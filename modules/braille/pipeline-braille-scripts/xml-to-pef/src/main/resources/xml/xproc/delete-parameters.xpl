@@ -35,7 +35,7 @@
         </p:documentation>
     </p:output>
     
-    <p:delete name="delete-parameters.delete">
+    <p:delete>
         <p:with-option name="match"
                        select="concat('c:param[string(@namespace)=&quot;',$parameter-namespace,'&quot;',
                                       'and @name=tokenize(&quot;',$parameter-names,'&quot;,&quot;\s+&quot;)]')"/>
