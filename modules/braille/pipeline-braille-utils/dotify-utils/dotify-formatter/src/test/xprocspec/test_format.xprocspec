@@ -2797,7 +2797,8 @@
   
   <x:scenario label="test_27">
     <x:documentation>
-      Tests collapsing of margins of three adjacent sibling blocks, the middle one being empty.
+      Tests collapsing of margins of three adjacent sibling blocks, the middle one being empty. The
+      middle one is said to "collapse through".
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
