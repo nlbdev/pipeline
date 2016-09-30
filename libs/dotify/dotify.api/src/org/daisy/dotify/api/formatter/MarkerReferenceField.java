@@ -15,7 +15,7 @@ public class MarkerReferenceField implements Field {
 	/**
 	 * Defines marker search scopes.
 	 */
-	public static enum MarkerSearchScope {PAGE_CONTENT, PAGE, SPREAD, SHEET, SEQUENCE, VOLUME, DOCUMENT}
+	public static enum MarkerSearchScope {PAGE_CONTENT, PAGE, SPREAD_CONTENT, SPREAD, SHEET, SEQUENCE, VOLUME, DOCUMENT}
 
 	private final String markerName;
 	private final MarkerSearchDirection dir;
