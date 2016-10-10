@@ -12,7 +12,7 @@ Thumbs.db
 /bom.xml
 .maven-*
 /maven.log
-/.gradle*
+.gradle*
 /*.zip
 /*.deb
 /*.rpm
