@@ -10,5 +10,5 @@
 .DS_Store
 /*.zip
 /*.deb
-.maven-test
+.maven-test*
 target/
