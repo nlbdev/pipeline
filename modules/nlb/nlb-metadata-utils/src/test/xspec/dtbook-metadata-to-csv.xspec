@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/dtbook-metadata-to-csv.xsl" xmlns:SRU="http://www.loc.gov/zing/sru/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:normarc="info:lc/xmlns/marcxchange-v1" xmlns:marcxchange="info:lc/xmlns/marcxchange-v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:DIAG="http://www.loc.gov/zing/sru/diagnostics/" xmlns:nlb="http://metadata.nlb.no/vocabulary/#" xmlns:opf="http://www.idpf.org/2007/opf" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <x:scenario label="a complete example - parse input">
+        <x:call template="parse-books">
+            <x:param name="input">
+                <level1 format="DAISY 2.02" audience="Student" mainGenre="Non-fiction" periodical="false" production-available="2014-01-28" id="b_218084" external-production="">
+                    <h1>
+                        <span><span class="title">Modernisering og kjønn</span>: <span class="subTitle">AFR 2120</span></span>
+                    </h1>
+                    <linegroup>
+                        <line>
+                            <span class="fieldName">Varighet: </span>
+                            <span class="duration">13 t 15 min</span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Kjersti Maagerø</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Forlag: </span>
+                            <span class="publisher"><span class="publisherName">Norsk lyd- og blindeskriftbibliotek</span>, <span class="publisherPlace">Oslo</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Originalforlag:</span>
+                            <span class="originalPublisher"><span class="originalPublisherName">Akademika forlag</span>, <span class="originalPublisherPlace">Trondheim</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Afrika</span>, <span class="topic">Samfunnsanalyser</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Dewey:</span>
+                            <span class="deweys">
+                                <span class="dewey">960</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218084" class="identifier">218084</a>
+                        </line>
+                    </linegroup>
+                </level1>
+                <level1 format="Braille" audience="Adult" mainGenre="Fiction" periodical="false" production-available="2014-01-09" id="b_112014" external-production="">
+                    <h1>
+                        <span>
+                            <span class="title">Julefortellinger</span>
+                        </span>
+                    </h1>
+                    <linegroup>
+                        <line>
+                            <span class="fieldName">Forfattere:</span>
+                            <span class="authors"><span class="author">H.C. Andersen</span>, <span class="author">Ketil Bjørnstad</span>, <span class="author">Brown,Larry</span>, <span class="author"
+                                    >Tom Egeland</span>, <span class="author">Helga Flatland</span>, <span class="author">Klaus Hagerup</span>, <span class="author">Johan Harstad</span>, <span
+                                    class="author">Tove Jansson</span>, <span class="author">Merethe Lindstrøm</span>, <span class="author">Alf Prøysen</span>, <span class="author"
+                                    ><![CDATA[Anne B. Ragde]]></span>, <span class="author">Lev Nikolajevitsj Tolstoj</span>, <span class="author">Sigrid Undset</span>, <span class="author"
+                                    ><![CDATA[Christian Støre Valeur]]></span> og <span class="author">Unni Lindell</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Hefter: </span>
+                            <span class="extent">14 hefter (392 s.)</span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Bokomtale: </span>
+                            <span class="description"
+                                ><![CDATA[Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl.]]></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Forlag: </span>
+                            <span class="publisher"><span class="publisherName">Norsk lyd- og blindeskriftbibliotek</span>, <span class="publisherPlace">Oslo</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Originalforlag:</span>
+                            <span class="originalPublisher"><span class="originalPublisherName">Aschehoug</span>, <span class="originalPublisherPlace">Oslo</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Høytider</span>, <span class="topic">Jul</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=112014" class="identifier">112014</a>
+                        </line>
+                    </linegroup>
+                </level1>
+                <level1 format="DAISY 2.02" audience="Student" mainGenre="Non-fiction" periodical="false" production-available="2014-01-21" id="b_217866" external-production="TIGAR">
+                    <h1>
+                        <span>
+                            <span class="title">Statistiske metoder i medisin og helsefag</span>
+                        </span>
+                    </h1>
+                    <linegroup>
+                        <line>
+                            <span class="fieldName">Forfattere:</span>
+                            <span class="authors"><span class="author">Odd O. Aalen</span>, <span class="author">Arnoldo Frigessi</span>, <span class="author">Tron Anders Moger</span>, <span
+                                    class="author">Ida Scheel</span>, <span class="author">Eva Skovlund</span> og <span class="author">Marit B. Veierød</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Varighet: </span>
+                            <span class="duration">16 t 30 min</span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Jan Olav Simonsen</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Forlag: </span>
+                            <span class="publisher"><span class="publisherName">Norsk lyd- og blindeskriftbibliotek</span>, <span class="publisherPlace">Oslo</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Originalforlag:</span>
+                            <span class="originalPublisher"><span class="originalPublisherName">Gyldendal akademisk</span>, <span class="originalPublisherPlace">Oslo</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Medisinsk forskning</span>, <span class="topic">Medisin</span>, <span class="topic">Statistiske metoder</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Dewey:</span>
+                            <span class="deweys">
+                                <span class="dewey">610.72</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=217866" class="identifier">217866</a>
+                        </line>
+                    </linegroup>
+                </level1>
+                <level1 format="DAISY 2.02" audience="Juvenile" mainGenre="Fiction" periodical="false" production-available="2014-06-03" id="b_620488" external-production="WIPS">
+                    <h1>
+                        <span class="author">Norlin, Arne</span>
+                        <br/>
+                        <span><span class="title">Fans</span>: <span class="partName">Motstanderne</span>
+                            <span class="partNumber">(1)</span></span>
+                    </h1>
+                    <linegroup>
+                        <line>
+                            <span class="fieldName">Oversatt av:</span>
+                            <span class="translators">
+                                <span class="translator">Jonas Bjarkøy</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Varighet: </span>
+                            <span class="duration">4 t 10 min</span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators"><span class="narrator">Geir Morstad</span> og <span class="narrator">Sibeth Hoff</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Bokomtale: </span>
+                            <span class="description"
+                                ><![CDATA[Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget.]]></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Originaltittel:</span>
+                            <span class="originalTitle">Motstånderna</span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Forlag: </span>
+                            <span class="publisher"><span class="publisherName">Norsk lyd- og blindeskriftbibliotek</span>, <span class="publisherPlace">Oslo</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Originalforlag:</span>
+                            <span class="originalPublisher"><span class="originalPublisherName">Mangschou</span>, <span class="originalPublisherPlace">Bergen</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Barn</span>, <span class="topic">Fotball</span>, <span class="topic">Sport</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=620488" class="identifier">620488</a>
+                        </line>
+                    </linegroup>
+                </level1>
+                <level1 xmlns="http://www.daisy.org/z3986/2005/dtbook/" format="DAISY 2.02" audience="Adult" mainGenre="Non-fiction" periodical="true" newspaper="false" magazine="false"
+                    production-available="" id="b_611823" external-production="RNIB">
+                    <h1>
+                        <span>
+                            <span class="title">Aftenposten (dagens)</span>
+                        </span>
+                    </h1>
+                    <linegroup>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Forlag: </span>
+                            <span class="publisher">
+                                <span class="publisherName">Norsk lyd- og blindeskriftbibliotek</span>, <span class="publisherPlace">Oslo</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Avis</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=611823" class="identifier">611823</a>
+                        </line>
+                    </linegroup>
+                </level1>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be parsed correctly">
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <meta name="Format" value="DAISY 2.02"/>
+                <meta name="Målgruppe" value="Student"/>
+                <meta name="Sjanger" value="Sakprosa"/>
+                <meta name="Tidsskrift" value="Nei"/>
+                <meta name="Avis" value="Nei"/>
+                <meta name="Klar for utlån" value="2014-01-28"/>
+                <meta name="Tittel" value="Modernisering og kjønn: AFR 2120"/>
+                <meta name="Varighet" value="13:15"/>
+                <meta name="Innleser 1" value="Kjersti Maagerø"/>
+                <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                <meta name="Originalforlag" value="Akademika forlag, Trondheim"/>
+                <meta name="Sjanger/Emner" value="Afrika, Samfunnsanalyser"/>
+                <meta name="Dewey" value="960"/>
+                <meta name="Boknummer" value="218084"/>
+            </book>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <meta name="Format" value="Punktskrift"/>
+                <meta name="Målgruppe" value="Voksen"/>
+                <meta name="Sjanger" value="Skjønnlitteratur"/>
+                <meta name="Tidsskrift" value="Nei"/>
+                <meta name="Avis" value="Nei"/>
+                <meta name="Klar for utlån" value="2014-01-09"/>
+                <meta name="Forfatter 1" value="H.C. Andersen"/>
+                <meta name="Forfatter 2" value="Ketil Bjørnstad"/>
+                <meta name="Forfatter 3" value="Brown,Larry"/>
+                <meta name="Forfatter 4" value="Tom Egeland"/>
+                <meta name="Forfatter 5" value="Helga Flatland"/>
+                <meta name="Forfatter 6" value="Klaus Hagerup"/>
+                <meta name="Forfatter 7" value="Johan Harstad"/>
+                <meta name="Forfatter 8" value="Tove Jansson"/>
+                <meta name="Forfatter 9" value="Merethe Lindstrøm"/>
+                <meta name="Forfatter 10" value="Alf Prøysen"/>
+                <meta name="Forfatter 11" value="Anne B. Ragde"/>
+                <meta name="Forfatter 12" value="Lev Nikolajevitsj Tolstoj"/>
+                <meta name="Forfatter 13" value="Sigrid Undset"/>
+                <meta name="Forfatter 14" value="Christian Støre Valeur"/>
+                <meta name="Forfatter 15" value="Unni Lindell"/>
+                <meta name="Tittel" value="Julefortellinger"/>
+                <meta name="Hefter (bind)" value="14 hefter (392 s.)"/>
+                <meta name="Bokomtale"
+                    value="Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."/>
+                <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                <meta name="Originalforlag" value="Aschehoug, Oslo"/>
+                <meta name="Sjanger/Emner" value="Høytider, Jul"/>
+                <meta name="Boknummer" value="112014"/>
+            </book>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <meta name="Format" value="DAISY 2.02"/>
+                <meta name="Målgruppe" value="Student"/>
+                <meta name="Sjanger" value="Sakprosa"/>
+                <meta name="Tidsskrift" value="Nei"/>
+                <meta name="Avis" value="Nei"/>
+                <meta name="Produsert eksternt" value="TIGAR"/>
+                <meta name="Klar for utlån" value="2014-01-21"/>
+                <meta name="Forfatter 1" value="Odd O. Aalen"/>
+                <meta name="Forfatter 2" value="Arnoldo Frigessi"/>
+                <meta name="Forfatter 3" value="Tron Anders Moger"/>
+                <meta name="Forfatter 4" value="Ida Scheel"/>
+                <meta name="Forfatter 5" value="Eva Skovlund"/>
+                <meta name="Forfatter 6" value="Marit B. Veierød"/>
+                <meta name="Tittel" value="Statistiske metoder i medisin og helsefag"/>
+                <meta name="Varighet" value="16:30"/>
+                <meta name="Innleser 1" value="Jan Olav Simonsen"/>
+                <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                <meta name="Originalforlag" value="Gyldendal akademisk, Oslo"/>
+                <meta name="Sjanger/Emner" value="Medisinsk forskning, Medisin, Statistiske metoder"/>
+                <meta name="Dewey" value="610.72"/>
+                <meta name="Boknummer" value="217866"/>
+            </book>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <meta name="Format" value="DAISY 2.02"/>
+                <meta name="Målgruppe" value="Barn/Ungdom"/>
+                <meta name="Sjanger" value="Skjønnlitteratur"/>
+                <meta name="Tidsskrift" value="Nei"/>
+                <meta name="Avis" value="Nei"/>
+                <meta name="Produsert eksternt" value="WIPS"/>
+                <meta name="Klar for utlån" value="2014-06-03"/>
+                <meta name="Forfatter 1" value="Norlin, Arne"/>
+                <meta name="Tittel" value="Fans: Motstanderne(1)"/>
+                <meta name="Oversatt av" value="Jonas Bjarkøy"/>
+                <meta name="Varighet" value="4:10"/>
+                <meta name="Innleser 1" value="Geir Morstad"/>
+                <meta name="Innleser 2" value="Sibeth Hoff"/>
+                <meta name="Bokomtale"
+                    value="Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."/>
+                <meta name="Originaltittel" value="Motstånderna"/>
+                <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                <meta name="Originalforlag" value="Mangschou, Bergen"/>
+                <meta name="Sjanger/Emner" value="Barn, Fotball, Sport"/>
+                <meta name="Boknummer" value="620488"/>
+            </book>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <meta name="Format" value="DAISY 2.02"/>
+                <meta name="Målgruppe" value="Voksen"/>
+                <meta name="Sjanger" value="Sakprosa"/>
+                <meta name="Tidsskrift" value="Nei"/>
+                <meta name="Avis" value="Nei"/>
+                <meta name="Produsert eksternt" value="RNIB"/>
+                <meta name="Klar for utlån" value=""/>
+                <meta name="Tittel" value="Aftenposten (dagens)"/>
+                <meta name="Innleser 1" value="Brage Talesyntese"/>
+                <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                <meta name="Sjanger/Emner" value="Avis"/>
+                <meta name="Boknummer" value="611823"/>
+            </book>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="a complete example - serialize csv">
+        <x:call template="books-to-csv">
+            <x:param name="authorInColumns" select="true()"/>
+            <x:param name="narratorInColumns" select="true()"/>
+            <x:param name="books">
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Student"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Klar for utlån" value="2014-01-28"/>
+                    <meta name="Tittel" value="Modernisering og kjønn: AFR 2120"/>
+                    <meta name="Varighet" value="13:15"/>
+                    <meta name="Innleser 1" value="Kjersti Maagerø"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Akademika forlag, Trondheim"/>
+                    <meta name="Sjanger/Emner" value="Afrika, Samfunnsanalyser"/>
+                    <meta name="Dewey" value="960"/>
+                    <meta name="Boknummer" value="218084"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="Punktskrift"/>
+                    <meta name="Målgruppe" value="Voksen"/>
+                    <meta name="Sjanger" value="Skjønnlitteratur"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Klar for utlån" value="2014-01-09"/>
+                    <meta name="Forfatter 1" value="H.C. Andersen"/>
+                    <meta name="Forfatter 2" value="Ketil Bjørnstad"/>
+                    <meta name="Forfatter 3" value="Brown,Larry"/>
+                    <meta name="Forfatter 4" value="Tom Egeland"/>
+                    <meta name="Forfatter 5" value="Helga Flatland"/>
+                    <meta name="Forfatter 6" value="Klaus Hagerup"/>
+                    <meta name="Forfatter 7" value="Johan Harstad"/>
+                    <meta name="Forfatter 8" value="Tove Jansson"/>
+                    <meta name="Forfatter 9" value="Merethe Lindstrøm"/>
+                    <meta name="Forfatter 10" value="Alf Prøysen"/>
+                    <meta name="Forfatter 11" value="Anne B. Ragde"/>
+                    <meta name="Forfatter 12" value="Lev Nikolajevitsj Tolstoj"/>
+                    <meta name="Forfatter 13" value="Sigrid Undset"/>
+                    <meta name="Forfatter 14" value="Christian Støre Valeur"/>
+                    <meta name="Forfatter 15" value="Unni Lindell"/>
+                    <meta name="Tittel" value="Julefortellinger"/>
+                    <meta name="Hefter (bind)" value="14 hefter (392 s.)"/>
+                    <meta name="Bokomtale"
+                        value="Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Aschehoug, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Høytider, Jul"/>
+                    <meta name="Boknummer" value="112014"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Student"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="TIGAR"/>
+                    <meta name="Klar for utlån" value="2014-01-21"/>
+                    <meta name="Forfatter 1" value="Odd O. Aalen"/>
+                    <meta name="Forfatter 2" value="Arnoldo Frigessi"/>
+                    <meta name="Forfatter 3" value="Tron Anders Moger"/>
+                    <meta name="Forfatter 4" value="Ida Scheel"/>
+                    <meta name="Forfatter 5" value="Eva Skovlund"/>
+                    <meta name="Forfatter 6" value="Marit B. Veierød"/>
+                    <meta name="Tittel" value="Statistiske metoder i medisin og helsefag"/>
+                    <meta name="Varighet" value="16:30"/>
+                    <meta name="Innleser 1" value="Jan Olav Simonsen"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Gyldendal akademisk, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Medisinsk forskning, Medisin, Statistiske metoder"/>
+                    <meta name="Dewey" value="610.72"/>
+                    <meta name="Boknummer" value="217866"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Barn/Ungdom"/>
+                    <meta name="Sjanger" value="Skjønnlitteratur"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="WIPS"/>
+                    <meta name="Klar for utlån" value="2014-06-03"/>
+                    <meta name="Forfatter 1" value="Norlin, Arne"/>
+                    <meta name="Tittel" value="Fans: Motstanderne(1)"/>
+                    <meta name="Oversatt av" value="Jonas Bjarkøy"/>
+                    <meta name="Varighet" value="4:10"/>
+                    <meta name="Innleser 1" value="Geir Morstad"/>
+                    <meta name="Innleser 2" value="Sibeth Hoff"/>
+                    <meta name="Bokomtale"
+                        value="Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."/>
+                    <meta name="Originaltittel" value="Motstånderna"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Mangschou, Bergen"/>
+                    <meta name="Sjanger/Emner" value="Barn, Fotball, Sport"/>
+                    <meta name="Boknummer" value="620488"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Voksen"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="RNIB"/>
+                    <meta name="Klar for utlån" value=""/>
+                    <meta name="Tittel" value="Aftenposten (dagens)"/>
+                    <meta name="Innleser 1" value="Brage Talesyntese"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Avis"/>
+                    <meta name="Boknummer" value="611823"/>
+                </book>
+            </x:param>
+        </x:call>
+        <x:expect label="number of lines in the output" test="count(tokenize(.,'\n'))" select="7"/>
+        <x:expect label="line #1" test="tokenize(.,'\n')[1]" select="string(.)"
+            ><![CDATA["Boknummer","Format","Målgruppe","Sjanger","Tidsskrift","Klar for utlån","Tittel","Varighet","Varighet (desimal)","Forlag","Originalforlag","Sjanger/Emner","Originaltittel","Avis","Produsert eksternt","Hefter og sider","Hefter (bind)","Dewey","Oversatt av","Antall innlesere","Innleser 1","Innleser 2","Antall forfattere / oversettere","Forfatter 1","Forfatter 2","Forfatter 3","Forfatter 4","Forfatter 5","Forfatter 6","Forfatter 7","Forfatter 8","Forfatter 9","Forfatter 10","Forfatter 11","Forfatter 12","Forfatter 13","Forfatter 14","Forfatter 15","Bokomtale"]]></x:expect>
+        <x:expect label="line #2" test="tokenize(.,'\n')[2]" select="string(.)"
+            ><![CDATA["218084","DAISY 2.02","Student","Sakprosa","Nei","2014-01-28","Modernisering og kjønn: AFR 2120","13:15","13,25","Norsk lyd- og blindeskriftbibliotek, Oslo","Akademika forlag, Trondheim","Afrika, Samfunnsanalyser","","Nei","","","","960","","1","","Kjersti Maagerø","","","0","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]]></x:expect>
+        <x:expect label="line #3" test="tokenize(.,'\n')[3]" select="string(.)"
+            ><![CDATA["112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","","0","","","","","15","","H.C. Andersen","","Ketil Bjørnstad","","Brown,Larry","","Tom Egeland","","Helga Flatland","","Klaus Hagerup","","Johan Harstad","","Tove Jansson","","Merethe Lindstrøm","","Alf Prøysen","","Anne B. Ragde","","Lev Nikolajevitsj Tolstoj","","Sigrid Undset","","Christian Støre Valeur","","Unni Lindell","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #4" test="tokenize(.,'\n')[4]" select="string(.)"
+            ><![CDATA["217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","","1","","Jan Olav Simonsen","","","6","","Odd O. Aalen","","Arnoldo Frigessi","","Tron Anders Moger","","Ida Scheel","","Eva Skovlund","","Marit B. Veierød","","","","","","","","","","","","","","","","","","",""]]></x:expect>
+        <x:expect label="line #5" test="tokenize(.,'\n')[5]" select="string(.)"
+            ><![CDATA["620488","DAISY 2.02","Barn/Ungdom","Skjønnlitteratur","Nei","2014-06-03","Fans: Motstanderne(1)","4:10","4,17","Norsk lyd- og blindeskriftbibliotek, Oslo","Mangschou, Bergen","Barn, Fotball, Sport","Motstånderna","Nei","WIPS","","","","Jonas Bjarkøy","2","","Geir Morstad","","Sibeth Hoff","1","","Norlin, Arne","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."]]></x:expect>
+        <x:expect label="line #6" test="tokenize(.,'\n')[6]" select="string(.)"
+            ><![CDATA["611823","DAISY 2.02","Voksen","Sakprosa","Nei","","Aftenposten (dagens)","","","Norsk lyd- og blindeskriftbibliotek, Oslo","","Avis","","Nei","RNIB","","","","","1","","Brage Talesyntese","","","0","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]]></x:expect>
+    </x:scenario>
+
+    <x:scenario label="a complete example - serialize csv - author in first column">
+        <x:call template="books-to-csv">
+            <x:param name="authorInColumns" select="false()"/>
+            <x:param name="narratorInColumns" select="true()"/>
+            <x:param name="books">
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Student"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Klar for utlån" value="2014-01-28"/>
+                    <meta name="Tittel" value="Modernisering og kjønn: AFR 2120"/>
+                    <meta name="Varighet" value="13:15"/>
+                    <meta name="Innleser 1" value="Kjersti Maagerø"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Akademika forlag, Trondheim"/>
+                    <meta name="Sjanger/Emner" value="Afrika, Samfunnsanalyser"/>
+                    <meta name="Dewey" value="960"/>
+                    <meta name="Boknummer" value="218084"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="Punktskrift"/>
+                    <meta name="Målgruppe" value="Voksen"/>
+                    <meta name="Sjanger" value="Skjønnlitteratur"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Klar for utlån" value="2014-01-09"/>
+                    <meta name="Forfatter 1" value="H.C. Andersen"/>
+                    <meta name="Forfatter 2" value="Ketil Bjørnstad"/>
+                    <meta name="Forfatter 3" value="Brown,Larry"/>
+                    <meta name="Forfatter 4" value="Tom Egeland"/>
+                    <meta name="Forfatter 5" value="Helga Flatland"/>
+                    <meta name="Forfatter 6" value="Klaus Hagerup"/>
+                    <meta name="Forfatter 7" value="Johan Harstad"/>
+                    <meta name="Forfatter 8" value="Tove Jansson"/>
+                    <meta name="Forfatter 9" value="Merethe Lindstrøm"/>
+                    <meta name="Forfatter 10" value="Alf Prøysen"/>
+                    <meta name="Forfatter 11" value="Anne B. Ragde"/>
+                    <meta name="Forfatter 12" value="Lev Nikolajevitsj Tolstoj"/>
+                    <meta name="Forfatter 13" value="Sigrid Undset"/>
+                    <meta name="Forfatter 14" value="Christian Støre Valeur"/>
+                    <meta name="Forfatter 15" value="Unni Lindell"/>
+                    <meta name="Tittel" value="Julefortellinger"/>
+                    <meta name="Hefter (bind)" value="14 hefter (392 s.)"/>
+                    <meta name="Bokomtale"
+                        value="Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Aschehoug, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Høytider, Jul"/>
+                    <meta name="Boknummer" value="112014"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Student"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="TIGAR"/>
+                    <meta name="Klar for utlån" value="2014-01-21"/>
+                    <meta name="Forfatter 1" value="Odd O. Aalen"/>
+                    <meta name="Forfatter 2" value="Arnoldo Frigessi"/>
+                    <meta name="Forfatter 3" value="Tron Anders Moger"/>
+                    <meta name="Forfatter 4" value="Ida Scheel"/>
+                    <meta name="Forfatter 5" value="Eva Skovlund"/>
+                    <meta name="Forfatter 6" value="Marit B. Veierød"/>
+                    <meta name="Tittel" value="Statistiske metoder i medisin og helsefag"/>
+                    <meta name="Varighet" value="16:30"/>
+                    <meta name="Innleser 1" value="Jan Olav Simonsen"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Gyldendal akademisk, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Medisinsk forskning, Medisin, Statistiske metoder"/>
+                    <meta name="Dewey" value="610.72"/>
+                    <meta name="Boknummer" value="217866"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Barn/Ungdom"/>
+                    <meta name="Sjanger" value="Skjønnlitteratur"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="WIPS"/>
+                    <meta name="Klar for utlån" value="2014-06-03"/>
+                    <meta name="Forfatter 1" value="Norlin, Arne"/>
+                    <meta name="Tittel" value="Fans: Motstanderne(1)"/>
+                    <meta name="Oversatt av" value="Jonas Bjarkøy"/>
+                    <meta name="Varighet" value="4:10"/>
+                    <meta name="Innleser 1" value="Geir Morstad"/>
+                    <meta name="Innleser 2" value="Sibeth Hoff"/>
+                    <meta name="Bokomtale"
+                        value="Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."/>
+                    <meta name="Originaltittel" value="Motstånderna"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Mangschou, Bergen"/>
+                    <meta name="Sjanger/Emner" value="Barn, Fotball, Sport"/>
+                    <meta name="Boknummer" value="620488"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Voksen"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="RNIB"/>
+                    <meta name="Klar for utlån" value=""/>
+                    <meta name="Tittel" value="Aftenposten (dagens)"/>
+                    <meta name="Innleser 1" value="Brage Talesyntese"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Avis"/>
+                    <meta name="Boknummer" value="611823"/>
+                </book>
+            </x:param>
+        </x:call>
+        <x:expect label="number of lines in the output" test="count(tokenize(.,'\n'))" select="27"/>
+        <x:expect label="line #1" test="tokenize(.,'\n')[1]" select="string(.)"
+            ><![CDATA["Bibliofil ID for forfatter / oversetter","Forfatter / Oversetter","Rolle","Boknummer","Format","Målgruppe","Sjanger","Tidsskrift","Klar for utlån","Tittel","Varighet","Varighet (desimal)","Forlag","Originalforlag","Sjanger/Emner","Originaltittel","Avis","Produsert eksternt","Hefter og sider","Hefter (bind)","Dewey","Antall innlesere","Innleser 1","Innleser 2","Antall forfattere / oversettere","Bokomtale"]]></x:expect>
+        <x:expect label="line #2" test="tokenize(.,'\n')[2]" select="string(.)"
+            ><![CDATA["","Ukjent forfatter / oversetter","","218084","DAISY 2.02","Student","Sakprosa","Nei","2014-01-28","Modernisering og kjønn: AFR 2120","13:15","13,25","Norsk lyd- og blindeskriftbibliotek, Oslo","Akademika forlag, Trondheim","Afrika, Samfunnsanalyser","","Nei","","","","960","1","","Kjersti Maagerø","","","0",""]]></x:expect>
+        <x:expect label="line #3" test="tokenize(.,'\n')[3]" select="string(.)"
+            ><![CDATA["","H.C. Andersen","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #4" test="tokenize(.,'\n')[4]" select="string(.)"
+            ><![CDATA["","Ketil Bjørnstad","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #5" test="tokenize(.,'\n')[5]" select="string(.)"
+            ><![CDATA["","Brown,Larry","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #6" test="tokenize(.,'\n')[6]" select="string(.)"
+            ><![CDATA["","Tom Egeland","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #7" test="tokenize(.,'\n')[7]" select="string(.)"
+            ><![CDATA["","Helga Flatland","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #8" test="tokenize(.,'\n')[8]" select="string(.)"
+            ><![CDATA["","Klaus Hagerup","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #9" test="tokenize(.,'\n')[9]" select="string(.)"
+            ><![CDATA["","Johan Harstad","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #10" test="tokenize(.,'\n')[10]" select="string(.)"
+            ><![CDATA["","Tove Jansson","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #11" test="tokenize(.,'\n')[11]" select="string(.)"
+            ><![CDATA["","Merethe Lindstrøm","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #12" test="tokenize(.,'\n')[12]" select="string(.)"
+            ><![CDATA["","Alf Prøysen","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #13" test="tokenize(.,'\n')[13]" select="string(.)"
+            ><![CDATA["","Anne B. Ragde","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #14" test="tokenize(.,'\n')[14]" select="string(.)"
+            ><![CDATA["","Lev Nikolajevitsj Tolstoj","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #15" test="tokenize(.,'\n')[15]" select="string(.)"
+            ><![CDATA["","Sigrid Undset","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #16" test="tokenize(.,'\n')[16]" select="string(.)"
+            ><![CDATA["","Christian Støre Valeur","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #17" test="tokenize(.,'\n')[17]" select="string(.)"
+            ><![CDATA["","Unni Lindell","Forfatter","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","0","","","","","15","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #18" test="tokenize(.,'\n')[18]" select="string(.)"
+            ><![CDATA["","Odd O. Aalen","Forfatter","217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","1","","Jan Olav Simonsen","","","6",""]]></x:expect>
+        <x:expect label="line #19" test="tokenize(.,'\n')[19]" select="string(.)"
+            ><![CDATA["","Arnoldo Frigessi","Forfatter","217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","1","","Jan Olav Simonsen","","","6",""]]></x:expect>
+        <x:expect label="line #20" test="tokenize(.,'\n')[20]" select="string(.)"
+            ><![CDATA["","Tron Anders Moger","Forfatter","217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","1","","Jan Olav Simonsen","","","6",""]]></x:expect>
+        <x:expect label="line #21" test="tokenize(.,'\n')[21]" select="string(.)"
+            ><![CDATA["","Ida Scheel","Forfatter","217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","1","","Jan Olav Simonsen","","","6",""]]></x:expect>
+        <x:expect label="line #22" test="tokenize(.,'\n')[22]" select="string(.)"
+            ><![CDATA["","Eva Skovlund","Forfatter","217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","1","","Jan Olav Simonsen","","","6",""]]></x:expect>
+        <x:expect label="line #23" test="tokenize(.,'\n')[23]" select="string(.)"
+            ><![CDATA["","Marit B. Veierød","Forfatter","217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","1","","Jan Olav Simonsen","","","6",""]]></x:expect>
+        <x:expect label="line #24" test="tokenize(.,'\n')[24]" select="string(.)"
+            ><![CDATA["","Norlin, Arne","Forfatter","620488","DAISY 2.02","Barn/Ungdom","Skjønnlitteratur","Nei","2014-06-03","Fans: Motstanderne(1)","4:10","4,17","Norsk lyd- og blindeskriftbibliotek, Oslo","Mangschou, Bergen","Barn, Fotball, Sport","Motstånderna","Nei","WIPS","","","","2","","Geir Morstad","","Sibeth Hoff","1","Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."]]></x:expect>
+        <x:expect label="line #25" test="tokenize(.,'\n')[25]" select="string(.)"
+            ><![CDATA["","Jonas Bjarkøy","Oversetter","620488","DAISY 2.02","Barn/Ungdom","Skjønnlitteratur","Nei","2014-06-03","Fans: Motstanderne(1)","4:10","4,17","Norsk lyd- og blindeskriftbibliotek, Oslo","Mangschou, Bergen","Barn, Fotball, Sport","Motstånderna","Nei","WIPS","","","","2","","Geir Morstad","","Sibeth Hoff","1","Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."]]></x:expect>
+        <x:expect label="line #26" test="tokenize(.,'\n')[26]" select="string(.)"
+            ><![CDATA["","Ukjent forfatter / oversetter","","611823","DAISY 2.02","Voksen","Sakprosa","Nei","","Aftenposten (dagens)","","","Norsk lyd- og blindeskriftbibliotek, Oslo","","Avis","","Nei","RNIB","","","","1","","Brage Talesyntese","","","0",""]]></x:expect>
+    </x:scenario>
+
+    <x:scenario label="a complete example - serialize csv - narrator in first column">
+        <x:call template="books-to-csv">
+            <x:param name="authorInColumns" select="true()"/>
+            <x:param name="narratorInColumns" select="false()"/>
+            <x:param name="books">
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Student"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Klar for utlån" value="2014-01-28"/>
+                    <meta name="Tittel" value="Modernisering og kjønn: AFR 2120"/>
+                    <meta name="Varighet" value="13:15"/>
+                    <meta name="Innleser 1" value="Kjersti Maagerø"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Akademika forlag, Trondheim"/>
+                    <meta name="Sjanger/Emner" value="Afrika, Samfunnsanalyser"/>
+                    <meta name="Dewey" value="960"/>
+                    <meta name="Boknummer" value="218084"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="Punktskrift"/>
+                    <meta name="Målgruppe" value="Voksen"/>
+                    <meta name="Sjanger" value="Skjønnlitteratur"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Klar for utlån" value="2014-01-09"/>
+                    <meta name="Forfatter 1" value="H.C. Andersen"/>
+                    <meta name="Forfatter 2" value="Ketil Bjørnstad"/>
+                    <meta name="Forfatter 3" value="Brown,Larry"/>
+                    <meta name="Forfatter 4" value="Tom Egeland"/>
+                    <meta name="Forfatter 5" value="Helga Flatland"/>
+                    <meta name="Forfatter 6" value="Klaus Hagerup"/>
+                    <meta name="Forfatter 7" value="Johan Harstad"/>
+                    <meta name="Forfatter 8" value="Tove Jansson"/>
+                    <meta name="Forfatter 9" value="Merethe Lindstrøm"/>
+                    <meta name="Forfatter 10" value="Alf Prøysen"/>
+                    <meta name="Forfatter 11" value="Anne B. Ragde"/>
+                    <meta name="Forfatter 12" value="Lev Nikolajevitsj Tolstoj"/>
+                    <meta name="Forfatter 13" value="Sigrid Undset"/>
+                    <meta name="Forfatter 14" value="Christian Støre Valeur"/>
+                    <meta name="Forfatter 15" value="Unni Lindell"/>
+                    <meta name="Tittel" value="Julefortellinger"/>
+                    <meta name="Hefter (bind)" value="14 hefter (392 s.)"/>
+                    <meta name="Bokomtale"
+                        value="Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Aschehoug, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Høytider, Jul"/>
+                    <meta name="Boknummer" value="112014"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Student"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="TIGAR"/>
+                    <meta name="Klar for utlån" value="2014-01-21"/>
+                    <meta name="Forfatter 1" value="Odd O. Aalen"/>
+                    <meta name="Forfatter 2" value="Arnoldo Frigessi"/>
+                    <meta name="Forfatter 3" value="Tron Anders Moger"/>
+                    <meta name="Forfatter 4" value="Ida Scheel"/>
+                    <meta name="Forfatter 5" value="Eva Skovlund"/>
+                    <meta name="Forfatter 6" value="Marit B. Veierød"/>
+                    <meta name="Tittel" value="Statistiske metoder i medisin og helsefag"/>
+                    <meta name="Varighet" value="16:30"/>
+                    <meta name="Innleser 1" value="Jan Olav Simonsen"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Gyldendal akademisk, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Medisinsk forskning, Medisin, Statistiske metoder"/>
+                    <meta name="Dewey" value="610.72"/>
+                    <meta name="Boknummer" value="217866"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Barn/Ungdom"/>
+                    <meta name="Sjanger" value="Skjønnlitteratur"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="WIPS"/>
+                    <meta name="Klar for utlån" value="2014-06-03"/>
+                    <meta name="Forfatter 1" value="Norlin, Arne"/>
+                    <meta name="Tittel" value="Fans: Motstanderne(1)"/>
+                    <meta name="Oversatt av" value="Jonas Bjarkøy"/>
+                    <meta name="Varighet" value="4:10"/>
+                    <meta name="Innleser 1" value="Geir Morstad"/>
+                    <meta name="Innleser 2" value="Sibeth Hoff"/>
+                    <meta name="Bokomtale"
+                        value="Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."/>
+                    <meta name="Originaltittel" value="Motstånderna"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Originalforlag" value="Mangschou, Bergen"/>
+                    <meta name="Sjanger/Emner" value="Barn, Fotball, Sport"/>
+                    <meta name="Boknummer" value="620488"/>
+                </book>
+                <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <meta name="Format" value="DAISY 2.02"/>
+                    <meta name="Målgruppe" value="Voksen"/>
+                    <meta name="Sjanger" value="Sakprosa"/>
+                    <meta name="Tidsskrift" value="Nei"/>
+                    <meta name="Avis" value="Nei"/>
+                    <meta name="Produsert eksternt" value="RNIB"/>
+                    <meta name="Klar for utlån" value=""/>
+                    <meta name="Tittel" value="Aftenposten (dagens)"/>
+                    <meta name="Innleser 1" value="Brage Talesyntese"/>
+                    <meta name="Forlag" value="Norsk lyd- og blindeskriftbibliotek, Oslo"/>
+                    <meta name="Sjanger/Emner" value="Avis"/>
+                    <meta name="Boknummer" value="611823"/>
+                </book>
+            </x:param>
+        </x:call>
+        <x:expect label="number of lines in the output" test="count(tokenize(.,'\n'))" select="8"/>
+        <x:expect label="line #1" test="tokenize(.,'\n')[1]" select="string(.)"
+            ><![CDATA["Bibliofil ID for Innleser","Innleser","Boknummer","Format","Målgruppe","Sjanger","Tidsskrift","Klar for utlån","Tittel","Varighet","Varighet (desimal)","Forlag","Originalforlag","Sjanger/Emner","Originaltittel","Avis","Produsert eksternt","Hefter og sider","Hefter (bind)","Dewey","Oversatt av","Antall innlesere","Antall forfattere / oversettere","Forfatter 1","Forfatter 2","Forfatter 3","Forfatter 4","Forfatter 5","Forfatter 6","Forfatter 7","Forfatter 8","Forfatter 9","Forfatter 10","Forfatter 11","Forfatter 12","Forfatter 13","Forfatter 14","Forfatter 15","Bokomtale"]]></x:expect>
+        <x:expect label="line #2" test="tokenize(.,'\n')[2]" select="string(.)"
+            ><![CDATA["","Kjersti Maagerø","218084","DAISY 2.02","Student","Sakprosa","Nei","2014-01-28","Modernisering og kjønn: AFR 2120","13:15","13,25","Norsk lyd- og blindeskriftbibliotek, Oslo","Akademika forlag, Trondheim","Afrika, Samfunnsanalyser","","Nei","","","","960","","1","0","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]]></x:expect>
+        <x:expect label="line #3" test="tokenize(.,'\n')[3]" select="string(.)"
+            ><![CDATA["","Ukjent innleser","112014","Punktskrift","Voksen","Skjønnlitteratur","Nei","2014-01-09","Julefortellinger","","","Norsk lyd- og blindeskriftbibliotek, Oslo","Aschehoug, Oslo","Høytider, Jul","","Nei","","","14 hefter (392 s.)","","","0","15","","H.C. Andersen","","Ketil Bjørnstad","","Brown,Larry","","Tom Egeland","","Helga Flatland","","Klaus Hagerup","","Johan Harstad","","Tove Jansson","","Merethe Lindstrøm","","Alf Prøysen","","Anne B. Ragde","","Lev Nikolajevitsj Tolstoj","","Sigrid Undset","","Christian Støre Valeur","","Unni Lindell","Her er nye julefortellinger fra noen av vår tids beste forfattere, men også noen utvalgte perler fra eldre tider. Dette er en julebok for alle aldre. Her er juleminnene til Unni Lindell, Merethe Lindstrøm, Ketil Bjørnstad, Klaus Hagerup, Anne B.Ragde, Tom Egeland m.fl."]]></x:expect>
+        <x:expect label="line #4" test="tokenize(.,'\n')[4]" select="string(.)"
+            ><![CDATA["","Jan Olav Simonsen","217866","DAISY 2.02","Student","Sakprosa","Nei","2014-01-21","Statistiske metoder i medisin og helsefag","16:30","16,5","Norsk lyd- og blindeskriftbibliotek, Oslo","Gyldendal akademisk, Oslo","Medisinsk forskning, Medisin, Statistiske metoder","","Nei","TIGAR","","","610.72","","1","6","","Odd O. Aalen","","Arnoldo Frigessi","","Tron Anders Moger","","Ida Scheel","","Eva Skovlund","","Marit B. Veierød","","","","","","","","","","","","","","","","","","",""]]></x:expect>
+        <x:expect label="line #5" test="tokenize(.,'\n')[5]" select="string(.)"
+            ><![CDATA["","Geir Morstad","620488","DAISY 2.02","Barn/Ungdom","Skjønnlitteratur","Nei","2014-06-03","Fans: Motstanderne(1)","4:10","4,17","Norsk lyd- og blindeskriftbibliotek, Oslo","Mangschou, Bergen","Barn, Fotball, Sport","Motstånderna","Nei","WIPS","","","","Jonas Bjarkøy","2","1","","Norlin, Arne","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."]]></x:expect>
+        <x:expect label="line #6" test="tokenize(.,'\n')[6]" select="string(.)"
+            ><![CDATA["","Sibeth Hoff","620488","DAISY 2.02","Barn/Ungdom","Skjønnlitteratur","Nei","2014-06-03","Fans: Motstanderne(1)","4:10","4,17","Norsk lyd- og blindeskriftbibliotek, Oslo","Mangschou, Bergen","Barn, Fotball, Sport","Motstånderna","Nei","WIPS","","","","Jonas Bjarkøy","2","1","","Norlin, Arne","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Tove og Noel elsker fotball. Begge tar for gitt at den andre holder med samme lag. Men det gjør de ikke. Noel heier på Hammarby og Tove er født AIKer. Det byr på utfordringer når de er sammen og heier på erkefiendens lag. Dette er en fortelling om vennskap, kjærlighet, fotballglede, og om hvor vanskelig kjærligheten kan være og hvor langt en hengiven fans kan gå i sin kjærlighet til fotballaget."]]></x:expect>
+        <x:expect label="line #7" test="tokenize(.,'\n')[7]" select="string(.)"
+            ><![CDATA["","Brage Talesyntese","611823","DAISY 2.02","Voksen","Sakprosa","Nei","","Aftenposten (dagens)","","","Norsk lyd- og blindeskriftbibliotek, Oslo","","Avis","","Nei","RNIB","","","","","1","0","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]]></x:expect>
+    </x:scenario>
+
+</x:description>

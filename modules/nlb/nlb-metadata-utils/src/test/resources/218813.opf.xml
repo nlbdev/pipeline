@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.idpf.org/2007/opf"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:identifier id="pub-id">218813</dc:identifier>
+    <dc:title>Palestinske utfordringer</dc:title>
+    <dc:creator id="creator-1">Tuastad, Dag</dc:creator>
+    <meta property="birth" refines="#creator-1">1962</meta>
+    <dc:format>DAISY 2.02</dc:format>
+    <dc:language>nob</dc:language>
+    <dc:publisher>Norsk lyd- og blindeskriftbibliotek</dc:publisher>
+    <meta property="dc:contributor.narrator">Talesyntese, Brage</meta>
+    <meta property="dc:date.available">2014-07-24</meta>
+    <meta property="dc:date.issued">2014</meta>
+    <meta property="dc:date.issued.original">2014</meta>
+    <meta property="dc:format.extent.duration">15 t. 35 min.</meta>
+    <meta property="dc:format.extent.pages.original">190</meta>
+    <meta property="dc:format.other">Audio recording</meta>
+    <meta property="dc:format.other">Compact Disk</meta>
+    <meta property="dc:format.other">Other voice/other</meta>
+    <meta property="dc:format.other.no">Lydopptak</meta>
+    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+    <meta property="dc:format.other.no">Annen tale/annet</meta>
+    <meta property="dc:publisher.location">Oslo</meta>
+    <meta property="dc:publisher.original">Cappelen Damm akademisk</meta>
+    <meta property="dc:publisher.original.location">[Oslo]</meta>
+    <meta property="dc:subject.dewey">956</meta>
+    <meta property="dc:subject.dewey">956.94</meta>
+    <meta property="dc:subject.keyword">Midtøsten</meta>
+    <meta property="dc:subject.keyword">Historie</meta>
+    <meta property="dc:subject.keyword">Palestina</meta>
+    <meta property="dc:subject.keyword">Israel</meta>
+    <meta property="dc:subject.keyword">Jødisk-arabiske spørsmål</meta>
+    <meta property="dc:title.series">Utfordringer</meta>
+    <meta property="dc:type.genre">Non-fiction</meta>
+    <meta property="dc:type.genre">Non-biography</meta>
+    <meta property="dc:type.genre">textbook</meta>
+    <meta property="audience">Adult</meta>
+    <meta property="audience">Student</meta>
+    <meta property="isbn" scheme="ISBN">978-82-16-14327-8</meta>
+    <meta property="isbn.original">978-82-02-41181-7</meta>
+</metadata>

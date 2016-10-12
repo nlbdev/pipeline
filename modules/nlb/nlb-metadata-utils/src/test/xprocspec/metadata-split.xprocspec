@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" xmlns:nlb="http://metadata.nlb.no/vocabulary/#"
+    xmlns:SRU="http://www.loc.gov/zing/sru/" xmlns:marcxchange="info:lc/xmlns/marcxchange-v1" xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <x:script>
+        <p:declare-step type="nlb:metadata-split.test" xmlns:p="http://www.w3.org/ns/xproc" xmlns:nlb="http://metadata.nlb.no/vocabulary/#" exclude-inline-prefixes="#all" version="1.0">
+            <p:output sequence="true" port="periodical-audio">
+                <p:pipe step="metadata-split" port="periodical-audio"/>
+            </p:output>
+            <p:output sequence="true" port="periodical-braille">
+                <p:pipe step="metadata-split" port="periodical-braille"/>
+            </p:output>
+            <p:output sequence="true" port="braille-adult-fiction">
+                <p:pipe step="metadata-split" port="braille-adult-fiction"/>
+            </p:output>
+            <p:output sequence="true" port="braille-adult-nonfiction">
+                <p:pipe step="metadata-split" port="braille-adult-nonfiction"/>
+            </p:output>
+            <p:output sequence="true" port="braille-juvenile-fiction">
+                <p:pipe step="metadata-split" port="braille-juvenile-fiction"/>
+            </p:output>
+            <p:output sequence="true" port="braille-juvenile-nonfiction">
+                <p:pipe step="metadata-split" port="braille-juvenile-nonfiction"/>
+            </p:output>
+            <p:output sequence="true" port="braille-student">
+                <p:pipe step="metadata-split" port="braille-student"/>
+            </p:output>
+            <p:output sequence="true" port="audio-adult-fiction">
+                <p:pipe step="metadata-split" port="audio-adult-fiction"/>
+            </p:output>
+            <p:output sequence="true" port="audio-adult-nonfiction">
+                <p:pipe step="metadata-split" port="audio-adult-nonfiction"/>
+            </p:output>
+            <p:output sequence="true" port="audio-juvenile-fiction">
+                <p:pipe step="metadata-split" port="audio-juvenile-fiction"/>
+            </p:output>
+            <p:output sequence="true" port="audio-juvenile-nonfiction">
+                <p:pipe step="metadata-split" port="audio-juvenile-nonfiction"/>
+            </p:output>
+            <p:output sequence="true" port="audio-student">
+                <p:pipe step="metadata-split" port="audio-student"/>
+            </p:output>
+            <p:import href="../../../src/main/resources/xml/xproc/metadata-split.xpl"/>
+            <p:identity>
+                <!--<p:log port="result" href="file:/tmp/metadata-split/metadata-split.input.source.xml"/>-->
+                <p:input port="source" select="//marcxchange:record">
+                    <p:document href="../resources/sru/pre201407startRecord1"/>
+                    <p:document href="../resources/sru/pre201407startRecord11"/>
+                    <p:document href="../resources/sru/pre201407startRecord21"/>
+                    <p:document href="../resources/sru/pre201407startRecord31"/>
+                    <p:document href="../resources/sru/pre201407startRecord41"/>
+                    <p:document href="../resources/sru/pre201407startRecord51"/>
+                    <p:document href="../resources/sru/pre201407startRecord61"/>
+                    <p:document href="../resources/sru/pre201407startRecord71"/>
+                </p:input>
+            </p:identity>
+            <nlb:metadata-split name="metadata-split">
+                <!--<p:log port="periodical-audio" href="file:/tmp/metadata-split/metadata-split.output.periodical-audio.xml"/>
+                <p:log port="periodical-braille" href="file:/tmp/metadata-split/metadata-split.output.periodical-braille.xml"/>
+                <p:log port="braille-adult-fiction" href="file:/tmp/metadata-split/metadata-split.output.braille-adult-fiction.xml"/>
+                <p:log port="braille-adult-nonfiction" href="file:/tmp/metadata-split/metadata-split.output.braille-adult-nonfiction.xml"/>
+                <p:log port="braille-juvenile-fiction" href="file:/tmp/metadata-split/metadata-split.output.braille-juvenile-fiction.xml"/>
+                <p:log port="braille-juvenile-nonfiction" href="file:/tmp/metadata-split/metadata-split.output.braille-juvenile-nonfiction.xml"/>
+                <p:log port="braille-student" href="file:/tmp/metadata-split/metadata-split.output.braille-student.xml"/>
+                <p:log port="audio-adult-fiction" href="file:/tmp/metadata-split/metadata-split.output.audio-adult-fiction.xml"/>
+                <p:log port="audio-adult-nonfiction" href="file:/tmp/metadata-split/metadata-split.output.audio-adult-nonfiction.xml"/>
+                <p:log port="audio-juvenile-fiction" href="file:/tmp/metadata-split/metadata-split.output.audio-juvenile-fiction.xml"/>
+                <p:log port="audio-juvenile-nonfiction" href="file:/tmp/metadata-split/metadata-split.output.audio-juvenile-nonfiction.xml"/>
+                <p:log port="audio-student" href="file:/tmp/metadata-split/metadata-split.output.audio-student.xml"/>-->
+            </nlb:metadata-split>
+        </p:declare-step>
+
+    </x:script>
+
+    <x:scenario label="nlb:metadata-split">
+        <x:call step="nlb:metadata-split.test"/>
+
+        <x:context label="the 'periodical-audio' port">
+            <x:document type="port" port="periodical-audio" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 18 documents" type="count" min="18" max="18"/>
+        <x:expect label="the results should contain the records for all the 18 expected identifiers" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620842</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620759</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620766</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620782</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620783</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620828</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620854</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620855</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620856</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620870</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620890</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620704</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620878</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620696</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620906</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620907</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620908</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620735</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'periodical-audio' port">
+            <x:document type="port" port="periodical-audio"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 18 expected MARC XML documents (in the right order)">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.periodical-audio.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'periodical-braille' port">
+            <x:document type="port" port="periodical-braille" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 0 documents" type="count" min="0" max="0"/>
+
+        <x:context label="the 'braille-adult-fiction' port">
+            <x:document type="port" port="braille-adult-fiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 1 document" type="count" min="1" max="1"/>
+        <x:expect label="the result should contain the expected identifier" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">112279</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'braille-adult-fiction' port">
+            <x:document type="port" port="braille-adult-fiction"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 1 expected MARC XML document">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.braille-adult-fiction.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'braille-adult-nonfiction' port">
+            <x:document type="port" port="braille-adult-nonfiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 1 document" type="count" min="1" max="1"/>
+        <x:expect label="the result should contain the expected identifier" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">112748</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'braille-adult-nonfiction' port">
+            <x:document type="port" port="braille-adult-nonfiction"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 1 expected MARC XML document">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.braille-adult-nonfiction.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'braille-juvenile-fiction' port">
+            <x:document type="port" port="braille-juvenile-fiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 1 document" type="count" min="1" max="1"/>
+        <x:expect label="the result should contain the expected identifier" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">112737</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'braille-juvenile-fiction' port">
+            <x:document type="port" port="braille-juvenile-fiction"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 1 expected MARC XML document">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.braille-juvenile-fiction.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'braille-juvenile-nonfiction' port">
+            <x:document type="port" port="braille-juvenile-nonfiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 0 documents" type="count" min="0" max="0"/>
+
+        <x:context label="the 'braille-student' port">
+            <x:document type="port" port="braille-student" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 0 documents" type="count" min="0" max="0"/>
+
+        <x:context label="the 'audio-adult-fiction' port">
+            <x:document type="port" port="audio-adult-fiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 9 documents" type="count" min="9" max="9"/>
+        <x:expect label="the results should contain the records for all the 9 expected identifiers" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621296</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621556</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">620992</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621334</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621622</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621626</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621540</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621666</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621582</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'audio-adult-fiction' port">
+            <x:document type="port" port="audio-adult-fiction"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 9 expected MARC XML documents (in the right order)">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.audio-adult-fiction.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'audio-adult-nonfiction' port">
+            <x:document type="port" port="audio-adult-nonfiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 5 documents" type="count" min="5" max="5"/>
+        <x:expect type="compare" label="the result should be the 5 expected MARC XML documents (in the right order)">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621312</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621526</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">619371</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">619369</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">619373</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'audio-adult-nonfiction' port">
+            <x:document type="port" port="audio-adult-nonfiction"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 5 expected MARC XML documents (in the right order)">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.audio-adult-nonfiction.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'audio-juvenile-fiction' port">
+            <x:document type="port" port="audio-juvenile-fiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 9 documents" type="count" min="9" max="9"/>
+        <x:expect label="the results should contain the records for all the 9 expected identifiers" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">618726</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621659</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">619518</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621336</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621234</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621467</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621465</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621593</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621262</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'audio-juvenile-fiction' port">
+            <x:document type="port" port="audio-juvenile-fiction"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 9 expected MARC XML documents (in the right order)">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.audio-juvenile-fiction.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'audio-juvenile-nonfiction' port">
+            <x:document type="port" port="audio-juvenile-nonfiction" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 1 document" type="count" min="1" max="1"/>
+        <x:expect label="the result should contain the expected identifier" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">621663</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'audio-juvenile-nonfiction' port">
+            <x:document type="port" port="audio-juvenile-nonfiction"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 1 expected MARC XML document">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.audio-juvenile-nonfiction.xml" select="/*/*/*"/>
+        </x:expect>
+
+        <x:context label="the 'audio-student' port">
+            <x:document type="port" port="audio-student" select="/*/dc:identifier"/>
+        </x:context>
+        <x:expect label="the result should contain 26 documents" type="count" min="26" max="26"/>
+        <x:expect label="the results should contain the records for all the 26 expected identifiers" type="compare">
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218774</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218756</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218567</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218788</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218775</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218791</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218801</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218796</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218758</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218827</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218762</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218818</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218799</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218789</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218752</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218787</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218742</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218770</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218100</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218798</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218599</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218824</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218829</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218555</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218648</dc:identifier>
+            </x:document>
+            <x:document type="inline">
+                <dc:identifier id="pub-id">218813</dc:identifier>
+            </x:document>
+        </x:expect>
+
+        <x:context label="the 'audio-student' port">
+            <x:document type="port" port="audio-student"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be the 26 expected MARC XML documents (in the right order)">
+            <x:document type="file" method="xml" href="../resources/metadata-split.output.audio-student.xml" select="/*/*/*"/>
+        </x:expect>
+
+    </x:scenario>
+
+</x:description>

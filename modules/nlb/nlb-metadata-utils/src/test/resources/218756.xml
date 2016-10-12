@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<marcxchange:record xmlns:marcxchange="info:lc/xmlns/marcxchange-v1" format="normarc" type="Bibliographic">
+    <marcxchange:leader>02415nam 2200649 4500</marcxchange:leader>
+    <marcxchange:controlfield xml:space="preserve" tag="001">218756</marcxchange:controlfield>
+    <marcxchange:controlfield xml:space="preserve" tag="008">140624                a          00nob</marcxchange:controlfield>
+    <marcxchange:datafield tag="015" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">10123680</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">BibliofilID</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="b">dc,dj</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="020" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">978-82-16-15088-7</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="082" ind1="3" ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">610.73</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="090" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">218756</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="245" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Grunnleggende kunnskap i klinisk sykepleie</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="h">daisy 2.02</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">sykepleieboken 1</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="c">Inger Margrethe Holter og Tone Elin Mekki (red.)</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="260" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Norsk lyd- og blindeskriftbibliotek</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="c">2014</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="300" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">52 t. 35 min.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="500" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">1. utg. 2004. 1.-3. utg. med tittel: Grunnleggende sykepleie</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="500" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">Danske kapitler oversatt av Lisbeth Nilsen og May Britt Stamsø, revidert tekst i danske kapitler oversatt av Kari Marie Thorbjørnsen, kapittel 9 er oversatt fra engelsk av Linn Elise Kjerland</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="511" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">Brage Talesyntese</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="592" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">21/07/2014</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="596" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Akribe</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="c">cop. 2011</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="d">4. utg.</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">804 s.</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="f">978-82-7950-148-0</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="650" ind1=" " ind2="1">
+        <marcxchange:subfield xml:space="preserve" code="a">Sykepleie</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="1">610.73</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Arneberg, Hilde Mathisen</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Bachmann, Merete</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Bastøe, Liv-Karin Halvorsen</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Borge, Astrid Merete</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Brodtkorb, Kari</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Fredriksen, Arnhild</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Grov, Ellen Karine</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Hage, Ingrid</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Hellesø, Ragnhild</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Holter, Inger Margrethe</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Holter, Inger Margrethe</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">red.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Hougaard, Lone</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Hovland, Ragnar</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Ilkjær, Ingeborg</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Kim, Hesook Suzie</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Kirkevold, Marit</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Kjerland, Linn Elise</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">overs.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Laursen, Birgitte Schantz</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Lerdal,Anners</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Lindebjerg, Mai Britt</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Lindhardt, Jette</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Mathisen, Jorunn</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Mekki, Tone Elin</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Mekki, Tone Elin</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">red.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Mikkelsen, Jane</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Molven, Olav</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Nilsen, Lisbeth</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">overs.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Rotegård, Ann Kristin</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Solhaug, Marit</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Stamsø, May Britt</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">overs.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Stubberud, Dag-Gunnar</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Sørensen, Unni</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Thorbjørnsen, Kari Marie</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">overs.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1="1" ind2="0">
+        <marcxchange:subfield xml:space="preserve" code="a">Øverlie, Anne</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="e">medf.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Studie Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="f">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="h">4</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="x">2014-08-05T10:19+0200</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="y">1900-01-19</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Studie Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="f">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="h">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="x">2014-08-05T10:19+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Studie Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="f">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="h">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="x">2014-08-05T10:19+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Studie Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="f">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="h">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="x">2014-08-05T10:19+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Studie Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="f">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="h">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="x">2014-08-05T10:19+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="b">Studie Oslo</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="f">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="h">9</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="x">2014-08-05T10:19+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="856" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="u">URN:NBN:no-nb_nlb_</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="s">800409080</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="996" ind1=" " ind2=" ">
+        <marcxchange:subfield xml:space="preserve" code="u">http://websok.nlb.no/cgi-bin/websok?tnr=218756</marcxchange:subfield>
+        <marcxchange:subfield xml:space="preserve" code="t">local</marcxchange:subfield>
+    </marcxchange:datafield>
+</marcxchange:record>
+

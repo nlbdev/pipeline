@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dokumentasjon for metadatafelter tilhørende en produksjon</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+</head>
+<body>
+
+    <h1>Dokumentasjon for metadatafelter tilhørende en produksjon</h1>
+    
+    <table class="table table-striped table-hover">
+        <tr><th colspan="2">Feltnavn</th><th>Beskrivelse</th></tr>
+        <tr><td colspan="2">BOM</td><td>hvorvidt bokens content document starter med et byte order mark</td></tr>
+        <tr><td colspan="2">TIGAR</td><td>true/false - hvorvidt boken er tilgjengelig gjennom TIGAR-samarbeidet</td></tr>
+        <tr><td colspan="2">bibliofil.datestamp</td><td>OAI tidsstempel for publikasjonen</td></tr>
+        <tr><td colspan="2">bibliofil.deleted</td><td>OAI merknad for hvorvidt publikasjonen er slettet</td></tr>
+        <tr><td colspan="2">bookClub</td><td>true/false - hvorvidt dette er en bokklubb</td></tr>
+        <tr><td colspan="2">dc:abstract</td><td>kort beskrivelse av publikasjonen</td></tr>
+        <tr><td colspan="2">dc:audience</td><td>Adult, Juvenile, Student, Ages 0-5, Ages 6-8, Ages 9-10, Ages 11-12, Ages 13+, Deafblind</td></tr>
+        <tr><td colspan="2">dc:available</td><td>datoen da publikasjonen ble gjort tilgjengelig for utlån</td></tr>
+        <tr><td colspan="2">dc:available.previousState</td><td>f.eks. dc:created</td></tr>
+        <tr><td colspan="2">dc:available.production</td><td>Datoen da publikasjonen - i følge produksjonssystemet - ble gjort tilgjengelig for utlån. Dette kan noen ganger avvike fra dc:available.</td></tr>
+        <tr><td colspan="2">dc:available.responsibility</td><td>navn på person som er ansvarlig for å ha gjort produksjonen tilgjengelig for utlån</td></tr>
+        <tr><td colspan="2">dc:creator / dc:contributor.translator / dc:contributor.photographer / dc:contributor.illustrator / dc:contributor.consultant / dc:contributor.secretary / dc:contributor.editor / dc:creator.foreword / dc:creator.afterword / dc:contributor.collaborator / dc:contributor.commentator / dc:contributor / dc:contributor.narrator / dc:contributor.director / dc:contributor.musician / dc:contributor.composer / dc:contributor.compiler</td><td>navn på bidragsyter (person eller organisasjon. dc:creator er forfatter)</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>birth</td><td>året personen ble født</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>death</td><td>året personen døde</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>department</td><td>avdeling i organisasjonen</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>nationality</td><td>personens nasjonalitet</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>pseudonym</td><td>personens pseudonym</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>suffixName</td><td>f.eks. "XIV" for en monark</td></tr>
+        <tr><td colspan="2">dc:created</td><td>dato da produksjonen ble ferdig produsert</td></tr>
+        <tr><td colspan="2">dc:created.nextState</td><td>f.eks. "dc:available"</td></tr>
+        <tr><td colspan="2">dc:created.previousState</td><td>f.eks. postProductionComplete</td></tr>
+        <tr><td colspan="2">dc:created.responsibility</td><td>navn på person som er ansvarlig for den ferdige produksjonen</td></tr>
+        <tr><td colspan="2">dc:dateAccepted</td><td>levert innleser/tekstkonsulent</td></tr>
+        <tr><td colspan="2">dc:dateAccepted.nextState</td><td>narrationComplete</td></tr>
+        <tr><td colspan="2">dc:dateAccepted.previousState</td><td>scanningComplete</td></tr>
+        <tr><td colspan="2">dc:dateAccepted.responsibility</td><td>navn på innleser/tekstkonsulent</td></tr>
+        <tr><td colspan="2">dc:dateSubmitted</td><td>dato da publikasjonen ble bestilt</td></tr>
+        <tr><td colspan="2">dc:dateSubmitted.nextState</td><td>scanningComplete</td></tr>
+        <tr><td colspan="2">dc:dateSubmitted.responsibility</td><td>navn på person som registrerte bestillingen</td></tr>
+        <tr><td colspan="2">dc:extent</td><td>publikasjonens størrelse (antall bind, antall sider, etc.)</td></tr>
+        <tr><td colspan="2">dc:extent.duration</td><td>lydbokens varighet</td></tr>
+        <tr><td colspan="2">dc:extent.duration.estimate</td><td>beregnet innlest tid (angis før boken er lest inn)</td></tr>
+        <tr><td colspan="2">dc:extent.duration.facilitation</td><td>tid brukt på å tilrettelegge produksjonen</td></tr>
+        <tr><td colspan="2">dc:extent.images</td><td>antall bilder</td></tr>
+        <tr><td colspan="2">dc:extent.original</td><td>svartbokas størrelse (antall bind, antall sider, etc.)</td></tr>
+        <tr><td colspan="2">dc:extent.pages</td><td>antall sider produsert</td></tr>
+        <tr><td colspan="2">dc:extent.pages.original</td><td>antall sider i svartboka</td></tr>
+        <tr><td colspan="2">dc:extent.volumes</td><td>antall hefter</td></tr>
+        <tr><td colspan="2">dc:format</td><td>DTBook, DAISY 2.02, Braille, XHTML</td></tr>
+        <tr><td colspan="2">dc:format.no</td><td>DTBok, Punktskrift</td></tr>
+        <tr><td colspan="2">dc:medium.original</td><td>Fysisk medium på originalbok/svartbok (f.eks. CD)</td></tr>
+        <tr><td colspan="2">dc:format.other</td><td>Cartographic materials, Atlas, Map, Manuscripts, Sheet music, Audio recording, Gramophone record, Cassette, Compact Disk, Player with audio file, Digikort, Music, Language course, Audio book, Other voice/other, Combined document, Video, Video tape, VHS, DVD, Blu-ray, 3D, Graphic materials, Slides, Photography, Art reproduction, Electronic resource, Floppy, CD, Web resource, Storage card, UMD, Wii disk, Three-dimensional object, Microfilm, Microfilm tape, Microform, Microfilm card, Serial, Article, Physical book, Video game, PC, Playstation 2, Playstation 3, Playstation Portable, Xbox, Xbox 360 Nintendo DS, Nintendo Wii, DAISY 2.02, Braille, DTBook, XHTML</td></tr>
+        <tr><td colspan="2">dc:format.other.no</td><td>Kartografisk materiale, Atlas, Kart, Manuskripter, Musikktrykk, Lydopptak, Grammofonplate, Kassett, Kompaktplate, Avspiller med lydfil, Dikikort, Musikk, Språkkurs, Lydbok, Annen tale/annet, Kombidokument, Film, Filmspole, Videokassett (VHS), Videoplate (DVD), Blu-ray-plate, 3D, Grafisk materiale, Dias, Fotografi, Kunstreproduksjon, Elektronisk ressurs, Diskett, DVD-ROM, CD-ROM, Nettressurs, Lagringsbrikke, Blu-ray ROM, Wii-plate, Tredimensjonal gjenstand, Mikrofilm, Mikrofilmspole, Mikroform, Mikrofilmkort, Periodika, Artikler, Fysiske bøker, Dataspill, Punktskrift</td></tr>
+        <tr><td colspan="2">dc:hasVersion</td><td>hvis produksjonen anvendes som master-format for en annen produksjon så angis den andre produksjonen her (i praksis tilvekstnummer for punktbok)</td></tr>
+        <tr><td colspan="2">dc:identifier</td><td>tilvekstnummer</td></tr>
+        <tr><td colspan="2">dc:isVersionOf</td><td>hvis en annen produksjon brukes som master-format så angis den produksjonen her (i praksis DTBook tilvekstnummer)</td></tr>
+        <tr><td colspan="2">dc:issued</td><td>årstall for utgivelse</td></tr>
+        <tr><td colspan="2">dc:issued.original</td><td>årstall for utgivelse av svartboka</td></tr>
+        <tr><td colspan="2">dc:language</td><td>trebokstavs språkkoder for språk brukt i produksjonen</td></tr>
+        <tr><td colspan="2">dc:language.original</td><td>trebokstavs språkkoder for språk brukt i originalen/svartboka</td></tr>
+        <tr><td colspan="2">dc:medium</td><td>Paperback, Hardcover, Ebook</td></tr>
+        <tr><td colspan="2">dc:modified</td><td>tid for siste endring (gjelder i utgangspunktet kun Quickbase)</td></tr>
+        <tr><td colspan="2">dc:modified.responsibility</td><td>hvem som utførte sist endring</td></tr>
+        <tr><td colspan="2">dc:publisher</td><td>navn på forlegger, distributør etc.</td></tr>
+        <tr><td colspan="2">dc:publisher.location</td><td>sted for utgivelse</td></tr>
+        <tr><td colspan="2">dc:publisher.location.original</td><td>sted for utgivelse av svartboka</td></tr>
+        <tr><td colspan="2">dc:publisher.original</td><td>navn på forlegger, distributør etc. for svartboka</td></tr>
+        <tr><td colspan="2">dc:subject</td><td>emner (kan være person)</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>birth</td><td>året personen ble født</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>death</td><td>året personen døde</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>nationality</td><td>personens nasjonalitet</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>title</td><td>tittel (for f.eks. kongelige eller adelige titler)</td></tr>
+        <tr><td colspan="2">dc:subject.dewey</td><td>dewey-nummer</td></tr>
+        <tr><td colspan="2">dc:subject.keyword</td><td>stikkord</td></tr>
+        <tr><td colspan="2">dc:subject.location</td><td>sted for hendelser, begivenheter etc. i publikasjonen</td></tr>
+        <tr><td colspan="2">dc:subject.time</td><td>tidspunkt for hendelsr, begivenheter etc. i publikasjonen</td></tr>
+        <tr><td colspan="2">dc:title</td><td>publikasjonens tittel</td></tr>
+        <tr><td colspan="2">dc:title.original</td><td>svartbokas tittel</td></tr>
+        <tr><td colspan="2">dc:title.part</td><td>tittel for del av verk</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>dc:title.part.alternative</td><td>alternativ tittel for del av verk</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>dc:title.part.sortingKey</td><td>sorteringsnøkkel for del av verk</td></tr>
+        <tr><td>&#160;&#160;&#160;&#160;</td><td>dc:title.part.subTitle</td><td>undertittel for del av verk</td></tr>
+        <tr><td colspan="2">dc:title.series</td><td>serietittel</td></tr>
+        <tr><td colspan="2">dc:title.sortingKey</td><td>sorteringsnøkkel for tittel</td></tr>
+        <tr><td colspan="2">dc:title.subSeries</td><td>tittel for underserie</td></tr>
+        <tr><td colspan="2">dc:title.subTitle</td><td>undertittel for publikasjonen</td></tr>
+        <tr><td colspan="2">dc:type</td><td>f.eks. "Full Text", "Human Speech", "Full Audio", "Synthetic Speech", "Scanned", "Transcript"</td></tr>
+        <tr><td colspan="2">dc:type.genre</td><td>f.eks. "Non-fiction", "Fiction", "Non-biography", "Biography", "Autobiography", "Individual biography", "Collective biography", "short story", "poem", "play", "cartoon", "anthology", "textbook", "periodical"</td></tr>
+        <tr><td colspan="2">dc:type.original</td><td>f.eks. "Human Speech", "Full Audio"</td></tr>
+        <tr><td colspan="2">edition</td><td>utgave, opplag etc.</td></tr>
+        <tr><td colspan="2">edition.original</td><td>utgave, opplag etc. for svartboka</td></tr>
+        <tr><td colspan="2">expectedComplete</td><td>dato da publikasjonen er avtalt å være ferdigprodusert (deadline for innlesere)</td></tr>
+        <tr><td colspan="2">facilitationComplete</td><td>dato da tilretteleggingen var gjennomført</td></tr>
+        <tr><td colspan="2">internalFacilitation</td><td>true/false - hvorvidt boka skal tilrettelegges internt</td></tr>
+        <tr><td colspan="2">isbn</td><td>ISBN for produksjonen</td></tr>
+        <tr><td colspan="2">isbn.original</td><td>ISBN for svartboka</td></tr>
+        <tr><td colspan="2">issn</td><td>publikasjonens ISSN</td></tr>
+        <tr><td colspan="2">lineSpacing</td><td>open/normal - type linjeavstand, åpen eller vanlig</td></tr>
+        <tr><td colspan="2">narrationComplete</td><td>ferdig innlest/redigert</td></tr>
+        <tr><td colspan="2">narrationComplete.nextState</td><td>f.eks.: postProductionComplete</td></tr>
+        <tr><td colspan="2">narrationComplete.previousState</td><td>f.eks.: dc:dateAccepted</td></tr>
+        <tr><td colspan="2">narrationComplete.responsibility</td><td>navn på person som er ansvarlig for den ferdig innleste boka</td></tr>
+        <tr><td colspan="2">patron</td><td>navn på låner som det produseres for</td></tr>
+        <tr><td colspan="2">periodical</td><td>true/false (hvorvidt publikasjonen er et tidsskrift)</td></tr>
+        <tr><td colspan="2">periodicity</td><td>hvor ofte tidsskriftet utgis</td></tr>
+        <tr><td colspan="2">pofs.exists</td><td>true/false - hvorvidt boka finnes if POFS</td></tr>
+        <tr><td colspan="2">postProductionComplete</td><td>dato da etterarbeidet er ferdig utført</td></tr>
+        <tr><td colspan="2">postProductionComplete.nextState</td><td>f.eks. dc:created</td></tr>
+        <tr><td colspan="2">postProductionComplete.previousState</td><td>narrationComplete</td></tr>
+        <tr><td colspan="2">postProductionComplete.responsibility</td><td>navn på etterarbeider</td></tr>
+        <tr><td colspan="2">prepayment</td><td>true/false - forskuddsbetaling</td></tr>
+        <tr><td colspan="2">priority</td><td>produksjonens prioritet</td></tr>
+        <tr><td colspan="2">producer</td><td>navn på produsent</td></tr>
+        <tr><td colspan="2">production.state</td><td>produksjonens nåværende status: dc:dateSubmitted (bestilt av utlån), scanningComplete (ferdig skannet), dc:dateAccepted (produksjon startet), narrationComplete (ferdig innlest), postProductionComplete (ferdig etterarbeidet), dc:created (ferdig produsert), dc:available (klar til utlån)</td></tr>
+        <tr><td colspan="2">production.previousState</td><td>dc:dateSubmitted, scanningComplete, dc:dateAccepted, narrationComplete, postProductionComplete, dc:created, dc:available</td></tr>
+        <tr><td colspan="2">production.nextState</td><td>dc:dateSubmitted, scanningComplete, dc:dateAccepted, narrationComplete, postProductionComplete, dc:created, dc:available</td></tr>
+        <tr><td colspan="2">productionDeadline</td><td>dato da publikasjonen er forventet å være ferdigprodusert</td></tr>
+        <tr><td colspan="2">productionNotes</td><td>produksjonskommentarer</td></tr>
+        <tr><td colspan="2">proofReader</td><td>korrekturleser for produksjonen</td></tr>
+        <tr><td colspan="2">renumerationResponsibility</td><td>honoreringsansvarlig</td></tr>
+        <tr><td colspan="2">RNIB</td><td>true/false - hvorvidt boka er kjøpt inn fra RNIB</td></tr>
+        <tr><td colspan="2">scanningComplete</td><td>dato da publikasjonen ble ferdig skannet</td></tr>
+        <tr><td colspan="2">scanningComplete.nextState</td><td>productionStarted</td></tr>
+        <tr><td colspan="2">scanningComplete.previousState</td><td>ordered</td></tr>
+        <tr><td colspan="2">scanningComplete.responsibility</td><td>navn på person som er ansvarlig for skanningen</td></tr>
+        <tr><td colspan="2">series.issn</td><td>ISSN for serie</td></tr>
+        <tr><td colspan="2">series.partNumber</td><td>nummerering i underserien</td></tr>
+        <tr><td colspan="2">series.preceding.identifier</td><td>tilvekstnummer for forrige publikasjon i serien</td></tr>
+        <tr><td colspan="2">series.preceding.title</td><td>tittel på forrige publikasjon i serien</td></tr>
+        <tr><td colspan="2">series.preceding.title.alternative</td><td>alternativ tittel på forrige publikasjon i serien</td></tr>
+        <tr><td colspan="2">series.preceding.uri</td><td>NBN-URI for forrige publikasjon i serien</td></tr>
+        <tr><td colspan="2">series.sequel.identifier</td><td>tilvekstnummer for neste publikasjon i serien</td></tr>
+        <tr><td colspan="2">series.sequel.title</td><td>tittel på neste publikasjon i serien</td></tr>
+        <tr><td colspan="2">series.sequel.title.alternative</td><td>alternativ tittel på neste publikasjon i serien</td></tr>
+        <tr><td colspan="2">series.sequel.uri</td><td>NBN-URI for neste publikasjon i serien</td></tr>
+        <tr><td colspan="2">share.h1</td><td>Første h1-element i boka</td></tr>
+        <tr><td colspan="2">uri</td><td>OAI identifikator for publikasjonen</td></tr>
+        <tr><td colspan="2">watermark</td><td>"none" hvis lydboken ikke skal vannmerkes</td></tr>
+    </table>
+
+</body>
+</html>
