@@ -18,6 +18,8 @@ Thumbs.db
 /.gradle/
 /.gradle-modules
 /.gradle-settings/
+.gradle-install
+.gradle-test
 /*.zip
 /*.deb
 .maven-test*
@@ -35,6 +37,8 @@ xspec/*.html
 *.swp
 
 # Eclipse
-.classpath
+eclipse/
+eclipse/*
 .project
 .settings/
+.classpath
