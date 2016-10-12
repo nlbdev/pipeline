@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  
+  <!-- abstract script (common options and documentations) -->
+  <uri name="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl" uri="../xml/xml-to-pef.xpl"  px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
+  
+  <!-- scripts -->
+  <uri name="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl" uri="../xml/dtbook-to-pef.xpl" px:script="true" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
+  <uri name="http://www.nlb.no/pipeline/modules/braille/epub3-to-pef.xpl" uri="../xml/epub3-to-pef.xpl" px:script="true" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
+  <uri name="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl" uri="../xml/html-to-pef.xpl" px:script="true" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
+
+  <!-- utilities -->
+  <uri name="http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl" uri="../xml/insert-boilerplate-epub.xsl"/>
+
+  <!-- xproc library -->
+  <uri name="http://www.nlb.no/pipeline/modules/braille/library.xpl" uri="../xml/library.xpl"/>
+  
+  <!-- css -->
+  <uri name="http://www.nlb.no/pipeline/modules/braille/default.scss" uri="../css/nlb-default.scss"/>
+  
+  <!-- dependencies -->
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-tables"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:libhyphen-libreoffice-tables"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:dtbook-to-pef"/>
+  
+</catalog>

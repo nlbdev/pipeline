@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules.braille</groupId>
+    <artifactId>braille-modules-parent</artifactId>
+    <version>1.9.15</version>
+    <relativePath />
+  </parent>
+
+  <artifactId>mod-nlb</artifactId>
+  <version>1.9.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DP2 Braille Modules :: NLB</name>
+  <description>Module for the Norwegian Library of Talking Books and Braille to produce Norwegian braille.</description>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>css-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>dtbook-to-pef</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>epub3-to-pef</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>html-to-pef</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>xml-to-pef</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>css-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-tables</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>mediatype-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>zip-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-native</artifactId>
+      <classifier>linux</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-libreoffice-tables</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>dotify-formatter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>pef-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.xprocspec</groupId>
+      <artifactId>xprocspec</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xprocspec-runner</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>1.7.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>pax-exam-helper</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <!--
+          <exclude>hyph/**/*</exclude>
+          -->
+          <exclude>hyph/alphabet</exclude>
+          <exclude>hyph/hyph_nb_NO_nonstandard.pat</exclude>
+          <exclude>hyph/hyph_nb_NO_standard_base.pat</exclude>
+          <exclude>hyph/hyph_nb_NO_standard_dictionary/*</exclude>
+          <!--
+              braille-modules-parent
+          -->
+          <exclude>META-INF/catalog.xml</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/generated-resources</directory>
+        <includes>
+          <!--
+          <include>hyph/hyph_nb_NO.dic</include>
+          -->
+          <!--
+              braille-modules-parent
+          -->
+          <include>META-INF/catalog.xml</include>
+          <include>generated-scripts</include>
+          <include>generated-scripts/*</include>
+          <include>data-types</include>
+          <include>data-types/**/*</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <!--
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <id>process-whitelist</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <ac:if xmlns:ac="antlib:net.sf.antcontrib">
+                  <available file="target/generated-resources/hyph/hyph_nb_NO.dic" />
+                  <ac:then>
+                    <echo message="Won't recompile hyph_nb_NO.dic. Use `mvn clean` first if you need to recompile it." />
+                  </ac:then>
+                  <ac:else>
+                    <echo message="Will compile hyph_nb_NO.dic. This may take a few minutes..." />
+                    <mkdir dir="target/generated-resources/hyph" />
+                    <concat destfile="target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt" encoding="ISO-8859-1">
+                      <fileset dir="src/main/resources/hyph/hyph_nb_NO_standard_dictionary" />
+                    </concat>
+                    <exec executable="bash" failonerror="yes">
+                      <arg value="patgen.sh" />
+                      <arg value="target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt" />
+                      <arg value="src/main/resources/hyph/hyph_nb_NO_standard_base.pat" />
+                      <arg value="target/generated-resources/hyph/hyph_nb_NO_standard.pat" />
+                      <arg value="src/main/resources/hyph/alphabet" />
+                      <arg value="1" />   <!- - LEFT_HYPHEN_MIN - ->
+                      <arg value="1" />   <!- - RIGHT_HYPHEN_MIN - ->
+                      <arg value="1" />   <!- - HYPH_LEVEL - ->
+                      <arg value="1" />   <!- - PAT_START - ->
+                      <arg value="15" />  <!- - PAT_FINISH - ->
+                      <arg value="1" />   <!- - GOOD_WEIGHT - ->
+                      <arg value="100" /> <!- - BAD_WEIGHT - ->
+                      <arg value="1" />   <!- - THRESHOLD - ->
+                      <redirector output="target/patgen.log" />
+                    </exec>
+                    <concat destfile="target/generated-resources/hyph/hyph_nb_NO.dic" encoding="ISO-8859-1">
+                      <header trimleading="yes">
+                        ISO8859-1
+                        LEFTHYPHENMIN 1
+                        RIGHTHYPHENMIN 1${line.separator}
+                      </header>
+                      <filelist>
+                        <file name="target/generated-resources/hyph/hyph_nb_NO_standard.pat" />
+                        <file name="src/main/resources/hyph/hyph_nb_NO_nonstandard.pat" />
+                      </filelist>
+                    </concat>
+                  </ac:else>
+                </ac:if>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+            <exclusions>
+              <exclusion>
+                <groupId>ant</groupId>
+                <artifactId>ant</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant-nodeps</artifactId>
+            <version>1.8.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      -->
+      <plugin>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>maven-paxexam-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-depends-file</id>
+            <goals>
+              <goal>generate-depends-file</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <_dsannotations>
+              no.nlb.pipeline.braille.impl.NLBTranslator$Provider,
+              no.nlb.pipeline.braille.impl.LibhyphenTablePath,
+              no.nlb.pipeline.braille.impl.TablePath
+            </_dsannotations>
+          </instructions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bundle-before-test</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.vafer</groupId>
+        <artifactId>jdeb</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <id>package-deb</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jdeb</goal>
+            </goals>
+            <configuration>
+              <controlDir>src/main/deb/DEBIAN</controlDir>
+              <classifier>all</classifier>
+              <deb>target/${project.artifactId}_${project.version}_all.deb</deb>
+              <dataSet>
+                <data>
+                  <type>file</type>
+                  <src>target/${project.artifactId}-${project.version}.jar</src>
+                  <mapper>
+                    <type>perm</type>
+                    <prefix>/opt/daisy-pipeline2/modules</prefix>
+                  </mapper>
+                </data>
+              </dataSet>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

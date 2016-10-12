@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
+  
+  <x:scenario label="non-standard hyphenation #1">
+    <x:call step="nlb:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="inline" xml:base="file:/tmp/book.xml">
+          <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+            <book>
+              <bodymatter>
+                <level1>
+                  <p>Busstopp busstopp busstopp busstopp busstopp busstopp busstopp busstopp</p>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="page-width" select="28"/>
+      <x:option name="show-print-page-numbers" select="false()"/>
+      <x:option name="pef-output-dir" select="resolve-uri('non-standard-hyphenation-1/output-dir',$temp-dir)"/>
+      <x:option name="preview-output-dir" select="resolve-uri('non-standard-hyphenation-1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('non-standard-hyphenation-1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="non-standard-hyphenation-1/output-dir/book.pef" />
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="no" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="28" rows="28" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠀⠀⠀⠀⠠⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀</row>
+                  <row>⠀⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠤</row>
+                  <row>⠀⠀⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀</row>
+                  <row>⠀⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="non-standard hyphenation #2">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2001/dtbook/" style="margin-left: 0; padding-left: 0; text-indent: 0;">
+                        <head>
+                            <style media="embossed" type="text/css">
+                                @page {
+                                    size: 30 50;
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                                frontmatter, rearmatter, level1 {
+                                    display: none;
+                                }
+                                dtbook, book, bodymatter, level1, p {
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                                
+                                level1.hyphentest {
+                                    display: block;
+                                }
+                                .hyphentest p {
+                                    display: block;
+                                }
+                            </style>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1 class="hyphentest">
+                                    <!-- (to see the x position when writing the tests; words should go past the line width)
+                                       1        10        20        30
+                                       123456789012345678901234567890
+                                    -->
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx nattog</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx villaks</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx bassolo</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx blokkatt</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx brenneslebladenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxx budsjettal</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx busseter</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx butikkjedenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxx fjellandsbyenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx fotballandskampenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxx gullameene</p>
+                                    <p>xxxxxxxxxxxxxxxxxxx kontrollyst</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx bunnivå</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx gullotto</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx busstopp</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx fullastet</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx bussjåfør</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx skuddrama</p>
+                                    <p>xxxxxxxxxxxxxxxxxxx butikkjede</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="pef-output-dir" select="resolve-uri('non-standard-hyphenation-2/output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('non-standard-hyphenation-2/output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('non-standard-hyphenation-2/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+          <x:document type="file" base-uri="temp-dir" href="non-standard-hyphenation-2/output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline" select="//pef:row">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠝⠁⠞⠞⠤</row>
+                    <row>⠀⠞⠕⠛</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠊⠇⠇⠤</row>
+                    <row>⠀⠇⠁⠅⠎</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠁⠎⠎⠤</row>
+                    <row>⠀⠎⠕⠇⠕</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠇⠕⠅⠅⠤</row>
+                    <row>⠀⠅⠁⠞⠞</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠗⠑⠝⠝⠤</row>
+                    <row>⠀⠝⠑⠎⠇⠑⠃⠇⠁⠙⠑⠝⠑⠎</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠙⠎⠚⠑⠞⠞⠤</row>
+                    <row>⠀⠞⠁⠇</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
+                    <row>⠀⠎⠑⠞⠑⠗</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠞⠊⠅⠅⠤</row>
+                    <row>⠀⠅⠚⠑⠙⠑⠝⠑⠎</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠚⠑⠇⠇⠤</row>
+                    <row>⠀⠇⠁⠝⠙⠎⠃⠽⠑⠝⠑⠎</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠕⠞⠃⠁⠇⠇⠤</row>
+                    <row>⠀⠇⠁⠝⠙⠎⠅⠁⠍⠏⠑⠝⠑⠎</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
+                    <row>⠀⠇⠁⠍⠑⠑⠝⠑</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠅⠕⠝⠞⠗⠕⠇⠇⠤</row>
+                    <row>⠀⠇⠽⠎⠞</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠝⠝⠤</row>
+                    <row>⠀⠝⠊⠧⠡</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
+                    <row>⠀⠇⠕⠞⠞⠕</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
+                    <row>⠀⠎⠞⠕⠏⠏</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠥⠇⠇⠤</row>
+                    <row>⠀⠇⠁⠎⠞⠑⠞</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
+                    <row>⠀⠎⠚⠡⠋⠪⠗</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠅⠥⠙⠙⠤</row>
+                    <row>⠀⠙⠗⠁⠍⠁</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠞⠊⠅⠅⠤</row>
+                    <row>⠀⠅⠚⠑⠙⠑</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="standard hyphenation #1">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2001/dtbook/">
+                        <head>
+                            <style media="embossed" type="text/css">
+                                @page {
+                                    size: 30 50;
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                                frontmatter, rearmatter, level1 {
+                                    display: none;
+                                }
+                                dtbook, book, bodymatter, level1, p {
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                                
+                                level1.hyphentest {
+                                    display: block;
+                                }
+                                .hyphentest p {
+                                    display: block;
+                                }
+                            </style>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1 class="hyphentest">
+                                    <!-- (to see the x position when writing the tests; words should go past the line width)
+                                       1        10        20        30
+                                       123456789012345678901234567890
+                                    -->
+                                    <!-- some words that we've defined rules for explicitly -->
+                                    <p>xxxxxxxxxxxxxxxxxx hovedfagskandidat</p>
+                                    <p>xxxxxxxxxxxxxxxxxx inngangsport</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx selskapstøy</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx linje</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx orddeling</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx riksavis</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx skulle</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx eksempel</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx betale</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx førkrigstida</p>
+                                    <p>xxxxxxxxxxxxxxxxxx førkrigstida</p>
+                                    
+                                    <!-- words not explicitly defined but should work since we extend the existing table -->
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx gulerot</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx gullpengene</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="pef-output-dir" select="resolve-uri('standard-hyphenation-1/output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('standard-hyphenation-1/output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('standard-hyphenation-1/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+          <x:document type="file" base-uri="temp-dir" href="standard-hyphenation-1/output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline" select="//pef:row">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠓⠕⠧⠑⠙⠋⠁⠛⠎⠤</row>
+                    <row>⠀⠅⠁⠝⠙⠊⠙⠁⠞</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠊⠝⠝⠛⠁⠝⠛⠎⠤</row>
+                    <row>⠀⠏⠕⠗⠞</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠑⠇⠤</row>
+                    <row>⠀⠎⠅⠁⠏⠎⠞⠪⠽</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠇⠊⠝⠤</row>
+                    <row>⠀⠚⠑</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠕⠗⠙⠤</row>
+                    <row>⠀⠙⠑⠇⠊⠝⠛</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠗⠊⠅⠎⠤</row>
+                    <row>⠀⠁⠧⠊⠎</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠅⠥⠇⠤</row>
+                    <row>⠀⠇⠑</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠑⠅⠤</row>
+                    <row>⠀⠎⠑⠍⠏⠑⠇</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠑⠞⠁⠤</row>
+                    <row>⠀⠇⠑</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠪⠗⠤</row>
+                    <row>⠀⠅⠗⠊⠛⠎⠞⠊⠙⠁</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠪⠗⠅⠗⠊⠛⠎⠤</row>
+                    <row>⠀⠞⠊⠙⠁</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠑⠤</row>
+                    <row>⠀⠗⠕⠞</row>
+                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
+                    <row>⠀⠏⠑⠝⠛⠑⠝⠑</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+  
+</x:description>

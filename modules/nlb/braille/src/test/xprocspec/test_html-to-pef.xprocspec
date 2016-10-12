@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+    xmlns:p="http://www.w3.org/ns/xproc"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+    xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+    script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
+    
+    <x:scenario label="basic test">
+        <x:call step="nlb:html-to-pef">
+            <x:option name="html" select="resolve-uri('../resources/HTML/book.xhtml')"/>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="the output directory contents">
+            <x:document type="directory" base-uri="temp-dir" href="1/pef-output-dir/"/>
+        </x:context>
+        <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath"
+            test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+    </x:scenario>
+    
+</x:description>

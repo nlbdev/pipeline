@@ -1,0 +1,90 @@
+pipeline-mod-nlb v1.8.0
+=======================
+
+Includes
+--------
+- Improved EPUB support (https://github.com/snaekobbi/pipeline-mod-nlb/issues/35)
+- Alternate text on odd and even pages when line spacing is double
+  (https://github.com/snaekobbi/pipeline-mod-nlb/issues/31)
+- Automatic numbering of notes (https://github.com/snaekobbi/pipeline-mod-nlb/issues/33)
+- Mentioning of contraction grade on title page
+  (https://github.com/snaekobbi/pipeline-mod-nlb/issues/32)
+- Fixes to Liblouis table (https://github.com/snaekobbi/pipeline-mod-nlb/issues/36)
+
+pipeline-mod-nlb v1.7.0
+=======================
+
+Includes
+--------
+- Improved support for lists
+- Fix for emphasised text with white space
+- Various bugfixes
+
+pipeline-mod-nlb v1.6.0
+=======================
+
+Includes
+--------
+- NLB-specific scripts from DTBook, HTML and EPUB3 to PEF
+  (https://github.com/snaekobbi/pipeline-mod-nlb/pull/22)
+- Remove 5-2 surrounding other languages when using the norwegian braille table
+  (https://github.com/snaekobbi/pipeline-mod-nlb/issues/25)
+- Allow all languages as input
+- Do not perform contractions for foreign languages
+- Handle multiple authors and contributors on title page
+
+pipeline-mod-nlb v1.5.0
+=======================
+
+Includes
+--------
+- Automatic generation of boilerplate text
+  (https://github.com/snaekobbi/pipeline-mod-nlb/issues/18)
+- Treat `strong` as `em` when no `em` present
+  (https://github.com/snaekobbi/pipeline-mod-nlb/issues/2)
+
+pipeline-mod-nlb v1.4.0
+=======================
+
+Includes
+--------
+- CSS updates
+- Fixes to handling of bold, italic, underline, strike,
+  etc. (https://github.com/snaekobbi/pipeline-mod-nlb/pull/17)
+
+pipeline-mod-nlb v1.3.0
+=======================
+
+Includes
+--------
+- Improved handling of URLs and e-mail addresses (https://github.com/snaekobbi/pipeline-mod-nlb/issues/9)
+- Support for `text-transform:uncontracted` (https://github.com/snaekobbi/pipeline-mod-nlb/issues/10,
+  https://github.com/snaekobbi/pipeline-mod-nlb/issues/11)
+- Question mark for unrecognized characters (https://github.com/snaekobbi/pipeline-mod-nlb/issues/6)
+- Fixes to grade 2 (https://github.com/snaekobbi/pipeline-mod-nlb/issues/15)
+
+pipeline-mod-nlb v1.2.0
+=======================
+
+Includes
+--------
+- Support for 8-dot braille
+- Improved handling of URLs and e-mail addresses (https://github.com/snaekobbi/pipeline-mod-nlb/issues/4)
+
+pipeline-mod-nlb v1.1.0
+=======================
+
+Includes
+--------
+- Improved Liblouis table for Norwegian grade 2 (https://github.com/snaekobbi/liblouis/issues/4)
+- NLB specific braille CSS file
+
+pipeline-mod-nlb v1.0.0
+=======================
+
+Includes
+--------
+- Improved Liblouis table for Norwegian grade 0 (https://github.com/snaekobbi/liblouis/issues/4,
+  https://github.com/snaekobbi/issues/issues/13)
+- Custom Liblouis based translator that handles `html:strong`, `html:em` and `html:u`
+  (https://github.com/snaekobbi/issues/issues/14, https://github.com/snaekobbi/pipeline-mod-braille/issues/41)

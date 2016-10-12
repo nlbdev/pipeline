@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    <head>
+        <meta name="dtb:uid" content="123456"/>
+        <meta name="dc:Title" content="Testbok"/>
+        <meta name="dc:Creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+        <meta name="dc:Date" content="2016-03-01"/>
+        <meta name="dc:Publisher" content="NLB"/>
+        <meta name="dc:Language" content="no"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Testbok</doctitle>
+            <docauthor>Norsk lyd- og blindeskriftbibliotek</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Testbok</h1>
+                <p>Testavsnitt.</p>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>
