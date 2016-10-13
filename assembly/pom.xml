@@ -104,6 +104,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>no.nlb.pipeline.modules</groupId>
+        <artifactId>modules-bom</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
@@ -1136,6 +1143,36 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>zedai-to-pef</artifactId>
+                </artifactItem>
+                
+                <!-- NLB modules -->
+                <artifactItem>
+                    <groupId>org.daisy.pipeline.modules.braille</groupId>
+                    <artifactId>mod-nlb</artifactId>
+                </artifactItem>
+                <artifactItem>
+                    <groupId>no.nlb.pipeline.modules</groupId>
+                    <artifactId>catalog-month</artifactId>
+                </artifactItem>
+                <artifactItem>
+                    <groupId>no.nlb.pipeline.modules</groupId>
+                    <artifactId>catalog-year</artifactId>
+                </artifactItem>
+                <artifactItem>
+                    <groupId>no.nlb.pipeline.modules</groupId>
+                    <artifactId>html-to-dtbook</artifactId>
+                </artifactItem>
+                <artifactItem>
+                    <groupId>no.nlb.pipeline.modules</groupId>
+                    <artifactId>mailchimp</artifactId>
+                </artifactItem>
+                <artifactItem>
+                    <groupId>no.nlb.pipeline.modules</groupId>
+                    <artifactId>metadata-utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                    <groupId>org.daisy.pipeline.modules</groupId>
+                    <artifactId>tts-adapter-filibuster</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
