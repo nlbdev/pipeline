@@ -63,7 +63,7 @@
                 <linegroup>
                     <line class="duration">20 t 48 min</line>
                     <line>
-                        <span class="fieldName">Lest av:</span>
+                        <span class="fieldName">Lest av: </span>
                         <span class="narrators">
                             <span class="narrator">Emma Rowena Hansen</span>
                         </span>
@@ -71,13 +71,13 @@
                     <line class="description"
                         ><![CDATA[Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.]]></line>
                     <line>
-                        <span class="fieldName">Sjanger/Emner:</span>
+                        <span class="fieldName">Sjanger/Emner: </span>
                         <span class="topics">
                             <span class="topic">Kjærlighet</span>, <span class="topic">Samfunn</span>, <span class="topic">Rasisme</span>
                         </span>
                     </line>
                     <line>
-                        <span class="fieldName">Boknummer:</span>
+                        <span class="fieldName">Boknummer: </span>
                         <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621296" class="identifier">621296</a>
                     </line>
                 </linegroup>
@@ -146,7 +146,7 @@
                 <linegroup>
                     <line class="duration">20 t 48 min</line>
                     <line>
-                        <span class="fieldName">Lest av:</span>
+                        <span class="fieldName">Lest av: </span>
                         <span class="narrators">
                             <span class="narrator">Emma Rowena Hansen</span>
                         </span>
@@ -154,13 +154,13 @@
                     <line class="description"
                         ><![CDATA[Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.]]></line>
                     <line>
-                        <span class="fieldName">Sjanger/Emner:</span>
+                        <span class="fieldName">Sjanger/Emner: </span>
                         <span class="topics">
                             <span class="topic">Kjærlighet</span>, <span class="topic">Samfunn</span>, <span class="topic">Rasisme</span>
                         </span>
                     </line>
                     <line>
-                        <span class="fieldName">Boknummer:</span>
+                        <span class="fieldName">Boknummer: </span>
                         <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621296" class="identifier">621296</a>
                     </line>
                 </linegroup>

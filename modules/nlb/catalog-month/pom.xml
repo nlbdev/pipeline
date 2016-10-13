@@ -4,17 +4,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules</groupId>
+    <groupId>no.nlb.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.2</version>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>no.nlb.pipeline.modules</groupId>
-  <artifactId>nlb-catalog-year</artifactId>
+  <artifactId>catalog-month</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>NLB Pipeline 2 module :: Årskatalog</name>
+  <name>NLB Pipeline 2 module :: Nyhetsbrev</name>
 
 </project>

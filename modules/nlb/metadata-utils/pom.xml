@@ -5,19 +5,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.daisy.pipeline.modules</groupId>
+        <groupId>no.nlb.pipeline.modules</groupId>
         <artifactId>modules-parent</artifactId>
-        <version>1.2</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <groupId>no.nlb.pipeline.modules</groupId>
-    <artifactId>nlb-metadata-utils</artifactId>
+    <artifactId>metadata-utils</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>NLB Pipeline 2 module :: metadata utilities</name>
-
+    <name>NLB Pipeline 2 module :: Metadata Utilities</name>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>common-utils</artifactId>
+            <!--<version></version>-->
+        </dependency>
+    </dependencies>
+    
     <build>
         <plugins>
 
