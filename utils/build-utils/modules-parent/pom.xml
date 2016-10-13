@@ -269,7 +269,7 @@
               <dependency>
                 <groupId>org.daisy.pipeline.build</groupId>
                 <artifactId>modules-build-helper</artifactId>
-                <version>1.3</version>
+                <version>1.4-SNAPSHOT</version>
               </dependency>
             </dependencies>
           </plugin>
