@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/sbsdev/project-version-maven-plugin
+	remote = git@github.com:sbsdev/project-version-maven-plugin.git
 	branch = master
 	commit = 631910ef121514a3ab36f86a02ba8a6f9e98b023
 	parent = 3aadd08c6fcdd726ed62f36ffaf0f484af6763ea
