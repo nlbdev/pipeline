@@ -83,9 +83,9 @@ public class FilibusterEngine extends TTSEngine {
 
 	@Override
 	public Collection<AudioBuffer> synthesize(String sentence, XdmNode xmlSentence,
-	        Voice voice, TTSResource threadResources, List<Mark> marks,
-	        AudioBufferAllocator bufferAllocator, boolean retry) throws SynthesisException,
-	        InterruptedException, MemoryException {
+			Voice voice, TTSResource threadResources, List<Mark> marks,
+			List<String> expectedMarks, AudioBufferAllocator bufferAllocator, boolean retry)
+			throws SynthesisException, InterruptedException, MemoryException {
 		
 		if (threadResources instanceof FilibusterInstance) {
 			logger.debug(threadId()+"synthesizing: '"+sentence+"'");

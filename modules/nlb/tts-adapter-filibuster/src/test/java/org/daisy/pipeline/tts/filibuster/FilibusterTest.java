@@ -46,9 +46,9 @@ public class FilibusterTest {
 		Voice voice = getAnyVoice(engine);
 
 		TTSResource resource = engine.allocateThreadResources();
-		Collection<AudioBuffer> audio1 = engine.synthesize("this is a test", null, voice, resource,  null, BufferAllocator, false);
-		Collection<AudioBuffer> audio2 = engine.synthesize("this is another test", null, voice, resource,  null, BufferAllocator, false);
-		Collection<AudioBuffer> audio3 = engine.synthesize("this is a third test", null, voice, resource,  null, BufferAllocator, false);
+		Collection<AudioBuffer> audio1 = engine.synthesize("this is a test", null, voice, resource,  null, null, BufferAllocator, false);
+		Collection<AudioBuffer> audio2 = engine.synthesize("this is another test", null, voice, resource,  null, null, BufferAllocator, false);
+		Collection<AudioBuffer> audio3 = engine.synthesize("this is a third test", null, voice, resource,  null, null, BufferAllocator, false);
 		engine.releaseThreadResources(resource);
 		
 		Assert.assertTrue(getSize(audio1) > 2000);
@@ -61,7 +61,7 @@ public class FilibusterTest {
 		FilibusterEngine engine = allocateEngine();
 		TTSResource resource = engine.allocateThreadResources();
 		Voice voice = getAnyVoice(engine);
-		Collection<AudioBuffer> li = engine.synthesize("<s>𝄞𝄞𝄞𝄞 水水水水水 𝄞水𝄞水𝄞水𝄞水 test 国Ø家Ť标准 ĜæŘ ß ŒÞ ๕</s>", null, voice, resource, null, BufferAllocator, false);
+		Collection<AudioBuffer> li = engine.synthesize("<s>𝄞𝄞𝄞𝄞 水水水水水 𝄞水𝄞水𝄞水𝄞水 test 国Ø家Ť标准 ĜæŘ ß ŒÞ ๕</s>", null, voice, resource, null, null, BufferAllocator, false);
 		engine.releaseThreadResources(resource);
 
 		Assert.assertTrue(getSize(li) > 2000);
@@ -89,7 +89,7 @@ public class FilibusterTest {
 					Collection<AudioBuffer> li = null;
 					for (int k = 0; k < 16; ++k) {
 						try {
-							li = engine.synthesize("small test", null, voice, resource, null, BufferAllocator, false);
+							li = engine.synthesize("small test", null, voice, resource, null, null, BufferAllocator, false);
 
 						} catch (SynthesisException | InterruptedException | MemoryException e) {
 							e.printStackTrace();
