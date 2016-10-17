@@ -341,7 +341,7 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/block-underline-styles-input.obfl",
 		        "resource-files/dp2/block-underline-styles-expected.pef", false);
 	}
-	@Test(expected=UnsupportedOperationException.class)
+	@Ignore // undefined behavior
 	public void testBlockUnderlineWithChildBlock() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/block-underline-with-child-block-input.obfl",
 		        "resource-files/dp2/block-underline-with-child-block-expected.pef", false);
