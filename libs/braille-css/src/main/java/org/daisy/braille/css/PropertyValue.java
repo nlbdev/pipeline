@@ -40,6 +40,14 @@ public class PropertyValue implements Cloneable {
 		return clone;
 	}
 	
+	@Override
+	public String toString() {
+		if (value != null)
+			return value.toString();
+		else
+			return property.toString();
+	}
+	
 	private final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
 	private static BrailleCSSDeclarationTransformer transformerInstance; static {
 		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
