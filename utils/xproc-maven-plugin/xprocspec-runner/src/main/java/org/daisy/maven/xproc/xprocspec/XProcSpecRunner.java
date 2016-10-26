@@ -17,11 +17,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
@@ -74,6 +76,10 @@ public class XProcSpecRunner {
 		}
 	}
 	
+	private static final Map<String,String> XPROCSPEC_NS = new HashMap<String,String>(); {
+		XPROCSPEC_NS.put("x", "http://www.daisy.org/ns/xprocspec");
+	}
+	
 	public boolean run(Map<String,File> tests,
 	                   File reportsDir,
 	                   File surefireReportsDir,
@@ -97,11 +103,26 @@ public class XProcSpecRunner {
 		int totalErrors = 0;
 		int totalSkipped = 0;
 		
+		Set<String> skipTests = new HashSet<String>(); {
+			Set<String> focusTests = new HashSet<String>(); {
+				for (String testName : tests.keySet()) {
+					File test = tests.get(testName);
+					if (test.exists())
+						if ((Boolean)evaluateXPath(test, "exists(//x:scenario[@focus])", XPROCSPEC_NS, Boolean.class))
+							focusTests.add(testName); }}
+			if (!focusTests.isEmpty())
+				for (String testName : tests.keySet())
+					if (!focusTests.contains(testName))
+						skipTests.add(testName);
+		}
+		
 		long startTime = System.nanoTime();
 		
 		reporter.init();
 		
 		for (String testName : tests.keySet()) {
+			if (skipTests.contains(testName))
+				continue;
 			File test = tests.get(testName);
 			File report = new File(reportsDir, testName + ".html");
 			File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
@@ -138,19 +159,22 @@ public class XProcSpecRunner {
 		
 		/* Generate summary */
 		try {
-			String[] testNames = new String[tests.size()];
-			String[] surefireReports = new String[tests.size()];
-			String[] reports = new String[tests.size()];
+			String[] testNames = new String[tests.size() - skipTests.size()];
+			String[] surefireReports = new String[tests.size() - skipTests.size()];
+			String[] reports = new String[tests.size() - skipTests.size()];
 			File summary = new File(reportsDir, "index.html");
 			File css = new File(reportsDir, "xspec.css");
 			Joiner joiner = Joiner.on(" ");
 			int i = 0;
 			for (String testName : tests.keySet()) {
+				if (skipTests.contains(testName))
+					continue;
 				testNames[i] = testName;
 				File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
 				surefireReports[i] = asURI(surefireReport).toASCIIString();
 				File report = new File(reportsDir, testName + ".html");
-				reports[i++] = asURI(report).toASCIIString(); }
+				reports[i] = asURI(report).toASCIIString();
+				i++; }
 			Map<String,String> output = ImmutableMap.of("result", asURI(summary).toASCIIString());
 			Map<String,String> params = ImmutableMap.of("test-names", joiner.join(testNames),
 			                                            "surefire-reports", joiner.join(surefireReports),
