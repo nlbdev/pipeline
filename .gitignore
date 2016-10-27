@@ -21,6 +21,7 @@ Thumbs.db
 /*.zip
 /*.deb
 .maven-test*
+/releaseDescriptor*xml
 
 # Maven
 target/
