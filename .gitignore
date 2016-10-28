@@ -10,23 +10,13 @@ Thumbs.db
 
 # "super project"-files
 /bom.xml
-/.maven-modules
-/.maven-workspace/
-/.maven-cache/
-.maven-test*
+.maven-*
 /maven.log
-/.gradle/
-/.gradle-modules
-/.gradle-settings/
-.gradle-install
-.gradle-test
+.gradle*
 /*.zip
 /*.deb
-.maven-test*
-/releaseDescriptor*xml
-
-# Maven
 target/
+/releaseDescriptor*xml
 
 # XSpec
 xspec/*.html
