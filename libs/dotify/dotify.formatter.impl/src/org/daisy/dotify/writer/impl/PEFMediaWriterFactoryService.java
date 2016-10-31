@@ -14,7 +14,7 @@ import aQute.bnd.annotation.component.Component;
 public class PEFMediaWriterFactoryService implements
 		PagedMediaWriterFactoryService {
 	
-	private final static List<String> mediaTypes;
+	private static final List<String> mediaTypes;
 	static {
 		mediaTypes = new ArrayList<>();
 		mediaTypes.add(MediaTypes.PEF_MEDIA_TYPE);

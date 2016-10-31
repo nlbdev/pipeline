@@ -16,6 +16,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 public class ObflWsXsltTest {
 
@@ -102,7 +103,21 @@ public class ObflWsXsltTest {
 		int ret = testWsNormalizer("resource-files/ws-test-input-14.xml", "resource-files/ws-test-expected-14.xml", "14", false);
 		assertTrue("Compare (Item) failed at byte: " + ret, ret == -1);
 	}
-
+	
+	@Ignore // see https://github.com/joeha480/dotify/issues/117
+	@Test
+	public void testWsNormalizer_15() throws IOException, XMLStreamException {
+		int ret = testWsNormalizer("resource-files/ws-test-input-15.xml", "resource-files/ws-test-expected-15.xml", "15", false);
+		assertTrue("Compare (Item) failed at byte: " + ret, ret == -1);
+	}
+	
+	@Ignore
+	@Test
+	public void testWsNormalizer_16() throws IOException, XMLStreamException {
+		int ret = testWsNormalizer("resource-files/ws-test-input-16.xml", "resource-files/ws-test-expected-16.xml", "16", false);
+		assertTrue("Compare (Item) failed at byte: " + ret, ret == -1);
+	}
+	
 	// Helpers
 	public int testWsNormalizer(String input, String expected, String id, boolean keep) throws IOException, XMLStreamException {
 		

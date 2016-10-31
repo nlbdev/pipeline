@@ -116,7 +116,7 @@ class EvenSizeVolumeSplitterCalculator {
 			int m = (volumes-1) - (v % volumes); // 4, 3, 2, 1, 0
 			int current = volumeSize.get(m);
 			if (current==1) {
-				throw new IllegalArgumentException("Volume sizes too uneven.");
+				throw new IllegalArgumentException("Volume sizes too uneven: " + volumeSize);
 			}
 			volumeSize.set(m, current-1);
 			v++;

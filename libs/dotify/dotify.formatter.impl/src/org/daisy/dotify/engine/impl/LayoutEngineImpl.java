@@ -35,10 +35,10 @@ import org.daisy.dotify.obfl.ObflParser;
  *
  */
 class LayoutEngineImpl implements FormatterEngine {
-	private final static String DC_NS = "http://purl.org/dc/elements/1.1/";
-	private final static QName DC_IDENTIFIER = new QName(DC_NS, "identifier");
-	private final static QName DC_DATE = new QName(DC_NS, "date");
-	private final static QName DC_FORMAT = new QName(DC_NS, "format");
+	private static final String DC_NS = "http://purl.org/dc/elements/1.1/";
+	private static final QName DC_IDENTIFIER = new QName(DC_NS, "identifier");
+	private static final QName DC_DATE = new QName(DC_NS, "date");
+	private static final QName DC_FORMAT = new QName(DC_NS, "format");
 	private final FormatterConfiguration config;
 	private final PagedMediaWriter writer;
 	private final Logger logger;

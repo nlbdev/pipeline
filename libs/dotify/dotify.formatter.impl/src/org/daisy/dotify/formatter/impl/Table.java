@@ -19,7 +19,7 @@ import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.common.text.StringTools;
 
 class Table extends Block {
-	private final static Logger logger = Logger.getLogger(Table.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(Table.class.getCanonicalName());
 	@SuppressWarnings("unused")
 	private int headerRows;
 	private final TableData td;

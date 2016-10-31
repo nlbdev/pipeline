@@ -14,7 +14,7 @@ import aQute.bnd.annotation.component.Component;
 public class TextMediaWriterFactoryService implements
 		PagedMediaWriterFactoryService {
 	
-	private final static List<String> mediaTypes;
+	private static final List<String> mediaTypes;
 	static {
 		mediaTypes = new ArrayList<>();
 		mediaTypes.add(MediaTypes.TEXT_MEDIA_TYPE);

@@ -32,7 +32,7 @@ import org.daisy.dotify.formatter.impl.DefaultContext.Space;
  * @author Joel Håkansson
  */
 public class FormatterImpl implements Formatter {
-	private final static int DEFAULT_SPLITTER_MAX = 50;
+	private static final int DEFAULT_SPLITTER_MAX = 50;
 	
 	private final HashMap<String, TableOfContentsImpl> tocs;
 	private final Stack<VolumeTemplate> volumeTemplates;
@@ -136,100 +136,53 @@ public class FormatterImpl implements Formatter {
 	}
 
 	private Iterable<? extends Volume> getVolumes() {
+		VolumeProvider volumeProvider = new VolumeProvider(blocks, new VolumeSplitterLimit(), context.getFormatterContext(), crh);
 
-		int j = 1;
-		boolean ok = false;
-		int totalOverheadCount = 0;
-		
-		SplitterLimit splitterLimit = new VolumeSplitterLimit();
-		VolumeSplitter splitter = new EvenSizeVolumeSplitter(crh, splitterLimit);
-		ArrayList<VolumeImpl> ret = new ArrayList<>();
+		ArrayList<VolumeImpl> ret;
 		ArrayList<AnchorData> ad;
-		//FIXME: delete the following try/catch
-		//This code is here for compatibility with regression tests and can be removed once
-		//differences have been checked and accepted
-		try {
-			// make a preliminary calculation based on a contents only
-			List<Sheet> ps = new PageStructBuilder(context.getFormatterContext(), blocks, crh).paginate(new DefaultContext.Builder().space(Space.BODY).build());
-			splitter.updateSheetCount(ps.size() + totalOverheadCount);
-		} catch (PaginatorException e) {
-			throw new RuntimeException("Error while formatting.", e);
-		}
-		
-		while (!ok) {
-			int sheetCount = 0;
-			//System.out.println("volcount "+volumeCount() + " sheets " + sheets);
-			boolean ok2 = true;
-			totalOverheadCount = 0;
-			ret = new ArrayList<>();
-			
-			VolumeProvider volumeProvider = new VolumeProvider(new PageStructBuilder(context.getFormatterContext(), blocks, crh), crh, new DefaultContext.Builder().space(Space.BODY).build());
 
+		for (int j=1;j<=10;j++) {
+			ret = new ArrayList<>();
+			volumeProvider.prepare();
 			for (int i=1;i<= crh.getVolumeCount();i++) {
 				VolumeImpl volume = getVolume(i);
 				ad = new ArrayList<>();
-
 				volume.setPreVolData(updateVolumeContents(i, ad, true));
-
-				totalOverheadCount += volume.getOverhead();
-
-				{
-					int split = splitterLimit.getSplitterLimit(i);
-					List<Sheet> contents = volumeProvider.nextVolume(
-							(i==crh.getVolumeCount()?split:splitter.sheetsInVolume(i)),
-							volume.getOverhead(),
-							split, ad
-							);
-					
-					volume.setBody(contents);
-					sheetCount += volume.getBodySize();
+				volume.setBody(volumeProvider.nextVolume(volume.getOverhead(), ad));
+				
+				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Sheets  in volume " + i + ": " + (volume.getVolumeSize()) + 
 							", content:" + volume.getBodySize() +
 							", overhead:" + volume.getOverhead());
-					
-					volume.setPostVolData(updateVolumeContents(i, ad, false));
-					crh.setSheetsInVolume(i, volume.getBodySize() + volume.getOverhead());
-					//crh.setPagesInVolume(i, value);
-					crh.setAnchorData(i, ad);
+				}
+				volume.setPostVolData(updateVolumeContents(i, ad, false));
+				crh.setSheetsInVolume(i, volume.getBodySize() + volume.getOverhead());
+				//crh.setPagesInVolume(i, value);
+				crh.setAnchorData(i, ad);
+				ret.add(volume);
+			}
 
-					ret.add(volume);
-				}
-			}
-			int totalPageCount = volumeProvider.getTotalPageCount();
-			if (volumeProvider.hasNext()) {
-				sheetCount += volumeProvider.getRemaining().size();
-				totalPageCount += countPages(volumeProvider.getRemaining());
-			}
-			crh.setSheetsInDocument(sheetCount + totalOverheadCount);
+			volumeProvider.update();
+			crh.setVolumeCount(volumeProvider.getVolumeCount());
+			crh.setSheetsInDocument(volumeProvider.countTotalSheets());
 			//crh.setPagesInDocument(value);
-			splitter.updateSheetCount(sheetCount + totalOverheadCount);
 			if (volumeProvider.hasNext()) {
-				ok2 = false;
-				logger.fine("There is more content... sheets: " + volumeProvider.getRemaining() + ", pages: " +(totalPageCount-volumeProvider.getPageIndex()));
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("There is more content (sheets: " + volumeProvider.countRemainingSheets() + ", pages: " + volumeProvider.countRemainingPages() + ")");
+				}
 				if (!isDirty() && j>1) {
-					splitter.adjustVolumeCount(sheetCount+totalOverheadCount);
+					volumeProvider.adjustVolumeCount();
 				}
 			}
-			if (!isDirty() && volumeProvider.getPageIndex()==totalPageCount && ok2) {
+			if (!isDirty() && !volumeProvider.hasNext()) {
 				//everything fits
-				ok = true;
-			} else if (j>9) {
-				throw new RuntimeException("Failed to complete volume division.");
+				return ret;
 			} else {
-				j++;
 				setDirty(false);
 				logger.info("Things didn't add up, running another iteration (" + j + ")");
 			}
 		}
-		return ret;
-	}
-	
-	static int countPages(List<Sheet> sheets) {
-		int ret = 0;
-		for (Sheet s : sheets) {
-			ret += s.getPages().size();
-		}
-		return ret;
+		throw new RuntimeException("Failed to complete volume division.");
 	}
 
 	private List<Sheet> updateVolumeContents(int volumeNumber, ArrayList<AnchorData> ad, boolean pre) {

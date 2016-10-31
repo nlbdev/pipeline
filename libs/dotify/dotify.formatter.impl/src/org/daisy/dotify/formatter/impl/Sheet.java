@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.daisy.dotify.common.layout.SplitPointUnit;
 class Sheet implements SplitPointUnit {
-	private final static List<String> SUPPLEMENTS = Collections.unmodifiableList(new ArrayList<String>()); 
+	private static final List<String> SUPPLEMENTS = Collections.unmodifiableList(new ArrayList<String>()); 
 	private final List<PageImpl> pages;
 	private final boolean breakable, skippable, collapsible;
 	private final boolean startNewVolume;
