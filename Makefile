@@ -22,7 +22,7 @@ dist: dist-zip dist-deb
 .PHONY : dist-zip
 dist-zip : compile
 	cd assembly && \
-	$(MVN) clean package -Plinux,mac,win | $(MVN_LOG)
+	$(MVN) clean package -Plinux,mac,win,minimal | $(MVN_LOG)
 	mv assembly/target/*.zip .
 
 .PHONY : dist-deb
