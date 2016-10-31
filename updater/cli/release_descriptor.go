@@ -137,6 +137,7 @@ func (r ReleaseDescriptor) UpdateFrom(local ReleaseDescriptor, installationPath 
 	}
 	toDeploy, err := Download(tempDir, diffSet.ToDownload()...)
 	if err != nil {
+		os.RemoveAll(tempDir)
 		return err
 	}
 	ok, errs := Remove(diffSet.ToRemove(installationPath))
@@ -148,6 +149,11 @@ func (r ReleaseDescriptor) UpdateFrom(local ReleaseDescriptor, installationPath 
 	if !ok {
 		//warn
 		log.Printf("errs %+v\n", errs)
+	}
+	err = os.RemoveAll(tempDir)
+	if err != nil {
+		//warn
+		log.Printf("err %+v\n", err)
 	}
 	return nil
 }
