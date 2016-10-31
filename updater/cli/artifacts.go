@@ -201,9 +201,7 @@ func Remove(las []LocalArtifact) (ok bool, errs []error) {
 func Deploy(las []LocalArtifact, path string) (ok bool, errs []error) {
 	fn := func(l LocalArtifact) error {
 		if l.Extract {
-			ret := l.Unzip(path)
-			os.Remove(l.Path)
-			return ret
+			return l.Unzip(path)
 		} else {
 			return l.Copy(path)
 		}
