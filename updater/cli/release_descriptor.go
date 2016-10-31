@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-
+	"io/ioutil"
 	"github.com/blang/semver"
 )
 
@@ -131,7 +131,11 @@ func (r ReleaseDescriptor) UpdateFrom(local ReleaseDescriptor, installationPath 
 		//nothing to do!
 		return nil
 	}
-	toDeploy, err := Download(os.TempDir(), diffSet.ToDownload()...)
+	tempDir, err := ioutil.TempDir("", "pipeline-updater")
+	if err != nil {
+		return err
+	}
+	toDeploy, err := Download(tempDir, diffSet.ToDownload()...)
 	if err != nil {
 		return err
 	}
