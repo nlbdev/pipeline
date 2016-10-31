@@ -34,14 +34,15 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
     GROUP_ID="`echo $artifactLine | sed 's/.* groupId="//' | sed 's/".*//'`"
     ARTIFACT_ID="`echo $artifactLine | sed 's/.* artifactId="//' | sed 's/".*//'`"
     ARTIFACT_VERSION="`echo $artifactLine | sed 's/.* version="//' | sed 's/".*//'`"
-    REMOTE_PATH="`cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\"" | sed 's/.* href="//' | sed 's/".*//'`"
+    ARTIFACT_CLASSIFIER="`echo $artifactLine | sed 's/.* classifier="//' | sed 's/".*//'`"
+    REMOTE_PATH="`cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " classifier=\\\"$ARTIFACT_CLASSIFIER\\\"" | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\"" | sed 's/.* href="//' | sed 's/".*//'`"
     RELATIVE_PATH="`echo $artifactLine | sed 's/.*href="//' | sed 's/".*//' | sed 's/\/[^/]*$//'`"
     LOCAL_PATH="`find .maven-cache ~/.m2 -type d | grep "$RELATIVE_PATH$" | head -n 1`"
     STATUS_CODE="`curl -I --write-out %{http_code} --silent --output /dev/null "$REMOTE_PATH"`"
     if [ "`echo $ARTIFACT_VERSION | grep SNAPSHOT | wc -l`" != "1" ] || [ "$STATUS_CODE" = "200" ] || [ "$STATUS_CODE" = "302" ]; then
         echo "using $GROUP_ID:$ARTIFACT_ID:$ARTIFACT_VERSION from remote server"
-        if [ "$DEBUG" = "1" ]; then echo "adding: `cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\""`" ; fi
-        cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\"" >> releaseDescriptor.xml
+        if [ "$DEBUG" = "1" ]; then echo "adding: `cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " classifier=\\\"$ARTIFACT_CLASSIFIER\\\"" | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\""`" ; fi
+        cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " classifier=\\\"$ARTIFACT_CLASSIFIER\\\"" | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\"" >> releaseDescriptor.xml
     else
         # upload artifact to pipeline server since it's not hosted anywhere else,
         # or since it's a snapshot and we want a backup in case it disappears from sonatype.
