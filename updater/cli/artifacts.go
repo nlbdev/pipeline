@@ -94,6 +94,10 @@ func (la LocalArtifact) Unzip(path string) error {
 			return err
 		}
 		defer f.Close()
+		err = os.Chmod(extrPath, zEntry.Mode())
+		if err != nil {
+			Error("%s setting file permissions", err)
+		}
 		_, err = io.Copy(f, zC)
 		if err != nil {
 			return err
