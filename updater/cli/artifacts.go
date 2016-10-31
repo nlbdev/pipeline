@@ -200,7 +200,6 @@ func Remove(las []LocalArtifact) (ok bool, errs []error) {
 //depending on whether the artifact is marked to do so
 func Deploy(las []LocalArtifact, path string) (ok bool, errs []error) {
 	fn := func(l LocalArtifact) error {
-		Info("extract: %s", l.Extract)
 		if l.Extract {
 			ret := l.Unzip(path)
 			os.Remove(l.Path)
