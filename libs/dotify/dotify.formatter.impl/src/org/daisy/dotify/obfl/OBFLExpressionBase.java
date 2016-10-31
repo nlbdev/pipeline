@@ -7,13 +7,13 @@ import org.daisy.dotify.api.formatter.Context;
 import org.daisy.dotify.api.obfl.ExpressionFactory;
 
 public abstract class OBFLExpressionBase {
-	public final static String DEFAULT_PAGE_NUMBER_VARIABLE_NAME = "page";
-	public final static String DEFAULT_VOLUME_NUMBER_VARIABLE_NAME = "volume";
-	public final static String DEFAULT_VOLUME_COUNT_VARIABLE_NAME = "volumes";
-	public final static String DEFAULT_EVENT_VOLUME_NUMBER = "started-volume-number";
-	public final static String DEFAULT_EVENT_PAGE_NUMBER = "started-page-number";
-	public final static String DEFAULT_SHEET_COUNT_VARIABLE_NAME = "sheets-in-document";
-	public final static String DEFAULT_VOLUME_SHEET_COUNT_VARIABLE_NAME = "sheets-in-volume";
+	public static final String DEFAULT_PAGE_NUMBER_VARIABLE_NAME = "page";
+	public static final String DEFAULT_VOLUME_NUMBER_VARIABLE_NAME = "volume";
+	public static final String DEFAULT_VOLUME_COUNT_VARIABLE_NAME = "volumes";
+	public static final String DEFAULT_EVENT_VOLUME_NUMBER = "started-volume-number";
+	public static final String DEFAULT_EVENT_PAGE_NUMBER = "started-page-number";
+	public static final String DEFAULT_SHEET_COUNT_VARIABLE_NAME = "sheets-in-document";
+	public static final String DEFAULT_VOLUME_SHEET_COUNT_VARIABLE_NAME = "sheets-in-volume";
 	
 	protected final ExpressionFactory ef;
 	protected final String exp;

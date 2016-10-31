@@ -4,8 +4,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class LookupHandlerTest {
-	private final static String key1 = "key1";
-	private final static String value1 = "value1";
+	private static final String key1 = "key1";
+	private static final String value1 = "value1";
 
 	@Test
 	public void test_commit_vs_put_using_commit() {

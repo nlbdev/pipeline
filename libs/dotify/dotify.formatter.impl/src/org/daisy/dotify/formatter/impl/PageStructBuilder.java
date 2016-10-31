@@ -18,13 +18,24 @@ class PageStructBuilder {
 		this.fs = fs;
 		this.crh = crh;
 	}
-
+	
 	List<Sheet> paginate(DefaultContext rcontext) throws PaginatorException {
+		List<List<Sheet>> ret = paginateInner(rcontext, false);
+		return ret.get(0);
+	}
+	
+	List<List<Sheet>> paginateGrouped(DefaultContext rcontext) throws PaginatorException {
+		return paginateInner(rcontext, true);
+	}
+
+	private List<List<Sheet>> paginateInner(DefaultContext rcontext, boolean groupVolumeBreaks) throws PaginatorException {
 		try {
 		restart:while (true) {
 			crh.resetUniqueChecks();
 			struct = new PageStruct();
-			List<Sheet> ret = new ArrayList<>();
+			List<List<Sheet>> groups = new ArrayList<>();
+			List<Sheet> currentGroup = new ArrayList<>();
+			groups.add(currentGroup);
 			boolean volBreakAllowed = true;
 			for (BlockSequence bs : fs) {
 				try {
@@ -39,10 +50,15 @@ class PageStructBuilder {
 						if (!lm.duplex() || pageIndex % 2 == 0) {
 							volBreakAllowed = true;
 							if (s!=null) {
-								ret.add(s.build());
+								Sheet r = s.build();
+								if (r.shouldStartNewVolume() && groupVolumeBreaks) {
+									currentGroup = new ArrayList<>();
+									groups.add(currentGroup);
+								}
+								currentGroup.add(r);
 							}
 							s = new Sheet.Builder();
-							si = new SheetIdentity(rcontext.getSpace(), rcontext.getCurrentVolume()==null?0:rcontext.getCurrentVolume(), ret.size());
+							si = new SheetIdentity(rcontext.getSpace(), rcontext.getCurrentVolume()==null?0:rcontext.getCurrentVolume(), currentGroup.size());
 							sheetIndex++;
 						}
 						s.avoidVolumeBreakAfterPriority(p.getAvoidVolumeBreakAfter());
@@ -71,13 +87,18 @@ class PageStructBuilder {
 					}
 					if (s!=null) {
 						//Last page in the sequence doesn't need volume keep priority
-						ret.add(s.build());
+						Sheet r = s.build();
+						if (r.shouldStartNewVolume() && groupVolumeBreaks) {
+							currentGroup = new ArrayList<>();
+							groups.add(currentGroup);
+						}
+						currentGroup.add(r);
 					}
 				} catch (RestartPaginationException e) {
 					continue restart;
 				}
 			}
-			return ret;
+			return groups;
 		}
 		} finally {
 			crh.commitBreakable();

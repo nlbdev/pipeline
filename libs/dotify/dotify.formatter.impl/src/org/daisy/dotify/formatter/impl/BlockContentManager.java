@@ -27,8 +27,8 @@ import org.daisy.dotify.common.text.StringTools;
  * @author Joel Håkansson
  */
 class BlockContentManager extends AbstractBlockContentManager {
-	private final static Pattern softHyphenPattern  = Pattern.compile("\u00ad");
-	private final static Pattern trailingWsBraillePattern = Pattern.compile("[\\s\u2800]+\\z");
+	private static final Pattern softHyphenPattern  = Pattern.compile("\u00ad");
+	private static final Pattern trailingWsBraillePattern = Pattern.compile("[\\s\u2800]+\\z");
 
 	private final Stack<RowImpl> rows;
 	private final CrossReferenceHandler refs;
@@ -337,8 +337,12 @@ class BlockContentManager extends AbstractBlockContentManager {
 	}
 	
 	private String getPreText(String contentBefore, int indent, int blockIndent) {
-		int thisIndent = indent + blockIndent - StringTools.length(contentBefore);
-		//assert thisIndent >= 0;
+		int thisIndent = Math.max(
+				// There is one known cause for this calculation to become < 0. That is when an ordered list is so long
+				// that the number takes up more space than the indent reserved for it.
+				// In that case it is probably best to push the content instead of failing altogether.
+				indent + blockIndent - StringTools.length(contentBefore),
+				0);
 		return contentBefore + StringTools.fill(fcontext.getSpaceCharacter(), thisIndent).toString();
 	}
 

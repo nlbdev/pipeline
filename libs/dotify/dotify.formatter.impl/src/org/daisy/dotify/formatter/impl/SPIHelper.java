@@ -21,7 +21,7 @@ import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
  * @author Joel Håkansson
  */
 public class SPIHelper {
-	private final static Logger logger = Logger.getLogger(SPIHelper.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(SPIHelper.class.getCanonicalName());
 	private static BrailleTranslatorFactoryMakerService translatorFactory;
 	private static MarkerProcessorFactoryMakerService markerProcessorFactory;
 	private static TextBorderFactoryMakerService textBorderFactory;

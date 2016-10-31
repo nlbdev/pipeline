@@ -29,7 +29,7 @@ import org.daisy.dotify.common.io.StateObject;
  *
  */
 class PEFMediaWriter implements PagedMediaWriter {
-	private final static String DC_NAMESPACE_URI = "http://purl.org/dc/elements/1.1/";
+	private static final String DC_NAMESPACE_URI = "http://purl.org/dc/elements/1.1/";
 	//private final Pattern nonBraillePattern;
 	private PrintStream pst;
 	private boolean hasOpenVolume;

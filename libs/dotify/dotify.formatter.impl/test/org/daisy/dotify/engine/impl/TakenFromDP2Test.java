@@ -306,7 +306,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/sheets-in-volume-max-input.obfl",
 		        "resource-files/dp2/sheets-in-volume-max-expected.pef", false);
 	}
-	@Ignore // implementation does not support different target volume size
 	@Test
 	public void testVolumeTemplateVariousSheetsInVolumeMax() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/volume-template-various-sheets-in-volume-max-input.obfl",
@@ -346,5 +345,29 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	public void testBlockUnderlineWithChildBlock() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/block-underline-with-child-block-input.obfl",
 		        "resource-files/dp2/block-underline-with-child-block-expected.pef", false);
+	}
+	@Ignore // see https://github.com/joeha480/dotify/issues/194
+	@Test
+	public void testMarkerIndicatorBeforeBlock() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/marker-indicator-before-block-input.obfl",
+		        "resource-files/dp2/marker-indicator-before-block-expected.pef", true);
+	}
+	@Ignore // see https://github.com/joeha480/dotify/issues/195
+	@Test
+	public void testMarginRegionAndBorders() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/margin-region-and-borders-input.obfl",
+		        "resource-files/dp2/margin-region-and-borders-expected.pef", true);
+	}
+	@Ignore // see https://github.com/joeha480/dotify/issues/196
+	@Test
+	public void testRowSpacingAndFooter() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/row-spacing-and-footer-input.obfl",
+		        "resource-files/dp2/row-spacing-and-footer-expected.pef", true);
+	}
+	
+	@Test
+	public void testManualVolumeBreakingTOC() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/manual-volume-breaking-toc-input.obfl",
+		        "resource-files/dp2/manual-volume-breaking-toc-expected.pef", false);
 	}
 }

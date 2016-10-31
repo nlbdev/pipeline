@@ -10,14 +10,14 @@ import org.daisy.dotify.api.translator.BorderSpecification.Style;
 
 class BorderBuilder {
 	
-	private final static String KEY_BORDER = "border";
-	private final static String KEY_TOP = "top";
-	private final static String KEY_LEFT = "left";
-	private final static String KEY_RIGHT = "right";
-	private final static String KEY_BOTTOM = "bottom";
-	private final static String KEY_STYLE = "style";
-	private final static String KEY_WIDTH = "width";
-	private final static String KEY_ALIGN = "align";
+	private static final String KEY_BORDER = "border";
+	private static final String KEY_TOP = "top";
+	private static final String KEY_LEFT = "left";
+	private static final String KEY_RIGHT = "right";
+	private static final String KEY_BOTTOM = "bottom";
+	private static final String KEY_STYLE = "style";
+	private static final String KEY_WIDTH = "width";
+	private static final String KEY_ALIGN = "align";
 	private final Border.Builder builder;
 
 	private boolean useBorder = false;

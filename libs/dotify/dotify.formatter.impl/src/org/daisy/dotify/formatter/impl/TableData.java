@@ -10,7 +10,7 @@ import org.daisy.dotify.api.formatter.FormatterCore;
 import org.daisy.dotify.api.formatter.TableCellProperties;
 
 class TableData implements Iterable<TableRow> {
-	private final static Logger logger = Logger.getLogger(TableData.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(TableData.class.getCanonicalName());
 	private final Stack<TableRow> rows;
 	private final Map<GridPoint, TableCell> grid;
 	private int gy, cMax;

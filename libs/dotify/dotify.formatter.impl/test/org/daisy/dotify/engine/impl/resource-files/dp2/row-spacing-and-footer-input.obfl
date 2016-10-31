@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">row-spacing-and-footer</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests row spacing combined with footer. Broken: the last row of the first page (row 11) does not fit on the page (height 10): see https://github.com/joeha480/dotify/issues/196</dc:description>
+   </meta>
+   <layout-master name="main" duplex="true" page-width="10" page-height="10">
+      <default-template>
+         <header/>
+         <footer>
+            <field>
+               <current-page number-format="default"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <sequence master="main">
+      <block row-spacing="2.0">⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+              ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+              ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+            </block>
+   </sequence>
+</obfl>

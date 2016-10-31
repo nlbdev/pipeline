@@ -15,7 +15,7 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.common.text.StringTools;
 
 class TableBorderHandler {
-	private final static Logger logger = Logger.getLogger(TableBorderHandler.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(TableBorderHandler.class.getCanonicalName());
 	enum Position {
 		TOP,
 		BOTTOM,

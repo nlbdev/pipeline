@@ -9,8 +9,8 @@ import org.daisy.dotify.api.formatter.BlockPosition;
 import org.daisy.dotify.api.formatter.RenderingScenario;
 
 class PageSequenceRecorder {
-	private final static String baseline = "base";
-	private final static String scenario = "best";
+	private static final String baseline = "base";
+	private static final String scenario = "best";
 	
 	private PageSequenceRecorderData data;
 

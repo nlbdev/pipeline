@@ -19,6 +19,16 @@ public class VolumeBreaksTest extends AbstractFormatterEngineTest {
 	}
 	
 	@Test
+	public void testForcedVolumeBreak_02() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/volume-breaks2-input.obfl", "resource-files/volume-breaks2-expected.pef", false);
+	}
+
+	@Test
+	public void testForcedVolumeBreak_03() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/volume-breaks3-input.obfl", "resource-files/volume-breaks2-expected.pef", false);
+	}
+
+	@Test
 	public void testVolumeKeepPriority() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/volume-breaks-priority-input.obfl", "resource-files/volume-breaks-priority-expected.pef", false);
 	}
