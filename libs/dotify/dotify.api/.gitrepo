@@ -7,5 +7,5 @@
 	remote = https://github.com/brailleapps/dotify.api
 	branch = master
 	commit = 33471e47e048e5d673fdfd31329844efc948cbe7
-	parent = cc7cbce6b9babca561df492ff0d47d7c608f3e72
+	parent = 324a44a23bb2476bdc2f5793f12988a18e715190
 	cmdver = 0.3.0

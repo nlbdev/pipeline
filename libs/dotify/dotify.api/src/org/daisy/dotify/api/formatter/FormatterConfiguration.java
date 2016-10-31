@@ -12,6 +12,7 @@ import java.util.Set;
 public class FormatterConfiguration {
 	private final String translationMode;
 	private final String locale;
+	private final boolean allowsTextOverflowTrimming;
 	private final boolean hyphenating;
 	private final boolean marksCapitalLetters;
 	private final Set<String> ignoredStyles;
@@ -23,6 +24,7 @@ public class FormatterConfiguration {
 	public static class Builder {
 		private final String translationMode;
 		private final String locale;
+		private boolean allowsTextOverflowTrimming = false;
 		private boolean hyphenating = true;
 		private boolean marksCapitalLetters = true;
 		private Set<String> ignoredStyles = new HashSet<String>();
@@ -37,8 +39,21 @@ public class FormatterConfiguration {
 			this.locale = locale;
 		}
 		/**
+		 * Sets the text overflow trimming policy. If the value is true, text that overflows 
+		 * its boundaries may be truncated if needed. If the value is false, an 
+		 * error should be thrown and the process aborted (default).
+		 * 
+		 * @param value the value of the text overflow trimming policy
+		 * @return returns this builder
+		 */
+		public Builder allowsTextOverflowTrimming(boolean value) {
+			this.allowsTextOverflowTrimming = value;
+			return this;
+		}
+		/**
 		 * Sets the global hyphenation policy
 		 * @param value the value of the global hyphenation policy
+		 * @return returns this builder
 		 */
 		public Builder hyphenate(boolean value) {
 			hyphenating = value;
@@ -47,6 +62,8 @@ public class FormatterConfiguration {
 
 		/**
 		 * Sets the global capital letter policy
+		 * @param value the value of the capital letters policy
+		 * @return returns this builder
 		 */
 		public Builder markCapitalLetters(boolean value) {
 			marksCapitalLetters = value;
@@ -86,6 +103,7 @@ public class FormatterConfiguration {
 	private FormatterConfiguration(Builder builder) {
 		locale = builder.locale;
 		translationMode = builder.translationMode;
+		allowsTextOverflowTrimming = builder.allowsTextOverflowTrimming;
 		hyphenating = builder.hyphenating;
 		marksCapitalLetters = builder.marksCapitalLetters;
 		ignoredStyles = Collections.unmodifiableSet(new HashSet<>(builder.ignoredStyles));
@@ -105,6 +123,14 @@ public class FormatterConfiguration {
 	 */
 	public String getLocale() {
 		return locale;
+	}
+	
+	/**
+	 * Returns true if text that overflows is allowed to be truncated, false otherwise.
+	 * @return returns true if text that overflows is allowed, false otherwise
+	 */
+	public boolean isAllowingTextOverflowTrimming() {
+		return allowsTextOverflowTrimming;
 	}
 
 	/**
