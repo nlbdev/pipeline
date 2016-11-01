@@ -76,6 +76,10 @@
             <p:load href="news-feed-archive/manuelt-laget-for-oktober-2016.xml"/>
             <p:filter select="/*/*"/>
         </p:when>
+        <p:when test="starts-with($month,'2016-10')">
+            <p:load href="news-feed-archive/manuelt-laget-for-november-2016.xml"/>
+            <p:filter select="/*/*"/>
+        </p:when>
         <p:otherwise>
             <!--
                 TODO: trenger ny XML feed
