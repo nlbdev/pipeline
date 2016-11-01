@@ -25,6 +25,7 @@ type Artifact struct {
 	Version    string   `xml:"version,attr"`    //version
 	DeployPath string   `xml:"deployPath,attr"` //relative path where to copy the artifact file
 	Extract    bool     `xml:"extract,attr"`    //tells if the artifact should be extracted
+	Classifier string   `xml:"classifier,attr"` //classifier
 }
 
 //downloads the artifact from href
