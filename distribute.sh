@@ -21,7 +21,7 @@ java -cp "`find .maven-cache/net/sf/saxon/Saxon-HE/9* -type f | grep jar$ | tail
 
 DESCRIPTOR_VERSION="`cat releaseDescriptorRelative.xml | grep "<releaseDescriptor " | sed 's/.* version="//' | sed 's/".*//'`"
 GIT_SHA="`git rev-parse --short HEAD`"
-DESCRIPTOR_VERSION="`echo $DESCRIPTOR_VERSION | sed "s/SNAPSHOT/SNAPSHOT-\`date -u +"%Y%m%d%H%M%S"\`-$GIT_SHA/"`"
+DESCRIPTOR_VERSION="`echo $DESCRIPTOR_VERSION | sed "s/SNAPSHOT/SNAPSHOT+\`date -u +"%Y%m%d%H%M%S"\`-$GIT_SHA/"`"
 GIT_BRANCH="`git rev-parse --abbrev-ref HEAD`"
 
 echo "Distributing Pipeline 2 version: $DESCRIPTOR_VERSION"
