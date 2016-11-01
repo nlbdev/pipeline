@@ -62,9 +62,12 @@ echo "</releaseDescriptor>" >> releaseDescriptor.xml
 cat releaseDescriptor.xml | ssh $PIPELINE_USER@$PIPELINE_HOST "cat >> /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION"
 
 if [ "$GIT_BRANCH" != "HEAD" ]; then
-    ssh $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/$GIT_BRANCH"
+    ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/$GIT_BRANCH"
 fi
 
 if [ "$GIT_BRANCH" != "nlb" ]; then
-    ssh $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/current"
+    ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/current"
 fi
+
+ssh -n $PIPELINE_USER@$PIPELINE_HOST "mkdir -p /var/www/html/maven/pipeline-builds"
+rsync -av *zip $PIPELINE_USER@$PIPELINE_HOST:"/var/www/html/pipeline-builds"
