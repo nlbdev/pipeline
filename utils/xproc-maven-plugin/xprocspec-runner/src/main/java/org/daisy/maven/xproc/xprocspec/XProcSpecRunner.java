@@ -2,7 +2,7 @@ package org.daisy.maven.xproc.xprocspec;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
 import static com.google.common.io.Files.asByteSink;
 
@@ -78,6 +78,18 @@ public class XProcSpecRunner {
 	
 	private static final Map<String,String> XPROCSPEC_NS = new HashMap<String,String>(); {
 		XPROCSPEC_NS.put("x", "http://www.daisy.org/ns/xprocspec");
+	}
+	
+	public boolean hasFocus(File testDir) {
+		return hasFocus(listXProcSpecFilesRecursively(testDir));
+	}
+	
+	public boolean hasFocus(Collection<File> tests) {
+		for (File test : tests)
+			if (test.exists())
+				if ((Boolean)evaluateXPath(test, "exists(//x:scenario[@focus])", XPROCSPEC_NS, Boolean.class))
+					return true;
+		return false;
 	}
 	
 	public boolean run(Map<String,File> tests,
@@ -286,8 +298,8 @@ public class XProcSpecRunner {
 	 * FileUtils.listFiles from Apache Commons IO could be used here as well,
 	 * but would introduce another dependency.
 	 */
-	private static Collection<File> listXProcSpecFilesRecursively(File directory) {
-		ImmutableList.Builder<File> builder = new ImmutableList.Builder<File>();
+	public static Set<File> listXProcSpecFilesRecursively(File directory) {
+		ImmutableSet.Builder<File> builder = new ImmutableSet.Builder<File>();
 		if (directory.isDirectory())
 			for (File file : directory.listFiles()) {
 				if (file.isDirectory())
