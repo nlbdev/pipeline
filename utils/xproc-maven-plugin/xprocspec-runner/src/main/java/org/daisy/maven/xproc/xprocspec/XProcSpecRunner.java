@@ -103,26 +103,26 @@ public class XProcSpecRunner {
 		int totalErrors = 0;
 		int totalSkipped = 0;
 		
+		Set<String> focusTests = new HashSet<String>(); {
+			for (String testName : tests.keySet()) {
+				File test = tests.get(testName);
+				if (test.exists())
+					if ((Boolean)evaluateXPath(test, "exists(//x:scenario[@focus])", XPROCSPEC_NS, Boolean.class))
+						focusTests.add(testName); }}
 		Set<String> skipTests = new HashSet<String>(); {
-			Set<String> focusTests = new HashSet<String>(); {
-				for (String testName : tests.keySet()) {
-					File test = tests.get(testName);
-					if (test.exists())
-						if ((Boolean)evaluateXPath(test, "exists(//x:scenario[@focus])", XPROCSPEC_NS, Boolean.class))
-							focusTests.add(testName); }}
 			if (!focusTests.isEmpty())
 				for (String testName : tests.keySet())
 					if (!focusTests.contains(testName))
-						skipTests.add(testName);
-		}
+						skipTests.add(testName); }
 		
 		long startTime = System.nanoTime();
 		
 		reporter.init();
 		
 		for (String testName : tests.keySet()) {
-			if (skipTests.contains(testName))
-				continue;
+			if (skipTests.contains(testName)) {
+				reporter.skipping(testName);
+				continue; }
 			File test = tests.get(testName);
 			File report = new File(reportsDir, testName + ".html");
 			File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
@@ -130,7 +130,7 @@ public class XProcSpecRunner {
 			Map<String,String> output = ImmutableMap.of("html", asURI(report).toASCIIString(),
 			                                            "junit", asURI(surefireReport).toASCIIString());
 			Map<String,String> options = ImmutableMap.of("temp-dir", asURI(tempDir) + "/tmp/");
-			reporter.running(testName);
+			reporter.running(testName, focusTests.contains(testName));
 			try {
 				engine.run(xprocspec.toASCIIString(), input, output, options, null);
 				if (!surefireReport.exists()) {
@@ -210,7 +210,8 @@ public class XProcSpecRunner {
 	public static interface Reporter {
 		
 		public void init();
-		public void running(String name) ;
+		public void running(String name, boolean focus);
+		public void skipping(String name);
 		public void result(int run, int failures, int errors, int skipped, long time, String shortDesc, String longDesc);
 		public void finish(int run, int failures, int errors, int skipped, long time);
 		
@@ -239,10 +240,12 @@ public class XProcSpecRunner {
 				println("-------------------------------------------------------");
 			}
 			
-			public void running(String name) {
+			public void running(String name, boolean focus) {
 				println("Running %s", name);
 				currentTest = name;
 			}
+			
+			public void skipping(String name) {}
 			
 			public void result(int run, int failures, int errors, int skipped, long time, String shortDesc, String longDesc) {
 				println("Tests run: %d, Failures: %d, Errors: %d, Skipped: %d, Time elapsed: %s sec%s",
