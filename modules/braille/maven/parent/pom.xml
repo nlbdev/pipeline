@@ -114,11 +114,7 @@
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xspec-runner</artifactId>
-        <!--
-            depends on https://github.com/daisy/xspec-maven-plugin/pull/11
-        -->
-        <!-- <version>1.0.1-SNAPSHOT</version> -->
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>com.google.guava</groupId>
