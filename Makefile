@@ -39,6 +39,12 @@ run : assembly/target/dev-launcher/bin/pipeline2
 run-gui : assembly/target/dev-launcher/bin/pipeline2
 	$< gui
 
+.PHONY : run-webui
+run-webui :
+#	rm -r webui/dp2webui && cp -r webui/dp2webui-cleandb webui/dp2webui
+	cd webui && \
+	./activator run
+
 .PHONY : check
 check : gradle-test maven-test
 
@@ -196,8 +202,8 @@ gradle-install : .gradle-install
 	for module in $$(cat $<); do \
 		v=$$(cat $$module/gradle.properties | grep '^version' | sed 's/^version=//') && \
 		a=$$(basename $$module) && \
-		g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *'\(.*\)'/\1/") && \
-		dest="$(MVN_WORKSPACE)/$$(echo $$g |tr . /)/$$a/$$v" && \
+		g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/") && \
+		echo "$$dest" && \
 		if [[ ! -e "$$dest/$$a-$$v.pom" ]] || \
 		   [[ ! -e "$$dest/maven-metadata-local.xml" ]] || \
 		   [[ -n $$(find $$module/{build.gradle,gradle.properties,src} -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]]; then \
@@ -212,7 +218,7 @@ gradle-install : .gradle-install
 		v=$$(cat $$module/gradle.properties | grep '^version' | sed 's/^version=//') && \
 		if [[ "$$v" =~ -SNAPSHOT$$ ]]; then \
 			a=$$(basename $$module) && \
-			g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *'\(.*\)'/\1/") && \
+			g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/") && \
 			if v_in_bom=$$(xmllint --xpath "//*[local-name()='dependency'][ \
 			                                    *[local-name()='groupId']='$$g' and \
 			                                    *[local-name()='artifactId']='$$a' \
@@ -314,6 +320,8 @@ help :
 	echo "	Incrementally compile code and run locally"                                             >&2
 	echo "make run-gui:"                                                                            >&2
 	echo "	Incrementally compile code and run GUI locally"                                         >&2
+	echo "make run-webui:"                                                                          >&2
+	echo "	Compile and run web UI locally"                                                         >&2
 
 ifndef VERBOSE
 .SILENT:

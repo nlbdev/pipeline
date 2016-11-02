@@ -9,6 +9,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to EPUB3</h1>
         <p px:role="desc">Converts multiple dtbooks to epub3 format</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-epub3">
+            Online documentation
+        </a>
     </p:documentation>
 
     <p:input port="source" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">
@@ -27,8 +30,8 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
-            <p px:role="desc">Directory where both temp-files and the resulting EPUB3 publication is stored.</p>
+            <h2 px:role="name">EPUB 3</h2>
+            <p px:role="desc">The resulting EPUB 3 publication.</p>
         </p:documentation>
     </p:option>
 
