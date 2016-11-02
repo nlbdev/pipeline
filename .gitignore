@@ -15,6 +15,7 @@ Thumbs.db
 .gradle*
 /*.zip
 /*.deb
+/*.rpm
 target/
 /releaseDescriptor*xml
 
