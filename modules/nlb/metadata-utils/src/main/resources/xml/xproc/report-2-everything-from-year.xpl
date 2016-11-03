@@ -52,6 +52,13 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="library" select="'NLB'" px:dir="input" px:type="string">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Bibliotek</h2>
+            <p px:role="desc">For eksempel 'NLB' eller 'KABB'.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="metadata-load.xpl"/>
 
@@ -60,8 +67,9 @@
     </px:assert>
     <p:sink/>
 
-    <nlb:metadata-load cx:depends-on="year.assert" libraries="KABB">
+    <nlb:metadata-load cx:depends-on="year.assert">
         <p:with-option name="time" select="$year"/>
+    <p:with-option name="libraries" select="if ($library='') then 'NLB' else $library"/>
     </nlb:metadata-load>
 
     <p:for-each name="for-each">
