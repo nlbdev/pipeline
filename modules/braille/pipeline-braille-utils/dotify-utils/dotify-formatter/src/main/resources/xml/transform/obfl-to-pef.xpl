@@ -10,7 +10,10 @@
 	<p:option name="text-transform" required="true"/>
 	<p:input port="parameters" kind="parameter" primary="false"/>
 	
+	<p:import href="../obfl-normalize-space.xpl"/>
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
+	
+	<pxi:obfl-normalize-space/>
 	
 	<dotify:obfl-to-pef locale="und">
 		<p:with-option name="mode" select="$text-transform"/>

@@ -1021,10 +1021,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
-                  <artifactId>css-calabash</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>css-core</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -1958,7 +1954,7 @@
                   <controlDir>target/filtered-resources/deb/DEBIAN</controlDir>
                   <timestamped>true</timestamped>
                   <classifier>all</classifier>
-                  <deb>target/daisy-pipeline2_${project.version}_all.deb</deb>
+                  <deb>target/daisy-pipeline2_${project.detailedVersion}_all.deb</deb>
                   <dataSet>
                     <!-- ======== -->
                     <!-- binaries -->

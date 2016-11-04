@@ -101,9 +101,6 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 		rightMargin.push(new MarginComponent(rb, p.getMargin().getRightSpacing(), p.getPadding().getRightSpacing()));
 		if (propsContext.size()>0) {
 			addToBlockIndent(propsContext.peek().getBlockProperties().getBlockIndent());
-			if (propsContext.peek().getBlockProperties().getUnderlineStyle()!=null) {
-				throw new UnsupportedOperationException("No block allowed within a block with underline properties.");
-			}
 		}
 
 		RowDataProperties.Builder rdp = new RowDataProperties.Builder().
@@ -243,9 +240,10 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 						blockIndentParent(blockIndentParent.peek()).
 						leftMargin((Margin)leftMargin.clone()). //.stackMarginComp(formatterContext, false, false)
 						//leftMarginParent((Margin)leftMargin.clone()). //.stackMarginComp(formatterContext, true, false)
-						rightMargin((Margin)rightMargin.clone())//. //.stackMarginComp(formatterContext, false, true)
+						rightMargin((Margin)rightMargin.clone()). //.stackMarginComp(formatterContext, false, true)
 						//rightMarginParent((Margin)rightMargin.clone())
-						; //.stackMarginComp(formatterContext, true, true)
+						//.stackMarginComp(formatterContext, true, true)
+						underlineStyle(p.getUnderlineStyle());
 			Block c = newBlock(null, rdp.build());
 			c.setKeepType(keep);
 			c.setKeepWithNext(next);
@@ -320,7 +318,19 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 		if (table!=null) {
 			throw new IllegalStateException("A table is open.");
 		}
-		getCurrentBlock().addSegment(new PageNumberReferenceSegment(identifier, numeralStyle));
+		PageNumberReferenceSegment r; {
+			if (styles.isEmpty()) {
+				r = new PageNumberReferenceSegment(identifier, numeralStyle);
+			} else {
+				String[] style = new String[styles.size()];
+				int i = 0;
+				for (Style s : styles) {
+					style[i++] = s.name;
+				}
+				r = new PageNumberReferenceSegment(identifier, numeralStyle, style);
+			}
+		}
+		getCurrentBlock().addSegment(r);
 	}
 
 	@Override

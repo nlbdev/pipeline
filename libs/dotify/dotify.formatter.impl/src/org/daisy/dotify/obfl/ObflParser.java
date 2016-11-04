@@ -829,6 +829,8 @@ public class ObflParser extends XMLParserBase {
 				fc.insertAnchor(parseAnchor(event));
 			} else if (equalsStart(event, ObflQName.EVALUATE)) {
 				parseEvaluate(fc, event, input, tp);
+			} else if (equalsStart(event, ObflQName.PAGE_NUMBER)) {
+				parsePageNumber(fc, event, input);
 			} else if (equalsEnd(event, ObflQName.STYLE)) {
 				if (!ignore) {
 					if (!hasEvents) {
@@ -848,6 +850,7 @@ public class ObflParser extends XMLParserBase {
 		Iterator<?> atts = el.getAttributes();
 		BlockProperties.Builder builder = new BlockProperties.Builder();
 		HashMap<String, Object> border = new HashMap<>();
+		String underlinePattern = null;
 		HashMap<String, Object> underline = new HashMap<>();
 		while (atts.hasNext()) {
 			Attribute att = (Attribute)atts.next();
@@ -925,6 +928,10 @@ public class ObflParser extends XMLParserBase {
 				builder.rowSpacing(Float.parseFloat(att.getValue()));
 			} else if (name.startsWith("border")) {
 				border.put(name, att.getValue());
+			} else if ("underline-pattern".equals(name)) {
+				if (!att.getValue().equalsIgnoreCase("none") && !att.getValue().isEmpty()) {
+					underlinePattern = att.getValue();
+				}
 			} else if (name.startsWith("underline-")) {
 				underline.put(name.replaceAll("^underline", "border-bottom"), att.getValue());
 			}
@@ -937,20 +944,20 @@ public class ObflParser extends XMLParserBase {
 				logger.log(Level.WARNING, "Failed to add border to block properties: " + border, e);
 			}
 		}
-		if (!underline.isEmpty()) {
+		if (underlinePattern == null && !underline.isEmpty()) {
 			underline.put(TextBorderFactory.FEATURE_MODE, mode);
 			try {
 				TextBorderStyle underlineStyle = fm.getTextBorderFactory().newTextBorderStyle(underline);
 				if (underlineStyle != null) {
-					String pattern = underlineStyle.getBottomBorder();
-					if (pattern != null && !pattern.isEmpty()) {
-						builder.underlineStyle(pattern);
-					}
+					underlinePattern = underlineStyle.getBottomBorder();
 				}
 			} catch (TextBorderConfigurationException e) {
 				// FIXME: this will show border-bottom-* properties
 				logger.log(Level.WARNING, "Failed to add underline to block properties: " + underline, e);
 			}
+		}
+		if (underlinePattern != null && !underlinePattern.isEmpty()) {
+			builder.underlineStyle(underlinePattern);
 		}
 		return builder.build();
 	}
