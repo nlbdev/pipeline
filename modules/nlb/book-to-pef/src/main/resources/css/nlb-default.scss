@@ -71,6 +71,38 @@ bodymatter, *[epub|type~='bodymatter'] {
 /* -------------------------------------------------------------------------- */
 /*               for volume breaking, toc, titlepage                          */
 /* -------------------------------------------------------------------------- */
+
+/* Always start a new volume at elements containing a h1... */
+*:has(> h1) {
+    volume-break-before: always;
+}
+
+/* ...and prefer starting a new volume at subchapter heading elements (h2-h6)... */
+*:has(> h2), *:has(> h3), *:has(> h4), *:has(> h5), *:has(> h6) {
+    volume-break-before: prefer;
+}
+
+/* ...unless they are contained inside a sectioning element. */
+level1 *:has(> h1), section *:has(> h1), article *:has(> h1), nav *:has(> h1), aside *:has(> h1),
+level2 *:has(> h2), section *:has(> h2), article *:has(> h2), nav *:has(> h2), aside *:has(> h2),
+level3 *:has(> h3), section *:has(> h3), article *:has(> h3), nav *:has(> h3), aside *:has(> h3),
+level4 *:has(> h4), section *:has(> h4), article *:has(> h4), nav *:has(> h4), aside *:has(> h4),
+level5 *:has(> h5), section *:has(> h5), article *:has(> h5), nav *:has(> h5), aside *:has(> h5),
+level6 *:has(> h6), section *:has(> h6), article *:has(> h6), nav *:has(> h6), aside *:has(> h6) {
+    volume-break-before: auto;
+}
+
+/* Always start a new volume at sectioning elements containing a h1. */
+level1, section:has(h1), article:has(h1), nav:has(h1), aside:has(h1) {
+    volume-break-before: always;
+}
+
+/* Prefer starting a new volume at sectioning elements not containing a h1. */
+level2, level3, level4, level5, level6,
+section:not(:has(h1)), article:not(:has(h1)), nav:not(:has(h1)), aside:not(:has(h1)) {
+    volume-break-before: prefer;
+}
+
 @volume {
         @begin {
                 content: flow(front) flow(volume-toc);
