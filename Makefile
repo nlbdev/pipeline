@@ -118,9 +118,11 @@ $(addsuffix /.maven-test-dependencies,assembly $(MAVEN_MODULES)) : %/.maven-test
 
 .PHONY : $(addsuffix /.gradle-test-dependencies,assembly $(MAVEN_MODULES))
 $(addsuffix /.gradle-test-dependencies,assembly $(MAVEN_MODULES)) : %/.gradle-test-dependencies : %/.gradle-dependencies-to-test
-	if [ -e $< ]; then \
+	if [ -s $< ]; then \
 		$(GRADLE) test && \
-		rm $<; \
+		for module in $$(cat $<); do \
+			rm $$module/.gradle-to-test ;\
+		done \
 	fi
 
 $(addsuffix /.gradle-test-dependencies,assembly $(MAVEN_MODULES)) : %/.gradle-test-dependencies : %/.gradle-install-dependencies
@@ -147,6 +149,9 @@ $(addsuffix /.maven-test-dependencies,assembly $(MAVEN_MODULES)) : %/.maven-test
 $(addsuffix /.gradle-install-dependencies,assembly $(MAVEN_MODULES)) : %/.gradle-install-dependencies : %/.gradle-dependencies-to-install
 	if [ -s $< ]; then \
 		$(GRADLE) install; \
+		for module in $$(cat $<); do \
+			rm $$module/.gradle-to-install ;\
+		done \
 	else \
 		echo "All modules are up to date" >&2; \
 	fi
