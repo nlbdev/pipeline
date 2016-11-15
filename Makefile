@@ -318,7 +318,6 @@ cache :
 		rm -rf $(MVN_CACHE) && \
 		rsync -mr --exclude "*-SNAPSHOT" --exclude "maven-metadata-*.xml" $(MVN_WORKSPACE)/ $(MVN_CACHE); \
 	fi
-	find $(MVN_CACHE) -type d | grep SNAPSHOT | xargs rm -rf
 
 .PHONY : clean
 clean : cache

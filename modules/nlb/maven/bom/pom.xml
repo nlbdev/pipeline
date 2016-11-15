@@ -26,13 +26,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--
-                NLB modules
-            -->
-            <!--
-            mod-braille deactivated for now; it uses braille-modules-parent.
-            Might use the NLB modules-parent in the future, we'll see...
-            -->
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>mod-nlb</artifactId>

@@ -9,10 +9,9 @@ fi
 
 source ~/config/set-env.sh
 
-# like `make cache`, but with snapshots
-rsync -mr --exclude "maven-metadata-*.xml" .maven-workspace/ .maven-cache
+# NOTE: it is assumed that `make` has already cached all the necessary files in `.maven-workspace`
 
-java -cp "`find .maven-cache/net/sf/saxon/Saxon-HE/9* -type f | grep jar$ | tail -n 1`" \
+java -cp "`find .maven-workspace/net/sf/saxon/Saxon-HE/9* -type f | grep jar$ | tail -n 1`" \
     net.sf.saxon.Transform \
     -s:assembly/target/tmp/effective-pom.xml \
     -xsl:assembly/src/main/xslt/pom-to-release.xslt \
@@ -37,7 +36,7 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
     ARTIFACT_CLASSIFIER="`echo $artifactLine | sed 's/.* classifier="//' | sed 's/".*//'`"
     REMOTE_PATH="`cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " classifier=\\\"$ARTIFACT_CLASSIFIER\\\"" | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\"" | sed 's/.* href="//' | sed 's/".*//'`"
     RELATIVE_PATH="`echo $artifactLine | sed 's/.*href="//' | sed 's/".*//' | sed 's/\/[^/]*$//'`"
-    LOCAL_PATH="`find .maven-cache ~/.m2 -type d | grep "$RELATIVE_PATH$" | head -n 1`"
+    LOCAL_PATH="`find .maven-workspace ~/.m2 -type d | grep "$RELATIVE_PATH$" | head -n 1`"
     STATUS_CODE="`curl -I --write-out %{http_code} --silent --output /dev/null "$REMOTE_PATH"`"
     if [ "`echo $ARTIFACT_VERSION | grep SNAPSHOT | wc -l`" != "1" ] || [ "$STATUS_CODE" = "200" ] || [ "$STATUS_CODE" = "302" ]; then
         echo "using $GROUP_ID:$ARTIFACT_ID:$ARTIFACT_VERSION from remote server"
