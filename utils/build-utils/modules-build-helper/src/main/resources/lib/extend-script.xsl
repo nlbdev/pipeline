@@ -12,10 +12,12 @@
         <xsl:param name="script-uri"/>
         <xsl:param name="extends-uri"/>
         <xsl:param name="catalog-xml" as="element()"/>
-        <xsl:if test="not(doc-available($script-uri))">
-            <xsl:message terminate="yes" select="concat('Unable to resolve script: ', $script-uri)"/>
+        <xsl:variable name="resolved-script-uri" select="($catalog-xml//cat:uri[@name=$script-uri]/resolve-uri(@uri,base-uri(.)) , $script-uri)[1]"/>
+        <xsl:message select="concat($resolved-script-uri,' extends ',$extends-uri)"/>
+        <xsl:if test="not(doc-available($resolved-script-uri))">
+            <xsl:message terminate="yes" select="concat('Unable to resolve script: ''', $resolved-script-uri,'''')"/>
         </xsl:if>
-        <xsl:variable name="script-doc" select="document($script-uri)"/>
+        <xsl:variable name="script-doc" select="document($resolved-script-uri)"/>
         <xsl:variable name="extends-uri-element" as="element()?" select="$catalog-xml//cat:uri[@name=$extends-uri]"/>
         <xsl:variable name="extends-doc">
             <xsl:choose>
