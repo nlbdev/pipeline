@@ -19,7 +19,7 @@
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-      <cx:message message="Running pxi:css-to-obfl ...">
+      <cx:message>
         <p:with-option name="message" select="concat('Running test from ',replace(base-uri(),'.*/',''))"/>
       </cx:message>
       <cx:message message="    Running pxi:css-to-obfl"/>
