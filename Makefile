@@ -84,13 +84,6 @@ assembly/target/dev-launcher/bin/pipeline2 : compile
 	else \
 		rm assembly/target/dev-launcher/etc/*mac*; \
 	fi
-	assembly/target/dev-launcher/bin/pipeline2
-
-.PHONY : check
-check : gradle-test maven-test
-
-.PHONY : compile
-compile : gradle-install maven-install
 
 .PHONY : $(addprefix compile-,$(MAVEN_MODULES))
 $(addprefix compile-,$(MAVEN_MODULES)) : compile-% : %/.gradle-install-dependencies %/.maven-install-dependencies
@@ -253,7 +246,7 @@ $(addsuffix /.gradle-dependencies-to-install,assembly $(MAVEN_MODULES)) : %/.gra
 	for module in $$(cat $<); do \
 		v=$$(cat $$module/gradle.properties | grep '^version' | sed 's/^version=//') && \
 		a=$$(basename $$module) && \
-		g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *'\(.*\)'/\1/") && \
+		g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/") && \
 		dest="$(MVN_WORKSPACE)/$$(echo $$g |tr . /)/$$a/$$v" && \
 		if [[ ! -e "$$dest/$$a-$$v.pom" ]] || \
 		   [[ ! -e "$$dest/maven-metadata-local.xml" ]] || \
@@ -273,7 +266,7 @@ $(addsuffix /.gradle-snapshot-dependencies,assembly $(MAVEN_MODULES)) : %/.gradl
 		v=$$(cat $$module/gradle.properties | grep '^version' | sed 's/^version=//') && \
 		if [[ "$$v" =~ -SNAPSHOT$$ ]]; then \
 			a=$$(basename $$module) && \
-			g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *'\(.*\)'/\1/") && \
+			g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/") && \
 			if v_in_bom=$$(xmllint --xpath "//*[local-name()='dependency'][ \
 			                                    *[local-name()='groupId']='$$g' and \
 			                                    *[local-name()='artifactId']='$$a' \
@@ -360,16 +353,12 @@ cache :
 .PHONY : clean
 clean : cache
 	rm -rf $(MVN_WORKSPACE)
-	rm -f .maven-modules .maven-modules-install .maven-modules-test .maven-modules-test-dependents maven.log bom.xml
-	rm -f .gradle-install .gradle-test
+	rm -f maven.log
 	rm -f *.zip *.deb *.rpm
-	find * -name .maven-install -exec rm -r "{}" \;
-	find * -name .maven-to-install -exec rm -r "{}" \;
-	find * -name .maven-test -exec rm -r "{}" \;
-	find * -name .maven-to-test -exec rm -r "{}" \;
-	find * -name .maven-test-dependents -exec rm -r "{}" \;
-	find * -name .maven-to-test-dependents -exec rm -r "{}" \;
 	rm -rf webui/dp2webui
+	find * -name .maven-to-install -exec rm -r "{}" \;
+	find * -name .maven-to-test -exec rm -r "{}" \;
+	find * -name .maven-to-test-dependents -exec rm -r "{}" \;
 	find * -name .maven-snapshot-dependencies -exec rm -r "{}" \;
 	find * -name .maven-effective-pom.xml -exec rm -r "{}" \;
 	find * -name .maven-dependencies-to-install -exec rm -r "{}" \;
