@@ -247,7 +247,7 @@ $(addsuffix /.gradle-dependencies-to-install,assembly $(MAVEN_MODULES)) : %/.gra
 		v=$$(cat $$module/gradle.properties | grep '^version' | sed 's/^version=//') && \
 		a=$$(basename $$module) && \
 		g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/") && \
-		echo "$$dest" && \
+		dest="$(MVN_WORKSPACE)/$$(echo $$g |tr . /)/$$a/$$v" && \
 		if [[ ! -e "$$dest/$$a-$$v.pom" ]] || \
 		   [[ ! -e "$$dest/maven-metadata-local.xml" ]] || \
 		   [[ -n $$(find $$module/{build.gradle,gradle.properties,src} -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]]; then \
@@ -353,16 +353,12 @@ cache :
 .PHONY : clean
 clean : cache
 	rm -rf $(MVN_WORKSPACE)
-	rm -f .maven-modules .maven-modules-install .maven-modules-test .maven-modules-test-dependents maven.log bom.xml
-	rm -f .gradle-install .gradle-test
+	rm -f maven.log
 	rm -f *.zip *.deb *.rpm
-	find * -name .maven-install -exec rm -r "{}" \;
-	find * -name .maven-to-install -exec rm -r "{}" \;
-	find * -name .maven-test -exec rm -r "{}" \;
-	find * -name .maven-to-test -exec rm -r "{}" \;
-	find * -name .maven-test-dependents -exec rm -r "{}" \;
-	find * -name .maven-to-test-dependents -exec rm -r "{}" \;
 	rm -rf webui/dp2webui
+	find * -name .maven-to-install -exec rm -r "{}" \;
+	find * -name .maven-to-test -exec rm -r "{}" \;
+	find * -name .maven-to-test-dependents -exec rm -r "{}" \;
 	find * -name .maven-snapshot-dependencies -exec rm -r "{}" \;
 	find * -name .maven-effective-pom.xml -exec rm -r "{}" \;
 	find * -name .maven-dependencies-to-install -exec rm -r "{}" \;
