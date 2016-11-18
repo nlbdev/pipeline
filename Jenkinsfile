@@ -9,7 +9,4 @@ node {
     
     stage 'Test'
     sh 'make check'
-    
-    stage 'Distribute'
-    sh './distribute.sh'
 }
