@@ -81,6 +81,7 @@
               <chmod>true</chmod>
               <script>
                 #!/bin/sh
+                set -x
                 zip_odt() {
                   cd $1
                   zip -0 -X $2 mimetype
