@@ -1,5 +1,4 @@
 # OS Files
-.DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
@@ -23,7 +22,7 @@ target/
 eclipse/
 eclipse/*
 .project
-.settings/
+.settings
 .classpath
 
 # XSpec
