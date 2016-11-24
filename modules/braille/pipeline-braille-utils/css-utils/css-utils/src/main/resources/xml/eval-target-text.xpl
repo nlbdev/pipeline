@@ -37,6 +37,6 @@
         </p:input>
     </p:xslt>
     
-    <p:filter select="/_/*"/>
+    <p:filter select="/_/*" name="eval-target-text.filter"/>
     
 </p:declare-step>

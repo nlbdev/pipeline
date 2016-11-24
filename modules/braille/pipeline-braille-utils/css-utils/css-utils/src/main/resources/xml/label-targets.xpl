@@ -38,7 +38,7 @@
         </p:input>
     </p:xslt>
     
-    <p:delete match="@css:_id_[not(string(.)=(//css:text|//css:string|//css:counter|//css:content)/@target/string())]"/>
+    <p:delete match="@css:_id_[not(string(.)=(//css:text|//css:string|//css:counter|//css:content)/@target/string())]" name="label-targets.delete"/>
     <p:rename match="@css:_id_" new-name="css:id"/>
     
     <p:filter select="/_/*"/>

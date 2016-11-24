@@ -8,7 +8,7 @@
     <p:input port="source"/>
     <p:output port="result"/>
     
-    <p:xslt>
+    <p:xslt name="obfl-normalize-space.xslt">
         <p:input port="stylesheet">
             <p:document href="obfl-normalize-space.xsl"/>
         </p:input>
