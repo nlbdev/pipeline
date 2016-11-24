@@ -9,7 +9,7 @@
     <p:output port="result" primary="true"/>
     <p:option name="href" required="true"/>
     
-    <p:xslt>
+    <p:xslt name="normalize-uri.xslt">
         <p:with-param name="href" select="concat($href,'/')"/>
         <p:input port="source">
             <p:inline>

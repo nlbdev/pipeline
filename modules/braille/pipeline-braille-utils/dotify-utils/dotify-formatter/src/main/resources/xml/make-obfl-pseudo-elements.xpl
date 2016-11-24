@@ -8,7 +8,7 @@
     <p:input port="source"/>
     <p:output port="result" sequence="true"/>
     
-    <p:xslt>
+    <p:xslt name="make-obfl-pseudo-elements.xslt">
         <p:input port="stylesheet">
             <p:document href="make-obfl-pseudo-elements.xsl"/>
         </p:input>

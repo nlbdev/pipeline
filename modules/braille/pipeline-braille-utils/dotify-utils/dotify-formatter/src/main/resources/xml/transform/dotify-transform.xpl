@@ -32,9 +32,9 @@
 	</p:variable>
 	
 	<!-- for debug info -->
-	<p:for-each><p:identity/></p:for-each>
+	<!--<p:for-each><p:identity/></p:for-each>-->
 	
-	<px:transform>
+	<px:transform name="dotify-transform.transform">
 		<p:with-option name="query" select="$css-block-transform"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 		<p:input port="parameters">
@@ -43,21 +43,21 @@
 	</px:transform>
 	
 	<!-- for debug info -->
-	<p:for-each><p:identity/></p:for-each>
+	<!--<p:for-each><p:identity/></p:for-each>-->
 	
-	<pxi:css-to-obfl>
+	<pxi:css-to-obfl name="dotify-transform.css-to-obfl">
 		<p:with-option name="text-transform" select="$text-transform"/>
 		<p:with-option name="duplex" select="$duplex"/>
 		<p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
 	</pxi:css-to-obfl>
 	
-	<pxi:obfl-normalize-space/>
+	<pxi:obfl-normalize-space name="dotify-transform.obfl-normalize-space"/>
 	
 	<p:choose>
 		<p:when test="$output='pef'">
 			
 			<!-- for debug info -->
-			<p:for-each><p:identity/></p:for-each>
+			<!--<p:for-each><p:identity/></p:for-each>-->
 				
 			<dotify:obfl-to-pef locale="und">
 				<p:with-option name="mode" select="$text-transform"/>

@@ -24,6 +24,6 @@
     
     <p:wrap-sequence wrapper="c:param-set"/>
     <p:unwrap match="/c:param-set/c:param-set"/>
-    <p:delete match="/c:param-set/c:param[@name = following-sibling::c:param/@name]"/>
+    <p:delete match="/c:param-set/c:param[@name = following-sibling::c:param/@name]" name="merge-parameters.delete"/>
     
 </p:declare-step>

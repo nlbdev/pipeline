@@ -8,7 +8,7 @@
     <p:input port="source"/>
     <p:output port="result" sequence="true"/>
     
-    <p:xslt name="xslt">
+    <p:xslt name="extract-obfl-pseudo-elements.xslt">
         <p:input port="stylesheet">
             <p:document href="extract-obfl-pseudo-elements.xsl"/>
         </p:input>
@@ -19,8 +19,8 @@
     
     <p:identity>
         <p:input port="source">
-            <p:pipe step="xslt" port="result"/>
-            <p:pipe step="xslt" port="secondary"/>
+            <p:pipe step="extract-obfl-pseudo-elements.xslt" port="result"/>
+            <p:pipe step="extract-obfl-pseudo-elements.xslt" port="secondary"/>
         </p:input>
     </p:identity>
     

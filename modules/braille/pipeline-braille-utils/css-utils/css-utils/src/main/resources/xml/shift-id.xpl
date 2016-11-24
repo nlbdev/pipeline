@@ -41,7 +41,7 @@
                                 except (preceding::css:box|ancestor::css:box)
                                        [last()]/(preceding::*|ancestor::*)
                                )[last()]/@css:id)"/>
-    <p:delete match="@css:id[.='']"/>
+    <p:delete match="@css:id[.='']" name="shift-id.delete"/>
     
     <p:label-elements match="css:counter[@name][@target]" attribute="target"
                       label="for $target in @target return
