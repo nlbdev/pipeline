@@ -7,4 +7,5 @@
   <nextCatalog catalog="./tts/catalog.xml"/>
   <nextCatalog catalog="./braille/catalog.xml"/>
   <nextCatalog catalog="./nlp/catalog.xml"/>
+  <nextCatalog catalog="./nlb/catalog.xml"/>
 </catalog>
