@@ -33,9 +33,6 @@
     </pxi:css-to-obfl>
     <cx:message message="    Running pxi:obfl-normalize-space"/>
     <pxi:obfl-normalize-space/>
-    <!--<p:for-each>
-        <p:identity/>
-    </p:for-each>-->
     <cx:message message="    Running dotify:obfl-to-pef"/>
     <dotify:obfl-to-pef locale="und">
         <p:with-option name="mode" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
