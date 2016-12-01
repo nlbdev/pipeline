@@ -30,7 +30,7 @@
     
     <p:wrap-sequence wrapper="_"/>
     
-    <p:xslt>
+    <p:xslt name="shift-id.xslt">
         <p:input port="parameters">
             <p:empty/>
         </p:input>

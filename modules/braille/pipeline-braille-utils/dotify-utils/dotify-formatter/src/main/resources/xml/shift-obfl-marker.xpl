@@ -27,7 +27,7 @@
     
     <p:wrap-sequence wrapper="_"/>
     
-    <p:xslt>
+    <p:xslt name="shift-obfl-marker.xslt">
         <p:input port="stylesheet">
             <p:document href="shift-obfl-marker.xsl"/>
         </p:input>

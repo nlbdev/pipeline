@@ -28,7 +28,7 @@
     
     <p:wrap-sequence wrapper="_"/>
     
-    <p:xslt>
+    <p:xslt name="eval-target-content.xslt">
         <p:input port="stylesheet">
             <p:document href="eval-target-content.xsl"/>
         </p:input>
