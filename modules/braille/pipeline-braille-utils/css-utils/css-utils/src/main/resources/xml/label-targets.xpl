@@ -29,7 +29,7 @@
     
     <p:wrap-sequence wrapper="_"/>
     
-    <p:xslt>
+    <p:xslt name="label-targets.xslt">
         <p:input port="stylesheet">
             <p:document href="label-targets.xsl"/>
         </p:input>
