@@ -43,6 +43,6 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="text()" mode="remove-text-nodes"/>
+    <xsl:template match="text()" mode="remove-text-nodes" priority="2"/>
 
 </xsl:stylesheet>

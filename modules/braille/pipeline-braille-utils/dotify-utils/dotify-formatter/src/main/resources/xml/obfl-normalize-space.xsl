@@ -21,7 +21,7 @@
         <xsl:apply-templates select="." mode="normalize"/>
     </xsl:template>
     
-    <xsl:template match="*" mode="normalize">
+    <xsl:template match="*" mode="normalize" priority="2">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:variable name="normalization-point" select="(node()[descendant-or-self::*[not(self::obfl:marker)] | descendant-or-self::text()[normalize-space()!='']])[1]"/>
@@ -37,7 +37,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="text()" mode="normalize">
+    <xsl:template match="text()" mode="normalize" priority="2">
         <xsl:value-of select="replace(., '^\s+', '')"/>
     </xsl:template>
     
