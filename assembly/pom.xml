@@ -78,7 +78,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.9.16-SNAPSHOT</version>
+        <version>1.9.17-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -2218,7 +2218,9 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
-                  <formats>dir</formats>
+                  <formats>
+                    <format>dir</format>
+                  </formats>
                   <descriptors>
                     <descriptor>src/main/assembly/dist-linux.xml</descriptor>
                   </descriptors>

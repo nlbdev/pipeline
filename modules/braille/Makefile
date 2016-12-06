@@ -1,15 +1,15 @@
 POMS := $(shell find * -name 'pom.xml')
 
 .PHONY: all
-all : .modules-with-changes
+all : .modules-with-changes .modules-unchecked
 	@if [ -s $< ]; then \
 		mvn --projects $$(cat $< |paste -sd ',' -) clean install -DskipTests; \
 	fi
 
 .PHONY: check
-check : .modules
+check : .modules-unchecked
 	@if [ -s $< ]; then \
-		@mvn --projects $$(cat $< |paste -sd ',' -) --also-make-dependents clean install; \
+		mvn --projects $$(cat $< |paste -sd ',' -) clean install exec:exec -Dexec.executable=rm -Dexec.args=.unchecked; \
 	fi
 
 .PHONY: release
@@ -51,6 +51,15 @@ release : .modules
 		   [[ -n $$(find $$module/{pom.xml,src} -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]]; then \
 			echo $$module; \
 		fi \
+	done > $@
+
+.INTERMEDIATE: .modules-unchecked
+.modules-unchecked : .modules-with-changes
+	@if [ -s $< ]; then \
+		mvn --quiet --projects $$(cat $< |paste -sd ',' -) --also-make-dependents exec:exec -Dexec.executable=touch -Dexec.args=.unchecked; \
+	fi && \
+	find * -mindepth 1 -name .unchecked | while read -r f; do \
+		dirname $$f; \
 	done > $@
 
 .PHONY: release-notes

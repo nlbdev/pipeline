@@ -58,6 +58,7 @@ Release procedure
   make release-notes
   ```
 
+- Comment out all modules in the aggregator POMs that you don't want to release. Commit.
 - Perform the release with Maven.
 
   ```sh
@@ -65,12 +66,20 @@ Release procedure
   mvn release:perform
   ```
   
-- Revert snapshot increments of modules in `maven/bom/pom.xml` and `maven/parent/pom.xml`, update
-  parent version to new snapshot in all module POMs and amend to the last commit.
+- Revert the commit that commented out modules.
+  
+  ```sh
+  git revert HEAD~2
+  git reset --soft HEAD^
+  ```
+
+- Revert snapshot increments of modules in `maven/bom/pom.xml` and `maven/parent/pom.xml` and update
+  parent version to new snapshot in all module POMs.
+- Amend to the last commit.
 - Push and make a pull request (for turning an existing issue into a PR use the `-i <issueno>` switch).
 
   ```sh
-  git push origin release/${VERSION}:release/${VERSION}
+  git push -u origin release/${VERSION}:release/${VERSION}
   hub pull-request -b daisy:master -h daisy:release/${VERSION} -m "Release version ${VERSION}"
   ```
   

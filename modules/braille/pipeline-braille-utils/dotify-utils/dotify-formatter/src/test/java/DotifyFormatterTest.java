@@ -1,7 +1,5 @@
 import java.io.File;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -132,20 +130,16 @@ public class DotifyFormatterTest {
 	@Test
 	public void runXProcSpec() throws Exception {
 		File baseDir = new File(PathUtils.getBaseDir());
-		Map<String,File> tests = new HashMap<String,File>();
-		tests.put("test_format_0", new File(baseDir, "src/test/xprocspec/test_format_0.xprocspec"));
-		tests.put("test_format_1", new File(baseDir, "src/test/xprocspec/test_format_1.xprocspec"));
-		tests.put("test_format_2", new File(baseDir, "src/test/xprocspec/test_format_2.xprocspec"));
-		tests.put("test_format_3", new File(baseDir, "src/test/xprocspec/test_format_3.xprocspec"));
-		tests.put("test_format_4", new File(baseDir, "src/test/xprocspec/test_format_4.xprocspec"));
-		tests.put("test_format_5", new File(baseDir, "src/test/xprocspec/test_format_5.xprocspec"));
-		tests.put("test_format_6", new File(baseDir, "src/test/xprocspec/test_format_6.xprocspec"));
-		tests.put("test_format_7", new File(baseDir, "src/test/xprocspec/test_format_7.xprocspec"));
-		tests.put("test_format_8", new File(baseDir, "src/test/xprocspec/test_format_8.xprocspec"));
-		tests.put("test_format_9", new File(baseDir, "src/test/xprocspec/test_format_9.xprocspec"));
-		//tests.put("test_dotify.formatter.impl", new File(baseDir, "src/test/xprocspec/test_dotify.formatter.impl.xprocspec"));
-		tests.put("test_propagate-page-break.xprocspec", new File(baseDir, "src/test/xprocspec/test_propagate-page-break.xprocspec"));
-		boolean success = xprocspecRunner.run(tests,
+		boolean success = xprocspecRunner.run(ImmutableMap.of(
+			                                      "test_format",
+			                                      new File(baseDir, "src/test/xprocspec/test_format.xprocspec"),
+			                                      "test_obfl-to-pef",
+			                                      new File(baseDir, "src/test/xprocspec/test_obfl-to-pef.xprocspec"),
+			                                      // "test_dotify.formatter.impl",
+			                                      // new File(baseDir, "src/test/xprocspec/test_dotify.formatter.impl.xprocspec"),
+			                                      "test_propagate-page-break.xprocspec",
+			                                      new File(baseDir, "src/test/xprocspec/test_propagate-page-break.xprocspec")
+			                                      ),
 		                                      new File(baseDir, "target/xprocspec-reports"),
 		                                      new File(baseDir, "target/surefire-reports"),
 		                                      new File(baseDir, "target/xprocspec"),
