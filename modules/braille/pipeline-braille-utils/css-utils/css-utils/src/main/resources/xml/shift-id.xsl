@@ -7,7 +7,7 @@
     version="2.0">
     
     <xsl:template match="/*">
-        <!-- first pass: mode ids -->
+        <!-- first pass: move ids -->
         <xsl:variable name="move-ids" as="document-node()">
             <xsl:document>
                 <xsl:call-template name="move-ids"/>
