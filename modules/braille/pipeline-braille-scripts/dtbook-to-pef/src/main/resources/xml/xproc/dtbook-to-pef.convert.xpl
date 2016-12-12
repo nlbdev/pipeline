@@ -122,7 +122,6 @@
             <p:output port="obfl">
                 <p:pipe step="obfl" port="result"/>
             </p:output>
-            <px:message message="Transforming from XML with inline CSS to OBFL"/>
             <!--
                 TODO: move messages to px:transform step?
             -->
@@ -132,7 +131,7 @@
                 <px:message>
                     <!-- if $transform contains 'dotify'; use 'px:dotify-transform' as progress substep since there's currently no way to
                      send messages from java to the execution log. See: https://github.com/daisy/pipeline-issues/issues/477 -->
-                    <p:with-option name="message" select="concat('[progress px:dtbook-to-pef.convert 29 ',(if (contains($transform,'dotify')) then 'px:dotify-transform' else 'px:transform'),']')"/>
+                    <p:with-option name="message" select="concat('[progress px:dtbook-to-pef.convert 29 ',(if (contains($transform,'dotify')) then 'px:dotify-transform' else 'px:transform'),'] Transforming from XML with inline CSS to OBFL')"/>
                 </px:message>
                 <px:message severity="DEBUG">
                     <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
@@ -145,13 +144,12 @@
                     </p:input>
                 </px:transform>
             </p:group>
-            <px:message message="Transforming from OBFL to PEF"/>
             <p:group>
                 <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
                 <px:message>
                     <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
                 </px:message>
-                <px:message message="[progress px:dtbook-to-pef.convert 55 px:transform]"/>
+                <px:message message="[progress px:dtbook-to-pef.convert 55 px:transform] Transforming from OBFL to PEF"/>
                 <px:transform>
                     <p:with-option name="query" select="$transform-query"/>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
@@ -166,7 +164,6 @@
             <p:output port="obfl">
                 <p:empty/>
             </p:output>
-            <px:message message="Transforming from XML with inline CSS to PEF"/>
             <p:group>
                 <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
                 <px:message>
@@ -175,7 +172,7 @@
                 <px:message>
                     <!-- if $transform-query contains 'dotify'; use 'px:dotify-transform' as progress substep since there's currently no way to
                      send messages from java to the execution log. See: https://github.com/daisy/pipeline-issues/issues/477 -->
-                    <p:with-option name="message" select="concat('[progress px:dtbook-to-pef.convert 84 ',(if (contains($transform,'dotify')) then 'px:dotify-transform' else 'px:transform'),']')"/>
+                    <p:with-option name="message" select="concat('[progress px:dtbook-to-pef.convert 84 ',(if (contains($transform,'dotify')) then 'px:dotify-transform' else 'px:transform'),'] Transforming from XML with inline CSS to PEF')"/>
                 </px:message>
                 <px:transform>
                     <p:with-option name="query" select="$transform-query"/>
