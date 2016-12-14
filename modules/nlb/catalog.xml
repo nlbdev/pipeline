@@ -6,4 +6,5 @@
     <nextCatalog catalog="./html-to-dtbook/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./mailchimp/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./metadata-utils/src/main/resources/META-INF/catalog.xml"/>
+    <nextCatalog catalog="./nlbpub/src/main/resources/META-INF/catalog.xml"/>
 </catalog>
