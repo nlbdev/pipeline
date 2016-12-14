@@ -8,4 +8,5 @@
   <nextCatalog catalog="./braille/catalog.xml"/>
   <nextCatalog catalog="./nlp/catalog.xml"/>
   <nextCatalog catalog="./nlb/catalog.xml"/>
+  <nextCatalog catalog="./nordic/catalog.xml"/>
 </catalog>
