@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y golang vim zip
 # Build and install Pipeline 2
 ADD . /root/pipeline/
 RUN cd ~/pipeline && mkdir -p .maven-cache
-RUN cd ~/pipeline && make dist-zip || cd ~/pipeline && make dist-zip
-RUN unzip pipeline/pipeline2-*_linux.zip
-RUN rm ~/pipeline -rf
+RUN cd ~/pipeline && make dist-zip && mv pipeline2-*_linux.zip ~ && cd ~ && rm ~/pipeline -rf \
+ || cd ~/pipeline && make dist-zip && mv pipeline2-*_linux.zip ~ && cd ~ && rm ~/pipeline -rf
+RUN unzip pipeline2-*_linux.zip && rm pipeline2-*_linux.zip
 
 ENTRYPOINT /root/daisy-pipeline/cli/dp2
