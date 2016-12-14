@@ -19,6 +19,7 @@
 
     <p:option name="new-base" required="true"/>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
 
     <p:viewport match="/*/d:file">
@@ -36,7 +37,7 @@
     <p:viewport match="/*/d:file" name="file">
         <p:choose>
             <p:when test="not(/*/@original-href)">
-                <p:variable name="on-disk" select="resolve-uri(/*/(@original-href,@href)[1],base-uri(/*))"/>
+                <p:variable name="on-disk" select="/*/@href-before-move"/>
                 <p:try>
                     <p:group>
                         <px:info>
@@ -61,6 +62,9 @@
                                 <p:pipe port="current" step="file"/>
                             </p:input>
                         </p:identity>
+                        <px:message severity="DEBUG">
+                            <p:with-option name="message" select="concat('file does not exist on disk; won''t store original href: ', $on-disk)"/>
+                        </px:message>
                     </p:when>
                     <p:otherwise>
                         <p:add-attribute match="/*" attribute-name="original-href">

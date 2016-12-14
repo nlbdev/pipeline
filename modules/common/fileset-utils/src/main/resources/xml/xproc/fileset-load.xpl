@@ -3,7 +3,9 @@
   xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/fileset-load" xmlns:c="http://www.w3.org/ns/xproc-step" exclude-inline-prefixes="px">
 
   <p:input port="fileset" primary="true"/>
-  <p:input port="in-memory" sequence="true"/>
+  <p:input port="in-memory" sequence="true">
+    <p:empty/>
+  </p:input>
   <p:output port="result" sequence="true">
     <p:pipe port="result" step="load"/>
   </p:output>
@@ -144,15 +146,15 @@
             <p:try>
               <p:group>
                 <px:message severity="DEBUG">
-                  <p:with-option name="message" select="concat('loading ',$target,' from disk: ',$on-disk)"/>
+                  <p:with-option name="message" select="concat('loading ',$target,' from disk: ',$on-disk, ' media-type: ', $media-type, ' method: ', $method)"/>
                 </px:message>
                 <p:sink/>
 
                 <px:info>
                   <p:with-option name="href" select="replace(resolve-uri($on-disk, base-uri()), '^([^!]+)(!/.+)?$', '$1')">
-                    <p:inline>
-                      <doc/>
-                    </p:inline>
+                      <p:inline>
+                        <doc/>
+                      </p:inline>
                   </p:with-option>
                 </px:info>
                 <p:count name="file-exists"/>
