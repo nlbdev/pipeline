@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="validation-report-to-html" type="px:validation-report-to-html"
-    xmlns:p="http://www.w3.org/ns/xproc" 
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" 
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" 
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" 
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                name="main"
+                type="px:validation-report-to-html"
+                exclude-inline-prefixes="#all"
+                version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Validation Report to HTML</h1>
@@ -28,7 +30,7 @@
         <p:output port="result" sequence="true"/>
         
         <p:iteration-source>
-            <p:pipe port="source" step="validation-report-to-html"/>
+            <p:pipe port="source" step="main"/>
         </p:iteration-source>
         
         <p:viewport match="d:expected | d:was">
@@ -46,69 +48,19 @@
         
     </p:for-each>
     
-    <p:insert position="last-child" match="//xhtml:body" name="assemble-html-report">
+    <p:identity>
         <p:input port="source">
             <p:inline>
                 <html xmlns="http://www.w3.org/1999/xhtml">
                     <head>
                         <title>Validation Results</title>
-                        <style type="text/css"> 
-                            body { 
-                            font-family: helvetica; 
-                            } 
-                            pre.box { 
-                            white-space: pre-wrap; /* css-3 */ 
-                            white-space: -moz-pre-wrap; /*Mozilla, since 1999 */ 
-                            white-space: -pre-wrap; /* Opera 4-6 */
-                            white-space: -o-pre-wrap; /* Opera 7 */ 
-                            word-wrap: break-word; /*Internet Explorer 5.5+ */ 
-                            } 
-                            li.error div { 
-                            display: table; 
-                            border: gray thin solid; 
-                            padding: 5px; 
-                            } 
-                            li.error div h3 { 
-                            display: table-cell; 
-                            padding-right: 10px; 
-                            font-size: smaller; 
-                            } 
-                            li.error div pre.box { 
-                            display: table-cell; 
-                            } 
-                            li { 
-                            padding-bottom: 15px; 
-                            } 
-                            #toc {
-                            border-spacing: 0px;
-                            }
-                            #toc th, #toc td {
-                            padding: 5px 30px 5px 10px;
-                            border-spacing: 0px;
-                            font-size: 90%;
-                            margin: 0px;
-                            }
-                            #toc th, #toc td {
-                            text-align: left;
-                            border-top: 1px solid #f1f8fe;
-                            border-bottom: 1px solid #cbd2d8;
-                            border-right: 1px solid #cbd2d8;
-                            }
-                            
-                            #toc tr:nth-child(odd) {
-                            background-color: #e0e9f0;
-                            }
-                            #toc tr:nth-child(even), #toc thead th {
-                            background-color: #e8eff5; !important;
-                            }
-                            
-                        </style>
+                        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"> </script>
                     </head>
-                    <body>
+                    <body style="font-family: helvetica;">
                         <div id="header">
                             <h1>Validation Results</h1>
                             <p id="datetime">@@</p>
-                            <table id="toc">
+                            <table id="toc" style="border-spacing: 0px;">
                                 <thead>
                                     <tr>
                                         <th>File name</th>
@@ -125,13 +77,22 @@
                 </html>
             </p:inline>
         </p:input>
+    </p:identity>
+    <p:add-attribute match="//xhtml:th" attribute-name="style" attribute-value="padding: 5px 30px 5px 10px;
+                                                                                border-spacing: 0px;
+                                                                                font-size: 90%;
+                                                                                margin: 0px;
+                                                                                text-align: left;
+                                                                                border-top: 1px solid #f1f8fe;
+                                                                                border-bottom: 1px solid #cbd2d8;
+                                                                                border-right: 1px solid #cbd2d8;
+                                                                                background-color: #e8eff5;"/>
+    <p:insert position="last-child" match="//xhtml:body">
         <p:input port="insertion">
             <p:pipe port="result" step="convert-to-html"/>
-            <p:inline xmlns="http://www.w3.org/1999/xhtml">
-                <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"> </script>
-            </p:inline>
         </p:input>
     </p:insert>
+    <p:identity name="assemble-html-report"/>
     
     <p:choose>
         <p:when test="$toc eq 'true'">
@@ -159,6 +120,14 @@
                         </p:inline>
                     </p:input>
                 </p:identity>
+                <p:choose>
+                    <p:when test="p:iteration-position() mod 2 = 0">
+                        <p:add-attribute match="//xhtml:td" attribute-name="style" attribute-value="background-color: #e8eff5;"/>
+                    </p:when>
+                    <p:otherwise>
+                        <p:add-attribute match="//xhtml:td" attribute-name="style" attribute-value="background-color: #e0e9f0;"/>
+                    </p:otherwise>
+                </p:choose>
                 
                 <p:string-replace match="xhtml:td[@class='filename']/text()">
                     <p:with-option name="replace" select="concat('&quot;', $document-name, '&quot;')"/>
