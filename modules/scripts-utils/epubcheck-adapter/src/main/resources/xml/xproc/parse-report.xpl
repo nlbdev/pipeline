@@ -19,9 +19,9 @@
         <p:pipe port="result" step="html-report"/>
     </p:output>
     
-    <p:output port="pipeline-report">
+    <p:output port="xml-report">
         <p:documentation>Validation report corresponding to the grammar used by other steps in the DAISY Pipeline 2 framework</p:documentation>
-        <p:pipe port="result" step="pipeline-report"/>
+        <p:pipe port="result" step="xml-report"/>
     </p:output>
     
     <p:output port="status">
