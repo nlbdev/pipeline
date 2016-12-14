@@ -77,7 +77,7 @@
             <p:empty/>
         </p:input>
         <p:input port="stylesheet">
-            <p:document href="../xslt/opf-manifest-to-fileset.xsl"/>
+            <p:document href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/opf-manifest-to-fileset.xsl"/>
         </p:input>
     </p:xslt>
     <p:identity name="opf-fileset"/>
