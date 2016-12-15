@@ -18,6 +18,13 @@ Thumbs.db
 target/
 /releaseDescriptor*xml
 
+# Eclipse
+eclipse/
+eclipse/*
+.project
+.settings
+.classpath
+
 # XSpec
 xspec/*.html
 *-result.html
@@ -25,10 +32,3 @@ xspec/*.html
 # vim files
 *~
 *.swp
-
-# Eclipse
-eclipse/
-eclipse/*
-.project
-.settings/
-.classpath
