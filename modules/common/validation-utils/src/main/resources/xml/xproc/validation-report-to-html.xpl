@@ -37,7 +37,11 @@
             <p:escape-markup method="xml"/>
             <p:string-replace match="/*/text()" replace="replace(/*,'(\n)[\s\n]+\n','$1')"/>
         </p:viewport>
+        <p:identity>
+            <p:log port="result" href="file:/tmp/validation-report-to-html.xsl.in.xml"/>
+        </p:identity>
         <p:xslt name="htmlify-validation-report">
+            <p:log port="result" href="file:/tmp/validation-report-to-html.xsl.out.xml"/>
             <p:input port="parameters">
                 <p:empty/>
             </p:input>

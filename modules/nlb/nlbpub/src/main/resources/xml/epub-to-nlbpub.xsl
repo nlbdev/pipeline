@@ -43,252 +43,6 @@
     <xsl:import href="../../../../../../common/file-utils/src/main/resources/xml/xslt/uri-functions.xsl"/>
     
     
-    <!-- ############################################################# -->
-    <!-- ########## Feilmeldinger for elementer uten regler ########## -->
-    <!-- ############################################################# -->
-    
-    <xsl:template match="@* | node()" mode="#all">
-        <xsl:message terminate="yes" select="concat(f:filename(., /*/d:fileset/base-uri()),' (',f:xpath(.),'): Ingen regel for ',f:node-type(.),' her; &quot;',f:node-content(.),'&quot;')"/>
-    </xsl:template>
-    
-    
-    <!-- ############################################################################## -->
-    <!-- ########## Hoved-template som sjekker filsettet og plukker ut OPFen ########## -->
-    <!-- ############################################################################## -->
-    
-    <xsl:template match="/c:wrapper">
-        
-        <!-- Finn META-INF/container.xml -->
-        <xsl:variable name="ocf" select="/*/*[base-uri() = resolve-uri('META-INF/container.xml',/*/d:fileset/base-uri())]"/>
-        <xsl:if test="count($ocf) = 0">
-            <xsl:message terminate="yes" select="'Finner ikke META-INF/container.xml'"/>
-        </xsl:if>
-        <xsl:if test="count($ocf/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml']) &gt; 1">
-            <xsl:message terminate="yes" select="'Multiple Rendition EPUB er ikke støttet'"/>
-        </xsl:if>
-        
-        <!-- Finn OPF -->
-        <xsl:message select="$ocf/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml']/resolve-uri(concat('../',@full-path),base-uri())"/>
-        <xsl:variable name="opf" select="/*/*[base-uri() = $ocf/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml']/resolve-uri(concat('../',@full-path),base-uri())]"/>
-        <xsl:if test="count($opf) = 0">
-            <xsl:message terminate="yes" select="'Fant ingen OPF'"/>
-        </xsl:if>
-        
-        <!-- Sjekk at alle XML-filene er referert til fra OPFen -->
-        <xsl:for-each select="/*/* except /*/d:fileset">
-            <xsl:choose>
-                <xsl:when test="base-uri() = $opf/base-uri()">
-                    <!-- OPFen refererer ikke til seg selv -->
-                </xsl:when>
-                <xsl:when test="substring-after(base-uri(), /*/d:fileset/base-uri()) = (
-                                                                                        'mimetype',
-                                                                                        'META-INF/container.xml',
-                                                                                        'META-INF/encryption.xml',
-                                                                                        'META-INF/manifest.xml',
-                                                                                        'META-INF/metadata.xml',
-                                                                                        'META-INF/rights.xml',
-                                                                                        'META-INF/signatures.xml'
-                                                                                        )">
-                    <!-- Disse filene er definert i OCF-standarden, og refereres ikke til fra OPFen -->
-                </xsl:when>
-                <xsl:when test="not(base-uri() = $opf/opf:manifest/opf:item/resolve-uri(@href,base-uri()))">
-                    <xsl:message terminate="yes" select="concat(pf:relativize-uri(base-uri(),/*/d:fileset/base-uri()), ' er ikke referert til fra OPFen')"/>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:for-each>
-        
-        <!-- Behandle XML-filer (OPF, HTML, etc.) -->
-        <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            
-            <xsl:copy-of select="* except (html:* | opf:* | ncx:*)"/>
-            
-            <xsl:apply-templates select="html:* | opf:* | ncx:*"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="/*/*/@xml:base">
-        <xsl:copy-of select="."/>
-    </xsl:template>
-    
-    <!-- ############ -->
-    <!-- Behandle OPF -->
-    <!-- ############ -->
-    
-    <xsl:template match="opf:package | opf:metadata | opf:manifest | opf:spine | opf:item | opf:itemref | opf:metadata/dc:* | opf:metadata/opf:meta">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="opf:package/@version | opf:package/@unique-identifier | opf:package/@prefix">
-        <xsl:copy-of select="."/>
-    </xsl:template>
-    
-    <xsl:template match="opf:metadata/dc:*/@id | opf:metadata/dc:*/text()">
-        <xsl:copy-of select="."/>
-    </xsl:template>
-    
-    <xsl:template match="opf:meta/@id | opf:meta/@property | opf:meta[@property]/text()">
-        <xsl:copy-of select="."/>
-    </xsl:template>
-    
-    <xsl:template match="opf:meta[@name]">
-        <!-- OPF 2-metadata -->
-        <xsl:choose>
-            <xsl:when test="../opf:meta[not(@refines) and @property = current()/@name and text() = current()/@content]">
-                <!-- Metadataen finnes alleredemed OPF 3-syntaks; ignorer dette elementet -->
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- Skriv om metadataen til OPF 3-syntaks -->
-                <xsl:copy>
-                    <xsl:attribute name="property" select="@name"/>
-                    <xsl:value-of select="@content"/>
-                </xsl:copy>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    
-    <xsl:template match="opf:item/@id | opf:item/@media-type | opf:item/@href | opf:item/@properties">
-        <xsl:copy-of select="."/>
-    </xsl:template>
-    
-    <xsl:template match="opf:item[@media-type = 'application/x-dtbncx+xml']">
-        <!-- Fjern NCX fra manifestet -->
-    </xsl:template>
-    
-    <xsl:template match="opf:itemref/@id | opf:itemref/@idref | opf:itemref/@linear">
-        <xsl:copy-of select="."/>
-    </xsl:template>
-    
-    <xsl:template match="opf:spine/@toc">
-        <!-- Fjern referanse til NCX -->
-    </xsl:template>
-    
-    
-    <!-- ############# -->
-    <!-- Behandle HTML -->
-    <!-- ############# -->
-    
-    <xsl:template match="ncx:ncx">
-        <!-- Ikke inkluder NCX i resultatet -->
-    </xsl:template>
-    
-    
-    <!-- ############# -->
-    <!-- Behandle HTML -->
-    <!-- ############# -->
-    
-    <xsl:template match="html:html">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:head">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:head/html:title">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:head/html:meta">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:head/html:style">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:head/html:link">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:head/html:script">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:body">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:span | html:pre | html:code | html:abbr">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-
-    <xsl:template match="html:p">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:ul | html:ol">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:ul/html:li | html:ol/html:li">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:img">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:img/@src | html:img/@alt">
-        <xsl:copy-of select="."/>
-    </xsl:template>
-    
-    <xsl:template match="html:*/@id | html:*/@class">
-        <xsl:choose>
-            <xsl:when test="parent::*/local-name() = ('body', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'pre', 'code', 'abbr', 'li', 'img')">
-                <xsl:copy-of select="."/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:next-match/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    
-    <xsl:template match="html:*/text()">
-        <xsl:choose>
-            <xsl:when test="parent::*/local-name() = ('title', 'style', 'script', 'body', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'pre', 'code', 'abbr', 'li')">
-                <xsl:copy-of select="."/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:next-match/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    
     <!-- ################# -->
     <!-- Hjelpe-funksjoner -->
     <!-- ################# -->
@@ -391,5 +145,347 @@
         </xsl:variable>
         <xsl:value-of select="string-join($result,'')"/>
     </xsl:function>
+    
+    <xsl:template name="attach-error">
+        <xsl:param name="node" select="." as="node()"/>
+        <xsl:param name="desc" as="xs:string"/>
+        <xsl:param name="href" select="f:filename($node, $node/ancestor::*[last()]/d:fileset/base-uri())" as="xs:string"/>
+        <xsl:param name="was" select="''" as="xs:string"/>
+        <xsl:param name="expected" select="''" as="xs:string"/>
+        
+        <xsl:variable name="message">
+            <xsl:value-of select="replace($href,'\|','&amp;#124;')"/>
+            <xsl:text> | </xsl:text>
+            <xsl:value-of select="replace($desc,'\|','&amp;#124;')"/>
+            <xsl:text> | </xsl:text>
+            <xsl:value-of select="replace($was,'\|','&amp;#124;')"/>
+            <xsl:text> | </xsl:text>
+            <xsl:value-of select="replace($expected,'\|','&amp;#124;')"/>
+        </xsl:variable>
+        
+        <xsl:choose>
+            <xsl:when test="f:node-type($node) = 'attribute'">
+                <xsl:attribute name="d:error-{generate-id($node)}" select="$message"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:comment select="concat('d:error ',$message)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    
+    <!-- ############################################################# -->
+    <!-- ########## Feilmeldinger for elementer uten regler ########## -->
+    <!-- ############################################################# -->
+    
+    <xsl:template match="@* | node()" mode="#all">
+        <xsl:copy>
+            <xsl:call-template name="attach-error">
+                <xsl:with-param name="node" select="."/>
+                <xsl:with-param name="desc" select="concat('Ingen regel for ',f:node-type(.))"/>
+                <xsl:with-param name="was" select="concat(f:xpath(.), ': ', f:node-content(.))"/>
+            </xsl:call-template>
+        </xsl:copy>
+    </xsl:template>
+    
+    
+    <!-- ############################################################################## -->
+    <!-- ########## Hoved-template som sjekker filsettet og plukker ut OPFen ########## -->
+    <!-- ############################################################################## -->
+    
+    <xsl:template match="/c:wrapper">
+        
+        <!-- Finn META-INF/container.xml -->
+        <xsl:variable name="ocf" select="/*/*[base-uri() = resolve-uri('META-INF/container.xml',/*/d:fileset/base-uri())]"/>
+        <xsl:if test="count($ocf) = 0">
+            <xsl:call-template name="attach-error">
+                <xsl:with-param name="node" select="."/>
+                <xsl:with-param name="desc" select="'Finner ikke META-INF/container.xml'"/>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="count($ocf/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml']) &gt; 1">
+            <xsl:call-template name="attach-error">
+                <xsl:with-param name="node" select="."/>
+                <xsl:with-param name="desc" select="'Multiple Rendition EPUB er ikke støttet'"/>
+            </xsl:call-template>
+        </xsl:if>
+        
+        <!-- Finn OPF -->
+        <xsl:message select="$ocf/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml']/resolve-uri(concat('../',@full-path),base-uri())"/>
+        <xsl:variable name="opf" select="/*/*[base-uri() = $ocf/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml']/resolve-uri(concat('../',@full-path),base-uri())]"/>
+        <xsl:if test="count($opf) = 0">
+            <xsl:call-template name="attach-error">
+                <xsl:with-param name="node" select="."/>
+                <xsl:with-param name="desc" select="'Fant ingen OPF'"/>
+            </xsl:call-template>
+        </xsl:if>
+        
+        <!-- Sjekk at alle XML-filene er referert til fra OPFen -->
+        <xsl:for-each select="/*/* except /*/d:fileset">
+            <xsl:choose>
+                <xsl:when test="base-uri() = $opf/base-uri()">
+                    <!-- OPFen refererer ikke til seg selv -->
+                </xsl:when>
+                <xsl:when test="substring-after(base-uri(), /*/d:fileset/base-uri()) = (
+                                                                                        'mimetype',
+                                                                                        'META-INF/container.xml',
+                                                                                        'META-INF/encryption.xml',
+                                                                                        'META-INF/manifest.xml',
+                                                                                        'META-INF/metadata.xml',
+                                                                                        'META-INF/rights.xml',
+                                                                                        'META-INF/signatures.xml'
+                                                                                        )">
+                    <!-- Disse filene er definert i OCF-standarden, og refereres ikke til fra OPFen -->
+                </xsl:when>
+                <xsl:when test="not(base-uri() = $opf/opf:manifest/opf:item/resolve-uri(@href,base-uri()))">
+                    <xsl:call-template name="attach-error">
+                        <xsl:with-param name="node" select="."/>
+                        <xsl:with-param name="desc" select="concat(pf:relativize-uri(base-uri(),/*/d:fileset/base-uri()), ' er ikke referert til fra OPFen')"/>
+                    </xsl:call-template>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:for-each>
+        
+        <xsl:for-each select="$opf/opf:manifest/opf:item[not(../../opf:spine/opf:itemref/@idref = @id) and @media-type='application/xhtml+xml']">
+            <xsl:call-template name="attach-error">
+                <xsl:with-param name="node" select="."/>
+                <xsl:with-param name="desc" select="'Dokumentet er ikke en del av boka'"/>
+            </xsl:call-template>
+        </xsl:for-each>
+        
+        <!-- Behandle XML-filer (OPF, HTML, etc.) -->
+        <xsl:copy>
+            <xsl:copy-of select="@*"/>
+            
+            <xsl:copy-of select="* except (html:* | opf:* | ncx:*)"/>
+            
+            <xsl:for-each select="html:* | opf:* | ncx:*">
+                <xsl:choose>
+                    <xsl:when test="base-uri() = $opf/opf:manifest/opf:item[tokenize(@properties,'\s+') = 'nav']/resolve-uri(@href,.)">
+                        <!-- Navigation Document behandles i egen modus for å skille det fra andre HTML-filer -->
+                        <xsl:apply-templates select="." mode="nav"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="."/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:copy>
+    </xsl:template>
+    
+    <!-- Tillat xml:base på alle top-level elementer -->
+    <xsl:template match="/*/*/@xml:base">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <!-- ############ -->
+    <!-- Behandle OPF -->
+    <!-- ############ -->
+    
+    <xsl:template match="opf:metadata | opf:manifest | opf:spine | opf:item | opf:itemref | opf:metadata/dc:* | opf:metadata/opf:meta">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="opf:package">
+        <xsl:copy>
+            <xsl:attribute name="version" select="'3.1'"/>
+            <xsl:apply-templates select="@* except @version"/>
+            <xsl:apply-templates select="node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="opf:package/@unique-identifier | opf:package/@prefix">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="opf:metadata/dc:*/@id | opf:metadata/dc:*/text()">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="opf:meta/@id | opf:meta/@property | opf:meta[@property]/text()">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="opf:meta[@name]">
+        <!-- OPF 2-metadata -->
+        <xsl:choose>
+            <xsl:when test="../opf:meta[not(@refines) and @property = current()/@name and text() = current()/@content]">
+                <!-- Metadataen finnes alleredemed OPF 3-syntaks; ignorer dette elementet -->
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- Skriv om metadataen til OPF 3-syntaks -->
+                <xsl:copy>
+                    <xsl:attribute name="property" select="@name"/>
+                    <xsl:value-of select="@content"/>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="opf:item/@id | opf:item/@media-type | opf:item/@href | opf:item/@properties">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="opf:item[@media-type = 'application/x-dtbncx+xml']">
+        <!-- Fjern NCX fra manifestet -->
+    </xsl:template>
+    
+    <xsl:template match="opf:itemref/@id | opf:itemref/@idref | opf:itemref/@linear">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="opf:spine/@toc">
+        <!-- Fjern referanse til NCX -->
+    </xsl:template>
+    
+    <xsl:template match="opf:guide">
+        <!-- Fjern guide element -->
+    </xsl:template>
+    
+    
+    <!-- ############# -->
+    <!-- Behandle NCX  -->
+    <!-- ############# -->
+    
+    <xsl:template match="ncx:ncx">
+        <!-- Ikke inkluder NCX i resultatet -->
+    </xsl:template>
+    
+    
+    <!-- ############# -->
+    <!-- Behandle HTML -->
+    <!-- ############# -->
+    
+    <xsl:template match="html:html">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:html/@xml:lang | html:html/@lang">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="html:head">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:head/html:title">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:head/html:meta">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:head/html:style">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:head/html:link">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:head/html:script">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:body">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:div">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:span | html:pre | html:code | html:abbr | html:em | html:a">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="html:p">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:ul | html:ol">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:ul/html:li | html:ol/html:li">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:img">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:img/@src | html:img/@alt">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="html:a">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:a/@href">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="html:*/@id | html:*/@class">
+        <xsl:choose>
+            <xsl:when test="parent::*/local-name() = ('body', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'pre', 'code', 'abbr', 'em', 'a', 'li', 'img')">
+                <xsl:copy-of select="."/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:next-match/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="html:*/text()">
+        <xsl:choose>
+            <xsl:when test="parent::*/local-name() = ('title', 'style', 'script', 'body', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'pre', 'code', 'abbr', 'em', 'a', 'li')">
+                <xsl:copy-of select="."/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:next-match/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
     
 </xsl:stylesheet>

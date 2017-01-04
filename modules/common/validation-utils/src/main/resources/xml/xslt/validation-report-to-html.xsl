@@ -215,7 +215,7 @@
                 <xsl:value-of select="$message"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$desc"/>$>
+                <xsl:value-of select="$desc"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>

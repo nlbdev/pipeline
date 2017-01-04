@@ -57,7 +57,7 @@
                 <p:pipe port="result" step="epub-to-nlbpub.xsl.in-memory"/>
             </p:output>
             <p:output port="report.out" sequence="true">
-                <p:empty/>
+                <p:pipe port="result" step="epub-to-nlbpub.xsl.report"/>
             </p:output>
             
             <px:message message="[progress px:epub-to-nlbpub.convert 10 px:fileset-load] Laster XML-filer">
@@ -80,10 +80,9 @@
             </p:for-each>
             <p:wrap-sequence wrapper="c:wrapper"/>
             
-            <px:message message="[progress px:epub-to-nlbpub.convert 90 epub-to-nlbpub.xsl] Konverterer">
-                <p:log port="result" href="file:/tmp/wrapped.in.xml"/>
-            </px:message>
+            <px:message message="[progress px:epub-to-nlbpub.convert 90 epub-to-nlbpub.xsl] Konverterer"/>
             <p:xslt name="epub-to-nlbpub.xsl">
+                <p:log port="result" href="file:/tmp/epub-to-nlbpub.xsl.out.xml"/>
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -92,12 +91,32 @@
                 </p:input>
             </p:xslt>
             
-            <p:filter select="/*/*[position() &gt; 1]" name="epub-to-nlbpub.xsl.in-memory"/>
+            <p:delete match="//comment()[starts-with(.,'d:error ')] | //@d:*[starts-with(local-name(),'error-')]"/>
+            <p:filter select="/*/*[position() &gt; 1]"/>
+            <p:identity name="epub-to-nlbpub.xsl.in-memory"/>
+            
             <p:filter select="/*/*[1]" name="epub-to-nlbpub.xsl.fileset">
                 <p:input port="source">
                     <p:pipe port="result" step="epub-to-nlbpub.xsl"/>
                 </p:input>
             </p:filter>
+            
+            <p:xslt>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="source">
+                    <p:pipe port="result" step="epub-to-nlbpub.xsl"/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="epub-to-nlbpub.report.xsl"></p:document>
+                </p:input>
+            </p:xslt>
+            <p:filter select="/*/*"/>
+            <p:identity name="epub-to-nlbpub.xsl.report"/>
+            
+            <!-- TODO: egne schematrons i tillegg her for å validere f.eks. metadata? Og overskriftsoppmerking etc?
+                       Valideres mot dokumentet som kommer ut av epub-to-nlbpub.xsl isåfall så kan man legge inn fix på feil som oppstår i XSLTen. -->
             
         </p:when>
         <p:otherwise>
