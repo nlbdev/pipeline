@@ -42,26 +42,62 @@
     <p:option name="fail-on-error" select="'true'"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
-    
-    <px:message message="Ikke implementert"/>
     
     <p:choose name="choose">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
-            <p:output port="fileset.out" primary="true"/>
+            <p:output port="fileset.out" primary="true">
+                <p:pipe port="result" step="epub-to-nlbpub.xsl.fileset"/>
+            </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="in-memory.in" step="main"/>
+                <p:pipe port="result" step="epub-to-nlbpub.xsl.in-memory"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
             </p:output>
             
-            <!-- TODO -->
-            <p:identity/>
+            <px:message message="[progress px:epub-to-nlbpub.convert 10 px:fileset-load] Laster XML-filer">
+                <p:log port="result"/>
+            </px:message>
+            <px:fileset-load media-types="*/xml */*+xml" name="xml-files">
+                <p:log port="result" href="file:/tmp/loaded.xml"/>
+                <p:input port="in-memory">
+                    <p:pipe port="in-memory.in" step="main"/>
+                </p:input>
+            </px:fileset-load>
+            <p:for-each>
+                <p:iteration-source>
+                    <p:pipe port="fileset.in" step="main"/>
+                    <p:pipe port="result" step="xml-files"/>
+                </p:iteration-source>
+                <p:add-attribute attribute-name="xml:base" match="/*">
+                    <p:with-option name="attribute-value" select="(/*/@xml:base, /*/base-uri())[1]"/>
+                </p:add-attribute>
+            </p:for-each>
+            <p:wrap-sequence wrapper="c:wrapper"/>
             
+            <px:message message="[progress px:epub-to-nlbpub.convert 90 epub-to-nlbpub.xsl] Konverterer">
+                <p:log port="result" href="file:/tmp/wrapped.in.xml"/>
+            </px:message>
+            <p:xslt name="epub-to-nlbpub.xsl">
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="epub-to-nlbpub.xsl"/>
+                </p:input>
+            </p:xslt>
+            
+            <p:filter select="/*/*[position() &gt; 1]" name="epub-to-nlbpub.xsl.in-memory"/>
+            <p:filter select="/*/*[1]" name="epub-to-nlbpub.xsl.fileset">
+                <p:input port="source">
+                    <p:pipe port="result" step="epub-to-nlbpub.xsl"/>
+                </p:input>
+            </p:filter>
             
         </p:when>
         <p:otherwise>

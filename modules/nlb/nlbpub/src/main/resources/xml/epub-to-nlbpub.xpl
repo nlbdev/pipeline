@@ -56,9 +56,7 @@
         <p:pipe port="result" step="status"/>
     </p:output>
 
-    <p:import href="nlbpub.validate.xpl"/>
     <p:import href="epub-to-nlbpub.convert.xpl"/>
-    <p:import href="nlbpub-to-nordic.convert.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
@@ -100,7 +98,11 @@
                 <p:with-option name="unzipped-basedir" select="concat($tempDir,'epub/')"/>
             </px:fileset-unzip>
             <px:message message="Bestemmer filtyper"/>
-            <px:mediatype-detect name="unzipped-fileset"/>
+            <px:mediatype-detect name="unzipped-fileset">
+                <p:input port="source">
+                    <p:pipe port="fileset" step="fileset-unzip"/>
+                </p:input>
+            </px:mediatype-detect>
             
             <px:message message="Laster META-INF/container.xml"/>
             <px:fileset-load href="META-INF/container.xml" name="container"/>
@@ -163,11 +165,13 @@
         </p:input>
     </p:identity>
     <px:message message="[progress 30 nlb:nlbpub.validate] Validerer EPUB i henhold til NLB-standard"/>
-    <nlb:nlbpub.validate name="validate.nlbpub">
-        <p:log port="fileset.out" href="file:/tmp/validate.nlbpub.fileset.out.xml"/>
-        <p:log port="in-memory.out" href="file:/tmp/validate.nlbpub.in-memory.out.xml"/>
-        <p:log port="report.out" href="file:/tmp/validate.nlbpub.report.out.xml"/>
-        <p:log port="status.out" href="file:/tmp/validate.nlbpub.status.out.xml"/>
+    
+    <px:message message="[progress 60 px:epub-to-nlbpub.convert] Normaliserer EPUB i henhold til NLB-standard"/>
+    <nlb:epub-to-nlbpub.convert name="convert.nlbpub" fail-on-error="false">
+        <p:log port="fileset.out" href="file:/tmp/epub-to-nlbpub.convert.fileset.out.xml"/>
+        <p:log port="in-memory.out" href="file:/tmp/epub-to-nlbpub.convert.in-memory.out.xml"/>
+        <p:log port="report.out" href="file:/tmp/epub-to-nlbpub.convert.report.out.xml"/>
+        <p:log port="status.out" href="file:/tmp/epub-to-nlbpub.convert.status.out.xml"/>
         <p:input port="in-memory.in">
             <p:pipe port="opf" step="unzip"/>
         </p:input>
@@ -176,23 +180,6 @@
         </p:input>
         <p:input port="status.in">
             <p:pipe port="status" step="validate.epubcheck"/>
-        </p:input>
-    </nlb:nlbpub.validate>
-    
-    <px:message message="[progress 30 px:epub-to-nlbpub.convert] Normaliserer EPUB i henhold til NLB-standard"/>
-    <nlb:epub-to-nlbpub.convert name="convert.nlbpub" fail-on-error="false">
-        <p:log port="fileset.out" href="file:/tmp/epub-to-nlbpub.convert.fileset.out.xml"/>
-        <p:log port="in-memory.out" href="file:/tmp/epub-to-nlbpub.convert.in-memory.out.xml"/>
-        <p:log port="report.out" href="file:/tmp/epub-to-nlbpub.convert.report.out.xml"/>
-        <p:log port="status.out" href="file:/tmp/epub-to-nlbpub.convert.status.out.xml"/>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="validate.nlbpub"/>
-        </p:input>
-        <p:input port="report.in">
-            <p:pipe port="report.out" step="validate.nlbpub"/>
-        </p:input>
-        <p:input port="status.in">
-            <p:pipe port="status.out" step="validate.nlbpub"/>
         </p:input>
     </nlb:epub-to-nlbpub.convert>
     
@@ -208,7 +195,7 @@
     
     <p:identity>
         <p:input port="source">
-            <p:pipe port="report.out" step="validate.nlbpub"/>
+            <p:pipe port="report.out" step="convert.nlbpub"/>
         </p:input>
     </p:identity>
     <px:message message="[progress 1 px:validation-report-to-html] Lager HTML-rapport"/>
@@ -216,7 +203,7 @@
     
     <px:validation-status name="status">
         <p:input port="source">
-            <p:pipe port="report.out" step="validate.nlbpub"/>
+            <p:pipe port="report.out" step="convert.nlbpub"/>
         </p:input>
     </px:validation-status>
     
