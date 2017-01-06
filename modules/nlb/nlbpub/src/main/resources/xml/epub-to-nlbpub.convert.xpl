@@ -60,9 +60,7 @@
                 <p:pipe port="result" step="epub-to-nlbpub.xsl.report"/>
             </p:output>
             
-            <px:message message="[progress px:epub-to-nlbpub.convert 10 px:fileset-load] Laster XML-filer">
-                <p:log port="result"/>
-            </px:message>
+            <px:message message="[progress px:epub-to-nlbpub.convert 10 px:fileset-load] Laster XML-filer"/>
             <px:fileset-load media-types="*/xml */*+xml" name="xml-files">
                 <p:log port="result" href="file:/tmp/loaded.xml"/>
                 <p:input port="in-memory">
@@ -77,8 +75,30 @@
                 <p:add-attribute attribute-name="xml:base" match="/*">
                     <p:with-option name="attribute-value" select="(/*/@xml:base, /*/base-uri())[1]"/>
                 </p:add-attribute>
+                
+                <px:message message="Oppgraderer til HTML 5"/>
+                <p:choose>
+                    <p:when test="/*/namespace-uri() = 'http://www.w3.org/1999/xhtml'">
+                        <p:xslt>
+                            <p:input port="parameters">
+                                <p:empty/>
+                            </p:input>
+                            <p:input port="stylesheet">
+                                <p:document href="http://www.daisy.org/pipeline/modules/html-utils/html5-upgrade.xsl"/>
+                            </p:input>
+                        </p:xslt>
+                    </p:when>
+                    <p:otherwise>
+                        <p:identity/>
+                    </p:otherwise>
+                </p:choose>
             </p:for-each>
-            <p:wrap-sequence wrapper="c:wrapper"/>
+            <p:wrap-sequence wrapper="c:wrapper">
+                <p:log port="result" href="file:/tmp/wrap-sequence.out.xml"/>
+            </p:wrap-sequence>
+            
+            <!-- TODO: valider med XSD eller RNG for struktur, og Schematron for å sjekke metadata, klassenavn etc. -->
+            <!-- TODO: generer nytt navigation document basert på NCX hvis EPUB 2 -->
             
             <px:message message="[progress px:epub-to-nlbpub.convert 90 epub-to-nlbpub.xsl] Konverterer"/>
             <p:xslt name="epub-to-nlbpub.xsl">
@@ -109,7 +129,7 @@
                     <p:pipe port="result" step="epub-to-nlbpub.xsl"/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="epub-to-nlbpub.report.xsl"></p:document>
+                    <p:document href="epub-to-nlbpub.report.xsl"/>
                 </p:input>
             </p:xslt>
             <p:filter select="/*/*"/>

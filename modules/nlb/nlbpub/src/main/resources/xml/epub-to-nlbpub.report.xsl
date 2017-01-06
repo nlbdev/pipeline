@@ -48,12 +48,12 @@
                             <xsl:value-of select="base-uri(.)"/>
                         </document-path>
                         <error-count>
-                            <xsl:value-of select="count($errors)"/>
+                            <xsl:value-of select="count(distinct-values($errors))"/>
                         </error-count>
                     </document-info>
                     <reports>
                         <report>
-                            <xsl:for-each select="$errors">
+                            <xsl:for-each select="distinct-values($errors)">
                                 <xsl:variable name="error" select="tokenize(.,' \| ')"/>
                                 
                                 <message severity="error">
