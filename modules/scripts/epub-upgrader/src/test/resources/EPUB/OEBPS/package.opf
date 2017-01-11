@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" version="2.0" unique-identifier="pub-identifier">
+    <metadata>
+        <dc:identifier id="pub-identifier">123456</dc:identifier>
+        <dc:title>Test Book</dc:title>
+        <dc:language>en</dc:language>
+        <dc:creator>Jostein Austvik Jacobsen</dc:creator>
+        <dc:date>2017-01-09</dc:date>
+        <dc:publisher>NLB</dc:publisher>
+    </metadata>
+    <manifest>
+        <item id="item_1" media-type="application/xhtml+xml" href="content.xhtml"/>
+        <item id="item_2" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+    </manifest>
+    <spine toc="item_2">
+        <itemref id="itemref_1" idref="item_1"/>
+    </spine>
+</package>
