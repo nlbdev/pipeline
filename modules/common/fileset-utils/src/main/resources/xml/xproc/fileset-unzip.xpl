@@ -7,7 +7,7 @@
     
     <!-- Standard pxp:unzip output -->
     <p:output port="result" sequence="true" primary="true">    <!-- either a c:zipfile manifest if no file is specified, the file contents if load-to-memory is true, or the empty sequence otherwise -->
-        <p:pipe port="result" step="result"/>
+        <p:pipe port="result" step="fileset-unzip.result"/>
     </p:output>
     
     <!-- Additional secondary output -->
@@ -207,7 +207,7 @@
             
         </p:otherwise>
     </p:choose>
-    <p:identity name="result"/>
+    <p:identity name="fileset-unzip.result"/>
     <p:sink/>
     
     <p:choose>

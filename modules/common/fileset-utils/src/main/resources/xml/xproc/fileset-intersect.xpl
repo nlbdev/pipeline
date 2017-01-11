@@ -5,13 +5,14 @@
 
   <p:input port="source" sequence="true"/>
   <p:output port="result"/>
+  
+  <p:option name="use-first-base" select="'false'"/>
 
-  <p:xslt>
+  <p:xslt template-name="join">
+    <p:with-param name="method" select="'intersect'"/>
+    <p:with-param name="use-first-base" select="$use-first-base"/>
     <p:input port="stylesheet">
-      <p:document href="../xslt/fileset-intersect.xsl"/>
-    </p:input>
-    <p:input port="parameters">
-      <p:empty/>
+      <p:document href="../xslt/fileset-join.xsl"/>
     </p:input>
   </p:xslt>
 

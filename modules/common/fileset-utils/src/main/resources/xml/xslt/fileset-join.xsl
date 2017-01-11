@@ -3,6 +3,9 @@
     xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    
+    <xsl:param name="method" select="'join'"/>              <!-- join, intersect, diff, left-diff -->
+    <xsl:param name="use-first-base" select="'false'"/>     <!-- true, false -->
 
     <xsl:template name="join">
         <xsl:param name="filesets" select="collection()/*" as="node()*"/>
@@ -15,7 +18,9 @@
         <xsl:param name="filesets" required="yes" as="node()*"/>
 
         <!-- Joint fileset base: longest common URI of all fileset bases -->
-        <xsl:param name="base" select="pf:longest-common-uri(distinct-values($filesets[@xml:base]/pf:normalize-uri(@xml:base)))" as="xs:string"/>
+        <xsl:param name="base" select="if ($use-first-base = 'true') then pf:normalize-uri($filesets[1]/@xml:base) else pf:longest-common-uri(distinct-values($filesets[@xml:base]/pf:normalize-uri(@xml:base)))" as="xs:string"/>
+        
+        <xsl:variable name="fileset-count" select="count($filesets)"/>
 
         <d:fileset>
             <xsl:if test="$base">
@@ -26,9 +31,40 @@
                 if ($base) then pf:normalize-uri(pf:relativize-uri(resolve-uri(@href,base-uri(.)),$base))
                 else if (not(matches(@href,'^\w+:'))) then pf:normalize-uri(resolve-uri(@href,base-uri(.)))
                 else pf:normalize-uri(@href)">
-                <d:file href="{current-grouping-key()}">
-                    <xsl:apply-templates select="current-group()/(@* except @href) | current-group()/*"/>
-                </d:file>
+                
+                <xsl:choose>
+                    <xsl:when test="$method = 'intersect'">
+                        <xsl:if test="count(current-group()) = $fileset-count">
+                            <d:file href="{current-grouping-key()}">
+                                <xsl:apply-templates select="current-group()/(@* except @href) | current-group()/*"/>
+                            </d:file>
+                        </xsl:if>
+                        
+                    </xsl:when>
+                    <xsl:when test="$method = 'diff'">
+                        <xsl:if test="count(current-group()) = 1">
+                            <d:file href="{current-grouping-key()}">
+                                <xsl:apply-templates select="current-group()/(@* except @href) | current-group()/*"/>
+                            </d:file>
+                        </xsl:if>
+                        
+                    </xsl:when>
+                    <xsl:when test="$method = 'left-diff'">
+                        <xsl:if test="count(current-group()) = 1 and count(current-group() intersect $filesets[1]/d:file)">
+                            <d:file href="{current-grouping-key()}">
+                                <xsl:apply-templates select="current-group()/(@* except @href) | current-group()/*"/>
+                            </d:file>
+                        </xsl:if>
+                        
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- join -->
+                        <d:file href="{current-grouping-key()}">
+                            <xsl:apply-templates select="current-group()/(@* except @href) | current-group()/*"/>
+                        </d:file>
+                        
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:for-each-group>
         </d:fileset>
     </xsl:template>

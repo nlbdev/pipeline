@@ -7,23 +7,20 @@
   <p:input port="source" primary="true"/>
   <p:input port="secondary"/>
   <p:output port="result"/>
-
-
-
-
-  <p:viewport match="d:file">
-    <p:variable name="href" select="*/resolve-uri(@href,base-uri(.))"/>
-    <p:choose>
-      <p:xpath-context>
-        <p:pipe port="secondary" step="main"/>
-      </p:xpath-context>
-      <p:when test="//d:file[resolve-uri(@href,base-uri(.))=$href]">
-        <p:delete match="*"/>
-      </p:when>
-      <p:otherwise>
-        <p:identity/>
-      </p:otherwise>
-    </p:choose>
-  </p:viewport>
+  
+  <p:option name="use-first-base" select="'true'"/>
+  <p:option name="left-diff" select="'true'"/>
+  
+  <p:xslt template-name="join">
+    <p:with-param name="method" select="if ($left-diff = 'true') then 'left-diff' else 'diff'"/>
+    <p:with-param name="use-first-base" select="$use-first-base"/>
+    <p:input port="source">
+      <p:pipe port="source" step="main"/>
+      <p:pipe port="secondary" step="main"/>
+    </p:input>
+    <p:input port="stylesheet">
+      <p:document href="../xslt/fileset-join.xsl"/>
+    </p:input>
+  </p:xslt>
 
 </p:declare-step>

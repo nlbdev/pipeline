@@ -184,10 +184,6 @@
                       <p:with-option name="file" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
                       <p:with-option name="content-type" select="$media-type"/>
                     </px:unzip>
-                    <p:add-attribute match="/*" attribute-name="xml:base">
-                      <p:with-option name="attribute-value" select="$target"/>
-                    </p:add-attribute>
-                    <p:delete match="/*/@xml:base"/>
                   </p:when>
 
                   <!-- Force HTML -->
@@ -274,6 +270,12 @@
                   </p:otherwise>
 
                 </p:choose>
+                
+                <p:add-attribute match="/*" attribute-name="xml:base">
+                  <p:with-option name="attribute-value" select="$target"/>
+                </p:add-attribute>
+                <p:delete match="/*/@xml:base"/>
+                
               </p:group>
               <p:catch>
                 <!-- could not retrieve file from neither memory nor disk -->

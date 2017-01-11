@@ -4,13 +4,13 @@
 
   <p:input port="source" sequence="true"/>
   <p:output port="result" primary="true"/>
-
+  
+  <p:option name="use-first-base" select="'false'"/>
+  
   <p:xslt template-name="join">
+    <p:with-param name="method" select="'intersect'"/>
     <p:input port="stylesheet">
       <p:document href="../xslt/fileset-join.xsl"/>
-    </p:input>
-    <p:input port="parameters">
-      <p:empty/>
     </p:input>
   </p:xslt>
 
