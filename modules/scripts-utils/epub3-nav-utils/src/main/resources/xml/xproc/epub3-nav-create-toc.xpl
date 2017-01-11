@@ -4,7 +4,7 @@
 
     <p:input port="source" sequence="true"/>
     <p:output port="result">
-        <p:pipe port="result" step="result"/>
+        <p:pipe port="result" step="epub3-nav-create-toc.result"/>
     </p:output>
     <p:option name="base-dir" select="''"/>
 
@@ -71,7 +71,7 @@
 
     <!--TODO better handling of duplicate IDs-->
     <p:delete match="@xml:id|@id"/>
-    <p:identity name="result"/>
+    <p:identity name="epub3-nav-create-toc.result"/>
     <p:sink/>
 
     <p:wrap-sequence wrapper="wrapper">

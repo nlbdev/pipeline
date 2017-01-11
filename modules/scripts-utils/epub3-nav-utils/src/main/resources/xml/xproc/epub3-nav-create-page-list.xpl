@@ -5,7 +5,7 @@
 
     <p:input port="source" sequence="true"/>
     <p:output port="result">
-        <p:pipe port="result" step="result"/>
+        <p:pipe port="result" step="epub3-nav-create-page-list.result"/>
     </p:output>
     <p:option name="hidden" select="'true'"/>
     <p:option name="base-dir" select="''"/>
@@ -58,7 +58,7 @@
             <p:identity/>
         </p:otherwise>
     </p:choose>
-    <p:identity name="result"/>
+    <p:identity name="epub3-nav-create-page-list.result"/>
     <p:sink/>
 
     <p:wrap-sequence wrapper="wrapper">
