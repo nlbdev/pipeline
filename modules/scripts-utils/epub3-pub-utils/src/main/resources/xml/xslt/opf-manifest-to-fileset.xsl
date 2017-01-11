@@ -3,14 +3,18 @@
                                                              xmlns:xs="http://www.w3.org/2001/XMLSchema"
                                                              xmlns:d="http://www.daisy.org/ns/pipeline/data"
                                                              xmlns:opf="http://www.idpf.org/2007/opf">
+    
+    <xsl:param name="spine-only" select="'false'"/>
 
     <xsl:template match="opf:package">
         <!-- content files first, and in spine order -->
         <d:fileset>
             <xsl:attribute name="xml:base" select="replace(base-uri(/*),'(.*/)[^/]*','$1')"/>
-            <d:file href="{replace(base-uri(/*),'.*/','')}" media-type="application/oebps-package+xml"/>
             <xsl:apply-templates select="opf:spine/opf:itemref"/>
-            <xsl:apply-templates select="opf:manifest/opf:item[not(@id=/*/opf:spine/opf:itemref/@idref)]"/>
+            <xsl:if test="$spine-only = 'false'">
+                <d:file href="{replace(base-uri(/*),'.*/','')}" media-type="application/oebps-package+xml"/>
+                <xsl:apply-templates select="opf:manifest/opf:item[not(@id=/*/opf:spine/opf:itemref/@idref)]"/>
+            </xsl:if>
         </d:fileset>
     </xsl:template>
     
