@@ -3,5 +3,7 @@
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc" version="1.0">
     
     <p:import href="create-package-doc.xpl"/>
+    <p:import href="load-spine.xpl"/>
+    <p:import href="load-opf.xpl"/>
     
 </p:library>
