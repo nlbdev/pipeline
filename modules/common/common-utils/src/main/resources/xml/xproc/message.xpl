@@ -17,7 +17,7 @@
         <p:empty/>
     </p:input>
     <p:output port="result" sequence="true">
-        <p:pipe port="result" step="result"/>
+        <p:pipe port="result" step="message.result"/>
     </p:output>
 
     <p:option name="severity" select="'INFO'"/>                 <!-- one of either: WARN, INFO, DEBUG. Defaults to "INFO". Use px:error to throw errors. -->
@@ -156,6 +156,6 @@
 
         </p:otherwise>
     </p:choose>
-    <p:identity name="result"/>
+    <p:identity name="message.result"/>
 
 </p:declare-step>

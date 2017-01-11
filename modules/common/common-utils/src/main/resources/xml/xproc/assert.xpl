@@ -16,7 +16,7 @@
         <p:empty/>
     </p:input>
     <p:output port="result" sequence="true">
-        <p:pipe port="result" step="result"/>
+        <p:pipe port="result" step="assert.result"/>
     </p:output>
     
     <p:option name="test" select="''"/>                                             <!-- boolean -->
@@ -149,6 +149,6 @@
         </p:otherwise>
     </p:choose>
     
-    <p:identity name="result"/>
+    <p:identity name="assert.result"/>
     
 </p:declare-step>
