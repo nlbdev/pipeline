@@ -4,6 +4,7 @@
     
     <p:import href="ocf-finalize.xpl"/>
     <p:import href="ocf-zip.xpl"/>
+    <p:import href="load.xpl"/>
     <p:import href="store.xpl"/>
     
 </p:library>
