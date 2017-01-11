@@ -7,7 +7,6 @@
     <p:import href="fileset-from-dir.xpl"/>
     <p:import href="fileset-from-dir-list.xpl"/>
     <p:import href="fileset-intersect.xpl"/>
-    <p:import href="fileset-exclusive.xpl"/>
     <p:import href="fileset-join.xpl"/>
     <p:import href="fileset-filter.xpl"/>
     <p:import href="fileset-load.xpl"/>
