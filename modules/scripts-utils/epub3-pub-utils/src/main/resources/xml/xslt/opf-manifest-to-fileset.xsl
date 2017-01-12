@@ -5,6 +5,7 @@
                                                              xmlns:opf="http://www.idpf.org/2007/opf">
     
     <xsl:param name="spine-only" select="'false'"/>
+    <xsl:param name="include-opf" select="'true'"/>
 
     <xsl:template match="opf:package">
         <!-- content files first, and in spine order -->
@@ -12,7 +13,9 @@
             <xsl:attribute name="xml:base" select="replace(base-uri(/*),'(.*/)[^/]*','$1')"/>
             <xsl:apply-templates select="opf:spine/opf:itemref"/>
             <xsl:if test="$spine-only = 'false'">
-                <d:file href="{replace(base-uri(/*),'.*/','')}" media-type="application/oebps-package+xml"/>
+                <xsl:if test="$include-opf = 'true'">
+                    <d:file href="{replace(base-uri(/*),'.*/','')}" media-type="application/oebps-package+xml"/>
+                </xsl:if>
                 <xsl:apply-templates select="opf:manifest/opf:item[not(@id=/*/opf:spine/opf:itemref/@idref)]"/>
             </xsl:if>
         </d:fileset>
