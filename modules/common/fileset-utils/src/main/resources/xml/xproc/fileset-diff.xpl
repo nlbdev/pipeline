@@ -4,7 +4,7 @@
   xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
   exclude-inline-prefixes="px">
 
-  <p:input port="source" primary="true"/>
+  <p:input port="source" sequence="true" primary="true"/>
   <p:input port="secondary" sequence="true"/>
   <p:output port="result"/>
   
