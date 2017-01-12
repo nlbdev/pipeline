@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 exclude-inline-prefixes="#all"
                 type="px:epub-load-opf"
@@ -28,6 +29,9 @@
                 <p:with-option name="href" select="(/ocf:container/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml'])[1]/@full-path"/>
                 <p:with-option name="fail-on-not-found" select="$fail-on-not-found"/>
                 <p:with-option name="load-if-not-in-memory" select="$load-if-not-in-memory"/>
+                <p:input port="fileset">
+                    <p:pipe port="fileset" step="main"/>
+                </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="main"/>
                 </p:input>
@@ -41,6 +45,9 @@
                 <p:with-option name="href" select="(/ocf:container/ocf:rootfiles/ocf:rootfile[@media-type='application/oebps-package+xml'])[1]/@full-path"/>
                 <p:with-option name="fail-on-not-found" select="$fail-on-not-found"/>
                 <p:with-option name="load-if-not-in-memory" select="$load-if-not-in-memory"/>
+                <p:input port="fileset">
+                    <p:pipe port="fileset" step="main"/>
+                </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="main"/>
                 </p:input>

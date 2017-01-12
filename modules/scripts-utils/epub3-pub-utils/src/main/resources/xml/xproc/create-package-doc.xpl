@@ -34,12 +34,13 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <px:fileset-join/>
-    <px:mediatype-detect name="spine-filesets-with-mediatypes">
+    <px:mediatype-detect>
         <p:input port="in-memory">
             <p:pipe port="content-docs" step="main"/>
             <p:pipe port="mediaoverlays" step="main"/>
         </p:input>
     </px:mediatype-detect>
+    <p:identity name="spine-filesets-with-mediatypes"/>
 
     <p:split-sequence>
         <p:with-option name="test" select="if (not($nav-uri='')) then concat('base-uri(/*)=&quot;',resolve-uri($nav-uri),'&quot;') else '//html:nav/@*[name()=&quot;epub:type&quot;]=&quot;toc&quot;'">
@@ -427,7 +428,7 @@
             </px:fileset-diff>
             <px:fileset-filter media-types="application/xhtml+xml"/>
             <p:add-attribute match="/d:fileset/d:file" attribute-name="linear" attribute-value="no"/>
-        </p:group>    
+        </p:group>
         <px:fileset-join>
             <p:input port="source">
                 <p:pipe port="result" step="content-docs-primary"/>
@@ -467,7 +468,7 @@
                 <p:identity/>
             </p:otherwise>
         </p:choose>
-
+        
         <px:message severity="DEBUG" message="Successfully created package document spine"/>
     </p:group>
     <p:sink/>
