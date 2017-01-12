@@ -147,7 +147,7 @@
         </p:when>
         <p:otherwise>
             <px:message message="Creating fileset from OPF"/>
-            <p:xslt>
+            <p:xslt name="fileset-from-opf">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -155,6 +155,12 @@
                     <p:document href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/opf-manifest-to-fileset.xsl"/>
                 </p:input>
             </p:xslt>
+            <px:fileset-join>
+                <p:input port="source">
+                    <p:pipe port="result" step="href-fileset"/>
+                    <p:pipe port="result" step="fileset-from-opf"/>
+                </p:input>
+            </px:fileset-join>
             <px:mediatype-detect/>
             <px:fileset-move>
                 <p:with-option name="new-base" select="$outputDir"/>
