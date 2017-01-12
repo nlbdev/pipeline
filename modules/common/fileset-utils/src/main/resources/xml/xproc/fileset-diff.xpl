@@ -5,7 +5,9 @@
   exclude-inline-prefixes="px">
 
   <p:input port="source" sequence="true" primary="true"/>
-  <p:input port="secondary" sequence="true"/>
+  <p:input port="secondary" sequence="true">
+    <p:empty/>
+  </p:input>
   <p:output port="result"/>
   
   <p:option name="use-first-base" select="'true'"/>
