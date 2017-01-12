@@ -26,12 +26,13 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
-                <d:fileset xml:base="file:///Users/me/dir/">
+                <d:fileset xml:base="file:/Users/me/dir/">
                     <d:file href="doc1.html"/>
                 </d:fileset>
             </x:document>
         </x:expect>
     </x:scenario>
+    
     <x:scenario label="different-base">
         <x:call step="px:fileset-intersect">
             <x:input port="source">
@@ -54,22 +55,24 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
-                <d:fileset xml:base="file:///Users/me/dir/"> </d:fileset>
+                <d:fileset xml:base="file:/Users/me/"/>
             </x:document>
         </x:expect>
     </x:scenario>
-    <x:scenario label="different-base-with-common-resource">
+    
+    <x:scenario label="different-base-use-first-base">
         <x:call step="px:fileset-intersect">
+            <x:option name="use-first-base" select="'true'"/>
             <x:input port="source">
                 <x:document type="inline">
                     <d:fileset xml:base="file:///Users/me/dir/">
-                        <d:file href="../doc1.html"/>
+                        <d:file href="doc1.html"/>
                         <d:file href="doc2.html"/>
                     </d:fileset>
                 </x:document>
                 <x:document type="inline">
                     <d:fileset xml:base="file:///Users/me/other/">
-                        <d:file href="../doc1.html"/>
+                        <d:file href="doc1.html"/>
                         <d:file href="doc3.html"/>
                     </d:fileset>
                 </x:document>
@@ -80,8 +83,71 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
-                <d:fileset xml:base="file:///Users/me/dir/">
+                <d:fileset xml:base="file:/Users/me/dir/"> </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="different-base-with-common-resource">
+        <x:call step="px:fileset-intersect">
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:///Users/me/dir/">
+                        <d:file href="../doc1.html"/>
+                        <d:file href="../other/doc4.html"/>
+                        <d:file href="doc2.html"/>
+                    </d:fileset>
+                </x:document>
+                <x:document type="inline">
+                    <d:fileset xml:base="file:///Users/me/other/">
+                        <d:file href="../doc1.html"/>
+                        <d:file href="doc3.html"/>
+                        <d:file href="doc4.html"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline">
+                <d:fileset xml:base="file:/Users/me/">
+                    <d:file href="doc1.html"/>
+                    <d:file href="other/doc4.html"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="different-base-with-common-resource-use-first-base">
+        <x:call step="px:fileset-intersect">
+            <x:option name="use-first-base" select="'true'"/>
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:///Users/me/dir/">
+                        <d:file href="../doc1.html"/>
+                        <d:file href="../other/doc4.html"/>
+                        <d:file href="doc2.html"/>
+                    </d:fileset>
+                </x:document>
+                <x:document type="inline">
+                    <d:fileset xml:base="file:///Users/me/other/">
+                        <d:file href="../doc1.html"/>
+                        <d:file href="doc3.html"/>
+                        <d:file href="doc4.html"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline">
+                <d:fileset xml:base="file:/Users/me/dir/">
                     <d:file href="../doc1.html"/>
+                    <d:file href="../other/doc4.html"/>
                 </d:fileset>
             </x:document>
         </x:expect>

@@ -18,7 +18,7 @@
         <xsl:param name="filesets" required="yes" as="node()*"/>
 
         <!-- Joint fileset base: longest common URI of all fileset bases -->
-        <xsl:param name="base" select="if ($use-first-base = 'true') then pf:normalize-uri($filesets[1]/@xml:base) else pf:longest-common-uri(distinct-values($filesets[@xml:base]/pf:normalize-uri(@xml:base)))" as="xs:string"/>
+        <xsl:param name="base" select="if ($use-first-base = 'true') then $filesets[1]/pf:normalize-uri(@xml:base) else pf:longest-common-uri(distinct-values($filesets[@xml:base]/pf:normalize-uri(@xml:base)))" as="xs:string"/>
         
         <xsl:variable name="fileset-count" select="count($filesets)"/>
 
@@ -28,9 +28,11 @@
             </xsl:if>
             <xsl:for-each-group select="$filesets/d:file"
                 group-by="
-                if ($base) then pf:normalize-uri(pf:relativize-uri(resolve-uri(@href,base-uri(.)),$base))
-                else if (not(matches(@href,'^\w+:'))) then pf:normalize-uri(resolve-uri(@href,base-uri(.)))
-                else pf:normalize-uri(@href)">
+                pf:normalize-uri(
+                    if      ((ancestor-or-self::*/@xml:base or pf:is-absolute(@href)) and $base) then pf:relativize-uri(resolve-uri(@href,base-uri(.)),$base)
+                    else if ( ancestor-or-self::*/@xml:base                                    ) then                   resolve-uri(@href,base-uri(.))
+                    else                                                                                                            @href
+                )">
                 
                 <xsl:choose>
                     <xsl:when test="$method = 'intersect'">
