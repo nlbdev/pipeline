@@ -14,8 +14,12 @@
   <p:option name="left-diff" select="'true'"/>
   
   <p:xslt template-name="join">
-    <p:with-param name="method" select="if ($left-diff = 'true') then 'left-diff' else 'diff'"/>
-    <p:with-param name="use-first-base" select="$use-first-base"/>
+    <p:with-param name="method" select="if ($left-diff = 'true') then 'left-diff' else 'diff'">
+      <p:empty/>
+    </p:with-param>
+    <p:with-param name="use-first-base" select="$use-first-base">
+      <p:empty/>
+    </p:with-param>
     <p:input port="source">
       <p:pipe port="source" step="main"/>
       <p:pipe port="secondary" step="main"/>
