@@ -17,7 +17,7 @@
             <navLabel>
                 <text>Test Book</text>
             </navLabel>
-            <content src="content.xhtml"/>
+            <content src="content.html"/>
         </navPoint>
     </navMap>
 </ncx>

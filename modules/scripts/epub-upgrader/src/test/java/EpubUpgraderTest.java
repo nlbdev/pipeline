@@ -83,6 +83,8 @@ public class EpubUpgraderTest {
 				pipelineModule("epub3-pub-utils"),
 				pipelineModule("epub3-nav-utils"),
 				pipelineModule("mediatype-utils"),
+				mavenBundle("org.ccil.cowan.tagsoup:tagsoup:1.2.1"),
+				mavenBundle("nu.validator.htmlparser:htmlparser:1.4"),
 				logbackClassic(),
 				xprocspec(),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?")

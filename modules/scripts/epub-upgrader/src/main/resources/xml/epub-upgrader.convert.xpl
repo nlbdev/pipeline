@@ -75,7 +75,7 @@
                 </p:input>
             </p:identity>
             <px:message message="[progress px:epub-upgrader.convert 5 px:epub-load-opf] Loading package document"/>
-            <px:epub-load-opf>
+            <px:epub-load-opf fail-on-not-found="true">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
@@ -187,9 +187,7 @@
             <p:identity name="original-opf-with-fixed-hrefs"/>
             <px:message message="Creating fileset based on the input package document (with fixed hrefs)"/>
             <p:xslt>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
+                <p:with-param name="include-opf" select="'false'"/>
                 <p:input port="stylesheet">
                     <p:document href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/opf-manifest-to-fileset.xsl"/>
                 </p:input>
@@ -280,6 +278,9 @@
                         <p:input port="parameters">
                             <p:empty/>
                         </p:input>
+                        <p:input port="source">
+                            <p:pipe port="result" step="original-opf-with-fixed-hrefs"/>
+                        </p:input>
                         <p:input port="stylesheet">
                             <p:inline>
                                 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:opf="http://www.idpf.org/2007/opf" version="2.0">
@@ -294,7 +295,7 @@
                                                                                                    concat('navigation',$i,'.xhtml')))
                                                                                  return if (/*/opf:manifest/opf:item/@href = $href) then () else $href
                                                                                  )[1]"/>
-                                            <xsl:value-of select="if ($href) then resolve-uri($href, base-uri(/*)) else ''"/>
+                                            <xsl:value-of select="if ($href) then resolve-uri($href, base-uri()) else ''"/>
                                         </c:result>
                                     </xsl:template>
                                 </xsl:stylesheet>
@@ -326,9 +327,7 @@
                     <p:document href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/opf-manifest-to-fileset.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:identity name="original-opf-spine-fileset">
-                <p:log port="result"/>
-            </p:identity>
+            <p:identity name="original-opf-spine-fileset"/>
             
             <p:identity>
                 <p:input port="source">
@@ -350,7 +349,7 @@
                     <p:pipe port="result" step="original-opf-fileset"/>
                 </p:input>
             </p:identity>
-            <px:fileset-exclusive/>
+            <px:fileset-diff left-diff="false" use-first-base="false"/>
             <px:fileset-filter not-media-types="application/x-dtbncx+xml"/>
             <p:identity name="fileset-resources"/>
             
@@ -389,9 +388,7 @@
                     <p:pipe port="result" step="original-opf-with-fixed-hrefs"/>
                 </p:with-option>
             </p:add-attribute>
-            <p:identity name="opf">
-                <p:log port="result"/>
-            </p:identity>
+            <p:identity name="opf"/>
             
             <p:xslt name="opf-fileset">
                 <p:input port="parameters">

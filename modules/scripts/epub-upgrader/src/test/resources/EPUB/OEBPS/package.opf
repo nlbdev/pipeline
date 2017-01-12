@@ -9,7 +9,7 @@
         <dc:publisher>NLB</dc:publisher>
     </metadata>
     <manifest>
-        <item id="item_1" media-type="application/xhtml+xml" href="content.xhtml"/>
+        <item id="item_1" media-type="application/xhtml+xml" href="content.html"/>
         <item id="item_2" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
     </manifest>
     <spine toc="item_2">

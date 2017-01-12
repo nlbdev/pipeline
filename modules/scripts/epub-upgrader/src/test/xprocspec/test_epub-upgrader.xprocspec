@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:p="http://www.w3.org/ns/xproc"
-               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="http://www.daisy.org/pipeline/modules/epub-upgrader/epub-upgrader.xpl">
-    
-    <x:scenario label="test_001" >
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    script="http://www.daisy.org/pipeline/modules/epub-upgrader/epub-upgrader.xpl">
+
+    <x:scenario label="test_001">
         <x:call step="px:epub-upgrader">
             <x:option name="href" select="resolve-uri('../resources/EPUB/')"/>
             <x:option name="zip-results" select="'false'"/>
             <x:option name="output-dir" select="resolve-uri('1/output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
         </x:call>
-        
+
         <x:context label="status">
             <x:document type="port" port="validation-status"/>
         </x:context>
@@ -22,15 +19,25 @@
                 <d:validation-status result="ok"/>
             </x:document>
         </x:expect>
-        
+
         <x:context label="output files">
             <x:document type="directory" base-uri="temp-dir" href="1/output-dir" recursive="true"/>
         </x:context>
-        <x:expect  label="result" type="compare">
+        <x:expect label="result" type="compare">
             <x:document type="inline">
-                <d:validation-status result="ok"/>
+                <c:directory xmlns:c="http://www.w3.org/ns/xproc-step" name="output-dir">
+                    <c:directory name="META-INF">
+                        <c:file name="container.xml"/>
+                    </c:directory>
+                    <c:directory name="OEBPS">
+                        <c:file name="content.xhtml"/>
+                        <c:file name="nav.xhtml"/>
+                        <c:file name="package.opf"/>
+                    </c:directory>
+                    <c:file name="mimetype"/>
+                </c:directory>
             </x:document>
         </x:expect>
     </x:scenario>
-    
+
 </x:description>
