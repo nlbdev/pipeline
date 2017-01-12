@@ -9,8 +9,12 @@
   <p:option name="use-first-base" select="'false'"/>
 
   <p:xslt template-name="join">
-    <p:with-param name="method" select="'intersect'"/>
-    <p:with-param name="use-first-base" select="$use-first-base"/>
+    <p:with-param name="method" select="'intersect'">
+      <p:empty/>
+    </p:with-param>
+    <p:with-param name="use-first-base" select="$use-first-base">
+      <p:empty/>
+    </p:with-param>
     <p:input port="stylesheet">
       <p:document href="../xslt/fileset-join.xsl"/>
     </p:input>
