@@ -45,6 +45,7 @@
                 </p:input>
             </p:add-attribute>
             <p:http-request/>
+            <p:rename match="/*" new-name="c:result"/>
             <p:xslt>
                 <p:input port="parameters">
                     <p:empty/>
