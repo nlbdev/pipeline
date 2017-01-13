@@ -50,7 +50,7 @@
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="JOB"/>
   </root>
-  <logger name="com.xmlcalabash" level="INFO"/>
+  <logger name="com.xmlcalabash" level="${calabash.log.level}"/>
   <logger name="org.eclipse.jetty.util.log" level="INFO" />
   <logger name="cz.vutbr.web" level="WARN"/>
 </configuration>
