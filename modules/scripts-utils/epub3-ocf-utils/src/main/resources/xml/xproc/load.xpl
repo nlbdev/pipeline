@@ -63,7 +63,7 @@
     <p:choose>
         <p:when test="/*/d:file[@media-type='application/epub+zip']">
             <px:message>
-                <p:with-option name="message" select="concat('Unzipping EPUB: &quot;',/*/d:file/@href,'&quot;')"/>
+                <p:with-option name="message" select="concat('Unzipping EPUB: &quot;',/*/d:file[@media-type='application/epub+zip']/@href,'&quot;')"/>
             </px:message>
             <px:fileset-unzip name="unzip" load-to-memory="false" store-to-disk="true">
                 <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
@@ -90,7 +90,7 @@
         <p:xpath-context>
             <p:pipe port="result" step="href-fileset"/>
         </p:xpath-context>
-        <p:when test="/*[count(*)=1]/d:file[@media-type='application/oebps-package+xml']">
+        <p:when test="/*/d:file[count(*)=1][@media-type='application/oebps-package+xml']">
             <px:message>
                 <p:with-option name="message" select="concat('Loading OPF: &quot;',/*/d:file/@href,'&quot;')"/>
             </px:message>
@@ -102,11 +102,11 @@
 
         </p:when>
         <p:when test="not(/*/d:file[@href='META-INF/container.xml'])">
+            <p:delete match="/*/d:file[not(@media-type='application/oebps-package+xml')]"/>
+            <p:delete match="/*/d:file[position() &gt; 1]"/>
             <px:message>
                 <p:with-option name="message" select="concat('Loading first OPF in fileset: &quot;',/*/d:file/@href,'&quot;')"/>
             </px:message>
-            <p:delete match="/*/d:file[not(@media-type='application/oebps-package+xml')]"/>
-            <p:delete match="/*/d:file[position() &gt; 1]"/>
             <px:fileset-load/>
 
         </p:when>
