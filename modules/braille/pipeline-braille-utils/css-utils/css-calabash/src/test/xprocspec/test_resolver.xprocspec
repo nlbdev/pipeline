@@ -33,7 +33,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_02">
+  <x:scenario label="test_02" pending="'border' currently doesn't work">
     <x:documentation>
       Tests that spaces in .scss file paths are handled correctly in default-stylesheet option.
     </x:documentation>

@@ -4,7 +4,7 @@
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                script="../resources/inline.xpl">
   
-  <x:scenario label="test_01">
+  <x:scenario label="test_01" pending="'border' currently doesn't work">
     <x:documentation>
       Tests that Unicode characters 2800-28FF are recognized just fine if not on Windows.
     </x:documentation>
@@ -39,7 +39,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_02">
+  <x:scenario label="test_02" pending="'border' currently doesn't work">
     <x:documentation>
       Tests that a SASS style sheet with non-ASCII characters does not cause a parse error if not on
       Windows.

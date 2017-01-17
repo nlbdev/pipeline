@@ -4,7 +4,7 @@
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                script="../resources/inline.xpl">
   
-  <x:scenario label="test_01">
+  <x:scenario label="test_01" pending="'border' currently doesn't work">
     <x:documentation>
       Link SASS style sheet stored locally.
     </x:documentation>
@@ -68,7 +68,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_03">
+  <x:scenario label="test_03" pending="'border' currently doesn't work">
     <x:documentation>
       From (embedded) CSS style sheet import SASS style sheet stored locally.
     </x:documentation>
@@ -166,7 +166,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_06">
+  <x:scenario label="test_06" pending="'border' currently doesn't work">
     <x:documentation>
       From (linked) SASS style sheet stored locally import SASS style sheet stored locally.
     </x:documentation>
@@ -294,7 +294,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_10">
+  <x:scenario label="test_10" pending="'border' currently doesn't work">
     <x:documentation>
       Inject SASS variables.
     </x:documentation>

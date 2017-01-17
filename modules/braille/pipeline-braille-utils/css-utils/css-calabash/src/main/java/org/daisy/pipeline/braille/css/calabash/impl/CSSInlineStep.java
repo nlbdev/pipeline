@@ -328,7 +328,7 @@ public class CSSInlineStep extends DefaultStep {
 	private static final CSSParserFactory printParserFactory = CSSParserFactory.getInstance();
 	
 	// media embossed
-	private static final SupportedCSS brailleCSS = SupportedBrailleCSS.getInstance();
+	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS();
 	private static DeclarationTransformer brailleDeclarationTransformer; static {
 		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
 		CSSFactory.registerSupportedCSS(brailleCSS);
