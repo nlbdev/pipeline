@@ -814,6 +814,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>dtbook-to-odt</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>dtbook-to-ssml</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -959,6 +963,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>nlp-ruled-lexer</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>odt-utils</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
