@@ -565,7 +565,7 @@ public class JobsResource extends AuthenticatedResource {
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
                                         NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
-                                        if (metadata.isSequence() && items.getLength()>0) {
+                                        if (items.getLength()>0) {
                                                 // concat items
                                                 String val = ((Element)items.item(0)).getAttribute("value");
 
