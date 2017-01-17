@@ -2,14 +2,17 @@
 <xsl:stylesheet version="2.0"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
         xmlns:d="http://www.daisy.org/ns/pipeline/data"
+        xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
         xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">
+    
+    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
     
     <xsl:param name="base"/>
     <xsl:param name="original-base" select="''"/>
     
     <xsl:template match="manifest:manifest">
         <xsl:element name="d:fileset">
-            <xsl:attribute name="xml:base" select="$base"/>
+            <xsl:attribute name="xml:base" select="pf:normalize-uri($base)"/>
             <xsl:apply-templates select="manifest:file-entry"/>
         </xsl:element>
     </xsl:template>
@@ -17,9 +20,9 @@
     <xsl:template match="manifest:file-entry">
         <xsl:variable name="path" select="@manifest:full-path"/>
         <xsl:element name="d:file">
-            <xsl:attribute name="href" select="$path"/>
+            <xsl:attribute name="href" select="pf:normalize-uri($path)"/>
             <xsl:if test="$original-base!=''">
-                <xsl:attribute name="original-href" select="resolve-uri($path, $original-base)"/>
+                <xsl:attribute name="original-href" select="pf:normalize-uri(resolve-uri($path, $original-base))"/>
             </xsl:if>
             <xsl:if test="not(string(@manifest:media-type)='')">
                 <xsl:attribute name="media-type"
