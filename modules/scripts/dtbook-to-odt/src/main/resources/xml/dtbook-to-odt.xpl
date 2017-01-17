@@ -100,7 +100,7 @@
         </p:documentation>
     </p:option>
     
-    <p:import href="dtbook-to-odt.convert.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-odt/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/odt-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
@@ -131,7 +131,7 @@
         
         <px:dtbook-to-odt.convert name="odt">
             <p:input port="content.xsl">
-                <p:document href="content.xsl"/>
+                <p:document href="http://www.daisy.org/pipeline/modules/dtbook-to-odt/content.xsl"/>
             </p:input>
             <p:input port="fileset.in">
                 <p:pipe step="dtbook" port="fileset.out"/>

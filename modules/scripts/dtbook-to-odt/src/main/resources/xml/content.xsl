@@ -102,6 +102,11 @@
 		<xsl:apply-templates select="/*" mode="template"/>
 	</xsl:template>
 	
+	<xsl:template match="/office:document-content">
+		<!-- match a namespace to avoid saxon warning -->
+		<xsl:apply-templates select="/*" mode="template"/>
+	</xsl:template>
+	
 	<xsl:template match="@*|node()" mode="template">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()" mode="template"/>

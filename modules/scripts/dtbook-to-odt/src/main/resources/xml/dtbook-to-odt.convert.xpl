@@ -73,7 +73,7 @@
     </odt:load>
     <p:sink/>
     
-    <odt:get-file href="content.xml" name="template-content">
+    <odt:get-file href="content.xml">
         <p:input port="fileset.in">
             <p:pipe step="template" port="fileset.out"/>
         </p:input>
@@ -81,6 +81,10 @@
             <p:pipe step="template" port="in-memory.out"/>
         </p:input>
     </odt:get-file>
+    <p:add-attribute match="/*" attribute-name="xml:base">
+        <p:with-option name="attribute-value" select="base-uri(/*)"/>
+    </p:add-attribute>
+    <p:identity name="template-content"/>
     <p:sink/>
     
     <odt:get-file href="styles.xml" name="template-styles">
