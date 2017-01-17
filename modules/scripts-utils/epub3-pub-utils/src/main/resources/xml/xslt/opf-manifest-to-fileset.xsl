@@ -4,13 +4,15 @@
                                                              xmlns:d="http://www.daisy.org/ns/pipeline/data"
                                                              xmlns:opf="http://www.idpf.org/2007/opf">
     
+    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    
     <xsl:param name="spine-only" select="'false'"/>
     <xsl:param name="include-opf" select="'true'"/>
 
     <xsl:template match="opf:package">
         <!-- content files first, and in spine order -->
         <d:fileset>
-            <xsl:attribute name="xml:base" select="replace(base-uri(/*),'(.*/)[^/]*','$1')"/>
+            <xsl:attribute name="xml:base" select="pf:normalize-uri(replace(base-uri(/*),'(.*/)[^/]*','$1'))"/>
             <xsl:apply-templates select="opf:spine/opf:itemref"/>
             <xsl:if test="$spine-only = 'false'">
                 <xsl:if test="$include-opf = 'true'">
@@ -27,7 +29,8 @@
     
     <xsl:template match="opf:item">
         <d:file>
-            <xsl:copy-of select="@href | @media-type"/>
+            <xsl:attribute name="href" select="pf:normalize-uri(@href)"/>
+            <xsl:copy-of select="@media-type"/>
         </d:file>
     </xsl:template>
 
