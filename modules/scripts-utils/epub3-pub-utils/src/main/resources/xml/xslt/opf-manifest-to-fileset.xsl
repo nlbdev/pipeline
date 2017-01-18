@@ -19,7 +19,10 @@
                 <xsl:if test="$include-opf = 'true'">
                     <d:file href="{replace(base-uri(/*),'.*/','')}" media-type="application/oebps-package+xml"/>
                 </xsl:if>
-                <xsl:apply-templates select="opf:manifest/opf:item[not(@id=/*/opf:spine/opf:itemref/@idref)]"/>
+                <xsl:for-each select="opf:manifest/opf:item[not(@id=/*/opf:spine/opf:itemref/@idref)]">
+                    <xsl:sort select="@href"/>
+                    <xsl:apply-templates select="."/>
+                </xsl:for-each>
             </xsl:if>
         </d:fileset>
     </xsl:template>

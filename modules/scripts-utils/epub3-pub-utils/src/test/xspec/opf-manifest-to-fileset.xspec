@@ -27,9 +27,9 @@
 
         <x:expect label="result">
             <d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/tmp/">
-                <d:file href="package.opf" media-type="application/oebps-package+xml"/>
                 <d:file media-type="application/xhtml+xml" href="content-1.xhtml"/>
                 <d:file media-type="application/xhtml+xml" href="content-2.xhtml"/>
+                <d:file href="package.opf" media-type="application/oebps-package+xml"/>
                 <d:file media-type="application/x-dtbncx+xml" href="toc.ncx"/>
             </d:fileset>
         </x:expect>
