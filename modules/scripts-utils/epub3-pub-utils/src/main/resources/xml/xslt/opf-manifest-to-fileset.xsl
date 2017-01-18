@@ -2,6 +2,7 @@
 <xsl:stylesheet version="2.0" exclude-result-prefixes="#all" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                                                              xmlns:xs="http://www.w3.org/2001/XMLSchema"
                                                              xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                                                             xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                                                              xmlns:opf="http://www.idpf.org/2007/opf">
     
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
