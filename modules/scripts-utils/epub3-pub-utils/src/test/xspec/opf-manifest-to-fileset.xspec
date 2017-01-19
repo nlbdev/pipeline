@@ -3,27 +3,30 @@
     xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" stylesheet="../../main/resources/xml/xslt/opf-manifest-to-fileset.xsl">
 
     <x:scenario label="Test_1">
-        <x:context>
-            <package xml:base="file:/tmp/package.opf" xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" version="2.0" unique-identifier="pub-identifier">
-                <metadata>
-                    <dc:identifier id="pub-identifier">123456</dc:identifier>
-                    <dc:title>Test Book</dc:title>
-                    <dc:language>en</dc:language>
-                    <dc:creator>Jostein Austvik Jacobsen</dc:creator>
-                    <dc:date>2017-01-09</dc:date>
-                    <dc:publisher>NLB</dc:publisher>
-                </metadata>
-                <manifest>
-                    <item id="item_1" media-type="application/xhtml+xml" href="content-1.xhtml"/>
-                    <item id="item_2" media-type="application/xhtml+xml" href="content-2.xhtml"/>
-                    <item id="item_3" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
-                </manifest>
-                <spine toc="item_3">
-                    <itemref id="itemref_1" idref="item_1"/>
-                    <itemref id="itemref_2" idref="item_2"/>
-                </spine>
-            </package>
-        </x:context>
+        <x:call template="main">
+            <x:param name="opf">
+                <package xml:base="file:/tmp/package.opf" xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" version="2.0" unique-identifier="pub-identifier">
+                    <metadata>
+                        <dc:identifier id="pub-identifier">123456</dc:identifier>
+                        <dc:title>Test Book</dc:title>
+                        <dc:language>en</dc:language>
+                        <dc:creator>Jostein Austvik Jacobsen</dc:creator>
+                        <dc:date>2017-01-09</dc:date>
+                        <dc:publisher>NLB</dc:publisher>
+                    </metadata>
+                    <manifest>
+                        <item id="item_1" media-type="application/xhtml+xml" href="content-1.xhtml"/>
+                        <item id="item_2" media-type="application/xhtml+xml" href="content-2.xhtml"/>
+                        <item id="item_3" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+                    </manifest>
+                    <spine toc="item_3">
+                        <itemref id="itemref_1" idref="item_1"/>
+                        <itemref id="itemref_2" idref="item_2"/>
+                    </spine>
+                </package>
+            </x:param>
+            <x:param name="fileset" select="()"/>
+        </x:call>
 
         <x:expect label="result">
             <d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/tmp/">
@@ -31,6 +34,56 @@
                 <d:file media-type="application/xhtml+xml" href="content-2.xhtml"/>
                 <d:file href="package.opf" media-type="application/oebps-package+xml"/>
                 <d:file media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+            </d:fileset>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Test_1 - with fileset">
+        <x:call template="main">
+            <x:param name="opf">
+                <package xml:base="file:/tmp/package.opf" xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" version="2.0" unique-identifier="pub-identifier">
+                    <metadata>
+                        <dc:identifier id="pub-identifier">123456</dc:identifier>
+                        <dc:title>Test Book</dc:title>
+                        <dc:language>en</dc:language>
+                        <dc:creator>Jostein Austvik Jacobsen</dc:creator>
+                        <dc:date>2017-01-09</dc:date>
+                        <dc:publisher>NLB</dc:publisher>
+                    </metadata>
+                    <manifest>
+                        <item id="item_1" media-type="application/xhtml+xml" href="content-1.xhtml"/>
+                        <item id="item_2" media-type="application/xhtml+xml" href="content-2.xhtml"/>
+                        <item id="item_3" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+                    </manifest>
+                    <spine toc="item_3">
+                        <itemref id="itemref_1" idref="item_1"/>
+                        <itemref id="itemref_2" idref="item_2"/>
+                    </spine>
+                </package>
+            </x:param>
+            <x:param name="fileset">
+                <d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/">
+                    <d:file href="tmp/package.opf" original-href="file:/tmp/other/dir/my-package.xml"/>
+                    <d:file media-type="text/html" href="tmp/content-1.xhtml" original-href="file:/tmp/other/dir/filename.html"/>
+                    <d:file media-type="application/xhtml+xml" href="content-2.xhtml">
+                        <should-not-be-copied/>
+                    </d:file>
+                    <d:file href="image.jpg"/>
+                    <d:file media-type="application/x-dtbncx+xml" href="tmp/toc.ncx">
+                        <should-be-copied/>
+                    </d:file>
+                </d:fileset>
+            </x:param>
+        </x:call>
+        
+        <x:expect label="result">
+            <d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/tmp/">
+                <d:file media-type="application/xhtml+xml" href="content-1.xhtml" original-href="file:/tmp/other/dir/filename.html"/>
+                <d:file media-type="application/xhtml+xml" href="content-2.xhtml"/>
+                <d:file href="package.opf" media-type="application/oebps-package+xml" original-href="file:/tmp/other/dir/my-package.xml"/>
+                <d:file media-type="application/x-dtbncx+xml" href="toc.ncx">
+                    <should-be-copied/>
+                </d:file>
             </d:fileset>
         </x:expect>
     </x:scenario>
