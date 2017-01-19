@@ -48,6 +48,8 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
     <p:identity>
@@ -64,14 +66,23 @@
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
     </p:identity>
-    <px:message message="[progress px:epub3-to-pef.convert 1 px:fileset-load]"/>
-    <px:fileset-load media-types="application/oebps-package+xml">
+    <px:message message="[progress px:epub3-to-pef.convert 1 px:epub-load-opf]"/>
+    <px:epub-load-opf>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </px:epub-load-opf>
+    <p:add-attribute match="/*" attribute-name="xml:base">
+        <p:with-option name="attribute-value" select="base-uri(/*)"/>
+    </p:add-attribute>
     <p:identity name="opf"/>
-    <px:message message="[progress px:epub3-to-pef.convert 1 opf-manifest-to-fileset.xsl]"/>
+    
+    <p:identity>
+        <p:input port="source">
+            <p:pipe port="result" step="opf"/>
+            <p:pipe port="fileset.in" step="main"/>
+        </p:input>
+    </p:identity>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -80,31 +91,30 @@
             <p:document href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/opf-manifest-to-fileset.xsl"/>
         </p:input>
     </p:xslt>
-    <p:identity name="opf-fileset"/>
+    <px:mediatype-detect/>
+    <px:fileset-filter media-types="text/css text/scss"/>
+    <px:message message="Storing CSS files to disk so that they can be retrieved during inlining."/>
+    <px:fileset-store name="store-css-files">
+        <p:input port="in-memory.in">
+            <p:pipe port="in-memory.in" step="main"/>
+        </p:input>
+    </px:fileset-store>
     
     <!-- Load XHTML documents in spine order. -->
-    <px:message message="[progress px:epub3-to-pef.convert 2 px:fileset-load] Load XHTML documents in spine order."/>
-    <px:fileset-load media-types="application/oebps-package+xml application/xhtml+xml">
+    <p:identity cx:depends-on="store-css-files">
+        <p:input port="source">
+            <p:pipe port="result" step="opf"/>
+        </p:input>
+    </p:identity>
+    <px:message message="[progress px:epub3-to-pef.convert 2 px:epub-load-spine] Load XHTML documents in spine order."/>
+    <px:epub-load-spine>
+        <p:input port="fileset">
+            <p:pipe port="fileset.in" step="main"/>
+        </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
-    <p:for-each>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="base-uri(/*)"/>
-        </p:add-attribute>
-    </p:for-each>
-    <p:wrap-sequence wrapper="wrapper"/>
-    <px:message message="[progress px:epub3-to-pef.convert 1 get-epub3-spine.xsl]"/>
-    <p:xslt>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/get-epub3-spine.xsl"/>
-        </p:input>
-    </p:xslt>
-    <p:filter select="/*/*"/>
+    </px:epub-load-spine>
     
     <!-- In case there exists any CSS in the EPUB already, and $apply-document-specific-stylesheets = 'true',  then inline that CSS. -->
     <px:message cx:depends-on="parameters" message="[progress px:epub3-to-pef.convert 9 px:epub3-to-pef.convert.apply-document-specific-stylesheets] Processing CSS that is already present in the EPUB"/>
@@ -300,7 +310,6 @@
             </p:group>
         </p:otherwise>
     </p:choose>
-    
     <p:identity name="pef"/>
     
     <p:identity>
