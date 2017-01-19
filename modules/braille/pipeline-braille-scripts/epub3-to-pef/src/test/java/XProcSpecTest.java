@@ -56,11 +56,13 @@ public class XProcSpecTest {
 				brailleModule("liblouis-formatter"),
 				brailleModule("liblouis-native").forThisPlatform(),
 				brailleModule("dotify-formatter"),
+				pipelineModule("common-utils"),
+				pipelineModule("epub3-ocf-utils"),
+				pipelineModule("epub3-pub-utils"),
 				pipelineModule("file-utils"),
 				pipelineModule("fileset-utils"),
-				pipelineModule("common-utils"),
-				pipelineModule("zip-utils"),
 				pipelineModule("mediatype-utils"),
+				pipelineModule("zip-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec

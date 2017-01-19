@@ -111,6 +111,8 @@ even though the provided CSS is more specific.
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -157,25 +159,20 @@ even though the provided CSS is more specific.
         </p:input>
     </p:identity>
     <px:message message="[progress 3 px:epub3-to-pef.load] Loading EPUB"/>
-    <px:epub3-to-pef.load name="load">
-        <p:with-option name="epub" select="$epub"/>
-        <p:with-option name="temp-dir" select="concat(string(/c:result),'load/')">
+    <px:epub-load name="load">
+        <p:with-option name="href" select="$epub"/>
+        <p:with-option name="output-dir" select="concat(string(/c:result),'load/')">
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>
-    </px:epub3-to-pef.load>
+    </px:epub-load>
     
     <!-- Get the OPF so that we can use the metadata in options -->
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="fileset.out" step="load"/>
-        </p:input>
-    </p:identity>
     <px:message message="Getting the OPF"/>
-    <px:fileset-load media-types="application/oebps-package+xml">
+    <px:epub-load-opf>
         <p:input port="in-memory">
-            <p:pipe port="in-memory.out" step="load"/>
+            <p:pipe port="opf" step="load"/>
         </p:input>
-    </px:fileset-load>
+    </px:epub-load-opf>
     <p:identity name="opf"/>
     <p:sink/>
     
@@ -184,7 +181,7 @@ even though the provided CSS is more specific.
     <!-- ============= -->
     <p:identity>
         <p:input port="source">
-            <p:pipe port="fileset.out" step="load"/>
+            <p:pipe port="fileset" step="load"/>
         </p:input>
     </p:identity>
     <p:identity cx:depends-on="input-options"/>
@@ -192,7 +189,7 @@ even though the provided CSS is more specific.
     <px:message message="[progress 90 px:epub3-to-pef.convert] Converting from EPUB to PEF"/>
     <px:epub3-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css" name="convert">
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="load"/>
+            <p:pipe port="opf" step="load"/>
         </p:input>
         <p:with-option name="temp-dir" select="concat(string(/c:result),'convert/')">
             <p:pipe step="temp-dir" port="result"/>
