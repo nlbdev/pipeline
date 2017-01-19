@@ -163,6 +163,9 @@
             </p:identity>
             <px:message message="[progress px:epub-upgrader.convert 5 px:epub-load-opf] Loading spine"/>
             <px:epub-load-spine>
+                <p:input port="fileset">
+                    <p:pipe port="fileset.in" step="main"/>
+                </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="result" step="all-content"/>
                 </p:input>
