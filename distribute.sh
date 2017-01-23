@@ -48,11 +48,11 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
         echo "copying $GROUP_ID:$ARTIFACT_ID:$ARTIFACT_VERSION to local server"
         if [ "$DEBUG" = "1" ]; then
             echo "adding:"
-            echo "    $artifactLine" | sed "s|href=\"|href=\"http://$PIPELINE_HOST:$PIPELINE_REPO_PORT/maven/|"
+            echo "    $artifactLine" | sed "s|href=\"|href=\"http://$PIPELINE_HOST:$PIPELINE_REPO_PORT/maven-$DESCRIPTOR_VERSION/|"
         fi
-        echo "    $artifactLine" | sed "s|href=\"|href=\"http://$PIPELINE_HOST:$PIPELINE_REPO_PORT/maven/|" >> releaseDescriptor.xml
-        ssh -n $PIPELINE_USER@$PIPELINE_HOST "mkdir -p /var/www/html/maven/$RELATIVE_PATH"
-        rsync -av "$LOCAL_PATH" $PIPELINE_USER@$PIPELINE_HOST:"/var/www/html/maven/`echo "$RELATIVE_PATH" | sed 's/[^/]*$//'`"
+        echo "    $artifactLine" | sed "s|href=\"|href=\"http://$PIPELINE_HOST:$PIPELINE_REPO_PORT/maven-$DESCRIPTOR_VERSION/|" >> releaseDescriptor.xml
+        ssh -n $PIPELINE_USER@$PIPELINE_HOST "mkdir -p /var/www/html/maven-$DESCRIPTOR_VERSION/$RELATIVE_PATH"
+        rsync -av "$LOCAL_PATH" $PIPELINE_USER@$PIPELINE_HOST:"/var/www/html/maven-$DESCRIPTOR_VERSION/`echo "$RELATIVE_PATH" | sed 's/[^/]*$//'`"
         if [ "$DEBUG" = "1" ]; then echo $? ; fi
     fi
 done
@@ -68,5 +68,5 @@ if [ "$GIT_BRANCH" != "nlb" ]; then
     ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/current"
 fi
 
-ssh -n $PIPELINE_USER@$PIPELINE_HOST "mkdir -p /var/www/html/maven/pipeline-builds"
+ssh -n $PIPELINE_USER@$PIPELINE_HOST "mkdir -p /var/www/html/pipeline-builds"
 rsync -av *zip $PIPELINE_USER@$PIPELINE_HOST:"/var/www/html/pipeline-builds"
