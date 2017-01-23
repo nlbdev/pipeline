@@ -23,13 +23,42 @@
                 </p:inline>
             </p:input>
         </p:insert>
-        <p:add-attribute match="html:img[matches(@style,'width\s*:\s*\d*\s*px')]" attribute-name="width">
-            <p:with-option name="attribute-value" select="replace(@style,'width\s*:\s*(\d*)\s*px','$1')"/>
-        </p:add-attribute>
-        <p:add-attribute match="html:img[matches(@style,'height\s*:\s*\d*\s*px')]" attribute-name="height">
-            <p:with-option name="attribute-value" select="replace(@style,'height\s*:\s*(\d*)\s*px','$1')"/>
-        </p:add-attribute>
-        <p:viewport match="html:iframe[matches(@src,'^http://[^/]*youtube.com/')]">
+        <p:viewport match="html:img">
+            <p:variable name="width" select="replace(/*/@style,'width\s*:\s*(\d*)\s*px','$1')"/>
+            <p:variable name="height" select="replace(/*/@style,'height\s*:\s*(\d*)\s*px','$1')"/>
+            <p:choose>
+                <p:when test="matches(/*/@width,'^\d+')">
+                    <p:identity/>
+                </p:when>
+                <p:when test="matches($width,'^\d+')">
+                    <p:add-attribute match="/*" attribute-name="width">
+                        <p:with-option name="attribute-value" select="$width"/>
+                    </p:add-attribute>
+                </p:when>
+                <p:otherwise>
+                    <p:add-attribute match="/*" attribute-name="width">
+                        <p:with-option name="attribute-value" select="'600'"/>
+                    </p:add-attribute>
+                    <p:add-attribute match="/*" attribute-name="style">
+                        <p:with-option name="attribute-value" select="concat(/*/@style, ' width: 600px;')"/>
+                    </p:add-attribute>
+                </p:otherwise>
+            </p:choose>
+            <p:choose>
+                <p:when test="matches(/*/@height,'^\d+')">
+                    <p:identity/>
+                </p:when>
+                <p:when test="matches($height,'^\d+')">
+                    <p:add-attribute match="/*" attribute-name="height">
+                        <p:with-option name="attribute-value" select="$height"/>
+                    </p:add-attribute>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+        </p:viewport>
+        <p:viewport match="html:iframe[matches(@src,'^https?://[^/]*youtube.com/')]">
             <p:variable name="youtube" select="replace(/*/@src,'.*/([^?/]*).*','$1')"/>
             <p:identity name="iframe"/>
             <p:in-scope-names name="vars"/>
@@ -123,7 +152,7 @@
                                 </xsl:choose>
                             </xsl:copy>
                             <xsl:if
-                                test="parent::*/@id=('audio','braille','student','audio-adult-fiction','audio-adult-nonfiction','audio-juvenile-fiction','audio-juvenile-nonfiction','braille-adult-fiction','braille-adult-nonfiction','braille-juvenile-fiction','braille-juvenile-nonfiction','student-audio','student-braille')">
+                                test="parent::*[matches(@id,'^(audio|braille|student)')]">
                                 <xsl:element name="br" namespace="http://www.w3.org/1999/xhtml"/>
                             </xsl:if>
                         </xsl:template>
@@ -140,6 +169,11 @@
         <p:identity name="body.xhtml"/>
         <p:delete match="//@data-catalog"/>
         <p:insert match="*[local-name()='div' and starts-with(@id,'b_') and following-sibling::*]" position="after">
+            <p:input port="insertion">
+                <p:inline><hr xmlns="http://www.w3.org/1999/xhtml"/></p:inline>
+            </p:input>
+        </p:insert>
+        <p:insert match="*[matches(@id,'^(audio|braille|student)')][preceding-sibling::*[@id]]" position="before">
             <p:input port="insertion">
                 <p:inline><hr xmlns="http://www.w3.org/1999/xhtml"/></p:inline>
             </p:input>
@@ -161,7 +195,8 @@
                 <p:pipe port="xhtml" step="body"/>
             </p:input>
         </p:identity>
-        <p:delete match="//*[@id='student-audio']/*[not(matches(local-name(),'h\d'))]"/>
+        <p:delete match="//*[starts-with(@id, 'student-audio')]/*[not(matches(local-name(),'h\d'))]"/>
+        <p:delete match="//*[starts-with(@id, 'b_')]"/>
         <p:xslt>
             <p:input port="parameters">
                 <p:empty/>
@@ -181,12 +216,14 @@
                 <p:inline>
                     <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                         <!-- fix for <ul/> not being supported by Outlook -->
+                        <!-- also add some air between top-level list items -->
                         <xsl:template match="/*">
                             <xsl:copy>
                                 <!-- div -->
                                 <xsl:copy-of select="@*"/>
                                 <xsl:copy-of select="*[1]"/>
                                 <xsl:for-each select="*[2]">
+                                    <xsl:element name="br" namespace="http://www.w3.org/1999/xhtml"/>
                                     <xsl:copy>
                                         <!-- ul -->
                                         <xsl:copy-of select="@*"/>
@@ -209,6 +246,8 @@
                                                         </xsl:otherwise>
                                                     </xsl:choose>
                                                 </xsl:for-each>
+                                            <xsl:element name="br" namespace="http://www.w3.org/1999/xhtml"/>
+                                                <xsl:element name="br" namespace="http://www.w3.org/1999/xhtml"/>
                                             </xsl:copy>
                                         </xsl:for-each>
                                     </xsl:copy>

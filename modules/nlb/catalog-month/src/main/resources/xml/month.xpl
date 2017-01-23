@@ -74,7 +74,7 @@
     <!-- Hent bøker -->
     <p:load href="template-dtbook.xml"/>
     <cx:message message="Henter bøker"/>
-    <nlb:metadata-as-dtbook name="metadata-as-dtbook">
+    <nlb:metadata-as-dtbook name="metadata-as-dtbook" include-language="true">
         <p:input port="php-time">
             <p:pipe port="result" step="php-time"/>
         </p:input>
