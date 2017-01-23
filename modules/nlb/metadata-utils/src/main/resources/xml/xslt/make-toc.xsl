@@ -60,7 +60,7 @@
                                             </xsl:otherwise>
                                         </xsl:choose>
                                     </lic>
-                                    <xsl:if test="$include-adult-nonfiction-dewey and $id2=('audio-adult-nonfiction','braille-adult-nonfiction') and parent::*//dtbook:h3">
+                                    <xsl:if test="$include-adult-nonfiction-dewey and (starts-with($id2, 'audio-adult-nonfiction') or starts-with($id2, 'braille-adult-nonfiction')) and parent::*//dtbook:h3">
                                         <list class="toc_chapter" type="pl">
                                             <xsl:for-each select="parent::*//dtbook:h3">
                                                 <xsl:variable name="h3" select="normalize-space(string-join(.//text(),' '))"/>

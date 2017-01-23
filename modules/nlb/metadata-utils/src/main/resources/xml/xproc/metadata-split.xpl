@@ -7,18 +7,18 @@
 
     <p:input sequence="true" port="source"/>
     
-    <!--<p:log port="periodical-audio" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.periodical-audio.xml"/>
-    <p:log port="periodical-braille" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.periodical-braille.xml"/>
-    <p:log port="braille-adult-fiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.braille-adult-fiction.xml"/>
-    <p:log port="braille-adult-nonfiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.braille-adult-nonfiction.xml"/>
-    <p:log port="braille-juvenile-fiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.braille-juvenile-fiction.xml"/>
-    <p:log port="braille-juvenile-nonfiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.braille-juvenile-nonfiction.xml"/>
-    <p:log port="braille-student" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.braille-student.xml"/>
-    <p:log port="audio-adult-fiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.audio-adult-fiction.xml"/>
-    <p:log port="audio-adult-nonfiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.audio-adult-nonfiction.xml"/>
-    <p:log port="audio-juvenile-fiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.audio-juvenile-fiction.xml"/>
-    <p:log port="audio-juvenile-nonfiction" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.audio-juvenile-nonfiction.xml"/>
-    <p:log port="audio-student" href="file:/home/jostein/nlb/nlb-pipeline-modules/nlb-metadata-utils/src/test/resources/metadata-split.output.audio-student.xml"/>-->
+    <!--<p:log port="periodical-audio" href="file:/tmp/metadata-split.output.periodical-audio.xml"/>
+    <p:log port="periodical-braille" href="file:/tmp/metadata-split.output.periodical-braille.xml"/>
+    <p:log port="braille-adult-fiction" href="file:/tmp/metadata-split.output.braille-adult-fiction.xml"/>
+    <p:log port="braille-adult-nonfiction" href="file:/tmp/metadata-split.output.braille-adult-nonfiction.xml"/>
+    <p:log port="braille-juvenile-fiction" href="file:/tmp/metadata-split.output.braille-juvenile-fiction.xml"/>
+    <p:log port="braille-juvenile-nonfiction" href="file:/tmp/metadata-split.output.braille-juvenile-nonfiction.xml"/>
+    <p:log port="braille-student" href="file:/tmp/metadata-split.output.braille-student.xml"/>
+    <p:log port="audio-adult-fiction" href="file:/tmp/metadata-split.output.audio-adult-fiction.xml"/>
+    <p:log port="audio-adult-nonfiction" href="file:/tmp/metadata-split.output.audio-adult-nonfiction.xml"/>
+    <p:log port="audio-juvenile-fiction" href="file:/tmp/metadata-split.output.audio-juvenile-fiction.xml"/>
+    <p:log port="audio-juvenile-nonfiction" href="file:/tmp/metadata-split.output.audio-juvenile-nonfiction.xml"/>
+    <p:log port="audio-student" href="file:/tmp/metadata-split.output.audio-student.xml"/>-->
     
     <p:output sequence="true" port="periodical-audio">
         <p:pipe port="result" step="periodical-audio"/>

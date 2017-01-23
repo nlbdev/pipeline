@@ -12,6 +12,7 @@
     <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/metadata-to-dtbook.xsl" uri="../xml/xslt/metadata-to-dtbook.xsl"/>
     <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/sort-books.xsl" uri="../xml/xslt/sort-books.xsl"/>
     <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/template-engine.xsl" uri="../xml/xslt/template-engine.xsl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/dtbook-nlb-language-split.xsl" uri="../xml/xslt/dtbook-nlb-language-split.xsl"/>
     
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
 

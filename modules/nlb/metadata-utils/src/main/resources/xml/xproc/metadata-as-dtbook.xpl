@@ -12,6 +12,8 @@
 
     <p:option name="metadata-endpoint" select="''"/>
 
+    <p:option name="include-language" select="'false'"/>
+
     <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     <p:import href="metadata-load.xpl"/>
     <p:import href="metadata-split.xpl"/>
@@ -97,6 +99,7 @@
         <p:xslt>
             <p:with-param name="level" select="'3'"/>
             <p:with-param name="include-field" select="'genre'"/>
+            <p:with-param name="include-language" select="$include-language"/>
             <p:input port="stylesheet">
                 <p:document href="../xslt/metadata-to-dtbook.xsl"/>
             </p:input>
@@ -134,6 +137,13 @@
         </p:with-param>
         <p:input port="stylesheet">
             <p:document href="../xslt/template-engine.xsl"/>
+        </p:input>
+    </p:xslt>
+
+    <p:xslt>
+        <p:with-param name="split-type" select="'outer-other'"/>
+        <p:input port="stylesheet">
+            <p:document href="../xslt/dtbook-nlb-language-split.xsl"/>
         </p:input>
     </p:xslt>
 

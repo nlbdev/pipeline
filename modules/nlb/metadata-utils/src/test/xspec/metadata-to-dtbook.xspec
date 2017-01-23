@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/metadata-to-dtbook.xsl" xmlns:SRU="http://www.loc.gov/zing/sru/"
     xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:normarc="info:lc/xmlns/marcxchange-v1" xmlns:marcxchange="info:lc/xmlns/marcxchange-v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:DIAG="http://www.loc.gov/zing/sru/diagnostics/" xmlns:nlb="http://metadata.nlb.no/vocabulary/#" xmlns:opf="http://www.idpf.org/2007/opf" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    xmlns:DIAG="http://www.loc.gov/zing/sru/diagnostics/" xmlns:nlb="http://metadata.nlb.no/vocabulary/#" xmlns:opf="http://www.idpf.org/2007/opf" xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:f="#">
 
     <x:param name="level" select="'3'"/>
     <x:param name="include-field" select="'genre'"/>
+    <x:param name="include-language" select="'true'"/>
 
     <x:scenario label="a complete example">
         <x:context>
@@ -52,7 +54,7 @@
             </metadata>
         </x:context>
         <x:expect label="all metadata should be converted correctly">
-            <level3 id="b_621296">
+            <level3 id="b_621296" lang="nob" langName="Bokmål">
                 <h3>
                     <span class="author">Adichie, Chimamanda</span>
                     <br/>
@@ -135,7 +137,7 @@
         </x:call>
         <x:expect label="all metadata should be converted correctly">
             <level3 id="b_621296" format="DAISY 2.02" audience="Adult" mainGenre="Fiction" periodical="true" newspaper="false" magazine="true" production-available="2014-07-02"
-                external-production="RNIB">
+                external-production="RNIB" lang="nob" langName="Bokmål">
                 <h3>
                     <span class="author">Adichie, Chimamanda</span>
                     <br/>
@@ -166,6 +168,291 @@
                 </linegroup>
             </level3>
         </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - nob">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>nob</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nob"
+                langName="Bokmål">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - nno">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>nno</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nno"
+                langName="Nynorsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - eng">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>eng</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="eng"
+                langName="Engelsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - nob nno">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>nob</dc:language>
+                    <dc:language>nno</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nor"
+                langName="Norsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob nno">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                    <dc:language>nno</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nor"
+                langName="Norsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob nno eng">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                    <dc:language>nno</dc:language>
+                    <dc:language>eng</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="mul"
+                langName="Flerspråklig">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob eng">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                    <dc:language>eng</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="mul"
+                langName="Flerspråklig">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nob"
+                langName="Bokmål">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - mul">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="'mul'"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="'Flerspråklig'"/>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - nob">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="'nob'"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="'Bokmål'"/>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - mul nob">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="('mul', 'nob')"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="'Bokmål'"/>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - mul nob eng">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="('mul', 'nob', 'eng')"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="('Bokmål', 'Engelsk', 'Flerspråklig')"/>
     </x:scenario>
 
 </x:description>
