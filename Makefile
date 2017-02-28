@@ -413,6 +413,14 @@ publish-website : compile
 clean-website :
 	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(MVN_WORKSPACE)' -Dcache='$(MVN_CACHE)'" clean
 
+.PHONY : mvn
+mvn :
+	echo -n "mvn () { `dirname "\`bash which mvn\`"`/$(MVN) \""
+	echo -n '$$'
+	echo "@\" }"
+	echo '# Run this command to configure your shell: '
+	echo '# eval $$(make mvn)'
+
 .PHONY : help
 help :
 	echo "make all:"                                                                                                >&2
@@ -445,6 +453,8 @@ help :
 	echo "	Compile and run web UI locally"                                                                         >&2
 	echo "make website:"                                                                                            >&2
 	echo "	Build the website"                                                                                      >&2
+	echo "make mvn:"                                                                                                >&2
+	echo '	Get the Maven command used. To configure your shell: eval $$(make mvn)'                                 >&2
 
 ifndef VERBOSE
 .SILENT:
