@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="no.bokbasen.PrimaryID">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:title>Eksempelbok basert på Bokbasens bøker</dc:title>
+    <dc:identifier id="ISBN" opf:scheme="ISBN">000-00-00-00000-0</dc:identifier>
+    <dc:language>no</dc:language>
+    <dc:creator opf:role="aut">Forfattersen, Forfatter</dc:creator>
+    <dc:publisher>NLB</dc:publisher>
+    <dc:contributor opf:role="bkp">NLB</dc:contributor>
+    <dc:date opf:event="original-publication">2017</dc:date>
+    <dc:date opf:event="epub-creation">2017-01-05</dc:date>
+    <meta name="cover" content="cover-image"/>
+    <dc:identifier id="no.bokbasen.PrimaryID" opf:scheme="URN">00000000-0000-0000-0000-000000000000</dc:identifier>
+  </metadata>
+  <manifest>
+    <item id="javascript-iBooksHack" href="insertSpan.js" media-type="text/javascript"/>
+    <item id="cover" href="coverpage.xhtml" media-type="application/xhtml+xml"/>
+    <item id="cover-image" href="cover.jpg" media-type="image/jpeg"/>
+    <item id="font1" href="fonts/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
+    <item id="font1-italic" href="fonts/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
+    <item id="font1-bold" href="fonts/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
+    <item id="font1-bolditalic" href="fonts/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
+    <item id="font1-monospace" href="fonts/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
+    <item id="font-license" href="fonts/LICENSE.txt" media-type="text/plain"/>
+    <item id="img-img15" href="img15.jpg" media-type="image/jpeg"/>
+    <item id="img-img14" href="img14.jpg" media-type="image/jpeg"/>
+    <item id="img-forlag-ebok" href="forlag-ebok.jpg" media-type="image/jpeg"/>
+    <item id="img-b5" href="b5.jpg" media-type="image/jpeg"/>
+    <item id="img-b7" href="b7.jpg" media-type="image/jpeg"/>
+    <item id="img-b8" href="b8.jpg" media-type="image/jpeg"/>
+    <item id="img-b9" href="b9.jpg" media-type="image/jpeg"/>
+    <item id="img-b12" href="b12.jpg" media-type="image/jpeg"/>
+    <item id="img-b13" href="b13.jpg" media-type="image/jpeg"/>
+    <item id="img-b14-a" href="b14-a.jpg" media-type="image/jpeg"/>
+    <item id="img-b14-b" href="b14-b.jpg" media-type="image/jpeg"/>
+    <item id="img-b16" href="b16.jpg" media-type="image/jpeg"/>
+    <item id="img-b17" href="b17.jpg" media-type="image/jpeg"/>
+    <item id="img-b18" href="b18.jpg" media-type="image/jpeg"/>
+    <item id="img-b20" href="b20.jpg" media-type="image/jpeg"/>
+    <item id="img-b21" href="b21.jpg" media-type="image/jpeg"/>
+    <item id="img-b24" href="b24.jpg" media-type="image/jpeg"/>
+    <item id="img-b25" href="b25.jpg" media-type="image/jpeg"/>
+    <item id="img-b29" href="b29.jpg" media-type="image/jpeg"/>
+    <item id="img-b30" href="b30.jpg" media-type="image/jpeg"/>
+    <item id="img-b32" href="b32.jpg" media-type="image/jpeg"/>
+    <item id="img-b33" href="b33.jpg" media-type="image/jpeg"/>
+    <item id="img-img16" href="img16.jpg" media-type="image/jpeg"/>
+    <item id="img-img17" href="img17.jpg" media-type="image/jpeg"/>
+    <item id="img-decoration" href="decoration.jpg" media-type="image/jpeg"/>
+    <item id="img-dedic2" href="dedic2.jpg" media-type="image/jpeg"/>
+    <item id="img-dedic" href="dedic.jpg" media-type="image/jpeg"/>
+    <item id="img-del" href="del.jpg" media-type="image/jpeg"/>
+    <item id="img-faksmile" href="faksmile.jpg" media-type="image/jpeg"/>
+    <item id="img-img9" href="img9.jpg" media-type="image/jpeg"/>
+    <item id="img-img12" href="img12.jpg" media-type="image/jpeg"/>
+    <item id="img-img11" href="img11.jpg" media-type="image/jpeg"/>
+    <item id="img-img10" href="img10.jpg" media-type="image/jpeg"/>
+    <item id="img-img2" href="img2.jpg" media-type="image/jpeg"/>
+    <item id="img-img1" href="img1.jpg" media-type="image/jpeg"/>
+    <item id="img-img3" href="img3.jpg" media-type="image/jpeg"/>
+    <item id="img-img4" href="img4.jpg" media-type="image/jpeg"/>
+    <item id="img-img5" href="img5.jpg" media-type="image/jpeg"/>
+    <item id="img-img8" href="img8.jpg" media-type="image/jpeg"/>
+    <item id="img-img7" href="img7.jpg" media-type="image/jpeg"/>
+    <item id="img-img13" href="img13.jpg" media-type="image/jpeg"/>
+    <item id="img-img6" href="img6.gif" media-type="image/gif"/>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item id="toc-xhtml" href="toc.xhtml" media-type="application/xhtml+xml"/>
+    <item id="css" href="style.css" media-type="text/css"/>
+    <item id="c1" href="chapter01.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c1b" href="chapter01b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c1c" href="chapter01c.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c2" href="chapter02.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c3" href="chapter03.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c5" href="chapter05.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c5-notes" href="chapter05-notes.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c6" href="chapter06.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c7" href="chapter07.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c7b" href="chapter07b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c8" href="chapter08.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c9" href="chapter09.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c11" href="chapter11.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c11-notes" href="chapter11-notes.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c11-notesb" href="chapter11b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c12b" href="chapter12b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c14" href="chapter14.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c15-notesb" href="chapter15b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c20" href="chapter20.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c21-notesb" href="chapter21b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c23" href="chapter23.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c25" href="chapter25.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c26-notesb" href="chapter26b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c30" href="chapter30.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c32" href="chapter32.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c32b" href="chapter32b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c33" href="chapter33.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c43" href="chapter43.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c44" href="chapter44.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c44-notesb" href="chapter44b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c44-notesc" href="chapter44c.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c45b" href="chapter45b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c47" href="chapter47.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c48-notesb" href="chapter48b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c50" href="chapter50.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c51" href="chapter51.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c52" href="chapter52.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c54" href="chapter54.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c57" href="chapter57.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c67" href="chapter67.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c69" href="chapter69.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c70" href="chapter70.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c71" href="chapter71.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c78" href="chapter78.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c80" href="chapter80.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c85" href="chapter85.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c87" href="chapter87.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c88" href="chapter88.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c90b" href="chapter90b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c91b" href="chapter91b.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c92" href="chapter92.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c93" href="chapter93.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c96" href="chapter96.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c97" href="chapter97.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c98" href="chapter98.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c99" href="chapter99.xhtml" media-type="application/xhtml+xml"/>
+    <item id="c100" href="chapter100.xhtml" media-type="application/xhtml+xml"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="cover" linear="yes"/>
+    <itemref idref="c1"/>
+    <itemref idref="c91b"/>
+    <itemref idref="c1b"/>
+    <itemref idref="toc-xhtml"/>
+    <itemref idref="c1c"/>
+    <itemref idref="c2"/>
+    <itemref idref="c3"/>
+    <itemref idref="c5"/>
+    <itemref idref="c6"/>
+    <itemref idref="c7"/>
+    <itemref idref="c7b"/>
+    <itemref idref="c8"/>
+    <itemref idref="c9"/>
+    <itemref idref="c11"/>
+    <itemref idref="c11-notesb"/>
+    <itemref idref="c12b"/>
+    <itemref idref="c14"/>
+    <itemref idref="c15-notesb"/>
+    <itemref idref="c20"/>
+    <itemref idref="c21-notesb"/>
+    <itemref idref="c23"/>
+    <itemref idref="c25"/>
+    <itemref idref="c26-notesb"/>
+    <itemref idref="c30"/>
+    <itemref idref="c32"/>
+    <itemref idref="c32b"/>
+    <itemref idref="c33"/>
+    <itemref idref="c43"/>
+    <itemref idref="c44"/>
+    <itemref idref="c44-notesb"/>
+    <itemref idref="c44-notesc"/>
+    <itemref idref="c45b"/>
+    <itemref idref="c47"/>
+    <itemref idref="c48-notesb"/>
+    <itemref idref="c50"/>
+    <itemref idref="c51"/>
+    <itemref idref="c52"/>
+    <itemref idref="c54"/>
+    <itemref idref="c57"/>
+    <itemref idref="c67"/>
+    <itemref idref="c69"/>
+    <itemref idref="c70"/>
+    <itemref idref="c71"/>
+    <itemref idref="c78"/>
+    <itemref idref="c80"/>
+    <itemref idref="c85"/>
+    <itemref idref="c87"/>
+    <itemref idref="c88"/>
+    <itemref idref="c90b"/>
+    <itemref idref="c92"/>
+    <itemref idref="c93"/>
+    <itemref idref="c96"/>
+    <itemref idref="c97"/>
+    <itemref idref="c98"/>
+    <itemref idref="c99"/>
+    <itemref idref="c100"/>
+    <itemref idref="c5-notes" linear="no"/>
+    <itemref idref="c11-notes" linear="no"/>
+  </spine>
+  <guide>
+    <reference href="coverpage.xhtml" type="cover" title="Cover"/>
+  </guide>
+</package>

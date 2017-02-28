@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-catalog-month/month.xpl" uri="../xml/month.xpl" px:script="true"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-catalog-month/news.xpl" uri="../xml/news.xpl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-catalog-month/norbraille-cleanup.xsl" uri="../xml/norbraille-cleanup.xsl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-catalog-month/norbraille-cleanup.whitespace.xsl" uri="../xml/norbraille-cleanup.whitespace.xsl"/>
+    
+    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+    <nextCatalog catalog="no:nlb:pipeline:modules:html-to-dtbook"/>
+</catalog>

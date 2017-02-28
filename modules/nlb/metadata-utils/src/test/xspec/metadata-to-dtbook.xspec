@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/metadata-to-dtbook.xsl" xmlns:SRU="http://www.loc.gov/zing/sru/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:normarc="info:lc/xmlns/marcxchange-v1" xmlns:marcxchange="info:lc/xmlns/marcxchange-v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:DIAG="http://www.loc.gov/zing/sru/diagnostics/" xmlns:nlb="http://metadata.nlb.no/vocabulary/#" xmlns:opf="http://www.idpf.org/2007/opf" xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:f="#">
+
+    <x:param name="level" select="'3'"/>
+    <x:param name="include-field" select="'genre'"/>
+    <x:param name="include-language" select="'true'"/>
+
+    <x:scenario label="a complete example">
+        <x:context>
+            <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:identifier id="pub-id">621296</dc:identifier>
+                <dc:title>Americanah</dc:title>
+                <dc:creator id="creator-1">Adichie, Chimamanda</dc:creator>
+                <meta property="nationality" refines="#creator-1">ne</meta>
+                <dc:format>DAISY 2.02</dc:format>
+                <dc:language>nob</dc:language>
+                <dc:publisher>Norsk lyd- og blindeskriftbibliotek</dc:publisher>
+                <meta property="dc:contributor.narrator">Hansen, Emma Rowena</meta>
+                <meta property="dc:contributor.translator" id="contributor-700-1">Stubhaug, Hilde</meta>
+                <meta property="dc:date.available">2014-07-02</meta>
+                <meta property="dc:date.issued">2014</meta>
+                <meta property="dc:date.issued.original">2013</meta>
+                <meta property="dc:description.abstract"
+                    ><![CDATA[Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.]]></meta>
+                <meta property="dc:format.extent.duration">20 t. 48 min.</meta>
+                <meta property="dc:format.extent.pages.original">550</meta>
+                <meta property="dc:format.other">Audio recording</meta>
+                <meta property="dc:format.other">Compact Disk</meta>
+                <meta property="dc:format.other">Other voice/other</meta>
+                <meta property="dc:format.other.no">Lydopptak</meta>
+                <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                <meta property="dc:format.other.no">Annen tale/annet</meta>
+                <meta property="dc:publisher.location">Oslo</meta>
+                <meta property="dc:publisher.original">Gyldendal</meta>
+                <meta property="dc:publisher.original.location">Oslo</meta>
+                <meta property="dc:subject.keyword">Rasisme</meta>
+                <meta property="dc:title.original">Americanah</meta>
+                <meta property="dc:title.part" id="title-740-1">Americanah</meta>
+                <meta property="dc:type.genre">Fiction</meta>
+                <meta property="dc:type.genre">Non-biography</meta>
+                <meta property="dc:type.genre">Kjærlighet</meta>
+                <meta property="dc:type.genre">Samfunn</meta>
+                <meta property="dc:type.genre.no">Kjærlighet</meta>
+                <meta property="dc:type.genre.no">Samfunn</meta>
+                <meta property="audience">Adult</meta>
+                <meta property="isbn" scheme="ISBN">978-82-16-14947-8</meta>
+                <meta property="isbn.original">978-82-05-45310-4</meta>
+                <meta property="periodical">true</meta>
+                <meta property="magazine">true</meta>
+                <meta property="external-production">RNIB</meta>
+            </metadata>
+        </x:context>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 id="b_621296" lang="nob" langName="Bokmål">
+                <h3>
+                    <span class="author">Adichie, Chimamanda</span>
+                    <br/>
+                    <span>
+                        <span class="title">Americanah</span>
+                    </span>
+                </h3>
+                <linegroup>
+                    <line class="duration">20 t 48 min</line>
+                    <line>
+                        <span class="fieldName">Lest av: </span>
+                        <span class="narrators">
+                            <span class="narrator">Emma Rowena Hansen</span>
+                        </span>
+                    </line>
+                    <line class="description"
+                        ><![CDATA[Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.]]></line>
+                    <line>
+                        <span class="fieldName">Sjanger/Emner: </span>
+                        <span class="topics">
+                            <span class="topic">Kjærlighet</span>, <span class="topic">Samfunn</span>, <span class="topic">Rasisme</span>
+                        </span>
+                    </line>
+                    <line>
+                        <span class="fieldName">Boknummer: </span>
+                        <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621296" class="identifier">621296</a>
+                    </line>
+                </linegroup>
+            </level3>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="a complete example">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:identifier id="pub-id">621296</dc:identifier>
+                    <dc:title>Americanah</dc:title>
+                    <dc:creator id="creator-1">Adichie, Chimamanda</dc:creator>
+                    <meta property="nationality" refines="#creator-1">ne</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <dc:language>nob</dc:language>
+                    <dc:publisher>Norsk lyd- og blindeskriftbibliotek</dc:publisher>
+                    <meta property="dc:contributor.narrator">Hansen, Emma Rowena</meta>
+                    <meta property="dc:contributor.translator" id="contributor-700-1">Stubhaug, Hilde</meta>
+                    <meta property="dc:date.available">2014-07-02</meta>
+                    <meta property="dc:date.issued">2014</meta>
+                    <meta property="dc:date.issued.original">2013</meta>
+                    <meta property="dc:description.abstract"
+                        ><![CDATA[Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.]]></meta>
+                    <meta property="dc:format.extent.duration">20 t. 48 min.</meta>
+                    <meta property="dc:format.extent.pages.original">550</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <meta property="dc:format.other">Other voice/other</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other.no">Annen tale/annet</meta>
+                    <meta property="dc:publisher.location">Oslo</meta>
+                    <meta property="dc:publisher.original">Gyldendal</meta>
+                    <meta property="dc:publisher.original.location">Oslo</meta>
+                    <meta property="dc:subject.keyword">Rasisme</meta>
+                    <meta property="dc:title.original">Americanah</meta>
+                    <meta property="dc:title.part" id="title-740-1">Americanah</meta>
+                    <meta property="dc:type.genre">Fiction</meta>
+                    <meta property="dc:type.genre">Non-biography</meta>
+                    <meta property="dc:type.genre">Kjærlighet</meta>
+                    <meta property="dc:type.genre">Samfunn</meta>
+                    <meta property="dc:type.genre.no">Kjærlighet</meta>
+                    <meta property="dc:type.genre.no">Samfunn</meta>
+                    <meta property="audience">Adult</meta>
+                    <meta property="isbn" scheme="ISBN">978-82-16-14947-8</meta>
+                    <meta property="isbn.original">978-82-05-45310-4</meta>
+                    <meta property="periodical">true</meta>
+                    <meta property="magazine">true</meta>
+                    <meta property="external-production">RNIB</meta>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 id="b_621296" format="DAISY 2.02" audience="Adult" mainGenre="Fiction" periodical="true" newspaper="false" magazine="true" production-available="2014-07-02"
+                external-production="RNIB" lang="nob" langName="Bokmål">
+                <h3>
+                    <span class="author">Adichie, Chimamanda</span>
+                    <br/>
+                    <span>
+                        <span class="title">Americanah</span>
+                    </span>
+                </h3>
+                <linegroup>
+                    <line class="duration">20 t 48 min</line>
+                    <line>
+                        <span class="fieldName">Lest av: </span>
+                        <span class="narrators">
+                            <span class="narrator">Emma Rowena Hansen</span>
+                        </span>
+                    </line>
+                    <line class="description"
+                        ><![CDATA[Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.]]></line>
+                    <line>
+                        <span class="fieldName">Sjanger/Emner: </span>
+                        <span class="topics">
+                            <span class="topic">Kjærlighet</span>, <span class="topic">Samfunn</span>, <span class="topic">Rasisme</span>
+                        </span>
+                    </line>
+                    <line>
+                        <span class="fieldName">Boknummer: </span>
+                        <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621296" class="identifier">621296</a>
+                    </line>
+                </linegroup>
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - nob">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>nob</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nob"
+                langName="Bokmål">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - nno">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>nno</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nno"
+                langName="Nynorsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - eng">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>eng</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="eng"
+                langName="Engelsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - nob nno">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>nob</dc:language>
+                    <dc:language>nno</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nor"
+                langName="Norsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob nno">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                    <dc:language>nno</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nor"
+                langName="Norsk">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob nno eng">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                    <dc:language>nno</dc:language>
+                    <dc:language>eng</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="mul"
+                langName="Flerspråklig">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob eng">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                    <dc:language>eng</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="mul"
+                langName="Flerspråklig">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="language codes - mul nob">
+        <x:call template="metadata">
+            <x:param name="include-categorization-attributes" select="'true'"/>
+            <x:param name="context">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:language>mul</dc:language>
+                    <dc:language>nob</dc:language>
+                </metadata>
+            </x:param>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly">
+            <level3 format=""
+                audience=""
+                mainGenre=""
+                periodical="false"
+                newspaper="false"
+                magazine="false"
+                production-available=""
+                external-production=""
+                id="b_"
+                lang="nob"
+                langName="Bokmål">
+                <h3>
+                    <span>
+                        <span class="title" />
+                    </span>
+                </h3>
+                <linegroup />
+            </level3>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - mul">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="'mul'"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="'Flerspråklig'"/>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - nob">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="'nob'"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="'Bokmål'"/>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - mul nob">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="('mul', 'nob')"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="'Bokmål'"/>
+    </x:scenario>
+    
+    <x:scenario label="f:language-codes-to-names - mul nob eng">
+        <x:call function="f:language-codes-to-names" xmlns:f="#">
+            <x:param name="codes" select="('mul', 'nob', 'eng')"/>
+        </x:call>
+        <x:expect label="all metadata should be converted correctly" select="('Bokmål', 'Engelsk', 'Flerspråklig')"/>
+    </x:scenario>
+
+</x:description>

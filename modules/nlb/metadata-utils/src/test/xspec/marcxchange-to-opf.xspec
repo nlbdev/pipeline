@@ -1,0 +1,2086 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/marcxchange-to-opf/marcxchange-to-opf.xsl" xmlns:SRU="http://www.loc.gov/zing/sru/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:normarc="info:lc/xmlns/marcxchange-v1" xmlns:marcxchange="info:lc/xmlns/marcxchange-v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:DIAG="http://www.loc.gov/zing/sru/diagnostics/" xmlns:nlb="http://metadata.nlb.no/vocabulary/#" xmlns:opf="http://www.idpf.org/2007/opf" xmlns="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="the marcxchange:record element">
+        <x:scenario label="with no children">
+            <x:context>
+                <marcxchange:record format="normarc" type="Bibliographic"/>
+            </x:context>
+            <x:expect label="should become metadata">
+                <metadata/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with duplicate metadata">
+            <x:context>
+                <marcxchange:record format="normarc" type="Bibliographic">
+                    <marcxchange:controlfield tag="001">1</marcxchange:controlfield>
+                    <marcxchange:controlfield tag="001">2</marcxchange:controlfield>
+                    <marcxchange:controlfield tag="001">2</marcxchange:controlfield>
+                </marcxchange:record>
+            </x:context>
+            <x:expect label="duplicates should be removed">
+                <metadata>
+                    <dc:identifier id="pub-id">1</dc:identifier>
+                    <dc:identifier id="pub-id">2</dc:identifier>
+                </metadata>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with unsorted metadata">
+            <x:context>
+                <marcxchange:record format="normarc" type="Bibliographic">
+                    <marcxchange:controlfield tag="001">1</marcxchange:controlfield>
+                    <marcxchange:datafield tag="260" ind1="1" ind2="0">
+                        <marcxchange:subfield code="c">1985</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="600" ind1="1" ind2="0">
+                        <marcxchange:subfield code="0">Matlaging</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="440" ind1="1" ind2="0">
+                        <marcxchange:subfield code="x">1234-5678</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">XII</marcxchange:subfield>
+                        <marcxchange:subfield code="c">pseudonym for David Robert Jones</marcxchange:subfield>
+                        <marcxchange:subfield code="w">creator</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="020" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="a">978-82-16-15092-4</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">Appetitt nr 2/2014</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </marcxchange:record>
+            </x:context>
+            <x:expect label="should be sorted (first dc:* elements, then meta properties: dc:*, then *:*, then the rest; all meta with refines should be directly after the meta it refines and sorted)">
+                <metadata>
+                    <dc:identifier id="pub-id">1</dc:identifier>
+                    <dc:title>Appetitt nr 2/2014</dc:title>
+                    <dc:creator id="creator-1">creator</dc:creator>
+                    <meta property="pseudonym" refines="#creator-1">Jones, David Robert</meta>
+                    <meta property="suffixName" refines="#creator-1">XII</meta>
+                    <meta property="dc:date.issued">1985</meta>
+                    <meta property="dc:subject.keyword">Matlaging</meta>
+                    <meta property="isbn" scheme="ISBN">978-82-16-15092-4</meta>
+                    <meta property="series.issn">1234-5678</meta>
+                </metadata>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="the marcxchange:leader element">
+        <x:context>
+            <marcxchange:leader>01000nam 2200289 4500</marcxchange:leader>
+        </x:context>
+        <x:expect label="should be removed"/>
+    </x:scenario>
+
+    <x:scenario label="by default, the marcxchange:controlfield element">
+        <x:context>
+            <marcxchange:controlfield tag="N/A">N/A</marcxchange:controlfield>
+        </x:context>
+        <x:expect label="should be removed"/>
+    </x:scenario>
+
+    <x:scenario label="by default, the marcxchange:datafield element">
+        <x:context>
+            <marcxchange:datafield tag="N/A" ind1=" " ind2=" ">N/A</marcxchange:datafield>
+        </x:context>
+        <x:expect label="should be removed"/>
+    </x:scenario>
+
+    <x:scenario label="by default, the marcxchange:subfield element">
+        <x:context>
+            <marcxchange:subfield code="N/A">N/A</marcxchange:subfield>
+        </x:context>
+        <x:expect label="should be removed"/>
+    </x:scenario>
+
+    <!-- 00X KONTROLLFELT -->
+
+    <x:scenario label="001">
+        <x:context>
+            <marcxchange:controlfield tag="001">123456</marcxchange:controlfield>
+        </x:context>
+        <x:expect label="the result should be dc:identifier">
+            <dc:identifier id="pub-id">123456</dc:identifier>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="008">
+        <x:context>
+            <marcxchange:controlfield tag="008" xml:space="preserve">131031              n a          00nob</marcxchange:controlfield>
+        </x:context>
+        <x:expect label="the available metadata should be extracted">
+            <meta property="audience">Adult</meta>
+            <meta property="dc:type.genre">Non-fiction</meta>
+            <meta property="dc:type.genre">Non-biography</meta>
+            <dc:language>nob</dc:language>
+        </x:expect>
+        <x:scenario label="POS 22">
+            <x:context>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                      a               </marcxchange:controlfield>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                      j               </marcxchange:controlfield>
+            </x:context>
+            <x:expect label="the result should be a audience property">
+                <meta property="audience">Adult</meta>
+                <meta property="audience">Juvenile</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="POS 33">
+            <x:scenario label="a">
+                <x:context>
+                    <marcxchange:controlfield tag="008" xml:space="preserve">                                 0    </marcxchange:controlfield>
+                    <marcxchange:controlfield tag="008" xml:space="preserve">                                 1    </marcxchange:controlfield>
+                </x:context>
+                <x:expect label="the result should be dc:type.genre">
+                    <meta property="dc:type.genre">Non-fiction</meta>
+                    <meta property="dc:type.genre">Fiction</meta>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="POS 34">
+            <x:context>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                                  0   </marcxchange:controlfield>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                                  1   </marcxchange:controlfield>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                                  a   </marcxchange:controlfield>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                                  b   </marcxchange:controlfield>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                                  c   </marcxchange:controlfield>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                                  d   </marcxchange:controlfield>
+            </x:context>
+            <x:expect label="the result should be dc:type.genre">
+                <meta property="dc:type.genre">Non-biography</meta>
+                <meta property="dc:type.genre">Biography</meta>
+                <meta property="dc:type.genre">Biography</meta>
+                <meta property="dc:type.genre">Autobiography</meta>
+                <meta property="dc:type.genre">Biography</meta>
+                <meta property="dc:type.genre">Individual biography</meta>
+                <meta property="dc:type.genre">Biography</meta>
+                <meta property="dc:type.genre">Collective biography</meta>
+                <meta property="dc:type.genre">Biography</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="POS 35-37">
+            <x:context>
+                <marcxchange:controlfield tag="008" xml:space="preserve">                                   nob</marcxchange:controlfield>
+            </x:context>
+            <x:expect label="the result should be dc:language">
+                <dc:language>nob</dc:language>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- 010 - 04X KONTROLLNUMMER OG KODER -->
+
+    <x:scenario label="019">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">a</marcxchange:subfield>
+                    <marcxchange:subfield code="a">b</marcxchange:subfield>
+                    <marcxchange:subfield code="a">bu</marcxchange:subfield>
+                    <marcxchange:subfield code="a">u</marcxchange:subfield>
+                    <marcxchange:subfield code="a">mu</marcxchange:subfield>
+                    <marcxchange:subfield code="a">a,b</marcxchange:subfield>
+                    <marcxchange:subfield code="a">a, b</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a audience property">
+                <meta property="audience">Ages 0-5</meta>
+                <meta property="audience">Ages 6-8</meta>
+                <meta property="audience">Ages 9-10</meta>
+                <meta property="audience">Ages 11-12</meta>
+                <meta property="audience">Ages 13+</meta>
+                <meta property="audience">Ages 0-5</meta>
+                <meta property="audience">Ages 6-8</meta>
+                <meta property="audience">Ages 0-5</meta>
+                <meta property="audience">Ages 6-8</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:scenario label="should map correctly">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">a</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ab</marcxchange:subfield>
+                        <marcxchange:subfield code="b">aj</marcxchange:subfield>
+                        <marcxchange:subfield code="b">b</marcxchange:subfield>
+                        <marcxchange:subfield code="b">c</marcxchange:subfield>
+                        <marcxchange:subfield code="b">d</marcxchange:subfield>
+                        <marcxchange:subfield code="b">da</marcxchange:subfield>
+                        <marcxchange:subfield code="b">db</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dc</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dd</marcxchange:subfield>
+                        <marcxchange:subfield code="b">de</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dg</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dh</marcxchange:subfield>
+                        <marcxchange:subfield code="b">di</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dj</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dk</marcxchange:subfield>
+                        <marcxchange:subfield code="b">e</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ec</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ed</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ee</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ef</marcxchange:subfield>
+                        <marcxchange:subfield code="b">eg</marcxchange:subfield>
+                        <marcxchange:subfield code="b">f</marcxchange:subfield>
+                        <marcxchange:subfield code="b">fd</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ff</marcxchange:subfield>
+                        <marcxchange:subfield code="b">fi</marcxchange:subfield>
+                        <marcxchange:subfield code="b">g</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gb</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gc</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gd</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ge</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gf</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gg</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gh</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gi</marcxchange:subfield>
+                        <marcxchange:subfield code="b">gt</marcxchange:subfield>
+                        <marcxchange:subfield code="b">h</marcxchange:subfield>
+                        <marcxchange:subfield code="b">i</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ib</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ic</marcxchange:subfield>
+                        <marcxchange:subfield code="b">j</marcxchange:subfield>
+                        <marcxchange:subfield code="b">jn</marcxchange:subfield>
+                        <marcxchange:subfield code="b">jp</marcxchange:subfield>
+                        <marcxchange:subfield code="b">k</marcxchange:subfield>
+                        <marcxchange:subfield code="b">l</marcxchange:subfield>
+                        <marcxchange:subfield code="b">m</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ma</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mb</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mc</marcxchange:subfield>
+                        <marcxchange:subfield code="b">md</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mi</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mj</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mn</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mo</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dl</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dm</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dn</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dz</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ea</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ga</marcxchange:subfield>
+                        <marcxchange:subfield code="b">je</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ka</marcxchange:subfield>
+                        <marcxchange:subfield code="b">la</marcxchange:subfield>
+                        <marcxchange:subfield code="b">me</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mk</marcxchange:subfield>
+                        <marcxchange:subfield code="b">mp</marcxchange:subfield>
+                        <marcxchange:subfield code="b">n</marcxchange:subfield>
+                        <marcxchange:subfield code="b">na</marcxchange:subfield>
+                        <marcxchange:subfield code="b">nb</marcxchange:subfield>
+                        <marcxchange:subfield code="b">nc</marcxchange:subfield>
+                        <marcxchange:subfield code="b">nl</marcxchange:subfield>
+                        <marcxchange:subfield code="b">ns</marcxchange:subfield>
+                        <marcxchange:subfield code="b">o</marcxchange:subfield>
+                        <marcxchange:subfield code="b">te</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be dc:format, dc:format.no, dc:format.other and dc:format.other.no">
+                    <meta property="dc:format.other.no">Kartografisk materiale</meta>
+                    <meta property="dc:format.other">Cartographic materials</meta>
+                    <meta property="dc:format.other.no">Kartografisk materiale</meta>
+                    <meta property="dc:format.other">Cartographic materials</meta>
+                    <meta property="dc:format.other.no">Atlas</meta>
+                    <meta property="dc:format.other">Atlas</meta>
+                    <meta property="dc:format.other.no">Kartografisk materiale</meta>
+                    <meta property="dc:format.other">Cartographic materials</meta>
+                    <meta property="dc:format.other.no">Kart</meta>
+                    <meta property="dc:format.other">Map</meta>
+                    <meta property="dc:format.other.no">Manuskripter</meta>
+                    <meta property="dc:format.other">Manuscripts</meta>
+                    <meta property="dc:format.other.no">Musikktrykk</meta>
+                    <meta property="dc:format.other">Sheet music</meta>
+                    <dc:format>Braille</dc:format>
+                    <meta property="dc:format.no">Punktskrift</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Grammofonplate</meta>
+                    <meta property="dc:format.other">Gramophone record</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Kassett</meta>
+                    <meta property="dc:format.other">Cassette</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Avspiller med lydfil</meta>
+                    <meta property="dc:format.other">Player with audio file</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Digikort</meta>
+                    <meta property="dc:format.other">Digikort</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Musikk</meta>
+                    <meta property="dc:format.other">Music</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Språkkurs</meta>
+                    <meta property="dc:format.other">Language course</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Lydbok</meta>
+                    <meta property="dc:format.other">Audio book</meta>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Annen tale/annet</meta>
+                    <meta property="dc:format.other">Other voice/other</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Kombidokument</meta>
+                    <meta property="dc:format.other">Combined document</meta>
+                    <meta property="dc:format.other.no">Film</meta>
+                    <meta property="dc:format.other">Video</meta>
+                    <meta property="dc:format.other.no">Film</meta>
+                    <meta property="dc:format.other">Video</meta>
+                    <meta property="dc:format.other.no">Filmspole</meta>
+                    <meta property="dc:format.other">Video tape</meta>
+                    <meta property="dc:format.other.no">Film</meta>
+                    <meta property="dc:format.other">Video</meta>
+                    <meta property="dc:format.other.no">Videokassett (VHS)</meta>
+                    <meta property="dc:format.other">VHS</meta>
+                    <meta property="dc:format.other.no">Film</meta>
+                    <meta property="dc:format.other">Video</meta>
+                    <meta property="dc:format.other.no">Videoplate (DVD)</meta>
+                    <meta property="dc:format.other">DVD</meta>
+                    <meta property="dc:format.other.no">Film</meta>
+                    <meta property="dc:format.other">Video</meta>
+                    <meta property="dc:format.other.no">Blu-ray-plate</meta>
+                    <meta property="dc:format.other">Blu-ray</meta>
+                    <meta property="dc:format.other.no">Film</meta>
+                    <meta property="dc:format.other">Video</meta>
+                    <meta property="dc:format.other.no">3D</meta>
+                    <meta property="dc:format.other">3D</meta>
+                    <meta property="dc:format.other.no">Grafisk materiale</meta>
+                    <meta property="dc:format.other">Graphic materials</meta>
+                    <meta property="dc:format.other.no">Grafisk materiale</meta>
+                    <meta property="dc:format.other">Graphic materials</meta>
+                    <meta property="dc:format.other.no">Dias</meta>
+                    <meta property="dc:format.other">Slides</meta>
+                    <meta property="dc:format.other.no">Grafisk materiale</meta>
+                    <meta property="dc:format.other">Graphic materials</meta>
+                    <meta property="dc:format.other.no">Fotografi</meta>
+                    <meta property="dc:format.other">Photography</meta>
+                    <meta property="dc:format.other.no">Grafisk materiale</meta>
+                    <meta property="dc:format.other">Graphic materials</meta>
+                    <meta property="dc:format.other.no">Kunstreproduksjon</meta>
+                    <meta property="dc:format.other">Art reproduction</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <dc:format>XHTML</dc:format>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other.no">Diskett</meta>
+                    <meta property="dc:format.other">Floppy</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other.no">DVD-ROM</meta>
+                    <meta property="dc:format.other">DVD</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other.no">CD-ROM</meta>
+                    <meta property="dc:format.other">CD</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other.no">Nettressurs</meta>
+                    <meta property="dc:format.other">Web resource</meta>
+                    <dc:format>XHTML</dc:format>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other.no">Lagringsbrikke</meta>
+                    <meta property="dc:format.other">Storage card</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other.no">Blu-ray ROM</meta>
+                    <meta property="dc:format.other">Blu-ray</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other">UMD</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.other.no">Wii-plate</meta>
+                    <meta property="dc:format.other">Wii disk</meta>
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.no">DTBok</meta>
+                    <dc:format>DTBook</dc:format>
+                    <meta property="dc:format.other.no">Tredimensjonal gjenstand</meta>
+                    <meta property="dc:format.other">Three-dimensional object</meta>
+                    <meta property="dc:format.other.no">Mikroform</meta>
+                    <meta property="dc:format.other">Microform</meta>
+                    <meta property="dc:format.other.no">Mikroform</meta>
+                    <meta property="dc:format.other">Microform</meta>
+                    <meta property="dc:format.other.no">Mikrofilmspole</meta>
+                    <meta property="dc:format.other">Microfilm tape</meta>
+                    <meta property="dc:format.other.no">Mikroform</meta>
+                    <meta property="dc:format.other">Microform</meta>
+                    <meta property="dc:format.other.no">Mikrofilmkort</meta>
+                    <meta property="dc:format.other">Microfilm card</meta>
+                    <meta property="dc:format.other.no">Periodika</meta>
+                    <meta property="dc:format.other">Serial</meta>
+                    <meta property="periodical">true</meta>
+                    <meta property="dc:format.other.no">Periodika</meta>
+                    <meta property="dc:format.other">Serial</meta>
+                    <meta property="dc:format.other.no">Avis</meta>
+                    <meta property="dc:format.other">Newspaper</meta>
+                    <meta property="periodical">true</meta>
+                    <meta property="newspaper">true</meta>
+                    <meta property="dc:format.other.no">Periodika</meta>
+                    <meta property="dc:format.other">Serial</meta>
+                    <meta property="dc:format.other.no">Tidsskrift</meta>
+                    <meta property="dc:format.other">Magazine</meta>
+                    <meta property="periodical">true</meta>
+                    <meta property="magazine">true</meta>
+                    <meta property="dc:format.other.no">Artikler</meta>
+                    <meta property="dc:format.other">Article</meta>
+                    <meta property="dc:format.other.no">Fysiske bøker</meta>
+                    <meta property="dc:format.other">Physical book</meta>
+                    <dc:format>Braille</dc:format>
+                    <meta property="dc:format.no">Punktskrift</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">PC</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">Playstation 2</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">Playstation 3</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">Playstation Portable</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">Xbox</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">Xbox 360</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">Nintendo DS</meta>
+                    <meta property="dc:format.other.no">Dataspill</meta>
+                    <meta property="dc:format.other">Video game</meta>
+                    <meta property="dc:format.other">Nintendo Wii</meta>
+                    <meta property="dc:format.other.no">SACD</meta>
+                    <meta property="dc:format.other">SACD</meta>
+                    <meta property="dc:format.other.no">DVD-audio</meta>
+                    <meta property="dc:format.other">DVD-audio</meta>
+                    <meta property="dc:format.other.no">Blu-Ray-audio</meta>
+                    <meta property="dc:format.other">Blu-Ray-audio</meta>
+                    <meta property="dc:format.other.no">MP3</meta>
+                    <meta property="dc:format.other">MP3</meta>
+                    <meta property="dc:format.other.no">E-film</meta>
+                    <meta property="dc:format.other">E-film</meta>
+                    <meta property="dc:format.other.no">Nedlastbar fil</meta>
+                    <meta property="dc:format.other">Downloadable file</meta>
+                    <meta property="dc:format.other.no">E-tidsskrifter</meta>
+                    <meta property="dc:format.other">E-periodicals</meta>
+                    <meta property="dc:format.other.no">E-artikler</meta>
+                    <meta property="dc:format.other">E-articles</meta>
+                    <meta property="dc:format.other.no">E-bøker</meta>
+                    <meta property="dc:format.other">E-books</meta>
+                    <meta property="dc:format.other.no">Playstation 4</meta>
+                    <meta property="dc:format.other">Playstation 4</meta>
+                    <meta property="dc:format.other.no">Xbox One</meta>
+                    <meta property="dc:format.other">Xbox One</meta>
+                    <meta property="dc:format.other.no">Nintendo Wii U</meta>
+                    <meta property="dc:format.other">Nintendo Wii U</meta>
+                    <meta property="dc:format.other.no">Filformater</meta>
+                    <meta property="dc:format.other">File formats</meta>
+                    <meta property="dc:format.other.no">PDF</meta>
+                    <meta property="dc:format.other">PDF</meta>
+                    <meta property="dc:format.other.no">EPUB</meta>
+                    <meta property="dc:format.other">EPUB</meta>
+                    <meta property="dc:format.other.no">MOBI</meta>
+                    <meta property="dc:format.other">MOBI</meta>
+                    <meta property="dc:format.other.no">WMA (Windows Media Audio)</meta>
+                    <meta property="dc:format.other">WMA (Windows Media Audio)</meta>
+                    <meta property="dc:format.other.no">WMV (Windows Media Video)</meta>
+                    <meta property="dc:format.other">WMV (Windows Media Video)</meta>
+                    <meta property="dc:format.other.no">Digital rettighetsadministrasjon (DRM)</meta>
+                    <meta property="dc:format.other">Digital rights management (DRM)</meta>
+                    <dc:format>Braille</dc:format>
+                    <meta property="dc:format.no">Punktskrift</meta>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="should allow multiple values (comma-separated)">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">dc,dj</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be dc:format, dc:format.no, dc:format.other and dc:format.other.no">
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Annen tale/annet</meta>
+                    <meta property="dc:format.other">Other voice/other</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="should allow multiple values (invalidly comma-separated)">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">dc, dj</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dc.dj</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dc-dj</marcxchange:subfield>
+                        <marcxchange:subfield code="b">dc_dj</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be dc:format, dc:format.no, dc:format.other and dc:format.other.no">
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Annen tale/annet</meta>
+                    <meta property="dc:format.other">Other voice/other</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Annen tale/annet</meta>
+                    <meta property="dc:format.other">Other voice/other</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Annen tale/annet</meta>
+                    <meta property="dc:format.other">Other voice/other</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">Annen tale/annet</meta>
+                    <meta property="dc:format.other">Other voice/other</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="e">
+            <x:scenario label="when 019$b does not contain format information">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">a</marcxchange:subfield>
+                        <marcxchange:subfield code="e">dc</marcxchange:subfield>
+                        <marcxchange:subfield code="e">dj</marcxchange:subfield>
+                        <marcxchange:subfield code="e">te</marcxchange:subfield>
+                        <marcxchange:subfield code="e">c</marcxchange:subfield>
+                        <marcxchange:subfield code="e">l</marcxchange:subfield>
+                        <marcxchange:subfield code="e">gt</marcxchange:subfield>
+                        <marcxchange:subfield code="e">ge</marcxchange:subfield>
+                        <marcxchange:subfield code="e">g</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be dc:format and dc:format.no from 019$e">
+                    <meta property="dc:format.other.no">Kartografisk materiale</meta>
+                    <meta property="dc:format.other">Cartographic materials</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <dc:format>Braille</dc:format>
+                    <meta property="dc:format.no">Punktskrift</meta>
+                    <dc:format>Braille</dc:format>
+                    <meta property="dc:format.no">Punktskrift</meta>
+                    <dc:format>Braille</dc:format>
+                    <meta property="dc:format.no">Punktskrift</meta>
+                    <dc:format>DTBook</dc:format>
+                    <meta property="dc:format.no">DTBok</meta>
+                    <dc:format>XHTML</dc:format>
+                    <dc:format>XHTML</dc:format>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when 019$b contains format information">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">dc</marcxchange:subfield>
+                        <marcxchange:subfield code="e">dc</marcxchange:subfield>
+                        <marcxchange:subfield code="e">dj</marcxchange:subfield>
+                        <marcxchange:subfield code="e">te</marcxchange:subfield>
+                        <marcxchange:subfield code="e">c</marcxchange:subfield>
+                        <marcxchange:subfield code="e">l</marcxchange:subfield>
+                        <marcxchange:subfield code="e">gt</marcxchange:subfield>
+                        <marcxchange:subfield code="e">ge</marcxchange:subfield>
+                        <marcxchange:subfield code="e">g</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="019$e should be ignored in favor of 019$b">
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="d">
+            <x:context>
+                <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="d">N</marcxchange:subfield>
+                    <marcxchange:subfield code="d">B</marcxchange:subfield>
+                    <marcxchange:subfield code="d">D</marcxchange:subfield>
+                    <marcxchange:subfield code="d">R</marcxchange:subfield>
+                    <marcxchange:subfield code="d">S</marcxchange:subfield>
+                    <marcxchange:subfield code="d">T</marcxchange:subfield>
+                    <marcxchange:subfield code="d">A</marcxchange:subfield>
+                    <marcxchange:subfield code="d">L</marcxchange:subfield>
+                    <marcxchange:subfield code="d">TAL</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:type.genre">
+                <meta property="dc:type.genre">Biography</meta>
+                <meta property="dc:type.genre">short story</meta>
+                <meta property="dc:type.genre">Biography</meta>
+                <meta property="dc:type.genre">short story</meta>
+                <meta property="dc:type.genre">poem</meta>
+                <meta property="dc:type.genre">poem</meta>
+                <meta property="dc:type.genre">play</meta>
+                <meta property="dc:type.genre">cartoon</meta>
+                <meta property="dc:type.genre">anthology</meta>
+                <meta property="dc:type.genre">textbook</meta>
+                <meta property="dc:type.genre">cartoon</meta>
+                <meta property="dc:type.genre">anthology</meta>
+                <meta property="dc:type.genre">textbook</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="020">
+        <x:context>
+            <marcxchange:datafield tag="020" ind1=" " ind2=" ">
+                <marcxchange:subfield code="a">978-82-16-15092-4</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be a isbn property with scheme=ISBN">
+            <meta property="isbn" scheme="ISBN">978-82-16-15092-4</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="022">
+        <x:context>
+            <marcxchange:datafield tag="022" ind1=" " ind2=" ">
+                <marcxchange:subfield code="a">1502-4334</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be a issn property with scheme=ISSN">
+            <meta property="issn" scheme="ISSN">1502-4334</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="041">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="041" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">nob</marcxchange:subfield>
+                    <marcxchange:subfield code="a">nobnno</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:language">
+                <dc:language>nob</dc:language>
+                <dc:language>nob</dc:language>
+                <dc:language>nno</dc:language>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="h">
+            <x:context>
+                <marcxchange:datafield tag="041" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="h">nob</marcxchange:subfield>
+                    <marcxchange:subfield code="h">nobnno</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:language.original">
+                <meta property="dc:language.original">nob</meta>
+                <meta property="dc:language.original">nob</meta>
+                <meta property="dc:language.original">nno</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="082">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="082" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">505</marcxchange:subfield>
+                    <marcxchange:subfield code="a">641.5</marcxchange:subfield>
+                    <marcxchange:subfield code="a">362.105</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.dewey">
+                <meta property="dc:subject.dewey">505</meta>
+                <meta property="dc:subject.dewey">641.5</meta>
+                <meta property="dc:subject.dewey">362.105</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="082" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="b">505</marcxchange:subfield>
+                    <marcxchange:subfield code="b">641.5</marcxchange:subfield>
+                    <marcxchange:subfield code="b">362.105</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.dewey">
+                <meta property="dc:subject.dewey">505</meta>
+                <meta property="dc:subject.dewey">641.5</meta>
+                <meta property="dc:subject.dewey">362.105</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- 1XX HOVEDORDNINGSORD -->
+
+    <x:scenario label="100">
+        <x:scenario label="q">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="q">creator q</marcxchange:subfield>
+                    <marcxchange:subfield code="a">creator a</marcxchange:subfield>
+                    <marcxchange:subfield code="w">creator w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:creator; $a and $w should be ignored">
+                <dc:creator id="creator-1">q, creator</dc:creator>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator a</marcxchange:subfield>
+                    <marcxchange:subfield code="w">creator w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:creator; $w should be ignored">
+                <dc:creator id="creator-1">a, creator</dc:creator>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="w">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="w">creator w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:creator">
+                <dc:creator id="creator-1">creator w</dc:creator>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a (multiple datafields)">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator 1</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator 2</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be multiple dc:creators, with unique ids">
+                <dc:creator id="creator-1">1, creator</dc:creator>
+                <dc:creator id="creator-2">2, creator</dc:creator>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Pius</marcxchange:subfield>
+                    <marcxchange:subfield code="b">XII</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a suffixName property which refines the associated creator">
+                <dc:creator id="creator-1">Pius</dc:creator>
+                <meta property="suffixName" refines="#creator-1">XII</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="c">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">David Bowie</marcxchange:subfield>
+                    <marcxchange:subfield code="c">pseudonym for David Robert Jones</marcxchange:subfield>
+                    <marcxchange:subfield code="c">Hans Majestet Kongen</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be pseudonym and title properties which refine the associated creator">
+                <dc:creator id="creator-1">Bowie, David</dc:creator>
+                <meta property="pseudonym" refines="#creator-1">Jones, David Robert</meta>
+                <meta property="title" refines="#creator-1">Hans Majestet Kongen</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="d">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Mozart</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756 f.Kr.</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756-1791</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be birth and death properties which refine the associated creator">
+                <dc:creator id="creator-1">Mozart</dc:creator>
+                <meta property="birth" refines="#creator-1">-1756</meta>
+                <meta property="birth" refines="#creator-1">1756</meta>
+                <meta property="birth" refines="#creator-1">1756</meta>
+                <meta property="death" refines="#creator-1">1791</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="j">
+            <x:context>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Mozart</marcxchange:subfield>
+                    <marcxchange:subfield code="j">øst</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a nationality property which refines the associated creator">
+                <dc:creator id="creator-1">Mozart</dc:creator>
+                <meta property="nationality" refines="#creator-1">at</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="110">
+        <x:scenario label="a without b">
+            <x:context>
+                <marcxchange:datafield tag="110" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Norge</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:creator">
+                <dc:creator id="creator-1">Norge</dc:creator>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a with b">
+            <x:context>
+                <marcxchange:datafield tag="110" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Norge</marcxchange:subfield>
+                    <marcxchange:subfield code="b">Utvalget for statseiendom i Nordland og Troms</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:creator and a department property">
+                <dc:creator id="creator-1">Norge</dc:creator>
+                <meta property="department" refines="#creator-1">Utvalget for statseiendom i Nordland og Troms</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b without a">
+            <x:context>
+                <marcxchange:datafield tag="110" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="b">Utvalget for statseiendom i Nordland og Troms</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:creator">
+                <dc:creator id="creator-1">Utvalget for statseiendom i Nordland og Troms</dc:creator>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="the ids should be unique">
+            <x:context>
+                <marcxchange:datafield tag="110" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator a (organization $a)</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator b (person $a)</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator c (person $w)</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator d (person $q)</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="110" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="b">creator e (organization $b)</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="110" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">creator f (organization $a)</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should three dc:creators with unique ids">
+                <dc:creator id="creator-1">creator a (organization $a)</dc:creator>
+                <dc:creator id="creator-2">$a), creator b (person</dc:creator>
+                <dc:creator id="creator-3">$w), creator c (person</dc:creator>
+                <dc:creator id="creator-4">$q), creator d (person</dc:creator>
+                <dc:creator id="creator-5">creator e (organization $b)</dc:creator>
+                <dc:creator id="creator-6">creator f (organization $a)</dc:creator>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- 2XX TITTEL-, ANSVARS- OG UTGIVELSESOPPLYSNINGER -->
+
+    <x:scenario label="240">
+        <x:context>
+            <marcxchange:datafield tag="240" ind1=" " ind2=" ">
+                <marcxchange:subfield code="a">Forvaltningsloven</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be a dc:title.alternative">
+            <meta property="dc:title.alternative">Forvaltningsloven</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="245">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Title</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:title">
+                <dc:title>Title</dc:title>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                    <marcxchange:subfield code="b">Subtitle</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:title.subTitle">
+                <meta property="dc:title.subTitle">Subtitle</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="h">
+            <x:context>
+                <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                    <marcxchange:subfield code="h">daisy 2.02</marcxchange:subfield>
+                    <marcxchange:subfield code="h">dAisy 202</marcxchange:subfield>
+                    <marcxchange:subfield code="h">DTbook</marcxchange:subfield>
+                    <marcxchange:subfield code="h">Dtbook</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:format and dc:type">
+                <dc:format>DAISY 2.02</dc:format>
+                <dc:format>DAISY 2.02</dc:format>
+                <dc:type>Full Text</dc:type>
+                <dc:format>DTBook</dc:format>
+                <dc:type>Full Text</dc:type>
+                <dc:format>DTBook</dc:format>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="n">
+            <x:context>
+                <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                    <marcxchange:subfield code="n">13</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a partNumber property">
+                <meta property="partNumber">13</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="p">
+            <x:context>
+                <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                    <marcxchange:subfield code="p">Part Name</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a partName property">
+                <meta property="partName">Part Name</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="w">
+            <x:context>
+                <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                    <marcxchange:subfield code="w">Lord of the Rings, The</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:title.part.sortingKey">
+                <meta property="dc:title.part.sortingKey">Lord of the Rings, The</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="typical example">
+            <x:context>
+                <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Appetitt nr 2/2014</marcxchange:subfield>
+                    <marcxchange:subfield code="b">magasinet for mat og drikke</marcxchange:subfield>
+                    <marcxchange:subfield code="h">daisy 2.02</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:title, a dc:title.subTitle, and a dc:format">
+                <dc:title>Appetitt nr 2/2014</dc:title>
+                <meta property="dc:title.subTitle">magasinet for mat og drikke</meta>
+                <dc:format>DAISY 2.02</dc:format>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="246">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="246" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Alternative title</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:title.alternative">
+                <meta property="dc:title.alternative">Alternative title</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="246" ind1="1" ind2="0">
+                    <marcxchange:subfield code="b">Alternative subtitle</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:title.alternative">
+                <meta property="dc:title.subTitle.alternative">Alternative subtitle</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="250">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="250" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">3. utg.</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be an edition property">
+                <meta property="edition">3. utg.</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="260">
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="260" ind1="1" ind2="0">
+                    <marcxchange:subfield code="b">Gyldendal</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:publisher">
+                <dc:publisher id="...">Gyldendal</dc:publisher>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b and a">
+            <x:context>
+                <marcxchange:datafield tag="260" ind1="1" ind2="0">
+                    <marcxchange:subfield code="b">Gyldendal</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Oslo</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:publisher and a dc:publisher.location">
+                <dc:publisher id="...">Gyldendal</dc:publisher>
+                <meta property="dc:publisher.location" refines="...">Oslo</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="c">
+            <x:context>
+                <marcxchange:datafield tag="260" ind1="1" ind2="0">
+                    <marcxchange:subfield code="c">1985</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:date.issued">
+                <meta property="dc:date.issued">1985</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="9">
+            <x:context>
+                <marcxchange:datafield tag="260" ind1="1" ind2="0">
+                    <marcxchange:subfield code="9">n</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a watermark property">
+                <meta property="watermark">none</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- 3XX FYSISK BESKRIVELSE -->
+
+    <x:scenario label="300">
+        <x:scenario label="a">
+            <x:scenario label="when there's no implied format in 019$b or 245$h">
+                <x:context>
+                    <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">2 t. 13 min.</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be a dc:format.extent">
+                    <meta property="dc:format.extent">2 t. 13 min.</meta>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when 019$b=dc">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">dc</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">2 t. 13 min.</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be a dc:format.extent.duration">
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.extent.duration">2 t. 13 min.</meta>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when 019$b=te">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">te</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">5 hefter (364 s.)</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be a dc:format.extent">
+                    <dc:format>Braille</dc:format>
+                    <meta property="dc:format.no">Punktskrift</meta>
+                    <meta property="dc:format.extent">5 hefter (364 s.)</meta>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when 019$b=gt">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">gt</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">364 s.</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be a dc:format.extent">
+                    <meta property="dc:format.other.no">Elektronisk ressurs</meta>
+                    <meta property="dc:format.other">Electronic resource</meta>
+                    <meta property="dc:format.no">DTBok</meta>
+                    <dc:format>DTBook</dc:format>
+                    <meta property="dc:format.extent">364 s.</meta>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when 245$h='dAiSy 2.02'">
+                <x:context>
+                    <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                        <marcxchange:subfield code="h">dAiSy 2.02</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">2 t. 13 min.</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be a dc:format.extent.duration">
+                    <dc:format>DAISY 2.02</dc:format>
+                    <meta property="dc:format.extent.duration">2 t. 13 min.</meta>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when 245$h='dTbOoK'">
+                <x:context>
+                    <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                        <marcxchange:subfield code="h">dTbOoK</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">364 s.</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be a dc:format.extent">
+                    <dc:type>Full Text</dc:type>
+                    <dc:format>DTBook</dc:format>
+                    <meta property="dc:format.extent">364 s.</meta>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when 019$b=dc and 245$h='dTbOoK' (i.e. in conflict)">
+                <x:context>
+                    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+                        <marcxchange:subfield code="b">dc</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="245" ind1="1" ind2="0">
+                        <marcxchange:subfield code="h">dTbOoK</marcxchange:subfield>
+                    </marcxchange:datafield>
+                    <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                        <marcxchange:subfield code="a">364 s.</marcxchange:subfield>
+                    </marcxchange:datafield>
+                </x:context>
+                <x:expect label="the result should be a dc:format.extent">
+                    <meta property="dc:format.other.no">Lydopptak</meta>
+                    <meta property="dc:format.other">Audio recording</meta>
+                    <meta property="dc:format.other.no">CD (kompaktplate)</meta>
+                    <meta property="dc:format.other">Compact Disk</meta>
+                    <dc:format>DAISY 2.02</dc:format>
+                    <dc:type>Full Text</dc:type>
+                    <dc:format>DTBook</dc:format>
+                    <meta property="dc:format.extent">364 s.</meta>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="310">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="310" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">6 nummer pr. år</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a periodicity property">
+                <meta property="periodicity">6 nummer pr. år</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- 4XX SERIEANGIVELSER -->
+
+    <x:scenario label="440">
+        <x:context>
+            <marcxchange:datafield tag="440" ind1="1" ind2="0">
+                <marcxchange:subfield code="a">Biblioteca de arte hispanico</marcxchange:subfield>
+                <marcxchange:subfield code="p">Artes aplicadas</marcxchange:subfield>
+                <marcxchange:subfield code="x">1234-5678</marcxchange:subfield>
+                <marcxchange:subfield code="v">8</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be dc:title.series, dc:title.subSeries, series.issn and series.partNumber">
+            <meta property="dc:title.series" id="...">Biblioteca de arte hispanico</meta>
+            <meta property="dc:title.subSeries" refines="...">Artes aplicadas</meta>
+            <meta property="series.issn" refines="...">1234-5678</meta>
+            <meta property="series.partNumber" refines="...">8</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="449">
+        <x:scenario label="n when there's no 300">
+            <x:context>
+                <marcxchange:datafield tag="449" ind1="1" ind2="0">
+                    <marcxchange:subfield code="n">2</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:format.extent">
+                <meta property="dc:format.extent">2 CDs</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="n when there's a dc:format.extent in 300">
+            <x:context>
+                <marcxchange:datafield tag="300" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">2 t. 13 min.</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="449" ind1="1" ind2="0">
+                    <marcxchange:subfield code="n">2</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a dc:format.extent.other">
+                <meta property="dc:format.extent">2 t. 13 min.</meta>
+                <meta property="dc:format.extent.other">2 CDs</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- 5XX NOTER -->
+
+    <x:scenario label="503">
+        <x:context>
+            <marcxchange:datafield tag="503" ind1="1" ind2="0">
+                <marcxchange:subfield code="a">1. utgave 1931</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be a edition property">
+            <meta property="edition">1. utgave 1931</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="505$a" pending="what's this? prodnote?"/>
+
+    <x:scenario label="511">
+        <x:context>
+            <marcxchange:datafield tag="511" ind1="1" ind2="0">
+                <marcxchange:subfield code="a">Firstname Middlename Lastname</marcxchange:subfield>
+                <marcxchange:subfield code="a">Lastname, Firstname</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be dc:contributor.narrator">
+            <meta property="dc:contributor.narrator" id="...">Lastname, Firstname Middlename</meta>
+            <meta property="dc:contributor.narrator">Lastname, Firstname</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="520">
+        <x:context>
+            <marcxchange:datafield tag="520" ind1="1" ind2="0">
+                <marcxchange:subfield code="a">Sammendrag: Belyser høydepunktene i skuespillet "Julius Cæsar" gjennom fotografier av en virkelig oppsetning</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be dc:description.abstract">
+            <meta property="dc:description.abstract">Sammendrag: Belyser høydepunktene i skuespillet "Julius Cæsar" gjennom fotografier av en virkelig oppsetning</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="574">
+        <x:context>
+            <marcxchange:datafield tag="574" ind1="1" ind2="0">
+                <marcxchange:subfield code="a">Originaltittel : Kids Baking</marcxchange:subfield>
+                <marcxchange:subfield code="a">Kokbok för diabetiker</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be dc:contributor.narrator">
+            <meta property="dc:title.original">Kids Baking</meta>
+            <meta property="dc:title.original">Kokbok för diabetiker</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="592">
+        <x:context>
+            <marcxchange:datafield tag="592" ind1="1" ind2="0">
+                <marcxchange:subfield code="a">07/07/2014</marcxchange:subfield>
+                <marcxchange:subfield code="a">07.07.2014</marcxchange:subfield>
+                <marcxchange:subfield code="a">I PRODUKSJON!!!</marcxchange:subfield>
+            </marcxchange:datafield>
+        </x:context>
+        <x:expect label="the result should be dc:date.available">
+            <meta property="dc:date.available">2014-07-07</meta>
+            <meta property="dc:date.available">2014-07-07</meta>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="594$a" pending="Karakteristikk (fulltekst/lettlest/musikk/...) - se emneordprosjektet"/>
+
+    <x:scenario label="596">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="596" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Oslo</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:publisher.original.location">
+                <meta property="dc:publisher.original.location">Oslo</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="596" ind1="1" ind2="0">
+                    <marcxchange:subfield code="b">Gyldendal</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:publisher.original">
+                <meta property="dc:publisher.original">Gyldendal</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="c">
+            <x:context>
+                <marcxchange:datafield tag="596" ind1="1" ind2="0">
+                    <marcxchange:subfield code="c">1985</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:date.issued.original">
+                <meta property="dc:date.issued.original">1985</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="d">
+            <x:context>
+                <marcxchange:datafield tag="596" ind1="1" ind2="0">
+                    <marcxchange:subfield code="d">3. utg.</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a edition.original property">
+                <meta property="edition.original">3. utg.</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="e">
+            <x:context>
+                <marcxchange:datafield tag="596" ind1="1" ind2="0">
+                    <marcxchange:subfield code="e">42s</marcxchange:subfield>
+                    <marcxchange:subfield code="e">42 s.</marcxchange:subfield>
+                    <marcxchange:subfield code="e">5 hefter (364 s.)</marcxchange:subfield>
+                    <marcxchange:subfield code="e">2 t. 50 min.</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:format.extent.pages.original and dc:format.extent.original">
+                <meta property="dc:format.extent.pages.original">42</meta>
+                <meta property="dc:format.extent.pages.original">42</meta>
+                <meta property="dc:format.extent.original">5 hefter (364 s.)</meta>
+                <meta property="dc:format.extent.original">2 t. 50 min.</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="f">
+            <x:context>
+                <marcxchange:datafield tag="596" ind1="1" ind2="0">
+                    <marcxchange:subfield code="f">123-456-789</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a isbn.original property">
+                <meta property="isbn.original">123-456-789</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="598">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="598" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">INNKJØPT: Ferdig 19/02/2014</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:date.available">
+                <meta property="external-production">WIPS</meta>
+                <meta property="dc:date.available">2014-02-19</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="598" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">NEDLASTET FRA TIGAR</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a external-production property with the value 'TIGAR'">
+                <meta property="external-production">TIGAR</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="598" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">INNKJØPT</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a external-production property with the value 'WIPS'">
+                <meta property="external-production">WIPS</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="598" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">INNKJØPT FRA RNIB</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a external-production property with the value 'RNIB'">
+                <meta property="external-production">RNIB</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a with 008">
+            <x:context>
+                <marcxchange:controlfield tag="008" xml:space="preserve">131031                                </marcxchange:controlfield>
+                <marcxchange:datafield tag="598" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">INNKJØPT FRA RNIB</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a external-production property with the value 'RNIB' and 008 should not be used to create a dc:date.available">
+                <meta property="external-production">RNIB</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a with 592$a and 008">
+            <x:context>
+                <marcxchange:controlfield tag="008" xml:space="preserve">131031                                </marcxchange:controlfield>
+                <marcxchange:datafield tag="592" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">07/07/2014</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="598" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">INNKJØPT FRA RNIB</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="dc:date.available should come from 592$a">
+                <meta property="dc:date.available">2014-07-07</meta>
+                <meta property="external-production">RNIB</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with dates both in 592$a and 598$a">
+            <x:context>
+                <marcxchange:controlfield tag="008" xml:space="preserve">131031                                </marcxchange:controlfield>
+                <marcxchange:datafield tag="592" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">07/07/2014</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="598" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">INNKJØPT: 08/08/2008</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="dc:date.available should come from 592$a">
+                <meta property="dc:date.available">2014-07-07</meta>
+                <meta property="external-production">WIPS</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- 6XX EMNEINNFØRSLER -->
+
+    <x:scenario label="600">
+        <x:scenario label="0, 1 and x">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1="1" ind2="0">
+                    <marcxchange:subfield code="0">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="x">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword">Matlaging</meta>
+                <meta property="dc:subject.keyword">Matlaging</meta>
+                <meta property="dc:subject.dewey">641</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="q">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="q">person q</marcxchange:subfield>
+                    <marcxchange:subfield code="a">person a</marcxchange:subfield>
+                    <marcxchange:subfield code="w">person w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject; $a and $w should be ignored">
+                <dc:subject id="subject-600-1">q, person</dc:subject>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">person a</marcxchange:subfield>
+                    <marcxchange:subfield code="w">person w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject; $w should be ignored">
+                <dc:subject id="subject-600-1">a, person</dc:subject>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="w">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="w">person w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject">
+                <dc:subject id="subject-600-1">person w</dc:subject>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a (multiple datafields)">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">person 1</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">person 2</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be multiple dc:subjects, with unique ids">
+                <dc:subject id="subject-600-1">1, person</dc:subject>
+                <dc:subject id="subject-600-2">2, person</dc:subject>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Pius</marcxchange:subfield>
+                    <marcxchange:subfield code="b">XII</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a suffixName property which refines the associated subject person">
+                <dc:subject id="subject-600-1">Pius</dc:subject>
+                <meta property="suffixName" refines="#subject-600-1">XII</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="c">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">David Bowie</marcxchange:subfield>
+                    <marcxchange:subfield code="c">pseudonym for David Robert Jones</marcxchange:subfield>
+                    <marcxchange:subfield code="c">Hans Majestet Kongen</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be pseudonym and title properties which refine the associated subject person">
+                <dc:subject id="subject-600-1">Bowie, David</dc:subject>
+                <meta property="pseudonym" refines="#subject-600-1">Jones, David Robert</meta>
+                <meta property="title" refines="#subject-600-1">Hans Majestet Kongen</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="d">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Mozart</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756 f.Kr.</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756-1791</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be birth and death properties which refine the associated subject person">
+                <dc:subject id="subject-600-1">Mozart</dc:subject>
+                <meta property="birth" refines="#subject-600-1">-1756</meta>
+                <meta property="birth" refines="#subject-600-1">1756</meta>
+                <meta property="birth" refines="#subject-600-1">1756</meta>
+                <meta property="death" refines="#subject-600-1">1791</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="j">
+            <x:context>
+                <marcxchange:datafield tag="600" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Mozart</marcxchange:subfield>
+                    <marcxchange:subfield code="j">øst</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a nationality property which refines the associated subject person">
+                <dc:subject id="subject-600-1">Mozart</dc:subject>
+                <meta property="nationality" refines="#subject-600-1">at</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="610">
+        <x:scenario label="1, a, b and q">
+            <x:context>
+                <marcxchange:datafield tag="610" ind1="1" ind2="0">
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="b">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="q">Matlaging</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+                <meta property="dc:subject.dewey" refines="...">641</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="611">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="611" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="650">
+        <x:scenario label="0, 1, a, c, d, q, w, x and z">
+            <x:context>
+                <marcxchange:datafield tag="650" ind1="1" ind2="0">
+                    <marcxchange:subfield code="0">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="c">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="d">2014</marcxchange:subfield>
+                    <marcxchange:subfield code="q">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="w">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="x">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="z">Oslo</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.dewey" refines="...">641</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.time" refines="...">2014</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.location" refines="...">Oslo</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="651">
+        <x:scenario label="1, a, q, x and z">
+            <x:context>
+                <marcxchange:datafield tag="651" ind1="1" ind2="0">
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Oslo</marcxchange:subfield>
+                    <marcxchange:subfield code="q">Oslo</marcxchange:subfield>
+                    <marcxchange:subfield code="x">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="z">Oslo</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.location" id="...">Oslo</meta>
+                <meta property="dc:subject.dewey" refines="...">641</meta>
+                <meta property="dc:subject.location" refines="...">Oslo</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.location" refines="...">Oslo</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="653">
+        <x:scenario label="1, a, c, q and x">
+            <x:context>
+                <marcxchange:datafield tag="653" ind1="1" ind2="0">
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="c">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="q">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="x">Matlaging</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+                <meta property="dc:subject.dewey" refines="...">641</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="655">
+        <x:scenario label="1 and a">
+            <x:context>
+                <marcxchange:datafield tag="655" ind1="1" ind2="0">
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Krim</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:type.genre" id="...">Krim</meta>
+                <meta property="dc:type.genre.no" refines="...">Krim</meta>
+                <meta property="dc:subject.dewey" refines="...">641</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="691">
+        <x:scenario label="1, a and x">
+            <x:context>
+                <marcxchange:datafield tag="691" ind1="1" ind2="0">
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="x">Matlaging</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+                <meta property="dc:subject.dewey" refines="...">641</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="692">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="692" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="693">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="693" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="699">
+        <x:scenario label="1, a, c, d, q, x and z">
+            <x:context>
+                <marcxchange:datafield tag="699" ind1="1" ind2="0">
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="c">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="d">2014</marcxchange:subfield>
+                    <marcxchange:subfield code="q">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="x">Matlaging</marcxchange:subfield>
+                    <marcxchange:subfield code="z">Oslo</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.keyword and dc:subject.dewey">
+                <meta property="dc:subject.keyword" id="...">Matlaging</meta>
+                <meta property="dc:subject.dewey" refines="...">641</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.time" refines="...">2014</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="dc:subject.keyword" refines="...">Matlaging</meta>
+                <meta property="location" refines="...">Oslo</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="700">
+        <x:scenario label="q">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="q">contributor q</marcxchange:subfield>
+                    <marcxchange:subfield code="a">contributor a</marcxchange:subfield>
+                    <marcxchange:subfield code="w">contributor w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:contributor (default; since no role is declared); $a and $w should be ignored">
+                <dc:contributor id="contributor-700-1">q, contributor</dc:contributor>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">contributor a</marcxchange:subfield>
+                    <marcxchange:subfield code="w">contributor w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:contributor; $w should be ignored">
+                <dc:contributor id="contributor-700-1">a, contributor</dc:contributor>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="w">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="w">contributor w</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:contributor">
+                <dc:contributor id="contributor-700-1">contributor w</dc:contributor>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="e">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="w">contributor w</marcxchange:subfield>
+                    <marcxchange:subfield code="e">etterord</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:contributor">
+                <meta property="dc:creator.afterword" id="contributor-700-1">contributor w</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="r">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="w">contributor w</marcxchange:subfield>
+                    <marcxchange:subfield code="r">hovedredaktør</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:contributor">
+                <meta property="dc:contributor.secretary" id="contributor-700-1">contributor w</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="x">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="w">contributor w</marcxchange:subfield>
+                    <marcxchange:subfield code="x">illustrasjoner</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:contributor">
+                <meta property="dc:contributor.illustrator" id="contributor-700-1">contributor w</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a (multiple datafields)">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">contributor 1</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">contributor 2</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be multiple dc:contributors, with unique ids">
+                <dc:contributor id="contributor-700-1">1, contributor</dc:contributor>
+                <dc:contributor id="contributor-700-2">2, contributor</dc:contributor>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="b">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Pius</marcxchange:subfield>
+                    <marcxchange:subfield code="b">XII</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a suffixName property which refines the associated contributor">
+                <dc:contributor id="contributor-700-1">Pius</dc:contributor>
+                <meta property="suffixName" refines="#contributor-700-1">XII</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="c">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">David Bowie</marcxchange:subfield>
+                    <marcxchange:subfield code="c">pseudonym for David Robert Jones</marcxchange:subfield>
+                    <marcxchange:subfield code="c">Hans Majestet Kongen</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be pseudonym and title properties which refine the associated contributor">
+                <dc:contributor id="contributor-700-1">Bowie, David</dc:contributor>
+                <meta property="pseudonym" refines="#contributor-700-1">Jones, David Robert</meta>
+                <meta property="title" refines="#contributor-700-1">Hans Majestet Kongen</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="d">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Mozart</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756 f.Kr.</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756</marcxchange:subfield>
+                    <marcxchange:subfield code="d">1756-1791</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be birth and death properties which refine the associated contributor">
+                <dc:contributor id="contributor-700-1">Mozart</dc:contributor>
+                <meta property="birth" refines="#contributor-700-1">-1756</meta>
+                <meta property="birth" refines="#contributor-700-1">1756</meta>
+                <meta property="birth" refines="#contributor-700-1">1756</meta>
+                <meta property="death" refines="#contributor-700-1">1791</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="j">
+            <x:context>
+                <marcxchange:datafield tag="700" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Mozart</marcxchange:subfield>
+                    <marcxchange:subfield code="j">øst</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be a nationality property which refines the associated contributor">
+                <dc:contributor id="contributor-700-1">Mozart</dc:contributor>
+                <meta property="nationality" refines="#contributor-700-1">at</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="710">
+        <x:scenario label="1, a">
+            <x:context>
+                <marcxchange:datafield tag="710" ind1="1" ind2="0">
+                    <marcxchange:subfield code="1">641</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Kommentarer til åndsverksloven</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:subject.dewey and dc:contributor">
+                <meta property="dc:subject.dewey">641</meta>
+                <dc:contributor id="...">Kommentarer til åndsverksloven</dc:contributor>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="730">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="730" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">Fire julesanger</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:title.alternative">
+                <meta property="dc:title.alternative">Fire julesanger</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="740">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="740" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">A Song of Ice and Fire</marcxchange:subfield>
+                    <marcxchange:subfield code="b">A Game of Thrones</marcxchange:subfield>
+                    <marcxchange:subfield code="n">1</marcxchange:subfield>
+                    <marcxchange:subfield code="p">A Song of Ice and Fire: A Game of Thrones</marcxchange:subfield>
+                    <marcxchange:subfield code="w">game of thrones</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be dc:title.part, dc:title.part.subTitle, partNumber, dc:title.part.alternative and dc:title.part.sortingKey">
+                <meta property="dc:title.part" id="title-740-1">A Song of Ice and Fire</meta>
+                <meta property="dc:title.part.subTitle" refines="#title-740-1">A Game of Thrones</meta>
+                <meta property="partNumber" refines="#title-740-1">1</meta>
+                <meta property="dc:title.part.alternative" refines="#title-740-1">A Song of Ice and Fire: A Game of Thrones</meta>
+                <meta property="dc:title.part.sortingKey" refines="#title-740-1">game of thrones</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="780">
+        <x:scenario label="a">
+            <x:context>
+                <marcxchange:datafield tag="780" ind1="0" ind2="0">
+                    <marcxchange:subfield code="t">I vargens tid</marcxchange:subfield>
+                    <marcxchange:subfield code="w">621622</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Skumringens mester</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be series.preceding.title, series.preceding.uri, series.preceding.identifier and series.preceding.title.alternative properties">
+                <meta property="dc:title.series.preceding" id="...">I vargens tid</meta>
+                <meta property="dc:identifier.series.preceding.uri" refines="...">urn:NBN:no-nb_nlb_621622</meta>
+                <meta property="dc:identifier.series.preceding" refines="...">621622</meta>
+                <meta property="dc:title.series.preceding.alternative" refines="...">Skumringens mester</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="785">
+        <x:scenario label="t, w and a">
+            <x:context>
+                <marcxchange:datafield tag="785" ind1="0" ind2="0">
+                    <marcxchange:subfield code="t">I vargens tid</marcxchange:subfield>
+                    <marcxchange:subfield code="w">621622</marcxchange:subfield>
+                    <marcxchange:subfield code="a">Skumringens mester</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="the result should be series.sequel.title, series.sequel.uri, series.sequel.identifier and series.sequel.title.alternative properties">
+                <meta property="dc:title.series.sequel" id="...">I vargens tid</meta>
+                <meta property="dc:identifier.series.sequel.uri" refines="...">urn:NBN:no-nb_nlb_621622</meta>
+                <meta property="dc:identifier.series.sequel" refines="...">621622</meta>
+                <meta property="dc:title.series.sequel.alternative" refines="...">Skumringens mester</meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="850">
+        <x:scenario label="a - NLB/S">
+            <x:context>
+                <marcxchange:datafield tag="850" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">NLB/S</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="NLB/S implies a student textbook">
+                <meta property="audience">Student</meta>
+                <meta property="dc:type.genre">textbook</meta>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a - NLB/L">
+            <x:context>
+                <marcxchange:datafield tag="850" ind1="1" ind2="0">
+                    <marcxchange:subfield code="a">NLB/L</marcxchange:subfield>
+                </marcxchange:datafield>
+            </x:context>
+            <x:expect label="ignore values other than NLB/S"/>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- regression tests -->
+
+    <x:scenario label="dc:type.genre.no should not be removed when sorting elements">
+        <x:context>
+            <marcxchange:record format="normarc" type="Bibliographic" xmlns:marcxchange="info:lc/xmlns/marcxchange-v1">
+                <marcxchange:datafield tag="655" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Kjærlighet</marcxchange:subfield>
+                </marcxchange:datafield>
+                <marcxchange:datafield tag="655" ind1=" " ind2=" ">
+                    <marcxchange:subfield code="a">Samfunn</marcxchange:subfield>
+                </marcxchange:datafield>
+            </marcxchange:record>
+        </x:context>
+        <x:expect label="dc:type.genre.no should be present">
+            <metadata>
+                <meta property="dc:type.genre" id="...">Kjærlighet</meta>
+                <meta property="dc:type.genre.no" refines="...">Kjærlighet</meta>
+                <meta property="dc:type.genre" id="...">Samfunn</meta>
+                <meta property="dc:type.genre.no" refines="...">Samfunn</meta>
+            </metadata>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

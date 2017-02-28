@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               stylesheet="../../main/resources/xml/epub-to-nlbpub.xsl">
+    
+    <x:scenario label="Simple test">
+        <x:context>
+            <c:wrapper>
+                <d:fileset xml:base="file:/tmp/epub/">
+                    <d:file href="META-INF/container.xml" media-type="application/xml"/>
+                    <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                    <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+                    <d:file href="EPUB/content-1.xhtml" media-type="application/xhtml+xml"/>
+                    <d:file href="EPUB/content-2.xhtml" media-type="application/xhtml+xml"/>
+                    <d:file href="EPUB/image.jpg" media-type="image/jpeg"/>
+                </d:fileset>
+                <container xml:base="file:/tmp/epub/META-INF/container.xml" xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+                    <rootfiles>
+                        <rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                    </rootfiles>
+                </container>
+                <package xml:base="file:/tmp/epub/EPUB/package.opf" xmlns="http://www.idpf.org/2007/opf" version="3.0">
+                    <metadata/>
+                    <manifest>
+                        <item id="item_1" media-type="image/jpeg" href="images/valentin.jpg"/>
+                        <item id="item_2" media-type="application/xhtml+xml" href="content-1.xhtml"/>
+                        <item id="item_3" media-type="application/xhtml+xml" href="content-2.xhtml"/>
+                        <item id="item_4" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+                    </manifest>
+                    <spine>
+                        <itemref id="itemref_1" idref="item_2" linear="no"/>
+                        <itemref id="itemref_2" idref="item_3"/>
+                    </spine>
+                </package>
+                <html xml:base="file:/tmp/epub/EPUB/nav.xhtml" xmlns="http://www.w3.org/1999/xhtml">
+                    <head/>
+                    <body>
+                        <h1>Navigation Document</h1>
+                    </body>
+                </html>
+                <html xml:base="file:/tmp/epub/EPUB/content-1.xhtml" xmlns="http://www.w3.org/1999/xhtml">
+                    <head/>
+                    <body>
+                        <h1>Headline 1</h1>
+                        <p>Paragraph 1</p>
+                        <img src="image.jpg"/>
+                    </body>
+                </html>
+                <html xml:base="file:/tmp/epub/EPUB/content-2.xhtml" xmlns="http://www.w3.org/1999/xhtml">
+                    <head/>
+                    <body>
+                        <h1>Headline 2</h1>
+                        <p>Paragraph 2</p>
+                    </body>
+                </html>
+            </c:wrapper>
+        </x:context>
+
+        <x:expect label="result">
+            <wrapper>
+                <d:fileset xml:base="file:/tmp/epub/">
+                    <d:file href="META-INF/container.xml" media-type="application/xml"/>
+                    <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                    <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+                    <d:file href="EPUB/content-1.xhtml" media-type="application/xhtml+xml"/>
+                    <d:file href="EPUB/content-2.xhtml" media-type="application/xhtml+xml"/>
+                    <d:file href="EPUB/image.jpg" media-type="image/jpeg"/>
+                </d:fileset>
+                <container xml:base="file:/tmp/epub/META-INF/container.xml" xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+                    <rootfiles>
+                        <rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                    </rootfiles>
+                </container>
+                <package xml:base="file:/tmp/epub/EPUB/package.opf" xmlns="http://www.idpf.org/2007/opf" version="3.0">
+                    <metadata/>
+                    <manifest>
+                        <item id="item_1" media-type="image/jpeg" href="images/valentin.jpg"/>
+                        <item id="item_2" media-type="application/xhtml+xml" href="content-1.xhtml"/>
+                        <item id="item_3" media-type="application/xhtml+xml" href="content-2.xhtml"/>
+                        <item id="item_4" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+                    </manifest>
+                    <spine>
+                        <itemref id="itemref_1" idref="item_2" linear="no"/>
+                        <itemref id="itemref_2" idref="item_3"/>
+                    </spine>
+                </package>
+                <html xml:base="file:/tmp/epub/EPUB/nav.xhtml" xmlns="http://www.w3.org/1999/xhtml">
+                    <head/>
+                    <body>
+                        <h1>Navigation Document</h1>
+                    </body>
+                </html>
+                <html xml:base="file:/tmp/epub/EPUB/content-1.xhtml" xmlns="http://www.w3.org/1999/xhtml">
+                    <head/>
+                    <body>
+                        <h1>Headline 1</h1>
+                        <p>Paragraph 1</p>
+                        <img src="image.jpg"/>
+                    </body>
+                </html>
+                <html xml:base="file:/tmp/epub/EPUB/content-2.xhtml" xmlns="http://www.w3.org/1999/xhtml">
+                    <head/>
+                    <body>
+                        <h1>Headline 2</h1>
+                        <p>Paragraph 2</p>
+                    </body>
+                </html>
+            </wrapper>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/dtbook-nlb-language-split.xsl" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <x:param name="split-student" select="'false'"/>
+    <x:param name="split-type" select="'outer-other'"/>
+
+    <x:scenario label="split-type: outer-other #1">
+        <x:context>
+            <dtbook>
+                <bodymatter>
+                    <level1 id="something-else-1"/>
+                    <level1 id="audio">
+                        <h1>Nye lydbøker</h1>
+                        <level2 id="audio-adult-fiction">
+                            <h2>Skjønnlitteratur for voksne</h2>
+                            <level3 id="b_625770" lang="eng" langName="Engelsk">
+                                <h3>Whispers Under Ground</h3>
+                            </level3>
+                            <level3 id="b_625816" lang="nob" langName="Bokmål">
+                                <h3>Tidens larm</h3>
+                            </level3>
+                            <level3 id="b_625751" lang="nob" langName="Bokmål">
+                                <h3>Versjoner av oss</h3>
+                            </level3>
+                        </level2>
+                    </level1>
+                    <level1 id="braille">
+                        <h1>Nye punktskriftbøker</h1>
+                        <level2 id="braille-adult-fiction">
+                            <h2>Skjønnlitteratur for voksne</h2>
+                            <level3 id="b_625770" lang="eng" langName="Engelsk">
+                                <h3>Whispers Under Ground</h3>
+                            </level3>
+                            <level3 id="b_625816" lang="nob" langName="Bokmål">
+                                <h3>Tidens larm</h3>
+                            </level3>
+                            <level3 id="b_625751" lang="nob" langName="Bokmål">
+                                <h3>Versjoner av oss</h3>
+                            </level3>
+                        </level2>
+                    </level1>
+                    <level1 id="something-else-2"/>
+                    <level1 id="student-audio">
+                        <h1>Ny studielitteratur</h1>
+                        <level2 id="b_625770" lang="eng" langName="Engelsk">
+                            <h2>Whispers Under Ground</h2>
+                        </level2>
+                        <level2 id="b_625816" lang="nob" langName="Bokmål">
+                            <h2>Tidens larm</h2>
+                        </level2>
+                        <level2 id="b_625751" lang="nob" langName="Bokmål">
+                            <h2>Versjoner av oss</h2>
+                        </level2>
+                    </level1>
+                    <level1 id="something-else-3"/>
+                </bodymatter>
+            </dtbook>
+        </x:context>
+
+        <x:expect label="Append language group name to headline, split into two sections, place norwegian first, remove language attributes">
+            <dtbook>
+                <bodymatter>
+                    <level1 id="something-else-1"/>
+                    <level1 id="audio">
+                        <h1>Nye lydbøker</h1>
+                        <level2 id="audio-adult-fiction">
+                            <h2>Skjønnlitteratur for voksne</h2>
+                            <level3 id="b_625816">
+                                <h3>Tidens larm</h3>
+                            </level3>
+                            <level3 id="b_625751">
+                                <h3>Versjoner av oss</h3>
+                            </level3>
+                        </level2>
+                    </level1>
+                    <level1 id="braille">
+                        <h1>Nye punktskriftbøker</h1>
+                        <level2 id="braille-adult-fiction">
+                            <h2>Skjønnlitteratur for voksne</h2>
+                            <level3 id="b_625816">
+                                <h3>Tidens larm</h3>
+                            </level3>
+                            <level3 id="b_625751">
+                                <h3>Versjoner av oss</h3>
+                            </level3>
+                        </level2>
+                    </level1>
+                    <level1 id="something-else-2"/>
+                    <level1 id="student-audio">
+                        <h1>Ny studielitteratur</h1>
+                        <level2 id="b_625770">
+                            <h2>Whispers Under Ground</h2>
+                        </level2>
+                        <level2 id="b_625816">
+                            <h2>Tidens larm</h2>
+                        </level2>
+                        <level2 id="b_625751">
+                            <h2>Versjoner av oss</h2>
+                        </level2>
+                    </level1>
+                    <level1 id="audio-other">
+                        <h1>Nye lydbøker på andre språk</h1>
+                        <level2 id="audio-adult-fiction-other">
+                            <h2>Skjønnlitteratur for voksne på andre språk</h2>
+                            <level3 id="b_625770">
+                                <h3>Whispers Under Ground</h3>
+                            </level3>
+                        </level2>
+                    </level1>
+                    <level1 id="braille-other">
+                        <h1>Nye punktskriftbøker på andre språk</h1>
+                        <level2 id="braille-adult-fiction-other">
+                            <h2>Skjønnlitteratur for voksne på andre språk</h2>
+                            <level3 id="b_625770">
+                                <h3>Whispers Under Ground</h3>
+                            </level3>
+                        </level2>
+                    </level1>
+                    <level1 id="something-else-3"/>
+                </bodymatter>
+            </dtbook>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

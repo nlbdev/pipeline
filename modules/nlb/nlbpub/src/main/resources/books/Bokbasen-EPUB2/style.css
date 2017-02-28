@@ -1,0 +1,385 @@
+/* CSS for 'Egeland - Nostradamus testamente' */
+
+@font-face {
+  font-family: Caslon;
+  font-weight: normal;
+  font-style: normal;
+  src: url(fonts/OpenDyslexic-Regular.otf);
+}
+
+@font-face {
+  font-family: Caslon;
+  font-weight: normal;
+  font-style: italic;
+  src: url(fonts/OpenDyslexic-Italic.otf);
+}
+
+@font-face {
+  font-family: Caslon;
+  font-weight: bold;
+  font-style: normal;
+  src: url(fonts/OpenDyslexic-Regular.otf);
+}
+
+@font-face {
+  font-family: Caslon;
+  font-weight: bold;
+  font-style: italic;
+  src: url(fonts/OpenDyslexic-Italic.otf);
+}
+
+@font-face {
+  font-family: DejaVuSans;
+  font-weight: normal;
+  font-style: normal;
+  src: url(fonts/OpenDyslexic-Regular.otf);
+}
+
+@font-face {
+  font-family: DejaVuSans;
+  font-weight: bold;
+  font-style: normal;
+  src: url(fonts/OpenDyslexic-Bold.otf);
+}
+
+@font-face {
+  font-family: DejaVuSerif;
+  font-weight: normal;
+  font-style: normal;
+  src: url(fonts/OpenDyslexic-Regular.otf);
+}
+
+@font-face {
+  font-family: DejaVuSerif;
+  font-weight: normal;
+  font-style: italic;
+  src: url(fonts/OpenDyslexic-Italic.otf);
+}
+
+@font-face {
+  font-family: DejaVuSerif;
+  font-weight: bold;
+  font-style: normal;
+  src: url(fonts/OpenDyslexic-Bold.otf);
+}
+
+@font-face {
+  font-family: DejaVuSerif;
+  font-weight: bold;
+  font-style: italic;
+  src: url(fonts/OpenDyslexic-BoldItalic.otf);
+}
+
+/** Generelle tags **/
+@page {
+  margin-top: 8pt;
+  margin-bottom: 8pt;
+}
+body {
+  font-family: "DejaVuSerif", "DejaVuSans", serif;
+  font-size: 1em;
+  line-height: 1.32em;
+  margin-left: 14pt;
+  margin-right: 14pt;
+}
+p {
+  margin-bottom: 0;
+  margin-top: 0;
+  text-indent: 0; 
+  widows: 2;
+  orphans: 2;
+}
+table {
+  margin: 1em 0 1em 0;
+  page-break-inside: avoid;
+}
+td {
+  padding: 2px 4px 2px 4px;
+  vertical-align: top;
+}
+
+h1 {font-weight: normal; margin:0; padding:0;}
+h2 {font-weight: normal; margin:0; padding:0;}
+h3 {font-weight: normal; margin:0; padding:0;}
+h4 {font-weight: normal; margin:0; padding:0;}
+h5 {font-weight: normal; margin:0; padding:0;}
+
+.smallcaps {font-variant: small-caps;}
+.underline {text-decoration: underline;}
+.linethrough {text-decoration: line-through;}
+.center {text-align: center; text-indent: 0;}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {padding-top: 40pt}
+/*h2 {padding-top: 1em}*/
+h3 {padding-top: 2em}
+/*h1.pagebreak {page-break-before: always; padding-top: 40pt}*/
+h1.pagebreak {padding-top: 40pt}
+h2.pagebreak {padding-top: 40pt}
+h3.pagebreak {padding-top: 40pt}
+p.pagebreak {padding-top: 40pt}
+
+p.noindents {text-indent: 0}
+ol.noindents {text-indent: 0}
+ul.noindents {text-indent: 0}
+
+table.indentoff {text-indent: 0}
+p.indentoff {text-indent: 0}
+ol.indentoff {text-indent: 0}
+ul.indentoff {text-indent: 0}
+
+p.extraspace {padding-top: 35pt}
+p.kile {padding-top: 35pt}
+
+p.rcentre {text-align: center; text-indent: 0}
+p.jcentre {text-align: center; text-indent: 0}
+p.jright {text-align: right; text-indent: 0}
+p.rright {text-align: right; text-indent: 0}
+p.jleft {text-align: left; text-indent: 0}
+p.rleft {text-align: left; text-indent: 0}
+
+p.Vspace {padding-top: 1em}
+p.Hspace {text-indent: 1em}
+p.indent1 {text-indent: 1em}
+p.pause {padding-top: 1em; padding-bottom: 1em; text-align: center}
+p.Hang {margin-left:1em; text-indent:-1em;}
+
+.bl {padding-top:1em}
+/*.blny {padding-top:1em}*/
+
+.forlag {text-align: center}
+
+.dropcap {
+	float: left;
+	font-size: 3em;
+	line-height: 0.9;
+	/**font-weight: bold;**/
+	margin-right: 0.2em;
+	margin-bottom: -0.2em;
+}
+
+ul {margin-top: 0; margin-bottom: 0}
+ol {margin-top: 0; margin-bottom: 0}
+li {list-style-position: outside}
+.list-none {list-style-type: none;}
+.list-disc {list-style-type: disc;}
+.list-decimal {list-style-type: decimal;}
+.list-lower-alpha {list-style-type: lower-alpha;}
+.list-upper-alpha {list-style-type: upper-alpha;}
+.list-lower-roman {list-style-type: lower-roman;}
+.list-upper-roman {list-style-type: upper-roman;}
+
+.image {
+  padding-top:1em; 
+  padding-bottom:1em;    
+  page-break-inside: avoid;
+}
+.imgcenter {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.imagecaption {
+  font-size: 0.8em;
+  line-height: 1.2em;
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+table.rulers {
+	border-width: thin;
+	border-style: solid;
+	border-color: black;
+	border-collapse: collapse;
+}
+table.rulers th {
+	border-width: thin;
+	border-style: solid;
+	border-color: black;
+}
+table.rulers td {
+	border-width: thin;
+	border-style: solid;
+	border-color: black;
+}
+
+.framed {
+	border-width: thin;
+	border-style: solid;
+	border-color: black;
+	padding:1em;
+}
+
+div.keep {
+  page-break-inside: avoid;
+} 
+p.keep {
+  page-break-inside: avoid;
+}
+
+a {
+  color: #0000EE;
+}
+
+
+/** Egne tags for 'TEST_Egeland_Nostradamus_testamente' **/
+.Gud {font-size: 0.95em; text-align: center; text-indent: 0; text-indent: 0;}
+.Guddel {font-size: 3.67em; line-height: 1.06em; text-align: center; text-indent: 0; text-indent: 0;}
+.Kode {font-family: "Caslon", fantasy; font-size: 1.00em; text-align: center; }
+.STRIKE {text-decoration: line-through;}
+.dedik {font-size: 0.92em; text-align: center; text-indent: 0;}
+.dedikasjon {font-size: 0.86em; text-align: center; text-indent: 0;}
+.deltekst {font-size: 0.86em; text-align: center; text-indent: 0; text-indent: 0;}
+.dikt {font-size: 1.00em; text-align: center; text-indent: 0; text-indent: 0.00em;}
+.dropcap {font-family: "Caslon", fantasy;}
+.forlag {font-size: 1.00em; text-align: center; text-indent: 0; text-indent: 0;}
+.gud2 {font-size: 2.24em; text-align: center; text-indent: 0; text-indent: 0.00em; }
+.gud3 {font-size: 1.00em; text-align: right; text-indent: 0.00em; }
+.gudded {font-size: 0.87em; text-align: center; text-indent: 0;}
+.gudtekst {font-size: 0.95em; text-align: left; text-indent: 1.00em;}
+.kap0 {font-family: "Caslon", fantasy; font-size: 1.7em; text-align: center; text-indent: 0; text-indent: 0;}
+.kap1 {font-family: "DejaVuSans", sans-serif; font-size: 0.95em; text-align: center; text-indent: 0; text-indent: 0; border-bottom: solid thin; }
+.kap2 {font-size: 2.67em; text-align: center; text-indent: 0; text-indent: 0; font-family: "Caslon", fantasy; padding-top:0.5em; line-height: 1em;}
+.kap3 {font-size: 1.00em; font-style: italic; text-align: center; text-indent: 0; text-indent: 0; padding-top: 5em; page-break-after: avoid;}
+.kap4 {font-size: 1.00em; text-align: center; text-indent: 0; margin-top: 1em; page-break-after: avoid;}
+.kapgud {font-size: 2.67em; text-align: center; text-indent: 0; text-indent: 0;}
+.kapmellom {font-size: 1.14em; text-align: center; text-indent: 0; text-indent: 0;}
+.mail {font-size: 0.76em; text-align: left; text-indent: 0.00em;line-height: 1.3em}
+.mail2 {font-family: "DejaVuSans", sans-serif; font-size: 0.6em; line-height: 1.3em; text-align: left; text-indent: 0.00em;}
+.mailsit {font-size: 0.67em; line-height: 1.4em; text-align: left; text-indent: 0.00em; margin-left: 1.00em;}
+.mellomspill {font-size: 2.75em; line-height: 1.07em; text-align: center; text-indent: 0; text-indent: 0;}
+.pause1 {text-align: left; text-indent: 1.00em;}
+.personer {font-size: 0.85em; text-align: left; text-indent: 0.00em;}
+.sitatx {font-size: 0.90em; text-align: left; text-indent: 0.00em; margin-left: 1.00em;}
+.skrive {font-family: monospace ; font-size: 0.90em; line-height: 1.35em; text-align: left; text-indent: 1.00em;}
+.tabell {font-size: 0.67em;}
+.tekst {font-size: 1.00em; text-align: left; text-indent: 1.00em;}
+
+.tekst-ekstra-keyword {font-size: 1.00em; text-align: left; text-indent: 0; page-break-after: avoid;}
+.tekst-ekstra {font-size: 1.00em; text-align: left; text-indent: 0; padding-bottom: 1em;}
+
+.size7 {font-size: 0.7em; line-height: 1.1em}
+.size8 {font-size: 0.8em; line-height: 1.1em}
+.size13 {font-size: 1.3em}
+.size17 {font-size: 1.7em}
+
+.mail td {
+  padding: 0 2em 0 0;
+}
+
+a.ekstranoter {
+  text-decoration: none; 
+  color: black !important;
+}
+a.enoteref {
+}
+
+.Caslon {
+  font-family: "Caslon", "DejaVuSans", fantasy;
+}
+.diktCaslon {
+  font-family: "Caslon", "DejaVuSans", fantasy;
+  text-align: center;
+  padding-top:1em;
+}
+.Del {  
+  font-family: "Caslon", fantasy;
+  font-size: 3.67em; 
+  line-height: 1.06em; 
+  text-align: center; 
+  text-indent: 0; 
+  text-indent: 0;
+}
+
+hr {
+  width: 50%;
+  margin-left: 25%;
+  background-color: black;
+  color: black;
+  height: 1px;
+  border: 0 none;
+  margin-top: 1.2em;
+  text-align: center;
+}
+
+h3.notes {
+  margin-top: 1em; 
+  margin-bottom: 1em; 
+  padding-top: 0.5em; 
+  /*border-top: solid thin; */
+  /*width: 10em;*/
+}
+
+dl {
+  font-family: "DejaVuSans", sans-serif;
+  font-size: 0.8em; 
+  line-height: 1.2em; 
+}
+
+div.note {
+  font-family: "DejaVuSans", sans-serif;
+  font-size: 1em; 
+  line-height: 1.2em; 
+  page-break-inside: avoid;
+}
+p.note-item {
+  float:left;
+}
+p.note-descr {
+  margin-left: 3em;
+  margin-bottom: 1em;
+}
+
+.mail2 td {
+  padding-right: 2em;  
+}
+
+.vigenerekvadrat {
+  font-size: 0.65em;
+  line-height: 1.2em;
+}
+.vigenerekvadrat td {
+  text-align: center;
+  padding: 1px;
+}
+table.vigenerekvadrat {
+  border-collapse: collapse;
+}
+tr.vigeneretop td { 
+  border-bottom: thin solid black; 
+}
+
+
+table.keyword td {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+table.nopadding td {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+table.morecolumnspace td {
+  padding-right: 2em;
+}
+.newpage {
+  page-break-before: always;
+}
+
+p.toc {
+  margin-left: 2em;
+}
+p.toc-sub {
+  margin-left: 3em;
+}
+
+
+/** Aschehoug tittelsider **/
+/*.elogo {margin-top: -40pt}*/
+.eforfatter {font-family:"Caslon", "Times New Roman",serif; font-size:2.5em; padding-top:0.4em; line-height: 1em}
+.etittel {font-family: "Caslon", "Times New Roman",serif; font-size:2.5em; padding-top:0.5em; line-height: 1em}
+.eutittel {font-family: "Times New Roman",serif; font-size:1.12em; padding-top:0.9em; line-height: 1.2em}
+.eoversatt {font-family: "Caslon", "Times New Roman",serif; font-size: 1.00em; padding-top:0.9em; line-height: 1.2em}
+.ekolofon {font-family: "Times New Roman",serif; font-size: 0.73em; text-align: center; text-indent: 0; line-height: 1.4em}

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    <head>
+        <meta name="dtb:uid" content="123456"/>
+        <meta name="dc:Title" content="Testbok"/>
+        <meta name="dc:Creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+        <meta name="dc:Date" content="2016-03-01"/>
+        <meta name="dc:Publisher" content="NLB"/>
+        <meta name="dc:Language" content="no"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Testbok</doctitle>
+            <docauthor>Norsk lyd- og blindeskriftbibliotek</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <pagenum id="page-1" page="normal">1</pagenum>
+                <h1>Testbok</h1>
+                <poem>
+                    <linegroup>
+                        <line>Liten?</line>
+                        <line>Jeg?</line>
+                        <line>Langtifra.</line>
+                        <line>Jeg er akkurat stor nok.</line>
+                        <line>Fyller meg selv helt</line>
+                        <line>på langs og på tvers</line>
+                        <line>fra øverst til nederst.</line>
+                        <line>Er du større enn deg selv kanskje?</line>
+                    </linegroup>
+                </poem>
+            </level1>
+            <level1>
+                <pagenum id="page-2" page="normal">2</pagenum>
+                <h1>NLB - Norsk lyd- og blindeskriftbibliotek</h1>
+                <p>NLB er et bibliotek som produserer og låner ut lydbøker og punktskriftbøker til blinde, svaksynte og andre som har vansker med å lese trykt tekst. Mange av NLBs lånere har dysleksi
+                    eller andre lese- og skrivevansker. Biblioteket er for lånere fra hele landet.</p>
+                <p>Det er gratis å låne bøker fra NLB.</p>
+                <p>Våre avdelinger er:</p>
+                <list type="ul">
+                    <li>Administrasjonsavdelingen</li>
+                    <li>Utlåns-/formidlingsavdelingen</li>
+                    <li>Informasjonsavdelingen</li>
+                    <li>Innlesingsavdelingen</li>
+                    <li>Utviklingsavdelingen</li>
+                </list>
+                <table>
+                    <caption>Åpningstider</caption>
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <th scope="col">September - April</th>
+                            <th scope="col">Mai - August</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Vi har utvidete åpningstider i sommersesongen grunnet mange turister.</td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Mandag</th>
+                            <td>10-17</td>
+                            <td>09-19</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Tirsdag</th>
+                            <td>10-17</td>
+                            <td>09-19</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Onsdag</th>
+                            <td>12-17</td>
+                            <td>09-19</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Torsdag</th>
+                            <td>12-19</td>
+                            <td>09-19</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Fredag</th>
+                            <td>10-19</td>
+                            <td>09-20</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Lørdag</th>
+                            <td>10-15</td>
+                            <td>10-20</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Søndag</th>
+                            <td>Stengt</td>
+                            <td>10-16</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/">
+  <head>
+    <meta name="dtb:uid" content="000-00-00-00000-0"/>
+    <meta name="dtb:depth" content="2"/>
+    <meta name="dtb:totalPageCount" content="0"/>
+    <meta name="dtb:maxPageNumber" content="0"/>
+  </head>
+  <docTitle>
+    <text>Eksempelbok basert på Bokbasens bøker</text>
+  </docTitle>  
+
+  <navMap>
+    <navPoint id="cover" playOrder="1">
+      <navLabel>
+        <text>Qkyzdtb</text>
+      </navLabel>
+      <content src="coverpage.xhtml"/>
+    </navPoint>
+
+     <navPoint id="c162" playOrder="2">
+      <navLabel>
+        <text>Hf dnkfax gfe rehsripaqnw</text>
+      </navLabel>
+      <content src="chapter91.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c162b" playOrder="3">
+      <navLabel>
+        <text>Cqhjjii</text>
+      </navLabel>
+      <content src="toc.xhtml"/>
+    </navPoint>
+    
+
+    <navPoint id="c4" playOrder="4">
+      <navLabel>
+        <text>Bfsbqf</text>
+      </navLabel>
+      <content src="chapter02.xhtml"/>
+    <navPoint id="c5" playOrder="5">
+      <navLabel>
+        <text>1549</text>
+      </navLabel>
+      <content src="chapter03.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c6" playOrder="6">
+      <navLabel>
+        <text>1995</text>
+      </navLabel>
+      <content src="chapter04.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c7" playOrder="7">
+      <navLabel>
+        <text>2012</text>
+      </navLabel>
+      <content src="chapter05.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c9" playOrder="8">
+        <navLabel>
+          <text>Ymhl zztqzlrd abahyrfax</text>
+        </navLabel>
+        <content src="chapter06.xhtml"/>
+      </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c11" playOrder="9">
+      <navLabel>
+        <text>Z</text>
+      </navLabel>
+      <content src="chapter07.xhtml"/>
+    <navPoint id="c13" playOrder="10">
+      <navLabel>
+        <text>KMFXANZB 1</text>
+      </navLabel>
+      <content src="chapter08.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c15" playOrder="11">
+      <navLabel>
+        <text>NLVLJSMG 2</text>
+      </navLabel>
+      <content src="chapter09.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c17" playOrder="12">
+      <navLabel>
+        <text>COEVLKCB 3</text>
+      </navLabel>
+      <content src="chapter10.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c19" playOrder="13">
+      <navLabel>
+        <text>Xsetnxuc ueuxksad (W)</text>
+      </navLabel>
+      <content src="chapter11.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c22" playOrder="14">
+      <navLabel>
+        <text>PY</text>
+      </navLabel>
+      <content src="chapter12.xhtml"/>
+    <navPoint id="c24" playOrder="15">
+      <navLabel>
+        <text>JIAFBRDV 4</text>
+      </navLabel>
+      <content src="chapter13.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c26" playOrder="16">
+      <navLabel>
+        <text>KOEKRLOS 5</text>
+      </navLabel>
+      <content src="chapter14.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c27" playOrder="17">
+      <navLabel>
+        <text>Yewanlae cjfjiixa (OO)</text>
+      </navLabel>
+      <content src="chapter15.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c30" playOrder="18">
+      <navLabel>
+        <text>BMB</text>
+      </navLabel>
+      <content src="chapter16.xhtml"/>
+    <navPoint id="c32" playOrder="19">
+      <navLabel>
+        <text>JURUNOIH 6</text>
+      </navLabel>
+      <content src="chapter17.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c34" playOrder="20">
+      <navLabel>
+        <text>RMDXMEEV 7</text>
+      </navLabel>
+      <content src="chapter18.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c36" playOrder="21">
+      <navLabel>
+        <text>LRRFMFXG 8</text>
+      </navLabel>
+      <content src="chapter19.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c38" playOrder="22">
+      <navLabel>
+        <text>VRBMPQXG 9</text>
+      </navLabel>
+      <content src="chapter20.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c40" playOrder="23">
+      <navLabel>
+        <text>Ekvocdct jhrwgbue (VXN)</text>
+      </navLabel>
+      <content src="chapter21.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c43" playOrder="24">
+      <navLabel>
+        <text>TK</text>
+      </navLabel>
+      <content src="chapter22.xhtml"/>
+    <navPoint id="c45" playOrder="25">
+      <navLabel>
+        <text>AEJKWGDB 10</text>
+      </navLabel>
+      <content src="chapter23.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c47" playOrder="26">
+      <navLabel>
+        <text>VUAAJTFE 11</text>
+      </navLabel>
+      <content src="chapter24.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c48" playOrder="27">
+      <navLabel>
+        <text>VGWXRDVT 12</text>
+      </navLabel>
+      <content src="chapter25.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c50" playOrder="28">
+      <navLabel>
+        <text>Tsntiruz sothfvln (DN)</text>
+      </navLabel>
+      <content src="chapter26.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c53" playOrder="29">
+      <navLabel>
+        <text>L</text>
+      </navLabel>
+      <content src="chapter27.xhtml"/>
+    <navPoint id="c55" playOrder="30">
+      <navLabel>
+        <text>ZLHGXLBI 13</text>
+      </navLabel>
+      <content src="chapter28.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c56" playOrder="31">
+      <navLabel>
+        <text>KLYPDXWX 14</text>
+      </navLabel>
+      <content src="chapter29.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c57" playOrder="32">
+      <navLabel>
+        <text>NQBEOFCF 15</text>
+      </navLabel>
+      <content src="chapter30.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c59" playOrder="33">
+      <navLabel>
+        <text>GLEBDDJT 16</text>
+      </navLabel>
+      <content src="chapter31.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c67" playOrder="34">
+      <navLabel>
+        <text>OHTHEZJS 17</text>
+      </navLabel>
+      <content src="chapter36.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c69" playOrder="35">
+      <navLabel>
+        <text>HWLEQKVI 18</text>
+      </navLabel>
+      <content src="chapter37.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c70" playOrder="36">
+      <navLabel>
+        <text>IZXCNJNH 19</text>
+      </navLabel>
+      <content src="chapter38.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c72" playOrder="37">
+      <navLabel>
+        <text>YTMHBCKI 20</text>
+      </navLabel>
+      <content src="chapter39.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c73" playOrder="38">
+      <navLabel>
+        <text>MQSYFWSA 21</text>
+      </navLabel>
+      <content src="chapter40.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c75" playOrder="39">
+      <navLabel>
+        <text>YENHOAHJ 22</text>
+      </navLabel>
+      <content src="chapter41.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c77" playOrder="40">
+      <navLabel>
+        <text>Tvmqxogy dkilkdwk (I)</text>
+      </navLabel>
+      <content src="chapter42.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c81" playOrder="41">
+        <navLabel>
+          <text>Pohomn zå Opm</text>
+        </navLabel>
+        <content src="chapter44.xhtml"/>
+      </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c85" playOrder="42">
+      <navLabel>
+        <text>MC</text>
+      </navLabel>
+      <content src="chapter45.xhtml"/>
+    <navPoint id="c87" playOrder="43">
+      <navLabel>
+        <text>RDQBMVTU 23</text>
+      </navLabel>
+      <content src="chapter46.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c88" playOrder="44">
+      <navLabel>
+        <text>FXBKATJG 24</text>
+      </navLabel>
+      <content src="chapter47.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c90" playOrder="45">
+      <navLabel>
+        <text>Inrydpeg duemfbyo (WG)</text>
+      </navLabel>
+      <content src="chapter48.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c93" playOrder="46">
+      <navLabel>
+        <text>YGV</text>
+      </navLabel>
+      <content src="chapter49.xhtml"/>
+    <navPoint id="c95" playOrder="47">
+      <navLabel>
+        <text>CLFYZPRL 25</text>
+      </navLabel>
+      <content src="chapter50.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c97" playOrder="48">
+      <navLabel>
+        <text>HACLPORX JLCZUZPR – VHZDGCPBVHA (PTR)</text>
+      </navLabel>
+      <content src="chapter51.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c98" playOrder="49">
+      <navLabel>
+        <text>QNQQJMLD 26</text>
+      </navLabel>
+      <content src="chapter52.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c100" playOrder="50">
+      <navLabel>
+        <text>Zidmnldxymrprh utndrzkup ettfxhve</text>
+      </navLabel>
+      <content src="chapter53.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c104" playOrder="51">
+      <navLabel>
+        <text>Gkxpdkudiv yubjcroly fmdrdhed</text>
+      </navLabel>
+      <content src="chapter56.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c109" playOrder="52">
+      <navLabel>
+        <text>Elclxnprbpd’ yjcvmrghc sqdcfwtr</text>
+      </navLabel>
+      <content src="chapter59.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c118" playOrder="53">
+      <navLabel>
+        <text>GRCQ</text>
+      </navLabel>
+      <content src="chapter65.xhtml"/>
+    <navPoint id="c120" playOrder="54">
+      <navLabel>
+        <text>RRFLMDWZ 27</text>
+      </navLabel>
+      <content src="chapter66.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c121" playOrder="55">
+      <navLabel>
+        <text>NXGOIXMR MHUZKEGW – WDCATOKMGRA (XQNR)</text>
+      </navLabel>
+      <content src="chapter67.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c123" playOrder="56">
+      <navLabel>
+        <text>UJIYJTLR 28</text>
+      </navLabel>
+      <content src="chapter68.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c124" playOrder="57">
+      <navLabel>
+        <text>BNVXPGIB HQSDWSGK – ZOMOSDJLRBJ (ZS)</text>
+      </navLabel>
+      <content src="chapter69.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c126" playOrder="58">
+      <navLabel>
+        <text>RZXZGNNB 29</text>
+      </navLabel>
+      <content src="chapter70.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c128" playOrder="59">
+      <navLabel>
+        <text>XKJQAICF TUYOIRTA – HZALERYMBJE (S)</text>
+      </navLabel>
+      <content src="chapter71.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c130" playOrder="60">
+      <navLabel>
+        <text>IMLBYIWC 30</text>
+      </navLabel>
+      <content src="chapter72.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c132" playOrder="61">
+      <navLabel>
+        <text>SKMTZASW PARPQSRD – RKPARBTSUJY (SR)</text>
+      </navLabel>
+      <content src="chapter73.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c133" playOrder="62">
+      <navLabel>
+        <text>DSQCGYDP 31</text>
+      </navLabel>
+      <content src="chapter74.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c134" playOrder="63">
+      <navLabel>
+        <text>VUIFNGTA WYTLWOPC – IOHXHMHIABG (UAV)</text>
+      </navLabel>
+      <content src="chapter75.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c135" playOrder="64">
+      <navLabel>
+        <text>LIJOXLQA 32</text>
+      </navLabel>
+      <content src="chapter76.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c136" playOrder="65">
+      <navLabel>
+        <text>FV</text>
+      </navLabel>
+      <content src="chapter77.xhtml"/>
+    <navPoint id="c138" playOrder="66">
+      <navLabel>
+        <text>PMVBCFAA 33</text>
+      </navLabel>
+      <content src="chapter78.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c140" playOrder="67">
+      <navLabel>
+        <text>BJOSMSIG MIINJIVS – DRCAUFOKHGU (UHWG)</text>
+      </navLabel>
+      <content src="chapter79.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c141" playOrder="68">
+      <navLabel>
+        <text>UNWKJOPD 34</text>
+      </navLabel>
+      <content src="chapter80.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c143" playOrder="69">
+      <navLabel>
+        <text>TSIJLWTK 35</text>
+      </navLabel>
+      <content src="chapter81.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c145" playOrder="70">
+      <navLabel>
+        <text>WRKAGEFL WBTYYUES – GJAXISALVER (WIJ)</text>
+      </navLabel>
+      <content src="chapter82.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c147" playOrder="71">
+      <navLabel>
+        <text>ASJYHERR 36</text>
+      </navLabel>
+      <content src="chapter83.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c149" playOrder="72">
+      <navLabel>
+        <text>DUDMTHGT 37</text>
+      </navLabel>
+      <content src="chapter84.xhtml"/>
+    </navPoint>
+
+    </navPoint>
+
+    <navPoint id="c151" playOrder="73">
+      <navLabel>
+        <text>Wnsdcz</text>
+      </navLabel>
+      <content src="chapter85.xhtml"/>
+
+    <navPoint id="c154" playOrder="74">
+      <navLabel>
+        <text>Arncg</text>
+      </navLabel>
+      <content src="chapter87.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c156" playOrder="75">
+      <navLabel>
+        <text>Pvmlpoumqvvof</text>
+      </navLabel>
+      <content src="chapter88.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c158" playOrder="76">
+      <navLabel>
+        <text>Njbu</text>
+      </navLabel>
+      <content src="chapter89.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c160" playOrder="77">
+        <navLabel>
+          <text>Gzwa naltffp bcmbetnfg</text>
+        </navLabel>
+        <content src="chapter90.xhtml"/>
+      </navPoint>
+    </navPoint>
+    
+    <navPoint id="c164" playOrder="78">
+      <navLabel>
+        <text>Ghlcriyetjyylwcewsb jt ybepsdwm ombtck</text>
+      </navLabel>
+      <content src="chapter92.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c165" playOrder="79">
+      <navLabel>
+        <text>Cvdy</text>
+      </navLabel>
+      <content src="chapter93.xhtml"/>
+    <navPoint id="c165b" playOrder="80">
+      <navLabel>
+        <text>Batjheg</text>
+      </navLabel>
+      <content src="chapter93.xhtml#start"/>
+    </navPoint>
+
+    <navPoint id="c166" playOrder="81">
+      <navLabel>
+        <text>Yuødg hm Vprsfjzdl iaøhzscej</text>
+      </navLabel>
+      <content src="chapter94.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c167" playOrder="82">
+      <navLabel>
+        <text>Jauiddir wmøyrwghw</text>
+      </navLabel>
+      <content src="chapter95.xhtml"/>
+    </navPoint>
+    </navPoint>
+
+    <navPoint id="c168" playOrder="83">
+      <navLabel>
+        <text>Llyzgy</text>
+      </navLabel>
+      <content src="chapter96.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c169" playOrder="84">
+      <navLabel>
+        <text>Shzxmzqg</text>
+      </navLabel>
+      <content src="chapter97.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c170" playOrder="85">
+      <navLabel>
+        <text>Dcpyrytmtijs hzunhqhy</text>
+      </navLabel>
+      <content src="chapter98.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c171" playOrder="86">
+      <navLabel>
+        <text>Bbupawmtga</text>
+      </navLabel>
+      <content src="chapter99.xhtml"/>
+    </navPoint>
+
+    <navPoint id="c172" playOrder="87">
+      <navLabel>
+        <text>Eto Tsmzvpq</text>
+      </navLabel>
+      <content src="chapter100.xhtml"/>
+    </navPoint>
+
+  </navMap>
+</ncx>

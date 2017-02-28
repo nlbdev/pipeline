@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+
+  <uri name="http://www.nlb.no/pipeline/modules/nlbpub/epub-to-nlbpub.xpl" uri="../xml/epub-to-nlbpub.xpl" px:script="true"/>
+  <uri name="http://www.nlb.no/pipeline/modules/nlbpub/epub-to-nordic.xpl" uri="../xml/epub-to-nordic.xpl" px:script="true"/>
+  <uri name="http://www.nlb.no/pipeline/modules/nlbpub/library.xpl" uri="../xml/library.xpl"/>
+
+<!--  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>-->
+<!--  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>-->
+<!--  <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>-->
+<!--  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>-->
+<!--  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>-->
+
+</catalog>

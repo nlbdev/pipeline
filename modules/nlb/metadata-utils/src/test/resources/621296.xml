@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<marcxchange:record format="normarc" type="Bibliographic" xmlns:marcxchange="info:lc/xmlns/marcxchange-v1" xml:space="preserve">
+    <marcxchange:leader>01145nam  2200289   4500</marcxchange:leader>
+    <marcxchange:controlfield tag="001">621296</marcxchange:controlfield>
+    <marcxchange:controlfield tag="008">140130                a          10nob</marcxchange:controlfield>
+    <marcxchange:datafield tag="015" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">10128156</marcxchange:subfield>
+        <marcxchange:subfield code="b">BibliofilID</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="019" ind1=" " ind2=" ">
+        <marcxchange:subfield code="b">dc,dj</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="020" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">978-82-16-14947-8</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="090" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">621296</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="100" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Adichie, Chimamanda</marcxchange:subfield>
+        <marcxchange:subfield code="j">niger.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="245" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Americanah</marcxchange:subfield>
+        <marcxchange:subfield code="c">Chimamanda Ngozi Adichie ; oversatt fra engelsk av Hilde Stubhaug</marcxchange:subfield>
+        <marcxchange:subfield code="h">daisy 2.02</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="260" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Oslo</marcxchange:subfield>
+        <marcxchange:subfield code="b">Norsk lyd- og blindeskriftbibliotek</marcxchange:subfield>
+        <marcxchange:subfield code="c">2014</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="300" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">20 t. 48 min.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="511" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Emma Rowena Hansen</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="520" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="574" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Originaltittel: Americanah</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="592" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">02/07/2014</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="596" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Oslo</marcxchange:subfield>
+        <marcxchange:subfield code="b">Gyldendal</marcxchange:subfield>
+        <marcxchange:subfield code="c">2013</marcxchange:subfield>
+        <marcxchange:subfield code="e">550 s.</marcxchange:subfield>
+        <marcxchange:subfield code="f">978-82-05-45310-4</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="655" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Kjærlighet</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="655" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Samfunn</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="691" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Rasisme</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="700" ind1=" " ind2="0">
+        <marcxchange:subfield code="a">Stubhaug, Hilde</marcxchange:subfield>
+        <marcxchange:subfield code="e">overs.</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="740" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">Americanah</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-01</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-01</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-01</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-18</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-01</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-02</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-02</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-03</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-03</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-03</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-03</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-03</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-18</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-03</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-04</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-18</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-19</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-19</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-19</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-19</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-19</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-03</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-20</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-22</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-22</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-22</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-27</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-27</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-28</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-04</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-05</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-05</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-05</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-08</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-08</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-08</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-08</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-08</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-08</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">4</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+        <marcxchange:subfield code="y">1900-01-08</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="850" ind1=" " ind2=" ">
+        <marcxchange:subfield code="a">2030251</marcxchange:subfield>
+        <marcxchange:subfield code="b">Oslo Lyd</marcxchange:subfield>
+        <marcxchange:subfield code="f">9</marcxchange:subfield>
+        <marcxchange:subfield code="h">9</marcxchange:subfield>
+        <marcxchange:subfield code="x">2014-08-13T10:23+0200</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="856" ind1=" " ind2=" ">
+        <marcxchange:subfield code="u">URN:NBN:no-nb_nlb_</marcxchange:subfield>
+        <marcxchange:subfield code="s">461237519</marcxchange:subfield>
+    </marcxchange:datafield>
+    <marcxchange:datafield tag="996" ind1=" " ind2=" ">
+        <marcxchange:subfield code="u">http://websok.nlb.no/cgi-bin/websok?tnr=621296</marcxchange:subfield>
+        <marcxchange:subfield code="t">local</marcxchange:subfield>
+    </marcxchange:datafield>
+</marcxchange:record>

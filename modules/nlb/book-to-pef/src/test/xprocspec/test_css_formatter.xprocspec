@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+  
+  <x:script>
+    <p:declare-step type="pxi:transform" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result"/>
+      <p:option name="temp-dir" required="true"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
+      <css:inline  >
+        <p:log port="result" href="file:/tmp/tmp.xml"/>
+      </css:inline>
+      <px:transform query="(input:css)(output:pef)(formatter:dotify)(translator:nlb)(locale:no)(grade:0)">
+        <p:with-option name="temp-dir" select="$temp-dir"/>
+      </px:transform>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="table_caption" focus="true">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+            <head>
+              <style type="text/css">
+                head {
+                  display: none;
+                }
+                h1 {
+                  display: block;
+                  page-break-before: always;
+                }
+                table {
+                  display: table;
+                }
+                table caption::after {
+                  display: block;
+                  content: 'Tabell starter';
+                }
+                table:not(:has(caption))::before {
+                  display: block;
+                  content: 'Tabell starter';
+                }
+                table::after {
+                  display: block;
+                  content: 'Tabell slutter';
+                }
+              </style>
+              </head>
+              <book>
+                <bodymatter>
+                  <level1>
+                    <h1>Table with caption</h1>
+                    <table>
+                      <caption>caption</caption>
+                      <tr>
+                        <td>a</td>
+                        <td>b</td>
+                      </tr>
+                      <tr>
+                        <td>c</td>
+                        <td>d</td>
+                      </tr>
+                    </table>
+                    <h1>Table without caption</h1>
+                    <table>
+                      <tr>
+                        <td>a</td>
+                        <td>b</td>
+                      </tr>
+                      <tr>
+                        <td>c</td>
+                        <td>d</td>
+                      </tr>
+                    </table>
+                  </level1>
+                </bodymatter>
+              </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="temp-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠠⠞⠁⠃⠇⠑⠀⠺⠊⠞⠓⠀⠉⠁⠏⠞⠊⠕⠝</row>
+                  <row>⠉⠁⠏⠞⠊⠕⠝</row>
+                  <row>⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                  <row>⠁⠀⠀⠃</row>
+                  <row>⠉⠀⠀⠙</row>
+                  <row>⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                </page>
+                <page>
+                  <row>⠠⠞⠁⠃⠇⠑⠀⠺⠊⠞⠓⠕⠥⠞⠀⠉⠁⠏⠞⠊⠕⠝</row>
+                  <row>⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                  <row>⠁⠀⠀⠃</row>
+                  <row>⠉⠀⠀⠙</row>
+                  <row>⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="marks_in_left_margin" focus="true">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+            <head>
+              <style type="text/css">
+                @page {
+                  size: 35 20;
+                  margin-left: 2;
+                  @left {
+                    content: -obfl-marker-indicator(pagenum, '⠿');
+                  }
+                }
+                head { display: none }
+                p { display: block }
+                pagenum {
+                  display: none;
+                  -obfl-marker: pagenum;
+                }
+              </style>
+              </head>
+              <book>
+                <bodymatter>
+                  <level1>
+                    <p>
+                      ...
+                      
+                      På perrongen viste skiltet førti minutter til neste tog, det var toget
+                      nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                      nedover fortauet med den <pagenum id="p11" page="normal">11</pagenum>lille
+                      hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                      studerte håndflaten sin imens.
+                      
+                      ...
+                    </p>
+                  </level1>
+                </bodymatter>
+              </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="temp-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="35" rows="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠀⠀⠄⠄⠄⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞⠀</row>
+                  <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞</row>
+                  <row>⠀⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀</row>
+                  <row>⠀⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗⠀</row>
+                  <row>⠀⠀⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀</row>
+                  <row>⠿⠀⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑⠀</row>
+                  <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝⠀⠇⠕⠞</row>
+                  <row>⠀⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀</row>
+                  <row>⠀⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀</row>
+                  <row>⠀⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄⠀⠄⠄⠄</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario> 
+</x:description>
