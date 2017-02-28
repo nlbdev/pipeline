@@ -22,7 +22,7 @@
     </p:declare-step>
   </x:script>
   
-  <x:scenario label="table_caption" focus="true">
+  <x:scenario label="table_caption">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -124,7 +124,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="marks_in_left_margin" focus="true">
+  <x:scenario label="marks_in_left_margin">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
