@@ -1,20 +1,34 @@
-.DS_Store
-.classpath
-.gradle-snapshot-dependencies
-.gradle-to-install
-.gradle-to-test
-.maven-effective-pom.xml
-.maven-snapshot-dependencies
-.maven-to-install
-.maven-to-test
-.maven-to-test-dependents
-.project
-.settings
+# OS Files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# "super project"-files
+/bom.xml
+.maven-*
+/maven.log
+.gradle*
+/*.zip
 /*.deb
 /*.rpm
-/*.zip
-/.gradle-settings/
-/.gradle/
-/.maven-cache/
-/.maven-workspace/
-/maven.log
+target/
+/releaseDescriptor*xml
+
+# Eclipse
+eclipse/
+eclipse/*
+.project
+.settings
+.classpath
+
+# XSpec
+xspec/*.html
+*-result.html
+
+# vim files
+*~
+*.swp
