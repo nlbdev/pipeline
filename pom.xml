@@ -30,7 +30,9 @@
     <module>modules/scripts</module>
     <module>modules/tts</module>
     <module>modules/audio</module>
+    <module>modules/nlb</module>
     <module>modules/nlp</module>
+    <module>modules/nordic</module>
     <module>cli</module>
     <module>gui</module>
     <module>updater/cli</module>
