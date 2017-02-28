@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <nextCatalog catalog="./scripts-utils/catalog.xml"/>
+  <nextCatalog catalog="./scripts/catalog.xml"/>
+  <nextCatalog catalog="./common/catalog.xml"/>
+  <nextCatalog catalog="./tts/catalog.xml"/>
+  <nextCatalog catalog="./braille/catalog.xml"/>
+  <nextCatalog catalog="./nlp/catalog.xml"/>
+  <nextCatalog catalog="./nlb/catalog.xml"/>
+  <nextCatalog catalog="./nordic/catalog.xml"/>
+</catalog>
