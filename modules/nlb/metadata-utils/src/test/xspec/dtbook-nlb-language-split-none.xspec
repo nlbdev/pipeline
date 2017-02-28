@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/dtbook-nlb-language-split.xsl" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    
+    <x:param name="split-type" select="'none'"/>
+    
+    <x:scenario label="split-type: none">
+        <x:context>
+            <bodymatter>
+                <level2 id="audio-adult-fiction">
+                    <h2>Skjønnlitteratur for voksne</h2>
+                    <level3 id="b_625770" lang="eng" langName="Engelsk">
+                        <h3>Whispers Under Ground</h3>
+                    </level3>
+                    <level3 id="b_625816" lang="nob" langName="Bokmål">
+                        <h3>Tidens larm</h3>
+                    </level3>
+                    <level3 id="b_625751" lang="nob" langName="Bokmål">
+                        <h3>Versjoner av oss</h3>
+                    </level3>
+                </level2>
+            </bodymatter>
+        </x:context>
+        
+        <x:expect label="Remove language attributes">
+            <bodymatter>
+                <level2 id="audio-adult-fiction">
+                    <h2>Skjønnlitteratur for voksne</h2>
+                    <level3 id="b_625770">
+                        <h3>Whispers Under Ground</h3>
+                    </level3>
+                    <level3 id="b_625816">
+                        <h3>Tidens larm</h3>
+                    </level3>
+                    <level3 id="b_625751">
+                        <h3>Versjoner av oss</h3>
+                    </level3>
+                </level2>
+            </bodymatter>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

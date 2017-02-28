@@ -1,0 +1,523 @@
+@namespace epub 'http://www.idpf.org/2007/ops';
+
+/* Declare parameters. Values are passed in from nlb:dtbook-to-pef. */
+$show-print-page-numbers: false !default;
+$show-braille-page-numbers: false !default;
+$line-spacing: false !default;
+$include-note-references: true !default;
+$choice-of-colophon: true !default;
+
+/* -------------------------------------------------------------------------- */
+/*                displaying Original and Braille Page                        */
+/* -------------------------------------------------------------------------- */
+@page {
+        margin-top: 0;
+        margin-bottom: 1;
+        margin-left: 2;
+        margin-right: 2;
+}
+
+@page body {
+        @if $show-print-page-numbers {
+                @bottom-right {
+                        content: string(print-page, last);
+                }
+
+                @left {
+                        content: -obfl-marker-indicator(pagenum, "⠿");
+                }
+        }
+
+        @if $show-braille-page-numbers {
+                @bottom-center {
+                        content: counter(page);
+                }
+        }
+}
+
+pagenum, span[epub|type~='pagebreak'], div[epub|type~='pagebreak'] {
+        display: none;
+}
+
+@if $show-print-page-numbers {
+        bodymatter pagenum, *[epub|type~='bodymatter'] *[epub|type~='pagebreak'] {
+                display: none;
+                -obfl-marker: pagenum;
+                string-set: print-page "⠿" content();
+        }
+}
+
+@if $line-spacing == double {
+        :root {
+                line-height: 1;
+
+                /* to cancel out generic rule */
+        }
+
+        bodymatter, level1[epub|type~='bodymatter'] {
+                line-height: 2;
+        }
+
+        @page body:left {
+                margin-top: 1;
+        }
+}
+
+bodymatter, *[epub|type~='bodymatter'] {
+        page: body;
+        counter-set: page;
+}
+
+/* -------------------------------------------------------------------------- */
+/*               for volume breaking, toc, titlepage                          */
+/* -------------------------------------------------------------------------- */
+
+/* Always start a new volume at elements containing a h1... */
+*:has(> h1) {
+    volume-break-before: always;
+}
+
+/* ...and prefer starting a new volume at subchapter heading elements (h2-h6)... */
+*:has(> h2), *:has(> h3), *:has(> h4), *:has(> h5), *:has(> h6) {
+    volume-break-before: prefer;
+}
+
+/* ...unless they are contained inside a sectioning element. */
+level1 *:has(> h1), section *:has(> h1), article *:has(> h1), nav *:has(> h1), aside *:has(> h1),
+level2 *:has(> h2), section *:has(> h2), article *:has(> h2), nav *:has(> h2), aside *:has(> h2),
+level3 *:has(> h3), section *:has(> h3), article *:has(> h3), nav *:has(> h3), aside *:has(> h3),
+level4 *:has(> h4), section *:has(> h4), article *:has(> h4), nav *:has(> h4), aside *:has(> h4),
+level5 *:has(> h5), section *:has(> h5), article *:has(> h5), nav *:has(> h5), aside *:has(> h5),
+level6 *:has(> h6), section *:has(> h6), article *:has(> h6), nav *:has(> h6), aside *:has(> h6) {
+    volume-break-before: auto;
+}
+
+/* Always start a new volume at sectioning elements containing a h1. */
+level1, section:has(h1), article:has(h1), nav:has(h1), aside:has(h1) {
+    volume-break-before: always;
+}
+
+/* Prefer starting a new volume at sectioning elements not containing a h1. */
+level2, level3, level4, level5, level6,
+section:not(:has(h1)), article:not(:has(h1)), nav:not(:has(h1)), aside:not(:has(h1)) {
+    volume-break-before: prefer;
+}
+
+@volume {
+        @begin {
+                content: flow(front) flow(volume-toc);
+        }
+}
+
+level1.first-page, section.first-page {
+        flow: front;
+}
+
+.titlepage {
+        display: block;
+        page-break-before: always;
+        flow: titlepage;
+}
+
+@if $choice-of-colophon {
+        .colophon {
+                display: block;
+                page-break-before: always;
+                flow: titlepage;
+        }
+}
+
+#generated-volume-toc {
+        page-break-before: always;
+}
+
+#generated-volume-toc li {
+        display: block;
+        margin-left: 2;
+        margin-top: 2;
+        text-indent: -2;
+}
+
+#generated-volume-toc li a::after {
+        content: " " leader("⠄") " " target-counter(attr(href), page);
+        margin-left: 2;
+        margin-top: 2;
+        text-indent: -2;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                        Generated content CSS                               */
+/* -------------------------------------------------------------------------- */
+.first-page {
+        flow: front;
+}
+
+.first-page p {
+        text-align: center;
+}
+
+.first-page p, .second-page p, .third-page p {
+        display: block;
+}
+
+.author-1 {
+        margin-top: 3;
+}
+
+.translater {
+        margin-top: 2;
+}
+
+.title-pef {
+        display: block;
+        margin-top: 1;
+}
+
+.nlb {
+        margin-top: 4;
+}
+
+.year {}
+
+.bind::before {
+        display: inline;
+        content: "Bind " -obfl-evaluate("(round $volume)");
+}
+
+.bind {
+        display: inline;
+        -obfl-vertical-position: 25;
+}
+
+.bind::after {
+        display: inline;
+        content: -obfl-evaluate("(round $volumes)");
+        page-break-after: always;
+}
+
+.second-page h1, third-page h1 {
+        display: block;
+        page-break-before: always;
+}
+
+.contraction-level {
+        margin-top: 1;
+}
+
+.contact {
+        page-break-after: always;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  Pages in document                         */
+/* -------------------------------------------------------------------------- */
+.second-page, .third-page {
+        flow: front-first;
+}
+
+@volume :first {
+        @begin {
+                content: flow(front) flow(volume-toc) flow(front-first);
+        }
+}
+
+.pages {
+        display: inline;
+}
+
+.pages::after {
+        display: inline;
+        content: -obfl-evaluate("(round $sheets-in-document)");
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  general                                   */
+/* -------------------------------------------------------------------------- */
+head {
+        display: none;
+}
+
+level1,
+frontmatter, *[epub|type~='frontmatter'], bodymatter, *[epub|type~='bodymatter'], rearmatter, *[epub|type~='backmatter'] {
+        display: block;
+}
+
+blockquote, sidebar, aside[epub|type~='sidebar'], epigraph, aside[epub|type~='epigraph'], noteref, a[epub|type~='noteref'],
+.Rammetekst, poem, section[epub|type~='z3998:poem'], div[epub|type~='z3998:poem'], linegroup, section.linegroup, div.linegroup, line, p.line {
+        display: block;
+}
+
+note, aside[epub|type~='note'] {
+        display: if($include-note-references, block, none);
+}
+
+doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauthor, h1[epub|type~='z3998:author'] {
+        display: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                Frontmatter                                                 */
+/* -------------------------------------------------------------------------- */
+
+frontmatter, level1[epub|type~='frontmatter'] {
+        margin-left: 3;
+        margin-right: 3;
+        text-align: left;
+}
+
+.uncontracted-letters, h1 {
+        text-transform: uncontracted;
+}
+
+.titlepage {
+        text-transform: uncontracted;
+        margin-left: 1;
+        margin-top: 1;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                class                                                       */
+/* -------------------------------------------------------------------------- */
+.part h1, h1.part {
+        margin-left: 1;
+        margin-top: 2;
+        text-align: center;
+        page-break-before: right;
+        border: ⠉ ⠸ ⠤ ⠇;
+}
+
+.precedingemptyline {
+        margin-top: 1;
+}
+
+.Rammetekst {
+        margin-top: 1;
+        margin-bottom: 1;
+        text-indent: 2;
+        text-align: left;
+        margin-left: 2;
+}
+
+.Rammetekst::before {
+        content: "Rammetekst:";
+}
+
+/* -------------------------------------------------------------------------- */
+/*                element                                                     */
+/* -------------------------------------------------------------------------- */
+h1, .part h2 {
+        page-break-before: right;
+        margin-top: 2;
+        margin-left: 5;
+        margin-right: 5;
+        margin-bottom: 1;
+        text-align: center;
+        border: ⠉ none;
+}
+
+h2, .part h3 {
+        margin-top: 2;
+        margin-left: 5;
+        margin-right: 5;
+        margin-bottom: 1;
+        text-align: center;
+}
+
+h3, .part h4 {
+        margin-top: 1;
+        margin-left: 5;
+        margin-right: 5;
+        text-align: center;
+}
+
+h4, .part h5 {
+        margin-top: 1;
+        margin-left: 1;
+        margin-right: 5;
+        text-align: left;
+        text-indent: 0;
+}
+
+h5, .part h6 {
+        margin-top: 1;
+        margin-left: 1;
+        margin-right: 5;
+        text-align: left;
+        text-indent: 0;
+}
+
+h5::after, .part h6::after {
+        content: ":";
+}
+
+h6 {
+        margin-top: 1;
+        margin-left: 1;
+        margin-right: 5;
+        text-align: left;
+        text-indent: 0;
+        border: ⠉;
+}
+
+p {
+        text-indent: 2;
+        text-align: left;
+        widows: 2;
+        orphans: 2;
+}
+
+blockquote {
+        margin-top: 1;
+        margin-bottom: 1;
+        margin-left: 2;
+        text-indent: 2;
+        text-align: left;
+}
+
+sidebar, aside[epub|type~='sidebar'] {
+        margin-top: 1;
+        margin-bottom: 1;
+        margin-left: 2;
+        text-indent: 2;
+        text-align: left;
+}
+
+sidebar::before, aside[epub|type~='sidebar']::before {
+        content: "Margtekst:";
+}
+
+epigraph, aside[epub|type~='epigraph'] {
+        margin-top: 1;
+        margin-bottom: 1;
+        margin-left: 2;
+        text-indent: 2;
+        text-align: left;
+}
+
+prodnote::before, aside[epub|type~='z3998:production']::before {
+        content: "⠷";
+}
+
+prodnote::after, aside[epub|type~='z3998:production']::after {
+        content: "⠾";
+}
+
+note, aside[epub|type~='note'], noteref, a[epub|type~='noteref'] {
+        text-indent: 2;
+        text-align: left;
+}
+
+/*
+    book {
+    counter-reset: note-counter;
+}
+
+note:before {
+    counter-increment: note-counter;
+    content:  counter(note-counter) ". ";
+}
+*/
+
+imggroup, figure {
+        display: block;
+}
+
+caption::before {
+        content: "Bildetekst:";
+}
+
+caption {
+        margin-top: 1;
+        margin-bottom: 1;
+        margin-left: 2;
+        text-indent: 2;
+        text-align: left;
+}
+
+poem, section[epub|type~='z3998:poem'], div[epub|type~='z3998:poem'] {
+        text-indent: 2;
+        text-align: left;
+}
+
+linegroup, section.linegroup, div.linegroup {
+        margin-bottom: 1;
+        text-indent: -2;
+}
+
+line, p.line {
+        margin-left: 2;
+        text-indent: -2;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                Lists                                                       */
+/* -------------------------------------------------------------------------- */
+
+list, ul, ol {
+        margin-left: 2;
+        text-indent: -2;
+        margin-bottom: 1;
+}
+
+li {
+        text-indent: 2;
+        text-align: left;
+        display: list-item;
+}
+
+list, ul, ol {
+        counter-reset: list-item;
+}
+
+list[type=ul], ul {
+        list-style-type: '⠤';
+}
+
+list[type=ol], ol {
+        list-style-type: decimal;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                Note and endnote                                            */
+/* -------------------------------------------------------------------------- */
+@page {
+        @footnotes {
+                content: flow(footnotes);
+                -obfl-fallback-collection: endnotes;
+        }
+}
+
+@page {
+        @footnotes {
+                max-height: 15;
+        }
+}
+
+@volume {
+        @end {
+                content: flow(endnotes, volume);
+        }
+}
+
+noteref::before, a[epub|type~='noteref']::before {
+        content: '⠠';
+}
+
+noteref::alternate, a[epub|type~='noteref']::alternate {
+        flow: endnotes;
+        display: block;
+        content: target-content(attr(idref));
+}
+
+level1.footnotes {
+        display: none;
+}
+
+note p::before, aside[epub|type~='note'] p::before {
+        content: '⠠';
+}
+
+note p, aside[epub|type~='note'] p::before {
+        margin-left: 4;
+        text-indent: -2;
+}

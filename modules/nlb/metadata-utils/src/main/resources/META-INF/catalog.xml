@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/library.xpl" uri="../xml/xproc/library.xpl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/report-1-view-metadata.xpl" uri="../xml/xproc/report-1-view-metadata.xpl" px:script="true"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/report-2-everything-from-year.xpl" uri="../xml/xproc/report-2-everything-from-year.xpl" px:script="true"/>
+
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/catalog-dewey-split.xpl" uri="../xml/xproc/catalog-dewey-split.xpl"/>
+    
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/level4-to-level5.xsl" uri="../xml/xslt/level4-to-level5.xsl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/make-toc.xsl" uri="../xml/xslt/make-toc.xsl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/metadata-to-dtbook.xsl" uri="../xml/xslt/metadata-to-dtbook.xsl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/sort-books.xsl" uri="../xml/xslt/sort-books.xsl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/template-engine.xsl" uri="../xml/xslt/template-engine.xsl"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/dtbook-nlb-language-split.xsl" uri="../xml/xslt/dtbook-nlb-language-split.xsl"/>
+    
+    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+
+</catalog>

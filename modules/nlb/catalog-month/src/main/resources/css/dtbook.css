@@ -1,0 +1,339 @@
+/* ------------------------------------------------------------- */
+/*                  base properties of whole doc                 */
+/* ------------------------------------------------------------- */
+
+book {
+ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+ font-weight: 300;
+}
+
+/* ------------------------------------------------------------- */
+
+@page {
+  size: a4 portrait;
+  margin: 1.5cm;
+}
+
+@page {
+  size: a4;
+  margin: 2cm;
+  font-size: 9pt;
+}
+
+@page :left {
+  /*@top-left {
+    content: string(author);
+    vertical-align: middle;
+    font-size: 9pt;
+  }*/
+
+  @bottom-left {
+    content: counter(page);
+    vertical-align: middle;
+    margin: 0.8em 0;
+    font-size: 9pt;
+  }
+}
+
+@page :right {
+  /*@top-right {
+    content: string(story-title, last);
+    vertical-align: middle;
+    margin: 0.8em 0;
+    font-size: 9pt;
+  }*/
+  
+  @bottom-right {
+    content: counter(page);
+    vertical-align: middle;
+    margin: 0.8em 0;
+    font-size: 9pt;
+  }
+}
+
+@page :first {
+  @top-right { content: normal }
+  @top-left { content: normal }
+  @bottom-right { content: normal }
+  @bottom-left { content: normal }
+}
+
+@page clean {
+  @top-right { content: normal }
+  @top-left { content: normal }
+  @bottom-right { content: normal }
+  @bottom-left { content: normal }
+}
+
+:root {
+  font: 11pt/15pt Georgia;
+}
+
+head {
+  display: none;
+}
+
+frontmatter, li, h1, h2, h3, h4, h5, h6, level1, level2, level3, level4, level5, level6, p, blockquote, footnote, note, list, table, line, linegroup {
+  display: block;
+}
+
+blockquote, em, i, ref, span{
+  display: inline;
+}
+
+frontmatter {
+  text-align: center;
+}
+
+frontmatter, bodymatter level1, bodymatter level2, covertitle {
+  page-break-after: always;
+}
+
+covertitle, h1, h2, h3, h4, h5, h6 {
+  display: block;
+  /*text-align: center;*/
+  padding: 2em 0 0.2em;
+}
+
+level2[id=toc] a:after {
+  content: leader('.') target-counter(attr(href), page);
+}
+
+p {
+  text-indent: 1em;
+}
+
+br {
+ display:block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  string-set: story-title content();
+}
+
+frontmatter docauthor {
+  font-size: 1.5em;
+  text-align: center;
+  padding: 1em 0 0;
+  display: block;
+  string-set: author content();
+}
+
+frontmatter doctitle {
+  padding: 3em 0 2em;
+  font-size: 3em;
+  display: block;
+}
+
+frontmatter h1, frontmatter level levelhd {
+  font-size: 2.0em;
+}
+
+bodymatter h1, bodymatter level levelhd {
+  font-size: 2.4em;
+}
+
+h2, level level levelhd {
+  font-size: 2.2em;
+}
+
+h3, level level level levelhd {
+  font-size: 2.0em;
+}
+
+h4, level level level level levelhd {
+  font-size: 1.8em;
+}
+
+h5, level level level level level levelhd {
+  font-size: 1.6em;
+}
+
+h6, level level level level level level levelhd {
+  font-size: 1.4em;
+}
+
+
+/* ------------------------------------------------------------- */
+/*                      list.ul,list.ol                          */
+/*                                                               */
+/* <!ELEMENT list                                                */
+/* Contains:                                                     */
+/* (hd | prodnote | li | pagenum)+                               */
+/*                                                               */
+/* type (ol | ul) #IMPLIED                                       */
+/* enum (1 | a | U | i | X) #IMPLIED                             */
+/* ------------------------------------------------------------- */
+
+list {
+	display: block;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+li {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+}
+
+lic {
+	display: inline;
+	font-size: .9em;
+	line-height: 1.6em;
+}
+
+lic + lic {
+	display:inline;
+	position:absolute;
+	left: 810px;
+}
+
+lic + lic:after {
+	content:"";
+}
+
+list > li > list, list li list {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+/* ------------------------------------------------------------- */
+/*                      definition list                          */
+/* ------------------------------------------------------------- */
+	
+
+	
+a {
+	text-decoration:none;
+	color: blue;
+}
+
+a[href] {
+	prince-link:attr(href)
+}
+
+/* ------------------------------------------------------------- */
+/*                          tables                               */
+/* ------------------------------------------------------------- */
+
+
+table {
+  display: table;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  margin-top: 0;
+  margin-bottom: 0;
+  /* -moz-box-sizing: border-box; */
+  text-indent: 0;
+  empty-cells: show;
+}
+
+table > caption {
+  display: table-caption;
+  text-align: center;
+  /* -moz-box-sizing: border-box; */
+}
+
+tr {
+  display: table-row;
+  vertical-align: inherit;
+}
+
+col {
+  display: table-column;
+}
+
+colgroup {
+  display: table-column-group;
+}
+
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+}
+
+thead {
+  display: table-header-group;
+  vertical-align: middle;
+}
+
+tfoot {
+  display: table-footer-group;
+  vertical-align: middle;
+}
+
+td {
+  display: table-cell;
+  /*border: 1px solid gray;*/
+  vertical-align: inherit;
+  text-align: inherit;
+  /*padding: 0.5em;*/
+}
+
+th {
+  display: table-cell;
+  /*border: 1px solid gray;*/
+  vertical-align: inherit;
+  font-weight: bold;
+  padding: 2px;
+}
+
+
+/* ------------------------------------------------------------- */
+/*                          images                               */
+/* ------------------------------------------------------------- */
+
+imggroup {
+	display:inline;
+	
+}
+
+img {
+	display:table-cell;
+	vertical-align:middle;
+	/*margin-left: 250px;*/
+	
+}
+
+prodnote {
+	
+	display: none;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	visibility: hidden;
+	
+}
+
+img:before {
+  content: attr("src", url);
+}
+
+imggroup > caption {
+  font-size: 80%;
+}
+
+/* NLB-logo */
+
+@media print {
+    docauthor img:before {
+      /*position: relative;*/
+      /*margin-left: 240px;*/
+      margin-left: 58.5mm;
+      /*width: 200px;*/
+      /*left: -271.5px;*/
+    }
+}
+
+@media all {
+    docauthor {
+       width: 100%;
+       text-align: center;
+    }
+    docauthor img:before {
+       /*position: absolute;*/
+       /*left: -100px;*/
+       margins: 0 auto;
+       width: 200px;
+    }
+}

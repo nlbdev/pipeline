@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet href="dtbook.css" type="text/css"?>
+<dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    <head>
+        <meta content="${uid}" name="dtb:uid"/>
+        <meta content="Nye produksjoner fra NLB, ${param:month} ${param:year}" name="dc:Title"/>
+        <meta content="NLB" name="dc:Creator"/>
+        <meta content="${time:Y-m-d}" name="dc:Date"/>
+        <meta content="NLB" name="dc:Publisher"/>
+        <meta content="${uid}" name="dc:Identifier"/>
+        <meta content="nob" name="dc:Language"/>
+    </head>
+    <book showin="blp">
+        <frontmatter>
+            <doctitle>Nye produksjoner fra NLB, ${param:month} ${param:year}</doctitle>
+            <docauthor>
+                <img src="NLB logo_blå.jpg" alt="NLB"/>
+            </docauthor>
+            <level1 id="contact">
+                <p>Her finner du nyheter og lister med bøker NLB har produsert siste måned. For å bestille bøker du finner i listene - klikk på boknummeret og du sendes videre til NLBs bokbase.</p>
+                <p>Du kan også kontakte oss på e-post: <a href="mailto:utlaan@nlb.no">utlaan@nlb.no</a> eller telefon: <a href="tlf:22068810">22 06 88 10</a>.</p>
+            </level1>
+            <level1 id="toc" class="">
+                <h1>Innholdsfortegnelse</h1>
+                <list type="pl" class="toc"/>
+            </level1>
+        </frontmatter>
+        <bodymatter id="bodymatter_0001">
+            <level1 id="audio">
+                <h1>Nye lydbøker</h1>
+                <level2 id="audio-adult-fiction">
+                    <h2>Skjønnlitteratur for voksne</h2>
+                </level2>
+                <level2 id="audio-adult-nonfiction">
+                    <h2>Faglitteratur for voksne</h2>
+                </level2>
+                <level2 id="audio-juvenile-fiction">
+                    <h2>Skjønnlitteratur for barn</h2>
+                </level2>
+                <level2 id="audio-juvenile-nonfiction">
+                    <h2>Faglitteratur for barn</h2>
+                </level2>
+            </level1>
+            <level1 id="braille">
+                <h1>Nye punktskriftbøker</h1>
+                <p>
+                    <em>Har du bokønsker? Send dine ønsker til <a external="true" href="mailto:utlaan@nlb.no">utlaan@nlb.no</a>. Vi produserer det aller meste av det du har lyst til å lese i
+                        punkt.</em>
+                    <br/>
+                    <br/>
+                </p>
+                <level2 id="braille-adult-fiction">
+                    <h2>Skjønnlitteratur for voksne</h2>
+                </level2>
+                <level2 id="braille-adult-nonfiction">
+                    <h2>Faglitteratur for voksne</h2>
+                </level2>
+                <level2 id="braille-juvenile-fiction">
+                    <h2>Skjønnlitteratur for barn</h2>
+                </level2>
+                <level2 id="braille-juvenile-nonfiction">
+                    <h2>Faglitteratur for barn</h2>
+                </level2>
+            </level1>
+            <level1 id="student-audio">
+                <h1>Ny studielitteratur</h1>
+                <p>
+                    <em>Legg merke til at de fleste studiebøker er talesyntesebøker.</em>
+                    <br/>
+                    <br/>
+                </p>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

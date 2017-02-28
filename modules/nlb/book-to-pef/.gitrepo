@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/nlbdev/pipeline-mod-nlb.git
+	branch = master
+	commit = 30562e0dfcd1c6b9797ba3964323efce5b7f8780
+	parent = fd3d8dc73db1502ffb2aa4d6bc26132a3b49e370
+	cmdver = 0.3.0

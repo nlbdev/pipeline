@@ -1,0 +1,1507 @@
+<?xml-stylesheet href="dtbook.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="no">
+    <head>
+        <meta content="DUMMY-UID" name="dtb:uid"/>
+        <meta content="Nye produksjoner fra NLB, august 2014" name="dc:Title"/>
+        <meta content="NLB" name="dc:Creator"/>
+        <meta content="DUMMY-DATE" name="dc:Date"/>
+        <meta content="NLB" name="dc:Publisher"/>
+        <meta content="DUMMY-UID" name="dc:Identifier"/>
+        <meta content="nob" name="dc:Language"/>
+    </head>
+    <book showin="blp">
+        <frontmatter>
+            <doctitle>Nye produksjoner fra NLB, august 2014</doctitle>
+            <docauthor>
+                <img src="NLB logo_blå.jpg" alt="NLB"/>
+            </docauthor>
+            <level1 id="contact">
+                <p>Velkommen til NLBs nyhetsbrev. Her finner du nyheter og lister med bøker NLB har produsert siste måned - masse gode lesetips! Send oss gjerne forslag og kommentarer til nyhetsbrevet.</p>
+                <p>For å bestille bøker gjennom MappaMi, klikk på boknummeret, og du sendes videre til NLBs bokbase. Du kan også kontakte oss på e-post: <a href="mailto:utlaan@nlb.no"
+                        >utlaan@nlb.no</a> eller telefon: <a href="tlf:22068810">22 06 88 10</a>.</p>
+            </level1>
+            <level1 id="toc" class="">
+                <h1>Innholdsfortegnelse</h1>
+                <list type="pl" class="toc"/>
+            </level1>
+        </frontmatter>
+        <bodymatter id="bodymatter_0001">
+            <level1 id="audio">
+                <h1>Nye lydbøker</h1>
+                <level2 id="audio-adult-fiction">
+                    <h2>Skjønnlitteratur for voksne</h2>
+                    <level3 id="b_621296">
+                        <h3>
+                            <span class="author">Adichie, Chimamanda</span>
+                            <br/>
+                            <span>
+                                <span class="title">Americanah</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">20 t 48 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Emma Rowena Hansen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Ifemelu og Obinze forelsker seg i tenårene i Nigeria. Ifemelu reiser til USA for å studere, og meningen er at Obinze skal komme etter, men etter terrorangrepet på World Trade Center blir dette umulig. Etter mange år treffes de igjen i Nigeria, og blir stilt ovenfor mange vanskelige valg.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Kjærlighet</span>, <span class="topic">Samfunn</span>, <span class="topic"
+                                        >Rasisme</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621296" class="identifier">621296</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621556">
+                        <h3>
+                            <span class="author">Fosse, Jon</span>
+                            <br/>
+                            <span><span class="title">Kveldsvævd</span>: <span class="subTitle">forteljing</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">1 t 37 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Tor Sigbjørnsen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Dette er ein frittstående oppfølgjar til Andvake og Olavs draumer. Her møter vi gamle Ales, dotter til Alida. Gjennom henne får vi vita korleis det gjekk med Alida og Asle, paret som ofra samvitet for kjærleiken.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Historisk</span>, <span class="topic">Kjærlighet</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621556" class="identifier">621556</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_620992">
+                        <h3>
+                            <span class="author">Lang, Maria</span>
+                            <br/>
+                            <span>
+                                <span class="title">Se, døden på deg venter</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">5 t 23 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Inger Teien</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Puck har lidenskap for opera, og er nå blitt venn med en gruppe operasangere på Drottningsholms slottsteater i Stockholm. Det er mye følelser og temperament blant operasangerne, og i midten er den vakre Tove Monrad. Hun blir brutalt myrdet, og dette setter en støkk i alle. Puck må få tak i sin venn kriminalkommisær Christer Wijk, men kommer han tidsnok før morderen slår til igjen ?</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Krim</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=620992" class="identifier">620992</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621334">
+                        <h3>
+                            <span class="author">Lykke, Nina</span>
+                            <br/>
+                            <span>
+                                <span class="title">Oppløsningstendenser</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">7 t 3 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Eva Dons</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Liv bor i en kjeller på Sagene, og prøver å overleve på 100 kroner dagen. Hvorfor har hun havnet i en slike situasjon? Hun var gift med Anders, ble skilt og innledet et forhold til Bjørn. De levde i sus og dus på en bunke kredittkort. Det viste seg at Bjørn var bipolar og ikke eide noen ting. Liv sitter nå igjen med alle gjelda, og prøver å gjøre det beste ut av det.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Kvinneskildringer</span>, <span class="topic">Psykologisk</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621334" class="identifier">621334</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621622">
+                        <h3>
+                            <span class="author">Martin, George R.R.</span>
+                            <br/>
+                            <span>
+                                <span class="title">I vargens tid</span>
+                                <span class="partNumber">(1/1)</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">15 t 52 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Erich Kruse Nielsen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Familie, plikt, ære og makt er sentrale stikkord i det første bindet i serien En sang om is og ild. Her kjemper konger og dronninger, riddere og bastarder om Jerntronen, maktsetet i De syv rikene. Da lord Eddard Stark av Vinterfall reiser sørover for å bli kongens hånd involveres han i konspirasjoner, kjærlighet, forræderi, drap og grådighet. I spillet om Jerntronen vil man vinne, eller dø. En sang om is og ild er en av verdens mestselgende sagaer gjennom tidene.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Fantasy</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621622" class="identifier">621622</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621626">
+                        <h3>
+                            <span class="author">Martin, George R.R.</span>
+                            <br/>
+                            <span>
+                                <span class="title">Kampen om Jerntronen</span>
+                                <span class="partNumber">(1/2)</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">17 t 56 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Erich Kruse Nielsen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >I en verden der den kommende vinteren kan strekke seg over tiår, kjemper konger og dronninger, riddere og bastarder om Jerntronen, maktsetet i De syv rikene. I nord våkner en eldgammel ondskap, og i sør har en ny prins blitt unnfanget. Midt mellom dem står Lord Eddard Stark alene. Omringet av løgnere og fiender, må han ta avgjørelser som ikke bare setter familien hans i fare, men hele kongeriket.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Fantasy</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621626" class="identifier">621626</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621540">
+                        <h3>
+                            <span class="author">Nam Le</span>
+                            <br/>
+                            <span><span class="title">Båten</span>: <span class="subTitle">noveller</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">10 t 20 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Jonathan Espolin-Johnson</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Novellene i Nam Les Båten tar oss fra slummen i Colombia til Teherans gater, fra New York City til Iowa City, fra en liten fiskerlandsby i Australia til en tumlende farkost i Sørkinahavet, i en mesterlig oppvisning i litterær virtuositet og følsomhet. Båten er blitt oversatt til fjorten språk, og fortellingene er trykket i en rekke antologier.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Noveller</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621540" class="identifier">621540</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621666">
+                        <h3>
+                            <span class="author">Nesbø, Jo</span>
+                            <br/>
+                            <span><span class="title">Karusellmusikk</span>: <span class="subTitle">noveller</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">4 t 40 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Jonathan Espolin-Johnson</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Elleve fortellinger om lange reiser, svimle dager og døgnvill sol. Dette er forfatterens første novellesamling, og ble utgitt sammen med plate-albumet med samme navn. Hver novelle tilsvarer en sang på albumet. I denne utgaven er en ny novelle.</line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621666" class="identifier">621666</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621582">
+                        <h3>
+                            <span class="author">Stene, Øystein</span>
+                            <br/>
+                            <span><span class="title">Zombie nation</span>: <span class="subTitle">roman</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">8 t 38 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Erich Kruse Nielsen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Amerikansk og europeisk etterretning har i årevis klart å skjule ei øy som ligger midt i Atlanterhavet. Sjøkart har blitt tegnet om, nærgående skip har blitt senket og havbunnen ombygget. Men Johannes van der Linden har fått jobb ved øyas byarkiv. Han trives ikke: det regner alltid, han fryser hele tiden, maten smaker ikke og alt er likegyldig. Etter hvert går det opp for ham at øya er bebodd av levende døde. Og at han er en av dem. Finnes det noen vei tilbake? Boken blir beskrevet som en alternativ konspirasjonsteori, en gotisk grøsser og en eksistensiell zombieroman, og vil appellere både til ungdom og voksne.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Grøsser</span>, <span class="topic">Zombier</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621582" class="identifier">621582</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                </level2>
+                <level2 id="audio-adult-nonfiction">
+                    <h2>Faglitteratur for voksne</h2>
+                    <level3 id="b_621312">
+                        <h3>
+                            <span class="author">Jonassen, Mari</span>
+                            <br/>
+                            <span><span class="title">Fernanda Nissen</span>: <span class="subTitle">kjærlighet og arbeid</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">13 t 53 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Toril G. Havrevold</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Fernanda Nissen var en glødende kvinnesakskvinne og sosialdemokrat, og hun regnes som en av pionerene i den fremvoksende arbeiderbevegelsen. Hun kjempet blant annet for åttetimersdag, og bedre arbeidervern, særlig for kvinnene. Privat skilte hun seg fra sin første ektemann og giftet seg med mannen hun elsket, Oscar Egede Nissen. Dette kostet henne mye, men hun angret aldri. Hennes liv var kjærlighet og arbeid, arbeid og kjærlighet.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Nissen, Fernanda</span>, <span class="topic">Biografi</span>, <span
+                                        class="topic">Kvinner</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621312" class="identifier">621312</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621526">
+                        <h3>
+                            <span class="author">Osbourne, Ozzy</span>
+                            <br/>
+                            <span>
+                                <span class="title">Jeg er Ozzy</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">13 t 10 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Jon Husø</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Født inn i fattigslige kår, hadde Ozzy en tøff oppvekst. Musikk var hans frelse og hans band Black Sabbath endret musikkscenen for alltid. Men med rock and roll ble livet hans fyllt med sex og narkotika og Ozzy falt i et langt forhold med vanedannende stoffer. Historiene om Ozzy sine dager på veien er legendarisk - bite hodet av levende flaggermus, å miste sin beste venn og skrive partner Randy Rhoades i en tragisk flyulykke - men få vet om den virkelige kjærlighetssorg han led under disse dagene. Til slutt kjærligheten til sin kone Sharon og barna Kelly, Jack og Aimee. I sin etterlengtede selvbiografi, blir Ozzy ren: i alle sanser. I denne boka får vi de egentlige versjonene av det pressen før har laget til skandaløse overskrifter.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Osbourne, Ozzy</span>, <span class="topic">Biografi</span>, <span class="topic"
+                                        >Rock</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621526" class="identifier">621526</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_619371">
+                        <h3>
+                            <span class="author">Sjøberg, Karin Helena</span>
+                            <br/>
+                            <span>
+                                <span class="title">Amsterdam - vann og velstand</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">1 t 8 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Marianne Hoff Engesland</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >For en som har gjort det til en livsform å reise rundt i Europa for å finne ulike byers identitet og kjerne er det lett å streve med å holde byer fra hverandre. Ikke som totalopplevelse, men plutselig kan jeg i minnene befinne meg i en gate jeg ikke greier plassere. Med Amsterdam er det annerledes. Byen er lett gjenkjennelig og enhetlig, og det gir en spesiell ro å tenke på alle de vakre gatene med kanaler og broer. Selv om hver bydel har en egen stemme og stemning gir et glimt av byen en opplevelse av helheten på en måte du ikke finner i noen annen by.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Historie</span>, <span class="topic">Reiserskildringer</span>, <span
+                                        class="topic">Amsterdam</span>, <span class="topic">Nederland</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=619371" class="identifier">619371</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_619369">
+                        <h3>
+                            <span class="author">Sjøberg, Karin Helena</span>
+                            <br/>
+                            <span>
+                                <span class="title">Krakow – Aske og diamanter</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">0 t 50 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Marianne Hoff Engesland</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >- På bunnen av asken en skinnende diamant, en gryende evig seier! Setningen er hentet fra et berømt dikt av 1800-tallspoeten Cyprian Norwid. På mange måter er dette selve essensen av denne vakre byen og av landet Polen. Landet er blitt slått og brent ned utallige ganger, men reiser seg igjen og igjen. Kraków selv er som en diamant som har vokst opp og ut av asken.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Reiseskildringer</span>, <span class="topic">Krakow</span>, <span class="topic"
+                                        >Polen</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=619369" class="identifier">619369</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_619373">
+                        <h3>
+                            <span class="author">Sjøberg, Karin Helena</span>
+                            <br/>
+                            <span>
+                                <span class="title">Madrid - liv og blod</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">0 t 58 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Marianne Hoff Engesland</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Hver gang jeg kommer til Madrid blir jeg like fascinert av dette fenomenet som Ernest Hemingway her beskriver så godt. Det er som om jeg blir sugd inn i byens liv. Jeg drives fra bar til bar gjennom bydelene Chueca og Malasaña en varm sommernatt og kjenner hvordan jeg fryder meg over å bli en del av det myldrende livet som leves på gater og plasser. Det er lett å forstå hvorfor folk som tiltrekkes av noe annet enn A4-livet flytter hit. Det kribler alltid i kroppen når jeg skal reise til denne levende byen.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Reiserskildringer</span>, <span class="topic">Madrid</span>, <span
+                                        class="topic">Spania</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=619373" class="identifier">619373</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                </level2>
+                <level2 id="audio-juvenile-fiction">
+                    <h2>Skjønnlitteratur for barn</h2>
+                    <level3 id="b_618726">
+                        <h3>
+                            <span class="author">Frohde, Liv</span>
+                            <br/>
+                            <span>
+                                <span class="title">Mariahagen</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">3 t 29 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Kristine Rui Slettebakken</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Tre venninner bor i et båtnaust i sommerferien. Om natta ser de et lys i det huset som Maria bodde i før hun forsvant. Hvem er det som lusker rundt om natta?</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Spenning</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">9-12</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=618726" class="identifier">618726</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621659">
+                        <h3>
+                            <span class="author">Green, John</span>
+                            <br/>
+                            <span>
+                                <span class="title">Papirbyer</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">8 t 47 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Christoffer Hag Maure</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Hele sitt liv har Quentin Jacobsen elsket den praktfullt eventyrlystne Margo Roth Spiegelman på avstand. Så da hun – kledd som en ninja – åpner et vindu, klatrer inn i livet hans igjen og vil ha ham ut på en genial hevntokt, blir han med. Etter at det nattlige toktet er over og en ny dag gryr, møter Q på skolen og oppdager at Margo, som alltid har vært en gåte, nå har blitt et mysterium. En usedvanlig velskrevet ungdomsbok som hever seg over det meste.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Kjærlighet</span>, <span class="topic">Ung</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">13+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621659" class="identifier">621659</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_619518">
+                        <h3>
+                            <span class="author">Hovden, Magne</span>
+                            <br/>
+                            <span><span class="title">Åndejegerne</span>: <span class="partName">Dødelig gjenkomst</span>
+                                <span class="partNumber">(2)</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">4 t 18 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Julie From</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Dette er andre bok om Eirik, Lizzy og Gunther som nå er blitt fullbefarne åndejegere. De må kjempe mot ufattelig ondskap. En to tusen år gammel spådom om verdens undergang truer.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Fantastisk</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">13+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=619518" class="identifier">619518</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621336">
+                        <h3>
+                            <span class="author">Lahlum, Hans Olav</span>
+                            <br/>
+                            <span>
+                                <span class="title">Huset ved havet</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">8 t 21 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators"><span class="narrator">Sibeth Hoff</span> og <span class="narrator">Sveinung Oppegaard</span></span>
+                            </line>
+                            <line class="description"
+                                >Huset ved havet er Hans Olav Lahlums første ungdomsroman. Den handler om to ungdommer fra Oslo, Nicolai og Bea, men handlingen utspiller seg i et lite fiskevær i Nordland. Nicolai og Bea er på sommerferie i et gammelt hus ved havet, og der begynner de å grave i spennende og uoppklarte ting i husets historie.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Spenning</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">13+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621336" class="identifier">621336</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621234">
+                        <h3>
+                            <span class="author">Marzi, Christoph</span>
+                            <br/>
+                            <span>
+                                <span class="title">Memory, drømmenes by (2)</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">8 t 12 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Liv Steen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >En sen natt finner Jude Finney ei mystisk jente på kirkegården. Hun er nesten gjennomsiktig kan ikke en gang huske navnet sitt. Snart går det opp for Jude at den ukjente jenta befinner seg i stor fare og at han er den enste som kan hjelpe henne.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Fantastisk</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">13+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621234" class="identifier">621234</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621467">
+                        <h3>
+                            <span class="author">Mæhle, Lars</span>
+                            <br/>
+                            <span><span class="title">Landet under isen</span>: <span class="partName">Dødeboka</span>
+                                <span class="partNumber">(2)</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">14 t 59 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Ane Barmen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Leo Rubin, Den utvalde, får ei grufull utfordring: Smalvik er igjen truga, og difor må Den utvalde reise frå heimstaden Smalvik til Karnak, tempelet lengst sør i Landet under isen. Leo må vere der innan vintersolkverv, det aller mørkaste døgnet i året. Og han får eit umogleg val: Døden. For han sjølv. Eller for vennane sine. Det er ei hemmeleg sekt, Soltempelordenen, som står bak. Og sektleiaren, den nådelause Hathor, skjuler seg ein stad i Smalvik. Sekta førebur dommedag, saman med ein veksande hær livsfarlege kappekatter. Men først må dei få fatt i "Dødeboka", protokollen med svara på dødens gåter. Hathor trør over lik for å få fatt i skrifta. Men kven er ho? Kan etterforskar Magne Jerstad avsløre henne? Kan Leo klare det umoglege oppdraget i riket under isbreen? Og kan dei finne Dødeboka i tide?</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Fantastisk</span>, <span class="topic">Spenning</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">11+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621467" class="identifier">621467</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621465">
+                        <h3>
+                            <span class="author">Riordan, Rick</span>
+                            <br/>
+                            <span><span class="title">Gudene fra Olympos</span>: <span class="partName">Neptuns sønn</span>
+                                <span class="partNumber">(2)</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">15 t 24 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Erich Kruse Nielsen</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Percy Jackson, sønn av havguden Neptun, har våknet opp fra en veldig dyp søvn, og står ansikt til ansikt med to damer med slanger i håret som rett og slett nekter å dø. De er bare begynnelsen på problemene hans. Nå er han på et sted som heter Halvblodsleiren, hva enn det måtte være, og alt han husker fra sin egen fortid er ett enkelt navn: Annabeth.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Fantastisk</span>, <span class="topic">Mytologi</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">11+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621465" class="identifier">621465</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621593">
+                        <h3>
+                            <span class="author">Røssland, Tor Arve</span>
+                            <br/>
+                            <span>
+                                <span class="title">Soledad</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">4 t 42 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Eva Dons</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >14 år gamle Soledad våkner en morgen og oppdager at hun er helt alene. Faren, naboen og resten av beboerne på øya er forsvunnet. Soledad må ikke bare finne ut hva som har skjedd, hun må også gjøre hva hun kan for å overleve. Dette er en dystopi om en nær framtid lagt til områdene rundt Haugesund.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics">
+                                    <span class="topic">Fantastisk</span>
+                                </span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">13+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621593" class="identifier">621593</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                    <level3 id="b_621262">
+                        <h3>
+                            <span class="author">Webber, Tammara</span>
+                            <br/>
+                            <span>
+                                <span class="title">Easy</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">9 t 19 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Sibeth Hoff</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >For Jaqueline blir ikke det første året på college slik hun hadde tenkt. Kjæresten hun har hatt i tre år slår opp med henne. Kjærlighetssorgen er uutholdelig. Helt til hun blir oppmerksom på Lucas: En sjarmerende Starbucks-barista. Og den kjekkeste på campus.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Kjærlighet</span>, <span class="topic">Ung</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">13+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621262" class="identifier">621262</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                </level2>
+                <level2 id="audio-juvenile-nonfiction">
+                    <h2>Faglitteratur for barn</h2>
+                    <level3 id="b_621663">
+                        <h3>
+                            <span class="author">Leyson, Leon</span>
+                            <br/>
+                            <span>
+                                <span class="title">Gutten på trekassa</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="duration">4 t 43 min</line>
+                            <line>
+                                <span class="fieldName">Lest av:</span>
+                                <span class="narrators">
+                                    <span class="narrator">Sigmund Sæverud</span>
+                                </span>
+                            </line>
+                            <line class="description"
+                                >Dette er den sanne historien om den yngste gutten på Schindlers liste. Leon Leyson forteller sin gripende, fryktelige historie uten bitterhet, med sin egen stemme og sine egne, unike minner. Han gir også sitt personlige inntrykk av Oskar Schindler, mannen i nazistuniform som reddet over tusen liv.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Oskar Schindler</span>, <span class="topic">Holocaust, 1933-1945</span>, <span
+                                        class="topic">Konsentrasjonsleirer</span>, <span class="topic">Verdenskrigen, 1939-1945</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">11+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=621663" class="identifier">621663</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                </level2>
+            </level1>
+            <level1 id="braille">
+                <h1>Nye punktskriftbøker</h1>
+                <p>
+                    <em>Har du bokønsker? Send dine ønsker til <a href="mailto:utlaan@nlb.no"
+                        >utlaan@nlb.no</a>. Vi produserer det aller meste av det du har lyst til å lese i punkt.</em>
+                    <br/>
+                    <br/>
+                </p>
+                <level2 id="braille-adult-fiction">
+                    <h2>Skjønnlitteratur for voksne</h2>
+                    <level3 id="b_112279">
+                        <h3>
+                            <span class="author">Lawson, April Ayers</span>
+                            <br/>
+                            <span>
+                                <span class="title">Jomfru</span>
+                            </span>
+                        </h3>
+                        <linegroup>
+                            <line class="extent">1 hefte</line>
+                            <line class="description"
+                                >Jake og Sheila møtes, og gifter seg etter kort tid. Snart finner Jake ut årsaken til at Sheila ville være jomfru helt fram til giftermålet.</line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=112279" class="identifier">112279</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                </level2>
+                <level2 id="braille-adult-nonfiction">
+                    <h2>Faglitteratur for voksne</h2>
+                    <level3 id="b_112748">
+                        <h3>
+                            <span class="author">Alstadheim, Kjetil Bragli</span>
+                            <br/>
+                            <span><span class="title">Republikken Norge</span>: <span class="subTitle"
+                                    >om hvorfor vi fortsatt har konge - og hva vi kan få i stedet</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="extent">11 hefter</line>
+                            <line class="description"
+                                >200 år etter Grunnloven ble vedtatt, går Norges øverste politiske verv fortsatt i arv. Norges statsoverhode blir ikke valgt, men født. Demokratiseringen av landet har stanset foran Slottet. Hvorfor er det slik? Ville vi i dag hentet en prins eller en prinsesse som var til overs i et annet land? Sannsynligvis ikke. Kongen ville blitt skrevet ut av Grunnloven, og vi ville fått Republikken Norge. Hvordan ville den sett ut?</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Republikk</span>, <span class="topic">statsformer</span>, <span class="topic"
+                                        >Norge</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=112748" class="identifier">112748</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                </level2>
+                <level2 id="braille-juvenile-fiction">
+                    <h2>Skjønnlitteratur for barn</h2>
+                    <level3 id="b_112737">
+                        <h3>
+                            <span class="author">Shepard, Sara</span>
+                            <br/>
+                            <span><span class="title">Små, søte løgnere</span>: <span class="partName">Lamslått</span>
+                                <span class="partNumber">(11)</span></span>
+                        </h3>
+                        <linegroup>
+                            <line class="extent">13 hefter</line>
+                            <line class="description"
+                                >Den mystiske A er fremdeles usynlig til stede, og gjør livet surt for Emily, Spencer, Aria og alle de andre jentene fra en - tilsynelatende - søvnig forstad i Pennsylvania, U S A.</line>
+                            <line>
+                                <span class="fieldName">Sjanger/Emner:</span>
+                                <span class="topics"><span class="topic">Kjærlighet</span>, <span class="topic">Spenning</span></span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Aldersgruppe:</span>
+                                <span class="age-group">13+</span>
+                            </line>
+                            <line>
+                                <span class="fieldName">Boknummer:</span>
+                                <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=112737" class="identifier">112737</a>
+                            </line>
+                        </linegroup>
+                    </level3>
+                </level2>
+
+            </level1>
+            <level1 id="student-audio">
+                <h1>Ny studielitteratur</h1>
+                <p>
+                    <em>Legg merke til at de fleste studiebøker er talesyntesebøker.</em>
+                    <br/>
+                    <br/>
+                </p>
+                <level2 id="b_218100">
+                    <h2>
+                        <span class="author">Krug, Steve</span>
+                        <br/>
+                        <span><span class="title">Don't make me think!</span>: <span class="subTitle">a common sense approach to Web usability</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">5 t 8 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Internett</span>, <span class="topic">Webdesign</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218100" class="identifier">218100</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218555">
+                    <h2>
+                        <span class="author">Steine, Arnlaug</span>
+                        <br/>
+                        <span><span class="title">Eg kan - eg klarer!</span>: <span class="subTitle"
+                                >primærmotorisk trening og sansemotorisk stimulering gjennom leik og aktivitet</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">9 t 17 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Hallvard Lydvo</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Barn</span>, <span class="topic">Bevegelse</span>, <span class="topic"
+                                    >barnepsykologi</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218555" class="identifier">218555</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218567">
+                    <h2>
+                        <span><span class="title">Inkluderende praksis</span>: <span class="subTitle">gode erfaringer fra barnehage, skole og fritid</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">13 t 14 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Geir Morstad</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Funksjonshemmede barn</span>, <span class="topic">Integrering</span>, <span
+                                    class="topic">pedagogikk</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218567" class="identifier">218567</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218599">
+                    <h2>
+                        <span class="author">Næss, Hans Erik</span>
+                        <br/>
+                        <span><span class="title">Små nøkler - store dører</span>: <span class="subTitle">invitasjon til sosiologi</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">13 t 28 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Geir Morstad</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Sosiologi</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218599" class="identifier">218599</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218648">
+                    <h2>
+                        <span class="author">Thwaites, Tony</span>
+                        <br/>
+                        <span><span class="title">Introducing cultural and media studies</span>: <span class="subTitle">a semiotic approach</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">13 t 0 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Stephen Katz</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Kultursosiologi</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218648" class="identifier">218648</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218742">
+                    <h2>
+                        <span class="author">Kirkebøen, Geir</span>
+                        <br/>
+                        <span>
+                            <span class="title">Hva er intuisjon</span>
+                        </span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">5 t 23 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Kjersti B. Maagerø</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Intuisjon</span>, <span class="topic">Psykologi</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218742" class="identifier">218742</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218752">
+                    <h2>
+                        <span class="author">Cialdini, Robert B.</span>
+                        <br/>
+                        <span><span class="title">Påvirkning</span>: <span class="subTitle">teori og praksis</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">20 t 55 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Markedsføring</span>, <span class="topic">Påvirkning</span>, <span class="topic"
+                                    >Sosialpsykologi</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218752" class="identifier">218752</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218756">
+                    <h2>
+                        <span><span class="title">Grunnleggende kunnskap i klinisk sykepleie</span>: <span class="subTitle">sykepleieboken 1</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">52 t 35 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Sykepleie</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218756" class="identifier">218756</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218758">
+                    <h2>
+                        <span><span class="title">Sentrale begreper i klinisk sykepleie</span>: <span class="subTitle">sykepleieboken 2</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">32 t 38 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Sykepleie</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218758" class="identifier">218758</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218762">
+                    <h2>
+                        <span><span class="title">Utøvelse av klinisk sykepleie</span>: <span class="subTitle">sykepleieboken 3</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">64 t 20 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Sykepleie</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218762" class="identifier">218762</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218770">
+                    <h2>
+                        <span class="author">Knoph, Ragnar</span>
+                        <br/>
+                        <span>
+                            <span class="title">Knophs oversikt over Norges rett</span>
+                        </span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">75 t 31 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Rettskilder</span>, <span class="topic">norsk rett</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218770" class="identifier">218770</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218774">
+                    <h2>
+                        <span><span class="title">Forbrukersosiologi</span>: <span class="subTitle">makt, tegn og mening i forbrukersamfunnet</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">29 t 43 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Forbruk</span>, <span class="topic">Forbrukersamfunnet</span>, <span class="topic"
+                                    >sosiologi</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218774" class="identifier">218774</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218775">
+                    <h2>
+                        <span>
+                            <span class="title">Leksjoner i markedsvitenskap</span>
+                        </span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">19 t 59 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Markedsføring</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218775" class="identifier">218775</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218787">
+                    <h2>
+                        <span class="author">Killén, Kari</span>
+                        <br/>
+                        <span><span class="title">Sveket</span>: <span class="partName">Ansvar og (be)handling</span>
+                            <span class="partNumber">(II)</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">24 t 23 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Omsorgssvikt</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218787" class="identifier">218787</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218788">
+                    <h2>
+                        <span>
+                            <span class="title">Innvandrere på utsiden av samfunnet</span>
+                        </span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">13 t 24 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Innvandrere</span>, <span class="topic">Norge</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218788" class="identifier">218788</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218789">
+                    <h2>
+                        <span class="author">Barth, Tom</span>
+                        <br/>
+                        <span><span class="title">Motiverende intervju</span>: <span class="subTitle">samtaler om endring</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">13 t 1 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics">
+                                <span class="topic">Vernepleie</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218789" class="identifier">218789</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218791">
+                    <h2>
+                        <span><span class="title">Oppvekst med funksjonshemming</span>: <span class="subTitle">familie, livsløp og overganger</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">18 t 44 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Funksjonshemmede barn</span>, <span class="topic">sosial velferd</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218791" class="identifier">218791</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218796">
+                    <h2>
+                        <span><span class="title">Resilience</span>: <span class="subTitle"
+                                >learning from people with disabilities and the turning points in their lives</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">9 t 34 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Funksjonshemning</span>, <span class="topic">Miljøpsykologi</span>, <span
+                                    class="topic">Resiliens</span>, <span class="topic">Stress</span>, <span class="topic"
+                                    >psykologisk påvirkning</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218796" class="identifier">218796</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218798">
+                    <h2>
+                        <span class="author">Mork, Sonja M.</span>
+                        <br/>
+                        <span>
+                            <span class="title">Språk og digitale verktøy i naturfag</span>
+                        </span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">13 t 46 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Naturfag</span>, <span class="topic">Undervisning</span>, <span class="topic"
+                                    >grunnskolen</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218798" class="identifier">218798</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218799">
+                    <h2>
+                        <span class="author">Andreassen, Bengt-Ove</span>
+                        <br/>
+                        <span><span class="title">Religionsdidaktikk</span>: <span class="subTitle">en innføring</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">16 t 14 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Kristendom</span>, <span class="topic">Undervisning</span>, <span class="topic"
+                                    >Undervisning</span>, <span class="topic">grunnskolen</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218799" class="identifier">218799</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218801">
+                    <h2>
+                        <span><span class="title">Religions- og livssynsdidaktikk</span>: <span class="subTitle">en innføring</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">13 t 43 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Livssyn</span>, <span class="topic">Pedagogikk</span>, <span class="topic"
+                                    >Religion</span>, <span class="topic">Undervisning</span>, <span class="topic"
+                                >Undervisning</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218801" class="identifier">218801</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218813">
+                    <h2>
+                        <span class="author">Tuastad, Dag</span>
+                        <br/>
+                        <span>
+                            <span class="title">Palestinske utfordringer</span>
+                        </span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">15 t 35 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Historie</span>, <span class="topic">Historie</span>, <span class="topic"
+                                    >Jødisk-arabiske spørsmål</span>, <span class="topic">Midtøsten</span>, <span class="topic"
+                                    >Palestina</span>, <span class="topic">Palestina</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218813" class="identifier">218813</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218818">
+                    <h2>
+                        <span><span class="title">Virtual teams that work</span>: <span class="subTitle"
+                            >creating conditions for virtual team effectiveness</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">20 t 44 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Ledelse</span>, <span class="topic">Organisasjoner</span>, <span class="topic"
+                                    >Planlegging</span>, <span class="topic">bedriftsledelse</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218818" class="identifier">218818</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218824">
+                    <h2>
+                        <span class="author">Roe, Astrid</span>
+                        <br/>
+                        <span><span class="title">Lesedidaktikk</span>: <span class="subTitle">etter den første leseopplæringen</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">16 t 56 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Lesing</span>, <span class="topic">Lesing</span>, <span class="topic"
+                                    >Undervisning</span>, <span class="topic">grunnskole</span>, <span class="topic"
+                                >grunnskole</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218824" class="identifier">218824</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218827">
+                    <h2>
+                        <span><span class="title">Teaching history with big ideas</span>: <span class="subTitle">cases of ambitious teachers</span></span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">7 t 42 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Historie</span>, <span class="topic">Undervisning</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218827" class="identifier">218827</a>
+                        </line>
+                    </linegroup>
+                </level2>
+                <level2 id="b_218829">
+                    <h2>
+                        <span class="author">Saugstad, Per</span>
+                        <br/>
+                        <span>
+                            <span class="title">Psykologiens historie</span>
+                        </span>
+                    </h2>
+                    <linegroup>
+                        <line class="duration">50 t 6 min</line>
+                        <line>
+                            <span class="fieldName">Lest av:</span>
+                            <span class="narrators">
+                                <span class="narrator">Brage Talesyntese</span>
+                            </span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Sjanger/Emner:</span>
+                            <span class="topics"><span class="topic">Historie</span>, <span class="topic">Psykologi</span></span>
+                        </line>
+                        <line>
+                            <span class="fieldName">Boknummer:</span>
+                            <a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=218829" class="identifier">218829</a>
+                        </line>
+                    </linegroup>
+                </level2>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

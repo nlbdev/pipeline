@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plain-text xml:space="preserve" xmlns="http://www.w3.org/1999/xhtml">
+NLBs nyhetsbrev inneholder informasjon om nye bøker og andre nyheter. Vises ikke e-posten riktig? åpne den i nettleseren (*|ARCHIVE|*).
+
+*|HEADER_IMAGE|*
+
+* Biblioteket for lyd og punkt
+------------------------------------------------------------
+
+ 
+
+** *|HEADER_ISSUETITLE|*
+------------------------------------------------------------
+
+Her finner du nyheter og lister med bøker NLB har produsert siste måned. For å bestille bøker du finner i listene - klikk på boknummeret og du sendes videre til NLBs bokbase.
+
+Du kan også kontakte oss på e-post: utlaan@nlb.no (mailto:utlaan@nlb.no) eller telefon: 22 06 88 10.
+
+------------------------------------------------------------
+
+*|TOC|*
+------------------------------------------------------------
+
+*|BODY|*
+
+følg på Twitter (https://twitter.com/NLBNorge) | bli venn på Facebook (http://www.facebook.com/pages/NLB-Norsk-lyd-og-blindeskriftbibliotek/328029534808) | videresend til en venn (*|FORWARD|*)  
+
+/ © *|CURRENT_YEAR|* *|LIST:COMPANY|* /
+*|IFNOT:ARCHIVE_PAGE|* *|LIST:DESCRIPTION|*
+*Postadresse:*
+*|LIST:ADDRESS|**|END:IF|* *|IF:REWARDS|* *|HTML:REWARDS|* *|END:IF|*
+
+meld deg av denne listen (*|UNSUB|*) | endre innstillinger (*|UPDATE_PROFILE|*)
+
+
+
+
+</plain-text>

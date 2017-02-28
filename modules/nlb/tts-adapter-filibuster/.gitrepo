@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/nlbdev/tts-adapter-filibuster.git
+	branch = master
+	commit = 12d57f1bdbbc19d4494778c862c4dcab3ae18096
+	parent = af8f5d227c92f083bb5486ade73fbafab05e0014
+	cmdver = 0.3.0

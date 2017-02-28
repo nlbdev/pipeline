@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet href="dtbook.css" type="text/css"?>
+<dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    <head>
+        <meta content="${uid}" name="dtb:uid"/>
+        <meta content="Årskatalog for ${param:year}" name="dc:Title"/>
+        <meta content="NLB" name="dc:Creator"/>
+        <meta content="${time:Y-m-d}" name="dc:Date"/>
+        <meta content="NLB" name="dc:Publisher"/>
+        <meta content="${uid}" name="dc:Identifier"/>
+        <meta content="nob" name="dc:Language"/>
+    </head>
+    <book showin="blp">
+        <frontmatter>
+            <doctitle>Årskatalog for ${param:year}</doctitle>
+            <docauthor>
+                <img src="NLB_logo_blå.jpg" alt="NLB"/>
+            </docauthor>
+            <level1 id="contact">
+                <h1>Kontaktinformasjon</h1>
+                <p>Utlån: 22 06 88 10</p>
+                <p>E-post: <a external="true" href="mailto:utlaan@nlb.no">utlaan@nlb.no</a></p>
+                <p>Telefaks: 22 06 88 90</p>
+                <p>Postadresse:</p>
+                <p>Norsk lyd- og blindeskriftbibliotek</p>
+                <p>Postboks 2764 Solli, 0204 Oslo</p>
+                <p>Besøksadresse: Observatoriegt. 1B, Oslo</p>
+                <p>
+                    <a external="true" href="http://www.nlb.no/">www.nlb.no</a>
+                </p>
+            </level1>
+            <level1 id="opening-hours">
+                <h1>Åpningstider</h1>
+                <p>
+                    <span>Mandag til fredag: 9 - 14</span>
+                </p>
+            </level1>
+            <level1 id="toc" class="print_toc">
+                <h1>Innholdsfortegnelse</h1>
+                <list type="pl" class="toc"/>
+            </level1>
+        </frontmatter>
+        <bodymatter id="bodymatter_0001">
+            <level1>
+                <level2 id="usage">
+                    <h2>Veiledning i bruk av katalogen</h2>
+                    <p>
+                        <span>Katalogen inneholder fortegnelsen over NLBs nye lyd- og punktskriftbøker ${param:year}.</span>
+                        <span>Den er delt inn i to deler.</span>
+                        <span>Del 1 innholder lydbøker og Del 2 inneholder punktskriftbøker.</span>
+                        <span>Katalogen omfatter bøker for voksne og bøker for barn og ungdom.</span>
+                    </p>
+                    <level3>
+                        <h3>Skjønnlitteratur - Alfabetisk ordning</h3>
+                        <p>
+                            <span>Bøkene er ordnet alfabetisk etter forfatterens etternavn.</span>
+                            <span>Antologier er ordnet etter bokens tittel.</span>
+                            <span>For hver bok gis det opplysninger om bokens forfatter, forfatterens nasjonalitet, tittel, forlag og år.</span>
+                            <span>Oversetter blir oppgitt for oversatte bøker.</span>
+                            <span>For lydboken blir innleser og spilletid oppgitt.</span>
+                            <span>For punktskriftboken blir antall hefter oppgitt.</span>
+                            <span>Det gis opplysninger om bøker som er utgitt i serier.</span>
+                            <span>Alle bøker blir kort omtalt.</span>
+                            <span>Samtidig gir vi opplysninger om bokens genre.</span>
+                            <span>Hvis ikke annet er oppgitt er boken produsert av NLB i ${param:year}.</span>
+                        </p>
+                    </level3>
+                    <level3>
+                        <h3>Fagbøker – Systematisk og alfabetisk ordning</h3>
+                        <p>
+                            <span>Fagbøker er delt inn i fagemner i henhold til Deweys desimalklassifikasjon.</span>
+                            <span>Under hvert fagemne er bøkene alfabetisk ordnet etter forfatterens etternavn.</span>
+                            <span>Antologier er ordnet etter bokens tittel.</span>
+                            <span>For hver bok gis det opplysninger om bokens forfatter, forfatterens nasjonalitet, tittel, forlag og år.</span>
+                            <span>Oversetter blir oppgitt for oversatte fagbøker.</span>
+                            <span>For lydboken blir innleser og spilletid oppgitt.</span>
+                            <span>For punktskriftboken blir antall hefter oppgitt.</span>
+                            <span>Det gis opplysninger om bøker som er utgitt i serier.</span>
+                            <span>Alle bøker blir kort omtalt.</span>
+                            <span>Samtidig gir vi opplysninger om bokens emne.</span>
+                        </p>
+                    </level3>
+                    <level3>
+                        <h3>Boknummer</h3>
+                        <p>
+                            <span>Under hver innførsel er tittelens boknummer oppgitt.</span>
+                            <span>Det er tilstrekkelig å oppgi boknummeret ved bestilling.</span>
+                            <span>Da mange bøker er dobbeltprodusert, er det viktig å oppgi korrekt boknummer knyttet til lyd- eller punktskriftutgaven.</span>
+                        </p>
+                    </level3>
+                    <level3>
+                        <h3>Biografier</h3>
+                        <p>
+                            <span>I katalogen blir biografier i hovedsak registrert under sitt fagemne på forfatterens etternavn.</span>
+                        </p>
+                    </level3>
+                </level2>
+                <level2 id="periodicals">
+                    <h2>Tidsskrifter og aviser i lyd og punkt</h2>
+                    <level3 id="periodical-audio">
+                        <h3>Lyd: (Talesyntese)</h3>
+                        <level4>
+                            <h4>Tidsskrifter:</h4>
+                            <list type="pl" id="periodical-audio-list">
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Appetitt">Appetitt</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Athene">Athene</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Cupido">Cupido (innlest)</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Fjell%20og%20vidde">Fjell og vidde</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Hjemmet">Hjemmet</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Hund%20%26%20fritid%20">Hund &amp; fritid!</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=i%20FORM">i FORM</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Illustrert%20vitenskap">Illustrert vitenskap</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Innsikt">Innsikt</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Kapital">Kapital</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Levende%20historie">Levende historie</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Magasinet%20Reiselyst">Magasinet Reiselyst</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Mat%20fra%20Norge">Mat fra Norge</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=National%20geographic">National geographic</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Spesialpedagogikk">Spesialpedagogikk</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=StatpedMagasinet">StatpedMagasinet</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=STYLEmag">STYLEmag (innlest)</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Syn%20og%20segn">Syn og segn (innlest)</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Vi%20menn">Vi menn</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Vi%20over%2060">Vi over 60 (innlest)</a></li>
+                            </list>
+                            <list type="pl" id="periodical-audio-list-radiotv">
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=613748">Radioguiden</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=612045">TV-Guiden</a></li>
+                            </list>
+                        </level4>
+                        <level4>
+                            <h4>Aviser:</h4>
+                            <list type="pl" id="newspaper-audio-list">
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=611823">Aftenposten</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=618720">Bergens Tidende</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=618363">Fædrelandsvennen</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?tnr=618360">Stavanger Aftenblad</a></li>
+                            </list>
+                        </level4>
+                    </level3>
+                    <level3 id="periodical-braille">
+                        <h3>Punkt:</h3>
+                        <level4>
+                            <h4>Tidsskrifter:</h4>
+                            <list type="pl" id="periodical-braille-list">
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=Appetitt">Appetitt</a></li>
+                                <li><a external="true" href="http://websok.nlb.no/cgi-bin/websok?mode=vt&amp;pubsok_txt_0=National%20geographic">National geographic</a></li>
+                            </list>
+                        </level4>
+                    </level3>
+                    <p>Ta kontakt med Utlånet på e-post eller telefon 22 06 88 10 for abonnement på tidsskrifter.</p>
+                </level2>
+                <level2 id="audio">
+                    <h2>Nye lydbøker</h2>
+                    <level3 id="audio-adult-fiction">
+                        <h3>Skjønnlitteratur for voksne</h3>
+                    </level3>
+                    <level3 id="audio-adult-nonfiction">
+                        <h3>Faglitteratur for voksne</h3>
+                    </level3>
+                    <level3 id="audio-juvenile-fiction">
+                        <h3>Skjønnlitteratur for barn</h3>
+                    </level3>
+                    <level3 id="audio-juvenile-nonfiction">
+                        <h3>Faglitteratur for barn</h3>
+                    </level3>
+                </level2>
+                <level2 id="braille">
+                    <h2>Nye punktskriftbøker</h2>
+                    <p>
+                        <em>Har du bokønsker? Send dine ønsker til <a external="true" href="mailto:utlaan@nlb.no">utlaan@nlb.no</a>. Vi produserer det aller meste av det du har lyst til å lese i
+                            punkt.</em>
+                        <br/>
+                        <br/>
+                    </p>
+                    <level3 id="braille-adult-fiction">
+                        <h3>Skjønnlitteratur for voksne</h3>
+                    </level3>
+                    <level3 id="braille-adult-nonfiction">
+                        <h3>Faglitteratur for voksne</h3>
+                    </level3>
+                    <level3 id="braille-juvenile-fiction">
+                        <h3>Skjønnlitteratur for barn</h3>
+                    </level3>
+                    <level3 id="braille-juvenile-nonfiction">
+                        <h3>Faglitteratur for barn</h3>
+                    </level3>
+                </level2>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>
