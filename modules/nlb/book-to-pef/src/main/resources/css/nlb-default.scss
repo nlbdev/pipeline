@@ -72,36 +72,39 @@ bodymatter, *[epub|type~='bodymatter'] {
 /*               for volume breaking, toc, titlepage                          */
 /* -------------------------------------------------------------------------- */
 
-/* Always start a new volume at elements containing a h1... */
-*:has(> h1) {
-    volume-break-before: always;
+/* Prefer breaking at higher-level sections */
+*:has(h1) { volume-break-inside: -obfl-keep(8); }
+*:has(h2) { volume-break-inside: -obfl-keep(7); }
+*:has(h3) { volume-break-inside: -obfl-keep(6); }
+*:has(h4) { volume-break-inside: -obfl-keep(5); }
+*:has(h5) { volume-break-inside: -obfl-keep(4); }
+*:has(h6) { volume-break-inside: -obfl-keep(3); }
+
+/* A headline must always have its two following pages in the same volume as itself (orphaned headline) */
+h1, h2, h3, h4, h5, h6 {
+    -obfl-keep-with-next-sheets: 2;
 }
 
-/* ...and prefer starting a new volume at subchapter heading elements (h2-h6)... */
-*:has(> h2), *:has(> h3), *:has(> h4), *:has(> h5), *:has(> h6) {
-    volume-break-before: prefer;
-}
+/* minimalist version of the two rules below that causes the error "Cannot call xsl:next-match when context item is not a node" */
+/*p { volume-break-inside: avoid; }*/
 
-/* ...unless they are contained inside a sectioning element. */
-level1 *:has(> h1), section *:has(> h1), article *:has(> h1), nav *:has(> h1), aside *:has(> h1),
-level2 *:has(> h2), section *:has(> h2), article *:has(> h2), nav *:has(> h2), aside *:has(> h2),
-level3 *:has(> h3), section *:has(> h3), article *:has(> h3), nav *:has(> h3), aside *:has(> h3),
-level4 *:has(> h4), section *:has(> h4), article *:has(> h4), nav *:has(> h4), aside *:has(> h4),
-level5 *:has(> h5), section *:has(> h5), article *:has(> h5), nav *:has(> h5), aside *:has(> h5),
-level6 *:has(> h6), section *:has(> h6), article *:has(> h6), nav *:has(> h6), aside *:has(> h6) {
-    volume-break-before: auto;
-}
+/* Avoid volume breaking inside certain DTBook elements (mainly block-level) */
+/*h1, h2, h3, h4, h5, h6,
+imggroup, prodnote, sidebar, note, annotation
+list, dl, table, poem,
+p, address, blockquote, byline, dateline, epigraph, author {
+    volume-break-inside: avoid;
+}*/
 
-/* Always start a new volume at sectioning elements containing a h1. */
-level1, section:has(h1), article:has(h1), nav:has(h1), aside:has(h1) {
-    volume-break-before: always;
-}
-
-/* Prefer starting a new volume at sectioning elements not containing a h1. */
-level2, level3, level4, level5, level6,
-section:not(:has(h1)), article:not(:has(h1)), nav:not(:has(h1)), aside:not(:has(h1)) {
-    volume-break-before: prefer;
-}
+/* Avoid volume breaking inside certain HTML elements (mainly block-level) */
+/*h1, h2, h3, h4, h5, h6,
+nav, header, hgroup,
+figure, footer, form,
+ol, ul, dl, table,
+canvas, audio, video,
+p, address, aside, blockquote, pre {
+    volume-break-inside: avoid;
+}*/
 
 @volume {
         @begin {
