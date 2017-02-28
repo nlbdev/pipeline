@@ -87,6 +87,7 @@
       </x:input>
       <x:option name="temp-dir" select="$temp-dir"/>
     </x:call>
+    
     <x:context label="pef">
       <x:document type="port" port="result"/>
     </x:context>
@@ -168,6 +169,7 @@
       </x:input>
       <x:option name="temp-dir" select="$temp-dir"/>
     </x:call>
+    
     <x:context label="pef">
       <x:document type="port" port="result"/>
     </x:context>
@@ -200,5 +202,6 @@
         </pef>
       </x:document>
     </x:expect>
-  </x:scenario> 
+  </x:scenario>
+  
 </x:description>

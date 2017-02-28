@@ -17,6 +17,7 @@
             <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
         </x:call>
+        
         <x:context label="the output directory contents">
             <x:document type="directory" base-uri="temp-dir" href="1/pef-output-dir/"/>
         </x:context>
@@ -26,7 +27,7 @@
     
     <!-- test for generated content -->
     
-    <x:scenario   label="test with epub file" >
+    <x:scenario label="test with epub file">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB/package.opf')"/>
             <!--       <x:option name="stylesheet" select="resolve-uri('../resources/test1.css')"/> -->
@@ -34,13 +35,10 @@
             <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
         </x:call>
+        
         <x:context label="the output directory contents">
             <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/123456.pef"  select="/*/*[local-name()='body']"  />
         </x:context>
-       
-       
-       
-       
         <x:expect  label="result" type="compare">
             <x:document type="inline" >
                 <body xmlns="http://www.daisy.org/ns/2008/pef">
@@ -60,7 +58,7 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠝⠕⠗⠛⠑⠀⠼⠃⠚⠁⠋</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠝⠕⠗⠛⠑⠀⠼⠃⠚⠁⠛</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -201,23 +199,15 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                            </page>                            
+                            </page>
                         </section>
                     </volume>
                 </body>
-                
             </x:document>
         </x:expect>
-       
-       
-       
     </x:scenario>
     
-    
-    
-    <!-- test for page number -->
-    
-    <x:scenario   label="test with epub file" >
+    <x:scenario label="test for page number">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB_1/package.opf')"/>
                <x:option name="stylesheet" select="resolve-uri('../resources/test3.css')"/>
@@ -225,12 +215,12 @@
             <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
         </x:call>
+        
         <x:context label="the output directory contents">
             <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/123456.pef"  select="/*/*[local-name()='body']"  />
-        </x:context>  
-        
+        </x:context>
         <x:expect  label="result" type="compare">
-            <x:document type="inline" >
+            <x:document type="inline">
                 <body xmlns="http://www.daisy.org/ns/2008/pef">
                     <volume cols="30" rows="28" rowgap="0" duplex="true">
                         <section>
@@ -248,7 +238,7 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠝⠕⠗⠛⠑⠀⠼⠃⠚⠁⠋</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠝⠕⠗⠛⠑⠀⠼⠃⠚⠁⠛</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -393,16 +383,11 @@
                         </section>
                     </volume>
                 </body>
-                
             </x:document>
         </x:expect>
     </x:scenario>
-    
-    
-    
-    <!-- test for page list -->
-    
-    <x:scenario   label="test with epub file" >
+      
+    <x:scenario label="test for page list">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB_2/package.opf')"/>
             <x:option name="stylesheet" select="resolve-uri('../resources/test3.css')"/>
@@ -410,10 +395,10 @@
             <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
         </x:call>
+        
         <x:context label="the output directory contents">
             <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/123456.pef"  select="/*/*[local-name()='body']"  />
-        </x:context>  
-        
+        </x:context>
         <x:expect  label="result" type="compare">
             <x:document type="inline" >
                 <body xmlns="http://www.daisy.org/ns/2008/pef">
@@ -433,7 +418,7 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠝⠕⠗⠛⠑⠀⠼⠃⠚⠁⠋</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠝⠕⠗⠛⠑⠀⠼⠃⠚⠁⠛</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -578,11 +563,9 @@
                         </section>
                     </volume>
                 </body>
-                
             </x:document>
         </x:expect>
     </x:scenario>
-    
   </x:scenario>
   
 </x:description>

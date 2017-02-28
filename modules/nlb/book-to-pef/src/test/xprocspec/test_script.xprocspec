@@ -11,34 +11,30 @@
           <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
             <head>
               <style type="text/css" media="embossed">
-                @page 
-                { size: 30 28;
-                margin-bottom: 1;
-                margin-left: 2;
-                margin-right: 2;
-                
-                @bottom-right 
+                @page
                 {
-                content:  string(print-page , last);
-                }	
-                @bottom-center 
-                {
-                content: counter(page);
+                  size: 30 28;
+                  margin-bottom: 1;
+                  margin-left: 2;
+                  margin-right: 2;
+                  @bottom-right {
+                    content:  string(print-page , last);
+                  }
+                  @bottom-center {
+                    content: counter(page);
+                  }
+                  @left {
+                    content: -obfl-marker-indicator(pagenum, '⠿');
+                  }
                 }
-                
-                @left 
-                {
-                content: -obfl-marker-indicator(pagenum, '⠿');
+                pagenum {
+                  display: none;
+                  -obfl-marker: pagenum;
+                  string-set: print-page '⠿'content();
                 }
-                } 
-                
-                pagenum 
-                {
-                display: none;
-                -obfl-marker: pagenum;
-                string-set: print-page '⠿'content();
+                doctitle, docauthor, level1.colophon, head {
+                  display: none
                 }
-                doctitle , docauthor , level1.colophon , head{ display: none } 
               </style>
               <meta name="dtb:uid" content="557901"/>
               <meta name="dc:Title" content="ULVEGUTTEN TAL - BOK 1"/>
@@ -48,9 +44,9 @@
               <meta name="dc:Language" content="no"/>
               <meta name="dc:Format" content="DTBook"/>
               <meta name="dc:Creator" content="aa ll"/>
-              <meta name="dc:Creator" content="bb"/> 
-              <meta name="dc:Creator" content="ll"/> 
-              <meta name="dc:Creator" content="rr"/> 
+              <meta name="dc:Creator" content="bb"/>
+              <meta name="dc:Creator" content="ll"/>
+              <meta name="dc:Creator" content="rr"/>
               <meta name="dc:Creator" content="zz"/>
               <meta name="dc:Contributor" content="ll"/>
               <meta name="dc:Contributor" content="cc"/>
@@ -232,10 +228,8 @@
               </section>
             </volume>
           </body>
-        
       </x:document>
     </x:expect>
-    
   </x:scenario>
   
 </x:description>

@@ -254,16 +254,14 @@
 
 
   <!--   ***test for bold, italic, strike through  and strong for html*** -->
-  <!--      
-    
-    Always use dots 23 (⠆) in front of italic and dots 56 (⠰) after italic.  if alone    
+  <!--
+    Always use dots 23 (⠆) in front of italic and dots 56 (⠰) after italic.  if alone
     Always use dots 456 (⠸) in front of and after underline.
     Strikethrough use 5-2(⠐⠂) in front and after
    
-   Always use dots 23 (⠆) in front of bold and dots 56 (⠰) after bold.  if alone
-   if both em and bold occurs      
-   Always use dots 6-3 (⠠⠄) in front of bold and dots 6-3 (⠠⠄) after bold. 
-   
+    Always use dots 23 (⠆) in front of bold and dots 56 (⠰) after bold.  if alone
+    if both em and bold occurs
+    Always use dots 6-3 (⠠⠄) in front of bold and dots 6-3 (⠠⠄) after bold.
    -->
 
   <x:scenario label="test for bold, italic, strike through  and strong for html">
@@ -271,7 +269,6 @@
       <x:input port="source">
         <x:document type="inline">
           <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
-            <!--   <div xmlns="http://www.daisy.org/z3986/2005/dtbook/">       -->
             <level1>
               <h1>aa ll bb cc</h1>
               <p>aa <em>bb</em> cc </p>
