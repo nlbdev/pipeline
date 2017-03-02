@@ -119,24 +119,25 @@
                                        123456789012345678901234567890
                                     -->
                                     <p>xxxxxxxxxxxxxxxxxxxxxxx nattog</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx villaks</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx bassolo</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx blokkatt</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx brenneslebladenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxx budsjettal</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx busseter</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx butikkjedenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxx fjellandsbyenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx fotballandskampenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxx gullameene</p>
-                                    <p>xxxxxxxxxxxxxxxxxxx kontrollyst</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx bunnivå</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx gullotto</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx busstopp</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx fullastet</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx bussjåfør</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx skuddrama</p>
-                                    <p>xxxxxxxxxxxxxxxxxxx butikkjede</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx nattog</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx villaks</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx bassolo</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx blokkatt</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx brenneslebladenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx budsjettal</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx busseter</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx butikkjedenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx fjellandsbyenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx fotballandskampenes</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx gullameene</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx kontrollyst</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx bunnivå</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx gullotto</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx busstopp</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx fullastet</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx bussjåfør</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx skuddrama</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx butikkjede</p>
                                 </level1>
                             </bodymatter>
                         </book>
@@ -153,44 +154,45 @@
         <x:expect label="result" type="compare">
             <x:document type="inline" select="//pef:row">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠝⠁⠞⠞⠤</row>
-                    <row>⠀⠞⠕⠛</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠊⠇⠇⠤</row>
-                    <row>⠀⠇⠁⠅⠎</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠁⠎⠎⠤</row>
-                    <row>⠀⠎⠕⠇⠕</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠇⠕⠅⠅⠤</row>
-                    <row>⠀⠅⠁⠞⠞</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠗⠑⠝⠝⠤</row>
-                    <row>⠀⠝⠑⠎⠇⠑⠃⠇⠁⠙⠑⠝⠑⠎</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠙⠎⠚⠑⠞⠞⠤</row>
-                    <row>⠀⠞⠁⠇</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
-                    <row>⠀⠎⠑⠞⠑⠗</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠞⠊⠅⠅⠤</row>
-                    <row>⠀⠅⠚⠑⠙⠑⠝⠑⠎</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠚⠑⠇⠇⠤</row>
-                    <row>⠀⠇⠁⠝⠙⠎⠃⠽⠑⠝⠑⠎</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠕⠞⠃⠁⠇⠇⠤</row>
-                    <row>⠀⠇⠁⠝⠙⠎⠅⠁⠍⠏⠑⠝⠑⠎</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
-                    <row>⠀⠇⠁⠍⠑⠑⠝⠑</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠅⠕⠝⠞⠗⠕⠇⠇⠤</row>
-                    <row>⠀⠇⠽⠎⠞</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠝⠝⠤</row>
-                    <row>⠀⠝⠊⠧⠡</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
-                    <row>⠀⠇⠕⠞⠞⠕</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
-                    <row>⠀⠎⠞⠕⠏⠏</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠥⠇⠇⠤</row>
-                    <row>⠀⠇⠁⠎⠞⠑⠞</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
-                    <row>⠀⠎⠚⠡⠋⠪⠗</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠅⠥⠙⠙⠤</row>
-                    <row>⠀⠙⠗⠁⠍⠁</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠞⠊⠅⠅⠤</row>
-                    <row>⠀⠅⠚⠑⠙⠑</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠝⠁⠞⠞⠕⠛</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠝⠁⠞⠞⠤</row>
+                    <row>⠞⠕⠛</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠊⠇⠇⠤</row>
+                    <row>⠇⠁⠅⠎</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠁⠎⠎⠤</row>
+                    <row>⠎⠕⠇⠕</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠇⠕⠅⠅⠤</row>
+                    <row>⠅⠁⠞⠞</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠗⠑⠝⠝⠤</row>
+                    <row>⠝⠑⠎⠇⠑⠃⠇⠁⠙⠑⠝⠑⠎</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠙⠎⠚⠑⠞⠞⠤</row>
+                    <row>⠞⠁⠇</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
+                    <row>⠎⠑⠞⠑⠗</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠞⠊⠅⠅⠤</row>
+                    <row>⠅⠚⠑⠙⠑⠝⠑⠎</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠚⠑⠇⠇⠤</row>
+                    <row>⠇⠁⠝⠙⠎⠃⠽⠑⠝⠑⠎</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠕⠞⠃⠁⠇⠇⠤</row>
+                    <row>⠇⠁⠝⠙⠎⠅⠁⠍⠏⠑⠝⠑⠎</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
+                    <row>⠇⠁⠍⠑⠑⠝⠑</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠅⠕⠝⠞⠗⠕⠇⠇⠤</row>
+                    <row>⠇⠽⠎⠞</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠝⠝⠤</row>
+                    <row>⠝⠊⠧⠡</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
+                    <row>⠇⠕⠞⠞⠕</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
+                    <row>⠎⠞⠕⠏⠏</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠥⠇⠇⠤</row>
+                    <row>⠇⠁⠎⠞⠑⠞</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤</row>
+                    <row>⠎⠚⠡⠋⠪⠗</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠅⠥⠙⠙⠤</row>
+                    <row>⠙⠗⠁⠍⠁</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠞⠊⠅⠅⠤</row>
+                    <row>⠅⠚⠑⠙⠑</row>
                 </page>
             </x:document>
         </x:expect>
@@ -238,15 +240,16 @@
                                        123456789012345678901234567890
                                     -->
                                     <!-- some words that we've defined rules for explicitly -->
+                                    <p>xxxxxxxxxxxx hovedfagskandidat</p>
                                     <p>xxxxxxxxxxxxxxxxxx hovedfagskandidat</p>
                                     <p>xxxxxxxxxxxxxxxxxx inngangsport</p>
                                     <p>xxxxxxxxxxxxxxxxxxxxxxx selskapstøy</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx linje</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxxx linje</p>
                                     <p>xxxxxxxxxxxxxxxxxxxxxxx orddeling</p>
                                     <p>xxxxxxxxxxxxxxxxxxxxxxx riksavis</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx skulle</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx eksempel</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx betale</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx skulle</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx eksempel</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx betale</p>
                                     <p>xxxxxxxxxxxxxxxxxxxxxx førkrigstida</p>
                                     <p>xxxxxxxxxxxxxxxxxx førkrigstida</p>
                                     
@@ -269,32 +272,33 @@
         <x:expect label="result" type="compare">
             <x:document type="inline" select="//pef:row">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠓⠕⠧⠑⠙⠋⠁⠛⠎⠤</row>
-                    <row>⠀⠅⠁⠝⠙⠊⠙⠁⠞</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠊⠝⠝⠛⠁⠝⠛⠎⠤</row>
-                    <row>⠀⠏⠕⠗⠞</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠑⠇⠤</row>
-                    <row>⠀⠎⠅⠁⠏⠎⠞⠪⠽</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠇⠊⠝⠤</row>
-                    <row>⠀⠚⠑</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠕⠗⠙⠤</row>
-                    <row>⠀⠙⠑⠇⠊⠝⠛</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠗⠊⠅⠎⠤</row>
-                    <row>⠀⠁⠧⠊⠎</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠅⠥⠇⠤</row>
-                    <row>⠀⠇⠑</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠑⠅⠤</row>
-                    <row>⠀⠎⠑⠍⠏⠑⠇</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠑⠞⠁⠤</row>
-                    <row>⠀⠇⠑</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠪⠗⠤</row>
-                    <row>⠀⠅⠗⠊⠛⠎⠞⠊⠙⠁</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠪⠗⠅⠗⠊⠛⠎⠤</row>
-                    <row>⠀⠞⠊⠙⠁</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠑⠤</row>
-                    <row>⠀⠗⠕⠞</row>
-                    <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
-                    <row>⠀⠏⠑⠝⠛⠑⠝⠑</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠓⠕⠧⠑⠙⠋⠁⠛⠎⠅⠁⠝⠙⠊⠙⠁⠞</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠓⠕⠧⠑⠙⠋⠁⠛⠎⠤</row>
+                    <row>⠅⠁⠝⠙⠊⠙⠁⠞</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠊⠝⠝⠛⠁⠝⠛⠎⠤</row>
+                    <row>⠏⠕⠗⠞</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠑⠇⠤</row>
+                    <row>⠎⠅⠁⠏⠎⠞⠪⠽</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠇⠊⠝⠤</row>
+                    <row>⠚⠑</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠕⠗⠙⠤</row>
+                    <row>⠙⠑⠇⠊⠝⠛</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠗⠊⠅⠎⠤</row>
+                    <row>⠁⠧⠊⠎</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠎⠅⠥⠇⠤</row>
+                    <row>⠇⠑</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠑⠅⠤</row>
+                    <row>⠎⠑⠍⠏⠑⠇</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠑⠞⠁⠤</row>
+                    <row>⠇⠑</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠪⠗⠤</row>
+                    <row>⠅⠗⠊⠛⠎⠞⠊⠙⠁</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠋⠪⠗⠅⠗⠊⠛⠎⠤</row>
+                    <row>⠞⠊⠙⠁</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠑⠤</row>
+                    <row>⠗⠕⠞</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠛⠥⠇⠇⠤</row>
+                    <row>⠏⠑⠝⠛⠑⠝⠑</row>
                 </page>
             </x:document>
         </x:expect>

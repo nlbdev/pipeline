@@ -373,8 +373,8 @@
       <x:document type="inline">
         <_ style="text-transform: none">
         <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
-          <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
-          <p css:display="block">
+          <p style="display: block">⠋⠕⠕­⠃⠁⠗</p>
+          <p style="display: block">
             <_ xmlns="" style="hyphens: auto; text-transform: auto">busstopp</_>
           </p>
         </div>
