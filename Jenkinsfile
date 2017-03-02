@@ -5,7 +5,7 @@ node {
     stage 'Build'
     sh 'make clean'
     sh 'mkdir -p .maven-cache'
-    sh 'make dist-zip'
+    sh 'make dist-zip-linux'
     
     stage 'Test'
     sh 'make check'
