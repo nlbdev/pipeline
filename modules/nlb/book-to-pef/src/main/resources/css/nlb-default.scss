@@ -22,10 +22,6 @@ $choice-of-colophon: true !default;
                 @bottom-right {
                         content: string(print-page, last);
                 }
-
-                @left {
-                        content: -obfl-marker-indicator(pagenum, "⠿");
-                }
         }
 
         @if $show-braille-page-numbers {
