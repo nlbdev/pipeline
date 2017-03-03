@@ -18,7 +18,7 @@ SHELL := /bin/bash
 all : compile check dist
 
 .PHONY : dist
-dist: dist-dmg dist-exe dist-zip-linux dist-deb dist-rpm dist-webui-deb dist-webui-rpm
+dist: dist-dmg dist-exe dist-zip-linux dist-zip-minimal dist-deb dist-rpm dist-webui-deb dist-webui-rpm
 
 .PHONY : dist-dmg
 dist-dmg : compile
@@ -36,6 +36,12 @@ dist-exe : compile
 dist-zip-linux : compile
 	cd assembly && \
 	$(MVN) clean package -Plinux | $(MVN_LOG)
+	mv assembly/target/*.zip .
+
+.PHONY : dist-zip-minimal
+dist-zip-minimal : compile
+	cd assembly && \
+	$(MVN) clean package -Pminimal | $(MVN_LOG)
 	mv assembly/target/*.zip .
 
 .PHONY : dist-deb
@@ -417,7 +423,7 @@ clean-website :
 mvn :
 	echo -n "mvn () { `dirname "\`bash which mvn\`"`/$(MVN) \""
 	echo -n '$$'
-	echo "@\" }"
+	echo "@\" ; }"
 	echo '# Run this command to configure your shell: '
 	echo '# eval $$(make mvn)'
 
