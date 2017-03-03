@@ -418,9 +418,9 @@
             <pxi:propagate-page-break>
                 <p:documentation>
                     Propagate css:page-break-before, css:page-break-after, css:page-break-inside,
-                    css:page, css:counter-set-page, css:volume and css:volume-break-before
-                    attributes,so that splitting can be performed without creating empty boxes. <!--
-                    depends on make-anonymous-block-boxes -->
+                    css:page, css:volume and css:volume-break-before attributes, so that splitting
+                    can be performed without creating empty boxes. <!-- depends on
+                    make-anonymous-block-boxes -->
                 </p:documentation>
             </pxi:propagate-page-break>
             <p:group>

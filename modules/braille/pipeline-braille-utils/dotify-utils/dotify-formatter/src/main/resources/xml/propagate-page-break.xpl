@@ -20,9 +20,7 @@
             box ancestor. The 'page-break' and 'volume-break' properties of block boxes must be
             declared in css:page-break-before, css:page-break-after, css:page-break-inside and
             css:volume-break-before attributes. 'page' properties must be declared in css:page
-            attributes. 'counter-set' properties for the 'page' counter must be declared in
-            css:counter-set-page attributes. 'volume' properties must be declared in css:volume
-            attributes.
+            attributes. 'volume' properties must be declared in css:volume attributes.
         </p:documentation>
     </p:input>
     
