@@ -241,8 +241,23 @@ head {
 }
 
 level1,
-frontmatter, *[epub|type~='frontmatter'], bodymatter, *[epub|type~='bodymatter'], rearmatter, *[epub|type~='backmatter'] {
+bodymatter, *[epub|type~='bodymatter'], rearmatter, *[epub|type~='backmatter'] {
         display: block;
+}
+
+frontmatter, *[epub|type~='frontmatter'] {
+        display: none;
+        &:has(> *:not(doctitle,
+                      h1[epub|type~='fulltitle'],
+                      h1[epub|type~='z3998:covertitle'],
+                      docauthor,
+                      h1[epub|type~='z3998:author'],
+                     .first-page,
+                     .second-page,
+                     .third-page,
+                     .titlepage)) {
+                display: block;
+        }
 }
 
 blockquote, sidebar, aside[epub|type~='sidebar'], epigraph, aside[epub|type~='epigraph'], noteref, a[epub|type~='noteref'],
@@ -286,7 +301,10 @@ frontmatter, level1[epub|type~='frontmatter'] {
         margin-top: 2;
         text-align: center;
         page-break-before: right;
-        border: ⠉ ⠸ ⠤ ⠇;
+        border-top: ⠉;
+        border-right: ⠸;
+        border-bottom: ⠤;
+        border-left: ⠇;
 }
 
 .precedingemptyline {
@@ -315,7 +333,8 @@ h1, .part h2 {
         margin-right: 5;
         margin-bottom: 1;
         text-align: center;
-        border: ⠉ none;
+        border-top: ⠉;
+        border-bottom: ⠉;
 }
 
 h2, .part h3 {
