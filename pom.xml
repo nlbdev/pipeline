@@ -35,8 +35,8 @@
     <module>modules/nordic</module>
     <!--<module>cli</module>-->
     <!--<module>gui</module>-->
-    <module>updater/cli</module>
-    <module>updater/gui</module>
+    <!--<module>updater/cli</module>-->
+    <!--<module>updater/gui</module>-->
   </modules>
   
   <build>
