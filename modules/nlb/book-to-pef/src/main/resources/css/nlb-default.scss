@@ -68,37 +68,9 @@ bodymatter, *[epub|type~='bodymatter'] {
 /*               for volume breaking, toc, titlepage                          */
 /* -------------------------------------------------------------------------- */
 
-/* Prefer breaking at higher-level sections */
-*:has(h1) { volume-break-inside: -obfl-keep(8); }
-*:has(h2) { volume-break-inside: -obfl-keep(7); }
-*:has(h3) { volume-break-inside: -obfl-keep(6); }
-*:has(h4) { volume-break-inside: -obfl-keep(5); }
-*:has(h5) { volume-break-inside: -obfl-keep(4); }
-*:has(h6) { volume-break-inside: -obfl-keep(3); }
+/* TODO: volume breaking rules */
 
-/* A headline must always have its two following pages in the same volume as itself (orphaned headline) */
-h1, h2, h3, h4, h5, h6 {
-    -obfl-keep-with-next-sheets: 2;
-}
-
-/* Avoid volume breaking inside certain DTBook elements (mainly block-level) */
-h1, h2, h3, h4, h5, h6,
-imggroup, prodnote, sidebar, note, annotation
-list, dl, table, poem,
-p, address, blockquote, byline, dateline, epigraph, author {
-    volume-break-inside: -obfl-keep(1);
-}
-
-/* Avoid volume breaking inside certain HTML elements (mainly block-level) */
-h1, h2, h3, h4, h5, h6,
-nav, header, hgroup,
-figure, footer, form,
-ol, ul, dl, table,
-canvas, audio, video,
-p, address, aside, blockquote, pre {
-    volume-break-inside: -obfl-keep(1);
-}
-
+/* Insert generated content at start of volume */
 @volume {
         @begin {
                 content: flow(front) flow(volume-toc);
