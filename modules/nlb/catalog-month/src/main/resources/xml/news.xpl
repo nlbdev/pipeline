@@ -180,7 +180,7 @@
                     </p:input>
                 </p:insert>
                 <p:insert match="j:bodyOriginal" position="first-child">
-                    <p:input port="insertion" select="/*/j:introOriginal">
+                    <p:input port="insertion" select="/*/j:introOriginal/*">
                         <p:pipe port="result" step="unescaped-json-article"/>
                     </p:input>
                 </p:insert>
