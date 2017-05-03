@@ -25,11 +25,6 @@
             <p px:role="desc">Mappe der nyhetsbrevet i DTBook-format skal lagres.</p>
         </p:documentation>
     </p:option>
-    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Mappe for midlertidige filer</h2>
-        </p:documentation>
-    </p:option>
 
     <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     <p:import href="news.xpl"/>
@@ -38,7 +33,6 @@
     <p:import href="make-dtbook.xpl"/>
     
     <p:variable name="outputDir" select="if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/')"/>
-    <p:variable name="tempDir" select="if (ends-with($temp-dir,'/')) then $temp-dir else concat($temp-dir,'/')"/>
 
     <p:choose>
         <p:when test="not(matches($month,'^\d\d\d\d-\d\d$'))">
@@ -75,7 +69,6 @@
         <p:with-option name="month" select="/*/@previous-month">
             <p:pipe port="result" step="php-time"/>
         </p:with-option>
-        <p:with-option name="temp-dir" select="$tempDir"/>
     </nlb:news>
 
     <!-- Hent bøker -->

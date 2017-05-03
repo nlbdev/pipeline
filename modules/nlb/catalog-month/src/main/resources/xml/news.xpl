@@ -27,8 +27,6 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="temp-dir" required="true"/>
-    
     <p:variable name="lastMonthDay" select="if (ends-with($month,'-01')) then '31'
                                         else if (ends-with($month,'-02') and number(tokenize($month,'-')[1]) mod 4 = 0.0) then '29'
                                         else if (ends-with($month,'-02')) then '28'
@@ -139,14 +137,6 @@
                 <p:with-option name="attribute-value" select="concat(/*/@href,'?from=',$month,'-01&amp;to=',$month,'-',$lastMonthDay)"/>
             </p:add-attribute>
             <p:http-request/>
-            <p:store name="store-news-latin1" encoding="ISO-8859-1">
-                <p:with-option name="href" select="concat($temp-dir,'news-',$month,'.xml')"/>
-            </p:store>
-            <p:load>
-                <p:with-option name="href" select="/*/text()">
-                    <p:pipe port="result" step="store-news-latin1"/>
-                </p:with-option>
-            </p:load>
             <p:unescape-markup content-type="application/json"/>
             <p:for-each>
                 <p:iteration-source select="/c:body/j:json/j:article/j:item"/>
