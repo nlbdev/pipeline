@@ -10,7 +10,9 @@
                 exclude-result-prefixes="#all"
                 version="2.0" >
     
-    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl" />
+    <!--
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+    -->
     <xsl:include href="generate-obfl-layout-master.xsl"/>
     
     <!-- ========== -->
@@ -1454,12 +1456,15 @@
     
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:volume-break-inside">
+        <xsl:variable name="this" select="."/>
         <xsl:analyze-string select="." regex="^{$_OBFL_KEEP_FN_RE}$">
             <xsl:matching-substring>
                 <xsl:attribute name="volume-keep-priority" select="regex-group($_OBFL_KEEP_FN_RE_priority)"/>
             </xsl:matching-substring>
             <xsl:non-matching-substring>
-                <xsl:next-match/>
+                <xsl:call-template name="coding-error">
+                    <xsl:with-param name="context" select="$this"/>
+                </xsl:call-template>
             </xsl:non-matching-substring>
         </xsl:analyze-string>
     </xsl:template>
@@ -1609,25 +1614,29 @@
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes"/>
-        <!--
-            Dotify always uses default mode for page-number (bug?), so effective value of
-            text-transform is 'auto'
-        -->
-        <xsl:variable name="pending-text-transform" as="xs:string" select="($pending-text-transform,$text-transform)[1]"/>
+        <xsl:if test="($pending-text-transform[not(.='none')] and $text-transform='none')
+                      or ($pending-hyphens[not(.='auto')] and $hyphens='auto')">
+            <xsl:message terminate="yes">Coding error</xsl:message>
+        </xsl:if>
+        <xsl:variable name="text-transform" as="xs:string" select="($pending-text-transform,$text-transform)[1]"/>
+        <xsl:variable name="hyphens" as="xs:string" select="($pending-hyphens,$hyphens)[1]"/>
         <xsl:variable name="style" as="xs:string*">
             <xsl:variable name="text-transform" as="xs:string*">
                 <xsl:if test="matches(@style,re:exact($css:SYMBOLS_FN_RE))">
                     <xsl:sequence select="'-dotify-counter'"/>
                 </xsl:if>
-                <xsl:if test="not($pending-text-transform=('auto','none'))">
-                    <xsl:sequence select="$pending-text-transform"/>
+                <!--
+                    Dotify always uses default mode for page-number (bug?)
+                -->
+                <xsl:if test="not($text-transform='auto' or ($text-transform='none' and matches(@style,re:exact($css:SYMBOLS_FN_RE))))">
+                    <xsl:sequence select="$text-transform"/>
                 </xsl:if>
             </xsl:variable>
             <xsl:if test="exists($text-transform)">
                 <xsl:sequence select="concat('text-transform: ',string-join($text-transform,' '))"/>
             </xsl:if>
-            <xsl:if test="exists($pending-hyphens) and not($pending-hyphens=$hyphens)">
-                <xsl:sequence select="concat('hyphens: ',$pending-hyphens)"/>
+            <xsl:if test="$hyphens='none'">
+                <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
             </xsl:if>
             <xsl:if test="@css:white-space">
                 <xsl:sequence select="concat('white-space:',@css:white-space)"/>
@@ -1719,12 +1728,18 @@
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes"/>
+        <xsl:if test="($pending-text-transform[not(.='none')] and $text-transform='none')
+                      or ($pending-hyphens[not(.='auto')] and $hyphens='auto')">
+            <xsl:message terminate="yes">Coding error</xsl:message>
+        </xsl:if>
+        <xsl:variable name="text-transform" as="xs:string" select="($pending-text-transform,$text-transform)[1]"/>
+        <xsl:variable name="hyphens" as="xs:string" select="($pending-hyphens,$hyphens)[1]"/>
         <xsl:variable name="style" as="xs:string*">
-            <xsl:if test="exists($pending-text-transform) and not($pending-text-transform=($text-transform,'none'))">
-                <xsl:sequence select="concat('text-transform: ',$pending-text-transform)"/>
+            <xsl:if test="not($text-transform=('auto','none'))">
+                <xsl:sequence select="concat('text-transform: ',$text-transform)"/>
             </xsl:if>
-            <xsl:if test="exists($pending-hyphens) and not($pending-hyphens=$hyphens)">
-                <xsl:sequence select="concat('hyphens: ',$pending-hyphens)"/>
+            <xsl:if test="$hyphens='none'">
+                <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
             </xsl:if>
         </xsl:variable>
         <xsl:choose>
@@ -2041,13 +2056,14 @@
     </xsl:template>
     
     <xsl:template name="coding-error">
+        <xsl:param name="context" select="."/> <!-- element()|text()|attribute() -->
         <xsl:message terminate="yes">
           <xsl:text>Coding error: unexpected </xsl:text>
-          <xsl:value-of select="pxi:get-path(.)"/>
-          <xsl:if test="self::text()">
+          <xsl:value-of select="pxi:get-path($context)"/>
+          <xsl:if test="$context/self::text()">
               <xsl:text> ("</xsl:text>
               <xsl:value-of select="replace(
-                                      if (string-length(.)&gt;10) then concat(substring(.,1,10),'...') else string(.),
+                                      if (string-length($context)&gt;10) then concat(substring($context,1,10),'...') else string($context),
                                       '\n','\\n')"/>
               <xsl:text>")</xsl:text>
           </xsl:if>

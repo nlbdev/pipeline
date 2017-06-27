@@ -14,6 +14,7 @@
                 exclude-inline-prefixes="#all"
                 name="main">
     
+    <p:option name="epub" required="true"/>
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
     <p:output port="fileset.out" primary="true">
@@ -136,6 +137,11 @@
         </p:choose>
         
         <p:filter select="/*/html:body"/>
+        
+        <!-- xml:base attribute is required for resolving cross-references between different bodies -->
+        <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:with-option name="attribute-value" select="base-uri(/*)"/>
+        </p:add-attribute>
     </p:for-each>
     <p:identity name="spine-bodies"/>
     
@@ -173,16 +179,19 @@
     
     <px:message message="Inlining global CSS"/>
     <p:group>
+        <p:variable name="abs-stylesheet"
+                    select="string-join(for $s in tokenize($stylesheet,'\s+')[not(.='')]
+                                        return resolve-uri($s,$epub),' ')"/>
         <p:variable name="first-css-stylesheet"
-                    select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
+                    select="tokenize($abs-stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
-                    select="(index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
+                    select="(index-of(tokenize($abs-stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
-                              (tokenize($stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
+                              (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
                               $default-stylesheet,
                               resolve-uri('../../css/default.scss'),
-                              (tokenize($stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
+                              (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
         <px:message severity="DEBUG">
@@ -287,20 +296,7 @@
             <p:empty/>
         </p:input>
     </p:xslt>
-    <!-- add xml:lang -->
-    <p:choose>
-        <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
-            <p:pipe port="result" step="opf"/>
-        </p:variable>
-        <p:when test="not($lang='und')">
-            <p:add-attribute match="/*" attribute-name="xml:lang">
-                <p:with-option name="attribute-value" select="$lang"/>
-            </p:add-attribute>
-        </p:when>
-        <p:otherwise>
-            <p:identity/>
-        </p:otherwise>
-    </p:choose>
+    
     <p:add-attribute match="/*" attribute-name="xml:base">
         <p:with-option name="attribute-value" select="replace(base-uri(/*),'[^/]+$',concat(((/*/opf:metadata/dc:identifier[not(@refines)]/text()), 'pef')[1],'.pef'))">
             <p:pipe port="result" step="opf"/>
