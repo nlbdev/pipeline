@@ -199,7 +199,7 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 			public Query assocLocale(Query query, Locale locale) {
 				MutableQuery q = mutableQuery(query);
 				q.removeAll("locale");
-				q.add("locale", Locales.toString(locale, '_'));
+				q.add("locale", locale.toLanguageTag());
 				return q.asImmutable();
 			}
 			public TransformProvider<T> withContext(Logger context) {

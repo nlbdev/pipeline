@@ -49,7 +49,6 @@ import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
-import org.daisy.pipeline.braille.common.util.Locales;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import static org.daisy.pipeline.braille.common.util.Strings.insertHyphens;
@@ -220,7 +219,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		if (table != null)
 			q.add("table", table);
 		if (locale != null)
-			q.add("locale", Locales.toString(parseLocale(locale), '_'));
+			q.add("locale", parseLocale(locale).toLanguageTag().replace('-', '_'));
 		if (!asciiBraille)
 			q.add("unicode");
 		q.add("white-space");
