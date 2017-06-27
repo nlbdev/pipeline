@@ -40,6 +40,7 @@
     <module>updater/cli</module>
     <module>updater/gui</module>
     <module>assembly</module>
+    <module>website/target/maven</module>
   </modules>
   
   <build>
