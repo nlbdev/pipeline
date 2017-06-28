@@ -376,7 +376,7 @@
         <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
           <p style="display: block">⠋⠕⠕­⠃⠁⠗</p>
           <p style="display: block">
-            <_ xmlns="" style="hyphens: auto; text-transform: auto">busstopp</_>
+            <_ xmlns="" xml:lang="no" style="hyphens: auto; text-transform: auto">busstopp</_>
           </p>
         </div>
         </_>
