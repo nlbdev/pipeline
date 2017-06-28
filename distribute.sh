@@ -58,13 +58,13 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
 done
 echo "</releaseDescriptor>" >> releaseDescriptor.xml
 
-cat releaseDescriptor.xml | ssh $PIPELINE_USER@$PIPELINE_HOST "cat >> /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION"
+cat releaseDescriptor.xml | ssh $PIPELINE_USER@$PIPELINE_HOST "cat > /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION"
 
 if [ "$GIT_BRANCH" != "HEAD" ]; then
     ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/$GIT_BRANCH"
 fi
 
-if [ "$GIT_BRANCH" != "nlb" ]; then
+if [ "$GIT_BRANCH" = "nlb" ]; then
     ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/current"
 fi
 
