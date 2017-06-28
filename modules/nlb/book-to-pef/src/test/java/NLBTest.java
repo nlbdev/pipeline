@@ -17,6 +17,7 @@ import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import org.osgi.framework.BundleContext;
@@ -49,6 +50,22 @@ public class NLBTest extends AbstractXSpecAndXProcSpecTest {
 			return dispatch(providers); }
 		catch (Exception e) {
 			throw new RuntimeException(e); }
+	}
+	
+	@Test
+	public void testQuery() throws Exception {
+		{
+			BrailleTranslator translator = translatorProvider().get(query(
+				"(input:css)(output:css)(translator:nlb)(locale:no)(grade:0)"
+			)).iterator().next();
+			assertNotNull(translator);
+		}
+		{
+			BrailleTranslator translator = translatorProvider().get(query(
+				"(input:html)(input:css)(output:html)(output:css)(output:braille)(translator:nlb)(grade:0)(locale:no)"
+			)).iterator().next();
+			assertNotNull(translator);
+		}
 	}
 	
 	@Test

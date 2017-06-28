@@ -87,8 +87,9 @@ public interface NLBTranslator {
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
 		
-		private final static List<String> supportedInput = ImmutableList.of("css","text-css","dtbook","html");
+		private final static List<String> supportedInput = ImmutableList.of("css","text-css");
 		private final static List<String> supportedOutput = ImmutableList.of("css","braille");
+		private final static List<String> supportedInputOutput = ImmutableList.of("dtbook","html");
 		
 		/**
 		 * Recognized features:
@@ -101,12 +102,17 @@ public interface NLBTranslator {
 		 */
 		protected final Iterable<BrailleTranslator> _get(Query query) {
 			final MutableQuery q = mutableQuery(query);
-			for (Feature f : q.removeAll("input"))
-				if (!supportedInput.contains(f.getValue().get()))
-					return empty;
-			for (Feature f : q.removeAll("output"))
-				if (!supportedOutput.contains(f.getValue().get()))
-					return empty;
+			String inputFormat = null;
+			for (Feature f : q.removeAll("input")) {
+				String i = f.getValue().get();
+				if (inputFormat == null && supportedInputOutput.contains(i))
+					inputFormat = i;
+				else if (!supportedInput.contains(i))
+					return empty; }
+			for (Feature f : q.removeAll("output")) {
+				String o = f.getValue().get();
+				if (!supportedOutput.contains(o) && (inputFormat == null || !inputFormat.equals(o)))
+					return empty; }
 			if (q.containsKey("locale")) {
 				String locale = parseLocale(q.removeOnly("locale").getValue().get()).getLanguage();
 				// If we want to use other tables for other languages in the future; it can be done here.
