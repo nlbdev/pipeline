@@ -269,9 +269,9 @@
                 <x:document type="inline" select="//pef:row">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠇</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
                         <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠇</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
                         <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                         <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
                         <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
