@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
     xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
@@ -207,8 +208,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="test for page number"
-                pending="Test started failing after update to latest Pipeline but the expected result looks suspicious. Please verify.">
+    <x:scenario label="test for page number">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB_1/package.opf')"/>
                <x:option name="stylesheet" select="resolve-uri('../resources/test3.css')"/>
@@ -358,10 +358,10 @@
                                 <row>⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
-                                <row>⠿⠀⠀⠀⠠⠠⠝⠇⠃⠀⠑⠗⠀⠑⠞⠀⠃⠊⠃⠇⠊⠕⠞⠑⠅⠀⠄</row>
-                                <row>⠿⠀⠀⠀⠠⠧⠡⠗⠑⠀⠁⠧⠙⠑⠇⠊⠝⠛⠑⠗⠀⠑⠗⠒</row>
+                                <row>⠀⠀⠀⠀⠠⠠⠝⠇⠃⠀⠑⠗⠀⠑⠞⠀⠃⠊⠃⠇⠊⠕⠞⠑⠅⠀⠄</row>
+                                <row>⠀⠀⠀⠀⠠⠧⠡⠗⠑⠀⠁⠧⠙⠑⠇⠊⠝⠛⠑⠗⠀⠑⠗⠒</row>
                                 <row>⠿⠀⠀⠀⠁⠁</row>
-                                <row>⠿⠀⠀⠀⠃⠃</row>
+                                <row>⠀⠀⠀⠀⠃⠃</row>
                                 <row>⠿⠀⠀⠀⠉⠉</row>
                                 <row/>
                                 <row/>
@@ -388,8 +388,7 @@
         </x:expect>
     </x:scenario>
       
-    <x:scenario label="test for page list"
-                pending="Test started failing after update to latest Pipeline but the expected result looks suspicious. Please verify.">
+    <x:scenario label="test for page list">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB_2/package.opf')"/>
             <x:option name="stylesheet" select="resolve-uri('../resources/test3.css')"/>
@@ -539,9 +538,9 @@
                                 <row>⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
-                                <row>⠿⠀⠀⠀⠁⠁⠁⠄</row>
-                                <row>⠿⠀⠀⠀⠀⠀⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                <row>⠿⠀⠀⠀⠀⠀⠤⠀⠃⠃⠃⠀⠃⠃⠃</row>
+                                <row>⠀⠀⠀⠀⠁⠁⠁⠄</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠤⠀⠃⠃⠃⠀⠃⠃⠃</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠇⠇⠇⠀⠇⠇⠇</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠗⠗⠗⠀⠗⠗⠗</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>

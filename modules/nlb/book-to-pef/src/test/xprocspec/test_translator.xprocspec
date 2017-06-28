@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
@@ -21,7 +22,7 @@
     </p:declare-step>
   </x:script>
 
-  <x:scenario label="6-dot: Grade 0, 1, 2 and 3">
+  <x:scenario label="6-dot: Grade 0, 1, 2 and 3" pending="https://github.com/nlbdev/pipeline/issues/67">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -105,7 +106,7 @@
     </x:scenario>
   </x:scenario>
 
-  <x:scenario label="8-dot: Grade 0">
+  <x:scenario label="8-dot: Grade 0" pending="https://github.com/nlbdev/pipeline/issues/67">
     <x:call step="pxi:transform">
       <x:option name="dots" select="'8'"/>
       <x:input port="source">
@@ -264,7 +265,7 @@
     Always use dots 6-3 (⠠⠄) in front of bold and dots 6-3 (⠠⠄) after bold.
    -->
 
-  <x:scenario label="test for bold, italic, strike through  and strong for html">
+  <x:scenario label="test for bold, italic, strike through  and strong for html" pending="https://github.com/nlbdev/pipeline/issues/67">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -311,7 +312,7 @@
 
   <!--   ***test for bold, italic, strike through  and strong for DTbook*** -->
 
-  <x:scenario label="test for bold, italic, strike through  and strong for DTbook">
+  <x:scenario label="test for bold, italic, strike through  and strong for DTbook" pending="https://github.com/nlbdev/pipeline/issues/67">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -354,7 +355,7 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="non-standard hyphenation">
+  <x:scenario label="non-standard hyphenation" pending="https://github.com/nlbdev/pipeline/issues/67">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
