@@ -22,7 +22,7 @@
     </p:declare-step>
   </x:script>
 
-  <x:scenario label="6-dot: Grade 0, 1, 2 and 3" pending="https://github.com/nlbdev/pipeline/issues/67">
+  <x:scenario label="6-dot: Grade 0, 1, 2 and 3">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -43,7 +43,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <_ style="text-transform: none">
-          <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+          <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
             <p xmlns="http://www.w3.org/1999/xhtml">⠋⠕⠕­⠃⠁⠗</p>
           </div>
           </_>
@@ -61,7 +61,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <_ style="text-transform: none">
-          <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+          <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
             <p xmlns="http://www.w3.org/1999/xhtml">⠋⠕⠕­⠃⠼</p>
           </div>
           </_>
@@ -79,7 +79,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <_ style="text-transform: none">
-          <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+          <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
             <p xmlns="http://www.w3.org/1999/xhtml">⠋⠕⠕­⠃⠼</p>
           </div>
           </_>
@@ -97,7 +97,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <_ style="text-transform: none">
-          <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+          <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
             <p xmlns="http://www.w3.org/1999/xhtml">⠋⠕⠕­⠃⠼</p>
           </div>
           </_>
@@ -106,7 +106,7 @@
     </x:scenario>
   </x:scenario>
 
-  <x:scenario label="8-dot: Grade 0" pending="https://github.com/nlbdev/pipeline/issues/67">
+  <x:scenario label="8-dot: Grade 0">
     <x:call step="pxi:transform">
       <x:option name="dots" select="'8'"/>
       <x:input port="source">
@@ -127,7 +127,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <_ style="text-transform: none">
-          <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+          <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
             <p>⠋⠕⠕­⠃⠁⠗</p>
           </div>
           </_>
@@ -265,7 +265,7 @@
     Always use dots 6-3 (⠠⠄) in front of bold and dots 6-3 (⠠⠄) after bold.
    -->
 
-  <x:scenario label="test for bold, italic, strike through  and strong for html" pending="https://github.com/nlbdev/pipeline/issues/67">
+  <x:scenario label="test for bold, italic, strike through  and strong for html">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -291,7 +291,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <_ style="text-transform: none">
-        <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+        <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
           <level1>
             <h1>⠁⠁ ⠇⠇ ⠃⠃ ⠉⠉</h1>
             <p>⠁⠁ <em>⠆⠃⠃⠰</em> ⠉⠉</p>
@@ -312,7 +312,7 @@
 
   <!--   ***test for bold, italic, strike through  and strong for DTbook*** -->
 
-  <x:scenario label="test for bold, italic, strike through  and strong for DTbook" pending="https://github.com/nlbdev/pipeline/issues/67">
+  <x:scenario label="test for bold, italic, strike through  and strong for DTbook">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -338,7 +338,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <_ style="text-transform: none">
-        <div xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+        <div xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
           <level1>
             <h1>⠁⠁ ⠇⠇ ⠃⠃ ⠉⠉</h1>
             <p>⠁⠁ <em>⠆⠃⠃⠰</em> ⠉⠉</p>
@@ -355,7 +355,7 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="non-standard hyphenation" pending="https://github.com/nlbdev/pipeline/issues/67">
+  <x:scenario label="non-standard hyphenation">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -373,7 +373,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <_ style="text-transform: none">
-        <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+        <div xml:lang="no-Brai" xmlns="http://www.w3.org/1999/xhtml">
           <p style="display: block">⠋⠕⠕­⠃⠁⠗</p>
           <p style="display: block">
             <_ xmlns="" style="hyphens: auto; text-transform: auto">busstopp</_>

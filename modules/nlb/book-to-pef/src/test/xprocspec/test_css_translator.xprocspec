@@ -20,7 +20,7 @@
 
   <!--   **** test for text-transform:uncontracted   ***  -->
 
-  <x:scenario label="test for text-transform:uncontracted" pending="https://github.com/nlbdev/pipeline/issues/67">
+  <x:scenario label="test for text-transform:uncontracted">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -44,7 +44,7 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <div xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+        <div xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no-Brai">
           <doctitle>⠰⠇</doctitle>
           <docauthor>⠰⠁</docauthor>
           <level1 class="titlepage">
@@ -62,7 +62,7 @@
 
   <!--   *** test for Blocks of consecutive letters*** -->
 
-  <x:scenario label="test for Blocks of consecutive letters should not be contracted" pending="https://github.com/nlbdev/pipeline/issues/67">
+  <x:scenario label="test for Blocks of consecutive letters should not be contracted">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
@@ -88,7 +88,7 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <div xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+        <div xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no-Brai">
           <doctitle>⠰⠇</doctitle>
           <docauthor>⠰⠁</docauthor>
           <level1 class="titlepage">
