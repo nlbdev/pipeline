@@ -215,19 +215,18 @@
                                 <meta name="dc:Language" content="no"/>
                                 <style media="embossed" type="text/css">
                                     @page {
-                                        size: 35 28;
-                                        margin-top: 0;
-                                        margin-left: 0;
-                                        @left {
-                                            content: none;
-                                        }
+                                      size: 35 28;
+                                      margin-top: 0;
+                                      margin-left: 0;
+                                      @left {
+                                        content: none;
+                                      }
                                     }
                                     h1, h2, h3, p {
-                                        text-indent: 0;
-                                        text-align: left;
-                                        margin-left: 0;
-                                        border: none;
-                                        text-transform: auto;
+                                      text-indent: 0;
+                                      text-align: left;
+                                      margin-left: 0;
+                                      border: none;
                                     }
                                 </style>
                             </head>
@@ -238,17 +237,10 @@
                                 </frontmatter>
                                 <bodymatter>
                                     <level1>
-                                        <h1>a ble at l</h1>
-                                        <p>a ble at l</p>
-                                    </level1>
-                                    <level1>
-                                        <h1>a ble at ll</h1>
                                         <p>a ble at ll</p>
                                         <p xml:lang="en">a ble at ll</p>
                                         <level2 xml:lang="en">
-                                            <h2>a ble at ll</h2>
                                             <p>a ble at ll</p>
-                                            <p xml:lang="no">a ble at ll</p>
                                         </level2>
                                     </level1>
                                 </bodymatter>
@@ -263,24 +255,153 @@
                 <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef" select="//pef:page[not(pef:row[contains(text(),'⠠⠕⠍⠀⠃⠕⠅⠁') or contains(text(),'⠝⠕⠗⠎⠅⠀⠇⠽⠙') or contains(text(),'⠼⠁⠀⠁⠧⠀⠼⠁')])]/pef:row[text() and not(position()=last())]"/>
+                <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[text() != '' and not(contains(text(),'⠼'))]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="//pef:row">
-                    <page xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
-                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
-                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
-                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
                         <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
                         <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
                         <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="test for contracted norwegian inside other languages" pending="https://github.com/nlbdev/pipeline/issues/73">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="Testbok"/>
+                                <meta name="dc:Creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+                                <meta name="dc:Date" content="2016-03-01"/>
+                                <meta name="dc:Publisher" content="NLB"/>
+                                <meta name="dc:Language" content="no"/>
+                                <style media="embossed" type="text/css">
+                                    @page {
+                                      size: 35 28;
+                                      margin-top: 0;
+                                      margin-left: 0;
+                                      @left {
+                                        content: none;
+                                      }
+                                    }
+                                    h1, h2, h3, p {
+                                      text-indent: 0;
+                                      text-align: left;
+                                      margin-left: 0;
+                                      border: none;
+                                    }
+                                </style>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>l</doctitle>
+                                    <docauthor>a</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <p>a ble at ll</p>
+                                        <level2 xml:lang="en">
+                                            <p>a ble at ll</p>
+                                            <p xml:lang="no">a ble at ll</p>
+                                            <div xml:lang="no">
+                                                <p>a ble at ll</p>
+                                            </div>
+                                            <p>a ble at ll</p>
+                                        </level2>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:1)'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('17/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('17/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('17/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="17/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[text() != '' and not(contains(text(),'⠼'))]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline" select="//pef:row">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
                         <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
                         <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
-                    </page>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="regression test for issue where dot 56 is sometimes missing in contraction (issue nlbdev/pipeline#70)" pending="https://github.com/nlbdev/pipeline/issues/70">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Creator" content="a ble at l"/>
+                                <meta name="dc:Title" content="Testbok"/>
+                                <meta name="dc:Date" content="2016-03-01"/>
+                                <meta name="dc:Publisher" content="NLB"/>
+                                <meta name="dc:Language" content="no"/>
+                                <style media="embossed" type="text/css">
+                                    @page {
+                                       size: 35 28;
+                                       margin-top: 0;
+                                       margin-left: 0;
+                                       @left {
+                                           content: none;
+                                        }
+                                    }
+                                    h1, h2, h3, p {
+                                        text-indent: 0;
+                                        text-align: left;
+                                        margin-left: 0;
+                                        border: none;
+                                    }
+                                    .first-page p {
+                                        text-align: left;
+                                    }
+                                </style>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>l</doctitle>
+                                    <docauthor>a</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <p>a ble at l</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:1)'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('18/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('18/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('18/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="(//pef:row[text() != '' and not(contains(text(),'⠼'))])[position() = (1,last())]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline" select="//pef:row">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
+                    </_>
                 </x:document>
             </x:expect>
         </x:scenario>
