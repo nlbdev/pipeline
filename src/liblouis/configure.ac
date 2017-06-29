@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.68)
-AC_INIT([Liblouis], [3.0.0], [liblouis-liblouisxml@freelists.org], [liblouis], [http://www.liblouis.org])
+AC_INIT([Liblouis], [3.2.0], [liblouis-liblouisxml@freelists.org], [liblouis], [http://www.liblouis.org])
 AC_CONFIG_SRCDIR([liblouis/lou_backTranslateString.c])
 AM_CONFIG_HEADER(liblouis/config.h)
 
@@ -51,7 +51,7 @@ AH_BOTTOM([
 ])
 
 # increment if the interface has additions, changes, removals.
-LIBLOUIS_CURRENT=12
+LIBLOUIS_CURRENT=14
 
 # increment any time the source changes; set to 0 if you increment
 # CURRENT
@@ -86,6 +86,9 @@ else
 fi
 AM_CONDITIONAL([HAVE_HELP2MAN], [test x$HELP2MAN = xhelp2man])
 
+# Only run parts of the tests if we are cross compiling
+AM_CONDITIONAL([CROSS_COMPILING], [test "x$cross_compiling" = xyes])
+
 # Check for makeinfo version >= 5, required for building documentation.
 have_makeinfo_5=false
 AC_PROG_SED
@@ -108,9 +111,26 @@ else
 fi
 AM_CONDITIONAL([HAVE_MAKEINFO_5], [test x$have_makeinfo_5 = xtrue])
 
-# Check if we have Python installed
-AM_PATH_PYTHON([2.6],, [:])
-AM_CONDITIONAL([HAVE_PYTHON], [test "$PYTHON" != :])
+# Check if the user wants to enable yaml tests
+AC_ARG_WITH([yaml],
+  [AS_HELP_STRING([--with-yaml], [enable YAML-based tests @<:@default=yes@:>@])],
+  [with_yaml=$withval],
+  [])
+
+if test "x$with_yaml" == xno; then
+  AC_DEFINE([WITHOUT_YAML],[1],[Disable YAML tests])
+fi
+
+# if libyaml is missing warn or die depending on --with-yaml
+if test x$ac_cv_lib_yaml_yaml_parser_initialize != xyes; then
+  case "$with_yaml" in
+  yes) AC_MSG_ERROR([--with-yaml was given, but libyaml was not found]);;
+  no) ;;
+  *) AC_MSG_WARN([libyaml was not found. YAML tests will be skipped]);;
+  esac
+fi
+
+AM_CONDITIONAL([WITH_YAML], [test "x$ac_cv_lib_yaml_yaml_parser_initialize" == xyes -a "x$with_yaml" != xno])
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config)
 
@@ -156,10 +176,10 @@ AC_CONFIG_FILES([
         tests/tables/resolve_table/dir_1/dir_1.1/Makefile
         tests/tables/resolve_table/dir_2/Makefile
 	tests/tablesWithMetadata/Makefile
-        tests/doctests/Makefile
         tests/ueb_test_data/Makefile
         tests/yaml/Makefile
 	python/Makefile
+	python/setup.py
 	python/louis/Makefile
         tools/Makefile
         tools/gnulib/Makefile

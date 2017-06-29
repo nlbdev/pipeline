@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "louis.h"
+#include "internal.h"
 #include <getopt.h>
 #include "progname.h"
 #include "unistr.h"
@@ -87,7 +87,7 @@ get_input(void) {
 
 static int
 get_wide_input(widechar * buffer) {
-  return extParseChars(get_input(), buffer);
+  return _lou_extParseChars(get_input(), buffer);
 }
 
 static char *
@@ -95,9 +95,9 @@ print_chars(const widechar * buffer, int length) {
   static uint8_t result_buf[BUFSIZE];
   size_t result_len = BUFSIZE - 1;
 #ifdef WIDECHARS_ARE_UCS4
-    u32_to_u8(buffer, length, &result_buf, &result_len);
+    u32_to_u8(buffer, length, result_buf, &result_len);
 #else
-    u16_to_u8(buffer, length, &result_buf, &result_len);
+    u16_to_u8(buffer, length, result_buf, &result_len);
 #endif
   result_buf[result_len] = 0;
   return result_buf;
@@ -106,7 +106,7 @@ print_chars(const widechar * buffer, int length) {
 static char *
 print_dots(const widechar * buffer, int length) {
   static char dots[BUFSIZE];
-  strcpy(dots, showDots(buffer, length));
+  strcpy(dots, _lou_showDots(buffer, length));
   return dots;
 }
 
@@ -120,7 +120,7 @@ print_number(widechar c) {
 static char *
 print_attributes(unsigned int a) {
   static char attr[BUFSIZE];
-  strcpy(attr, showAttributes(a));
+  strcpy(attr, _lou_showAttributes(a));
   return attr;
 }
 
@@ -223,7 +223,7 @@ print_script(const widechar * buffer, int length) {
 
 static void
 print_rule(const TranslationTableRule * rule) {
-  const char *opcode = findOpcodeName(rule->opcode);
+  const char *opcode = _lou_findOpcodeName(rule->opcode);
   char *chars;
   char *dots;
   char *script;
@@ -262,12 +262,12 @@ main_loop(int backward_translation, char *table) {
     ruleslen = RULESSIZE;
     if (backward_translation)
       {
-	if (!backTranslateWithTracing(table, inbuf, &inlen, outbuf, &outlen,
+	if (!_lou_backTranslateWithTracing(table, inbuf, &inlen, outbuf, &outlen,
 				      NULL, NULL, NULL, NULL, NULL, 0, rules, &ruleslen))
 	  break;
       }
     else
-      if (!translateWithTracing(table, inbuf, &inlen, outbuf, &outlen,
+      if (!_lou_translateWithTracing(table, inbuf, &inlen, outbuf, &outlen,
 				NULL, NULL, NULL, NULL, NULL, 0, rules, &ruleslen))
 	break;
     printf("%s\n", print_chars(outbuf, outlen));

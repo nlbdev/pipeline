@@ -7,26 +7,56 @@ dist: trusty
 
 language: c
 
-compiler:
-  - gcc
+services:
+  - docker
+
+matrix:
+  include:
+    - compiler: gcc
+      env: BUILD_GCC=yes
+    - compiler: gcc
+      env: BUILD_GCC=yes ENABLE_UCS4=--enable-ucs4
+    - compiler: i586-mingw32msvc-gcc
+      env: BUILD_MINGW=yes
+    - compiler: gcc
+      env: BUILD_JS=yes
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y libyaml-dev
+  - 'chmod +x ./.travis/before_install/*.sh'
+  - 'chmod +x ./.travis/script/*.sh'
+  - 'chmod +x ./.travis/after_success/*.sh'
+  - if [ "$BUILD_MINGW" == yes ]; then
+        source .travis/before_install/mingw.sh;
+    elif [ "$BUILD_JS" == yes ]; then
+        source .travis/before_install/emscripten.sh;
+    else
+        source .travis/before_install/gcc.sh;
+    fi
 
-# let's have two parallel builds. One with ucs4 disabled and the other
-# enabling it
-env:
-  - ENABLE_UCS4=
-  - ENABLE_UCS4=--enable-ucs4
+script:
+  - cd $TRAVIS_BUILD_DIR
+  - if [ "$BUILD_MINGW" == yes ]; then
+        source .travis/script/mingw.sh;
+    elif [ "$BUILD_JS" == yes ]; then
+        source .travis/script/emscripten.sh;
+    else
+        source .travis/script/gcc.sh;
+    fi
 
-script: "./autogen.sh && ./configure $ENABLE_UCS4 && make && make check"
+after_failure:
+  - if [ -z "$BUILD_JS" ]; then
+        cat tests/test-suite.log;
+    fi
 
-after_failure: cat tests/test-suite.log
+after_success:
+  - if [ "$BUILD_JS" == yes ]; then
+        source .travis/after_success/emscripten.sh;
+    fi
 
 # tell the irc channel about the results of the build
 notifications:
-  irc: "irc.oftc.net#liblouis"
+   irc: "irc.oftc.net#liblouis"
 
 # do not build on the following branches
 branches:

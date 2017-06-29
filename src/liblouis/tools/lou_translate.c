@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include "liblouis.h"
-#include "louis.h"
+#include "internal.h"
 #include "progname.h"
 #include "unistr.h"
 #include "version-etc.h"
@@ -76,7 +76,7 @@ translate_input (int forward_translation, char *table_name)
       if (ch == EOF && k == 0)
 	break;
       charbuf[k] = 0;
-      inlen = extParseChars (charbuf, inbuf);
+      inlen = _lou_extParseChars (charbuf, inbuf);
       if (forward_translation) 
 	  result = lou_translateString (table_name, inbuf, &inlen,
 				      transbuf, &translen, NULL, NULL, 0);
@@ -108,12 +108,28 @@ output. It is intended for large-scale testing of the accuracy of\n\
 Braille translation and back-translation.\n\n", stdout);
 
   fputs ("\
+Options:\n\
   -h, --help          display this help and exit\n\
   -v, --version       display version information and exit\n\
   -f, --forward       forward translation using the given table\n\
   -b, --backward      backward translation using the given table\n\
                       If neither -f nor -b are specified forward translation\n\
                       is assumed\n", stdout);
+  fputs ("\
+Examples:\n\
+  lou_translate --forward en-us-g2.ctb < input.txt\n\
+  \n\
+  Do a forward translation with table en-us-g2.ctb. The resulting braille is\n\
+  ASCII encoded.\n\
+  \n\
+  lou_translate unicode.dis,en-us-g2.ctb < input.txt\n\
+  \n\
+  Do a forward translation with table en-us-g2.ctb. The resulting braille is\n\
+  encoded as Unicode dot patterns.\n\
+  \n\
+  echo \",! qk br{n fox\" | lou_translate --backward en-us-g2.ctb\n\
+  \n\
+  Do a backward translation with table en-us-g2.ctb.\n", stdout);
   printf ("\n");
   printf ("Report bugs to %s.\n", PACKAGE_BUGREPORT);
 
@@ -168,7 +184,7 @@ main (int argc, char **argv)
 
   /*if (optind != argc - 1)
     {
-      /* Print error message and exit.  *
+      // Print error message and exit.
       if (optind < argc - 1)
 	fprintf (stderr, "%s: extra operand: %s\n",
 		 program_name, argv[optind + 1]);
