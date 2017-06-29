@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:bertfrees/maven-nar-plugin.git
+	branch = skipUnpackProcessing
+	commit = 74e2c02ddb4ac6c7451666d97fd5b5297bc1d320
+	parent = 4f2406f700f3dd4984d1a46a53ca7ccf5ead9c0c
+	cmdver = 0.3.1
