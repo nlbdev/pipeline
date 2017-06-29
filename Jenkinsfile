@@ -8,8 +8,8 @@ node {
     sh 'make dist-zip-minimal'
     
     stage 'Test'
-    sh 'make check-modules/nlb'
-    sh 'make check-modules/nordic'
+    sh 'make SKIP_GROUP_EVAL_TARGET=true EVAL=eval check-modules/nlb'
+    sh 'make SKIP_GROUP_EVAL_TARGET=true EVAL=eval check-modules/nordic'
     
     stage 'Distribute'
     sh './distribute.sh'
