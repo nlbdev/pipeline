@@ -219,7 +219,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		if (table != null)
 			q.add("table", table);
 		if (locale != null)
-			q.add("locale", parseLocale(locale).toLanguageTag().replace('-', '_'));
+			q.add("locale", parseLocale(locale).toLanguageTag());
 		if (!asciiBraille)
 			q.add("unicode");
 		q.add("white-space");
