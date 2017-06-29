@@ -5,6 +5,8 @@ AM_CPPFLAGS =					\
 	-I$(top_srcdir)/tools/gnulib		\
 	-I$(top_builddir)/tools/gnulib
 
+lou_checkyaml_CPPFLAGS = $(AM_CPPFLAGS) $(YAML_CFLAGS)
+
 LDADD =							\
 	$(top_builddir)/liblouis/liblouis.la		\
 	$(top_builddir)/tools/gnulib/libgnutools.la	\
@@ -29,6 +31,8 @@ libbrlcheck_la_LIBADD =					\
 	$(top_builddir)/liblouis/liblouis.la		\
 	$(top_builddir)/tools/gnulib/libgnutools.la
 
+lou_checkyaml_LDADD = $(LDADD) $(YAML_LIBS)
+
 bin_PROGRAMS =					\
 	lou_allround				\
 	lou_checkhyphens			\
@@ -36,8 +40,14 @@ bin_PROGRAMS =					\
 	lou_debug				\
 	lou_translate				\
 	lou_trace				\
-	lou_compare				\
-	lou_checkyaml
+	lou_compare
+
+# install lou_checkyaml only if libyaml is found
+if WITH_YAML
+bin_PROGRAMS += lou_checkyaml
+else
+noinst_PROGRAMS = lou_checkyaml
+endif
 
 lou_allround_SOURCES = lou_allround.c
 lou_checkhyphens_SOURCES = lou_checkhyphens.c

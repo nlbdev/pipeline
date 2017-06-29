@@ -27,7 +27,7 @@ without any warranty. */
 #include <string.h>
 #include <stdlib.h>
 #include "liblouis.h"
-#include "louis.h"
+#include "internal.h"
 
 int
 main (int argc, char **argv)
@@ -664,7 +664,7 @@ main (int argc, char **argv)
 		"\"I wish I hadn't mentioned Dinah!\" she said to herself in a\n                    melancholy tone. \"Nobody seems to like her, down here, and I'm sure she's the\n                    best cat in the world! Oh, my dear Dinah! I wonder if I shall ever\n                    see you any more!\" And here poor Alice began to cry again, for she\n                    felt very lonely and low-spirited. In a little while, however, she again heard a\n                    little pattering of footsteps in the distance, and she looked up eagerly, half\n                    hoping that the Mousehad changed his mind, and was coming back to\n                    finish his story."
     };
 
-    const char* table = "unicode.dis,en-us-g2.ctb";
+    const char* table = "tables/unicode.dis,tables/en-us-g2.ctb";
 
     unsigned int i;
     int j;
@@ -676,7 +676,7 @@ main (int argc, char **argv)
         formtype* typeform = malloc(outlen * sizeof(formtype));
         for (j=0; j<=inlen; j++)
             typeform[j] = 0;
-        extParseChars(strings[i], inbuf);
+        _lou_extParseChars(strings[i], inbuf);
         if (!lou_translate(table, inbuf, &inlen, outbuf, &outlen, typeform, NULL, NULL, NULL, NULL, 0))
             return 1;
         free(inbuf);
