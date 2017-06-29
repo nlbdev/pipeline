@@ -136,6 +136,23 @@ public abstract class AbstractResourcesMojo extends AbstractNarMojo {
     return copied;
   }
 
+  protected final int copyOtherNoArch(final File srcDir) throws IOException, MojoExecutionException, MojoFailureException {
+    int copied = 0;
+
+    // copy share etc.
+    for (String dir : new String[]{"share"}) {
+      final File otherNoArchDir = new File(srcDir, dir);
+      if (otherNoArchDir.exists()) {
+        final File otherNoArchDstDir = new File(getLayout().getNoArchDirectory(getTargetDirectory(),
+            getMavenProject().getArtifactId(), getMavenProject().getVersion()), dir);
+        getLog().debug("Copying from " + otherNoArchDir + " to " + otherNoArchDstDir);
+        copied += NarUtil.copyDirectoryStructure(otherNoArchDir, otherNoArchDstDir, null, NarUtil.DEFAULT_EXCLUDES);
+      }
+    }
+
+    return copied;
+  }
+
   protected final void copyResources(final File srcDir, final String aol)
       throws MojoExecutionException, MojoFailureException {
     int copied = 0;
@@ -145,6 +162,8 @@ public abstract class AbstractResourcesMojo extends AbstractNarMojo {
       copied += copyBinaries(srcDir, aol);
 
       copied += copyLibraries(srcDir, aol);
+
+      copied += copyOtherNoArch(srcDir);
 
       // unpack jar files
       final File classesDirectory = new File(getOutputDirectory(), "classes");
