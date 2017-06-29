@@ -1,6 +1,6 @@
 MVN := mvn
 COMPOSE := docker-compose
-VERSION := 3.2.0-SNAPSHOT
+VERSION := 3.2.0-1-SNAPSHOT
 
 TARGET_NAR_LINUX_32 := $(addprefix target/nar/louis-$(VERSION)-i386-Linux-gpp-,executable shared)
 TARGET_NAR_LINUX_64 := $(addprefix target/nar/louis-$(VERSION)-amd64-Linux-gpp-,executable shared)
