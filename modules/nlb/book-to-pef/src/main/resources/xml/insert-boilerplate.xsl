@@ -65,22 +65,22 @@
 
 
             <xsl:variable name="contributor" select="//meta[@name eq 'dc:Contributor']/@content"/>
-            <p class="translater">Oversatt av</p>
+            <p class="translator">Oversatt av</p>
             <xsl:for-each select="$contributor[position() &lt;= 3]">
                 <xsl:choose>
                     <xsl:when test="position() = 1">
-                        <p class="translater-1">
+                        <p class="translator-1">
                             <xsl:value-of select="."/>
                         </p>
                     </xsl:when>
                     <xsl:when test="position() = 3 and count($contributor) > 3">
-                        <p class="translater-2">
+                        <p class="translator-2">
                             <xsl:value-of select="count($contributor) - 2"/>
                             <xsl:text> flere</xsl:text>
                         </p>
                     </xsl:when>
                     <xsl:otherwise>
-                        <p class="translater-3">
+                        <p class="translator-3">
                             <xsl:value-of select="."/>
                         </p>
                     </xsl:otherwise>
