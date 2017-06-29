@@ -8,20 +8,18 @@ ehthumbs.db
 Thumbs.db
 
 # "super project"-files
-/bom.xml
-.maven-*
+/.maven-cache/
+/.maven-modules
+/.maven-workspace/
 /maven.log
-.gradle*
+/.gradle-settings/
+/.gradle/
 /*.zip
 /*.deb
 /*.rpm
-target/
-/releaseDescriptor*xml
 .deps.mk
 .effective-pom.xml
 .last-tested
-**/com.xmlcalabash/test/errors.txt
-**/com.xmlcalabash/test/report.xml
 
 # Eclipse
 eclipse/
@@ -30,10 +28,9 @@ eclipse/*
 .settings
 .classpath
 
-# XSpec
-xspec/*.html
-*-result.html
-
 # vim files
 *~
 *.swp
+
+# NLB-specific
+/releaseDescriptor*xml
