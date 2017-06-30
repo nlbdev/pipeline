@@ -9,7 +9,7 @@ $include-note-references: true !default;
 $choice-of-colophon: true !default;
 
 /* -------------------------------------------------------------------------- */
-/*                page margins                                                */
+/*                page                                                        */
 /* -------------------------------------------------------------------------- */
 
 @page {
@@ -19,13 +19,35 @@ $choice-of-colophon: true !default;
         margin-right: 2;
 }
 
+bodymatter, body:not([epub|type~='cover']):not([epub|type~='frontmatter']):not([epub|type~='backmatter']) {
+        page: body;
+        counter-set: page;
+}
+
 /* -------------------------------------------------------------------------- */
 /*                braille and print page numbers                              */
 /* -------------------------------------------------------------------------- */
 
-pagenum, span[epub|type~='pagebreak'], div[epub|type~='pagebreak'] {
+/* Don't show pagenumber inline. Store reference in case we want to show marker in margin. */
+pagenum, *[epub|type~='pagebreak'] {
         display: none;
         -obfl-marker: pagenum;
+}
+
+/* Show page numbers in bodymatter. */
+@if $show-print-page-numbers {
+        bodymatter pagenum {
+                string-set: print-page "⠿" content();
+        }
+        
+        body:not([epub|type~='cover']):not([epub|type~='frontmatter']):not([epub|type~='backmatter']) *[epub|type~='pagebreak'] {
+                &[title] {
+                        string-set: print-page "⠿" attr(title);
+                }
+                &:not([title]) {
+                        string-set: print-page "⠿" content();
+                }
+        }
 }
 
 @page body {
@@ -45,14 +67,9 @@ pagenum, span[epub|type~='pagebreak'], div[epub|type~='pagebreak'] {
         }
 }
 
-
-@if $show-print-page-numbers {
-        bodymatter pagenum, *[epub|type~='bodymatter'] *[epub|type~='pagebreak'] {
-                display: none;
-                -obfl-marker: pagenum;
-                string-set: print-page "⠿" content();
-        }
-}
+/* -------------------------------------------------------------------------- */
+/*               line spacing                                                 */
+/* -------------------------------------------------------------------------- */
 
 @if $line-spacing == double {
         :root {
@@ -61,18 +78,13 @@ pagenum, span[epub|type~='pagebreak'], div[epub|type~='pagebreak'] {
                 /* to cancel out generic rule */
         }
 
-        bodymatter, level1[epub|type~='bodymatter'] {
+        bodymatter, body:not([epub|type~='cover']):not([epub|type~='frontmatter']):not([epub|type~='backmatter']) {
                 line-height: 2;
         }
 
         @page body:left {
                 margin-top: 1;
         }
-}
-
-bodymatter, *[epub|type~='bodymatter'] {
-        page: body;
-        counter-set: page;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -217,7 +229,7 @@ head {
 }
 
 level1,
-bodymatter, *[epub|type~='bodymatter'], rearmatter, *[epub|type~='backmatter'] {
+bodymatter, rearmatter, body:not([epub|type~='cover']):not([epub|type~='frontmatter']) {
         display: block;
 }
 

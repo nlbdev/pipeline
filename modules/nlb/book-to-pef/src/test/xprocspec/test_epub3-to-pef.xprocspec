@@ -14,6 +14,8 @@
     <x:scenario label="basic test">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB/package.opf')"/>
+            <x:option name="show-braille-page-numbers" select="'true'"/>
+            <x:option name="show-print-page-numbers" select="'true'"/>
             <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
@@ -31,7 +33,8 @@
     <x:scenario label="test with epub file">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB/package.opf')"/>
-            <!--       <x:option name="stylesheet" select="resolve-uri('../resources/test1.css')"/> -->
+            <x:option name="show-braille-page-numbers" select="'true'"/>
+            <x:option name="show-print-page-numbers" select="'true'"/>
             <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
@@ -73,7 +76,7 @@
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠃⠊⠝⠙⠀⠼⠁⠀⠁⠧⠀⠼⠁</row>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                         <section>
@@ -105,7 +108,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                             <page>
                                 <row/>
@@ -135,7 +138,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠙⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                         <section>
@@ -143,7 +146,7 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠃⠕⠅</row>
+                                <row>⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠃⠕⠅</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠠⠇⠊⠞⠑⠝⠢</row>
@@ -167,7 +170,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁</row>
                             </page>
                         </section>
                         <section>
@@ -175,7 +178,7 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃⠀⠤⠀⠠⠝⠕⠗⠎⠅</row>
+                                <row>⠿⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃⠀⠤⠀⠠⠝⠕⠗⠎⠅</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠇⠽⠙⠤⠀⠕⠛⠀⠃⠇⠊⠝⠙⠑⠤</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠎⠅⠗⠊⠋⠞⠃⠊⠃⠇⠊⠕⠞⠑⠅</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
@@ -199,7 +202,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃</row>
                             </page>
                         </section>
                     </volume>
@@ -211,7 +214,8 @@
     <x:scenario label="test for page number">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB_1/package.opf')"/>
-               <x:option name="stylesheet" select="resolve-uri('../resources/test3.css')"/>
+            <x:option name="show-braille-page-numbers" select="'true'"/>
+            <x:option name="show-print-page-numbers" select="'true'"/>
             <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
@@ -347,7 +351,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠉</row>
                             </page>
                         </section>
                         <section>
@@ -379,7 +383,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠋</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠊</row>
                             </page>
                         </section>
                     </volume>
@@ -391,7 +395,8 @@
     <x:scenario label="test for page list">
         <x:call>
             <x:option name="epub" select="resolve-uri('../resources/EPUB_2/package.opf')"/>
-            <x:option name="stylesheet" select="resolve-uri('../resources/test3.css')"/>
+            <x:option name="show-braille-page-numbers" select="'true'"/>
+            <x:option name="show-print-page-numbers" select="'true'"/>
             <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
@@ -527,7 +532,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠉</row>
                             </page>
                         </section>
                         <section>
