@@ -1509,4 +1509,247 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="table_caption">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="123456"/>
+                            <meta name="dc:Title" content="Title"/>
+                            <meta name="dc:Identifier" content="123456"/>
+                            <meta name="dc:Language" content="no"/>
+                            <meta name="dc:Format" content="DTBook"/>
+                            <meta name="dc:Creator" content="Creator"/>
+                            <meta name="dc:Contributor" content="Contributor"/>
+                            <meta name="dc:Date" content="2017-06-30"/>
+                            <meta name="dc:Publisher" content="NLB"/>
+                            <meta name="dc:Source" content="urn:isbn:9781111111111"/>
+                            <meta name="dcterms:modified" content="2017-06-30T10:14:30+02:00"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>other content</p>
+                                    <table>
+                                        <!--Table with caption-->
+                                        <caption>caption</caption>
+                                        <tr>
+                                            <td>a</td>
+                                            <td>b</td>
+                                        </tr>
+                                        <tr>
+                                            <td>c</td>
+                                            <td>d</td>
+                                        </tr>
+                                    </table>
+                                    <p>other content</p>
+                                    <table>
+                                        <!--Table without caption-->
+                                        <tr>
+                                            <td>a</td>
+                                            <td>b</td>
+                                        </tr>
+                                        <tr>
+                                            <td>c</td>
+                                            <td>d</td>
+                                        </tr>
+                                    </table>
+                                    <p>other content</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="pef-output-dir" select="resolve-uri('19/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('19/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('19/temp-dir',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="19/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠉⠁⠏⠞⠊⠕⠝</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠁⠀⠀⠃</row>
+                    <row>⠀⠀⠉⠀⠀⠙</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠁⠀⠀⠃</row>
+                    <row>⠀⠀⠉⠀⠀⠙</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="print page numbers enabled (marks in left margin and page footer)">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head/>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>På perrongen viste skiltet førti minutter til neste tog, det var toget
+                                       nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                                       nedover fortauet med den <pagenum id="p11" page="normal">11</pagenum>lille
+                                       hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                                       studerte håndflaten sin imens.</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="show-print-page-numbers" select="'true'"/>
+            <x:option name="pef-output-dir" select="resolve-uri('20/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('20/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('20/temp-dir',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="20/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
+                    <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
+                    <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
+                    <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
+                    <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗</row>
+                    <row>⠀⠀⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍</row>
+                    <row>⠿⠀⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀</row>
+                    <row>⠀⠀⠇⠊⠇⠇⠑⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞</row>
+                    <row>⠀⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑</row>
+                    <row>⠀⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝</row>
+                    <row>⠀⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝</row>
+                    <row>⠀⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠁</row></page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="print page numbers disabled (no marks in left margin or page footer)">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head/>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>På perrongen viste skiltet førti minutter til neste tog, det var toget
+                                       nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                                       nedover fortauet med den <pagenum id="p11" page="normal">11</pagenum>lille
+                                       hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                                       studerte håndflaten sin imens.</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="pef-output-dir" select="resolve-uri('21/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('21/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('21/temp-dir',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="21/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
+                    <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
+                    <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
+                    <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
+                    <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗</row>
+                    <row>⠀⠀⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍</row>
+                    <row>⠀⠀⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀</row>
+                    <row>⠀⠀⠇⠊⠇⠇⠑⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞</row>
+                    <row>⠀⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑</row>
+                    <row>⠀⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝</row>
+                    <row>⠀⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝</row>
+                    <row>⠀⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row></page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

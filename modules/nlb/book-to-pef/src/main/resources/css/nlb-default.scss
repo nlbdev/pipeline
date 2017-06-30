@@ -310,6 +310,7 @@ frontmatter, level1[epub|type~='frontmatter'] {
 /* -------------------------------------------------------------------------- */
 /*                element                                                     */
 /* -------------------------------------------------------------------------- */
+
 h1, .part h2 {
         page-break-before: right;
         margin-top: 2;
@@ -427,21 +428,29 @@ note:before {
 }
 */
 
+/* -------------------------------------------------------------------------- */
+/*                Images                                                      */
+/* -------------------------------------------------------------------------- */
+
 imggroup, figure {
         display: block;
+        
+        caption::before {
+            content: "Bildetekst:";
+        }
+        
+        caption {
+            margin-top: 1;
+            margin-bottom: 1;
+            margin-left: 2;
+            text-indent: 2;
+            text-align: left;
+        }
 }
 
-caption::before {
-        content: "Bildetekst:";
-}
-
-caption {
-        margin-top: 1;
-        margin-bottom: 1;
-        margin-left: 2;
-        text-indent: 2;
-        text-align: left;
-}
+/* -------------------------------------------------------------------------- */
+/*                Poems                                                       */
+/* -------------------------------------------------------------------------- */
 
 poem, section[epub|type~='z3998:poem'], div[epub|type~='z3998:poem'] {
         text-indent: 2;
@@ -484,6 +493,46 @@ list[type=ul], ul {
 
 list[type=ol], ol {
         list-style-type: decimal;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                Tables                                                      */
+/* -------------------------------------------------------------------------- */
+
+table {
+    display: table;
+}
+
+table > caption {
+    display: block;
+    text-indent: 2;
+    margin-top: 1;
+    margin-bottom: 1;
+    text-align: left;
+}
+
+table > caption::after {
+    display: block;
+    text-indent: 2;
+    margin-top: 1;
+    margin-bottom: 1;
+    content: 'Tabell starter';
+}
+
+table:not(:has(caption))::before {
+    display: block;
+    text-indent: 2;
+    margin-top: 1;
+    margin-bottom: 1;
+    content: 'Tabell starter';
+}
+
+table::after {
+    display: block;
+    text-indent: 2;
+    margin-top: 1;
+    margin-bottom: 1;
+    content: 'Tabell slutter';
 }
 
 /* -------------------------------------------------------------------------- */
