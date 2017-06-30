@@ -21,7 +21,7 @@
         </x:document>
       </x:input>
       <x:option name="page-width" select="28"/>
-      <x:option name="show-print-page-numbers" select="false()"/>
+      <x:option name="show-print-page-numbers" select="'false'"/>
       <x:option name="pef-output-dir" select="resolve-uri('non-standard-hyphenation-1/output-dir',$temp-dir)"/>
       <x:option name="preview-output-dir" select="resolve-uri('non-standard-hyphenation-1/output-dir',$temp-dir)"/>
       <x:option name="temp-dir" select="resolve-uri('non-standard-hyphenation-1/temp-dir',$temp-dir)"/>
@@ -146,6 +146,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
+            <x:option name="show-print-page-numbers" select="'false'"/>
             <x:option name="pef-output-dir" select="resolve-uri('non-standard-hyphenation-2/output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('non-standard-hyphenation-2/output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('non-standard-hyphenation-2/temp-dir',$temp-dir)"/>
@@ -264,6 +265,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
+            <x:option name="show-print-page-numbers" select="'false'"/>
             <x:option name="pef-output-dir" select="resolve-uri('standard-hyphenation-1/output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('standard-hyphenation-1/output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('standard-hyphenation-1/temp-dir',$temp-dir)"/>

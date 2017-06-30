@@ -9,8 +9,9 @@ $include-note-references: true !default;
 $choice-of-colophon: true !default;
 
 /* -------------------------------------------------------------------------- */
-/*                displaying Original and Braille Page                        */
+/*                page margins                                                */
 /* -------------------------------------------------------------------------- */
+
 @page {
         margin-top: 0;
         margin-bottom: 1;
@@ -18,10 +19,22 @@ $choice-of-colophon: true !default;
         margin-right: 2;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                braille and print page numbers                              */
+/* -------------------------------------------------------------------------- */
+
+pagenum, span[epub|type~='pagebreak'], div[epub|type~='pagebreak'] {
+        display: none;
+        -obfl-marker: pagenum;
+}
+
 @page body {
         @if $show-print-page-numbers {
                 @bottom-right {
                         content: string(print-page, last);
+                }
+                @left {
+                    content: -obfl-marker-indicator(pagenum, '⠿');
                 }
         }
 
@@ -32,9 +45,6 @@ $choice-of-colophon: true !default;
         }
 }
 
-pagenum, span[epub|type~='pagebreak'], div[epub|type~='pagebreak'] {
-        display: none;
-}
 
 @if $show-print-page-numbers {
         bodymatter pagenum, *[epub|type~='bodymatter'] *[epub|type~='pagebreak'] {
