@@ -383,5 +383,42 @@
       </x:document>
     </x:expect>
   </x:scenario>
-    
+  
+  <x:scenario label="text-transform:uncontracted">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <bodymatter xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level1>
+              <p style="display: block">a ble at ll</p>
+              <p style="display: block; text-transform: uncontracted" xml:lang="en">a ble at ll</p>
+              <level2 xml:lang="en" style="text-transform: uncontracted">
+                <p style="display: block">a ble at ll</p>
+              </level2>
+            </level1>
+          </bodymatter>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="1"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_ xmlns="" style="text-transform: none">
+          <bodymatter xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level1>
+              <p style="display: block">⠰⠁ ⠃ ⠁ ⠇⠇</p>
+              <p style="display: block" xml:lang="en-Brai">⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇</p>
+              <level2 xml:lang="en-Brai">
+                <p style="display: block">⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇</p>
+              </level2>
+            </level1>
+          </bodymatter>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>
