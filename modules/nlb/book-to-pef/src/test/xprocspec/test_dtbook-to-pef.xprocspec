@@ -958,7 +958,9 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="test for contraction grade in generated content">
+        <x:scenario label="test for contraction grade in generated content"
+                    pending="capsnocont was added to Liblouis table
+                             (see https://github.com/nlbdev/pipeline/issues/74)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
