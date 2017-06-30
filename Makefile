@@ -22,6 +22,12 @@ EVAL := :
 
 export CURDIR MVN MVN_LOG GRADLE MVN_CACHE MAKE MAKEFLAGS MAKECMDGOALS
 
+ifeq ($(shell uname),Darwin)
+nar.aol := x86_64-MacOSX-gpp
+else
+nar.aol := amd64-Linux-gpp
+endif
+
 rwildcard = $(shell find $1 -type f | sed 's/ /\\ /g')
 # does not support spaces in file names:
 #rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
@@ -214,6 +220,24 @@ updater/cli/.install : updater/cli/*.go
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
+
+.SECONDARY : \
+	libs/liblouis/.install.nar \
+	libs/liblouis/.install-noarch.nar \
+	libs/liblouis/.install-${nar.aol}-shared.nar
+libs/liblouis/.install.nar \
+libs/liblouis/.install-noarch.nar \
+libs/liblouis/.install-${nar.aol}-shared.nar : \
+	libs/liblouis/.install
+
+.SECONDARY : \
+	modules/braille/pipeline-braille-utils/liblouis-utils/liblouis-native/.install-mac.jar \
+	modules/braille/pipeline-braille-utils/liblouis-utils/liblouis-native/.install-linux.jar \
+	modules/braille/pipeline-braille-utils/liblouis-utils/liblouis-native/.install-windows.jar
+modules/braille/pipeline-braille-utils/liblouis-utils/liblouis-native/.install-mac.jar \
+modules/braille/pipeline-braille-utils/liblouis-utils/liblouis-native/.install-linux.jar \
+modules/braille/pipeline-braille-utils/liblouis-utils/liblouis-native/.install-windows.jar: \
+	modules/braille/pipeline-braille-utils/liblouis-utils/liblouis-native/.install
 
 .SECONDARY : .group-eval
 .group-eval :
