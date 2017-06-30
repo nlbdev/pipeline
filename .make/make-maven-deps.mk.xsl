@@ -648,7 +648,16 @@
 		                                                      /pom:executions/pom:execution[pom:goals[pom:goal='copy' or
 		                                                                                              pom:goal='unpack']]
 		                                                      /pom:configuration/pom:artifactItems/pom:artifactItem">
-			<xsl:variable name="groupId" select="pom:groupId"/>
+			<xsl:variable name="groupId">
+				<xsl:choose>
+					<xsl:when test="not(pom:groupId) and self::pom:plugin">
+						<xsl:sequence select="'org.apache.maven.plugins'"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="pom:groupId"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
 			<xsl:variable name="artifactId" select="pom:artifactId"/>
 			<xsl:variable name="version">
 				<xsl:choose>
@@ -658,25 +667,25 @@
 					<xsl:when test="self::pom:artifactItem">
 						<xsl:choose>
 							<xsl:when test="$project/pom:dependencies/pom:dependency
-							                [string(pom:groupId)=string(current()/pom:groupId) and
+							                [string(pom:groupId)=$groupId and
 							                 string(pom:artifactId)=string(current()/pom:artifactId) and
 							                 (pom:type/string(),'jar')[1]=(current()/pom:type/string(),'jar')[1] and
 							                 string(pom:classifier)=string(current()/pom:classifier)]">
 								<!-- already handled -->
 							</xsl:when>
 							<xsl:when test="$project/pom:dependencies/pom:dependency
-							                [string(pom:groupId)=string(current()/pom:groupId) and
+							                [string(pom:groupId)=$groupId and
 							                 string(pom:artifactId)=string(current()/pom:artifactId)]">
 								<xsl:value-of select="$project/pom:dependencies/pom:dependency
-								                      [string(pom:groupId)=string(current()/pom:groupId) and
+								                      [string(pom:groupId)=$groupId and
 								                       string(pom:artifactId)=string(current()/pom:artifactId)]
 								                      /pom:version"/>
 							</xsl:when>
 							<xsl:when test="$project/pom:dependencyManagement/pom:dependencies/pom:dependency
-							                [string(pom:groupId)=string(current()/pom:groupId) and
+							                [string(pom:groupId)=$groupId and
 							                 string(pom:artifactId)=string(current()/pom:artifactId)]">
 								<xsl:value-of select="($project/pom:dependencyManagement/pom:dependencies/pom:dependency
-								                       [string(pom:groupId)=string(current()/pom:groupId) and
+								                       [string(pom:groupId)=$groupId and
 								                        string(pom:artifactId)=string(current()/pom:artifactId)]
 								                       /(.[string(pom:classifier)=string(current()/pom:classifier)],.)
 								                       /pom:version)[1]"/>
@@ -714,7 +723,7 @@
 					</xsl:variable>
 					<dependency>
 						<groupId>
-							<xsl:value-of select="pom:groupId"/>
+							<xsl:value-of select="$groupId"/>
 						</groupId>
 						<artifactId>
 							<xsl:value-of select="pom:artifactId"/>
