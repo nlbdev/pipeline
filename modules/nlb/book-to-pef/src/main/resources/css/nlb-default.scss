@@ -21,7 +21,7 @@ $choice-of-colophon: true !default;
 
 bodymatter, body:not([epub|type~='cover']):not([epub|type~='frontmatter']):not([epub|type~='backmatter']) {
         page: body;
-        counter-set: page;
+        counter-set: page 1;
 }
 
 /* -------------------------------------------------------------------------- */
