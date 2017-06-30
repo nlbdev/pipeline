@@ -412,31 +412,6 @@
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
                             <head>
-                                <style type="text/css" media="embossed">
-                                    @page {
-                                        size: 30 28;
-                                        margin-bottom: 1;
-                                        margin-left: 2;
-                                        margin-right: 2;
-                                        @bottom-right {
-                                            content:  string(print-page , last);
-                                        }
-                                        @bottom-center {
-                                            content: counter(page);
-                                        }
-                                        @left {
-                                            content: -obfl-marker-indicator(pagenum, '⠿');
-                                        }
-                                    }
-                                    pagenum {
-                                        display: none;
-                                        -obfl-marker: pagenum;
-                                        string-set: print-page '⠿'content();
-                                    }
-                                    doctitle, docauthor, level1.colophon, head {
-                                        display: none;
-                                    }
-                                </style>
                                 <meta name="dtb:uid" content="557901"/>
                                 <meta name="dc:Title" content="ULVEGUTTEN TAL - BOK 1"/>
                                 <meta name="dc:Identifier" content="557901"/>
@@ -550,29 +525,6 @@
                         <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
                             <head>
                                 <style type="text/css" media="embossed">
-                                    @page {
-                                        size: 30 28;
-                                        margin-bottom: 1;
-                                        margin-left: 2;
-                                        margin-right: 2;
-                                        @bottom-right {
-                                            content:  string(print-page , last);
-                                        }
-                                        @bottom-center {
-                                            content: counter(page);
-                                        }
-                                        @left {
-                                            content: -obfl-marker-indicator(pagenum, '⠿');
-                                        }
-                                    }
-                                    pagenum {
-                                       display: none;
-                                       -obfl-marker: pagenum;
-                                       string-set: print-page '⠿'content();
-                                    }
-                                    doctitle, docauthor, level1.colophon, head {
-                                        display: none;
-                                    }
                                     @volume {
                                         max-length: 5;
                                     }
@@ -966,16 +918,6 @@
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
                             <head>
-                                <style type="text/css" media="embossed">
-                                    pagenum {
-                                        display: none;
-                                        -obfl-marker: pagenum;
-                                        string-set: print-page '⠿'content();
-                                    }
-                                    doctitle, docauthor, level1.colophon, head {
-                                        display: none;
-                                    }
-                                </style>
                                 <meta name="dtb:uid" content="557901"/>
                                 <meta name="dc:Title" content="ULVEGUTTEN TAL - BOK 1"/>
                                 <meta name="dc:Creator" content="aa ll"/>
@@ -1155,11 +1097,6 @@
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
                             <head>
-                                <style type="text/css" media="embossed">
-                                    @page {
-                                        size: 30 8;
-                                    }
-                                </style>
                                 <meta name="dtb:uid" content="557901"/>
                             </head>
                             <book>
@@ -1189,7 +1126,7 @@
             <x:expect label="result" type="compare">
                 <x:document type="inline">
                     <body xmlns="http://www.daisy.org/ns/2008/pef">
-                        <volume cols="30" rows="8" rowgap="0" duplex="true">
+                        <volume cols="30" rows="28" rowgap="0" duplex="true">
                             <section>
                                 <page>
                                     <row>⠀⠀⠀⠀⠷⠀⠠⠱⠀⠱</row>
@@ -1198,6 +1135,26 @@
                                     <row>⠀⠀⠀⠀⠁⠁⠤⠃⠃⠀⠁⠁⠤⠤⠃⠃</row>
                                     <row>⠀⠀⠀⠀⠁⠁⠀⠤⠤⠀⠃⠃</row>
                                     <row>⠀⠀⠀⠀⠁⠁⠀⠤⠀⠃⠃</row>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
                                     <row/>
                                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                                 </page>
@@ -1215,32 +1172,6 @@
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
                     <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
                         <head>
-                            <style type="text/css" media="embossed">
-                              @page
-                              {
-                                size: 30 28;
-                                margin-bottom: 1;
-                                margin-left: 2;
-                                margin-right: 2;
-                                @bottom-right {
-                                  content:  string(print-page , last);
-                                }
-                                @bottom-center {
-                                  content: counter(page);
-                                }
-                                @left {
-                                  content: -obfl-marker-indicator(pagenum, '⠿');
-                                }
-                              }
-                              pagenum {
-                                display: none;
-                                -obfl-marker: pagenum;
-                                string-set: print-page '⠿'content();
-                              }
-                              doctitle, docauthor, level1.colophon, head {
-                                display: none
-                              }
-                            </style>
                             <meta name="dtb:uid" content="557901"/>
                             <meta name="dc:Title" content="ULVEGUTTEN TAL - BOK 1"/>
                             <meta name="dc:Identifier" content="557901"/>
@@ -1352,7 +1283,9 @@
                                     <row/>
                                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠃⠊⠝⠙⠀⠼⠁⠀⠁⠧⠀⠼⠁</row>
                                     <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row></page></section>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
+                            </section>
                             <section>
                                 <page>
                                     <row/>
@@ -1382,7 +1315,9 @@
                                     <row/>
                                     <row/>
                                     <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row></page></section>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
+                            </section>
                             <section>
                                 <page>
                                     <row/>
@@ -1412,7 +1347,8 @@
                                     <row/>
                                     <row/>
                                     <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row></page>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
                                 <page>
                                     <row/>
                                     <row/>
@@ -1441,7 +1377,9 @@
                                     <row/>
                                     <row/>
                                     <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row></page></section>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
+                            </section>
                             <section>
                                 <page>
                                     <row/>
@@ -1471,7 +1409,9 @@
                                     <row/>
                                     <row/>
                                     <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row></page></section>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
+                            </section>
                             <section>
                                 <page>
                                     <row/>
