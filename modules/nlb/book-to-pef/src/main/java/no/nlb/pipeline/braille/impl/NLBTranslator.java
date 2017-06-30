@@ -75,11 +75,11 @@ public interface NLBTranslator {
 			href = asURI(context.getBundleContext().getBundle().getEntry("xml/block-translate.xpl"));
 		}
 		
-		private final static Query grade0Table = mutableQuery().add("liblouis-table", "http://www.nlb.no/liblouis/no-no-g0.utb");
-		private final static Query grade1Table = mutableQuery().add("liblouis-table", "http://www.nlb.no/liblouis/no-no-g1.ctb");
-		private final static Query grade2Table = mutableQuery().add("liblouis-table", "http://www.nlb.no/liblouis/no-no-g2.ctb");
-		private final static Query grade3Table = mutableQuery().add("liblouis-table", "http://www.nlb.no/liblouis/no-no-g3.ctb");
-		private final static Query grade0Table8dot = mutableQuery().add("liblouis-table", "http://www.nlb.no/liblouis/no-no-g0.utb");
+		private final static Query grade0Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g0.utb");
+		private final static Query grade1Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g1.ctb");
+		private final static Query grade2Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g2.ctb");
+		private final static Query grade3Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g3.ctb");
+		private final static Query grade0Table8dot = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g0.utb");
 		private final static Query hyphenationTable = mutableQuery().add("libhyphen-table", "http://www.nlb.no/hyphen/hyph_nb_NO.dic");
 		private final static Query fallbackHyphenationTable1 = mutableQuery().add("libhyphen-table",
 		                                                                          "http://www.libreoffice.org/dictionaries/hyphen/hyph_nb_NO.dic");

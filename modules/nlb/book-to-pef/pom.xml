@@ -281,8 +281,7 @@
           <instructions>
             <_dsannotations>
               no.nlb.pipeline.braille.impl.NLBTranslator$Provider,
-              no.nlb.pipeline.braille.impl.LibhyphenTablePath,
-              no.nlb.pipeline.braille.impl.TablePath
+              no.nlb.pipeline.braille.impl.LibhyphenTablePath
             </_dsannotations>
           </instructions>
         </configuration>
