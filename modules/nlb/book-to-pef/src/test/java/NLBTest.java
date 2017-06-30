@@ -11,6 +11,7 @@ import org.daisy.pipeline.braille.common.HyphenatorProvider;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import static org.daisy.pipeline.braille.common.Query.util.query;
+import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 
 import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 
@@ -97,6 +98,29 @@ public class NLBTest extends AbstractXSpecAndXProcSpecTest {
 		assertEquals("⠃⠥⠎⠎⠤\n" +
 		             "⠎⠞⠕⠏⠏",
 		             fillLines(translator.lineBreakingFromStyledText().transform(styledText("busstopp","hyphens:auto")), 6));
+	}
+	
+	@Inject
+	LiblouisTranslator.Provider liblouisProvider;
+	
+	// see https://github.com/nlbdev/pipeline/issues/70
+	@Test
+	public void testIssue70() throws Exception {
+		LiblouisTranslator grade0Translator
+			= liblouisProvider.get(query("(liblouis-table:'http://www.liblouis.org/tables/no-no-g0.utb')")).iterator().next();
+		LiblouisTranslator translator
+			= liblouisProvider.get(query("(liblouis-table:'http://www.liblouis.org/tables/no-no-g1.ctb')")).iterator().next();
+		assertEquals(
+			braille("⠰⠁ ⠃ ⠁ ⠰⠇"),
+			translator.fromStyledTextToBraille()
+			          .transform(styledText("a ble at l", "")));
+		
+		grade0Translator.fromStyledTextToBraille()
+		                .transform(styledText("punkt@nlb.no", ""));
+		assertEquals(
+			braille("⠰⠁ ⠃ ⠁ ⠰⠇"),
+			translator.fromStyledTextToBraille()
+			          .transform(styledText("a ble at l", "")));
 	}
 	
 	@Override

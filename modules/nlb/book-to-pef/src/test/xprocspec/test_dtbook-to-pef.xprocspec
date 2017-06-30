@@ -341,7 +341,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="regression test for issue where dot 56 is sometimes missing in contraction (issue nlbdev/pipeline#70)" pending="https://github.com/nlbdev/pipeline/issues/70">
+        <x:scenario label="regression test for issue where dot 56 is sometimes missing in contraction (issue nlbdev/pipeline#70)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
