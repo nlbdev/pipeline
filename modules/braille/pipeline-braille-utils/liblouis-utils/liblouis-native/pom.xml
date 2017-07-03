@@ -33,7 +33,7 @@
       <dependency>
         <groupId>org.liblouis</groupId>
         <artifactId>louis</artifactId>
-        <version>${liblouis.version}</version>
+        <version>3.0.0-alpha1</version>
         <type>nar</type>
       </dependency>
       <dependency>
@@ -72,6 +72,7 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louis</artifactId>
+                  <version>${liblouis.version}</version>
                   <classifier>amd64-Linux-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
