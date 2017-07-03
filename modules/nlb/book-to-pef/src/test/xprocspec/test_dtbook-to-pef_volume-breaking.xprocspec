@@ -80,4 +80,266 @@
         <x:expect label="40 short paragraphs, page height 15 and max sheets 1 (1 sheet = 2 braille pages), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
     </x:scenario>
     
+    <x:scenario label="with parts: parts will be top level splitting points" pending="Might be because of this: https://github.com/nlbdev/pipeline/issues/68">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                        <book>
+                            <bodymatter>
+                                <level1 class="part">
+                                    <p>content</p>
+                                </level1>
+                                <level1 class="part">
+                                    <p>content</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="page-height" select="15"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="maximum-number-of-sheets" select="1"/>
+            <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-2/output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-2/output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('volume-breaking-2/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="volume-breaking-1/output-dir/book.pef" />
+        </x:context>
+        <x:expect label="2 short paragraphs, but in different book 'parts', should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+    </x:scenario>
+    
+    <x:scenario label="with parts: fit small chapters in same volume, medium chapters in separate volume, and big chapters in multiple volumes" pending="https://github.com/nlbdev/pipeline/issues/80">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                        <book>
+                            <bodymatter>
+                                <level1 class="part">
+                                    <!-- small chapter -->
+                                    <level2>
+                                        <h2>small</h2>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                    </level2>
+                                    
+                                    <!-- small chapter -->
+                                    <level2>
+                                        <h2>small</h2>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                    </level2>
+                                </level1>
+                                <level1 class="part">
+                                    <!-- medium chapter -->
+                                    <level2>
+                                        <h2>medium</h2>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                    </level2>
+                                    
+                                    <!-- medium chapter -->
+                                    <level2>
+                                        <h2>medium</h2>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                    </level2>
+                                </level1>
+                                <level1 class="part">
+                                    <!-- big chapter -->
+                                    <level2>
+                                        <h2>big</h2>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                    </level2>
+                                    
+                                    <!-- big chapter -->
+                                    <level2>
+                                        <h2>big</h2>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        
+                                        <!-- 10 paragraphs -->
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                        <p>content</p>
+                                    </level2>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="page-height" select="15"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="maximum-number-of-sheets" select="1"/>
+            <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-3/output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-3/output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('volume-breaking-3/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="volume-breaking-3/output-dir/book.pef" />
+        </x:context>
+        <x:expect label="1 volume with 2 small chapters" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]])" equals="1"/>
+        <x:expect label="2 volumes with 1 medium chapter each" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')]])" equals="2"/>
+        <x:expect label="2 big chapters spread across 4 volumes" type="xpath" test="count(//pef:volume[not(.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]) and not(.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])])" equals="4"/>
+        <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
+    </x:scenario>
+    
 </x:description>

@@ -91,7 +91,9 @@ pagenum, *[epub|type~='pagebreak'] {
 /*               for volume breaking, toc, titlepage                          */
 /* -------------------------------------------------------------------------- */
 
-/* TODO: volume breaking rules */
+level1.part, *[epub|type~='part'] {
+        volume-break-before: always;
+}
 
 /* Insert generated content at start of volume */
 @volume {
