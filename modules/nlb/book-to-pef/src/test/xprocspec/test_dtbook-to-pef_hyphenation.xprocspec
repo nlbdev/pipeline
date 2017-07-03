@@ -307,5 +307,82 @@
             </x:document>
         </x:expect>
     </x:scenario>
-  
+    
+    <x:scenario label="regression test: first half of word should not be deleted when non-standard hyphenation break point is at page width (issue nlbdev/pipeline#14)">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2001/dtbook/" style="margin-left: 0; padding-left: 0; text-indent: 0;">
+                        <head>
+                            <style media="embossed" type="text/css">
+                                @page {
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                                dtbook, book, bodymatter, level1, p {
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                            </style>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>xxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                    <p>xxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+            <x:option name="page-width" select="35"/>
+            <x:option name="page-height" select="100"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="pef-output-dir" select="resolve-uri('24/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('24/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('24/temp-dir',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[replace(text(),'⠀','')]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline" select="/*/*">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠕⠇⠇⠑⠽⠃⠁⠇⠇⠑⠙⠑⠗⠑⠝</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠕⠇⠇⠑⠽⠃⠁⠇⠇⠤</row>
+                    <row>⠇⠑⠙⠑⠗⠑⠝</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠕⠇⠇⠑⠽⠃⠁⠇⠇⠤</row>
+                    <row>⠇⠑⠙⠑⠗⠑⠝</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠕⠇⠇⠑⠽⠃⠁⠇⠇⠤</row>
+                    <row>⠇⠑⠙⠑⠗⠑⠝</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠕⠇⠇⠑⠽⠃⠁⠇⠇⠤</row>
+                    <row>⠇⠑⠙⠑⠗⠑⠝</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠧⠕⠇⠇⠑⠽⠃⠁⠇⠇⠤</row>
+                    <row>⠇⠑⠙⠑⠗⠑⠝</row>
+                    <row>⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                    <row>⠧⠕⠇⠇⠑⠽⠃⠁⠇⠇⠑⠙⠑⠗⠑⠝</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>
