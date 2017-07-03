@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+    xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+    xmlns:pef="http://www.daisy.org/ns/2008/pef"
+    script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
+    
+    <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <!-- 10 paragraphs -->
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    
+                                    <!-- 10 paragraphs -->
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    
+                                    <!-- 10 paragraphs -->
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    
+                                    <!-- 10 paragraphs -->
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                    <p>content</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="page-height" select="15"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="maximum-number-of-sheets" select="1"/>
+            <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('volume-breaking-1/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="volume-breaking-1/output-dir/book.pef" />
+        </x:context>
+        <x:expect label="40 short paragraphs, page height 15 and max sheets 1 (1 sheet = 2 braille pages), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+    </x:scenario>
+    
+</x:description>
