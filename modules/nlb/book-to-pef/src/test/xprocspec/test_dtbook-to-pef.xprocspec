@@ -747,17 +747,17 @@
                                 <bodymatter>
                                     <level1>
                                         <h1>abc</h1>
-                                        <p>aa <noteref id="noteref_1" idref="#001">*</noteref> ll</p>
-                                        <p>bb <noteref id="noteref_2" idref="#002">*</noteref> ll</p>
-                                        <p>cc <noteref id="noteref_3" idref="#003">*</noteref> ll</p>
+                                        <p>aa <noteref id="noteref_1" idref="#note001">*</noteref> ll</p>
+                                        <p>bb <noteref id="noteref_2" idref="#note002">*</noteref> ll</p>
+                                        <p>cc <noteref id="noteref_3" idref="#note003">*</noteref> ll</p>
                                     </level1>
                                 </bodymatter>
                                 <rearmatter>
                                     <level1>
                                         <h1>notes</h1>
-                                        <note id="001"> <p>* aaa aaa</p> </note>
-                                        <note id="001"> <p>* rrr bbb</p> </note>
-                                        <note id="001"> <p>* lll lll</p> </note>
+                                        <note id="note001"> <p>* aaa aaa</p> </note>
+                                        <note id="note002"> <p>* rrr bbb</p> </note>
+                                        <note id="note003"> <p>* lll lll</p> </note>
                                     </level1>
                                 </rearmatter>
                             </book>
@@ -816,15 +816,15 @@
                                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
                                     <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                     <row/>
-                                    <row>⠀⠀⠀⠀⠁⠁</row>
-                                    <row>⠀⠀⠀⠀⠠⠼⠁</row>
-                                    <row>⠀⠀⠇⠇</row>
-                                    <row>⠀⠀⠀⠀⠃⠃</row>
-                                    <row>⠀⠀⠀⠀⠠⠼⠃</row>
-                                    <row>⠀⠀⠇⠇</row>
-                                    <row>⠀⠀⠀⠀⠉⠉</row>
-                                    <row>⠀⠀⠀⠀⠠⠼⠉</row>
-                                    <row>⠀⠀⠇⠇</row>
+                                    <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
+                                    <row>⠀⠀⠀⠀⠃⠃⠀⠠⠼⠃⠀⠇⠇</row>
+                                    <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
                                     <row/>
                                     <row/>
                                     <row/>
@@ -875,8 +875,8 @@
                             <section>
                                 <page>
                                     <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                    <row/>
-                                    <row/>
+                                    <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
+                                    <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
                                     <row/>
                                     <row/>
                                     <row/>
