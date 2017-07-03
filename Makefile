@@ -182,6 +182,7 @@ $(SAXON) :
 				cp $$pom $$dest; \
 			fi \
 		done && \
+		$(MVN) -f utils/nar-maven-plugin clean install && \
 		$(MVN) --quiet --projects $$(cat $< |paste -sd , -) help:effective-pom -Doutput=$(CURDIR)/$@; \
 	else \
 		touch $@; \
