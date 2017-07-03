@@ -36,6 +36,16 @@
         </p:documentation>
     </p:input>
     
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">Validation status</h1>
+            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
+        </p:documentation>
+        <p:pipe port="validation-status" step="validate-pef"/>
+    </p:output>
+    
     <p:option name="braille-standard"/>
     <p:option name="hyphenation"/>
     <p:option name="line-spacing"/>
@@ -60,9 +70,26 @@
     
     <p:import href="http://www.nlb.no/pipeline/modules/braille/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl"/>
     
-    <p:in-scope-names name="parameters"/>
+    <p:in-scope-names name="in-scope-names"/>
+    <px:delete-parameters parameter-names="stylesheet
+                                           pef-output-dir
+                                           preview-output-dir
+                                           temp-dir">
+        <p:input port="source">
+            <p:pipe step="in-scope-names" port="result"/>
+        </p:input>
+    </px:delete-parameters>
+    <px:add-parameters>
+        <p:with-param name="main-document-language" select="'no'"/>
+    </px:add-parameters>
+    <p:identity name="parameters"/>
+    <p:sink/>
+    
     <nlb:pre-processing>
         <p:input port="parameters">
             <p:pipe port="result" step="parameters"/>
@@ -72,30 +99,38 @@
         </p:input>
     </nlb:pre-processing>
     
-    <px:dtbook-to-pef>
-        <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss', if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
+    <px:tempdir name="temp-dir">
+        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
+    </px:tempdir>
+    <p:sink/>
+    
+    <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css">
+        <p:input port="source">
+            <p:pipe step="main" port="source"/>
+        </p:input>
+        <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss',
+                                                        if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
-        <p:with-option name="main-document-language" select="'no'"/>
-        <p:with-option name="include-preview" select="'true'"/>
-        <p:with-option name="page-width" select="$page-width"/>
-        <p:with-option name="page-height" select="$page-height"/>
-        <p:with-option name="duplex" select="$duplex"/>
-        <p:with-option name="hyphenation" select="$hyphenation"/>
-        <p:with-option name="line-spacing" select="$line-spacing"/>
-        <p:with-option name="capital-letters" select="$capital-letters"/>
-        <p:with-option name="include-captions" select="$include-captions"/>
-        <p:with-option name="include-images" select="$include-images"/>
-        <p:with-option name="include-line-groups" select="$include-line-groups"/>
-        <p:with-option name="include-note-references" select="$include-notes"/>
-        <p:with-option name="include-production-notes" select="$include-production-notes"/>
-        <p:with-option name="show-braille-page-numbers" select="$show-braille-page-numbers"/>
-        <p:with-option name="show-print-page-numbers" select="$show-print-page-numbers"/>
-        <p:with-option name="toc-depth" select="$toc-depth"/>
-        <p:with-option name="colophon-metadata-placement" select="$colophon-metadata-placement"/>
-        <p:with-option name="maximum-number-of-sheets" select="$maximum-number-of-sheets"/>
+        <p:input port="parameters">
+            <p:pipe port="result" step="parameters"/>
+        </p:input>
+        <p:with-option name="temp-dir" select="string(/c:result)">
+            <p:pipe step="temp-dir" port="result"/>
+        </p:with-option>
+    </px:dtbook-to-pef.convert>
+    
+    <pef:validate name="validate-pef" assert-valid="false">
+        <p:with-option name="temp-dir" select="string(/c:result)">
+            <p:pipe step="temp-dir" port="result"/>
+        </p:with-option>
+    </pef:validate>
+    
+    <px:dtbook-to-pef.store include-preview="true">
+        <p:input port="dtbook">
+            <p:pipe step="main" port="source"/>
+        </p:input>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-        <p:with-option name="temp-dir" select="$temp-dir"/>
-    </px:dtbook-to-pef>
+    </px:dtbook-to-pef.store>
     
 </p:declare-step>
