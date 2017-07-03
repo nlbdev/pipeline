@@ -20,8 +20,8 @@ java -cp "`find .maven-workspace/net/sf/saxon/Saxon-HE/9* -type f | grep jar$ | 
 
 DESCRIPTOR_VERSION="`cat releaseDescriptorRelative.xml | grep "<releaseDescriptor " | sed 's/.* version="//' | sed 's/".*//'`"
 GIT_SHA="`git rev-parse --short HEAD`"
+GIT_NLB_SHA="`git rev-parse --short nlb`"
 DESCRIPTOR_VERSION="`echo $DESCRIPTOR_VERSION | sed "s/SNAPSHOT/SNAPSHOT+\`date -u +"%Y%m%d%H%M%S"\`-$GIT_SHA/"`"
-GIT_BRANCH="`git rev-parse --abbrev-ref HEAD`"
 
 echo "Distributing Pipeline 2 version: $DESCRIPTOR_VERSION"
 
@@ -60,11 +60,7 @@ echo "</releaseDescriptor>" >> releaseDescriptor.xml
 
 cat releaseDescriptor.xml | ssh $PIPELINE_USER@$PIPELINE_HOST "cat > /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION"
 
-if [ "$GIT_BRANCH" != "HEAD" ]; then
-    ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/$GIT_BRANCH"
-fi
-
-if [ "$GIT_BRANCH" = "nlb" ]; then
+if [ "$GIT_SHA" = "$GIT_NLB_SHA" ]; then
     ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/current"
 fi
 
