@@ -1,6 +1,8 @@
 package org.daisy.pipeline.junit;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,7 +31,7 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 	@Inject
 	protected XSpecRunner xspecRunner;
 	
-	@Test
+	//@Test
 	public void runXSpec() throws Exception {
 		File baseDir = new File(PathUtils.getBaseDir());
 		File testsDir = new File(baseDir, "src/test/xspec");
@@ -44,7 +46,7 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 	@Inject
 	protected XProcSpecRunner xprocspecRunner;
 	
-	@Test
+	//@Test
 	public void runXProcSpec() throws Exception {
 		File baseDir = new File(PathUtils.getBaseDir());
 		File testsDir = new File(baseDir, "src/test/xprocspec");
@@ -56,6 +58,29 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 			                                      new XProcSpecRunner.Reporter.DefaultReporter());
 			assertTrue("XProcSpec tests should run with success", success);
 		}
+	}
+	
+	@Test
+	public void runXSpecAndXProcSpec() throws Exception {
+		File baseDir = new File(PathUtils.getBaseDir());
+		File xspecDir = new File(baseDir, "src/test/xspec");
+		File xprocspecDir = new File(baseDir, "src/test/xprocspec");
+		boolean xprocspecHasFocus = xprocspecRunner.hasFocus(xprocspecDir);
+		List<AssertionError> errors = new ArrayList<AssertionError>();
+		if (xspecDir.exists() && !xprocspecHasFocus)
+			try {
+				runXSpec();
+			} catch (AssertionError e) {
+				errors.add(e);
+			}
+		if (xprocspecDir.exists())
+			try {
+				runXProcSpec();
+			} catch (AssertionError e) {
+				errors.add(e);
+			}
+		for (AssertionError e : errors)
+			throw e;
 	}
 	
 	@Override @Configuration
