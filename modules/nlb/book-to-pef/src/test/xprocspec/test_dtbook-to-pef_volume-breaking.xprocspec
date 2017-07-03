@@ -80,7 +80,7 @@
         <x:expect label="40 short paragraphs, page height 15 and max sheets 1 (1 sheet = 2 braille pages), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
     </x:scenario>
     
-    <x:scenario label="with parts: parts will be top level splitting points" pending="Might be because of this: https://github.com/nlbdev/pipeline/issues/68">
+    <x:scenario label="with parts: parts will be top level splitting points">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -107,7 +107,7 @@
             <x:option name="temp-dir" select="resolve-uri('volume-breaking-2/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="volume-breaking-1/output-dir/book.pef" />
+            <x:document type="file" base-uri="temp-dir" href="volume-breaking-2/output-dir/book.pef" />
         </x:context>
         <x:expect label="2 short paragraphs, but in different book 'parts', should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
     </x:scenario>
