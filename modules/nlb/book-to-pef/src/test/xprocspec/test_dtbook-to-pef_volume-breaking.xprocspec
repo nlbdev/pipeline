@@ -338,7 +338,7 @@
         </x:context>
         <x:expect label="1 volume with 2 small chapters" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]])" equals="1"/>
         <x:expect label="2 volumes with 1 medium chapter each" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')]])" equals="2"/>
-        <x:expect label="2 big chapters spread across 4 volumes" type="xpath" test="count(//pef:volume[not(.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]) and not(.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])])" equals="4"/>
+        <x:expect label="2 big chapters spread across 4 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')] and not(.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]) and not(.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])])" equals="4"/>
         <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
     </x:scenario>
     
