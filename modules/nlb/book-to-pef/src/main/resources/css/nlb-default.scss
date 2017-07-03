@@ -248,9 +248,13 @@ frontmatter, *[epub|type~='frontmatter'] {
         }
 }
 
-blockquote, sidebar, aside[epub|type~='sidebar'], epigraph, aside[epub|type~='epigraph'], noteref, a[epub|type~='noteref'],
+blockquote, sidebar, aside[epub|type~='sidebar'], epigraph, aside[epub|type~='epigraph'],
 .Rammetekst, poem, section[epub|type~='z3998:poem'], div[epub|type~='z3998:poem'], linegroup, section.linegroup, div.linegroup, line, p.line {
         display: block;
+}
+
+noteref, a[epub|type~='noteref'] {
+        display: inline;
 }
 
 note, aside[epub|type~='note'] {
