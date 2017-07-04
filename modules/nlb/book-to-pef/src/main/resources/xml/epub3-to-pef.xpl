@@ -66,7 +66,7 @@
     <px:message message="Running NLB-specific pre-processing steps"/>
     <!--
         Nothing here yet.
-        Wait for: https://github.com/snaekobbi/pipeline-mod-braille/issues/63
+        Wait for: https://github.com/snaekobbi/pipeline-mod-braille/issues/63 (=> this is fixed now)
     -->
     <px:message message="Finished running NLB-specific pre-processing steps" severity="DEBUG"/>
     

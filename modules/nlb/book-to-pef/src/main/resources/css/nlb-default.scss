@@ -449,6 +449,11 @@ note, aside[epub|type~='note'], noteref, a[epub|type~='noteref'] {
 }
 
 /*
+ * noteref numbering is implemented in pre-processing.xsl (and pre-processing-epub.xsl)
+ * FIXME: could be implemented in CSS
+ */
+
+/*
     book {
     counter-reset: note-counter;
 }

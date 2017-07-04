@@ -18,17 +18,6 @@
         <xsl:call-template name="add-information-based-from-metadata"/>
     </xsl:template>
 
-    <xsl:template match="noteref[normalize-space(.) eq '*']">       
-        <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <xsl:value-of select="1 + count(preceding::noteref)"/>
-        </xsl:copy>
-    </xsl:template>
-
-    <xsl:template match="note/p[1]/text()[1][starts-with(normalize-space(.), '*')]">        
-        <xsl:value-of select="1 + count(preceding::note)"/>
-        <xsl:value-of select="substring-after(., '*')"/>
-    </xsl:template>
     <xsl:template match="node()" mode="#all" priority="-5">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
