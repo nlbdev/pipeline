@@ -12,7 +12,7 @@
             <x:option name="toc-depth" select="0"/>
         </x:call>
         
-        <x:scenario label="basic test">
+        <x:scenario label="basic test" pending="https://github.com/nlbdev/pipeline/issues/63">
             <x:call>
                 <x:input port="source">
                     <x:document type="file" href="../resources/DTBook/book.xml"/>
@@ -28,7 +28,7 @@
                 test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
         </x:scenario>
         
-        <x:scenario label="ability to override css rules - with a link element">
+        <x:scenario label="ability to override css rules - with a link element" pending="https://github.com/nlbdev/pipeline/issues/63">
             <x:call>
                 <x:input port="source">
                     <x:document type="file" href="../resources/DTBook-override-css/book-with-link.xml"/>
@@ -1279,7 +1279,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="table_caption">
+    <x:scenario label="table_caption" pending="https://github.com/nlbdev/pipeline/issues/63">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
