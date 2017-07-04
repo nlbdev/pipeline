@@ -36,6 +36,10 @@ public interface BrailleFilterFactoryService {
 	 */
 	public Collection<TranslatorSpecification> listSpecifications();
 
+	/**
+	 * Creates a new braille filter factory.
+	 * @return returns a new braille filter factory
+	 */
 	public BrailleFilterFactory newFactory();
 
 	/**
@@ -55,6 +59,6 @@ public interface BrailleFilterFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

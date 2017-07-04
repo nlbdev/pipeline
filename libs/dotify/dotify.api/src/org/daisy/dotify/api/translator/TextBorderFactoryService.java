@@ -17,6 +17,10 @@ package org.daisy.dotify.api.translator;
  */
 public interface TextBorderFactoryService {
 
+	/**
+	 * Creates a new text border factory
+	 * @return returns a new text border factory
+	 */
 	public TextBorderFactory newFactory();
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
@@ -35,6 +39,6 @@ public interface TextBorderFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

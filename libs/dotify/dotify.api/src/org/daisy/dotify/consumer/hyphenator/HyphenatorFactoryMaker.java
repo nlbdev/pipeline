@@ -32,6 +32,9 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 	private final Map<String, HyphenatorFactoryService> map;
 	private final Logger logger;
 	
+	/**
+	 * Creates a new formatter factory maker.
+	 */
 	public HyphenatorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		filters = new CopyOnWriteArrayList<>();
@@ -57,18 +60,29 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 		{
 			Iterator<HyphenatorFactoryService> i = ServiceLoader.load(HyphenatorFactoryService.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				HyphenatorFactoryService f = i.next();
+				f.setCreatedWithSPI();
+				ret.addFactory(f);
 			}
 		}
 		return ret;
 	}
 
+	/**
+	 * Adds a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to add
+	 */
 	@Reference(type = '*')
 	public void addFactory(HyphenatorFactoryService factory) {
 		logger.finer("Adding factory: " + factory);
 		filters.add(factory);
 	}
 
+
+	/**
+	 * Removes a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to remove
+	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(HyphenatorFactoryService factory) {
 		logger.finer("Removing factory: " + factory);

@@ -1,12 +1,10 @@
-package org.daisy.dotify.api.translator;
+package org.daisy.dotify.api.obfl;
 
-import java.util.Collection;
 
 /**
  * <p>
- * Provides an interface for a BrailleTranslatorFactory service. The purpose of
- * this interface is to expose an implementation of a BrailleTranslatorFactory as
- * a service.
+ * Provides an interface for a ObflParserFactory service. The purpose of this
+ * interface is to expose an implementation of a ObflParser as a service.
  * </p>
  * 
  * <p>
@@ -17,30 +15,13 @@ import java.util.Collection;
  * 
  * @author Joel Håkansson
  */
-public interface BrailleTranslatorFactoryService {
+public interface ObflParserFactoryService {
 
 	/**
-	 * Returns true if the translator factory supports the given specification.
-	 * 
-	 * @param locale
-	 *            the translator locale
-	 * @param mode
-	 *            the translator grade, or null for uncontracted braille
-	 * @return returns true if the translator factory supports the specification
+	 * Creates a new ObflParser.
+	 * @return returns a new OBFL parser.
 	 */
-	public boolean supportsSpecification(String locale, String mode);
-	
-	/**
-	 * Returns a list of supported specifications.
-	 * @return returns a list of specifications
-	 */
-	public Collection<TranslatorSpecification> listSpecifications();
-
-	/**
-	 * Creates a new braille translator factory.
-	 * @return returns a new braille translator factory
-	 */
-	public BrailleTranslatorFactory newFactory();
+	public ObflParser newObflParser();
 
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
@@ -59,6 +40,6 @@ public interface BrailleTranslatorFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public default void setCreatedWithSPI(){}
+	public void setCreatedWithSPI();
 
 }

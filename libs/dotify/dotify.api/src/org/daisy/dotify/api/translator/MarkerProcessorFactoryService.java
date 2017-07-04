@@ -32,6 +32,10 @@ public interface MarkerProcessorFactoryService {
 	 */
 	public boolean supportsSpecification(String locale, String mode);
 
+	/**
+	 * Creates a new marker processor factory
+	 * @return returns a new marker processor factory
+	 */
 	public MarkerProcessorFactory newFactory();
 	
 	/**
@@ -51,6 +55,6 @@ public interface MarkerProcessorFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }
