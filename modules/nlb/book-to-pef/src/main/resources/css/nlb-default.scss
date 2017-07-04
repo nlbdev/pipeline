@@ -91,8 +91,21 @@ pagenum, *[epub|type~='pagebreak'] {
 /*               for volume breaking, toc, titlepage                          */
 /* -------------------------------------------------------------------------- */
 
-level1.part, *[epub|type~='part'] {
+/* Always start a new volume before a part */
+level1.part,
+*[epub|type~='part'] {
         volume-break-before: always;
+}
+
+/* Avoid breaking inside chapters in parts */
+level1.part > level2,
+*[epub|type~='part'] > section,
+*[epub|type~='part'] > article,
+*[epub|type~='part'] > main,
+*[epub|type~='part'] > *:has(h1),
+*[epub|type~='part'] > *:has(h2),
+*[epub|type~='part'] > *:has(h3) {
+        volume-break-inside: -obfl-keep(8);
 }
 
 /* Insert generated content at start of volume */
