@@ -394,7 +394,7 @@
                 <x:option name="temp-dir" select="resolve-uri('18/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="(//pef:row[text() != '' and not(contains(text(),'⠼'))])[position() = (1,last())]"/>
+                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="//pef:row[contains(text(),'⠃⠀⠁')]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="//pef:row">
@@ -1199,7 +1199,7 @@
                                 <docauthor>bbb</docauthor>
                                 <level1  class="titlepage">
                                     <pagenum id="page-1" page="normal">1</pagenum>
-                                    <h1 id="h1_1" class="title fulltitle">ULVEGUTTEN TAL </h1>
+                                    <h1 id="h1_1" class="title fulltitle">ULVEGUTTEN TAL</h1>
                                     <p class="docauthor author">Tor </p>
                                     <p>Illustrert av Haakon Lie</p>
                                     <p>CAPPELEN DAMM</p>
