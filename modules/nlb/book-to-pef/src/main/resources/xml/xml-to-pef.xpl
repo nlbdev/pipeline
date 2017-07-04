@@ -135,6 +135,20 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
             <h2 px:role="name">Tekstelementer: Inkluder noter</h2>
         </p:documentation>
     </p:option>
+    <p:option name="notes-placement" select="'end-of-volume'">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+                    <value>bottom-of-page</value>
+                    <a:documentation xml:lang="en">Noter nederst på side</a:documentation>
+                    <value>end-of-volume</value>
+                    <a:documentation xml:lang="en">Noter i slutten av hefte</a:documentation>
+                    <value>end-of-book</value>
+                    <a:documentation xml:lang="en">Noter i slutten av boken</a:documentation>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
+    </p:option>
     <p:option name="include-production-notes" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Tekstelementer: Inkluder produsentkommentarer</h2>

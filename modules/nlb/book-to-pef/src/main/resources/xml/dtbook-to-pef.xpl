@@ -58,6 +58,7 @@
     <p:option name="include-images"/>
     <p:option name="include-line-groups"/>
     <p:option name="include-notes"/>
+    <p:option name="notes-placement"/>
     <p:option name="include-production-notes"/>
     <p:option name="show-braille-page-numbers"/>
     <p:option name="show-print-page-numbers"/>
@@ -86,7 +87,6 @@
     </px:delete-parameters>
     <px:add-parameters>
         <p:with-param name="main-document-language" select="'no'"/>
-        <p:with-param name="include-note-references" select="$include-notes"/>
     </px:add-parameters>
     <p:identity name="parameters"/>
     <p:sink/>

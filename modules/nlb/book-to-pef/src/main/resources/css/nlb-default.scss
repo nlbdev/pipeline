@@ -5,7 +5,8 @@
 $show-print-page-numbers: false !default;
 $show-braille-page-numbers: false !default;
 $line-spacing: false !default;
-$include-note-references: true !default;
+$include-notes: true !default;
+$notes-placement: end-of-volume !default;
 $choice-of-colophon: true !default;
 
 /* -------------------------------------------------------------------------- */
@@ -268,14 +269,6 @@ blockquote, sidebar, aside[epub|type~='sidebar'], epigraph, aside[epub|type~='ep
         display: block;
 }
 
-noteref, a[epub|type~='noteref'] {
-        display: inline;
-}
-
-note, aside[epub|type~='note'] {
-        display: if($include-note-references, block, none);
-}
-
 doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauthor, h1[epub|type~='z3998:author'] {
         display: none;
 }
@@ -443,27 +436,6 @@ prodnote::after, aside[epub|type~='z3998:production']::after {
         content: "⠾";
 }
 
-note, aside[epub|type~='note'], noteref, a[epub|type~='noteref'] {
-        text-indent: 2;
-        text-align: left;
-}
-
-/*
- * noteref numbering is implemented in pre-processing.xsl (and pre-processing-epub.xsl)
- * FIXME: could be implemented in CSS
- */
-
-/*
-    book {
-    counter-reset: note-counter;
-}
-
-note:before {
-    counter-increment: note-counter;
-    content:  counter(note-counter) ". ";
-}
-*/
-
 /* -------------------------------------------------------------------------- */
 /*                Images                                                      */
 /* -------------------------------------------------------------------------- */
@@ -574,44 +546,96 @@ table::after {
 /* -------------------------------------------------------------------------- */
 /*                Note and endnote                                            */
 /* -------------------------------------------------------------------------- */
-@page {
-        @footnotes {
-                content: flow(footnotes);
-                -obfl-fallback-collection: endnotes;
-        }
-}
 
-@page {
-        @footnotes {
-                max-height: 15;
-        }
-}
-
-@volume {
-        @end {
-                content: flow(endnotes, volume);
-        }
-}
-
-noteref::before, a[epub|type~='noteref']::before {
-        content: '⠠';
-}
-
-noteref::alternate, a[epub|type~='noteref']::alternate {
-        flow: endnotes;
-        display: block;
-        content: target-content(attr(idref));
-}
-
-level1.footnotes {
+noteref, a[epub|type~='noteref'],
+note, aside[epub|type~='note'],
+level1.footnotes,
+rearmatter:not(:has(> *:not(level1.footnotes))) {
         display: none;
 }
 
-note p::before, aside[epub|type~='note'] p::before {
-        content: '⠠';
-}
+@if ($include-notes) {
 
-note p, aside[epub|type~='note'] p::before {
-        margin-left: 4;
-        text-indent: -2;
+        /* An extend-only selector (%endnotes-title) would be more appropriate
+         * but does not seem to work in the 'end-of-book' case */
+        @mixin endnotes-title {
+                display: block;
+                margin-top: 2;
+                margin-left: 5;
+                margin-right: 5;
+                margin-bottom: 1;
+                text-align: center;
+                border-top: ⠉;
+                border-bottom: ⠉;
+                content: 'Fotnoter';
+                text-transform: auto;
+        }
+        
+        @if ($notes-placement == 'bottom-of-page') {
+                @page {
+                        @footnotes {
+                                content: flow(footnotes);
+                                max-height: 15;
+                        }
+                }
+        } @else if ($notes-placement == 'end-of-volume') {
+                book, html { &:has(noteref, a[epub|type~='noteref'])::alternate {
+                        @include endnotes-title;
+                        flow: endnotes-title;
+                }
+                }
+                @volume {
+                        @end {
+                                content: flow(endnotes-title) flow(endnotes, volume);
+                                page: auto;
+                        }
+                }
+        } @else if ($notes-placement == 'end-of-book') {
+                book, html { &:has(noteref, a[epub|type~='noteref'])::after {
+                        &::before {
+                                @include endnotes-title;
+                                page-break-before: right;
+                        }
+                        content: flow(endnotes);
+                }
+                }
+        }
+
+        /*
+         * noteref numbering is implemented in pre-processing.xsl (and pre-processing-epub.xsl)
+         * FIXME: could be implemented in CSS
+         */
+
+        @mixin noteref($refattr) {
+                display: inline;
+                &::before {
+                        content: '⠠';
+                }
+                &::alternate {
+                        display: block;
+                        content: target-content(attr($refattr));
+                        @if ($notes-placement == 'bottom-of-page') {
+                                flow: footnotes;
+                        } @else {
+                                flow: endnotes;
+                        }
+                }
+        }
+        
+        noteref {
+                @include noteref(idref);
+        }
+        
+        a[epub|type~='noteref'] {
+                @include noteref(href);
+        }
+
+        note, aside[epub|type~='note'] { p {
+                margin-left: 4;
+                text-indent: -2;
+                &::before {
+                        content: '⠠';
+                }
+        }
+        }
 }
