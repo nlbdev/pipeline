@@ -62,6 +62,8 @@ cat releaseDescriptor.xml | ssh $PIPELINE_USER@$PIPELINE_HOST "cat > /var/www/ht
 
 if [ "$GIT_SHA" = "$GIT_NLB_SHA" ]; then
     ssh -n $PIPELINE_USER@$PIPELINE_HOST "cp /var/www/html/pipeline-updates/$DESCRIPTOR_VERSION /var/www/html/pipeline-updates/current"
+else
+    echo "'$GIT_SHA' != '$GIT_NLB_SHA'"
 fi
 
 ssh -n $PIPELINE_USER@$PIPELINE_HOST "mkdir -p /var/www/html/pipeline-builds"
