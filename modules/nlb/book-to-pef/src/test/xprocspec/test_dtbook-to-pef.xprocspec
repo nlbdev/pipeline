@@ -38,7 +38,7 @@
                 <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="the output directory contents">
-                <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" select="(//pef:row[contains(text(),'⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄')])[1]"/>
+                <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" select="(//pef:row[contains(text(),'⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄')])[1]"/>
             </x:context>
             <x:expect label="The paragraph should be indented by 6 (2 page margin-left, 4 p text-indent)" type="compare">
                 <x:document type="inline">
