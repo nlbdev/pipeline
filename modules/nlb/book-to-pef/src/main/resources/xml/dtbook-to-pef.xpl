@@ -86,6 +86,7 @@
     </px:delete-parameters>
     <px:add-parameters>
         <p:with-param name="main-document-language" select="'no'"/>
+        <p:with-param name="include-note-references" select="$include-notes"/>
     </px:add-parameters>
     <p:identity name="parameters"/>
     <p:sink/>
