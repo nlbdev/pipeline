@@ -236,6 +236,51 @@
             <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
         </x:scenario>
         
+        <x:scenario label="if chapter &gt; max page number the chapter must be split in two or more volumes: seeking a balanced page number between these volumes">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>h1</h1>
+                                        <!-- 200 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('volume-breaking-1/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="volume-breaking-1/output-dir/book.pef" />
+            </x:context>
+            <x:expect label="There should be 2 volumes with bodymatter content" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+            <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="At least 20% of the content rows should be in the second bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+        </x:scenario>
+        
     </x:scenario>
     
 </x:description>
