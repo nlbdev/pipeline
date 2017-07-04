@@ -90,6 +90,11 @@
     <p:identity name="parameters"/>
     <p:sink/>
     
+    <px:tempdir name="temp-dir">
+        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
+    </px:tempdir>
+    <p:sink/>
+    
     <nlb:pre-processing>
         <p:input port="parameters">
             <p:pipe port="result" step="parameters"/>
@@ -99,15 +104,7 @@
         </p:input>
     </nlb:pre-processing>
     
-    <px:tempdir name="temp-dir">
-        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
-    </px:tempdir>
-    <p:sink/>
-    
     <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css">
-        <p:input port="source">
-            <p:pipe step="main" port="source"/>
-        </p:input>
         <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss',
                                                         if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
