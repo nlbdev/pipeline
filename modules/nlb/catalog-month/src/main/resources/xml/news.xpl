@@ -142,6 +142,10 @@
                 <p:iteration-source select="/c:body/j:json/j:article/j:item"/>
                 <p:variable name="url" select="/*/j:url/text()"></p:variable>
                 
+                <p:delete match="j:bodyOriginal[@type][@type != 'string']"/>
+                <p:delete match="j:introOriginal[@type][@type != 'string']"/>
+                <p:delete match="j:actionsLinks[@type][@type != 'array']"/>
+                
                 <p:viewport match="j:bodyOriginal | j:introOriginal">
                     <p:unescape-markup content-type="text/html"/>
                     <p:delete match="html:html/*[not(self::html:body)]"/>
