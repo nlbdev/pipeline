@@ -29,11 +29,10 @@ public class OBFLWsNormalizer extends XMLParserBase {
 	/**
 	 * Creates a new OBFLWsNormalizer. 
 	 * @param input the input XMLEventReader. Note that the underlying stream might not be closed after parsing, due to limitations in the StaX implementation.
-	 * @param eventFactory
+	 * @param eventFactory the xml event factory
 	 * @param out the output stream
-	 * @throws XMLStreamException
 	 */
-	public OBFLWsNormalizer(XMLEventReader input, XMLEventFactory eventFactory, OutputStream out) throws XMLStreamException {
+	public OBFLWsNormalizer(XMLEventReader input, XMLEventFactory eventFactory, OutputStream out) {
 		this.input = input;
 		this.writer = null;
 		this.out = out;
@@ -277,7 +276,7 @@ public class OBFLWsNormalizer extends XMLParserBase {
 	}
 
 	/**
-	 * @param args
+	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
 		try {

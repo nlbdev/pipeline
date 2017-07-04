@@ -19,6 +19,7 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -112,17 +113,6 @@ public class ObflParser extends XMLParserBase {
 		this.fm = fm;
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
 	}
-	/**
-	 * 
-	 * @param input
-	 * @throws XMLStreamException
-	 * @throws OBFLParserException
-	 * @deprecated use parse(input, formatter)
-	 */
-	@Deprecated
-	public void parse(XMLEventReader input) throws XMLStreamException, OBFLParserException {
-		parse(input, fm.getFormatterFactory().newFormatter(locale.toString(), mode));
-	}
 	
 	public void parse(XMLEventReader input, Formatter formatter) throws XMLStreamException, OBFLParserException {
 		this.formatter = formatter;
@@ -130,9 +120,7 @@ public class ObflParser extends XMLParserBase {
 		this.locale = FilterLocale.parse(config.getLocale());
 		this.mode = config.getTranslationMode();
 		this.hyphGlobal = config.isHyphenating();
-		//this.masters = new HashMap<String, LayoutMaster>();
 		this.meta = new ArrayList<>();
-		formatter.open();
 		XMLEvent event;
 		TextProperties tp = new TextProperties.Builder(this.locale.toString()).translationMode(mode).hyphenate(hyphGlobal).build();
 		
@@ -167,12 +155,7 @@ public class ObflParser extends XMLParserBase {
 				report(event);
 			}
 		}
-		try {
-			input.close();
-			formatter.close();
-		} catch (IOException e) {
-			throw new OBFLParserException(e);
-		}
+		input.close();
 	}
 
 	private void parseMeta(XMLEvent event, XMLEventReader input) throws XMLStreamException {
@@ -360,7 +343,7 @@ public class ObflParser extends XMLParserBase {
 
 	private void parseBeforeAfter(XMLEvent event, XMLEventReader input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
-		fc.startBlock(blockBuilder(event.asStartElement().getAttributes()));
+		fc.startBlock(blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (event.isCharacters()) {
@@ -757,7 +740,7 @@ public class ObflParser extends XMLParserBase {
 
 	void parseBlock(XMLEvent event, XMLEventReader input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
-		fc.startBlock(blockBuilder(event.asStartElement().getAttributes()));
+		fc.startBlock(blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (event.isCharacters()) {
@@ -828,6 +811,8 @@ public class ObflParser extends XMLParserBase {
 				fc.insertAnchor(parseAnchor(event));
 			} else if (equalsStart(event, ObflQName.EVALUATE)) {
 				parseEvaluate(fc, event, input, tp);
+			} else if (equalsStart(event, ObflQName.PAGE_NUMBER)) {
+				parsePageNumber(fc, event, input);
 			} else if (equalsEnd(event, ObflQName.STYLE)) {
 				if (!ignore) {
 					if (!hasEvents) {
@@ -843,9 +828,11 @@ public class ObflParser extends XMLParserBase {
 		}
 	}
 
-	private BlockProperties blockBuilder(Iterator<?> atts) {
+	private BlockProperties blockBuilder(StartElement el) {
+		Iterator<?> atts = el.getAttributes();
 		BlockProperties.Builder builder = new BlockProperties.Builder();
 		HashMap<String, Object> border = new HashMap<>();
+		String underlinePattern = null;
 		HashMap<String, Object> underline = new HashMap<>();
 		while (atts.hasNext()) {
 			Attribute att = (Attribute)atts.next();
@@ -872,6 +859,24 @@ public class ObflParser extends XMLParserBase {
 				builder.firstLineIndent(Integer.parseInt(att.getValue()));
 			} else if ("list-type".equals(name)) {
 				builder.listType(FormattingTypes.ListStyle.valueOf(att.getValue().toUpperCase()));
+			} else if ("list-style".equals(name)) {
+				String typeStr = getAttr(el, "list-type");
+				if (typeStr!=null) {
+					FormattingTypes.ListStyle type = FormattingTypes.ListStyle.valueOf(typeStr.toUpperCase());
+					if (FormattingTypes.ListStyle.OL == type) {
+						try {
+							builder.listNumberFormat(ObflParser.parseNumeralStyle(att.getValue()));
+						} catch (IllegalArgumentException e) {
+							logger.log(Level.WARNING, "Failed to parse as a number format: " + att.getValue(), e);
+						}
+					} else {
+						builder.defaultListLabel(att.getValue());
+					}
+				} else {
+					logger.info("list-style has no effect, missing @list-type." + toLocation(el));
+				}
+			} else if ("list-item-label".equals(name)) {
+				builder.listItemLabel(att.getValue());
 			} else if ("break-before".equals(name)) {
 				builder.breakBefore(FormattingTypes.BreakBefore.valueOf(att.getValue().toUpperCase()));
 			} else if ("keep".equals(name)) {
@@ -905,6 +910,10 @@ public class ObflParser extends XMLParserBase {
 				builder.rowSpacing(Float.parseFloat(att.getValue()));
 			} else if (name.startsWith("border")) {
 				border.put(name, att.getValue());
+			} else if ("underline-pattern".equals(name)) {
+				if (!att.getValue().equalsIgnoreCase("none") && !att.getValue().isEmpty()) {
+					underlinePattern = att.getValue();
+				}
 			} else if (name.startsWith("underline-")) {
 				underline.put(name.replaceAll("^underline", "border-bottom"), att.getValue());
 			}
@@ -917,20 +926,20 @@ public class ObflParser extends XMLParserBase {
 				logger.log(Level.WARNING, "Failed to add border to block properties: " + border, e);
 			}
 		}
-		if (!underline.isEmpty()) {
+		if (underlinePattern == null && !underline.isEmpty()) {
 			underline.put(TextBorderFactory.FEATURE_MODE, mode);
 			try {
 				TextBorderStyle underlineStyle = fm.getTextBorderFactory().newTextBorderStyle(underline);
 				if (underlineStyle != null) {
-					String pattern = underlineStyle.getBottomBorder();
-					if (pattern != null && !pattern.isEmpty()) {
-						builder.underlineStyle(pattern);
-					}
+					underlinePattern = underlineStyle.getBottomBorder();
 				}
 			} catch (TextBorderConfigurationException e) {
 				// FIXME: this will show border-bottom-* properties
 				logger.log(Level.WARNING, "Failed to add underline to block properties: " + underline, e);
 			}
+		}
+		if (underlinePattern != null && !underlinePattern.isEmpty()) {
+			builder.underlineStyle(underlinePattern);
 		}
 		return builder.build();
 	}
@@ -983,7 +992,7 @@ public class ObflParser extends XMLParserBase {
 		int tableColSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_COL_SPACING), 0);
 		int tableRowSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_ROW_SPACING), 0);
 		int preferredEmptySpace = toInt(getAttr(event, ObflQName.ATTR_TABLE_PREFERRED_EMPTY_SPACE), 2);
-		BlockProperties bp = blockBuilder(event.asStartElement().getAttributes());
+		BlockProperties bp = blockBuilder(event.asStartElement());
 		Border b = borderBuilder(event.asStartElement().getAttributes());
 		TableProperties.Builder tableProps = new TableProperties.Builder()
 				.tableColSpacing(tableColSpacing)
@@ -1054,7 +1063,7 @@ public class ObflParser extends XMLParserBase {
 		tp = getTextProperties(event, tp);
 		int colSpan = toInt(getAttr(event, ObflQName.ATTR_COL_SPAN), 1);
 		int rowSpan = toInt(getAttr(event, ObflQName.ATTR_ROW_SPAN), 1);
-		BlockProperties bp = blockBuilder(event.asStartElement().getAttributes());
+		BlockProperties bp = blockBuilder(event.asStartElement());
 		Border b = borderBuilder(event.asStartElement().getAttributes());
 		TableCellProperties tcp = new TableCellProperties.Builder()
 				.colSpan(colSpan)
@@ -1115,7 +1124,7 @@ public class ObflParser extends XMLParserBase {
 	private void parseTocEntry(XMLEvent event, XMLEventReader input, TableOfContents toc, TextProperties tp) throws XMLStreamException {
 		String refId = getAttr(event, "ref-id");
 		tp = getTextProperties(event, tp);
-		toc.startEntry(refId, blockBuilder(event.asStartElement().getAttributes()));
+		toc.startEntry(refId, blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (event.isCharacters()) {
@@ -1136,7 +1145,7 @@ public class ObflParser extends XMLParserBase {
 
 	private void parseCollectionItem(XMLEvent event, XMLEventReader input, ContentCollection coll, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
-		coll.startItem(blockBuilder(event.asStartElement().getAttributes()));
+		coll.startItem(blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (event.isCharacters()) {
@@ -1190,35 +1199,87 @@ public class ObflParser extends XMLParserBase {
 	}
 	
 	private NumeralStyle getNumeralStyle(XMLEvent event) {
-		NumeralStyle style = NumeralStyle.DEFAULT;
 		String styleStr = getAttr(event, "style");
 		if (styleStr!=null) {
 			logger.warning("@style has been deprecated. Use @number-format instead." + toLocation(event));
 		} else {
 			styleStr = getAttr(event, "number-format");
 		}
+		return numeralStyleFromAt(styleStr, event.getLocation());
+	}
+	
+	/**
+	 * 
+	 * @param styleStr the string to parse
+	 * @param location location in case of an error
+	 * @return returns a NumeralStyle
+	 */
+	private NumeralStyle numeralStyleFromAt(String styleStr, Location location) {
+		NumeralStyle style = NumeralStyle.DEFAULT;
 		try {
 			style = NumeralStyle.valueOf(styleStr.replace('-', '_').toUpperCase());
 		} catch (Exception e) { 
 			if (styleStr!=null) {
-				logger.warning("Unsupported value '" + styleStr + "'" + toLocation(event));
+				logger.warning("Unsupported value '" + styleStr + "'" + toLocation(location));
 			}
 		}
 
 		return style;
 	}
 	
-	private String toLocation(XMLEvent event) {
-		Location l = event.getLocation();
-		StringBuilder sb = new StringBuilder();
-		if (l.getLineNumber()>-1) {
-			sb.append("line: ").append(l.getLineNumber());
+	
+	/**
+	 * Gets a numeral style from a string. Either one of the enum names
+	 * as strings (for example upper-alpha or UPPER_ALPHA) or one of
+	 * 'A', 'a', 'I', 'i', '01' or '1'.
+	 * 
+	 * @param str the string to parse
+	 * @return returns a numeral style for the string
+	 * @throws IllegalArgumentException if the string cannot be interpreted
+	 * @throws NullPointerException if the string is null
+	 */
+	static NumeralStyle parseNumeralStyle(String str) {
+		if (str==null) {
+			throw new NullPointerException("Null argument not supported.");
 		}
-		if (l.getColumnNumber()>-1) {
-			if (sb.length()>0) {
-				sb.append(", ");
+		try {
+			return NumeralStyle.valueOf(str.replace('-', '_').toUpperCase());
+		} catch (IllegalArgumentException e) {
+			switch (str) {
+				case "A":
+					return NumeralStyle.UPPER_ALPHA;
+				case "a":
+					return NumeralStyle.LOWER_ALPHA;
+				case "I":
+					return NumeralStyle.UPPER_ROMAN;
+				case "i":
+					return NumeralStyle.LOWER_ROMAN;
+				case "01":
+					return NumeralStyle.DECIMAL_LEADING_ZERO;
+				case "1":
+					return NumeralStyle.DECIMAL;
+				default:
+					throw new IllegalArgumentException("Cannot interpret string: " + str);
 			}
-			sb.append("column: ").append(l.getColumnNumber());
+		}
+	}
+	
+	private String toLocation(XMLEvent event) {
+		return toLocation(event.getLocation());
+	}
+	
+	private String toLocation(Location l) {
+		StringBuilder sb = new StringBuilder();
+		if (l!=null) {
+			if (l.getLineNumber()>-1) {
+				sb.append("line: ").append(l.getLineNumber());
+			}
+			if (l.getColumnNumber()>-1) {
+				if (sb.length()>0) {
+					sb.append(", ");
+				}
+				sb.append("column: ").append(l.getColumnNumber());
+			}
 		}
 		return (sb.length()>0?" (at "+sb.toString()+")":"");
 	}
@@ -1399,6 +1460,10 @@ public class ObflParser extends XMLParserBase {
 				parseOnEvent(event, input, rlb.newOnPageStart(), ObflQName.ON_PAGE_START, tp);
 			} else if (equalsStart(event, ObflQName.ON_PAGE_END)) {
 				parseOnEvent(event, input, rlb.newOnPageEnd(), ObflQName.ON_PAGE_END, tp);
+			} else if (equalsStart(event, ObflQName.ON_VOLUME_START)) {
+				parseOnEvent(event, input, rlb.newOnVolumeStart(), ObflQName.ON_VOLUME_START, tp);
+			} else if (equalsStart(event, ObflQName.ON_VOLUME_END)) {
+				parseOnEvent(event, input, rlb.newOnVolumeEnd(), ObflQName.ON_VOLUME_END, tp);
 			} else if (equalsStart(event, ObflQName.ON_COLLECTION_START)) {
 				parseOnEvent(event, input, rlb.newOnCollectionStart(), ObflQName.ON_COLLECTION_START, tp);
 			} else if (equalsStart(event, ObflQName.ON_COLLECTION_END)) {
@@ -1492,17 +1557,6 @@ public class ObflParser extends XMLParserBase {
 			}
 		}
 		return translate;
-	}
-	
-	/**
-	 * 
-	 * @param writer
-	 * @throws IOException
-	 * @deprecated use parse(input, formatter) and then formatter.write(writer)
-	 */
-	@Deprecated
-	public void writeResult(PagedMediaWriter writer) throws IOException {
-		formatter.write(writer);
 	}
 
 	public List<MetaDataItem> getMetaData() {

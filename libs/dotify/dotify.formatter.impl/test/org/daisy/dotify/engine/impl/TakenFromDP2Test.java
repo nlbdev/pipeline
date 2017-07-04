@@ -138,7 +138,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/marker-reference-page-forward-backward-input.obfl",
 		        "resource-files/dp2/marker-reference-page-forward-backward-expected.pef", false);
 	}
-	@Ignore // issue https://github.com/joeha480/dotify/issues/150
 	@Test
 	public void testMarkerReferencePageContentForwardBackward() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/marker-reference-page-content-forward-backward-input.obfl",
@@ -169,14 +168,11 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/marker-reference-page-first-workaround-input.obfl",
 		        "resource-files/dp2/marker-reference-page-first-workaround-expected.pef", false);
 	}
-	@Ignore // issue https://github.com/joeha480/dotify/issues/150
 	@Test
 	public void testMarkerReferencePageStartWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/marker-reference-page-start-workaround-input.obfl",
 		        "resource-files/dp2/marker-reference-page-start-workaround-expected.pef", true);
 	}
-	@Ignore // issue https://github.com/joeha480/dotify/issues/150
-	        // and no spread-content scope
 	@Test
 	public void testMarkerReferenceSpreadStartWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/marker-reference-spread-start-workaround-input.obfl",
@@ -306,7 +302,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/sheets-in-volume-max-input.obfl",
 		        "resource-files/dp2/sheets-in-volume-max-expected.pef", false);
 	}
-	@Ignore // implementation does not support different target volume size
 	@Test
 	public void testVolumeTemplateVariousSheetsInVolumeMax() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/volume-template-various-sheets-in-volume-max-input.obfl",
@@ -342,9 +337,33 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/block-underline-styles-input.obfl",
 		        "resource-files/dp2/block-underline-styles-expected.pef", false);
 	}
-	@Test(expected=UnsupportedOperationException.class)
+	@Ignore // undefined behavior
 	public void testBlockUnderlineWithChildBlock() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/block-underline-with-child-block-input.obfl",
 		        "resource-files/dp2/block-underline-with-child-block-expected.pef", false);
+	}
+	@Ignore // see https://github.com/joeha480/dotify/issues/194
+	@Test
+	public void testMarkerIndicatorBeforeBlock() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/marker-indicator-before-block-input.obfl",
+		        "resource-files/dp2/marker-indicator-before-block-expected.pef", true);
+	}
+	@Ignore // see https://github.com/joeha480/dotify/issues/195
+	@Test
+	public void testMarginRegionAndBorders() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/margin-region-and-borders-input.obfl",
+		        "resource-files/dp2/margin-region-and-borders-expected.pef", true);
+	}
+	@Ignore // see https://github.com/joeha480/dotify/issues/196
+	@Test
+	public void testRowSpacingAndFooter() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/row-spacing-and-footer-input.obfl",
+		        "resource-files/dp2/row-spacing-and-footer-expected.pef", true);
+	}
+	
+	@Test
+	public void testManualVolumeBreakingTOC() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/manual-volume-breaking-toc-input.obfl",
+		        "resource-files/dp2/manual-volume-breaking-toc-expected.pef", false);
 	}
 }

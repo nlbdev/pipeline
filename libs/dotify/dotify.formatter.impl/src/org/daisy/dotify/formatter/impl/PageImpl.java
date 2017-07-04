@@ -30,8 +30,8 @@ import org.daisy.dotify.common.text.StringTools;
  * @author Joel Håkansson
  */
 class PageImpl implements Page {
-	private final static Pattern trailingWs = Pattern.compile("\\s*\\z");
-	private final static Pattern softHyphen = Pattern.compile("\u00ad");
+	private static final Pattern trailingWs = Pattern.compile("\\s*\\z");
+	private static final Pattern softHyphen = Pattern.compile("\u00ad");
 	private PageSequence parent;
 	private final LayoutMaster master;
 	private final FormatterContext fcontext;
@@ -427,7 +427,11 @@ class PageImpl implements Page {
 				throw new PaginatorToolsException(e);
 			}
 		}
-		return PaginatorTools.distribute(chunkF, width, padding, PaginatorTools.DistributeMode.EQUAL_SPACING);
+		return PaginatorTools.distribute(chunkF, width, padding,
+					fcontext.getConfiguration().isAllowingTextOverflowTrimming()?
+					PaginatorTools.DistributeMode.EQUAL_SPACING_TRUNCATE:
+					PaginatorTools.DistributeMode.EQUAL_SPACING
+				);
 	}
 	
 	private static String resolveField(Field field, PageImpl p, DefaultTextAttribute.Builder b) {
@@ -438,7 +442,8 @@ class PageImpl implements Page {
 		} else if (field instanceof MarkerReferenceField) {
 			MarkerReferenceField f2 = (MarkerReferenceField)field;
 			PageImpl start;
-			if (f2.getSearchScope()==MarkerSearchScope.SPREAD) {
+			if (f2.getSearchScope()==MarkerSearchScope.SPREAD ||
+				f2.getSearchScope()==MarkerSearchScope.SPREAD_CONTENT) {
 				start = p.getPageInVolumeWithOffset(f2.getOffset(), p.shouldAdjustOutOfBounds(f2));
 			} else {
 				start = p.getPageInSequenceWithOffset(f2.getOffset(), p.shouldAdjustOutOfBounds(f2));
@@ -475,7 +480,16 @@ class PageImpl implements Page {
 		int index = 0;
 		int count = 0;
 		List<Marker> m;
+		boolean skipLeading = false;
 		if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.PAGE_CONTENT) {
+			skipLeading = true;
+		} else if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.SPREAD_CONTENT) {
+			PageImpl prevPageInVolume = page.getPageInVolumeWithOffset(-1, false);
+			if (prevPageInVolume == null || !page.isWithinSpreadScope(-1, prevPageInVolume)) {
+				skipLeading = true;
+			}
+		}
+		if (skipLeading) {
 			m = page.getContentMarkers();
 		} else {
 			m = page.getMarkers();
@@ -499,8 +513,11 @@ class PageImpl implements Page {
 			) {
 			next = page.getPageInSequenceWithOffset(dir, false);
 		} //else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinDocumentSpreadScope(dir)) {
-			else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinVolumeSpreadScope(dir)) {
-			next = page.getPageInVolumeWithOffset(dir, false);
+		  else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD ||
+		           markerRef.getSearchScope() == MarkerSearchScope.SPREAD_CONTENT) {
+			if (page.isWithinVolumeSpreadScope(dir)) {
+				next = page.getPageInVolumeWithOffset(dir, false);
+			}
 		}
 		if (next!=null) {
 			return findMarker(next, markerRef);
@@ -519,7 +536,7 @@ class PageImpl implements Page {
 				return false;
 			case SEQUENCE: case VOLUME: case DOCUMENT:
 				return true;
-			case SPREAD:
+			case SPREAD_CONTENT: case SPREAD:
 				//return  isWithinSequenceSpreadScope(markerRef.getOffset());				
 				//return  isWithinDocumentSpreadScope(markerRef.getOffset());
 				return isWithinVolumeSpreadScope(markerRef.getOffset());

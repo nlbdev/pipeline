@@ -5,7 +5,7 @@ import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
 
 class TextMediaWriterFactory implements PagedMediaWriterFactory {
-	private final static String FEATURE_ENCODING_KEY = "encoding";
+	private static final String FEATURE_ENCODING_KEY = "encoding";
 	private String encoding = "utf-8";
 
 	@Override

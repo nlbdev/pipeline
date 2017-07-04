@@ -23,4 +23,7 @@ class AncestorContext {
 		listIterator++;
 		return listIterator;
 	}
+	public void setListNumber(int value) {
+		listIterator = value;
+	}
 }

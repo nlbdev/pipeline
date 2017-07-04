@@ -53,7 +53,7 @@ import org.daisy.dotify.api.text.IntegerOutOfRange;
  * @author Joel Håkansson
  */
 class ExpressionImpl implements Expression {
-	private final static Logger logger = Logger.getLogger(ExpressionImpl.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(ExpressionImpl.class.getCanonicalName());
 	private HashMap<String, Object> localVars;
 	private Map<String, Object> globalVars;
 	private final Integer2TextFactoryMakerService integer2textFactoryMaker;

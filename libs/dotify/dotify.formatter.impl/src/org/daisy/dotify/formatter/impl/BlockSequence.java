@@ -68,7 +68,6 @@ class BlockSequence extends FormatterCoreImpl implements FormatterSequence {
 	public int getKeepHeight(Block block, BlockContext bc) {
 		return getKeepHeight(this.indexOf(block), bc);
 	}
-	@SuppressWarnings("deprecation")
 	private int getKeepHeight(int gi, BlockContext bc) {
 		//FIXME: this assumes that row spacing is equal to 1
 		//FIXME: what about borders?
@@ -77,7 +76,7 @@ class BlockSequence extends FormatterCoreImpl implements FormatterSequence {
 			keepHeight += getBlock(gi).getRowDataProperties().getOuterSpaceAfter()+getBlock(gi).getRowDataProperties().getInnerSpaceAfter()
 						+getBlock(gi+1).getRowDataProperties().getOuterSpaceBefore()+getBlock(gi+1).getRowDataProperties().getInnerSpaceBefore()+getBlock(gi).getKeepWithNext();
 			switch (getBlock(gi+1).getKeepType()) {
-				case ALL: case PAGE:
+				case PAGE:
 					keepHeight += getKeepHeight(gi+1, bc);
 					break;
 				case AUTO: break;

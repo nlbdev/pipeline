@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.formatter.impl.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.formatter.impl)
+[![Type](https://img.shields.io/badge/type-provider_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 # dotify.formatter.impl #
 dotify.formatter.impl contains an implementation of the formatter interfaces of [dotify.api](https://github.com/brailleapps/dotify.api).
@@ -23,7 +24,7 @@ Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 
 ## Testing ##
 
-Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 
 ### Adding tests ###
 
@@ -42,5 +43,21 @@ the OBFL and PEF files need to be placed in
 to the pattern `foo-input.obfl`/`foo-expected.pef`.
 
 ## Requirements & Compatibility ##
-- Requires JDK 7
+- Requires Java 8
 - Compatible with SPI and OSGi
+
+## Limitations ##
+Compared to the latest [OBFL-version](http://braillespecs.github.io/obfl/obfl-specification.html), at least the following is not yet supported:
+
+* marker-reference scope=volume and scope=document
+* the text-style attribute outside of header/footers
+* tables (incubating)
+  * repeating headers
+  * border intersections (see [issue #167](https://github.com/joeha480/dotify/issues/167))
+  * render cell-border next to table border (see [issue #168](https://github.com/joeha480/dotify/issues/168))
+  * table-row-spacing > 0 (see [issue #169](https://github.com/joeha480/dotify/issues/169))
+
+Note that since OBFL does not have finalized releases, this list can be incomplete.
+
+## More information ##
+See the [common wiki](https://github.com/brailleapps/wiki/wiki) for more information.

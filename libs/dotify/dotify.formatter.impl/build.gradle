@@ -6,6 +6,9 @@ apply plugin: "org.dm.bundle"
 
 group = 'org.daisy.dotify'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 sourceSets {
 	main {	java { srcDir 'src' }	resources { srcDir 'src' } }
 	test {	java { srcDir 'test' }	resources { srcDir 'test' } }
@@ -16,37 +19,32 @@ configurations {
 	compile { extendsFrom provided }
 }
 
-/* Run gradle with JDK 1.7 or set bootstrap classpath, e.g.:
-	options.bootClasspath = "/usr/lib/jvm/java-7-openjdk/jre/lib/rt.jar" */
 compileJava {
     options.encoding = 'UTF-8'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
 }
 
 compileTestJava {
 	options.encoding = 'UTF-8'
-	sourceCompatibility = 1.7
-	targetCompatibility = 1.7
 }
 
 def repoRevision = System.getenv("REPO_REVISION")!=null?System.getenv("REPO_REVISION"):repositoryRevision
 
 javadoc {
 	options.encoding = 'UTF-8'
-	options.links('http://docs.oracle.com/javase/7/docs/api/')
+	options.links('http://docs.oracle.com/javase/8/docs/api/')
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven { url "https://oss.sonatype.org/content/groups/staging" }
+    //mavenLocal()
     //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
     provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-    compile "org.daisy.dotify:dotify.api:2.9.0"
-    compile "org.daisy.dotify:dotify.common:2.1.0"
+    compile "org.daisy.dotify:dotify.api:3.1.0"
+    compile "org.daisy.dotify:dotify.common:3.0.0"
     compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
 	}
@@ -59,9 +57,9 @@ dependencies {
 	}
     testCompile "org.mockito:mockito-core:1.10.19"
     
-	testRuntime group: group, name:'dotify.hyphenator.impl', version:'2.0.1'
-	testRuntime group: group, name:'dotify.text.impl', version:'2.0.0'
-	testRuntime group: group, name:'dotify.translator.impl', version:'2.3.0'
+	testRuntime group: group, name:'dotify.hyphenator.impl', version:'3.0.0'
+	testRuntime group: group, name:'dotify.text.impl', version:'3.0.0'
+	testRuntime group: group, name:'dotify.translator.impl', version:'3.0.0'
 }
 
 buildscript {
@@ -201,5 +199,5 @@ uploadArchives {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
+    gradleVersion = '3.0'
 }

@@ -17,7 +17,6 @@ public class ExpressionFactoryImpl implements ExpressionFactory {
 		return new ExpressionImpl(itf);
 	}
 
-	@Override
 	@Reference
 	public void setInteger2TextFactory(Integer2TextFactoryMakerService itf) {
 		this.itf = itf;

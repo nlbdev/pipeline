@@ -9,11 +9,11 @@ class CrossReferenceHandler {
 	private final LookupHandler<Integer, Iterable<AnchorData>> anchorRefs;
 	private final LookupHandler<String, Integer> variables;
 	private final LookupHandler<SheetIdentity, Boolean> breakable;
-	private final static String VOLUMES_KEY = "volumes";
-	private final static String SHEETS_IN_VOLUME = "sheets-in-volume-";
-	private final static String SHEETS_IN_DOCUMENT = "sheets-in-document";
-	private final static String PAGES_IN_VOLUME = "pages-in-volume-";
-	private final static String PAGES_IN_DOCUMENT = "pages-in-document";
+	private static final String VOLUMES_KEY = "volumes";
+	private static final String SHEETS_IN_VOLUME = "sheets-in-volume-";
+	private static final String SHEETS_IN_DOCUMENT = "sheets-in-document";
+	private static final String PAGES_IN_VOLUME = "pages-in-volume-";
+	private static final String PAGES_IN_DOCUMENT = "pages-in-document";
 	private Set<String> pageIds;
 	
 	CrossReferenceHandler() {

@@ -7,7 +7,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.events.XMLEvent;
 
 public abstract class XMLParserBase {
-	private final static Pattern ws = Pattern.compile("\\s+");
+	private static final Pattern ws = Pattern.compile("\\s+");
 
 	protected XMLParserBase() {}
 	

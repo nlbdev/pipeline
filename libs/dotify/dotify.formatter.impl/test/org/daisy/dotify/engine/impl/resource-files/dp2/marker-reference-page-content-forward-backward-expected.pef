@@ -3,7 +3,7 @@
    <head>
       <meta>
          <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-page-content-forward-backward</dc:title>
-         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with scope page-content. Tested with both forward and backward direction. Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break. Broken: behavior of page-content changed in Dotify 2.0.0 (see https://github.com/joeha480/dotify/issues/150).</dc:description>
+         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with scope page-content. Tested with both forward and backward direction. Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break.</dc:description>
          <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
       </meta>
    </head>
@@ -12,14 +12,14 @@
          <section>
             <page>
                <!-- 1 -->
-               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- was: 1   1 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
             </page>
             <page>
-               <row>⠼⠃⠀⠀⠀⠀⠀⠀⠼⠉</row> <!-- 2   3 --> <!-- or should it be?: 2   2 -->
+               <row>⠼⠃⠀⠀⠀⠀⠀⠀⠼⠉</row> <!-- 2   3 -->
                <row>⠁⠁⠁⠁⠁</row>
                <!-- 2 -->
                <row>⠁⠁⠁⠁⠁</row>
@@ -28,7 +28,7 @@
             <!-- 3 -->
             </page>
             <page>
-               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
@@ -36,7 +36,7 @@
             </page>
             <page>
                <!-- 4 -->
-               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- was: 4   4 -->
+               <row>⠼⠙⠀⠀⠀⠀⠀⠀⠼⠙</row> <!-- 4   4 --> <!-- should ideally be: (empty) -->
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
@@ -44,13 +44,33 @@
             </page>
             <page>
                <!-- 5 -->
-               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- was: 5   5 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
             </page>
             <page>
                <!-- 6 -->
-               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- was: 6   6 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 7 -->
+               <row>⠼⠛⠀⠀⠀⠀⠀⠀⠼⠛</row> <!-- 7   7 -->
+               <row/>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 8 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 9 -->
+               <row>⠼⠊⠀⠀⠀⠀⠀⠀⠼⠊</row> <!-- 9   9 -->
+               <row/>
                <row>⠁⠁⠁⠁⠁</row>
                <row>⠁⠁⠁⠁⠁</row>
             </page>

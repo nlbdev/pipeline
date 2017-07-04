@@ -9,7 +9,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
@@ -29,8 +31,8 @@ import org.daisy.dotify.common.io.StateObject;
  *
  */
 class PEFMediaWriter implements PagedMediaWriter {
-	private final static String DC_NAMESPACE_URI = "http://purl.org/dc/elements/1.1/";
-	//private final Pattern nonBraillePattern;
+	private static final String DC_NAMESPACE_URI = "http://purl.org/dc/elements/1.1/";
+	private static final Logger logger = Logger.getLogger(PEFMediaWriter.class.getCanonicalName());
 	private PrintStream pst;
 	private boolean hasOpenVolume;
 	private boolean hasOpenSection;
@@ -57,7 +59,6 @@ class PEFMediaWriter implements PagedMediaWriter {
 		cDuplex = true;
 		state = new StateObject("Writer");
 		this.metadata = new ArrayList<>();
-		//this.nonBraillePattern = Pattern.compile("[^\u2800-\u28FF]+");
 	}
 
 	@Override
@@ -93,12 +94,12 @@ class PEFMediaWriter implements PagedMediaWriter {
 		Map<String, String> ns = getNamespaces(meta);
 
 		pst.print("<meta");
-		for (String key : ns.keySet()) {
+		for (Entry<String, String> entry : ns.entrySet()) {
 			pst.print(" ");
 			pst.print("xmlns:");
-			pst.print(ns.get(key));
+			pst.print(entry.getValue());
 			pst.print("=\"");
-			pst.print(key);
+			pst.print(entry.getKey());
 			pst.print("\"");
 		}
 		pst.println(">");
@@ -131,13 +132,13 @@ class PEFMediaWriter implements PagedMediaWriter {
 		MetaDataItem date = null;
 		for (MetaDataItem item : meta) {
 			if (DC_NAMESPACE_URI.equals(item.getKey().getNamespaceURI())) {
-				if (item.getKey().getLocalPart().equals("identifier")) {
+				if ("identifier".equals(item.getKey().getLocalPart())) {
 					// we'll use the last defined identifier
 					identifier = item;
-				} else if (item.getKey().getLocalPart().equals("date")) {
+				} else if ("date".equals(item.getKey().getLocalPart())) {
 					// we'll use the last defined date
 					date = item;
-				} else if (item.getKey().getLocalPart().equals("format")) {
+				} else if ("format".equals(item.getKey().getLocalPart())) {
 					// ignore this item
 				} else {
 					dc.add(item);
@@ -198,9 +199,8 @@ class PEFMediaWriter implements PagedMediaWriter {
 		hasOpenPage = true;
 	}
 	
-	//performance optimization
+	//performance optimization over nonBraillePattern.matcher(row.getChars()).matches()
 	private boolean validate(Row row) {
-		//return nonBraillePattern.matcher(row.getChars()).matches();
 		char c;
 		for (int i=0; i<row.getChars().length(); i++) {
 			c = row.getChars().charAt(i);
@@ -215,14 +215,12 @@ class PEFMediaWriter implements PagedMediaWriter {
 	public void newRow(Row row) {
 		state.assertOpen();
 
-		if (!validate(row)) {
-			if (errorCount<10) {
-				Logger.getLogger(this.getClass().getCanonicalName()).fine(
-						"Non-braille characters in output"+
-							(errorCount==9?" (supressing additional messages of this kind)":"") + ": " + row.getChars()
-						);
-				errorCount++;
-			}
+		if (errorCount<10 && logger.isLoggable(Level.WARNING) && !validate(row)) {
+			logger.warning(
+					"Non-braille characters in output"+
+						(errorCount==9?" (supressing additional messages of this kind)":"") + ": " + row.getChars()
+					);
+			errorCount++;
 		}
 		pst.println("<row" +
 		(row.getRowSpacing()!=null?" rowgap=\""+(int)Math.floor((row.getRowSpacing()-1)*4)+"\"":"") +
@@ -277,6 +275,7 @@ class PEFMediaWriter implements PagedMediaWriter {
 		hasOpenSection = true;
 	}
 	
+	//performance optimization over text.replaceAll()
 	private String escape(String text) {
 		if (text == null) {
 			return "";
@@ -298,7 +297,6 @@ class PEFMediaWriter implements PagedMediaWriter {
 			}
 		}
 		return sb.toString();
-		//return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll("\"", "&quot;");
 	}
 
 	private void closeOpenVolume() {

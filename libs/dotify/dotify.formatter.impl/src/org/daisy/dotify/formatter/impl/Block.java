@@ -7,7 +7,7 @@ import org.daisy.dotify.api.formatter.FormattingTypes;
 import org.daisy.dotify.api.formatter.RenderingScenario;
 
 /**
- * <p>Provides a block of rows and the properties associated with it.<p>
+ * <p>Provides a block of rows and the properties associated with it.</p>
  * <p><b>Note that this class does not map directly to OBFL blocks.</b> 
  * OBFL has hierarchical blocks, which is represented by multiple
  * Block objects in sequence, a new one is created on each block boundary
@@ -128,8 +128,8 @@ abstract class Block implements Cloneable {
 	}
 
 	/**
-	 * Gets the vertical position of the block on page, or null if none is
-	 * specified
+	 * Sets the vertical position of the block on page.
+	 * @param vertical the position
 	 */
 	public void setVerticalPosition(BlockPosition vertical) {
 		this.verticalPosition = vertical;

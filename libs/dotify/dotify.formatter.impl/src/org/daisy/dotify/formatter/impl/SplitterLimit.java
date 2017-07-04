@@ -1,5 +1,10 @@
 package org.daisy.dotify.formatter.impl;
 
+/**
+ * Provides the splitter limit for a given volume.
+ * @author Joel Håkansson
+ *
+ */
 public interface SplitterLimit {
 	
 	/**

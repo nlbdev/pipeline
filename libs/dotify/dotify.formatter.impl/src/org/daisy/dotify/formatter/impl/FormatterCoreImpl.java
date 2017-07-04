@@ -40,7 +40,7 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 	 * 
 	 */
 	private static final long serialVersionUID = -7775469339792146048L;
-	private final static Logger logger = Logger.getLogger(FormatterCoreImpl.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(FormatterCoreImpl.class.getCanonicalName());
 	protected final Stack<AncestorContext> propsContext;
 	private Margin leftMargin;
 	private Margin rightMargin;
@@ -101,9 +101,6 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 		rightMargin.push(new MarginComponent(rb, p.getMargin().getRightSpacing(), p.getPadding().getRightSpacing()));
 		if (propsContext.size()>0) {
 			addToBlockIndent(propsContext.peek().getBlockProperties().getBlockIndent());
-			if (propsContext.peek().getBlockProperties().getUnderlineStyle()!=null) {
-				throw new UnsupportedOperationException("No block allowed within a block with underline properties.");
-			}
 		}
 
 		RowDataProperties.Builder rdp = new RowDataProperties.Builder().
@@ -122,12 +119,32 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 		Block c = newBlock(blockId, rdp.build());
 		if (propsContext.size()>0) {
 			if (propsContext.peek().getBlockProperties().getListType()!=FormattingTypes.ListStyle.NONE) {
-				String listLabel;
+				String listLabel = p.getListItemLabel();
 				switch (propsContext.peek().getBlockProperties().getListType()) {
 				case OL:
-					listLabel = propsContext.peek().nextListNumber()+""; break;
+					Integer item = null;
+					if (listLabel!=null) {
+						try {
+							item = Integer.parseInt(listLabel);
+							propsContext.peek().setListNumber(item);
+						} catch (NumberFormatException e) {
+							logger.log(Level.FINE, "Failed to convert a list item label to an integer.", e);
+						}
+					} else {
+						item = propsContext.peek().nextListNumber();
+					}
+					if (item!=null) {
+						NumeralStyle f = propsContext.peek().getBlockProperties().getListNumberFormat();
+						listLabel = f.format(item.intValue());
+					}
+					break;
 				case UL:
-					listLabel = "•";
+					if (listLabel==null) {
+						listLabel = propsContext.peek().getBlockProperties().getDefaultListLabel();
+						if (listLabel==null) {
+							listLabel = "•";
+						}
+					}
 					break;
 				case PL: default:
 					listLabel = "";
@@ -223,9 +240,10 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 						blockIndentParent(blockIndentParent.peek()).
 						leftMargin((Margin)leftMargin.clone()). //.stackMarginComp(formatterContext, false, false)
 						//leftMarginParent((Margin)leftMargin.clone()). //.stackMarginComp(formatterContext, true, false)
-						rightMargin((Margin)rightMargin.clone())//. //.stackMarginComp(formatterContext, false, true)
+						rightMargin((Margin)rightMargin.clone()). //.stackMarginComp(formatterContext, false, true)
 						//rightMarginParent((Margin)rightMargin.clone())
-						; //.stackMarginComp(formatterContext, true, true)
+						//.stackMarginComp(formatterContext, true, true)
+						underlineStyle(p.getUnderlineStyle());
 			Block c = newBlock(null, rdp.build());
 			c.setKeepType(keep);
 			c.setKeepWithNext(next);
@@ -300,7 +318,19 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 		if (table!=null) {
 			throw new IllegalStateException("A table is open.");
 		}
-		getCurrentBlock().addSegment(new PageNumberReferenceSegment(identifier, numeralStyle));
+		PageNumberReferenceSegment r; {
+			if (styles.isEmpty()) {
+				r = new PageNumberReferenceSegment(identifier, numeralStyle);
+			} else {
+				String[] style = new String[styles.size()];
+				int i = 0;
+				for (Style s : styles) {
+					style[i++] = s.name;
+				}
+				r = new PageNumberReferenceSegment(identifier, numeralStyle, style);
+			}
+		}
+		getCurrentBlock().addSegment(r);
 	}
 
 	@Override
