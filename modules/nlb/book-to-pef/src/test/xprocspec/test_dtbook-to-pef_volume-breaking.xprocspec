@@ -27,23 +27,6 @@
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
                             <book>
-                                <frontmatter>
-                                    <doctitle>aaa</doctitle>
-                                    <docauthor>bbb</docauthor>
-                                    <level1 class="titlepage">
-                                        <pagenum id="page-1" page="normal">1</pagenum>
-                                        <h1 id="h1_1" class="title fulltitle">ULVEGUTTEN TAL</h1>
-                                        <p class="docauthor author">Tor</p>
-                                        <p>Illustrert av Haakon Lie</p>
-                                        <p>CAPPELEN DAMM</p>
-                                    </level1>
-                                    <level1 class="colophon">
-                                        <pagenum id="page-2" page="normal">2</pagenum>
-                                        <p>Originaltittel: <em>The Kill List</em></p>
-                                        <p>Copyright © Frederick Forsyth 2013</p>
-                                        <p>Norsk utgave © Gyldendal Norsk Forlag AS 2014</p>
-                                    </level1>
-                                </frontmatter>
                                 <bodymatter>
                                     <level1>
                                         <h1>h1</h1>
