@@ -41,14 +41,14 @@
         <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
             <x:document type="inline">
                 <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="30" rows="28" rowgap="0" duplex="true">
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
                                 <row>⠀⠀⠀⠀⠃⠃⠀⠠⠼⠃⠀⠇⠇</row>
@@ -71,16 +71,16 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
@@ -103,7 +103,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </volume>
@@ -151,14 +151,14 @@
         <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
             <x:document type="inline">
                 <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="30" rows="28" rowgap="0" duplex="true">
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -181,11 +181,11 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </volume>
-                    <volume cols="30" rows="28" rowgap="0" duplex="true">
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
                         <section>
                             <page>
                                 <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
@@ -215,16 +215,16 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
@@ -247,11 +247,11 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </volume>
-                    <volume cols="30" rows="28" rowgap="0" duplex="true">
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
                         <section>
                             <page>
                                 <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
@@ -281,16 +281,16 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
                                 <row/>
@@ -313,7 +313,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </volume>
@@ -361,14 +361,14 @@
         <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
             <x:document type="inline">
                 <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="30" rows="28" rowgap="0" duplex="true">
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
                                 <row>⠀⠀⠀⠀⠃⠃⠀⠠⠼⠃⠀⠇⠇</row>
@@ -391,7 +391,7 @@
                                 <row/>
                                 <row>⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                             <page>
                                 <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
@@ -421,7 +421,7 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </volume>
@@ -469,14 +469,14 @@
         <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
             <x:document type="inline">
                 <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="30" rows="28" rowgap="0" duplex="true">
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
                                 <row>⠀⠀⠀⠀⠃⠃⠀⠠⠼⠃⠀⠇⠇</row>
@@ -499,11 +499,11 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </volume>
-                    <volume cols="30" rows="28" rowgap="0" duplex="true">
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
                         <section>
                             <page>
                                 <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
@@ -533,16 +533,16 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                         <section>
                             <page>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
@@ -565,7 +565,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </volume>

@@ -68,7 +68,7 @@
             <p px:role="desc">Valgfritt stilark som kan brukes for å legge til CSS-regler. NLBs standard-stilark brukes alltid, dette stilarket kommer i tillegg.</p>
         </p:documentation>
     </p:option>
-    <p:option name="page-width" select="'30'">
+    <p:option name="page-width" select="'32'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Layout: Sidebredde</h2>
         </p:documentation>
