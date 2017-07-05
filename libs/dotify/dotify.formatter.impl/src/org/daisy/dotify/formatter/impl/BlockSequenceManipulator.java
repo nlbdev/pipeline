@@ -46,15 +46,6 @@ class BlockSequenceManipulator {
 		return newSequence(sequence);
 	}
 	
-	/*
-	public BlockSequence newSubSequence(String fromId) {
-		Integer fromIndex = taggedEntries.get(fromId);
-		if (fromIndex==null) {
-			throw new IllegalArgumentException("Cannot find identifier " + fromId);
-		}
-		return newSequence(sequence.subList(fromIndex, sequence.size()));
-	}*/
-	
 	public void insertGroup(Iterable<Block> blocks, String beforeId) {
 		ArrayList<Block> call = new ArrayList<>();
 		for (Block b : blocks) {
@@ -111,22 +102,6 @@ class BlockSequenceManipulator {
 		taggedEntries = tagSequence(sequence);
 	}
 
-	/*
-	public BlockSequence newSubSequence(String fromId, String toId) {
-		Integer fromIndex = taggedEntries.get(fromId);
-		Integer toIndex = taggedEntries.get(toId);
-		if (fromIndex==null || toIndex==null) {
-			throw new IllegalArgumentException("Cannot find identifier " + fromId + "/" + toId);
-		}
-		toIndex++;
-		// subList handles checking of fromIndex>toIndex
-		return newSequence(sequence.subList(fromIndex, toIndex));
-	}*/
-	/*
-	public BlockSequence newFromItem(String id) {
-		return newSubSequence(id, id);
-	}
-	*/
 	private static HashMap<String, Integer> tagSequence(List<Block> seq) {
 		HashMap<String, Integer> entries = new HashMap<>();
 		int i = 0;

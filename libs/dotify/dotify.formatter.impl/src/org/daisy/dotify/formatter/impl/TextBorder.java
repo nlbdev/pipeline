@@ -28,6 +28,7 @@ class TextBorder {
 		/**
 		 * Creates a new Builder
 		 * @param width the width of the block including borders
+		 * @param fillCharacter the character representing empty space
 		 */
 		public Builder(int width, String fillCharacter) {
 			this.width = width;

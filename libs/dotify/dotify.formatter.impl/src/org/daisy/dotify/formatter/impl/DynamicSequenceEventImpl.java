@@ -8,6 +8,7 @@ import org.daisy.dotify.api.formatter.FormatterCore;
 import org.daisy.dotify.api.formatter.ItemSequenceProperties;
 import org.daisy.dotify.api.formatter.ReferenceListBuilder;
 import org.daisy.dotify.api.formatter.SequenceProperties;
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 
 class DynamicSequenceEventImpl implements VolumeSequence, DynamicSequenceBuilder {
 	private final SequenceProperties props;
@@ -17,7 +18,8 @@ class DynamicSequenceEventImpl implements VolumeSequence, DynamicSequenceBuilder
 	
 	/**
 	 * Creates a new sequence event
-	 * @param props
+	 * @param fc the formatter core context
+	 * @param props the sequence properties
 	 */
 	public DynamicSequenceEventImpl(FormatterCoreContext fc, SequenceProperties props) {
 		this.fc = fc;

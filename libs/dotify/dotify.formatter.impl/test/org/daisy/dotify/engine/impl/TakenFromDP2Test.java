@@ -7,6 +7,7 @@ import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	
 	@Test
@@ -250,7 +251,7 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test
 	public void testMultiLineHeaderPartlyEmpty() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/multi-line-header-partly-empty-input.obfl",
-		        "resource-files/dp2/multi-line-header-partly-empty-expected.pef", false);
+		        "resource-files/dp2/multi-line-header-partly-empty-expected.pef", true);
 	}
 	@Test
 	public void testHeaderVaryHeightLeftRightPages() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {

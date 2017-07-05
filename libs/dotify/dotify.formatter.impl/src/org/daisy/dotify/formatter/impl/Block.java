@@ -5,6 +5,8 @@ import java.util.Stack;
 import org.daisy.dotify.api.formatter.BlockPosition;
 import org.daisy.dotify.api.formatter.FormattingTypes;
 import org.daisy.dotify.api.formatter.RenderingScenario;
+import org.daisy.dotify.formatter.impl.segment.Segment;
+import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
 /**
  * <p>Provides a block of rows and the properties associated with it.</p>

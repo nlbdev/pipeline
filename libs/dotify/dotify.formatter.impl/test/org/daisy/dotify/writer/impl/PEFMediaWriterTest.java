@@ -15,6 +15,7 @@ import org.daisy.dotify.api.writer.MetaDataItem;
 import org.daisy.dotify.api.writer.PagedMediaWriterException;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class PEFMediaWriterTest {
 
 	

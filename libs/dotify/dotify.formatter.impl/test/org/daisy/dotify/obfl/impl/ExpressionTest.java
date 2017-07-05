@@ -8,6 +8,7 @@ import org.daisy.dotify.consumer.text.Integer2TextFactoryMaker;
 import org.junit.Test;
 
 
+@SuppressWarnings("javadoc")
 public class ExpressionTest {
 	private final Expression e;
 	

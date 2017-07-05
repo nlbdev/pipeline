@@ -5,11 +5,17 @@ import java.io.IOException;
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.junit.Test;
+@SuppressWarnings("javadoc")
 public class MarkerReferenceTest extends AbstractFormatterEngineTest {
 
 	@Test
 	public void testPageMarker() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/marker-ref-page-input.obfl", "resource-files/marker-ref-page-expected.pef", false);
+	}
+	
+	@Test
+	public void testPageVolMarker() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/marker-ref-page-vol-input.obfl", "resource-files/marker-ref-page-vol-expected.pef", false);
 	}
 	
 	@Test
@@ -45,6 +51,16 @@ public class MarkerReferenceTest extends AbstractFormatterEngineTest {
 	@Test
 	public void testMarkerAfterLeader() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/marker-ref-after-leader-input.obfl", "resource-files/marker-ref-after-leader-expected.pef", false);
+	}
+	
+	@Test
+	public void testDocumentMarker() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/marker-ref-sequence-input.obfl", "resource-files/marker-ref-sequence-expected.pef", false);
+	}
+
+	@Test
+	public void testSequenceVolMarker() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/marker-ref-sequence-vol-input.obfl", "resource-files/marker-ref-sequence-vol-expected.pef", false);
 	}
 
 }

@@ -44,7 +44,7 @@ repositories {
 dependencies {
     provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
     compile "org.daisy.dotify:dotify.api:3.1.0"
-    compile "org.daisy.dotify:dotify.common:3.0.0"
+    compile "org.daisy.dotify:dotify.common:3.2.0"
     compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
 	}
@@ -199,5 +199,5 @@ uploadArchives {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.0'
+    gradleVersion = '3.5'
 }

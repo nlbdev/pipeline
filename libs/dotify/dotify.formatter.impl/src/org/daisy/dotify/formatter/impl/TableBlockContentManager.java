@@ -3,11 +3,11 @@ package org.daisy.dotify.formatter.impl;
 import java.util.Iterator;
 import java.util.List;
 
-public class TableBlockContentManager extends AbstractBlockContentManager {
+class TableBlockContentManager extends AbstractBlockContentManager {
 	private final List<RowImpl> rows;
 	private final int forceCount;
 
-	public TableBlockContentManager(int flowWidth, int minWidth, int forceCount, List<RowImpl> rows, RowDataProperties rdp, FormatterContext fcontext, boolean isVolatile) {
+	TableBlockContentManager(int flowWidth, int minWidth, int forceCount, List<RowImpl> rows, RowDataProperties rdp, FormatterContext fcontext, boolean isVolatile) {
 		super(flowWidth, rdp, fcontext);
 		this.minWidth = minWidth;
 		this.rows = rows;
@@ -21,7 +21,7 @@ public class TableBlockContentManager extends AbstractBlockContentManager {
 	}
 
 	@Override
-	public int getRowCount() {
+	int getRowCount() {
 		return rows.size();
 	}
 

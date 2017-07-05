@@ -10,6 +10,10 @@ import org.daisy.dotify.api.writer.PagedMediaWriterFactoryService;
 
 import aQute.bnd.annotation.component.Component;
 
+/**
+ * Provides a paged media writer factory for plain text.
+ * @author Joel Håkansson
+ */
 @Component
 public class TextMediaWriterFactoryService implements
 		PagedMediaWriterFactoryService {

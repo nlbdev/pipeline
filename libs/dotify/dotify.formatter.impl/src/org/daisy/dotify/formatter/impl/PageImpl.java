@@ -3,6 +3,7 @@ package org.daisy.dotify.formatter.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.daisy.dotify.api.formatter.CompoundField;
 import org.daisy.dotify.api.formatter.CurrentPageField;
@@ -11,8 +12,7 @@ import org.daisy.dotify.api.formatter.FieldList;
 import org.daisy.dotify.api.formatter.FormattingTypes;
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.api.formatter.MarkerReferenceField;
-import org.daisy.dotify.api.formatter.MarkerReferenceField.MarkerSearchDirection;
-import org.daisy.dotify.api.formatter.MarkerReferenceField.MarkerSearchScope;
+import org.daisy.dotify.api.formatter.NoField;
 import org.daisy.dotify.api.formatter.PageAreaProperties;
 import org.daisy.dotify.api.translator.BrailleTranslator;
 import org.daisy.dotify.api.translator.DefaultTextAttribute;
@@ -21,6 +21,9 @@ import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.api.writer.Row;
 import org.daisy.dotify.common.text.StringTools;
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
+import org.daisy.dotify.formatter.impl.search.PageDetails;
+import org.daisy.dotify.writer.impl.Page;
 
 
 //FIXME: scope spread is currently implemented using document wide scope, i.e. across volume boundaries. This is wrong, but is better than the previous sequence scope.
@@ -32,75 +35,65 @@ import org.daisy.dotify.common.text.StringTools;
 class PageImpl implements Page {
 	private static final Pattern trailingWs = Pattern.compile("\\s*\\z");
 	private static final Pattern softHyphen = Pattern.compile("\u00ad");
-	private PageSequence parent;
+	private final CrossReferenceHandler crh;
+	private final PageDetails details;
 	private final LayoutMaster master;
 	private final FormatterContext fcontext;
 	private final List<RowImpl> before;
 	private final List<RowImpl> after;
-	private final ArrayList<RowImpl> rows;
-	private final ArrayList<RowImpl> pageArea;
-	private final ArrayList<Marker> markers;
-	private final ArrayList<String> anchors;
-	private final ArrayList<String> identifiers;
+    private final ArrayList<RowImpl> rows;
+    private final ArrayList<RowImpl> pageArea;
+    private final ArrayList<String> anchors;
+    private final ArrayList<String> identifiers;
 	private final int pageIndex;
 	private final int flowHeight;
 	private final PageTemplate template;
-	private int contentMarkersBegin;
-	private boolean isVolBreak;
+
 	private boolean isVolBreakAllowed;
 	private int keepPreviousSheets;
 	private Integer volumeBreakAfterPriority;
 	private int volumeNumber;
 	
 	
-	public PageImpl(LayoutMaster master, FormatterContext fcontext, int pageIndex, List<RowImpl> before, List<RowImpl> after) {
+	public PageImpl(CrossReferenceHandler crh, PageDetails details, LayoutMaster master, FormatterContext fcontext, int pageIndex, List<RowImpl> before, List<RowImpl> after) {
+		this.crh = crh;
+		this.details = details;
 		this.master = master;
 		this.fcontext = fcontext;
 		this.rows = new ArrayList<>();
 		this.before = before;
-		this.after = after; 
+		this.after = after;
 
 		this.pageArea = new ArrayList<>();
-		this.markers = new ArrayList<>();
 		this.anchors = new ArrayList<>();
 		this.identifiers = new ArrayList<>();
 		this.pageIndex = pageIndex;
-		contentMarkersBegin = 0;
-		this.parent = null;
 		this.template = master.getTemplate(pageIndex+1);
-		this.flowHeight = master.getPageHeight() - 
-				(int)Math.ceil(getHeight(template.getHeader(), master.getRowSpacing())) -
-				(int)Math.ceil(getHeight(template.getFooter(), master.getRowSpacing())) -
-				(master.getBorder() != null ? (int)Math.ceil(distributeRowSpacing(null, false).spacing*2) : 0);
-		this.isVolBreak = false;
+        this.flowHeight = master.getPageHeight() - 
+                (int)Math.ceil(getHeight(template.getHeader(), master.getRowSpacing())) -
+                (int)Math.ceil(getHeight(template.getFooter(), master.getRowSpacing())) -
+                (master.getBorder() != null ? (int)Math.ceil(distributeRowSpacing(null, false).spacing*2) : 0);
 		this.isVolBreakAllowed = true;
 		this.keepPreviousSheets = 0;
 		this.volumeBreakAfterPriority = null;
 		this.volumeNumber = 0;
+
 	}
 	
 	static float getHeight(List<FieldList> list, float def) {
-		float ret = 0;
-		for (FieldList f : list) {
-			if (f.getRowSpacing()!=null) {
-				ret += f.getRowSpacing();
-			} else {
-				ret += def;
-			}
-		}
-		return ret;
+		return (float)list.stream().mapToDouble(f -> f.getRowSpacing()!=null?f.getRowSpacing():def).sum();
 	}
 
 	void addToPageArea(List<RowImpl> block) {
 		pageArea.addAll(block);
 	}
 	
-	public void newRow(RowImpl r) {
+	void newRow(RowImpl r) {
 		if (rowsOnPage()==0) {
-			contentMarkersBegin = markers.size();
+			details.startsContentMarkers();
 		}
 		rows.add(r);
-		markers.addAll(r.getMarkers());
+		details.getMarkers().addAll(r.getMarkers());
 		anchors.addAll(r.getAnchors());
 	}
 	
@@ -108,39 +101,23 @@ class PageImpl implements Page {
 	 * Gets the number of rows on this page
 	 * @return returns the number of rows on this page
 	 */
-	public int rowsOnPage() {
+	private int rowsOnPage() {
 		return rows.size();
 	}
 	
-	public void addMarkers(List<Marker> m) {
-		markers.addAll(m);
+	void addMarkers(List<Marker> m) {
+		details.getMarkers().addAll(m);
 	}
 	
-	/**
-	 * Get all markers for this page
-	 * @return returns a list of all markers on a page
-	 */
-	public List<Marker> getMarkers() {
-		return markers;
-	}
-	
-	/**
-	 * Get markers for this page excluding markers before text content
-	 * @return returns a list of markers on a page
-	 */
-	public List<Marker> getContentMarkers() {
-		return markers.subList(contentMarkersBegin, markers.size());
-	}
-	
-	public List<String> getAnchors() {
+	List<String> getAnchors() {
 		return anchors;
 	}
 	
-	public void addIdentifier(String id) {
+	void addIdentifier(String id) {
 		identifiers.add(id);
 	}
 	
-	public List<String> getIdentifiers() {
+	List<String> getIdentifiers() {
 		return identifiers;
 	}
 	
@@ -178,15 +155,6 @@ class PageImpl implements Page {
 		return (!pageArea.isEmpty() ? staticAreaSpaceNeeded() + rowsNeeded(pageArea, master.getRowSpacing()) : 0);
 	}
 	
-	/**
-	 * Space needed if adding the supplied floating rows.
-	 * @param rs
-	 * @return
-	 */
-	float spaceNeeded(Iterable<? extends Row> rs) {
-		return rowsNeeded(rs, master.getRowSpacing()) + (pageArea.isEmpty() ? staticAreaSpaceNeeded() : 0);
-	}
-	
 	int spaceUsedOnPage(int offs) {
 		return (int)Math.ceil(spaceNeeded()) + offs;
 	}
@@ -198,17 +166,17 @@ class PageImpl implements Page {
 			int pagenum = getPageIndex() + 1;
 			PageTemplate t = lm.getTemplate(pagenum);
 			BrailleTranslator filter = fcontext.getDefaultTranslator();
-			ret.addAll(renderFields(lm, t.getHeader(), filter));
-			if (lm.getPageArea()!=null && lm.getPageArea().getAlignment()==PageAreaProperties.Alignment.TOP && !pageArea.isEmpty()) {
+            ret.addAll(renderFields(lm, t.getHeader(), filter));
+            if (lm.getPageArea()!=null && lm.getPageArea().getAlignment()==PageAreaProperties.Alignment.TOP && !pageArea.isEmpty()) {
 				ret.addAll(before);
 				ret.addAll(pageArea);
 				ret.addAll(after);
 			}
-			ret.addAll(rows);
-			float headerHeight = getHeight(t.getHeader(), lm.getRowSpacing());
-			if (!t.getFooter().isEmpty() || border != TextBorderStyle.NONE || (lm.getPageArea()!=null && lm.getPageArea().getAlignment()==PageAreaProperties.Alignment.BOTTOM && !pageArea.isEmpty())) {
-				float areaSize = (lm.getPageArea()!=null && lm.getPageArea().getAlignment()==PageAreaProperties.Alignment.BOTTOM ? pageAreaSpaceNeeded() : 0);
-				while (Math.ceil(rowsNeeded(ret, lm.getRowSpacing()) + areaSize) < getFlowHeight() + headerHeight) {
+            ret.addAll(rows);
+            float headerHeight = getHeight(t.getHeader(), lm.getRowSpacing());
+            if (!t.getFooter().isEmpty() || border != TextBorderStyle.NONE || (lm.getPageArea()!=null && lm.getPageArea().getAlignment()==PageAreaProperties.Alignment.BOTTOM && !pageArea.isEmpty())) {
+                float areaSize = (lm.getPageArea()!=null && lm.getPageArea().getAlignment()==PageAreaProperties.Alignment.BOTTOM ? pageAreaSpaceNeeded() : 0);
+                while (Math.ceil(rowsNeeded(ret, lm.getRowSpacing()) + areaSize) < getFlowHeight() + headerHeight) {
 					ret.add(new RowImpl());
 				}
 				if (lm.getPageArea()!=null && lm.getPageArea().getAlignment()==PageAreaProperties.Alignment.BOTTOM && !pageArea.isEmpty()) {
@@ -216,12 +184,16 @@ class PageImpl implements Page {
 					ret.addAll(pageArea);
 					ret.addAll(after);
 				}
-				ret.addAll(renderFields(lm, t.getFooter(), filter));
+                ret.addAll(renderFields(lm, t.getFooter(), filter));
 			}
 		}
 		return ret;
 	}
 
+	/*
+	 * The assumption is made that by now all pages have been added to the parent sequence and volume scopes
+	 * have been set on the page struct.
+	 */
 	@Override
 	public List<Row> getRows() {
 
@@ -230,10 +202,10 @@ class PageImpl implements Page {
 			if (border == null) {
 				border = TextBorderStyle.NONE;
 			}
-			List<RowImpl> ret = buildPageRows(border);
-			
+            List<RowImpl> ret = buildPageRows(border);
+
 			LayoutMaster lm = master;
-			ArrayList<Row> ret2 = new ArrayList<>();
+            ArrayList<Row> ret2 = new ArrayList<>();
 			{
 				final int pagenum = getPageIndex() + 1;
 				TextBorder tb = null;
@@ -291,7 +263,7 @@ class PageImpl implements Page {
 						DistributedRowSpacing rs = distributeRowSpacing(rs2, true);
 						r2.setRowSpacing(rs.spacing);
 						//don't add space to the last line
-						if (row!=ret.get(ret.size()-1)) {
+                        if (row!=ret.get(ret.size()-1)) {
 							RowImpl s = null;
 							for (int i = 0; i < rs.lines-1; i++) {
 								s = new RowImpl(tb.addBorderToRow(row.getLeftMargin().getContent(), row.getRightMargin().getContent()));
@@ -305,11 +277,11 @@ class PageImpl implements Page {
 					
 				}
 				if (!TextBorderStyle.NONE.equals(border)) {
-					ret2.add(new RowImpl(tb.getBottomBorder()));
+                    ret2.add(new RowImpl(tb.getBottomBorder()));
 				}
 			}
-			if (ret2.size()>0) {
-				RowImpl last = ((RowImpl)ret2.get(ret2.size()-1));
+            if (ret2.size()>0) {
+                RowImpl last = ((RowImpl)ret2.get(ret2.size()-1));
 				if (lm.getRowSpacing()!=1) {
 					//set row spacing on the last row to 1.0
 					last.setRowSpacing(1f);
@@ -348,74 +320,37 @@ class PageImpl implements Page {
 	 * 
 	 * @return returns the page index in the sequence (zero based)
 	 */
-	public int getPageIndex() {
+	int getPageIndex() {
 		return pageIndex;
 	}
-	
-	/**
-	 * Gets the external page number
-	 * @return the external page number
-	 */
-	public int getPageNumber() {
-		return pageIndex + 1;
-	}
-	
-	/**
-	 * Gets the ordinal number for the page in the page sequence list
-	 * @return returns the ordinal number for the page
-	 */
-	public int getPageOrdinal() {
-		return pageIndex-getSequenceParent().getPageNumberOffset();
-	}
-	
-	int getPageId() {
-		return getSequenceParent().getGlobalStartIndex()+getPageOrdinal();
-	}
 
-	public PageSequence getSequenceParent() {
-		return parent;
-	}
-	
-	public void setSequenceParent(PageSequence seq) {
-		this.parent = seq;
-	}
-	
 	/**
 	 * Gets the flow height for this page, i.e. the number of rows available for text flow
 	 * @return returns the flow height
 	 */
-	public int getFlowHeight() {
+	int getFlowHeight() {
 		return flowHeight;
 	}
 
-	public boolean isVolumeBreak() {
-		return isVolBreak;
-	}
-
-	public void setVolumeBreak(boolean value) {
-		isVolBreak = value;
-	}
-	
-	
-	private List<RowImpl> renderFields(LayoutMaster lm, List<FieldList> fields, BrailleTranslator translator) throws PaginatorException {
-		ArrayList<RowImpl> ret = new ArrayList<>();
+    private List<RowImpl> renderFields(LayoutMaster lm, List<FieldList> fields, BrailleTranslator translator) throws PaginatorException {
+        ArrayList<RowImpl> ret = new ArrayList<>();
 		for (FieldList row : fields) {
-			try {
-				RowImpl r = new RowImpl(distribute(row, lm.getFlowWidth(), fcontext.getSpaceCharacter()+"", translator));
-				r.setRowSpacing(row.getRowSpacing());
-				ret.add(r);
-			} catch (PaginatorToolsException e) {
-				throw new PaginatorException("Error while rendering header", e);
+            try {
+                RowImpl r = new RowImpl(distribute(row, lm.getFlowWidth(), fcontext.getSpaceCharacter()+"", translator));
+                r.setRowSpacing(row.getRowSpacing());
+                ret.add(r);
+            } catch (PaginatorToolsException e) {
+                throw new PaginatorException("Error while rendering header", e);
 			}
 		}
 		return ret;
 	}
 	
-	private String distribute(FieldList chunks, int width, String padding, BrailleTranslator translator) throws PaginatorToolsException {
+    private String distribute(FieldList chunks, int width, String padding, BrailleTranslator translator) throws PaginatorToolsException {
 		ArrayList<String> chunkF = new ArrayList<>();
 		for (Field f : chunks.getFields()) {
 			DefaultTextAttribute.Builder b = new DefaultTextAttribute.Builder(null);
-			String resolved = softHyphen.matcher(resolveField(f, this, b)).replaceAll("");
+            String resolved = softHyphen.matcher(resolveField(f, this, b)).replaceAll("");
 			Translatable.Builder tr = Translatable.text(fcontext.getConfiguration().isMarkingCapitalLetters()?resolved:resolved.toLowerCase()).
 										hyphenate(false);
 			if (resolved.length()>0) {
@@ -427,28 +362,27 @@ class PageImpl implements Page {
 				throw new PaginatorToolsException(e);
 			}
 		}
-		return PaginatorTools.distribute(chunkF, width, padding,
-					fcontext.getConfiguration().isAllowingTextOverflowTrimming()?
-					PaginatorTools.DistributeMode.EQUAL_SPACING_TRUNCATE:
-					PaginatorTools.DistributeMode.EQUAL_SPACING
-				);
+        return PaginatorTools.distribute(chunkF, width, padding,
+                fcontext.getConfiguration().isAllowingTextOverflowTrimming()?
+                PaginatorTools.DistributeMode.EQUAL_SPACING_TRUNCATE:
+                PaginatorTools.DistributeMode.EQUAL_SPACING
+            );
 	}
 	
-	private static String resolveField(Field field, PageImpl p, DefaultTextAttribute.Builder b) {
+	/*
+	 * Note that the result of this function is not constant because getPageInSequenceWithOffset(),
+	 * getPageInVolumeWithOffset() and shouldAdjustOutOfBounds() are not constant.
+	 */
+	private String resolveField(Field field, PageImpl p, DefaultTextAttribute.Builder b) {
+		if (field instanceof NoField) {
+			throw new UnsupportedOperationException("Not implemented");
+		}
 		String ret;
 		DefaultTextAttribute.Builder b2 = new DefaultTextAttribute.Builder(field.getTextStyle());
 		if (field instanceof CompoundField) {
 			ret = resolveCompoundField((CompoundField)field, p, b2);
 		} else if (field instanceof MarkerReferenceField) {
-			MarkerReferenceField f2 = (MarkerReferenceField)field;
-			PageImpl start;
-			if (f2.getSearchScope()==MarkerSearchScope.SPREAD ||
-				f2.getSearchScope()==MarkerSearchScope.SPREAD_CONTENT) {
-				start = p.getPageInVolumeWithOffset(f2.getOffset(), p.shouldAdjustOutOfBounds(f2));
-			} else {
-				start = p.getPageInSequenceWithOffset(f2.getOffset(), p.shouldAdjustOutOfBounds(f2));
-			}
-			ret = findMarker(start, f2);
+			ret = crh.getSearchInfo().findStartAndMarker(p.details, (MarkerReferenceField)field);
 		} else if (field instanceof CurrentPageField) {
 			ret = resolveCurrentPageField((CurrentPageField)field, p);
 		} else {
@@ -460,206 +394,8 @@ class PageImpl implements Page {
 		return ret;
 	}
 
-	private static String resolveCompoundField(CompoundField f, PageImpl p, DefaultTextAttribute.Builder b) {
-		StringBuffer sb = new StringBuffer();
-		for (Field f2 : f) {
-			String res = resolveField(f2, p, b);
-			sb.append(res);
-		}
-		return sb.toString();
-	}
-
-	private static String findMarker(PageImpl page, MarkerReferenceField markerRef) {
-		if (page==null) {
-			return "";
-		}
-		if (markerRef.getSearchScope()==MarkerSearchScope.VOLUME || markerRef.getSearchScope()==MarkerSearchScope.DOCUMENT) {
-			throw new RuntimeException("Marker reference scope not implemented: " + markerRef.getSearchScope());
-		}
-		int dir = 1;
-		int index = 0;
-		int count = 0;
-		List<Marker> m;
-		boolean skipLeading = false;
-		if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.PAGE_CONTENT) {
-			skipLeading = true;
-		} else if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.SPREAD_CONTENT) {
-			PageImpl prevPageInVolume = page.getPageInVolumeWithOffset(-1, false);
-			if (prevPageInVolume == null || !page.isWithinSpreadScope(-1, prevPageInVolume)) {
-				skipLeading = true;
-			}
-		}
-		if (skipLeading) {
-			m = page.getContentMarkers();
-		} else {
-			m = page.getMarkers();
-		}
-		if (markerRef.getSearchDirection() == MarkerReferenceField.MarkerSearchDirection.BACKWARD) {
-			dir = -1;
-			index = m.size()-1;
-		}
-		while (count < m.size()) {
-			Marker m2 = m.get(index);
-			if (m2.getName().equals(markerRef.getName())) {
-				return m2.getValue();
-			}
-			index += dir; 
-			count++;
-		}
-		PageImpl next = null;
-		if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.SEQUENCE ||
-			markerRef.getSearchScope() == MarkerSearchScope.SHEET && page.isWithinSheetScope(dir) //||
-			//markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinSequenceSpreadScope(dir)
-			) {
-			next = page.getPageInSequenceWithOffset(dir, false);
-		} //else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinDocumentSpreadScope(dir)) {
-		  else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD ||
-		           markerRef.getSearchScope() == MarkerSearchScope.SPREAD_CONTENT) {
-			if (page.isWithinVolumeSpreadScope(dir)) {
-				next = page.getPageInVolumeWithOffset(dir, false);
-			}
-		}
-		if (next!=null) {
-			return findMarker(next, markerRef);
-		} else {
-			return "";
-		}
-	}
-	
-	private boolean shouldAdjustOutOfBounds(MarkerReferenceField markerRef) {
-		if (markerRef.getSearchDirection()==MarkerSearchDirection.FORWARD && markerRef.getOffset()>=0 ||
-			markerRef.getSearchDirection()==MarkerSearchDirection.BACKWARD && markerRef.getOffset()<=0) {
-			return false;
-		} else {
-			switch(markerRef.getSearchScope()) {
-			case PAGE_CONTENT: case PAGE:
-				return false;
-			case SEQUENCE: case VOLUME: case DOCUMENT:
-				return true;
-			case SPREAD_CONTENT: case SPREAD:
-				//return  isWithinSequenceSpreadScope(markerRef.getOffset());				
-				//return  isWithinDocumentSpreadScope(markerRef.getOffset());
-				return isWithinVolumeSpreadScope(markerRef.getOffset());
-			case SHEET:
-				return isWithinSheetScope(markerRef.getOffset()) && 
-						markerRef.getSearchDirection()==MarkerSearchDirection.BACKWARD;
-			default:
-				throw new RuntimeException("Error in code. Missing implementation for value: " + markerRef.getSearchScope());
-			}
-		}
-	}
-
-	/*
-	 * This method is unused at the moment, but could be activated once additional scopes are added to the API,
-	 * namely SPREAD_WITHIN_SEQUENCE
-	 */
-	@SuppressWarnings("unused") 
-	private boolean isWithinSequenceSpreadScope(int offset) {
-		return 	offset==0 ||
-				(
-					getSequenceParent().getLayoutMaster().duplex() && 
-					(
-						(offset == 1 && getPageOrdinal() % 2 == 1) ||
-						(offset == -1 && getPageOrdinal() % 2 == 0)
-					)
-				);
-	}
-	
-	/*
-	 * This method is unused at the moment, but could be activated if additional scopes are added to the API,
-	 * namely SPREAD_WITHIN_DOCUMENT
-	 */
-	@SuppressWarnings("unused")
-	private boolean isWithinDocumentSpreadScope(int offset) {
-		if (offset==0) {
-			return true;
-		} else {
-			PageImpl n = getPageInDocumentWithOffset(offset, false);
-			return isWithinSpreadScope(offset, n);
-		}
-	}
-	
-	private boolean isWithinVolumeSpreadScope(int offset) {
-		if (offset==0) {
-			return true;
-		} else {
-			PageImpl n = getPageInVolumeWithOffset(offset, false);
-			return isWithinSpreadScope(offset, n);
-		}
-	}
-	
-	private boolean isWithinSpreadScope(int offset, PageImpl n) {
-		if (n==null) { 
-			return ((offset == 1 && getPageOrdinal() % 2 == 1) ||
-					(offset == -1 && getPageOrdinal() % 2 == 0));
-		} else {
-			return (
-					(offset == 1 && getPageOrdinal() % 2 == 1 && getSequenceParent().getLayoutMaster().duplex()==true) ||
-					(offset == -1 && getPageOrdinal() % 2 == 0 && n.getSequenceParent().getLayoutMaster().duplex()==true && n.getPageOrdinal() % 2 == 1)
-				);
-		}
-	}
-	
-	private boolean isWithinSheetScope(int offset) {
-		return 	offset==0 || 
-				(
-					getSequenceParent().getLayoutMaster().duplex() &&
-					(
-						(offset == 1 && getPageOrdinal() % 2 == 0) ||
-						(offset == -1 && getPageOrdinal() % 2 == 1)
-					)
-				);
-	}
-	
-	private PageImpl getPageInSequenceWithOffset(int offset, boolean adjustOutOfBounds) {
-		if (offset==0) {
-			return this;
-		} else {
-			PageSequence parent = getSequenceParent();
-			int next = getPageIndex() - parent.getPageNumberOffset() + offset;
-			if (adjustOutOfBounds) {
-				next = Math.min(parent.getPageCount()-1, Math.max(0, next));
-			}
-			if (next < parent.getPageCount() && next >= 0) {
-				return parent.getPage(next);
-			}
-			return null;
-		}
-	}
-	
-	private PageImpl getPageInVolumeWithOffset(int offset, boolean adjustOutOfBounds) {
-		if (offset==0) {
-			return this;
-		} else {
-			return getPageInScope(getSequenceParent().getParent().getContentsInVolume(getVolumeNumber()), offset, adjustOutOfBounds);
-		}
-	}
-
-	private PageImpl getPageInDocumentWithOffset(int offset, boolean adjustOutOfBounds) {
-		if (offset==0) {
-			return this;
-		} else {
-			return getPageInScope(getSequenceParent().getParent().getPageView(), offset, adjustOutOfBounds);
-		}
-	}
-	
-	private PageImpl getPageInScope(PageView pageView, int offset, boolean adjustOutOfBounds) {
-		if (offset==0) {
-			return this;
-		} else {
-			if (pageView!=null) {
-				List<PageImpl> scope = pageView.getPages();
-				int next = pageView.toLocalIndex(getPageId())+offset;
-				int size = scope.size();
-				if (adjustOutOfBounds) {
-					next = Math.min(size-1, Math.max(0, next));
-				}
-				if (next < size && next >= 0) {
-					return scope.get(next);
-				}
-			}
-			return null;
-		}
+	private String resolveCompoundField(CompoundField f, PageImpl p, DefaultTextAttribute.Builder b) {
+		return f.stream().map(f2 -> resolveField(f2, p, b)).collect(Collectors.joining());
 	}
 	
 	private static String resolveCurrentPageField(CurrentPageField f, PageImpl p) {
@@ -708,11 +444,11 @@ class PageImpl implements Page {
 		this.isVolBreakAllowed = value;
 	}
 
-	public boolean allowsVolumeBreak() {
+	boolean allowsVolumeBreak() {
 		return isVolBreakAllowed;
 	}
 
-	public int keepPreviousSheets() {
+	int keepPreviousSheets() {
 		return keepPreviousSheets;
 	}
 

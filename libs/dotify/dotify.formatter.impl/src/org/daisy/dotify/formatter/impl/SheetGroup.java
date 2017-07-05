@@ -1,6 +1,6 @@
 package org.daisy.dotify.formatter.impl;
 
-import java.util.List;
+import org.daisy.dotify.common.split.SplitPointDataSource;
 
 /**
  * Provides a list of consecutive sheets without manual volume breaks
@@ -9,7 +9,7 @@ import java.util.List;
  *
  */
 class SheetGroup {
-	private List<Sheet> units;
+	private SplitPointDataSource<Sheet> units;
 	private VolumeSplitter splitter;
 	private int overheadCount;
 	private int sheetCount;
@@ -65,7 +65,7 @@ class SheetGroup {
 	 * Gets the remaining sheets in this group
 	 * @return the remaining sheets
 	 */
-	List<Sheet> getUnits() {
+	SplitPointDataSource<Sheet> getUnits() {
 		return units;
 	}
 
@@ -73,7 +73,7 @@ class SheetGroup {
 	 * Sets the remaining sheets in this group
 	 * @param units a list of remaining sheets
 	 */
-	void setUnits(List<Sheet> units) {
+	void setUnits(SplitPointDataSource<Sheet> units) {
 		this.units = units;
 	}
 	
@@ -95,10 +95,11 @@ class SheetGroup {
 	
 	/**
 	 * Gets the total sheet count, including processed sheets, overhead sheets and remaining sheets.
+	 * <b>Note: only use after all volumes have been calculated.</b>
 	 * @return returns the total sheet count
 	 */
 	int countTotalSheets() {
-		return getOverheadCount() + getSheetCount() + getUnits().size();
+		return getOverheadCount() + getSheetCount() + getUnits().getRemaining().size();
 	}
 	
 	/**

@@ -16,8 +16,14 @@ import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.consumer.translator.BrailleTranslatorFactoryMaker;
 import org.daisy.dotify.consumer.translator.MarkerProcessorFactoryMaker;
 import org.daisy.dotify.consumer.translator.TextBorderFactoryMaker;
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
+import org.daisy.dotify.formatter.impl.segment.LeaderSegment;
+import org.daisy.dotify.formatter.impl.segment.NewLineSegment;
+import org.daisy.dotify.formatter.impl.segment.Segment;
+import org.daisy.dotify.formatter.impl.segment.TextSegment;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class BlockContentManagerTest {
 	
 	@Test

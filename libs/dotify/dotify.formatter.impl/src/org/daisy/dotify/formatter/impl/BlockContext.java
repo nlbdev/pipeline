@@ -1,5 +1,7 @@
 package org.daisy.dotify.formatter.impl;
 
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
+
 class BlockContext {
 	private final int flowWidth;
 	private final CrossReferenceHandler refs;

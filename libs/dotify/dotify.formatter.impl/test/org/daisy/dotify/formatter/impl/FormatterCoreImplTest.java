@@ -1,11 +1,11 @@
 package org.daisy.dotify.formatter.impl;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.daisy.dotify.api.formatter.BlockProperties;
 import org.daisy.dotify.formatter.impl.Margin.Type;
+import org.junit.Test;
+@SuppressWarnings("javadoc")
 public class FormatterCoreImplTest {
 
 	@Test

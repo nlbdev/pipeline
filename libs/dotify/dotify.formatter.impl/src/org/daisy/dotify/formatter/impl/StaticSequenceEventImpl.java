@@ -1,6 +1,7 @@
 package org.daisy.dotify.formatter.impl;
 
 import org.daisy.dotify.api.formatter.SequenceProperties;
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 
 class StaticSequenceEventImpl extends FormatterCoreImpl implements VolumeSequence {
 	private static final long serialVersionUID = 4646831324973203983L;
@@ -10,7 +11,8 @@ class StaticSequenceEventImpl extends FormatterCoreImpl implements VolumeSequenc
 	
 	/**
 	 * Creates a new sequence event
-	 * @param props
+	 * @param fc the formatter core context
+	 * @param props the sequence properties
 	 */
 	public StaticSequenceEventImpl(FormatterCoreContext fc, SequenceProperties props) {
 		super(fc);

@@ -2,11 +2,11 @@ package org.daisy.dotify.formatter.impl;
 
 import java.util.List;
 
-public class TableCostImpl implements TableCost {
+class TableCostImpl implements TableCost {
 	private final int spacePreferred;
 	private double cost;
 
-	public TableCostImpl(int spacePreferred) {
+	TableCostImpl(int spacePreferred) {
 		this.spacePreferred = spacePreferred;
 		this.cost = 0;
 	}

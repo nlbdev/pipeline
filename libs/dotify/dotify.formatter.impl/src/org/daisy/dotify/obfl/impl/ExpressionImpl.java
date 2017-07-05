@@ -87,22 +87,12 @@ class ExpressionImpl implements Expression {
 	
 	@Override
 	public Object evaluate(String expr, Map<String, String> variables) {
-		if (variables==null) {
-			return evaluate(expr);
-		}
-		for (String varName : variables.keySet()) {
-			expr = expr.replaceAll("\\$"+varName+"(?=\\W)", variables.get(varName));
-		}
-		return evaluate(expr);
+		return evaluate(ExpressionTools.resolveVariables(expr, variables));
 	}
 	
 	@Override
 	public Object evaluate(String expr, String ... vars) {
-		for (String var : vars) {
-			String[] v = var.split("=", 2);
-			expr = expr.replaceAll("\\$"+v[0]+"(?=\\W)", v[1]);
-		}
-		return evaluate(expr);
+		return evaluate(ExpressionTools.resolveVariables(expr, vars));
 	}
 	
 	@Override

@@ -1,6 +1,11 @@
 package org.daisy.dotify.formatter.impl;
 
-public class PaginatorException extends Exception {
+/**
+ * Indicates a pagination problem.
+ * 
+ * @author Joel Håkansson
+ */
+class PaginatorException extends RuntimeException {
 
 	/**
 	 * 

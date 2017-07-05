@@ -1,9 +1,11 @@
 package org.daisy.dotify.formatter.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import org.daisy.dotify.api.formatter.TableCellProperties;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
+@SuppressWarnings("javadoc")
 public class TableDataTest {
 
 	@Test

@@ -2,7 +2,10 @@ package org.daisy.dotify.formatter.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+
+import org.daisy.dotify.formatter.impl.search.Overhead;
+import org.daisy.dotify.writer.impl.Section;
+import org.daisy.dotify.writer.impl.Volume;
 
 /**
  * Provides a container for a physical volume of braille
@@ -12,55 +15,33 @@ class VolumeImpl implements Volume {
 	private List<Section> body;
 	private List<Section> preVolData;
 	private List<Section> postVolData;
-	private int preVolSize;
-	private int postVolSize;
+	private Overhead overhead;
 	private int bodyVolSize;
-	private int targetVolSize;
 	
-	VolumeImpl() {
-		this.preVolSize = 0;
-		this.postVolSize = 0;
+	VolumeImpl(Overhead overhead) {
+		this.overhead = overhead;
 		this.bodyVolSize = 0;
-		this.targetVolSize = 0;
 	}
 
-	public void setBody(List<Sheet> body) {
-		bodyVolSize = body.size();
-		this.body = sequencesFromSheets(body);
+	public void setBody(SectionBuilder body) {
+		bodyVolSize = body.getSheetCount();
+		this.body = body.getSections();
 	}
 	
-	private static List<Section> sequencesFromSheets(List<Sheet> sheets) {
-		Stack<Section> ret = new Stack<Section>();
-		PageSequence currentSeq = null;
-		for (Sheet s : sheets) {
-			for (PageImpl p : s.getPages()) {
-				if (ret.isEmpty() || currentSeq!=p.getSequenceParent()) {
-					currentSeq = p.getSequenceParent();
-					ret.add(
-							new SectionImpl(currentSeq.getSectionProperties())
-							//new PageSequence(ret, currentSeq.getLayoutMaster(), currentSeq.getPageNumberOffset())
-							);
-				}
-				((SectionImpl)ret.peek()).addPage(p);
-			}
-		}
-		return ret;
+	public void setPreVolData(SectionBuilder preVolData) {
+		//use the highest value to avoid oscillation
+		overhead = overhead.withPreContentSize(Math.max(overhead.getPreContentSize(), preVolData.getSheetCount()));
+		this.preVolData = preVolData.getSections();
 	}
 
-	public void setPreVolData(List<Sheet> preVolData) {
+	public void setPostVolData(SectionBuilder postVolData) {
 		//use the highest value to avoid oscillation
-		preVolSize = Math.max(preVolSize, preVolData.size());
-		this.preVolData = sequencesFromSheets(preVolData);
-	}
-
-	public void setPostVolData(List<Sheet> postVolData) {
-		//use the highest value to avoid oscillation
-		postVolSize = Math.max(postVolSize, postVolData.size());
-		this.postVolData = sequencesFromSheets(postVolData);
+		overhead = overhead.withPostContentSize(Math.max(overhead.getPostContentSize(), postVolData.getSheetCount()));
+		this.postVolData = postVolData.getSections();
 	}
 	
-	public int getOverhead() {
-		return preVolSize + postVolSize;
+	public Overhead getOverhead() {
+		return overhead;
 	}
 	
 	public int getBodySize() {
@@ -68,15 +49,7 @@ class VolumeImpl implements Volume {
 	}
 	
 	public int getVolumeSize() {
-		return preVolSize + postVolSize + bodyVolSize;
-	}
-
-	public int getTargetSize() {
-		return targetVolSize;
-	}
-
-	public void setTargetVolSize(int targetVolSize) {
-		this.targetVolSize = targetVolSize;
+		return overhead.total() + bodyVolSize;
 	}
 
 	@Override

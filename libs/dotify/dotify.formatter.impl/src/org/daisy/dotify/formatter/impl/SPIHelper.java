@@ -32,7 +32,7 @@ public class SPIHelper {
 	/**
 	 * <p>Gets a braille translator factory maker instance, or null if not found.</p> 
 	 * 
-	 * <p>Note: This method uses reflexion to get the implementation.</p>
+	 * <p>Note: This method uses reflection to get the implementation.</p>
 	 * @return returns a braille translator factory maker
 	 */
 	public static BrailleTranslatorFactoryMakerService getBrailleTranslatorFactoryMaker() {
@@ -45,7 +45,7 @@ public class SPIHelper {
 	/**
 	 * <p>Gets a marker processor factory maker instance, or null if not found.</p> 
 	 * 
-	 * <p>Note: This method uses reflexion to get the implementation.</p>
+	 * <p>Note: This method uses reflection to get the implementation.</p>
 	 * @return returns a marker processor factory maker
 	 */
 	public static MarkerProcessorFactoryMakerService getMarkerProcessorFactoryMaker() {
@@ -58,7 +58,7 @@ public class SPIHelper {
 	/**
 	 * <p>Gets a text border factory maker instance, or null if not found.</p> 
 	 * 
-	 * <p>Note: This method uses reflexion to get the implementation.</p>
+	 * <p>Note: This method uses reflection to get the implementation.</p>
 	 * @return returns a text border factory maker
 	 */
 	public static TextBorderFactoryMakerService getTextBorderFactoryMaker() {
@@ -71,7 +71,7 @@ public class SPIHelper {
 	/**
 	 * <p>Gets an integer 2 text factory maker instance, or null if not found.</p> 
 	 * 
-	 * <p>Note: This method uses reflexion to get the implementation.</p>
+	 * <p>Note: This method uses reflection to get the implementation.</p>
 	 * @return returns an integer 2 text factory maker
 	 */
 	public static Integer2TextFactoryMakerService getInteger2TextFactoryMaker() {
@@ -84,7 +84,12 @@ public class SPIHelper {
 	//the following two differ from the ones above because there isn't an interface for the maker implementations
 	//to hide behind and thus they cannot be used, either these should also have interfaces added to the API, or
 	//they should be removed
-
+	/**
+	 * <p>Gets an expression factory instance, or null if not found.</p> 
+	 * 
+	 * <p>Note: This method uses {@link ServiceLoader} to get the implementation.</p>
+	 * @return returns an integer 2 text factory maker
+	 */
 	public static ExpressionFactory getExpressionFactory() {
 		if (expressionFactory==null) {
 			expressionFactory = ServiceLoader.load(ExpressionFactory.class).iterator().next();
@@ -93,6 +98,12 @@ public class SPIHelper {
 		return expressionFactory;
 	}
 	
+	/**
+	 * <p>Gets a formatter factory instance, or null if not found.</p> 
+	 * 
+	 * <p>Note: This method uses {@link ServiceLoader} to get the implementation.</p>
+	 * @return returns an integer 2 text factory maker
+	 */
 	public static FormatterFactory getFormatterFactory() {
 		if (formatterFactory==null) {
 			formatterFactory = ServiceLoader.load(FormatterFactory.class).iterator().next();

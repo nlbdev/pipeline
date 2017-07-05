@@ -25,30 +25,54 @@ public class FormatterFactoryImpl implements FormatterFactory {
 		return new FormatterImpl(translatorFactory, borderFactory, markerProcessorFactory, locale, mode);
 	}
 
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setTranslator(BrailleTranslatorFactoryMakerService translatorFactory) {
-		this.translatorFactory = translatorFactory;
+	public void setTranslator(BrailleTranslatorFactoryMakerService service) {
+		this.translatorFactory = service;
 	}
 
-	public void unsetTranslator() {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetTranslator(BrailleTranslatorFactoryMakerService service) {
 		this.translatorFactory = null;
 	}
 	
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setTextBorderFactory(TextBorderFactoryMakerService borderFactory) {
-		this.borderFactory = borderFactory;
+	public void setTextBorderFactory(TextBorderFactoryMakerService service) {
+		this.borderFactory = service;
 	}
 	
-	public void unsetTextBorderFactory() {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetTextBorderFactory(TextBorderFactoryMakerService service) {
 		this.borderFactory = null;
 	}
 	
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setMarkerProcessorFactory(MarkerProcessorFactoryMakerService markerProcessorFactory) {
-		this.markerProcessorFactory = markerProcessorFactory;
+	public void setMarkerProcessorFactory(MarkerProcessorFactoryMakerService service) {
+		this.markerProcessorFactory = service;
 	}
 	
-	public void unsetMarkerProcessorFactory() {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetMarkerProcessorFactory(MarkerProcessorFactoryMakerService service) {
 		this.markerProcessorFactory = null;
 	}
 

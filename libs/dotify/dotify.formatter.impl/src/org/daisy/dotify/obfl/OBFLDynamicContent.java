@@ -3,6 +3,7 @@ package org.daisy.dotify.obfl;
 import org.daisy.dotify.api.formatter.Context;
 import org.daisy.dotify.api.formatter.DynamicContent;
 import org.daisy.dotify.api.obfl.ExpressionFactory;
+import org.daisy.dotify.obfl.impl.ExpressionTools;
 
 public class OBFLDynamicContent extends OBFLExpressionBase implements DynamicContent {
 
@@ -24,7 +25,7 @@ public class OBFLDynamicContent extends OBFLExpressionBase implements DynamicCon
 		if (exp==null) {
 			return "";
 		} else {
-			return ef.newExpression().evaluate(exp, buildArgs(context)).toString();
+			return ef.newExpression().evaluate(ExpressionTools.resolveVariables(exp, buildArgs(context))).toString();
 		}
 	}
 

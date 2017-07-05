@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.daisy.dotify.api.formatter.TableCellProperties;
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 
 class TableCell extends FormatterCoreImpl {
 	/**

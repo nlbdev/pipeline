@@ -15,15 +15,23 @@ import org.daisy.dotify.api.obfl.ExpressionFactory;
 import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
+import org.daisy.dotify.formatter.impl.FactoryManager;
 import org.daisy.dotify.formatter.impl.SPIHelper;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
 
+/**
+ * Provides a layout engine factory.
+ * @author Joel Håkansson
+ */
 @Component
 public class LayoutEngineFactoryImpl implements FormatterEngineFactoryService {
 	private FactoryManager factoryManager;
 
+	/**
+	 * Creates a new layout engine factory instance.
+	 */
 	public LayoutEngineFactoryImpl() {
 		factoryManager = new FactoryManager();
 	}
@@ -68,39 +76,71 @@ public class LayoutEngineFactoryImpl implements FormatterEngineFactoryService {
 	}
 
 	// FIXME: not a service
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setFormatterFactory(FormatterFactory formatterFactory) {
-		factoryManager.setFormatterFactory(formatterFactory);
+	public void setFormatterFactory(FormatterFactory service) {
+		factoryManager.setFormatterFactory(service);
 	}
 
-	public void unsetFormatterFactory(FormatterFactory formatterFactory) {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetFormatterFactory(FormatterFactory service) {
 		factoryManager.setFormatterFactory(null);
 	}
 
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setMarkerProcessor(MarkerProcessorFactoryMakerService mp) {
-		factoryManager.setMarkerProcessorFactory(mp);
+	public void setMarkerProcessor(MarkerProcessorFactoryMakerService service) {
+		factoryManager.setMarkerProcessorFactory(service);
 	}
 
-	public void unsetMarkerProcessor(MarkerProcessorFactoryMakerService mp) {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetMarkerProcessor(MarkerProcessorFactoryMakerService service) {
 		factoryManager.setMarkerProcessorFactory(null);
 	}
 
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setTextBorderFactoryMaker(TextBorderFactoryMakerService tbf) {
-		factoryManager.setTextBorderFactory(tbf);
+	public void setTextBorderFactoryMaker(TextBorderFactoryMakerService service) {
+		factoryManager.setTextBorderFactory(service);
 	}
 
-	public void unsetTextBorderFactoryMaker(TextBorderFactoryMakerService tbf) {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetTextBorderFactoryMaker(TextBorderFactoryMakerService service) {
 		factoryManager.setTextBorderFactory(null);
 	}
 
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setExpressionFactory(ExpressionFactory ef) {
-		factoryManager.setExpressionFactory(ef);
+	public void setExpressionFactory(ExpressionFactory service) {
+		factoryManager.setExpressionFactory(service);
 	}
 
-	public void unsetExpressionFactory(ExpressionFactory ef) {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetExpressionFactory(ExpressionFactory service) {
 		factoryManager.setExpressionFactory(null);
 	}
 

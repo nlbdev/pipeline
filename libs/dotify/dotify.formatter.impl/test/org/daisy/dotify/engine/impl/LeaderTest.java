@@ -6,6 +6,7 @@ import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.junit.Ignore;
 import org.junit.Test;
+@SuppressWarnings("javadoc")
 public class LeaderTest extends AbstractFormatterEngineTest {
 	
 	@Test @Ignore("This is a known issue, ignore until fixed")

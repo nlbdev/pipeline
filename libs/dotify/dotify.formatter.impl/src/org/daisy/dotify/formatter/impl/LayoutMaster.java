@@ -26,13 +26,13 @@ class LayoutMaster implements LayoutMasterBuilder, SectionProperties {
 		this.fc = fc;
 		this.templates = new ArrayList<>();
 		this.props = props;
-		this.defaultPageTemplate = new PageTemplate();
+		this.defaultPageTemplate = new PageTemplate(props.getRowSpacing());
 		this.pageArea = null;
 	}
 	
 	@Override
 	public PageTemplateBuilder newTemplate(Condition c) {
-		PageTemplate p = new PageTemplate(c);
+		PageTemplate p = new PageTemplate(c, getRowSpacing());
 		templates.add(p);
 		return p;
 	}

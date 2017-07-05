@@ -6,7 +6,7 @@ import java.util.List;
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.common.text.StringTools;
 
-public abstract class AbstractBlockContentManager implements Iterable<RowImpl> {
+abstract class AbstractBlockContentManager implements Iterable<RowImpl> {
 	protected boolean isVolatile;
 	protected final int flowWidth;
 	protected final RowDataProperties rdp;
@@ -114,46 +114,37 @@ public abstract class AbstractBlockContentManager implements Iterable<RowImpl> {
 	
 	abstract int getForceBreakCount();
 	
-	public abstract int getRowCount();
+	abstract int getRowCount();
 	/**
 	 * Returns true if this RowDataManager contains objects that makes the formatting volatile,
 	 * i.e. prone to change due to for example cross references.
 	 * @return returns true if, and only if, the RowDataManager should be discarded if a new pass is requested,
 	 * false otherwise
 	 */
-	public boolean isVolatile() {
+	boolean isVolatile() {
 		return isVolatile;
 	}
 
-	public MarginProperties getLeftMarginParent() {
+	MarginProperties getLeftMarginParent() {
 		return leftParent;
 	}
 
-	public MarginProperties getRightMarginParent() {
+	MarginProperties getRightMarginParent() {
 		return rightParent;
 	}
 
-	public List<RowImpl> getCollapsiblePreContentRows() {
+	List<RowImpl> getCollapsiblePreContentRows() {
 		return collapsiblePreContentRows;
 	}
 
-	public List<RowImpl> getInnerPreContentRows() {
+	List<RowImpl> getInnerPreContentRows() {
 		return innerPreContentRows;
 	}
 
-	/*public int countPostContentRows() {
-		return postContentRows.size();
-	}*/
-	
-	public List<RowImpl> getPostContentRows() {
+	List<RowImpl> getPostContentRows() {
 		return postContentRows;
 	}
-	/*
-	public int countSkippablePostContentRows() {
-		return skippablePostContentRows.size();
-	}*/
-	
-	public List<RowImpl> getSkippablePostContentRows() {
+	List<RowImpl> getSkippablePostContentRows() {
 		return skippablePostContentRows;
 	}
 	
@@ -169,11 +160,11 @@ public abstract class AbstractBlockContentManager implements Iterable<RowImpl> {
 	 * Get markers that are not attached to a row, i.e. markers that proceeds any text contents
 	 * @return returns markers that proceeds this FlowGroups text contents
 	 */
-	public ArrayList<Marker> getGroupMarkers() {
+	ArrayList<Marker> getGroupMarkers() {
 		return groupMarkers;
 	}
 	
-	public ArrayList<String> getGroupAnchors() {
+	ArrayList<String> getGroupAnchors() {
 		return groupAnchors;
 	}
 	

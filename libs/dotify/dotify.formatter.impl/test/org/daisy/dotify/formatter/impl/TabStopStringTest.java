@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.TreeSet;
 
-import org.daisy.dotify.formatter.impl.TabStopString;
 import org.daisy.dotify.formatter.impl.TabStopString.Alignment;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TabStopStringTest {
 
 	@Test

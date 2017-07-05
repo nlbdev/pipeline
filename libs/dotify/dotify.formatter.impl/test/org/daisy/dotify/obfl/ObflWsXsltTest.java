@@ -18,6 +18,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.junit.Ignore;
 import org.junit.Test;
+@SuppressWarnings("javadoc")
 public class ObflWsXsltTest {
 
 	@Test

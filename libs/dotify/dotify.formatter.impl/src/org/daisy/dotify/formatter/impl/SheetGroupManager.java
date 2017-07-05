@@ -49,7 +49,7 @@ class SheetGroupManager {
 		
 	/**
 	 * Gets the sheet group at the given index, zero based.
-	 * @param index, zero based
+	 * @param index the index, zero based
 	 * @return returns the sheet group
 	 */
 	SheetGroup atIndex(int index) {
@@ -126,16 +126,12 @@ class SheetGroupManager {
 	 * @return returns true if the manager has content, false otherwise
 	 */
 	boolean hasNext() {
-		for (SheetGroup g : groups) {
-			if (g.hasNext()) {
-				return true;
-			}
-		}
-		return false;
+		return groups.stream().anyMatch(g -> g.hasNext());
 	}
 	
 	/**
 	 * Updates the sheet count in every group.
+	 * <b>Note: only use after all volumes have been calculated.</b>
 	 */
 	void updateAll() {
 		for (SheetGroup g : groups) {
@@ -145,6 +141,7 @@ class SheetGroupManager {
 	
 	/**
 	 * Adjusts the volume count in every group (if needed).
+	 * <b>Note: only use after all volumes have been calculated.</b>
 	 */
 	void adjustVolumeCount() {
 		for (SheetGroup g : groups) {
@@ -156,38 +153,29 @@ class SheetGroupManager {
 	
 	/**
 	 * Counts the total number of sheets.
+	 * <b>Note: only use after all volumes have been calculated.</b>
 	 * @return returns the sheet count
 	 */
 	int countTotalSheets() {
-		int ret = 0;
-		for (SheetGroup g : groups) {
-			ret += g.countTotalSheets();
-		}
-		return ret;
+		return groups.stream().mapToInt(g -> g.countTotalSheets()).sum();
 	}
 	
 	/**
 	 * Counts the remaining sheets.
+	 * <b>Note: only use after all volumes have been calculated.</b>
 	 * @return returns the number of remaining sheets
 	 */
 	int countRemainingSheets() {
-		int ret = 0;
-		for (SheetGroup g : groups) {
-			ret += g.getUnits().size();
-		}
-		return ret;
+		return groups.stream().mapToInt(g -> g.getUnits().getRemaining().size()).sum();
 	}
 	
 	/**
 	 * Counts the remaining pages.
+	 * <b>Note: only use after all volumes have been calculated.</b>
 	 * @return returns the number of remaining pages
 	 */
 	int countRemainingPages() {
-		int ret = 0;
-		for (SheetGroup g : groups) {
-			ret += VolumeProvider.countPages(g.getUnits());
-		}
-		return ret;
+		return groups.stream().map(g -> g.getUnits().getRemaining()).mapToInt(Sheet::countPages).sum();
 	}
 	
 	/**
@@ -195,11 +183,7 @@ class SheetGroupManager {
 	 * @return returns the total number of volumes
 	 */
 	int getVolumeCount() {
-		int ret = 0;
-		for (SheetGroup g : groups) {
-			ret += g.getSplitter().getVolumeCount();
-		}
-		return ret;
+		return groups.stream().mapToInt(g -> g.getSplitter().getVolumeCount()).sum();
 	}
 
 }

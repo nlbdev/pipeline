@@ -8,6 +8,10 @@ import org.daisy.dotify.formatter.impl.SPIHelper;
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
 
+/**
+ * Provides an expression factory implementation.
+ * @author Joel Håkansson
+ */
 @Component
 public class ExpressionFactoryImpl implements ExpressionFactory {
 	private Integer2TextFactoryMakerService itf;
@@ -17,12 +21,20 @@ public class ExpressionFactoryImpl implements ExpressionFactory {
 		return new ExpressionImpl(itf);
 	}
 
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
-	public void setInteger2TextFactory(Integer2TextFactoryMakerService itf) {
-		this.itf = itf;
+	public void setInteger2TextFactory(Integer2TextFactoryMakerService service) {
+		this.itf = service;
 	}
 
-	public void unsetInteger2TextFactory(Integer2TextFactoryMakerService itf) {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetInteger2TextFactory(Integer2TextFactoryMakerService service) {
 		this.itf = null;
 	}
 

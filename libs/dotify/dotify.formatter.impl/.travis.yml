@@ -1,5 +1,9 @@
 language: java
 jdk: oraclejdk8
+branches:
+  except:
+   - /^backup/.*$/
+   - /^unfinished/.*$/
 after_success:
 - ./upload.sh
 before_install:

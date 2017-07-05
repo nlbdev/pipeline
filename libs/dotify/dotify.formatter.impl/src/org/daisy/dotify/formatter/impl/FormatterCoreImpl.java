@@ -34,6 +34,15 @@ import org.daisy.dotify.api.translator.TextBorderFactory;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.formatter.impl.Margin.Type;
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
+import org.daisy.dotify.formatter.impl.segment.AnchorSegment;
+import org.daisy.dotify.formatter.impl.segment.Evaluate;
+import org.daisy.dotify.formatter.impl.segment.LeaderSegment;
+import org.daisy.dotify.formatter.impl.segment.MarkerSegment;
+import org.daisy.dotify.formatter.impl.segment.NewLineSegment;
+import org.daisy.dotify.formatter.impl.segment.PageNumberReferenceSegment;
+import org.daisy.dotify.formatter.impl.segment.Segment;
+import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
 class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGroup {
 	/**

@@ -1,6 +1,7 @@
 package org.daisy.dotify.formatter.impl;
 
 import org.daisy.dotify.api.formatter.SequenceProperties;
+import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 
 /**
  * Provides a volume sequence object. A volume sequence is a chunk of contents

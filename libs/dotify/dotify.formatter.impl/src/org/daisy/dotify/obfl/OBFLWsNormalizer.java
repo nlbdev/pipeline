@@ -19,6 +19,10 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartDocument;
 import javax.xml.stream.events.XMLEvent;
 
+/**
+ * Provides a whitespace normalizer for OBFL-files.
+ * @author Joel Håkansson
+ */
 public class OBFLWsNormalizer extends XMLParserBase {
 	private final XMLEventReader input;
 	private final OutputStream out;
@@ -40,6 +44,11 @@ public class OBFLWsNormalizer extends XMLParserBase {
 		this.writingOften = false;
 	}
 
+	/**
+	 * Parses for whitespace.
+	 * @param outputFactory an xml output factory
+	 */
+	//FIXME: this argument doesn't make sense from a user's perspective
 	public void parse(XMLOutputFactory outputFactory) {
 		XMLEvent event;
 		while (input.hasNext()) {
@@ -90,10 +99,19 @@ public class OBFLWsNormalizer extends XMLParserBase {
 		}
 	}
 
+	/**
+	 * Returns true if the output stream is updated often.
+	 * @return true if the output stream is updated often, false otherwise
+	 */
 	public boolean isWritingOften() {
 		return writingOften;
 	}
 
+	/**
+	 * Sets an intention to write to the output stream often, if true.
+	 * Since this can affect performance, it is configurable. 
+	 * @param writingOften pass true to write often, false otherwise
+	 */
 	public void setWritingOften(boolean writingOften) {
 		this.writingOften = writingOften;
 	}
