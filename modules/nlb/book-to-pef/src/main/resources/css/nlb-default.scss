@@ -662,22 +662,42 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
         display: none;
 }
 
-@if ($include-notes) {
+/* An extend-only selector (%endnotes-title) would be more appropriate
+ * but does not seem to work in the 'end-of-book' case */
+@mixin endnotes-title {
+        display: block;
+        margin-top: 2;
+        margin-left: 5;
+        margin-right: 5;
+        margin-bottom: 1;
+        text-align: center;
+        border-top: ⠉;
+        border-bottom: ⠉;
+        content: 'Fotnoter';
+        text-transform: auto;
+}
 
-        /* An extend-only selector (%endnotes-title) would be more appropriate
-         * but does not seem to work in the 'end-of-book' case */
-        @mixin endnotes-title {
-                display: block;
-                margin-top: 2;
-                margin-left: 5;
-                margin-right: 5;
-                margin-bottom: 1;
-                text-align: center;
-                border-top: ⠉;
-                border-bottom: ⠉;
-                content: 'Fotnoter';
-                text-transform: auto;
+/*
+ * noteref numbering is implemented in pre-processing.xsl (and pre-processing-epub.xsl)
+ * FIXME: could be implemented in CSS
+ */
+@mixin noteref($refattr) {
+        display: inline;
+        &::before {
+                content: '⠠';
         }
+        &::alternate {
+                display: block;
+                content: target-content(attr($refattr));
+                @if ($notes-placement == 'bottom-of-page') {
+                        flow: footnotes;
+                } @else {
+                        flow: endnotes;
+                }
+        }
+}
+
+@if ($include-notes) {
         
         @if ($notes-placement == 'bottom-of-page') {
                 @page {
@@ -709,26 +729,6 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                 }
         }
 
-        /*
-         * noteref numbering is implemented in pre-processing.xsl (and pre-processing-epub.xsl)
-         * FIXME: could be implemented in CSS
-         */
-
-        @mixin noteref($refattr) {
-                display: inline;
-                &::before {
-                        content: '⠠';
-                }
-                &::alternate {
-                        display: block;
-                        content: target-content(attr($refattr));
-                        @if ($notes-placement == 'bottom-of-page') {
-                                flow: footnotes;
-                        } @else {
-                                flow: endnotes;
-                        }
-                }
-        }
         
         noteref {
                 @include noteref(idref);
