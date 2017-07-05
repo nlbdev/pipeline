@@ -321,12 +321,12 @@
                 </x:input>
                 <x:option name="braille-standard" select="'(dots:6)(grade:1)'"/>
                 <x:option name="show-print-page-numbers" select="'false'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('17/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('17/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('17/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('7/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('7/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('7/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="17/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[text() != '' and not(contains(text(),'⠼'))]"/>
+                <x:document type="file" base-uri="temp-dir" href="7/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[text() != '' and not(contains(text(),'⠼'))]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="//pef:row">
@@ -389,12 +389,12 @@
                 </x:input>
                 <x:option name="braille-standard" select="'(dots:6)(grade:1)'"/>
                 <x:option name="show-print-page-numbers" select="'false'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('18/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('18/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('18/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('8/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('8/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('8/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="//pef:row[contains(text(),'⠃⠀⠁')]"/>
+                <x:document type="file" base-uri="temp-dir" href="8/pef-output-dir/book.pef" select="//pef:row[contains(text(),'⠃⠀⠁')]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="//pef:row">
@@ -468,13 +468,13 @@
                 </x:input>
                 <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
                 <x:option name="show-print-page-numbers" select="'true'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('10/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('10/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('10/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('9/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('9/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('9/temp-dir',$temp-dir)"/>
             </x:call>
             
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef"  select="/*/*[local-name()='body']"  />
+                <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"  select="/*/*[local-name()='body']"  />
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
@@ -570,13 +570,13 @@
                 </x:input>
                 <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
                 <x:option name="show-print-page-numbers" select="'true'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('11/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('10/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('10/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('10/temp-dir',$temp-dir)"/>
             </x:call>
             
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef" select="//pef:volume//pef:page/((pef:row[contains(text(),'⠠⠃⠊⠝⠙')], pef:row[1])[1])"/>
+                <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef" select="//pef:volume//pef:page/((pef:row[contains(text(),'⠠⠃⠊⠝⠙')], pef:row[1])[1])"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="/*/*">
@@ -621,12 +621,12 @@
                 </x:input>
                 <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
                 <x:option name="show-print-page-numbers" select="'true'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('15/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('15/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('15/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('11/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="15/pef-output-dir/book.pef"  select="/*/*[local-name()='body']"  />
+                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef"  select="/*/*[local-name()='body']"  />
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
@@ -729,13 +729,13 @@
             </x:input>
             <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('19/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('19/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('19/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('12/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('12/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('12/temp-dir',$temp-dir)"/>
         </x:call>
         
         <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="19/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            <x:document type="file" base-uri="temp-dir" href="12/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
@@ -800,13 +800,13 @@
             <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="show-print-page-numbers" select="'true'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('20/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('20/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('20/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('13/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('13/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('13/temp-dir',$temp-dir)"/>
         </x:call>
         
         <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="20/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            <x:document type="file" base-uri="temp-dir" href="13/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
@@ -878,13 +878,13 @@
             <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="show-print-page-numbers" select="'true'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('22/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('22/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('22/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('14/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('14/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('14/temp-dir',$temp-dir)"/>
         </x:call>
         
         <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="(//pef:page)[position() &gt;= last()-1]"/>
+            <x:document type="file" base-uri="temp-dir" href="14/pef-output-dir/book.pef" select="(//pef:page)[position() &gt;= last()-1]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
@@ -981,13 +981,13 @@
             <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="show-print-page-numbers" select="'true'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('23/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('23/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('23/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('15/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('15/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('15/temp-dir',$temp-dir)"/>
         </x:call>
         
         <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="23/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            <x:document type="file" base-uri="temp-dir" href="15/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
@@ -1052,13 +1052,13 @@
             <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="show-print-page-numbers" select="'false'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('21/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('21/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('21/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('16/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('16/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('16/temp-dir',$temp-dir)"/>
         </x:call>
         
         <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="21/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            <x:document type="file" base-uri="temp-dir" href="16/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
@@ -1095,5 +1095,7 @@
             </x:document>
         </x:expect>
     </x:scenario>
-    
+        
+        
+    </x:scenario>
 </x:description>
