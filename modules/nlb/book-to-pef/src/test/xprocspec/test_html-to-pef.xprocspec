@@ -6,7 +6,7 @@
     xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
     script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
     
-    <x:scenario label="basic test" pending="https://github.com/nlbdev/pipeline/issues/63">
+    <x:scenario label="basic test">
         <x:call step="nlb:html-to-pef">
             <x:option name="html" select="resolve-uri('../resources/HTML/book.xhtml')"/>
             <x:option name="toc-depth" select="0"/>

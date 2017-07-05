@@ -670,7 +670,7 @@
             </x:expect>
         </x:scenario>
     
-    <x:scenario label="table_caption" pending="https://github.com/nlbdev/pipeline/issues/63">
+    <x:scenario label="table_caption">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
