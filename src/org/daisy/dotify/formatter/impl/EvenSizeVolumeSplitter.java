@@ -18,10 +18,12 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 		EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
 		// this fixes a problem where the volume overhead pushes the
 		// volume count up once the volume offset has been set
+		/*
 		if (volumeOffset == 1 && esc.getVolumeCount() > volsMin + 1) {
 			volumeOffset = 0;
 			esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
 		}
+		*/
 
 		volsMin = Math.min(esc.getVolumeCount(), volsMin);
 		
