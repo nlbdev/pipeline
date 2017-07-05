@@ -12,7 +12,7 @@
             <x:option name="toc-depth" select="0"/>
         </x:call>
         
-        <x:scenario label="basic test" pending="https://github.com/nlbdev/pipeline/issues/63">
+        <x:scenario label="basic test">
             <x:call>
                 <x:input port="source">
                     <x:document type="file" href="../resources/DTBook/book.xml"/>
@@ -28,7 +28,7 @@
                 test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
         </x:scenario>
         
-        <x:scenario label="ability to override css rules - with a link element" pending="https://github.com/nlbdev/pipeline/issues/63">
+        <x:scenario label="ability to override css rules - with a link element">
             <x:call>
                 <x:input port="source">
                     <x:document type="file" href="../resources/DTBook-override-css/book-with-link.xml"/>
@@ -38,7 +38,7 @@
                 <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="the output directory contents">
-                <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" select="(//pef:row[contains(text(),'⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄')])[1]"/>
+                <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book-with-link.pef" select="(//pef:row[contains(text(),'⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄')])[1]"/>
             </x:context>
             <x:expect label="The paragraph should be indented by 6 (2 page margin-left, 4 p text-indent)" type="compare">
                 <x:document type="inline">
