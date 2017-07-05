@@ -47,7 +47,6 @@
     <p:option name="duplex"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
-    <p:option name="include-line-groups"/>
     <p:option name="include-notes"/>
     <p:option name="include-production-notes"/>
     <p:option name="show-braille-page-numbers"/>
@@ -84,7 +83,6 @@
         <p:with-option name="capital-letters" select="$capital-letters"/>
         <p:with-option name="include-captions" select="$include-captions"/>
         <p:with-option name="include-images" select="$include-images"/>
-        <p:with-option name="include-line-groups" select="$include-line-groups"/>
         <p:with-option name="include-note-references" select="$include-notes"/>
         <p:with-option name="include-production-notes" select="$include-production-notes"/>
         <p:with-option name="show-braille-page-numbers" select="$show-braille-page-numbers"/>

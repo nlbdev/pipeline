@@ -56,7 +56,6 @@
     <p:option name="duplex"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
-    <p:option name="include-line-groups"/>
     <p:option name="include-notes"/>
     <p:option name="notes-placement"/>
     <p:option name="include-production-notes"/>

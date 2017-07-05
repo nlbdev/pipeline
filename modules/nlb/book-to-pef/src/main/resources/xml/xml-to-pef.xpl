@@ -110,17 +110,6 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
             <h2 px:role="name">Blokkelementer: Inkluder alternativ tekst for bilder</h2>
         </p:documentation>
     </p:option>
-    <!--<p:option name="include-image-groups" select="'true'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Blokkelementer: Inkluder bildegrupper</h2>
-        </p:documentation>
-    </p:option>-->
-    <p:option name="include-line-groups" select="'true'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Blokkelementer: Mellomrom før og etter `&lt;linegroup&gt;`</h2>
-            <p px:role="desc" inherit="append">`&lt;linegroup&gt;` brukes for eksempel for hvert vers i et dikt.</p>
-        </p:documentation>
-    </p:option>
     
     <!-- =============== -->
     <!-- Tekst-elementer -->
