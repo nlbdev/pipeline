@@ -1076,7 +1076,7 @@
         </x:expect>
     </x:scenario>
         
-        <x:scenario label="Normal text content (without page markers) should have as margins 1 cell on the left and 1 cell on the right" pending="need to decide if margin should be 1 or 2, and update CSS accordingly">
+        <x:scenario label="Normal text content (without page markers) should have as margins 1 cell on the left and 1 cell on the right">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -1095,6 +1095,7 @@
                 <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
                 <x:option name="show-braille-page-numbers" select="'false'"/>
                 <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="page-width" select="32"/>
                 <x:option name="pef-output-dir" select="resolve-uri('17/pef-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('17/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('17/temp-dir',$temp-dir)"/>
@@ -1103,12 +1104,12 @@
                 <x:document type="file" base-uri="temp-dir" href="17/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[contains(text(),'⠭')]"/>
             </x:context>
             <x:expect label="There should not be any text in column #1 or column #page-width" type="compare">
-                <x:document type="inline">
+                <x:document type="inline" select="/*/*">
                     <_ xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
-                        <row>⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
-                        <row>⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
-                        <row>⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
                     </_>
                 </x:document>
             </x:expect>
