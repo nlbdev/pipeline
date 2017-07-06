@@ -1,47 +1,63 @@
 package org.daisy.dotify.formatter.impl;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
+import java.util.Map;
 
 class EvenSizeVolumeSplitter implements VolumeSplitter {
 	private static final Logger logger = Logger.getLogger(EvenSizeVolumeSplitter.class.getCanonicalName());
 	private EvenSizeVolumeSplitterCalculator sdc;
 	private final SplitterLimit splitterMax;
 	int volumeOffset = 0;
-	int volsMin = Integer.MAX_VALUE;
-
+	
+	/*
+	 * Assuming that updateSheetCount() is called after each iteration, and that adjustVolumeCount()
+	 * is called if and only if some sheets did not fit within the predetermined volumes. This
+	 * allows us to keep track of which split suggestions resulted in a successful split. We make
+	 * use of this information in order to not get into an endless loop while looking for the
+	 * optimal number of volumes.
+	 */
+	private boolean sheetsFitInVolumes;
+	private Map<EvenSizeVolumeSplitterCalculator,Boolean> previouslyTried = new HashMap<>();
+	
 	EvenSizeVolumeSplitter(SplitterLimit splitterMax) {
 		this.splitterMax = splitterMax;
 	}
 	
 	@Override
 	public void updateSheetCount(int sheets) {
-		EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
-		// this fixes a problem where the volume overhead pushes the
-		// volume count up once the volume offset has been set
-		/*
-		if (volumeOffset == 1 && esc.getVolumeCount() > volsMin + 1) {
-			volumeOffset = 0;
-			esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
+		if (sdc == null) {
+			sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
+		} else {
+			previouslyTried.put(sdc, sheetsFitInVolumes);
+			if (!sheetsFitInVolumes) {
+			
+				// Try with adjusted number of sheets
+				EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
+				if (!previouslyTried.containsKey(esc) || previouslyTried.get(esc)) {
+					sdc = esc;
+				} else {
+				
+					// Try increasing the volume count
+					volumeOffset++;
+					sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
+				}
+			} else if (volumeOffset > 0) {
+			
+				// Try decreasing the volume count again
+				EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset - 1);
+				if (!previouslyTried.containsKey(esc)) {
+					volumeOffset--;
+					sdc = esc;
+				}
+			}
 		}
-		*/
-
-		volsMin = Math.min(esc.getVolumeCount(), volsMin);
-		
-		sdc = esc;
+		sheetsFitInVolumes = true;
 	}
 	
 	@Override
 	public void adjustVolumeCount(int sheets) {
-		if (volumeOffset < 1) {
-			//First check to see if the page increase can will be handled automatically without increasing volume offset 
-			//in the next iteration (by supplying up-to-date overhead values)
-			EvenSizeVolumeSplitterCalculator esv = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
-			if (esv.equals(sdc)) {
-				volumeOffset++;
-			}
-		} else {
-			logger.warning("Could not fit contents even when adding a new volume.");
-		}
+		sheetsFitInVolumes = false;
 	}
 
 	@Override
