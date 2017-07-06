@@ -14,10 +14,12 @@ $choice-of-colophon: true !default;
 /* -------------------------------------------------------------------------- */
 
 @page {
-        margin-top: 0;
-        margin-bottom: 1;
-        margin-left: 2;
-        margin-right: 2;
+        margin-right: 1;
+        @if $show-print-page-numbers {
+            margin-left: 2;
+        } @else {
+            margin-left: 1;
+        }
 }
 
 bodymatter, body:not([epub|type~='cover']):not([epub|type~='frontmatter']):not([epub|type~='backmatter']) {

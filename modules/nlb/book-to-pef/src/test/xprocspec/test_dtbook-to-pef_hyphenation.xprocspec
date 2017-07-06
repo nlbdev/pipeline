@@ -22,12 +22,13 @@
       </x:input>
       <x:option name="page-width" select="28"/>
       <x:option name="show-print-page-numbers" select="'false'"/>
-      <x:option name="pef-output-dir" select="resolve-uri('non-standard-hyphenation-1/output-dir',$temp-dir)"/>
-      <x:option name="preview-output-dir" select="resolve-uri('non-standard-hyphenation-1/output-dir',$temp-dir)"/>
-      <x:option name="temp-dir" select="resolve-uri('non-standard-hyphenation-1/temp-dir',$temp-dir)"/>
+      <x:option name="show-braille-page-numbers" select="'false'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+      <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
     </x:call>
     <x:context label="result">
-      <x:document type="file" base-uri="temp-dir" href="non-standard-hyphenation-1/output-dir/book.pef" />
+      <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" />
     </x:context>
     <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
@@ -42,34 +43,9 @@
             <volume cols="28" rows="28" rowgap="0" duplex="true">
               <section>
                 <page>
-                  <row>⠀⠀⠀⠀⠠⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀</row>
-                  <row>⠀⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠤</row>
-                  <row>⠀⠀⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀</row>
-                  <row>⠀⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠠⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠤</row>
+                    <row>⠀⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
+                    <row>⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
                 </page>
               </section>
             </volume>
@@ -147,12 +123,12 @@
                 </x:document>
             </x:input>
             <x:option name="show-print-page-numbers" select="'false'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('non-standard-hyphenation-2/output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('non-standard-hyphenation-2/output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('non-standard-hyphenation-2/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="result">
-          <x:document type="file" base-uri="temp-dir" href="non-standard-hyphenation-2/output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
+          <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline" select="//pef:row">
@@ -266,12 +242,12 @@
                 </x:document>
             </x:input>
             <x:option name="show-print-page-numbers" select="'false'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('standard-hyphenation-1/output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('standard-hyphenation-1/output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('standard-hyphenation-1/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="result">
-          <x:document type="file" base-uri="temp-dir" href="standard-hyphenation-1/output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
+          <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline" select="//pef:row">
@@ -356,13 +332,13 @@
             <x:option name="page-height" select="100"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="show-print-page-numbers" select="'false'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('24/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('24/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('24/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
         </x:call>
         
         <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[replace(text(),'⠀','')]"/>
+            <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[replace(text(),'⠀','')]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline" select="/*/*">

@@ -42,7 +42,7 @@
             </x:context>
             <x:expect label="The paragraph should be indented by 6 (2 page margin-left, 4 p text-indent)" type="compare">
                 <x:document type="inline">
-                    <row xmlns="http://www.daisy.org/ns/2008/pef">⠀⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄</row>
+                    <row xmlns="http://www.daisy.org/ns/2008/pef">⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄</row>
                 </x:document>
             </x:expect>
         </x:scenario>
@@ -178,15 +178,10 @@
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="//pef:row">
-                    <page xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                         <row>⠁⠁⠀⠇⠇⠀⠃⠃⠀⠉⠉</row>
-                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
-                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
-                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
-                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
-                        <row>⠁⠁⠀⠇⠇⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                         <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
                         <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
                         <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
@@ -196,7 +191,12 @@
                         <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
                         <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
                         <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
-                    </page>
+                        <row>⠁⠁⠀⠇⠇⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                    </_>
                 </x:document>
             </x:expect>
         </x:scenario>
@@ -585,8 +585,6 @@
                         <row/>
                         <row/>
                         <row/>
-                        <row/>
-                        <row/>
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠃⠊⠝⠙⠀⠼⠃⠀⠁⠧⠀⠼⠃</row>
                         <row/>
                         <row/>
@@ -811,18 +809,18 @@
         <x:expect label="result" type="compare">
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
-                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
-                    <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
-                    <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
-                    <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
-                    <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛</row>
-                    <row>⠀⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠤</row>
-                    <row>⠿⠀⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
-                    <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄</row>
-                    <row>⠀⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑</row>
-                    <row>⠀⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛</row>
-                    <row>⠀⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝</row>
-                    <row>⠀⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                    <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                    <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                    <row>⠀⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                    <row>⠀⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄</row>
+                    <row>⠀⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗</row>
+                    <row>⠿⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
+                    <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝</row>
+                    <row>⠀⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝</row>
+                    <row>⠀⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑</row>
+                    <row>⠀⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row/>
                     <row/>
                     <row/>
                     <row/>
@@ -889,18 +887,18 @@
         <x:expect label="result" type="compare">
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
-                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
-                    <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
-                    <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
-                    <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
-                    <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛</row>
-                    <row>⠀⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠤</row>
-                    <row>⠿⠀⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
-                    <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄</row>
-                    <row>⠀⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑</row>
-                    <row>⠀⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛</row>
-                    <row>⠀⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝</row>
-                    <row>⠀⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                    <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                    <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                    <row>⠀⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                    <row>⠀⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄</row>
+                    <row>⠀⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗</row>
+                    <row>⠿⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
+                    <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝</row>
+                    <row>⠀⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝</row>
+                    <row>⠀⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑</row>
+                    <row>⠀⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row/>
                     <row/>
                     <row/>
                     <row/>
@@ -921,18 +919,18 @@
             </x:document>
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
-                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
-                    <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
-                    <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
-                    <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
-                    <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛</row>
-                    <row>⠀⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠤</row>
-                    <row>⠀⠀⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
-                    <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄</row>
-                    <row>⠀⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑</row>
-                    <row>⠀⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛</row>
-                    <row>⠀⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝</row>
-                    <row>⠀⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                    <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                    <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                    <row>⠀⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                    <row>⠀⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄</row>
+                    <row>⠀⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗</row>
+                    <row>⠀⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
+                    <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝</row>
+                    <row>⠀⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝</row>
+                    <row>⠀⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑</row>
+                    <row>⠀⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                    <row/>
                     <row/>
                     <row/>
                     <row/>
@@ -1063,39 +1061,182 @@
         <x:expect label="result" type="compare">
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
-                    <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
-                    <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
-                    <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
-                    <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
-                    <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛</row>
-                    <row>⠀⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠤</row>
-                    <row>⠀⠀⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
-                    <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄</row>
-                    <row>⠀⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑</row>
-                    <row>⠀⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛</row>
-                    <row>⠀⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝</row>
-                    <row>⠀⠀⠊⠍⠑⠝⠎⠄</row>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                    <row>⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                    <row>⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                    <row>⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                    <row>⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝</row>
+                    <row>⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀</row>
+                    <row>⠀⠇⠊⠇⠇⠑⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄</row>
+                    <row>⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑</row>
+                    <row>⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛</row>
+                    <row>⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
                 </page>
             </x:document>
         </x:expect>
     </x:scenario>
         
+        <x:scenario label="Normal text content (without page markers) should have as margins 1 cell on the left and 1 cell on the right" pending="need to decide if margin should be 1 or 2, and update CSS accordingly">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head/>
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <p>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('17/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('17/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('17/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory contents">
+                <x:document type="file" base-uri="temp-dir" href="17/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[contains(text(),'⠭')]"/>
+            </x:context>
+            <x:expect label="There should not be any text in column #1 or column #page-width" type="compare">
+                <x:document type="inline">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="images, image groups, captions and alt-text" pending="TODO">
+            <x:call step="nlb:dtbook-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head/>
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <p>content</p>
+                                        
+                                        <!-- img without alt-text -->
+                                        <img src="https://uu.difi.no/traller.jpg"/>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- img with empty alt-text -->
+                                        <img src="https://uu.difi.no/traller.jpg" alt=""/>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- img with non-empty alt-text -->
+                                        <img src="https://uu.difi.no/traller.jpg" alt="Tre gamle tretraller. Foto."/>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- imggroup without caption and without alt-text -->
+                                        <imggroup>
+                                            <img src="https://uu.difi.no/traller.jpg"/>
+                                        </imggroup>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- imggroup without caption and with empty alt-text -->
+                                        <imggroup>
+                                            <img src="https://uu.difi.no/traller.jpg" alt=""/>
+                                        </imggroup>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- imggroup without caption and with non-empty alt-text -->
+                                        <imggroup>
+                                            <img src="https://uu.difi.no/traller.jpg" alt="Tre gamle tretraller. Foto."/>
+                                        </imggroup>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- imggroup with caption and without alt-text -->
+                                        <imggroup>
+                                            <img id="img1" src="https://uu.difi.no/traller.jpg"/>
+                                            <caption imgref="img1">Gamle tretraller regnes av mange som antikviteter.</caption>
+                                        </imggroup>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- imggroup with caption and with empty alt-text -->
+                                        <imggroup>
+                                            <img id="img2" src="https://uu.difi.no/traller.jpg" alt=""/>
+                                            <caption imgref="img2">Gamle tretraller regnes av mange som antikviteter.</caption>
+                                        </imggroup>
+                                        
+                                        <p>content</p>
+                                        
+                                        <!-- imggroup with caption and with non-empty alt-text -->
+                                        <imggroup>
+                                            <img id="img3" src="https://uu.difi.no/traller.jpg" alt="Tre gamle tretraller. Foto."/>
+                                            <caption imgref="img3">Gamle tretraller regnes av mange som antikviteter.</caption>
+                                        </imggroup>
+                                        
+                                        <p>content</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="page-height" select="150"/>
+                <x:option name="pef-output-dir" select="resolve-uri('18/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('18/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('18/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[(.|following-sibling::*)[string-length(replace(text(),'⠀','')) &gt; 0]]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
+                        <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
+                        <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
+                        <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
+                        <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗</row>
+                        <row>⠀⠀⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍</row>
+                        <row>⠀⠀⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀</row>
+                        <row>⠀⠀⠇⠊⠇⠇⠑⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞</row>
+                        <row>⠀⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑</row>
+                        <row>⠀⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝</row>
+                        <row>⠀⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝</row>
+                        <row>⠀⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
         
     </x:scenario>
 </x:description>
