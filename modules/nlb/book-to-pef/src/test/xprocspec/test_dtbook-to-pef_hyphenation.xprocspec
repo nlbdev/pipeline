@@ -361,4 +361,114 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="hyphenation and borders">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2001/dtbook/">
+                        <head>
+                            <style media="embossed" type="text/css">
+                                @page {
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                                dtbook, book, bodymatter, level1, p {
+                                    margin-left: 0;
+                                    padding-left: 0;
+                                    margin-right: 0;
+                                    padding-right: 0;
+                                    text-indent: 0;
+                                }
+                            </style>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1 class="part">
+                                    <!-- standard hyphenation before border -->
+                                    <h1>xxxxxxxxxxxxx hovedfagskandidat</h1>
+                                    
+                                    <!-- standard hyphenation at border -->
+                                    <h1>xxxxxxxxxxxxxx hovedfagskandidat</h1>
+                                    
+                                    <!-- standard hyphenation after border -->
+                                    <h1>xxxxxxxxxxxxxxx hovedfagskandidat</h1>
+                                    
+                                    <!-- non-standard hyphenation before border-->
+                                    <h1>xxxxxxxxxxxxxxxxxx busstopp</h1>
+                                    
+                                    <!-- non-standard hyphenation at border -->
+                                    <h1>xxxxxxxxxxxxxxxxxxx busstopp</h1>
+                                    
+                                    <!-- non-standard hyphenation after border -->
+                                    <h1>xxxxxxxxxxxxxxxxxxxx busstopp</h1>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="page-width" select="32"/>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="pef">
+            <x:document type="file" base-uri="temp-dir" href="5/pef-output-dir/book.pef" select="//pef:row"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline" select="/*/*">
+                <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row/>
+                    <row>⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                    <row>⠀⠇⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠓⠕⠧⠑⠙⠋⠁⠛⠎⠤⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠅⠁⠝⠙⠊⠙⠁⠞⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                    <row>⠀⠇⠀⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠇⠀⠀⠀⠓⠕⠧⠑⠙⠋⠁⠛⠎⠅⠁⠝⠙⠊⠙⠁⠞⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                    <row>⠀⠇⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠇⠀⠀⠀⠓⠕⠧⠑⠙⠋⠁⠛⠎⠅⠁⠝⠙⠊⠙⠁⠞⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                    <row>⠀⠇⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠃⠥⠎⠎⠤⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠎⠞⠕⠏⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                    <row>⠀⠇⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                    <row>⠀⠇⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                    <row/>
+                </_>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>
