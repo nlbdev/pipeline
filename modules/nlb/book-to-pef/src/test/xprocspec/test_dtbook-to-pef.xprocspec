@@ -42,7 +42,7 @@
             </x:context>
             <x:expect label="The paragraph should be indented by 6 (2 page margin-left, 4 p text-indent)" type="compare">
                 <x:document type="inline">
-                    <row xmlns="http://www.daisy.org/ns/2008/pef">⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄</row>
+                    <row xmlns="http://www.daisy.org/ns/2008/pef">⠀⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄</row>
                 </x:document>
             </x:expect>
         </x:scenario>
@@ -765,7 +765,7 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                 </page>
             </x:document>
         </x:expect>
