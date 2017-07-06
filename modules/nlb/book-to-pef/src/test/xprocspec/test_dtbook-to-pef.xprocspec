@@ -1115,7 +1115,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="images, image groups, captions and alt-text" pending="TODO">
+        <x:scenario label="images, image groups, captions and alt-text">
             <x:call step="nlb:dtbook-to-pef">
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -1201,39 +1201,47 @@
             </x:call>
             
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[(.|following-sibling::*)[string-length(replace(text(),'⠀','')) &gt; 0]]"/>
+                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
-                        <row>⠀⠀⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
-                        <row>⠀⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
-                        <row>⠀⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
-                        <row>⠀⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗</row>
-                        <row>⠀⠀⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍</row>
-                        <row>⠀⠀⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀</row>
-                        <row>⠀⠀⠇⠊⠇⠇⠑⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞</row>
-                        <row>⠀⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑</row>
-                        <row>⠀⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝</row>
-                        <row>⠀⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝</row>
-                        <row>⠀⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠃⠑⠎⠅⠗⠊⠧⠑⠇⠎⠑⠒⠀⠠⠞⠗⠑</row>
+                        <row>⠀⠀⠀⠛⠁⠍⠇⠑⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
                         <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠃⠑⠎⠅⠗⠊⠧⠑⠇⠎⠑⠒⠀⠠⠞⠗⠑</row>
+                        <row>⠀⠀⠀⠛⠁⠍⠇⠑⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
                         <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑⠀⠞⠗⠑⠤</row>
+                        <row>⠀⠀⠀⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑⠀⠎⠕⠍</row>
+                        <row>⠀⠀⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
                         <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑⠀⠞⠗⠑⠤</row>
+                        <row>⠀⠀⠀⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑⠀⠎⠕⠍</row>
+                        <row>⠀⠀⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
                         <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠃⠑⠎⠅⠗⠊⠧⠑⠇⠎⠑⠒⠀⠠⠞⠗⠑</row>
+                        <row>⠀⠀⠀⠛⠁⠍⠇⠑⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
                         <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑⠀⠞⠗⠑⠤</row>
+                        <row>⠀⠀⠀⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑⠀⠎⠕⠍</row>
+                        <row>⠀⠀⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
                         <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                     </page>
                 </x:document>
             </x:expect>

@@ -6,6 +6,8 @@ $show-print-page-numbers: false !default;
 $show-braille-page-numbers: false !default;
 $line-spacing: false !default;
 $include-notes: true !default;
+$include-images: true !default;
+$include-captions: true !default;
 $notes-placement: end-of-volume !default;
 $choice-of-colophon: true !default;
 
@@ -550,19 +552,54 @@ prodnote::after, aside[epub|type~='z3998:production']::after {
 /*                Images                                                      */
 /* -------------------------------------------------------------------------- */
 
-imggroup, figure {
-        display: block;
-        
-        caption::before {
-            content: "Bildetekst:";
+/* Show image captions */
+@if $include-captions {
+        imggroup, figure:has(img) {
+                display: block;
+                
+                caption, figcaption {
+                        display: block;
+                        margin-top: 1;
+                        margin-bottom: 1;
+                        margin-left: 2;
+                        text-indent: 2;
+                        text-align: left;
+                        
+                        &::before {
+                                content: "Bildetekst: ";
+                        }
+                }
+        }
+} @else {
+        imggroup, figure:has(img) {
+            caption, figcaption {
+                display: none;
+            }
+        }
+}
+
+/* Show alt text for images with alt text */
+@if $include-images {
+        img[alt]:not([alt=''])::after {
+                display: block;
+                content: "Bildebeskrivelse: " attr(alt);
+                margin-top: 1;
+                margin-bottom: 1;
+                margin-left: 2;
+                text-indent: 2;
+                text-align: left;
         }
         
-        caption {
-            margin-top: 1;
-            margin-bottom: 1;
-            margin-left: 2;
-            text-indent: 2;
-            text-align: left;
+        /* Don't render decorative images */
+        img:not([alt])::after, img[alt='']::after {
+                content: none;
+        }
+} @else {
+        img {
+                display: none;
+                &::after {
+                        content: none;
+                }
         }
 }
 

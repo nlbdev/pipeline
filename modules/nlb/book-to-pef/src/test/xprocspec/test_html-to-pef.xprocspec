@@ -4,12 +4,19 @@
     xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+    xmlns:pef="http://www.daisy.org/ns/2008/pef"
     script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
+    
+    <!-- Note: these tests can maybe be simplified in the future if xprocspec starts supporting inline documents for x:option. See: https://github.com/daisy/xprocspec/issues/57 -->
+    
+    <x:scenario label="_">
+        <x:call step="nlb:html-to-pef">
+            <x:option name="toc-depth" select="0"/>
+        </x:call>
     
     <x:scenario label="basic test">
         <x:call step="nlb:html-to-pef">
             <x:option name="html" select="resolve-uri('../resources/HTML/book.xhtml')"/>
-            <x:option name="toc-depth" select="0"/>
             <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
@@ -20,5 +27,65 @@
         <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath"
             test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
     </x:scenario>
-    
+        
+        <x:scenario label="images, figures, figcaptions and alt-text">
+            <x:call>
+                <x:option name="html" select="resolve-uri('../resources/html-to-pef/2/book.xhtml')"/>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="page-height" select="150"/>
+                <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠃⠑⠎⠅⠗⠊⠧⠑⠇⠎⠑⠒⠀⠠⠞⠗⠑</row>
+                        <row>⠀⠀⠀⠛⠁⠍⠇⠑⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠃⠑⠎⠅⠗⠊⠧⠑⠇⠎⠑⠒⠀⠠⠞⠗⠑</row>
+                        <row>⠀⠀⠀⠛⠁⠍⠇⠑⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑⠀⠞⠗⠑⠤</row>
+                        <row>⠀⠀⠀⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑⠀⠎⠕⠍</row>
+                        <row>⠀⠀⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑⠀⠞⠗⠑⠤</row>
+                        <row>⠀⠀⠀⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑⠀⠎⠕⠍</row>
+                        <row>⠀⠀⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠃⠑⠎⠅⠗⠊⠧⠑⠇⠎⠑⠒⠀⠠⠞⠗⠑</row>
+                        <row>⠀⠀⠀⠛⠁⠍⠇⠑⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑⠀⠞⠗⠑⠤</row>
+                        <row>⠀⠀⠀⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑⠀⠎⠕⠍</row>
+                        <row>⠀⠀⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+    </x:scenario>
 </x:description>
