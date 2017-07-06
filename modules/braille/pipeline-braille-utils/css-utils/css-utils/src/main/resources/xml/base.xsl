@@ -56,6 +56,25 @@
     <xsl:variable name="css:NON_NEGATIVE_INTEGER_RE_groups" select="0"/>
     
     <!--
+        positive <integer>
+    -->
+    <xsl:variable name="css:POSITIVE_INTEGER_RE" select="'[1-9][0-9]*'"/>
+    <xsl:variable name="css:POSITIVE_INTEGER_RE_groups" select="0"/>
+    
+    <!--
+        positive <number> (normalized)
+    -->
+    <xsl:variable name="css:POSITIVE_NUMBER_RE" select="'[1-9][0-9]*|(0|[1-9][0-9]*)\.[0-9]*?[1-9]'"/>
+    <xsl:variable name="css:POSITIVE_NUMBER_RE_groups" select="1"/>
+    
+    <!--
+        positive <percentage>
+    -->
+    <xsl:variable name="css:POSITIVE_PERCENTAGE_RE" select="concat('(',$css:POSITIVE_NUMBER_RE,')%')"/>
+    <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_number" select="1"/>
+    <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_groups" select="1 + $css:POSITIVE_NUMBER_RE_groups"/>
+    
+    <!--
         <string>
     -->
     <xsl:variable name="css:STRING_RE">'[^']*'|"[^"]*"</xsl:variable>

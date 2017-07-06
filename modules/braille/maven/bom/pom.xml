@@ -246,7 +246,7 @@
             <dependency>
                 <groupId>org.daisy.braille</groupId>
                 <artifactId>braille-css</artifactId>
-                <version>1.13.0</version>
+                <version>1.13.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.liblouis</groupId>

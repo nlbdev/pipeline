@@ -561,4 +561,25 @@
 		</x:expect>
 	</x:scenario>
 	
+	<x:scenario label="test_36">
+		<x:call function="css:round-line-height">
+			<x:param select="'0.9'"/>
+		</x:call>
+		<x:expect label="result" select="'1'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_37">
+		<x:call function="css:round-line-height">
+			<x:param select="'1.7'"/>
+		</x:call>
+		<x:expect label="result" select="'1.75'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_38">
+		<x:call function="css:round-line-height">
+			<x:param select="'240%'"/>
+		</x:call>
+		<x:expect label="result" select="'2.5'"/>
+	</x:scenario>
+	
 </x:description>

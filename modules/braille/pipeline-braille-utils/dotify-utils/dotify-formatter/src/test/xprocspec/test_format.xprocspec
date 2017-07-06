@@ -11664,4 +11664,77 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_103">
+    <x:documentation>
+      Tests line-height:1.3
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="{ text-transform:none } @page { size: 40 25 }">
+            <body>
+              <p style="display: block; line-height: 1.3">
+                ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
+              </p>
+              <p style="display: block; line-height: 1.3; margin-bottom: 1;">
+                ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
+              </p>
+              <p style="display: block; line-height: 1.3">
+                ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
+              </p>
+            </body>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="a" page-width="40" page-height="25" duplex="true" page-number-variable="page">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="a">
+            <block row-spacing="1.25">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿</block>
+            <block margin-bottom="1">
+              <block row-spacing="1.25">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿</block>
+            </block>
+            <block row-spacing="1.25">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿</block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="25" cols="40" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row rowgap="1">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row rowgap="1">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row/>
+                  <row>⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>
