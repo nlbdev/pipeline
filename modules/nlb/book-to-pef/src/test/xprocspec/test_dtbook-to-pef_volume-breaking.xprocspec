@@ -18,6 +18,7 @@
         <x:call step="nlb:dtbook-to-pef">
             <x:option name="show-print-page-numbers" select="'false'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="toc-depth" select="0"/>
             <x:option name="maximum-number-of-sheets" select="4"/>
         </x:call>
         
@@ -29,8 +30,14 @@
                             <book>
                                 <bodymatter>
                                     <level1>
-                                        <h1>h1</h1>
-                                        <!-- 200 paragraphs -->
+                                        <h1>big</h1>
+                                        
+                                        <!-- 250 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -57,12 +64,12 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('volume-breaking-1/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="volume-breaking-1/output-dir/book.pef" />
+                <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" />
             </x:context>
             <x:expect label="40 short paragraphs, page height 15 and max sheets 1 (1 sheet = 2 braille pages), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
         </x:scenario>
@@ -85,12 +92,12 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-2/output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-2/output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('volume-breaking-2/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="volume-breaking-2/output-dir/book.pef" />
+                <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" />
             </x:context>
             <x:expect label="2 short paragraphs, but in different book 'parts', should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
         </x:scenario>
@@ -132,7 +139,9 @@
                                         <level2>
                                             <h2>medium</h2>
                                             
-                                            <!-- 120 paragraphs -->
+                                            <!-- 140 paragraphs -->
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -151,7 +160,9 @@
                                         <level2>
                                             <h2>medium</h2>
                                             
-                                            <!-- 120 paragraphs -->
+                                            <!-- 140 paragraphs -->
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -171,7 +182,20 @@
                                         <level2>
                                             <h2>big</h2>
                                             
-                                            <!-- 120 paragraphs -->
+                                            <!-- 250 paragraphs -->
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -223,12 +247,12 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-3/output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-3/output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('volume-breaking-3/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="volume-breaking-3/output-dir/book.pef" />
+                <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" />
             </x:context>
             <x:expect label="1 volume with 2 small chapters" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]])" equals="1"/>
             <x:expect label="2 volumes with 1 medium chapter each" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')]])" equals="2"/>
@@ -244,8 +268,17 @@
                             <book>
                                 <bodymatter>
                                     <level1>
-                                        <h1>h1</h1>
-                                        <!-- 200 paragraphs -->
+                                        <h1>big</h1>
+                                        
+                                        <!-- 250 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -269,12 +302,12 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="pef-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('volume-breaking-1/output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('volume-breaking-1/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="volume-breaking-1/output-dir/book.pef" />
+                <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef" />
             </x:context>
             <x:expect label="There should be 2 volumes with bodymatter content" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
             <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
