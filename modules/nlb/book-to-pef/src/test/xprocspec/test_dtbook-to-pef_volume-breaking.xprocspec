@@ -541,6 +541,219 @@
             <x:expect label="The fifth part should have a volume break right before h6" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠋'" equals="true()"/>
         </x:scenario>
         
+        <x:scenario label="paragraph with inline elements: don't split volumes inside a paragraph; unless necessary" pending="https://github.com/nlbdev/pipeline/issues/86">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                            <book>
+                                <bodymatter>
+                                    <level1 class="part">
+                                        <p>Volume with frontmatter</p>
+                                    </level1>
+                                    <level1 class="part">
+                                        <!-- 300 occurences of "content" -->
+                                        <p>
+                                            <span>1</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        </p>
+                                        
+                                        <!-- 300 occurences of "content" -->
+                                        <p>
+                                            <span>2</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        </p>
+                                    </level1>
+                                    <level1 class="part">
+                                        <!-- 800 occurences of "content" -->
+                                        <p>
+                                            <span>3</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                            <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        </p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('7/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('7/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('7/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="7/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be 5 volumes" type="xpath" test="count(//pef:volume)" equals="5"/>
+            <x:expect label="The second volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[2]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The third volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[3]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The fourth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[4]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+            <x:expect label="The fifth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[5]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+        </x:scenario>
+        
+        <x:scenario label="paragraph without inline elements: don't split volumes inside a paragraph; unless necessary" pending="https://github.com/nlbdev/pipeline/issues/86">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                            <book>
+                                <bodymatter>
+                                    <level1 class="part">
+                                        <p>Volume with frontmatter</p>
+                                    </level1>
+                                    <level1 class="part">
+                                        <!-- 300 occurences of "content" -->
+                                        <p><![CDATA[
+                                            1
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                        ]]></p>
+                                        
+                                        <!-- 300 occurences of "content" -->
+                                        <p><![CDATA[
+                                            2
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                        ]]></p>
+                                    </level1>
+                                    <level1 class="part">
+                                        <!-- 800 occurences of "content" -->
+                                        <p><![CDATA[
+                                            3
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                            content content content content content content content content content content content content content content content content content content content content
+                                        ]]></p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('8/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('8/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('8/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="8/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be 5 volumes" type="xpath" test="count(//pef:volume)" equals="5"/>
+            <x:expect label="The second volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[2]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The third volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[3]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The fourth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[4]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+            <x:expect label="The fifth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[5]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+        </x:scenario>
+        
     </x:scenario>
-    
 </x:description>
