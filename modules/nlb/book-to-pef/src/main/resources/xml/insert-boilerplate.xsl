@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0"
-    xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
-
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+                exclude-result-prefixes="#all"
+                version="2.0">
+    
     <xsl:output indent="yes"/>
-
+    
     <xsl:param name="braille-standard" select="'(dots:6)(grade:0)'"/>
-    <xsl:variable name="contraction-grade"
-        select="replace($braille-standard, '.*\(grade:(.*)\).*', '$1')"/>  
-
-    <xsl:template match="frontmatter/docauthor">
+    <xsl:variable name="contraction-grade" select="replace($braille-standard, '.*\(grade:(.*)\).*', '$1')"/>
+    
+    <xsl:template match="@* | node()">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
-        <xsl:call-template name="add-information-based-from-metadata"/>
     </xsl:template>
-
-    <xsl:template match="node()" mode="#all" priority="-5">
+    
+    <xsl:template match="book[not(frontmatter)]">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates mode="#current"/>
+            <xsl:apply-templates select="@*"/>
+            <frontmatter>
+                <xsl:call-template name="add-information-based-from-metadata"/>
+            </frontmatter>
+            <xsl:apply-templates select="node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="frontmatter">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates select="node()[not(preceding-sibling::level1)]"/>
+            <xsl:call-template name="add-information-based-from-metadata"/>
+            <xsl:apply-templates select="level1"/>
+            <xsl:apply-templates select="node()[preceding-sibling::level1]"/>
         </xsl:copy>
     </xsl:template>
 
@@ -113,7 +125,6 @@
             <p class="pages">Antall Sider: </p>           
             <p class="return">Boka skal ikke returneres.</p>
             <p class="contact">Feil eller mangler kan meldes til punkt@nlb.no.</p>
-
         </level1>
     </xsl:template>
 
