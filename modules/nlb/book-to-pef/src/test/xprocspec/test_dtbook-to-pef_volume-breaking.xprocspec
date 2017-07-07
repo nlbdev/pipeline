@@ -22,7 +22,7 @@
             <x:option name="maximum-number-of-sheets" select="4"/>
         </x:call>
         
-        <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes">
+        <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes: seeking a balanced page number between these volumes">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -32,13 +32,7 @@
                                     <level1>
                                         <h1>big</h1>
                                         
-                                        <!-- 250 paragraphs -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <!-- 190 paragraphs -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -71,7 +65,9 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" />
             </x:context>
-            <x:expect label="40 short paragraphs, page height 15 and max sheets 1 (1 sheet = 2 braille pages), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+            <x:expect label="190 short paragraphs, default page height (28) and max sheets 4 (1 sheet = 2 braille pages; 1 volume = 8 pages - 1 titlepage - 1 colopohon), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+            <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="At least 20% of the content rows should be in the second bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
         </x:scenario>
         
         <x:scenario label="with parts: parts will be top level splitting points">
@@ -121,12 +117,12 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="5/pef-output-dir/book.pef" />
+                <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" />
             </x:context>
             <x:expect label="everything should fit in a single volume" type="xpath" test="count(//pef:volume)" equals="1"/>
         </x:scenario>
@@ -276,61 +272,6 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
-            </x:call>
-            <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" />
-            </x:context>
-            <x:expect label="1 volume with 2 small chapters" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]])" equals="1"/>
-            <x:expect label="2 volumes with 1 medium chapter each" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')]])" equals="2"/>
-            <x:expect label="2 big chapters spread across 4 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')] and not(.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]) and not(.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])])" equals="4"/>
-            <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
-        </x:scenario>
-        
-        <x:scenario label="if chapter &gt; max page number the chapter must be split in two or more volumes: seeking a balanced page number between these volumes">
-            <x:call>
-                <x:input port="source">
-                    <x:document type="inline" xml:base="file:/tmp/book.xml">
-                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
-                            <book>
-                                <bodymatter>
-                                    <level1>
-                                        <h1>big</h1>
-                                        
-                                        <!-- 250 paragraphs -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                    </level1>
-                                </bodymatter>
-                            </book>
-                        </dtbook>
-                    </x:document>
-                </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
@@ -338,9 +279,10 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef" />
             </x:context>
-            <x:expect label="There should be 2 volumes with bodymatter content" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
-            <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
-            <x:expect label="At least 20% of the content rows should be in the second bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="1 volume with 2 small chapters" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]])" equals="1"/>
+            <x:expect label="2 volumes with 1 medium chapter each" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')]])" equals="2"/>
+            <x:expect label="2 big chapters spread across 4 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')] and not(.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]) and not(.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])])" equals="4"/>
+            <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
         </x:scenario>
         
         <x:scenario label="regression test: volume division fails with maximum-number-of-sheets = 4 and 81 headlines">
@@ -376,6 +318,227 @@
                 <x:document type="file" base-uri="temp-dir" href="5/pef-output-dir/book.pef"/>
             </x:context>
             <x:expect label="The PEF should be generated" type="count" min="10"/>
+        </x:scenario>
+        
+        <x:scenario label="prefer splitting at lower level headings">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                            <book>
+                                <bodymatter>
+                                    <level1 class="part">
+                                        <h1>content h1</h1>
+                                        
+                                        <!-- 240 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <level2>
+                                            <h2>content h2</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </level2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                    </level1>
+                                    <level1 class="part">
+                                        <h1>content h1</h1>
+                                        
+                                        <!-- 240 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <level2>
+                                            <h2>content h2</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <level3>
+                                                <h3>content h3</h3>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            </level3>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </level2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                    </level1>
+                                    <level1 class="part">
+                                        <h1>content h1</h1>
+                                        
+                                        <!-- 240 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <level2>
+                                            <h2>content h2</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <level3>
+                                                <h3>content h3</h3>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <level4>
+                                                    <h4>content h4</h4>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                </level4>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            </level3>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </level2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                    </level1>
+                                    <level1 class="part">
+                                        <h1>content h1</h1>
+                                        
+                                        <!-- 240 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <level2>
+                                            <h2>content h2</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <level3>
+                                                <h3>content h3</h3>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <level4>
+                                                    <h4>content h4</h4>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <level5>
+                                                        <h5>content h5</h5>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    </level5>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                </level4>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            </level3>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </level2>
+                                        
+                                    </level1>
+                                    <level1 class="part">
+                                        <h1>content h1</h1>
+                                        
+                                        <!-- 240 paragraphs -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <level2>
+                                            <h2>content h2</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <level3>
+                                                <h3>content h3</h3>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <level4>
+                                                    <h4>content h4</h4>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <level5>
+                                                        <h5>content h5</h5>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        <level6>
+                                                            <h6>content h6</h6>
+                                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        </level6>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    </level5>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                </level4>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            </level3>
+                                        </level2>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('6/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('6/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef" />
+            </x:context>
+            <x:expect label="There should be 10 volumes with bodymatter content" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="10"/>
+            <x:expect label="The first part should have a volume break right before h2" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃'" equals="true()"/>
+            <x:expect label="The second part should have a volume break right before h3" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠉'" equals="true()"/>
+            <x:expect label="The third part should have a volume break right before h4" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠙'" equals="true()"/>
+            <x:expect label="The fourth part should have a volume break right before h5" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠑'" equals="true()"/>
+            <x:expect label="The fifth part should have a volume break right before h6" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠋'" equals="true()"/>
         </x:scenario>
         
     </x:scenario>
