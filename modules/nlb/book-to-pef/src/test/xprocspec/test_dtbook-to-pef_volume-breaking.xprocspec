@@ -102,7 +102,7 @@
             <x:expect label="2 short paragraphs, but in different book 'parts', should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
         </x:scenario>
         
-        <x:scenario label="with parts: fit small chapters in same volume, medium chapters in separate volume, and big chapters in multiple volumes" pending="https://github.com/nlbdev/pipeline/issues/63">
+        <x:scenario label="with parts: fit small chapters in same volume, medium chapters in separate volume, and big chapters in multiple volumes">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
