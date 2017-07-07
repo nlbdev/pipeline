@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/pre-processing.xsl">
+    
+    <x:scenario label="automatically give number to noterefs that are not already numbered">
+        <x:context>
+            <div>
+                <span epub:type="noteref">1</span>
+                <span epub:type="noteref">2</span>
+                <span epub:type="noteref">3</span>
+                <span epub:type="noteref">*</span>
+                <span epub:type="noteref">*</span>
+                <span epub:type="noteref">*</span>
+            </div>
+        </x:context>
+        
+        <x:expect>
+            <div>
+                <span epub:type="noteref">1</span>
+                <span epub:type="noteref">2</span>
+                <span epub:type="noteref">3</span>
+                <span epub:type="noteref">4</span>
+                <span epub:type="noteref">5</span>
+                <span epub:type="noteref">6</span>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="automatically give number to notes that are not already numbered">
+        <x:context>
+            <div>
+                <aside epub:type="note">
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="footnote">
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="endnote">
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="rearnote">
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+            </div>
+        </x:context>
+        
+        <x:expect>
+            <div>
+                <aside epub:type="note">
+                    <p>1 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="footnote">
+                    <p>2 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="endnote">
+                    <p>3 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="rearnote">
+                    <p>4 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="rename sectioning elements to 'section'">
+        <x:context>
+            <div>
+                <section id="a"/>
+                <article id="b"/>
+                <main id="c"/>
+            </div>
+        </x:context>
+        <x:expect>
+            <div>
+                <section id="a"/>
+                <section epub:type="article" id="b"/>
+                <section epub:type="main" id="c"/>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

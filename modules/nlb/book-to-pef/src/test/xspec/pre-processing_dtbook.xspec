@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+               stylesheet="../../main/resources/xml/pre-processing.xsl">
+    
+    <x:scenario label="automatically give number to noterefs that are not already numbered">
+        <x:context>
+            <div>
+                <noteref>1</noteref>
+                <noteref>2</noteref>
+                <noteref>3</noteref>
+                <noteref>*</noteref>
+                <noteref>*</noteref>
+                <noteref>*</noteref>
+            </div>
+        </x:context>
+        
+        <x:expect>
+            <div>
+                <noteref>1</noteref>
+                <noteref>2</noteref>
+                <noteref>3</noteref>
+                <noteref>4</noteref>
+                <noteref>5</noteref>
+                <noteref>6</noteref>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="automatically give number to notes that are not already numbered">
+        <x:context>
+            <div>
+                <note>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </note>
+                <note>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </note>
+                <note>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </note>
+            </div>
+        </x:context>
+        
+        <x:expect>
+            <div>
+                <note>
+                    <p>1 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </note>
+                <note>
+                    <p>2 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </note>
+                <note>
+                    <p>3 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </note>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
