@@ -121,7 +121,7 @@ level1:not(.part), level1.part > level2 {
 }
 level1:not(.part) level2, level1.part level3 {
         /* level 2 */
-        /*volume-break-inside: -obfl-keep(7);*/
+        volume-break-inside: -obfl-keep(7);
         
         & ~ level1:not(.part),
         & ~ level2:not(.part) {
@@ -130,7 +130,7 @@ level1:not(.part) level2, level1.part level3 {
 }
 level1:not(.part) level3, level1.part level4 {
         /* level 3 */
-        /*volume-break-inside: -obfl-keep(6);*/
+        volume-break-inside: -obfl-keep(6);
         
         & ~ level1:not(.part),
         & ~ level2:not(.part) {
@@ -139,7 +139,7 @@ level1:not(.part) level3, level1.part level4 {
 }
 level1:not(.part) level4, level1.part level5 {
         /* level 4 */
-        /*volume-break-inside: -obfl-keep(5);*/
+        volume-break-inside: -obfl-keep(5);
         
         & ~ level1:not(.part),
         & ~ level2:not(.part) {
@@ -148,7 +148,7 @@ level1:not(.part) level4, level1.part level5 {
 }
 level1:not(.part) level5, level1.part level6 {
         /* level 5 */
-        /*volume-break-inside: -obfl-keep(4);*/
+        volume-break-inside: -obfl-keep(4);
         
         & ~ level1:not(.part),
         & ~ level2:not(.part) {
@@ -157,7 +157,7 @@ level1:not(.part) level5, level1.part level6 {
 }
 level1:not(.part) level6 {
         /* level 6 */
-        /*volume-break-inside: -obfl-keep(3);*/
+        volume-break-inside: -obfl-keep(3);
         
         & ~ level1:not(.part),
         & ~ level2:not(.part) {
@@ -176,7 +176,7 @@ section:not([epub|type~='part']) {
         
         section {
                 /* level 2 */
-                /*volume-break-inside: -obfl-keep(7);*/
+                volume-break-inside: -obfl-keep(7);
                 
                 & ~ section {
                     /* level 2 except first sibling level 2 */
@@ -184,7 +184,7 @@ section:not([epub|type~='part']) {
                 
                 section {
                         /* level 3 */
-                        /*volume-break-inside: -obfl-keep(6);*/
+                        volume-break-inside: -obfl-keep(6);
                         
                         & ~ section {
                             /* level 3 except first sibling level 3 */
@@ -192,7 +192,7 @@ section:not([epub|type~='part']) {
                         
                         section {
                                 /* level 4 */
-                                /*volume-break-inside: -obfl-keep(5);*/
+                                volume-break-inside: -obfl-keep(5);
                                 
                                 & ~ section {
                                     /* level 4 except first sibling level 4 */
@@ -200,7 +200,7 @@ section:not([epub|type~='part']) {
                                 
                                 section {
                                         /* level 5 */
-                                        /*volume-break-inside: -obfl-keep(4);*/
+                                        volume-break-inside: -obfl-keep(4);
                                         
                                         & ~ section {
                                             /* level 5 except first sibling level 5 */
@@ -208,7 +208,7 @@ section:not([epub|type~='part']) {
                                         
                                         section {
                                                 /* level 6 */
-                                                /*volume-break-inside: -obfl-keep(3);*/
+                                                volume-break-inside: -obfl-keep(3);
                                                 
                                                 & ~ section {
                                                     /* level 6 except first sibling level 6 */
@@ -220,6 +220,30 @@ section:not([epub|type~='part']) {
                 }
         }
 }
+
+/* A headline must always have its two following pages in the same volume as itself (orphaned headline) */
+h1, h2, h3, h4, h5, h6 {
+    -obfl-keep-with-next-sheets: 2;
+}
+
+/* Avoid volume breaking inside certain DTBook elements (mainly block-level) */
+h1, h2, h3, h4, h5, h6,
+imggroup, prodnote, sidebar, note, annotation
+list, dl, table, poem,
+p, address, blockquote, byline, dateline, epigraph, author {
+    volume-break-inside: -obfl-keep(1);
+}
+
+/* Avoid volume breaking inside certain HTML elements (mainly block-level) */
+h1, h2, h3, h4, h5, h6,
+nav, header, hgroup,
+figure, footer, form,
+ol, ul, dl, table,
+canvas, audio, video,
+p, address, aside, blockquote, pre {
+    volume-break-inside: -obfl-keep(1);
+}
+
 
 /* Insert generated content at start of volume */
 @volume {
