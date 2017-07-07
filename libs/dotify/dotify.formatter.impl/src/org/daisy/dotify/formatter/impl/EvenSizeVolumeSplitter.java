@@ -29,7 +29,9 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 		if (sdc == null) {
 			sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
 		} else {
-			previouslyTried.put(sdc, sheetsFitInVolumes);
+			EvenSizeVolumeSplitterCalculator prvSdc = sdc;
+			sdc = null;
+			previouslyTried.put(prvSdc, sheetsFitInVolumes);
 			if (!sheetsFitInVolumes) {
 			
 				// Try with adjusted number of sheets
@@ -42,13 +44,25 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 					volumeOffset++;
 					sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
 				}
-			} else if (volumeOffset > 0) {
-			
-				// Try decreasing the volume count again
-				EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset - 1);
-				if (!previouslyTried.containsKey(esc)) {
-					volumeOffset--;
-					sdc = esc;
+			} else {
+				if (volumeOffset > 0) {
+					
+					// Try decreasing the volume count again
+					EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset - 1);
+					if (!previouslyTried.containsKey(esc)) {
+						volumeOffset--;
+						sdc = esc;
+					}
+				}
+				if (sdc == null) {
+					
+					// Try with up to date sheet count
+					EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
+					if (!previouslyTried.containsKey(esc)) {
+						sdc = esc;
+					} else {
+						sdc = prvSdc;
+					}
 				}
 			}
 		}
