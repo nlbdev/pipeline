@@ -102,6 +102,35 @@
             <x:expect label="2 short paragraphs, but in different book 'parts', should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
         </x:scenario>
         
+        <x:scenario label="with parts: don't force a volume break before the first part">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                            <book>
+                                <frontmatter>
+                                    <doctitle>doctitle</doctitle>
+                                    <docauthor>docauthor</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1 class="part">
+                                        <p>content</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="5/pef-output-dir/book.pef" />
+            </x:context>
+            <x:expect label="everything should fit in a single volume" type="xpath" test="count(//pef:volume)" equals="1"/>
+        </x:scenario>
+        
         <x:scenario label="with parts: fit small chapters in same volume, medium chapters in separate volume, and big chapters in multiple volumes">
             <x:call>
                 <x:input port="source">
