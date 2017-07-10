@@ -355,13 +355,11 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/margin-region-and-borders-input.obfl",
 		        "resource-files/dp2/margin-region-and-borders-expected.pef", true);
 	}
-	@Ignore // see https://github.com/joeha480/dotify/issues/196
 	@Test
 	public void testRowSpacingAndFooter() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/row-spacing-and-footer-input.obfl",
-		        "resource-files/dp2/row-spacing-and-footer-expected.pef", true);
+		        "resource-files/dp2/row-spacing-and-footer-expected.pef", false);
 	}
-	
 	@Test
 	public void testManualVolumeBreakingTOC() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/manual-volume-breaking-toc-input.obfl",
