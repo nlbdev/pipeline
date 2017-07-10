@@ -18,6 +18,7 @@
         <p:with-option name="query"
           select="concat('(input:css)(input:html)(output:css)(translator:nlb)(locale:no)(grade:',$grade,')(dots:',$dots,')')"
         />
+        <p:with-param port="parameters" name="force-norwegian" select="'false'"/>
       </px:transform>
     </p:declare-step>
   </x:script>
