@@ -4,9 +4,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.copyOfRange;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +44,7 @@ import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
+import org.daisy.pipeline.braille.common.TransformationException;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
@@ -180,7 +183,9 @@ public interface NLBTranslator {
 																	public BrailleTranslator _apply(LiblouisTranslator grade0Translator) {
 																		return __apply(
 																			logCreate(
-																				new TransformImpl(grade, dots, translator, grade0Translator))); }} ); }} )); }} )); }}
+																				new TransformImpl(grade, dots, translator, grade0Translator,
+																				                  // FIXME: other languages provider does not need to be liblouis
+																				                  liblouisTranslatorProvider))); }} ); }} )); }} )); }}
 			return empty;
 		}
 		
@@ -200,15 +205,18 @@ public interface NLBTranslator {
 			private final XProc xproc;
 			private final LiblouisTranslator translator;
 			private final LiblouisTranslator grade0Translator;
+			private final TransformProvider<? extends BrailleTranslator> otherLanguageTranslators;
 			private final int grade;
 			private final int dots;
 			
-			private TransformImpl(int grade, int dots, LiblouisTranslator translator, LiblouisTranslator grade0Translator) {
+			private TransformImpl(int grade, int dots, LiblouisTranslator translator, LiblouisTranslator grade0Translator,
+			                      TransformProvider<? extends BrailleTranslator> otherLanguageTranslators) {
 				Map<String,String> options = ImmutableMap.<String,String>of(
 					"text-transform", mutableQuery().add("id", this.getIdentifier()).toString());
 				xproc = new XProc(href, null, options);
 				this.translator = translator;
 				this.grade0Translator = grade0Translator;
+				this.otherLanguageTranslators = otherLanguageTranslators;
 				this.grade = grade;
 				this.dots = dots;
 			}
@@ -226,6 +234,35 @@ public interface NLBTranslator {
 			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
 				
 				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText) {
+					List<String> transformed = new ArrayList<String>();
+					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
+					String curLang = null;
+					for (CSSStyledText st : styledText) {
+						Map<String,String> attrs = st.getTextAttributes();
+						String lang = null;
+						if (attrs != null)
+							lang = attrs.remove("lang");
+						if (!(lang == null && curLang == null || lang == curLang)) {
+							if (!buffer.isEmpty()) {
+								for (String s : transform(buffer, curLang))
+									transformed.add(s);
+								buffer.clear(); }}
+						curLang = lang;
+						buffer.add(st); }
+					if (!buffer.isEmpty())
+						for (String s : transform(buffer, curLang))
+							transformed.add(s);
+					return transformed;
+				}
+				
+				private java.lang.Iterable<String> transform(List<CSSStyledText> styledText, String lang) {
+					if (lang == null)
+						return transformNorwegian(styledText);
+					else
+						return transform(styledText, lang, null);
+				}
+				
+				private java.lang.Iterable<String> transformNorwegian(List<CSSStyledText> styledText) {
 					List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 					// which segments are an url or e-mail address
 					List<Boolean> computer = new ArrayList<Boolean>();
@@ -244,9 +281,12 @@ public interface NLBTranslator {
 								for (String s : splitInclDelimiter(text, COMPUTER)) {
 									if (!s.isEmpty()) {
 										SimpleInlineStyle style = st.getStyle();
+										Map<String,String> attrs = st.getTextAttributes();
 										if (needStyleCopy) {
 											if (style != null)
-												style = (SimpleInlineStyle)style.clone(); }
+												style = (SimpleInlineStyle)style.clone();
+											if (attrs != null)
+												attrs = new HashMap<String,String>(attrs); }
 										segments.add(new CSSStyledText(s, style, attrs));
 										computer.add(c);
 										mapping.add(i);
@@ -258,7 +298,7 @@ public interface NLBTranslator {
 						braille[i] = "";
 					int i = 0;
 					boolean curComputer = false;
-					for (String b : transform(segments, computer)) {
+					for (String b : transform(segments, null, computer)) {
 						if (!computer.get(i) && curComputer)
 							braille[mapping.get(i)] += CLOSE_COMPUTER;
 						else if (computer.get(i) && !curComputer)
@@ -271,9 +311,7 @@ public interface NLBTranslator {
 					return Arrays.asList(braille);
 				}
 				
-				private java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, List<Boolean> computer) {
-					FromStyledTextToBraille translator = TransformImpl.this.translator.fromStyledTextToBraille();
-					FromStyledTextToBraille grade0Translator = TransformImpl.this.grade0Translator.fromStyledTextToBraille();
+				private java.lang.Iterable<String> transform(List<CSSStyledText> styledText, String lang, List<Boolean> computer) {
 					List<String> transformed = new ArrayList<String>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					boolean curUncontracted = false;
@@ -281,7 +319,7 @@ public interface NLBTranslator {
 					for (CSSStyledText st : styledText) {
 						SimpleInlineStyle style = st.getStyle();
 						boolean uncontracted; {
-							uncontracted = computer.get(i);
+							uncontracted = computer == null ? false : computer.get(i);
 							if (style != null) {
 								CSSProperty val = style.getProperty("text-transform");
 								if (val != null) {
@@ -297,18 +335,35 @@ public interface NLBTranslator {
 										if (values.isEmpty())
 											style.removeProperty("text-transform"); }}}}
 						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
-							for (String s : (curUncontracted ? grade0Translator : translator).transform(buffer))
+							for (String s : transformWithContractionGrade(buffer, lang, curUncontracted))
 								transformed.add(s);
 							buffer = new ArrayList<CSSStyledText>(); }
 						curUncontracted = uncontracted;
 						buffer.add(st);
 						i++; }
 					if (!buffer.isEmpty())
-						for (String s : (curUncontracted ? grade0Translator : translator).transform(buffer))
+						for (String s : transformWithContractionGrade(buffer, lang, curUncontracted))
 							transformed.add(s);
 					return transformed;
 				}
 			};
+			
+			private java.lang.Iterable<String> transformWithContractionGrade(List<CSSStyledText> styledText, String lang, boolean uncontracted) {
+				FromStyledTextToBraille t; {
+					if (lang == null) {
+						if (!uncontracted)
+							t = translator.fromStyledTextToBraille();
+						else
+							t = grade0Translator.fromStyledTextToBraille(); }
+					else {
+						MutableQuery q = mutableQuery().add("locale", lang).add("contraction", uncontracted ? "no" : "full");
+						try {
+							t = otherLanguageTranslators.get(q).iterator().next().fromStyledTextToBraille(); }
+						catch (NoSuchElementException e) {
+							throw new TransformationException("Could not find a sub-translator for language " + lang
+							                                  + " (" + (uncontracted ? "un" : "") + "contracted)"); }}}
+				return t.transform(styledText);
+			}
 			
 			@Override
 			public LineBreakingFromStyledText lineBreakingFromStyledText() {
@@ -318,6 +373,33 @@ public interface NLBTranslator {
 			private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
 				
 				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText) {
+					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
+					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
+					String curLang = null;
+					for (CSSStyledText st : styledText) {
+						Map<String,String> attrs = st.getTextAttributes();
+						String lang = null;
+						if (attrs != null)
+							lang = attrs.remove("lang");
+						if (!(lang == null && curLang == null || lang == curLang)) {
+							if (!buffer.isEmpty()) {
+								lineIterators.add(transform(buffer, curLang));
+								buffer.clear(); }}
+						curLang = lang;
+						buffer.add(st); }
+					if (!buffer.isEmpty()) {
+						lineIterators.add(transform(buffer, curLang)); }
+					return concatLineIterators(lineIterators);
+				}
+				
+				private LineIterator transform(List<CSSStyledText> styledText, String lang) {
+					if (lang == null)
+						return transformNorwegian(styledText);
+					else
+						return transform(styledText, lang, false);
+				}
+				
+				private LineIterator transformNorwegian(List<CSSStyledText> styledText) {
 					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					boolean curComputer = false;
@@ -331,30 +413,31 @@ public interface NLBTranslator {
 									if (computer != curComputer && !buffer.isEmpty()) {
 										if (curComputer)
 											lineIterators.add(new NonBreakingBrailleString(OPEN_COMPUTER));
-										lineIterators.add(transform(buffer, curComputer));
+										lineIterators.add(transform(buffer, null, curComputer));
 										if (curComputer)
 											lineIterators.add(new NonBreakingBrailleString(CLOSE_COMPUTER));
 										buffer = new ArrayList<CSSStyledText>();
 										curComputer = computer; }
 									SimpleInlineStyle style = st.getStyle();
+									Map<String,String> attrs = st.getTextAttributes();
 									if (needStyleCopy) {
 										if (style != null)
-											style = (SimpleInlineStyle)style.clone(); }
+											style = (SimpleInlineStyle)style.clone();
+										if (attrs != null)
+											attrs = new HashMap<String,String>(attrs); }
 									buffer.add(new CSSStyledText(s, style, attrs));
 									needStyleCopy = true; }
 								computer = !computer; }}}
 					if (!buffer.isEmpty()) {
 						if (curComputer)
 							lineIterators.add(new NonBreakingBrailleString(OPEN_COMPUTER));
-						lineIterators.add(transform(buffer, curComputer));
+						lineIterators.add(transform(buffer, null, curComputer));
 						if (curComputer)
 							lineIterators.add(new NonBreakingBrailleString(CLOSE_COMPUTER)); }
 					return concatLineIterators(lineIterators);
 				}
 				
-				private LineIterator transform(java.lang.Iterable<CSSStyledText> styledText, boolean computer) {
-					LineBreakingFromStyledText translator = TransformImpl.this.translator.lineBreakingFromStyledText();
-					LineBreakingFromStyledText grade0Translator = TransformImpl.this.grade0Translator.lineBreakingFromStyledText();
+				private LineIterator transform(List<CSSStyledText> styledText, String lang, boolean computer) {
 					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					boolean curUncontracted = false;
@@ -377,13 +460,30 @@ public interface NLBTranslator {
 										if (values.isEmpty())
 											style.removeProperty("text-transform"); }}}}
 						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
-							lineIterators.add((curUncontracted ? grade0Translator : translator).transform(buffer));
+							lineIterators.add(transformWithContractionGrade(buffer, lang, curUncontracted));
 							buffer = new ArrayList<CSSStyledText>(); }
 						curUncontracted = uncontracted;
 						buffer.add(st); }
 					if (!buffer.isEmpty())
-						lineIterators.add((curUncontracted ? grade0Translator : translator).transform(buffer));
+						lineIterators.add(transformWithContractionGrade(buffer, lang, curUncontracted));
 					return concatLineIterators(lineIterators);
+				}
+				
+				private LineIterator transformWithContractionGrade(List<CSSStyledText> styledText, String lang, boolean uncontracted) {
+					LineBreakingFromStyledText t; {
+						if (lang == null) {
+							if (!uncontracted)
+								t = translator.lineBreakingFromStyledText();
+							else
+								t = grade0Translator.lineBreakingFromStyledText(); }
+						else {
+							MutableQuery q = mutableQuery().add("locale", lang).add("contraction", uncontracted ? "no" : "full");
+							try {
+								t = otherLanguageTranslators.get(q).iterator().next().lineBreakingFromStyledText(); }
+							catch (NoSuchElementException e) {
+								throw new TransformationException("Could not find a sub-translator for language " + lang
+								                                  + " (" + (uncontracted ? "un" : "") + "contracted)"); }}}
+					return t.transform(styledText);
 				}
 			};
 			

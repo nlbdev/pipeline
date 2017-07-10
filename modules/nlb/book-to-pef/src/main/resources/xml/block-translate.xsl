@@ -11,6 +11,7 @@
 	<xsl:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-template.xsl"/>
 	
 	<xsl:variable name="em-count" select="count(//html:em | //html:i | //dtb:em | //dtb:i)"/>
+	<xsl:variable name="main-locale" select="'no'"/>
 	
 	<xsl:param name="text-transform" required="yes"/>
 	
@@ -21,9 +22,13 @@
 		<xsl:variable name="style" as="xs:string*">
 			<xsl:apply-templates mode="style"/>
 		</xsl:variable>
+		<xsl:variable name="lang" select="string(ancestor-or-self::*[@xml:lang][1]/string(@xml:lang))"/>
 		<xsl:variable name="new-text-nodes" as="xs:string*">
 			<xsl:apply-templates select="node()[1]" mode="emphasis">
-				<xsl:with-param name="segments" select="pf:text-transform($text-transform,$text,$style)"/>
+				<xsl:with-param name="segments" select="if ($lang=$main-locale)
+				                                        then pf:text-transform($text-transform, $text, $style)
+				                                        else pf:text-transform($text-transform, $text, $style,
+				                                                               for $_ in 1 to count($text) return $lang)"/>
 			</xsl:apply-templates>
 		</xsl:variable>
 		<xsl:apply-templates select="node()[1]" mode="treewalk">

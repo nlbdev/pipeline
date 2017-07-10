@@ -140,7 +140,7 @@
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml">
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="no">
             <!--
                 Always use dots 23 (⠆) in front of bold and dots 56 (⠰) after bold.
             -->
@@ -183,7 +183,7 @@
     <x:expect label="result" type="compare" >
       <x:document type="inline">
         <_ style="text-transform: none">
-        <div xmlns="http://www.w3.org/1999/xhtml">
+        <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="no-Brai">
           <p>
             ⠓⠥⠝⠙
             ⠓⠥⠝⠙<strong>⠠⠄⠑⠝⠠⠄</strong>
@@ -233,7 +233,7 @@
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml"> foobar <div style="text-transform:uncontracted"
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="no"> foobar <div style="text-transform:uncontracted"
               > foobar </div>
           </div>
         </x:document>
@@ -246,7 +246,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <_ style="text-transform: none">
-        <div xmlns="http://www.w3.org/1999/xhtml"> ⠋⠕⠕⠃⠼ <div> ⠋⠕⠕⠃⠁⠗ </div>
+        <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="no-Brai"> ⠋⠕⠕⠃⠼ <div> ⠋⠕⠕⠃⠁⠗ </div>
         </div>
         </_>
       </x:document>
@@ -391,8 +391,8 @@
           <bodymatter xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
             <level1>
               <p style="display: block">a ble at ll</p>
-              <p style="display: block; text-transform: uncontracted" xml:lang="en">a ble at ll</p>
-              <level2 xml:lang="en" style="text-transform: uncontracted">
+              <p style="display: block; text-transform: uncontracted">a ble at ll</p>
+              <level2 style="text-transform: uncontracted">
                 <p style="display: block">a ble at ll</p>
               </level2>
             </level1>
@@ -410,11 +410,72 @@
           <bodymatter xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
             <level1>
               <p style="display: block">⠰⠁ ⠃ ⠁ ⠇⠇</p>
-              <p style="display: block" xml:lang="en-Brai">⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇</p>
-              <level2 xml:lang="en-Brai">
+              <p style="display: block">⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇</p>
+              <level2>
                 <p style="display: block">⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇</p>
               </level2>
             </level1>
+          </bodymatter>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="mixed lang">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <bodymatter xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <p style="display: block"> %(/+ </p>
+            <p style="display: block" xml:lang="en"> %(/+ </p>
+          </bodymatter>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="1"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_ xmlns="" style="text-transform: none">
+          <bodymatter xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <p style="display: block"> ⠨⠴⠦⠌⠖ </p>
+            <p style="display: block" xml:lang="en-Brai"> ⠈⠒⠏⠶⠸⠌⠈⠬ </p>
+          </bodymatter>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="mixed lang within block" xfail="true">
+    <x:documentation>
+      not implemented yet
+    </x:documentation>
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <bodymatter xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <p style="display: block">
+              %(/+
+              <span xml:lang="en">%(/+</span>
+            </p>
+          </bodymatter>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="1"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_ xmlns="" style="text-transform: none">
+          <bodymatter xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <p style="display: block">
+              ⠨⠴⠦⠌⠖
+              <span xml:lang="en-Brai"> ⠈⠒⠏⠶⠸⠌⠈⠬ </span>
+            </p>
           </bodymatter>
         </_>
       </x:document>
