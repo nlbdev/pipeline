@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
@@ -36,14 +37,11 @@
         </x:call>
         <x:context label="result">
             <x:document type="file" base-uri="temp-dir" href="notes-numbering/pef-output-dir/test_dtbook-to-pef_notes.pef"
-                        select="/*/*[local-name()='body']" />
+                        select="(//pef:section)[position() &gt; 2]//pef:page"/>
         </x:context>
-        <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:expect label="result" type="compare">
             <x:document type="inline">
-                <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="32" rows="28" rowgap="0" duplex="true">
-                        <section>
-                            <page>
+                            <page xmlns="http://www.daisy.org/ns/2008/pef">
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
@@ -73,9 +71,9 @@
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
-                        </section>
-                        <section>
-                            <page>
+            </x:document>
+            <x:document type="inline">
+                            <page xmlns="http://www.daisy.org/ns/2008/pef">
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
@@ -86,9 +84,6 @@
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
                             </page>
-                        </section>
-                    </volume>
-                </body>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -125,15 +120,19 @@
             <x:option name="pef-output-dir" select="resolve-uri('volume-notes/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('volume-notes/temp-dir',$temp-dir)"/>
         </x:call>
-        <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="volume-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
-                        select="/*/*[local-name()='body']" />
+        
+        <x:context label="pef">
+            <x:document type="file" base-uri="temp-dir" href="volume-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"/>
         </x:context>
-        <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:expect label="There should be 3 volumes" type="xpath" test="count(//pef:volume)" equals="3"/>
+        
+        <x:context label="First volume">
+            <x:document type="file" base-uri="temp-dir" href="volume-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
+                        select="(//pef:volume)[1]//pef:section[last()]"/>
+        </x:context>
+        <x:expect label="result - first volume" type="compare">
             <x:document type="inline">
-                <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="32" rows="28" rowgap="0" duplex="true">
-                        <section>
+                        <section xmlns="http://www.daisy.org/ns/2008/pef">
                             <page>
                                 <row/>
                                 <row/>
@@ -165,9 +164,16 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
-                    </volume>
-                    <volume cols="32" rows="28" rowgap="0" duplex="true">
-                        <section>
+            </x:document>
+        </x:expect>
+        
+        <x:context label="Second volume">
+            <x:document type="file" base-uri="temp-dir" href="volume-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
+                select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
+        </x:context>
+        <x:expect label="result - second volume" type="compare">
+            <x:document type="inline">
+                        <section xmlns="http://www.daisy.org/ns/2008/pef">
                             <page>
                                 <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
                                 <row>⠀⠀⠀⠀⠃⠃⠀⠠⠼⠃⠀⠇⠇</row>
@@ -199,7 +205,9 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
-                        <section>
+            </x:document>
+            <x:document type="inline">
+                        <section xmlns="http://www.daisy.org/ns/2008/pef">
                             <page>
                                 <row/>
                                 <row/>
@@ -211,9 +219,16 @@
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
                             </page>
                         </section>
-                    </volume>
-                    <volume cols="32" rows="28" rowgap="0" duplex="true">
-                        <section>
+            </x:document>
+        </x:expect>
+        
+        <x:context label="Third volume">
+            <x:document type="file" base-uri="temp-dir" href="volume-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
+                select="(//pef:volume)[3]//pef:section[position() &gt; 1]"/>
+        </x:context>
+        <x:expect label="result - third volume" type="compare">
+            <x:document type="inline">
+                        <section xmlns="http://www.daisy.org/ns/2008/pef">
                             <page>
                                 <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
                                 <row/>
@@ -245,7 +260,9 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
-                        <section>
+            </x:document>
+            <x:document type="inline">
+                        <section xmlns="http://www.daisy.org/ns/2008/pef">
                             <page>
                                 <row/>
                                 <row/>
@@ -256,8 +273,6 @@
                                 <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
                             </page>
                         </section>
-                    </volume>
-                </body>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -294,15 +309,14 @@
             <x:option name="pef-output-dir" select="resolve-uri('footnotes/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('footnotes/temp-dir',$temp-dir)"/>
         </x:call>
+        
         <x:context label="result">
             <x:document type="file" base-uri="temp-dir" href="footnotes/pef-output-dir/test_dtbook-to-pef_notes.pef"
-                        select="/*/*[local-name()='body']" />
+                        select="(//pef:section)[last()]"/>
         </x:context>
-        <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:expect label="result - second volume" type="compare">
             <x:document type="inline">
-                <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="32" rows="28" rowgap="0" duplex="true">
-                        <section>
+                        <section xmlns="http://www.daisy.org/ns/2008/pef">
                             <page>
                                 <row/>
                                 <row/>
@@ -364,8 +378,6 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
-                    </volume>
-                </body>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -402,15 +414,20 @@
             <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('end-of-book-notes/temp-dir',$temp-dir)"/>
         </x:call>
-        <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
-                        select="/*/*[local-name()='body']" />
+        
+        <x:context label="pef">
+            <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"/>
         </x:context>
-        <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+        
+        <x:context label="First volume">
+            <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
+                        select="(//pef:volume)[1]//pef:section[last()]"/>
+        </x:context>
+        
+        <x:expect label="result - first volume" type="compare">
             <x:document type="inline">
-                <body xmlns="http://www.daisy.org/ns/2008/pef">
-                    <volume cols="32" rows="28" rowgap="0" duplex="true">
-                        <section>
+                        <section xmlns="http://www.daisy.org/ns/2008/pef">
                             <page>
                                 <row/>
                                 <row/>
@@ -442,8 +459,17 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
-                    </volume>
-                    <volume cols="32" rows="28" rowgap="0" duplex="true">
+            </x:document>
+        </x:expect>
+        
+        <x:context label="Second volume">
+            <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
+                        select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
+        </x:context>
+            
+            <x:expect label="result - second volume" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
                         <section>
                             <page>
                                 <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
@@ -489,8 +515,7 @@
                                 <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
                             </page>
                         </section>
-                    </volume>
-                </body>
+                    </_>
             </x:document>
         </x:expect>
     </x:scenario>

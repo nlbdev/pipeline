@@ -474,14 +474,11 @@
             </x:call>
             
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"  select="/*/*[local-name()='body']"  />
+                <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"  select="(//pef:section)[position() &gt; 2]//pef:page"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
-                    <body xmlns="http://www.daisy.org/ns/2008/pef">
-                        <volume cols="32" rows="28" rowgap="0" duplex="true">
-                            <section>
-                                <page>
+                                <page xmlns="http://www.daisy.org/ns/2008/pef">
                                     <row>⠀⠀⠀⠀⠁⠁⠁⠄</row>
                                     <row>⠀⠀⠀⠀⠀⠀⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                     <row>⠀⠀⠀⠀⠀⠀⠤⠀⠃⠃⠃⠀⠃⠃⠃</row>
@@ -511,9 +508,6 @@
                                     <row/>
                                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                                 </page>
-                            </section>
-                        </volume>
-                    </body>
                 </x:document>
             </x:expect>
         </x:scenario>
@@ -624,14 +618,11 @@
                 <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef"  select="/*/*[local-name()='body']"  />
+                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef"  select="(//pef:section)[position() &gt; 2]//pef:page"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
-                    <body xmlns="http://www.daisy.org/ns/2008/pef">
-                        <volume cols="32" rows="28" rowgap="0" duplex="true">
-                            <section>
-                                <page>
+                                <page xmlns="http://www.daisy.org/ns/2008/pef">
                                     <row>⠀⠀⠀⠀⠷⠀⠠⠱⠀⠱</row>
                                     <row>⠀⠀⠀⠀⠅⠕⠗⠞⠤⠀⠇⠁⠝⠛⠤⠤</row>
                                     <row>⠀⠀⠀⠀⠤⠅⠕⠗⠞⠀⠤⠤⠇⠁⠝⠛</row>
@@ -661,9 +652,6 @@
                                     <row/>
                                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                                 </page>
-                            </section>
-                        </volume>
-                    </body>
                 </x:document>
             </x:expect>
         </x:scenario>

@@ -28,29 +28,15 @@
       <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
     </x:call>
     <x:context label="result">
-      <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" />
+      <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
     </x:context>
-    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+    <x:expect label="result" type="compare">
       <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
-          <head>
-            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
-              <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>no</dc:language>
-            </meta>
-          </head>
-          <body>
-            <volume cols="28" rows="28" rowgap="0" duplex="true">
-              <section>
-                <page>
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
                     <row>⠀⠀⠀⠠⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠤</row>
                     <row>⠀⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
                     <row>⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
                 </page>
-              </section>
-            </volume>
-          </body>
-        </pef>
       </x:document>
     </x:expect>
   </x:scenario>
