@@ -191,9 +191,14 @@ class PageSequenceBuilder2 extends View<PageImpl> implements Section {
 				force = res.getHead().size()==0;
 				data = res.getTail();
 				List<RowGroup> head = res.getHead();
+				int i = head.size();
 				for (RowGroup rg : head) {
+					i--;
 					addProperties(rg);
-					for (RowImpl r : rg.getRows()) { 
+					List<RowImpl> rows = rg.getRows();
+					int j = rows.size();
+					for (RowImpl r : rows) {
+						j--;
 						if (r.shouldAdjustForMargin()) {
 							// clone the row as not to append the margins twice
 							r = RowImpl.withRow(r);
@@ -203,6 +208,10 @@ class PageSequenceBuilder2 extends View<PageImpl> implements Section {
 							for (MarginRegion mr : currentPage().getPageTemplate().getRightMarginRegion()) {
 								r.setRightMargin(r.getRightMargin().append(getMarginRegionValue(mr, r, true)));
 							}
+						}
+						if (i == 0 && j == 0) {
+							// this is the last row; set row spacing to 1 because this is how sph treated it
+							r.setRowSpacing(null);
 						}
 						currentPage().newRow(r);
 					}
