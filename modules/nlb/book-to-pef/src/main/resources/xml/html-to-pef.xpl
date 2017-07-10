@@ -69,6 +69,9 @@
     <p:option name="preview-output-dir"/>
     <p:option name="temp-dir"/>
     
+    <!-- for testing purposes -->
+    <p:input port="parameters" kind="parameter" primary="false"/>
+    
     <p:import href="http://www.nlb.no/pipeline/modules/braille/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -78,15 +81,17 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl"/>
     
     <p:in-scope-names name="in-scope-names"/>
+    <px:merge-parameters>
+        <p:input port="source">
+            <p:pipe step="in-scope-names" port="result"/>
+            <p:pipe step="main" port="parameters"/>
+        </p:input>
+    </px:merge-parameters>
     <px:delete-parameters parameter-names="stylesheet
                                            include-obfl
                                            pef-output-dir
                                            preview-output-dir
-                                           temp-dir">
-        <p:input port="source">
-            <p:pipe step="in-scope-names" port="result"/>
-        </p:input>
-    </px:delete-parameters>
+                                           temp-dir"/>
     <px:add-parameters>
         <p:with-param name="main-document-language" select="'no'"/>
     </px:add-parameters>
