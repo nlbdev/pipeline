@@ -244,6 +244,10 @@ p, address, aside, blockquote, pre {
     volume-break-inside: -obfl-keep(1);
 }
 
+/* Avoid page breaks after a headline (orphaned headline) */
+h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+}
 
 /* Insert generated content at start of volume */
 @volume {
