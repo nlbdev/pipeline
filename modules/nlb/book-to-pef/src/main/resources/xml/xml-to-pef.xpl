@@ -125,6 +125,9 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
         </p:documentation>
     </p:option>
     <p:option name="notes-placement" select="'end-of-volume'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Tekstelementer: Plassering av noter</h2>
+        </p:documentation>
         <p:pipeinfo>
             <px:data-type>
                 <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
