@@ -225,93 +225,63 @@ public interface NLBTranslator {
 			
 			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
 				
-				// FIXME: simplify! see implementation of lineBreakingFromStyledText()
-					
 				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText) {
-					int size = size(styledText);
-					String[] text = new String[size];
-					SimpleInlineStyle[] style = new SimpleInlineStyle[size];
-					int i = 0;
-					for (CSSStyledText t : styledText) {
-						text[i] = t.getText();
-						style[i] = t.getStyle();
-						i++; }
-					return Arrays.asList(transform(text, style));
-				}
-				
-				private String[] transform(String[] text, SimpleInlineStyle[] cssStyle) {
-					String[] segments;
+					List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 					// which segments are an url or e-mail address
-					boolean[] computer;
+					List<Boolean> computer = new ArrayList<Boolean>();
 					// mapping from index in segments to index in text
-					int[] mapping; {
-						List<String> l1 = new ArrayList<String>();
-						List<Boolean> l2 = new ArrayList<Boolean>();
-						List<Integer> l3 = new ArrayList<Integer>();
-						for (int i = 0; i < text.length; i++) {
-							String t = text[i];
-							if (t.isEmpty()) {
-								l1.add(t);
-								l2.add(false);
-								l3.add(i); }
+					List<Integer> mapping = new ArrayList<Integer>(); {
+						int i = 0;
+						for (CSSStyledText st : styledText) {
+							String text = st.getText();
+							if (text.isEmpty()) {
+								segments.add(st);
+								computer.add(false);
+								mapping.add(i); }
 							else {
-								Matcher m = COMPUTER.matcher(t);
-								int j = 0;
-								String s;
-								while (m.find()) {
-									s = t.substring(j, m.start());
+								boolean c = false;
+								boolean needStyleCopy = false;
+								for (String s : splitInclDelimiter(text, COMPUTER)) {
 									if (!s.isEmpty()) {
-										l1.add(s);
-										l2.add(false);
-										l3.add(i); }
-									s = m.group();
-									if (!s.isEmpty()) {
-										l1.add(s);
-										l2.add(true);
-										l3.add(i); }
-									j = m.end(); }
-								s = t.substring(j);
-								if (!s.isEmpty()) {
-									l1.add(s);
-									l2.add(false);
-									l3.add(i); }}}
-						int len = l1.size();
-						segments = new String[len];
-						computer = new boolean[len];
-						mapping = new int[len];
-						for (int i = 0; i < len; i++) {
-							segments[i] = l1.get(i);
-							computer[i] = l2.get(i);
-							mapping[i] = l3.get(i); }}
-					String[] brailleSegments;
-					SimpleInlineStyle[] segmentsStyle = new SimpleInlineStyle[segments.length];
-					for (int i = 0; i < segments.length; i++)
-						segmentsStyle[i] = cssStyle[mapping[i]];
-					brailleSegments = transform(segments, segmentsStyle, computer);
-					String braille[] = new String[text.length];
+										SimpleInlineStyle style = st.getStyle();
+										if (needStyleCopy) {
+											if (style != null)
+												style = (SimpleInlineStyle)style.clone(); }
+										segments.add(new CSSStyledText(s, style, attrs));
+										computer.add(c);
+										mapping.add(i);
+										needStyleCopy = true; }
+									c = !c; }}
+							i++; }}
+					String braille[] = new String[size(styledText)];
 					for (int i = 0; i < braille.length; i++)
 						braille[i] = "";
-					for (int i = 0; i < brailleSegments.length; i++)
-						if (computer[i])
-							braille[mapping[i]] += OPEN_COMPUTER + brailleSegments[i] + CLOSE_COMPUTER;
-						else
-							braille[mapping[i]] += brailleSegments[i];
-					return braille;
+					int i = 0;
+					boolean curComputer = false;
+					for (String b : transform(segments, computer)) {
+						if (!computer.get(i) && curComputer)
+							braille[mapping.get(i)] += CLOSE_COMPUTER;
+						else if (computer.get(i) && !curComputer)
+							braille[mapping.get(i)] += OPEN_COMPUTER;
+						braille[mapping.get(i)] += b;
+						curComputer = computer.get(i);
+						i++; }
+					if (curComputer)
+						braille[mapping.get(i-1)] += CLOSE_COMPUTER;
+					return Arrays.asList(braille);
 				}
 				
-				private String[] transform(String[] text, SimpleInlineStyle[] cssStyle, boolean[] uncontracted) {
-					if (text.length == 0)
-						return new String[]{};
+				private java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, List<Boolean> computer) {
 					FromStyledTextToBraille translator = TransformImpl.this.translator.fromStyledTextToBraille();
 					FromStyledTextToBraille grade0Translator = TransformImpl.this.grade0Translator.fromStyledTextToBraille();
-					String[] result = new String[text.length];
-					boolean uncont = false;
-					int j = 0;
-					List<SimpleInlineStyle> uncontStyle = null;
-					for (int i = 0; i < text.length; i++) {
-						SimpleInlineStyle style = cssStyle[i];
-						boolean thisUncont; {
-							thisUncont = uncontracted[i];
+					List<String> transformed = new ArrayList<String>();
+					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
+					boolean curUncontracted = false;
+					int i = 0;
+					for (CSSStyledText st : styledText) {
+						SimpleInlineStyle style = st.getStyle();
+						boolean uncontracted; {
+							uncontracted = computer.get(i);
 							if (style != null) {
 								CSSProperty val = style.getProperty("text-transform");
 								if (val != null) {
@@ -321,40 +291,22 @@ public interface NLBTranslator {
 										while (it.hasNext()) {
 											String tt = ((TermIdent)it.next()).getValue();
 											if (tt.equals("uncontracted")) {
-												thisUncont = true;
+												uncontracted = true;
 												it.remove();
 												break; }}
 										if (values.isEmpty())
 											style.removeProperty("text-transform"); }}}}
-						if (thisUncont) {
-							if (i > 0 && !uncont)
-								for (String s : transformArray(translator,
-								                               copyOfRange(text, j, i),
-								                               copyOfRange(cssStyle, j, i)))
-									result[j++] = s;
-							if (uncontStyle == null)
-								uncontStyle = new ArrayList<SimpleInlineStyle>();
-							uncontStyle.add(style);
-							uncont = true; }
-						else {
-							if (i > 0 && uncont) {
-								for (String s : transformArray(grade0Translator,
-								                               copyOfRange(text, j, i),
-								                               uncontStyle.toArray(new SimpleInlineStyle[i - j])))
-									result[j++] = s;
-								uncontStyle = null; }
-							uncont = false; }}
-					if (uncont)
-						for (String s : transformArray(grade0Translator,
-						                               copyOfRange(text, j, text.length),
-						                               uncontStyle.toArray(new SimpleInlineStyle[text.length - j])))
-							result[j++] = s;
-					else
-						for (String s : transformArray(translator,
-						                               copyOfRange(text, j, text.length),
-						                               copyOfRange(cssStyle, j, text.length)))
-							result[j++] = s;
-					return result;
+						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
+							for (String s : (curUncontracted ? grade0Translator : translator).transform(buffer))
+								transformed.add(s);
+							buffer = new ArrayList<CSSStyledText>(); }
+						curUncontracted = uncontracted;
+						buffer.add(st);
+						i++; }
+					if (!buffer.isEmpty())
+						for (String s : (curUncontracted ? grade0Translator : translator).transform(buffer))
+							transformed.add(s);
+					return transformed;
 				}
 			};
 			
@@ -371,9 +323,9 @@ public interface NLBTranslator {
 					boolean curComputer = false;
 					for (CSSStyledText st : styledText) {
 						String text = st.getText();
-						boolean needStyleCopy = false;
 						if (!text.isEmpty()) {
 							boolean computer = false;
+							boolean needStyleCopy = false;
 							for (String s : splitInclDelimiter(text, COMPUTER)) {
 								if (!s.isEmpty()) {
 									if (computer != curComputer && !buffer.isEmpty()) {
@@ -385,9 +337,10 @@ public interface NLBTranslator {
 										buffer = new ArrayList<CSSStyledText>();
 										curComputer = computer; }
 									SimpleInlineStyle style = st.getStyle();
-									if (needStyleCopy)
-										style = (SimpleInlineStyle)style.clone();
-									buffer.add(new CSSStyledText(s, style));
+									if (needStyleCopy) {
+										if (style != null)
+											style = (SimpleInlineStyle)style.clone(); }
+									buffer.add(new CSSStyledText(s, style, attrs));
 									needStyleCopy = true; }
 								computer = !computer; }}}
 					if (!buffer.isEmpty()) {
@@ -425,8 +378,8 @@ public interface NLBTranslator {
 											style.removeProperty("text-transform"); }}}}
 						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
 							lineIterators.add((curUncontracted ? grade0Translator : translator).transform(buffer));
-							buffer = new ArrayList<CSSStyledText>();
-							curUncontracted = uncontracted; }
+							buffer = new ArrayList<CSSStyledText>(); }
+						curUncontracted = uncontracted;
 						buffer.add(st); }
 					if (!buffer.isEmpty())
 						lineIterators.add((curUncontracted ? grade0Translator : translator).transform(buffer));
@@ -441,18 +394,6 @@ public interface NLBTranslator {
 					.add("dots", dots)
 					.toString();
 			}
-		}
-		
-		private static String[] transformArray(BrailleTranslator.FromStyledTextToBraille translator,
-		                                       String[] text, SimpleInlineStyle[] style) {
-			List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
-			for (int i = 0; i < text.length; i++)
-				styledText.add(new CSSStyledText(text[i], style[i]));
-			String[] result = new String[text.length];
-			int i = 0;
-			for (String s : translator.transform(styledText))
-				result[i++] = s;
-			return result;
 		}
 		
 		private static class NonBreakingBrailleString implements BrailleTranslator.LineIterator {
