@@ -54,6 +54,7 @@
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
+    <p:option name="include-obfl"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
     <p:option name="include-notes"/>

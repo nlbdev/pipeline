@@ -45,6 +45,7 @@
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
+    <p:option name="include-obfl"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
     <p:option name="include-notes"/>
@@ -81,6 +82,7 @@
         <p:with-option name="hyphenation" select="$hyphenation"/>
         <p:with-option name="line-spacing" select="$line-spacing"/>
         <p:with-option name="capital-letters" select="$capital-letters"/>
+        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:with-option name="include-captions" select="$include-captions"/>
         <p:with-option name="include-images" select="$include-images"/>
         <p:with-option name="include-note-references" select="$include-notes"/>
