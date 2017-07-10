@@ -285,7 +285,7 @@
             <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
         </x:scenario>
         
-        <x:scenario label="regression test: volume division fails with maximum-number-of-sheets = 4 and 81 headlines">
+        <x:scenario label="regression test: volume division fails with maximum-number-of-sheets = 4 and 81 headlines" pending="https://github.com/nlbdev/pipeline/issues/63">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -320,7 +320,7 @@
             <x:expect label="The PEF should be generated" type="count" min="10"/>
         </x:scenario>
         
-        <x:scenario label="prefer splitting at lower level headings">
+        <x:scenario label="prefer splitting at lower level headings" pending="https://github.com/nlbdev/pipeline/issues/63">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
