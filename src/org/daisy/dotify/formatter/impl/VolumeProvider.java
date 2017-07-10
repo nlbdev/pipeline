@@ -268,18 +268,18 @@ public class VolumeProvider {
 	 * @return returns true if the volumes can be accepted, false otherwise  
 	 */
 	boolean done() {
-		groups.updateAll();
-		crh.setVolumeCount(groups.getVolumeCount());
-		crh.setSheetsInDocument(groups.countTotalSheets());
-		//crh.setPagesInDocument(value);
 		if (groups.hasNext()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("There is more content (sheets: " + groups.countRemainingSheets() + ", pages: " + groups.countRemainingPages() + ")");
 			}
-			if (!crh.isDirty() && j>1) {
-				groups.adjustVolumeCount();
-			}
+			groups.adjustVolumeCount();
 		}
+		// this changes the value of groups.getVolumeCount() to the newly computed
+		// required number of volume based on groups.countTotalSheets()
+		groups.updateAll();
+		crh.setVolumeCount(groups.getVolumeCount());
+		crh.setSheetsInDocument(groups.countTotalSheets());
+		//crh.setPagesInDocument(value);
 		if (!crh.isDirty() && !groups.hasNext()) {
 			return true;
 		} else {
