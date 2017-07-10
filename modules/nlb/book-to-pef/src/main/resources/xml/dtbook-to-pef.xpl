@@ -78,6 +78,7 @@
     
     <p:in-scope-names name="in-scope-names"/>
     <px:delete-parameters parameter-names="stylesheet
+                                           include-obfl
                                            pef-output-dir
                                            preview-output-dir
                                            temp-dir">
@@ -105,10 +106,12 @@
         </p:input>
     </nlb:pre-processing>
     
-    <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css">
+    <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
+                              name="convert">
         <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss',
                                                         if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
+        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="parameters"/>
         </p:input>
@@ -127,6 +130,10 @@
         <p:input port="dtbook">
             <p:pipe step="main" port="source"/>
         </p:input>
+        <p:input port="obfl">
+            <p:pipe step="convert" port="obfl"/>
+        </p:input>
+        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
     </px:dtbook-to-pef.store>

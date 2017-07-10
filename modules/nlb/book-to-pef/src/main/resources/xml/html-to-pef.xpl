@@ -37,6 +37,16 @@
         </p:documentation>
     </p:option>
     
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">Validation status</h1>
+            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
+        </p:documentation>
+        <p:pipe port="validation-status" step="validate-pef"/>
+    </p:output>
+    
     <p:option name="braille-standard"/>
     <p:option name="hyphenation"/>
     <p:option name="line-spacing"/>
@@ -60,41 +70,75 @@
     <p:option name="temp-dir"/>
     
     <p:import href="http://www.nlb.no/pipeline/modules/braille/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl"/>
+    
+    <p:in-scope-names name="in-scope-names"/>
+    <px:delete-parameters parameter-names="stylesheet
+                                           include-obfl
+                                           pef-output-dir
+                                           preview-output-dir
+                                           temp-dir">
+        <p:input port="source">
+            <p:pipe step="in-scope-names" port="result"/>
+        </p:input>
+    </px:delete-parameters>
+    <px:add-parameters>
+        <p:with-param name="main-document-language" select="'no'"/>
+    </px:add-parameters>
+    <p:identity name="parameters"/>
+    <p:sink/>
+    
+    <px:tempdir name="temp-dir">
+        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
+    </px:tempdir>
+    <p:sink/>
+    
+    <px:html-load name="html">
+        <p:with-option name="href" select="$html"/>
+    </px:html-load>
     
     <px:message message="Running NLB-specific pre-processing steps"/>
     <!--
         Nothing here yet.
-        Wait for: https://github.com/snaekobbi/pipeline-mod-braille/issues/63
+        Wait for: https://github.com/snaekobbi/pipeline-mod-braille/issues/63 (=> this is fixed now)
     -->
     <px:message message="Finished running NLB-specific pre-processing steps" severity="DEBUG"/>
-    
-    <px:html-to-pef>
-        <p:with-option name="html" select="$html"/>
-        <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss', if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
+        
+    <px:html-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
+                            name="convert">
+        <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss',
+                                                        if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
-        <p:with-option name="main-document-language" select="'no'"/>
-        <p:with-option name="include-preview" select="'true'"/>
-        <p:with-option name="page-width" select="$page-width"/>
-        <p:with-option name="page-height" select="$page-height"/>
-        <p:with-option name="duplex" select="$duplex"/>
-        <p:with-option name="hyphenation" select="$hyphenation"/>
-        <p:with-option name="line-spacing" select="$line-spacing"/>
-        <p:with-option name="capital-letters" select="$capital-letters"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
-        <p:with-option name="include-captions" select="$include-captions"/>
-        <p:with-option name="include-images" select="$include-images"/>
-        <p:with-option name="include-note-references" select="$include-notes"/>
-        <p:with-option name="include-production-notes" select="$include-production-notes"/>
-        <p:with-option name="show-braille-page-numbers" select="$show-braille-page-numbers"/>
-        <p:with-option name="show-print-page-numbers" select="$show-print-page-numbers"/>
-        <p:with-option name="toc-depth" select="$toc-depth"/>
-        <p:with-option name="colophon-metadata-placement" select="$colophon-metadata-placement"/>
-        <p:with-option name="maximum-number-of-sheets" select="$maximum-number-of-sheets"/>
+        <p:input port="parameters">
+            <p:pipe step="parameters" port="result"/>
+        </p:input>
+        <p:with-option name="temp-dir" select="concat(string(/c:result),'convert/')">
+            <p:pipe step="temp-dir" port="result"/>
+        </p:with-option>
+    </px:html-to-pef.convert>
+    
+    <pef:validate name="validate-pef" assert-valid="false">
+        <p:with-option name="temp-dir" select="string(/c:result)">
+            <p:pipe step="temp-dir" port="result"/>
+        </p:with-option>
+    </pef:validate>
+    
+    <px:xml-to-pef.store include-preview="true">
+        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
+            <p:pipe step="html" port="result"/>
+        </p:with-option>
+        <p:input port="obfl">
+            <p:pipe step="convert" port="obfl"/>
+        </p:input>
+        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-        <p:with-option name="temp-dir" select="$temp-dir"/>
-    </px:html-to-pef>
+    </px:xml-to-pef.store>
     
 </p:declare-step>
