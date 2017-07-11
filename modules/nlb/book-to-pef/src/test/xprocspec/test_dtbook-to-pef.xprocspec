@@ -1252,7 +1252,7 @@
                       test="count(/*/*[ends-with(@name,'.obfl')])" equals="1"/>
         </x:scenario>
         
-        <x:scenario label="Use UEB-table when force-norwegian=false" pending="https://github.com/nlbdev/pipeline/issues/54">
+        <x:scenario label="Use UEB-table when force-norwegian=false"
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -1274,8 +1274,8 @@
                 <x:option name="preview-output-dir" select="resolve-uri('20/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('20/temp-dir',$temp-dir)"/>
             </x:call>
-            <x:context label="the output directory contents">
-                <x:document type="directory" base-uri="temp-dir" href="20/pef-output-dir/"/>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="20/pef-output-dir/book.pef"/>
             </x:context>
             <x:expect label="The two paragraphs should not be equal" type="xpath" test="(//pef:row[contains(.,'⠁⠃⠉')])[1]/replace(.,'⠀','')" equals="(//pef:row[contains(.,'⠁⠃⠉')])[2]/replace(.,'⠀','')" xfail=""/>
         </x:scenario>
