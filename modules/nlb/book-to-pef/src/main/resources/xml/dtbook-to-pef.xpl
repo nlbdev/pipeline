@@ -50,6 +50,7 @@
     <p:option name="hyphenation"/>
     <p:option name="line-spacing"/>
     <p:option name="capital-letters"/>
+    <p:option name="force-norwegian"/>
     <p:option name="stylesheet"/>
     <p:option name="page-width"/>
     <p:option name="page-height"/>

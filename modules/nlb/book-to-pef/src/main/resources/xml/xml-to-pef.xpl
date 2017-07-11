@@ -8,6 +8,9 @@
     exclude-inline-prefixes="#all"
     name="main">
     
+    <!-- ====== -->
+    <!-- Layout -->
+    <!-- ====== -->
     <p:option name="braille-standard" select="'(dots:6)(grade:0)'">
         <p:pipeinfo>
             <px:data-type>
@@ -56,6 +59,34 @@
     <p:option name="capital-letters" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Tekstformatering: Stor bokstav-tegn</h2>
+        </p:documentation>
+    </p:option>
+    <p:option name="force-norwegian" select="'true'" required="false" px:type="boolean">
+        <p:documentation>
+            <h2 px:role="name">Tekstformatering: Bruk alltid norsk punktstandard</h2>
+            <p px:role="desc">Med dette valget brukes alltid norsk punktstandard, uavhengig av hvilket språk teksten er markert opp med.
+
+Hvis et element har attributtet `xml:lang` så endres språket for alt som står inni det elementet.
+Ved å deaktivere dette valget vil punktstandarden tilhørende hvert enkelt språk brukes, istedenfor norsk.
+For engelsk brukes UEB (Unified English Braille). Dersom språket ikke har en implementert punktstandard,
+så vil den norske standarden alikevel brukes.
+
+Kortskrift vil aldri brukes for fremmedspråklige tekster, uavhengig av dette valget.
+
+Eksempel på bruk av språkkode på del av dokument:
+
+~~~xml
+&lt;p&gt;Amerikas forente stater (engelsk: &lt;span xml:lang="en"&gt;United States of America&lt;/span&gt;), er en forbundsrepublikk i Nord-Amerika.&lt;/p&gt;
+~~~
+
+Eksempel på bruk av språkkode på et helt dokument
+
+~~~xml
+&lt;dtbook xml:lang="en"&gt;
+&lt;!-- ...eller... --&gt;
+&lt;html xml:lang="en"&gt;
+~~~
+</p>
         </p:documentation>
     </p:option>
     
