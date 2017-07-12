@@ -1252,7 +1252,7 @@
                       test="count(/*/*[ends-with(@name,'.obfl')])" equals="1"/>
         </x:scenario>
         
-        <x:scenario label="Use UEB-table when force-norwegian=false"
+        <x:scenario label="Use UEB-table when force-norwegian=false">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
