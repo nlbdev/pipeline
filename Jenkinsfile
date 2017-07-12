@@ -5,6 +5,7 @@ node {
     stage 'Build'
     sh 'make clean'
     sh 'mkdir -p .maven-cache'
+    sh 'make clean || true'
     sh 'make SKIP_GROUP_EVAL_TARGET=true EVAL=eval check || true'
     sh 'make SKIP_GROUP_EVAL_TARGET=true EVAL=eval dist-zip-minimal'
     
