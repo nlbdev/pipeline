@@ -183,7 +183,7 @@ $(SAXON) :
 			fi \
 		done && \
 		bash .make/mvn-install.sh utils/nar-maven-plugin && \
-		$(MVN) --quiet --projects $$(cat $< |paste -sd , -) help:effective-pom -Doutput=$(CURDIR)/$@; \
+		$(MVN) --projects $$(cat $< |paste -sd , -) help:effective-pom -Doutput=$(CURDIR)/$@ >maven.log; \
 	else \
 		touch $@; \
 	fi
