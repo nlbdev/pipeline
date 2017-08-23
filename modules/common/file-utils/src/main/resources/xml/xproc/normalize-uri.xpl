@@ -10,7 +10,7 @@
     <p:option name="href" required="true"/>
     
     <p:xslt>
-        <p:with-param name="href" select="concat($href,'/')"/>
+        <p:with-param name="href" select="$href"/>
         <p:input port="source">
             <p:inline>
                 <c:result/>
