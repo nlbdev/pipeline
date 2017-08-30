@@ -112,10 +112,16 @@ public interface NLBTranslator {
 					inputFormat = i;
 				else if (!supportedInput.contains(i))
 					return empty; }
+			String outputFormat = null;
 			for (Feature f : q.removeAll("output")) {
 				String o = f.getValue().get();
-				if (!supportedOutput.contains(o) && (inputFormat == null || !inputFormat.equals(o)))
+				if (outputFormat == null && supportedInputOutput.contains(o))
+					outputFormat = o;
+				else if (!supportedOutput.contains(o));
 					return empty; }
+			if (outputFormat != null && (inputFormat == null || !inputFormat.equals(outputFormat)))
+				return empty;
+			final boolean htmlOrDtbookOut = (outputFormat != null);
 			if (q.containsKey("locale")) {
 				String locale = parseLocale(q.removeOnly("locale").getValue().get()).getLanguage();
 				// If we want to use other tables for other languages in the future; it can be done here.
@@ -185,7 +191,8 @@ public interface NLBTranslator {
 																			logCreate(
 																				new TransformImpl(grade, dots, translator, grade0Translator,
 																				                  // FIXME: other languages provider does not need to be liblouis
-																				                  liblouisTranslatorProvider))); }} ); }} )); }} )); }}
+																				                  liblouisTranslatorProvider,
+																				                  htmlOrDtbookOut))); }} ); }} )); }} )); }}
 			return empty;
 		}
 		
@@ -210,9 +217,16 @@ public interface NLBTranslator {
 			private final int dots;
 			
 			private TransformImpl(int grade, int dots, LiblouisTranslator translator, LiblouisTranslator grade0Translator,
-			                      TransformProvider<? extends BrailleTranslator> otherLanguageTranslators) {
+			                      TransformProvider<? extends BrailleTranslator> otherLanguageTranslators,
+								  boolean htmlOrDtbookOut) {
 				Map<String,String> options = ImmutableMap.<String,String>of(
-					"text-transform", mutableQuery().add("id", this.getIdentifier()).toString());
+					"text-transform", mutableQuery().add("id", this.getIdentifier()).toString(),
+					// This will omit the <_ style="text-transform:none">
+					// wrapper. It is assumed that if (output:html) or
+					// (output:dtbook) is set, the result is known to be
+					// braille (which is the case if (output:braille) is also
+					// set).
+					"no-wrap", String.valueOf(htmlOrDtbookOut));
 				xproc = new XProc(href, null, options);
 				this.translator = translator;
 				this.grade0Translator = grade0Translator;

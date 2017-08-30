@@ -6,6 +6,7 @@
             exclude-inline-prefixes="#all">
 
         <p:option name="text-transform" required="true"/>
+        <p:option name="no-wrap" select="'false'"/>
 
         <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
 
@@ -16,6 +17,7 @@
                         <p:document href="block-translate.xsl"/>
                 </p:input>
                 <p:with-param name="text-transform" select="$text-transform"/>
+                <p:with-param name="no-wrap" select="$no-wrap"/>
         </p:xslt>
 
 </p:pipeline>
