@@ -87,7 +87,7 @@ public interface LiblouisCSSBlockTransform {
 						return empty;
 				htmlOut = html;
 			}
-			final String locale = q.containsKey("locale") ? q.removeOnly("locale").getValue().get() : null;
+			final String locale = q.containsKey("locale") ? q.getOnly("locale").getValue().get() : null;
 			if (q.containsKey("translator"))
 				if (!"liblouis".equals(q.removeOnly("translator").getValue().get()))
 					return empty;
@@ -150,11 +150,13 @@ public interface LiblouisCSSBlockTransform {
 		)
 		protected void bindLiblouisTranslatorProvider(LiblouisTranslator.Provider provider) {
 			liblouisTranslatorProviders.add(provider);
+			logger.debug("Adding LiblouisTranslator provider: {}", provider);
 		}
 	
 		protected void unbindLiblouisTranslatorProvider(LiblouisTranslator.Provider provider) {
 			liblouisTranslatorProviders.remove(provider);
 			liblouisTranslatorProvider.invalidateCache();
+			logger.debug("Removing LiblouisTranslator provider: {}", provider);
 		}
 	
 		private List<TransformProvider<LiblouisTranslator>> liblouisTranslatorProviders
