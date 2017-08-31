@@ -117,7 +117,7 @@ public interface NLBTranslator {
 				String o = f.getValue().get();
 				if (outputFormat == null && supportedInputOutput.contains(o))
 					outputFormat = o;
-				else if (!supportedOutput.contains(o));
+				else if (!supportedOutput.contains(o))
 					return empty; }
 			if (outputFormat != null && (inputFormat == null || !inputFormat.equals(outputFormat)))
 				return empty;
