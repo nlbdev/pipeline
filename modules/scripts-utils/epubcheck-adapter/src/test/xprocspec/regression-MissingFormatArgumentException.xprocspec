@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/library.xpl" xmlns:p="http://www.w3.org/ns/xproc"
+    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
+    
+    <x:scenario label="regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'">
+        <x:call step="px:epubcheck">
+            <x:option name="version" select="3"/>
+            <x:option name="mode" select="'expanded'"/>
+            <x:option name="epub" select="resolve-uri('../resources/regression-MissingFormatArgumentException/EPUB/package.opf',base-uri())"/>
+        </x:call>
+        
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="there should be a some results" min="1"/>
+    </x:scenario>
+    
+</x:description>
