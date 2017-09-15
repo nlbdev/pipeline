@@ -94,9 +94,9 @@
           Third-Party Libraries
       -->
       <dependency>
-        <groupId>org.idpf</groupId>
+        <groupId>org.daisy</groupId>
         <artifactId>epubcheck</artifactId>
-        <version>4.0.1</version>
+        <version>4.0.2-a11y-2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
