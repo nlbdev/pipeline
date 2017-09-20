@@ -1,8 +1,10 @@
 package org.daisy.pipeline.epub;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 import net.sf.saxon.s9api.QName;
@@ -105,6 +107,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 			super.run();
 
 			Archive epub = null;
+			File tempDir = null;
 			try {
 
 				URI epubURI = new URI(getOption(_epubFile).getString());
@@ -134,6 +137,18 @@ public class EpubCheckProvider implements XProcStepProvider {
 					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.get("single_file"), "opf", epubVersion.toString(), EPUBProfile.DEFAULT));
 
 					if ("expanded".equals(mode) || "exp".equals(mode)) {
+						if (new File(path+".epub").exists()) {
+							// epubcheck will delete the file `path`.epub if it exists,
+							// so if it exists, we create a copy in the temporary directory
+							// and use that instead.
+							tempDir = File.createTempFile("epub-", null);
+							tempDir.delete();
+							tempDir.mkdir();
+							File destDir = new File(tempDir, new File(path).getName());
+							copyDirectory(new File(path), destDir);
+							path = new File(tempDir, new File(path).getName()).getCanonicalPath();
+						}
+						
 						epub = new Archive(path, false);
 						epub.createArchive();
 
@@ -186,9 +201,45 @@ public class EpubCheckProvider implements XProcStepProvider {
 			}
 
 			finally {
+				if (tempDir != null) {
+					try {
+						deleteDirectory(tempDir);
+					} catch (IOException e) {
+						// ignore
+					}
+				}
+				
 				if (epub != null)
 					epub.deleteEpubFile();
 			}
+		}
+		
+		private void copyDirectory(final File srcDir, final File destDir) throws IOException {
+	        final File[] srcFiles = srcDir.listFiles();
+	        destDir.mkdirs();
+	        for (final File srcFile : srcFiles) {
+	            final File dstFile = new File(destDir, srcFile.getName());
+                if (srcFile.isDirectory()) {
+                	copyDirectory(srcFile, dstFile);
+                } else {
+                	Files.copy(srcFile.toPath(), dstFile.toPath());
+                }
+	        }
+		}
+		
+		private void deleteDirectory(final File directory) throws IOException {
+			if (!directory.exists()) {
+	            return;
+	        }
+	        final File[] files = directory.listFiles();
+	        for (final File file : files) {
+                if (file.isDirectory()) {
+                	deleteDirectory(file);
+                } else {
+                	file.delete();
+                }
+	        }
+			directory.delete();
 		}
 	}
 }
