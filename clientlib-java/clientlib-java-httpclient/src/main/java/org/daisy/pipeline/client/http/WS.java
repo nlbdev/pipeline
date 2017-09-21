@@ -34,7 +34,7 @@ import org.w3c.dom.Document;
 /**
  * Methods for communicating with the Pipeline 2 API.
  * 
- * @see http://code.google.com/p/daisy-pipeline/wiki/WebServiceAPI
+ * @see <a href="http://code.google.com/p/daisy-pipeline/wiki/WebServiceAPI">http://code.google.com/p/daisy-pipeline/wiki/WebServiceAPI</a>
  */
 public class WS implements WSInterface {
 
@@ -652,27 +652,32 @@ public class WS implements WSInterface {
 		}
 	}
 	
-	// Based on http://stackoverflow.com/a/2406819/281065
 	public void checkIfLocal() {
-	    // Check if the address is defined on any interface
-	    try {
-	    	URI url = new URI(endpoint);
-	    	InetAddress addr = InetAddress.getByName(url.getHost());
-	    	
-			// Check if the address is a valid special local or loopback
-		    if (addr.isAnyLocalAddress() || addr.isLoopbackAddress())
-		    	isLocal = true;
-		    
-		    isLocal = NetworkInterface.getByInetAddress(addr) != null;
-	        
-	    } catch (SocketException e) {
-	        isLocal = false;
-	        
-	    } catch (UnknownHostException e) {
-	    	isLocal = false;
-	    	
-		} catch (URISyntaxException e) {
+		Alive alive = alive();
+		if (alive != null && alive.localfs == false) {
 			isLocal = false;
+		} else {
+			// Check if the address is defined on any interface
+			// Based on http://stackoverflow.com/a/2406819/281065
+			try {
+				URI url = new URI(endpoint);
+				InetAddress addr = InetAddress.getByName(url.getHost());
+
+				// Check if the address is a valid special local or loopback
+				if (addr.isAnyLocalAddress() || addr.isLoopbackAddress())
+					isLocal = true;
+
+				isLocal = NetworkInterface.getByInetAddress(addr) != null;
+
+			} catch (SocketException e) {
+				isLocal = false;
+
+			} catch (UnknownHostException e) {
+				isLocal = false;
+
+			} catch (URISyntaxException e) {
+				isLocal = false;
+			}
 		}
 	}
 

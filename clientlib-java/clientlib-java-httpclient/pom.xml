@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.daisy</groupId>
         <artifactId>daisy</artifactId>
-        <version>3</version>
+        <version>4</version>
         <relativePath />
     </parent>
 
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>clientlib-java-httpclient</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DAISY Pipeline 2 :: Java Client Library :: HTTP Client Implementation</name>
@@ -46,6 +46,31 @@
     </issueManagement>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.ops4j.pax.exam</groupId>
+                <artifactId>maven-paxexam-plugin</artifactId>
+                <version>1.2.4</version>
+                <executions>
+                    <execution>
+                        <id>generate-depends-file</id>
+                        <goals>
+                            <goal>generate-depends-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -88,6 +113,17 @@
             </plugin>
         </plugins>
     </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.daisy.pipeline</groupId>
+                <artifactId>framework-bom</artifactId>
+                <version>1.10.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -107,13 +143,66 @@
         <dependency>
             <groupId>org.daisy.pipeline</groupId>
             <artifactId>clientlib-java</artifactId>
-            <version>[4.4.1,5.0.0)</version>
+            <version>4.8.2-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--
+            test dependencies
+        -->
+        <!--
+            FIXME: use for compilation
+        -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient-osgi</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--
+            FIXME: use for compilation
+        -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore-osgi</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>webservice</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>calabash-adapter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>modules-registry</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>framework-volatile</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>woodstox-osgi-adapter</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>pax-exam-helper</artifactId>
+            <version>2.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
