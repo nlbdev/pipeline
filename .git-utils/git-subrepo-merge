@@ -264,6 +264,7 @@ sub rebase_on_subrepo {
 				if ($temp_branch) {
 					print " $temp_branch";
 				}
+				print "\n";
 				print "git rebase --onto $last_sync[1] HEAD~$commits_in_subtree HEAD\n";
 			}
 			if ($onto eq @$base[1]) {
