@@ -114,7 +114,7 @@ my @subrepos; {
 		push @subrepos, $repo;
 	} else {
 		my $prev;
-		for (`find . -type f -name .gitrepo`) {
+		for (`find . -type f -name .gitrepo | sort`) {
 			chomp;
 			s/\/\.gitrepo$//;
 			s/^\.\///;
