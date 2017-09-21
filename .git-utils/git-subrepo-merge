@@ -123,8 +123,10 @@ sub common_path_between {
 				chomp(my @side_path = `git rev-list $_ ^$base`);
 				@commits = array_minus(@commits, @side_path);
 			}
-			$commits[0] eq $base or die "coding error";
-			push @path, shift @commits;
+			if (@commits) {
+				$commits[0] eq $base or die "coding error";
+				push @path, shift @commits;
+			}
 		} else {
 			die "coding error";
 		}
