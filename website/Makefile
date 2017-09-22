@@ -1,5 +1,6 @@
 JEKYLL_SRC_DIR := src
-JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_gui,_wiki_webui} -type f -not -name '_Sidebar.md' )
+SHELL := bash
+JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_gui,_wiki_webui} -type f -not -name '_Sidebar.md' -not -name '*.png' )
 JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/_data/_spines/ -type f -name '*.yml')
 JEKYLL_SRC_FILES_OTHER := $(filter-out $(JEKYLL_SRC_FILES_CONTENT) $(JEKYLL_SRC_FILES_MUSTACHE),\
                                        $(shell find $(JEKYLL_SRC_DIR) -type f))
@@ -101,14 +102,9 @@ $(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/modules $(JEKYLL_DIR)/$(meta_file)
 
 $(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
 	rm -rf $@
-	mkdir -p $@
-	cd $(dir $<) && mvn --quiet \
-	                    $(MVN_OPTS) \
-	                    "dependency:unpack-dependencies" \
-	                    -Dclassifier=doc -DexcludeTransitive -Dmdep.unpack.excludes='META-INF,META-INF/**/*' \
-	                    -Dmdep.useRepositoryLayout -Dmdep.failOnMissingClassifierArtifact=true
-	cd $(dir $<)/target/dependency/org/daisy/pipeline/modules && find . -type d -name '[0-9]*' -prune -exec bash -c \
-		'mkdir -p $(CURDIR)/$@/$$(dirname {}); cp -r {}/* $$_' \; || true
+	cd $(dir $<) && \
+	mvn --quiet $(MVN_OPTS) "process-sources"
+	test -e $@
 
 $(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml
 	mkdir -p $(dir $@)
@@ -120,7 +116,7 @@ serve : ws all
 
 .PHONY : ws
 ws :
-	@if ! which $@ 2>/dev/null; then \
+	@if ! which $@ >/dev/null 2>/dev/null; then \
 		echo "ws is not installed, install with 'npm install -g local-web-server'" 2>&1; \
 		exit 1; \
 	fi
