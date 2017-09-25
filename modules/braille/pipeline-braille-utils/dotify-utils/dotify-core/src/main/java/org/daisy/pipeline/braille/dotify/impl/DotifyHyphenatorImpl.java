@@ -104,7 +104,13 @@ public class DotifyHyphenatorImpl extends AbstractHyphenator implements DotifyHy
 				public Iterable<DotifyHyphenator> _get(Query query) {
 					MutableQuery q = mutableQuery(query);
 					if (q.containsKey("locale")) {
-						final String locale = parseLocale(q.removeOnly("locale").getValue().get()).toLanguageTag();
+						final String locale; {
+							try {
+								locale = parseLocale(q.removeOnly("locale").getValue().get()).toLanguageTag(); }
+							catch (IllegalArgumentException e) {
+								logger.error("Invalid locale", e);
+								return empty; }
+						}
 						if (!q.isEmpty()) {
 							logger.warn("Unsupported feature '"+ q.iterator().next().getKey() + "'");
 							return empty; }

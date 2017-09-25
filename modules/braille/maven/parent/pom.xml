@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.5</version>
-    <relativePath />
+    <version>1.6-SNAPSHOT</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>braille-modules-parent</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.10.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Braille Modules Parent POM</name>
@@ -36,7 +36,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.10.1-SNAPSHOT</version>
+        <version>1.10.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -46,7 +46,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.5-SNAPSHOT</version>
+        <version>1.10.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -56,21 +56,21 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.10.4-SNAPSHOT</version>
+        <version>1.10.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.10.3-SNAPSHOT</version>
+        <version>1.10.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.10.2-SNAPSHOT</version>
+        <version>1.10.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -85,7 +85,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -105,11 +105,6 @@
     </plugins>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.daisy.pipeline.build</groupId>
-          <artifactId>modules-build-helper</artifactId>
-          <version>2.0.1-SNAPSHOT</version>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -176,7 +171,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -193,7 +188,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -206,7 +201,7 @@
                         </goals>
                     </pluginExecutionFilter>
                     <action>
-                        <ignore />
+                        <ignore/>
                     </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -219,8 +214,21 @@
                         </goals>
                     </pluginExecutionFilter>
                     <action>
-                        <ignore />
+                        <ignore/>
                     </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.daisy.pipeline.build</groupId>
+                    <artifactId>modules-build-helper</artifactId>
+                    <versionRange>[2.0.0,)</versionRange>
+                    <goals>
+                      <goal>process-catalog</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
                 </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>

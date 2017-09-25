@@ -17,6 +17,7 @@ import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public interface TransformProvider<T extends Transform> extends Provider<Query,T>, Contextual<Logger,TransformProvider<T>> {
 	
@@ -192,7 +193,11 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 			}
 			public Locale getLocale(Query query) {
 				if (query.containsKey("locale"))
-					return parseLocale(query.getOnly("locale").getValue().get());
+					try {
+						return parseLocale(query.getOnly("locale").getValue().get()); }
+					catch (IllegalArgumentException e) {
+						logger.warn("Invalid locale", e);
+						return null; }
 				else
 					return null;
 			}
@@ -210,5 +215,8 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 				return "varyLocale( " + delegate + " )";
 			}
 		}
+		
+		private static final Logger logger = LoggerFactory.getLogger(TransformProvider.class);
+		
 	}
 }

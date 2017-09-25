@@ -180,7 +180,13 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 				public Iterable<DotifyTranslator> _get(Query query) {
 					MutableQuery q = mutableQuery(query);
 					if (q.containsKey("locale")) {
-						final String locale = parseLocale(q.removeOnly("locale").getValue().get()).toLanguageTag();
+						final String locale; {
+							try {
+								locale = parseLocale(q.removeOnly("locale").getValue().get()).toLanguageTag(); }
+							catch (IllegalArgumentException e) {
+								logger.error("Invalid locale", e);
+								return empty; }
+						}
 						final String mode = BrailleTranslatorFactory.MODE_UNCONTRACTED;
 						String v = null;
 						if (q.containsKey("hyphenator"))
