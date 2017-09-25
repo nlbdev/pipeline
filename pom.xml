@@ -25,6 +25,7 @@
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
     <module>libs/liblouis</module>
+    <module>libs/epubcheck</module>
     <module>framework</module>
     <module>modules/braille</module>
     <module>modules/common</module>
