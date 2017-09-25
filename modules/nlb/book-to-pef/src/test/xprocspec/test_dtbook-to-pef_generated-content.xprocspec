@@ -525,4 +525,97 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="DTBook frontmatter should not be duplicated (issue 93)" pending="https://github.com/nlbdev/pipeline/issues/93">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="tests"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>tests</doctitle>
+                                <level1>
+                                    <p>Forordet skal ikke være annerledes en det som kommer etterpå; margene skal være de samme - og det skal være økt linjeavstand</p>
+                                </level1>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>Boka har ingen overskrifter, men det betyr ikke at det ikke skal være toppmarg ved begynnelsen. Den har økt linjeavstand.</p>
+                                    <imggroup>
+                                        <img src="xxx.jpg" alt="Bildet viser konturene av ingenting mot en lysabsorberende flate av tomhet. Kontrastene er ikke akkurat til å ta og føle på."/> 
+                                    </imggroup>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef"/>
+        </x:context>
+        <x:expect label="The text 'Forordet skal' should only occur once" type="xpath" test="count(//pef:row[contains(text(),'⠠⠋⠕⠗⠕⠗⠙⠑⠞⠀⠎⠅⠁⠇')])" equals="1"/>
+    </x:scenario>
+    
+    <x:scenario label="double linespacing should work inside the DTBook (see comment on issue 93)" pending="https://github.com/nlbdev/pipeline/issues/93#issuecomment-324914293">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="tests"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>tests</doctitle>
+                                <level1>
+                                    <p>Forordet skal ikke være annerledes en det som kommer etterpå; margene skal være de samme - og det skal være økt linjeavstand</p>
+                                </level1>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>Boka har ingen overskrifter, men det betyr ikke at det ikke skal være toppmarg ved begynnelsen. Den har økt linjeavstand.</p>
+                                    <imggroup>
+                                        <img src="xxx.jpg" alt="Bildet viser konturene av ingenting mot en lysabsorberende flate av tomhet. Kontrastene er ikke akkurat til å ta og føle på."/> 
+                                    </imggroup>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+        </x:call>
+        
+        <x:scenario label="single line spacing">
+            <x:call>
+                <x:option name="line-spacing" select="'single'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="5/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="The row after the row containing 'Forordet skal', should not be empty and there should be no rowgap" type="xpath" test="(//pef:row[contains(text(),'⠠⠋⠕⠗⠕⠗⠙⠑⠞⠀⠎⠅⠁⠇')])[1]/((not(@rowgap) or @rowgap = '0') and following-sibling::pef:row[1]/replace(text(),'[\s⠀]','') != '')"/>
+        </x:scenario>
+        
+        <x:scenario label="double line spacing">
+            <x:call>
+                <x:option name="line-spacing" select="'double'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('6/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('6/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="Either rowgap should be 4, or the row after the row containing 'Forordet skal', should be empty" type="xpath" test="(//pef:row[contains(text(),'⠠⠋⠕⠗⠕⠗⠙⠑⠞⠀⠎⠅⠁⠇')])[1]/(@rowgap = '4' or following-sibling::pef:row[1]/replace(text(),'[\s⠀]','') = '')"/>
+        </x:scenario>
+    </x:scenario>
+    
 </x:description>
