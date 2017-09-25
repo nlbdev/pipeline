@@ -525,7 +525,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="DTBook frontmatter should not be duplicated (issue 93)" pending="https://github.com/nlbdev/pipeline/issues/93">
+    <x:scenario label="DTBook frontmatter should not be duplicated (issue 93)">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">

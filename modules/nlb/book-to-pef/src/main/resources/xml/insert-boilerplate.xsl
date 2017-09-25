@@ -30,10 +30,9 @@
     <xsl:template match="frontmatter">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates select="node()[not(preceding-sibling::level1)]"/>
+            <xsl:apply-templates select="node() except level1[1]/(. | following-sibling::node())"/>
             <xsl:call-template name="add-information-based-from-metadata"/>
-            <xsl:apply-templates select="level1"/>
-            <xsl:apply-templates select="node()[preceding-sibling::level1]"/>
+            <xsl:apply-templates select="level1[1]/(. | following-sibling::node())"/>
         </xsl:copy>
     </xsl:template>
 
