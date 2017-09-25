@@ -618,4 +618,71 @@
         </x:scenario>
     </x:scenario>
     
+    <x:scenario label="margins in frontmatter should be the same as in bodymatter (see comment on issue 93)" pending="https://github.com/nlbdev/pipeline/issues/93#issuecomment-324914293">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="test"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>test</doctitle>
+                                <level1>
+                                    <p>frontmatter xxxxxx</p>
+                                    <p>frontmatter xxxxxxx</p>
+                                    <p>frontmatter xxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxxxxxxxx</p>
+                                    <p>frontmatter xxxxxxxxxxxxxxxxxxx</p>
+                                </level1>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>bodymatter xxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxxxxxxxx</p>
+                                    <p>bodymatter xxxxxxxxxxxxxxxxxxxxx</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="page-width" select="32"/>
+            <x:option name="pef-output-dir" select="resolve-uri('7/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('7/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('7/temp-dir',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="7/pef-output-dir/book.pef"/>
+        </x:context>
+        <x:expect label="The left margins should be the same in frontmatter and bodymatter" type="xpath"
+            test="min(//pef:row[contains(text(),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/string-length(replace(text(),'^(⠀*).+?$','$1','s')))"
+            equals="min(//pef:row[contains(text(),'⠃⠕⠙⠽⠍⠁⠞⠞⠑⠗')]/string-length(replace(text(),'^(⠀*).+?$','$1','s')))"/>
+        <x:expect label="The right margins should be the same in frontmatter and bodymatter" type="xpath"
+            test="min(//pef:row[contains(text(),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/(string-length(replace(text(),'^.+?(⠀*)$','$1','s')) + (32 - string-length(text()))))"
+            equals="min(//pef:row[contains(text(),'⠃⠕⠙⠽⠍⠁⠞⠞⠑⠗')]/(string-length(replace(text(),'^.+?(⠀*)$','$1','s')) + (32 - string-length(text()))))"/>
+    </x:scenario>
+    
 </x:description>
