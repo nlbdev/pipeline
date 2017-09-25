@@ -42,7 +42,7 @@
 					<groupId>com.github.maven-nar</groupId>
 					<artifactId>nar-maven-plugin</artifactId>
 					<!--
-					    depends on branch "skipUnpackProcessing"
+					    depends on branch "bertfrees"
 					-->
 					<version>3.5.3-SNAPSHOT</version>
 				</plugin>
