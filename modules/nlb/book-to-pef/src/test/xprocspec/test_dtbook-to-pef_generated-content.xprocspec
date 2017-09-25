@@ -562,7 +562,7 @@
         <x:expect label="The text 'Forordet skal' should only occur once" type="xpath" test="count(//pef:row[contains(text(),'⠠⠋⠕⠗⠕⠗⠙⠑⠞⠀⠎⠅⠁⠇')])" equals="1"/>
     </x:scenario>
     
-    <x:scenario label="double linespacing should work inside the DTBook (see comment on issue 93)" pending="https://github.com/nlbdev/pipeline/issues/93#issuecomment-324914293">
+    <x:scenario label="double linespacing should work inside the DTBook (see comment on issue 93)">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">

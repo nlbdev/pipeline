@@ -83,7 +83,9 @@ pagenum, *[epub|type~='pagebreak'] {
                 /* to cancel out generic rule */
         }
 
-        bodymatter, body:not([epub|type~='cover']):not([epub|type~='frontmatter']):not([epub|type~='backmatter']) {
+        frontmatter level1:not(.first-page):not(.second-page):not(.third-page):not(.titlepage):not(.colophon):not(.about),
+        bodymatter,
+        body:not([epub|type~='cover']):not([epub|type~='backmatter']):not(.titlepage):not(.colophon):not(.about) {
                 line-height: 2;
         }
 
