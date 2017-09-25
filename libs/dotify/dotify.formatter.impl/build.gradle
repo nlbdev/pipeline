@@ -37,7 +37,7 @@ javadoc {
 repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/groups/staging" }
-    //mavenLocal()
+    mavenLocal()
     //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
