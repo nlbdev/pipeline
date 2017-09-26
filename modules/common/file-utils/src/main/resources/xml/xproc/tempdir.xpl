@@ -22,6 +22,7 @@
     <px:normalize-uri name="parent-dir">
         <p:with-option name="href" select="if (not(ends-with($href,'/'))) then concat($href,'/') else $href"/>
     </px:normalize-uri>
+    <p:sink/>
     
     <px:mkdir>
         <p:with-option name="href" select="string(/c:result)">
