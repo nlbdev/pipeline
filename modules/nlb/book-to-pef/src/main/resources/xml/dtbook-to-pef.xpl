@@ -139,7 +139,6 @@
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
     </px:dtbook-to-pef.store>
