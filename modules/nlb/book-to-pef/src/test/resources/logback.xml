@@ -8,10 +8,11 @@
     </encoder>
   </appender>
 
-  <root level="WARN">
+  <root level="DEBUG">
     <appender-ref ref="TEST_LOG"/>
   </root>
 
   <logger name="org.daisy" level="DEBUG"/>
+  <logger name="com.xmlcalabash" level="DEBUG"/>
 
 </configuration>
