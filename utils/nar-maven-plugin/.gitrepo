@@ -5,7 +5,7 @@
 ;
 [subrepo]
 	remote = git@github.com:bertfrees/maven-nar-plugin.git
-	branch = skipUnpackProcessing
-	commit = 5a42ed74c7f7af0569e4d61f23424b0bf487715b
-	parent = 6bb1af494b0886e0823abae0f6a911d10b3a1af2
+	branch = bertfrees
+	commit = 9c1581bd1ca6e294fffd29ed388a15b46eb6909e
+	parent = bf899902605184d574827dc701e1f2e774b11f53
 	cmdver = 0.3.1
