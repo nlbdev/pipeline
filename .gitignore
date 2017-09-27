@@ -12,6 +12,7 @@ Thumbs.db
 /.maven-modules
 /.maven-workspace/
 /maven.log
+/.gradle-pom.xml
 /.gradle-settings/
 /.gradle/
 /*.zip
