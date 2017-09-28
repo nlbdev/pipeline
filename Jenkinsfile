@@ -4,14 +4,13 @@ node {
     
     stage 'Build'
     sh 'make clean'
-    sh 'mkdir -p .maven-cache'
-    sh 'make clean || true'
-    sh 'make SKIP_RELEASE=true check || true'
     sh 'make SKIP_RELEASE=true dist-zip-minimal'
+    sh 'make SKIP_RELEASE=true dist-zip-linux'
     
     stage 'Test'
     sh 'make SKIP_RELEASE=true check-modules/nlb'
     sh 'make SKIP_RELEASE=true check-modules/nordic'
+    sh 'make SKIP_RELEASE=true check'
     
     stage 'Distribute'
     sh './distribute.sh'
