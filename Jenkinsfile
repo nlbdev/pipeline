@@ -10,7 +10,6 @@ node {
     stage 'Test'
     sh 'make SKIP_RELEASE=true check-modules/nlb'
     sh 'make SKIP_RELEASE=true check-modules/nordic'
-    sh 'make SKIP_RELEASE=true check'
     
     stage 'Distribute'
     sh './distribute.sh'
