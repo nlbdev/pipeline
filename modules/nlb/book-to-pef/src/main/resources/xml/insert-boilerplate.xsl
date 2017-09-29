@@ -9,6 +9,7 @@
     <xsl:output indent="yes"/>
     
     <xsl:param name="braille-standard" select="'(dots:6)(grade:0)'"/>
+    <xsl:param name="notes-placement" select="''"/>
     <xsl:variable name="contraction-grade" select="replace($braille-standard, '.*\(grade:(.*)\).*', '$1')"/>
     
     <xsl:template match="@* | node()">
@@ -121,7 +122,23 @@
                     <xsl:when test="$contraction-grade = '3'">Kortskrift nivå 3</xsl:when>
                 </xsl:choose>
             </p>
-            <p class="pages">Antall Sider: </p>           
+            <p class="pages">Antall Sider: </p>
+            <xsl:if test="//note">
+                <!-- TODO: handle fallback mechanism for footnotes (bottom-of-page = end-of-volume) -->
+                <p class="notes-placement">
+                    <xsl:choose>
+                        <xsl:when test="$notes-placement = 'bottom-of-page'">
+                            <xsl:text>Noter er plassert nederst på hver side.</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$notes-placement = 'end-of-volume'">
+                            <xsl:text>Noter er plassert i slutten av hvert hefte.</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$notes-placement = 'end-of-book'">
+                            <xsl:text>Noter er plassert bakerst i boken.</xsl:text>
+                        </xsl:when>
+                    </xsl:choose>
+                </p>
+            </xsl:if>
             <p class="return">Boka skal ikke returneres.</p>
             <p class="contact">Feil eller mangler kan meldes til punkt@nlb.no.</p>
         </level1>

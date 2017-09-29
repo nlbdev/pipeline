@@ -520,4 +520,156 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="test for text describing placement of notes in generated content ('om boka')">
+        <x:call step="nlb:dtbook-to-pef"/>
+        
+        <x:scenario label="small notes">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="dc:Title"/>
+                                <meta name="dc:Creator" content="dc:Creator"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>doctitle</doctitle>
+                                    <docauthor>docauthor</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>h1</h1>
+                                        <p>NLB<noteref idref="#smallnote">1</noteref> cooperates both nationally and internationally with other producers of adapted literature.</p>
+                                        <note id="smallnote">
+                                            <span>NLB is a state library under the Ministry of culture. The library offers a free, nation-wide service.</span>
+                                        </note>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+            </x:call>
+            
+            <x:scenario label="with notes-placement=bottom-of-page">
+                <x:call>
+                    <x:option name="notes-placement" select="'bottom-of-page'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('8/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('8/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('8/temp-dir',$temp-dir)"/>
+                </x:call>
+                
+                <x:context label="the page containing 'om boka'">
+                    <x:document type="file" base-uri="temp-dir" href="8/pef-output-dir/book.pef"  select="//pef:page[.//text()[contains(.,'⠕⠍⠀⠃⠕⠅⠁')]]"/>
+                </x:context>
+                <x:expect label="the page should contain 'Noter er plassert nederst på hver side.'" type="xpath" test="contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠝⠑⠙⠑⠗⠎⠞⠀⠏⠡⠀⠓⠧⠑⠗⠀⠎⠊⠙⠑⠄')"/>
+            </x:scenario>
+            
+            <x:scenario label="with notes-placement=end-of-volume">
+                <x:call>
+                    <x:option name="notes-placement" select="'end-of-volume'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('9/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('9/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('9/temp-dir',$temp-dir)"/>
+                </x:call>
+                
+                <x:context label="the page containing 'om boka'">
+                    <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"  select="//pef:page[.//text()[contains(.,'⠕⠍⠀⠃⠕⠅⠁')]]"/>
+                </x:context>
+                <x:expect label="the page should contain 'Noter er plassert i slutten av hvert hefte.'" type="xpath" test="contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠊⠀⠎⠇⠥⠞⠞⠑⠝⠀⠁⠧⠀⠓⠧⠑⠗⠞⠀⠓⠑⠋⠞⠑⠄')"/>
+            </x:scenario>
+            
+            <x:scenario label="with notes-placement=end-of-book">
+                <x:call>
+                    <x:option name="notes-placement" select="'end-of-book'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('10/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('10/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('10/temp-dir',$temp-dir)"/>
+                </x:call>
+                
+                <x:context label="the page containing 'om boka'">
+                    <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef"  select="//pef:page[.//text()[contains(.,'⠕⠍⠀⠃⠕⠅⠁')]]"/>
+                </x:context>
+                <x:expect label="the page should contain 'Noter er plassert bakerst i boken.'" type="xpath" test="contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠃⠁⠅⠑⠗⠎⠞⠀⠊⠀⠃⠕⠅⠑⠝⠄')"/>
+            </x:scenario>
+        </x:scenario>
+        
+        <x:scenario label="big notes">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="dc:Title"/>
+                                <meta name="dc:Creator" content="dc:Creator"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>doctitle</doctitle>
+                                    <docauthor>docauthor</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>h1</h1>
+                                        <p>NLB<noteref idref="#bignote">1</noteref> cooperates both nationally and internationally with other producers of adapted literature.</p>
+                                        <note id="bignote">
+                                            <span>The Norwegian Library of Talking Books and Braille (NLB) produces and lends out talking books and braille books. We have books for children as well as adults.</span>
+                                            <span>NLB works to ensure that everyone has equal access to literature and information. Our main task is to enable persons with print disabilities  to participate in society on an equal footing with others.</span>
+                                            <span>NLB is a state library under the Ministry of culture. The library offers a free, nation-wide service.</span>
+                                        </note>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+            </x:call>
+            
+            <x:scenario label="with notes-placement=bottom-of-page" pending="https://github.com/nlbdev/pipeline/issues/99">
+                <x:call>
+                    <x:option name="notes-placement" select="'bottom-of-page'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('11/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
+                </x:call>
+                
+                <x:context label="the page containing 'om boka'">
+                    <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef"  select="//pef:page[.//text()[contains(.,'⠕⠍⠀⠃⠕⠅⠁')]]"/>
+                </x:context>
+                <x:expect label="the page should contain 'Noter er plassert i slutten av hvert hefte.'" type="xpath" test="contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠊⠀⠎⠇⠥⠞⠞⠑⠝⠀⠁⠧⠀⠓⠧⠑⠗⠞⠀⠓⠑⠋⠞⠑⠄')"/>
+            </x:scenario>
+            
+            <x:scenario label="with notes-placement=end-of-volume">
+                <x:call>
+                    <x:option name="notes-placement" select="'end-of-volume'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('12/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('12/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('12/temp-dir',$temp-dir)"/>
+                </x:call>
+                
+                <x:context label="the page containing 'om boka'">
+                    <x:document type="file" base-uri="temp-dir" href="12/pef-output-dir/book.pef"  select="//pef:page[.//text()[contains(.,'⠕⠍⠀⠃⠕⠅⠁')]]"/>
+                </x:context>
+                <x:expect label="the page should contain 'Noter er plassert i slutten av hvert hefte.'" type="xpath" test="contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠊⠀⠎⠇⠥⠞⠞⠑⠝⠀⠁⠧⠀⠓⠧⠑⠗⠞⠀⠓⠑⠋⠞⠑⠄')"/>
+            </x:scenario>
+            
+            <x:scenario label="with notes-placement=end-of-book">
+                <x:call>
+                    <x:option name="notes-placement" select="'end-of-book'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('13/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('13/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('13/temp-dir',$temp-dir)"/>
+                </x:call>
+                
+                <x:context label="the page containing 'om boka'">
+                    <x:document type="file" base-uri="temp-dir" href="13/pef-output-dir/book.pef"  select="//pef:page[.//text()[contains(.,'⠕⠍⠀⠃⠕⠅⠁')]]"/>
+                </x:context>
+                <x:expect label="the page should contain 'Noter er plassert bakerst i boken.'" type="xpath" test="contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠃⠁⠅⠑⠗⠎⠞⠀⠊⠀⠃⠕⠅⠑⠝⠄')"/>
+            </x:scenario>
+        </x:scenario>
+    </x:scenario>
+    
 </x:description>
