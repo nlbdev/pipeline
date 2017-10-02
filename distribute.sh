@@ -51,8 +51,7 @@ DESCRIPTOR_VERSION="`echo $DESCRIPTOR_VERSION | sed "s/SNAPSHOT/SNAPSHOT+\`date 
 echo "Distributing Pipeline 2 version: $DESCRIPTOR_VERSION"
 
 ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/branches"
-ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/commits/$GIT_FULL_SHA"
-ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/commits/$GIT_SHORT_SHA"
+ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/commits"
 ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/files/$GIT_FULL_SHA"
 
 # Compile a release descriptor where artifacts not present in other repositories are linked to NLBs repository
@@ -63,10 +62,12 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
     ARTIFACT_ID="`echo $artifactLine | sed 's/.* artifactId="//' | sed 's/".*//'`"
     ARTIFACT_VERSION="`echo $artifactLine | sed 's/.* version="//' | sed 's/".*//'`"
     ARTIFACT_CLASSIFIER="`echo $artifactLine | sed 's/.* classifier="//' | sed 's/".*//'`"
+    DEPLOY_PATH="`echo $artifactLine | sed 's/.* deployPath="//' | sed 's/".*//'`"
     REMOTE_PATH="`cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " classifier=\\\"$ARTIFACT_CLASSIFIER\\\"" | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\"" | sed 's/.* href="//' | sed 's/".*//'`"
     RELATIVE_PATH="`echo $artifactLine | sed 's/.*href="//' | sed 's/".*//'`"
     RELATIVE_DIR="`echo $artifactLine | sed 's/.*href="//' | sed 's/".*//' | sed 's/\/[^/]*$//'`"
     LOCAL_PATH="`find .maven-workspace ~/.m2 -type f | grep "$RELATIVE_PATH$" | head -n 1`"
+    FILENAME="`echo $LOCAL_PATH | sed 's/^.*\///'`"
     STATUS_CODE="`curl -I --write-out %{http_code} --silent --output /dev/null "$REMOTE_PATH"`"
     if [ "`echo $ARTIFACT_VERSION | grep SNAPSHOT | wc -l`" != "1" ] || [ "$STATUS_CODE" = "200" ] || [ "$STATUS_CODE" = "302" ]; then
         echo "using $GROUP_ID:$ARTIFACT_ID:$ARTIFACT_VERSION from remote server"
@@ -75,36 +76,44 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
         # upload artifact to pipeline server since it's not hosted anywhere else,
         # or since it's a snapshot and we want a backup in case it disappears from sonatype.
         echo "copying $GROUP_ID:$ARTIFACT_ID:$ARTIFACT_VERSION to local server"
-        echo "    $artifactLine" | sed "s|href=\"|href=\"http://$REPO_PUBLIC_HOST/pipeline/files/$GIT_FULL_SHA/|" >> descriptor-full-sha.xml
+        echo "    $artifactLine" | sed "s|href=\"[^\"]*\"|href=\"http://$REPO_PUBLIC_HOST/pipeline/files/$GIT_FULL_SHA/$DEPLOY_PATH\"|" >> descriptor-full-sha.xml
         EXISTING=""
+        TARGET="$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$DEPLOY_PATH"
+        ssh -n $REPO_USER@$REPO_HOST "mkdir -p `echo $TARGET | sed 's/\/[^\/]*$//'`"
         if [ "$USE_SYMLINKS" == "true" ]; then
             EXISTING="`find_existing $LOCAL_PATH`"
-            FILENAME="`echo $LOCAL_PATH | sed 's/^.*\///'`"
             if [ "$EXISTING" != "" ]; then
-                ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $EXISTING $HOST_DIR/pipeline/files/$GIT_FULL_SHA/$FILENAME"
+                if [ "$EXISTING" != "$TARGET" ]; then
+                    ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $EXISTING $TARGET"
+                fi
             fi
         fi
         if [ "$USE_SYMLINKS" != "true" ] || [ "$EXISTING" == "" ]; then
-            rsync -av "$LOCAL_PATH" $REPO_USER@$REPO_HOST:"$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$FILENAME"
+            rsync -av "$LOCAL_PATH" $REPO_USER@$REPO_HOST:"$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$DEPLOY_PATH"
         fi
     fi
 done
 
 echo "</releaseDescriptor>" >> descriptor-full-sha.xml
 
-echo "uploading descriptor as pipeline/commits/$GIT_FULL_SHA"
-cat descriptor-full-sha.xml | ssh $REPO_USER@$REPO_HOST "cat > $HOST_DIR/pipeline/commits/$GIT_FULL_SHA"
 ZIP_FILENAME="`ls *minimal.zip | head -n 1`"
+echo "uploading $ZIP_FILENAME"
 EXISTING=""
 if [ "$USE_SYMLINKS" == "true" ]; then
     EXISTING="`find_existing $ZIP_FILENAME`"
     if [ "$EXISTING" != "" ]; then
-        ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $EXISTING $HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME"
+        TARGET="$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME"
+        if [ "$EXISTING" != "$TARGET" ]; then
+            ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $EXISTING $TARGET"
+        fi
     fi
 fi
 if [ "$USE_SYMLINKS" != "true" ] || [ "$EXISTING" == "" ]; then
-    rsync -av "$LOCAL_PATH" $REPO_USER@$REPO_HOST:"$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME"
+    rsync -av "$ZIP_FILENAME" $REPO_USER@$REPO_HOST:"$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME"
 fi
+
+echo "uploading descriptor as pipeline/commits/$GIT_FULL_SHA"
+cat descriptor-full-sha.xml | ssh $REPO_USER@$REPO_HOST "cat > $HOST_DIR/pipeline/commits/$GIT_FULL_SHA"
 
 echo "uploading descriptor as pipeline/commits/$GIT_SHORT_SHA"
 cat descriptor-full-sha.xml | sed "s/pipeline\/commits\/[^\"']*/pipeline\/commits\/$GIT_SHORT_SHA/g" > descriptor-short-sha.xml
@@ -129,9 +138,10 @@ while read branch; do
         
         # upload zip as pipeline/pipeline2_minimal.zip
         if [ "$USE_SYMLINKS" == "true" ]; then
-            ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $HOST_DIR/pipeline/commits/$GIT_FULL_SHA/$ZIP_FILENAME $HOST_DIR/pipeline/pipeline2_minimal.zip"
+            ssh -n $REPO_USER@$REPO_HOST "rm $HOST_DIR/pipeline/pipeline2_minimal.zip || true"
+            ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME $HOST_DIR/pipeline/pipeline2_minimal.zip"
         else
-            rsync -av $ZIP_FILENAME $REPO_USER@$REPO_HOST:"$HOST_DIR/pipeline/pipeline2_minimal.zip"
+            rsync -av "$ZIP_FILENAME" $REPO_USER@$REPO_HOST:"$HOST_DIR/pipeline/pipeline2_minimal.zip"
         fi
         
         # update index.html (only do this when we update "current", to prevent overwriting from feature branches)
@@ -145,7 +155,7 @@ while read branch; do
         echo "<p>To use this server, please read the installation guide describing the Pipeline 2 updater mechanism on the Pipeline 2 homepage:" >> index.html
         echo "<ul><li><a href=\"http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/#updater\">http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/#updater</a></li></ul>" >> index.html
         echo "<p>If you don't already have an existing installation of Pipeline 2, then you can download the latest build of the minimal version containing only the command line updater here:</p>" >> index.html
-        echo "<ul><li><a href=\"http://$REPO_PUBLIC_HOST/pipeline/pipeline2_minimal.zip\">pipeline2_minimal.zip</a></li></ul>" >> index.html
+        echo "<ul><li><a href=\"pipeline2_minimal.zip\">pipeline2_minimal.zip</a></li></ul>" >> index.html
         echo "<p>Use the following update URL:</p>" >> index.html
         echo "<p><pre><code>http://$REPO_PUBLIC_HOST/pipeline/</code></pre></p>" >> index.html
         echo "<p>For version, you should use <code>current</code>. Alternatively, you may reference a specific branch or a specific commit as follows:</p>" >> index.html
