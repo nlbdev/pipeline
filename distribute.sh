@@ -17,14 +17,37 @@ USE_SYMLINKS="true"
 
 function find_existing {
     FILENAME="`echo $1 | sed 's/.*\///'`"
+    DEPLOY_PATH="$2"
     MD5SUM="`md5sum $1 | awk '{print $1}'`"
-    ssh -n $REPO_USER@$REPO_HOST "find $HOST_DIR/pipeline/files -type f | grep "$FILENAME$" | xargs md5sum | grep $MD5SUM | head -n 1" | {
+    ssh -n $REPO_USER@$REPO_HOST "find $HOST_DIR/pipeline/files -type f | grep "$DEPLOY_PATH$" | xargs md5sum | grep $MD5SUM | head -n 1" | {
     while read match; do
         # found existing identical file
         echo $match | awk '{print $2}'
     done
     }
 }
+
+# create remote directory, and check return code
+function ssh_mkdir {
+    DIR="$1"
+    ssh -n $REPO_USER@$REPO_HOST "mkdir -p \"$DIR\" ; echo \$? > /tmp/ret"
+    RET="`ssh -n $REPO_USER@$REPO_HOST "cat /tmp/ret"`"
+    if [ "$RET" != "0" ]; then
+        exit $RET
+    fi
+}
+
+# create remote symlink, and check return code
+function ssh_symlink {
+    TARGET="$1"
+    LINK_NAME="$2"
+    ssh -n $REPO_USER@$REPO_HOST "ln --symbolic \"$TARGET\" \"$LINK_NAME\" ; echo \$? > /tmp/ret"
+    RET="`ssh -n $REPO_USER@$REPO_HOST "cat /tmp/ret"`"
+    if [ "$RET" != "0" ]; then
+        exit $RET
+    fi
+}
+
 
 # NOTE: it is assumed that `make` has already cached all the necessary files in `.maven-workspace`
 #       and that the minimal distribution has been build (`make dist-zip-minimal`).
@@ -48,13 +71,13 @@ java -cp "`find .maven-workspace/net/sf/saxon/Saxon-HE/9* -type f | grep jar$ | 
 DESCRIPTOR_VERSION="`cat releaseDescriptorRelative.xml | grep "<releaseDescriptor " | sed 's/.* version="//' | sed 's/".*//'`"
 GIT_FULL_SHA="`git rev-parse HEAD`"
 GIT_SHORT_SHA="`git rev-parse --short HEAD`"
-DESCRIPTOR_VERSION="`echo $DESCRIPTOR_VERSION | sed "s/SNAPSHOT/SNAPSHOT+\`date -u +"%Y%m%d%H%M%S"\`-$GIT_FULL_SHA/"`"
+DESCRIPTOR_VERSION="`echo $DESCRIPTOR_VERSION | sed "s/SNAPSHOT/SNAPSHOT-\`date -u +"%Y%m%d%H%M%S"\`-$GIT_FULL_SHA/"`"
 
 echo "Distributing Pipeline 2 version: $DESCRIPTOR_VERSION"
 
-ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/branches"
-ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/commits"
-ssh -n $REPO_USER@$REPO_HOST "mkdir -p $HOST_DIR/pipeline/files/$GIT_FULL_SHA"
+ssh_mkdir "$HOST_DIR/pipeline/branches"
+ssh_mkdir "$HOST_DIR/pipeline/commits"
+ssh_mkdir "$HOST_DIR/pipeline/files/$GIT_FULL_SHA"
 
 # Compile a release descriptor where artifacts not present in other repositories are linked to NLBs repository
 echo '<?xml version="1.0" encoding="UTF-8"?>' > descriptor-full-sha.xml
@@ -78,15 +101,15 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
         # upload artifact to pipeline server since it's not hosted anywhere else,
         # or since it's a snapshot and we want a backup in case it disappears from sonatype.
         echo "copying $GROUP_ID:$ARTIFACT_ID:$ARTIFACT_VERSION to local server"
-        echo "    $artifactLine" | sed "s|href=\"[^\"]*\"|href=\"http://$REPO_PUBLIC_HOST/pipeline/files/$GIT_FULL_SHA/$DEPLOY_PATH\"|" >> descriptor-full-sha.xml
+        echo "    $artifactLine" | sed "s|href=\"[^\"]*\"|href=\"http://$REPO_PUBLIC_HOST/pipeline/files/$GIT_FULL_SHA/$DEPLOY_PATH\"|" | sed "s|version=\"\([^\"]*\)\"|version=\"\1-$GIT_FULL_SHA\"|" >> descriptor-full-sha.xml
         EXISTING=""
         TARGET="$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$DEPLOY_PATH"
-        ssh -n $REPO_USER@$REPO_HOST "mkdir -p `echo $TARGET | sed 's/\/[^\/]*$//'`"
+        ssh_mkdir "`echo $TARGET | sed 's/\/[^\/]*$//'`"
         if [ "$USE_SYMLINKS" == "true" ]; then
-            EXISTING="`find_existing $LOCAL_PATH`"
+            EXISTING="`find_existing $LOCAL_PATH $DEPLOY_PATH`"
             if [ "$EXISTING" != "" ]; then
-                if [ "$EXISTING" != "$TARGET" ]; then
-                    ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $EXISTING $TARGET"
+                if [ "$EXISTING" != "$TARGET" ]; then
+                    ssh_symlink "$EXISTING" "$TARGET"
                 fi
             fi
         fi
@@ -102,11 +125,11 @@ ZIP_FILENAME="`ls *minimal.zip | head -n 1`"
 echo "uploading $ZIP_FILENAME"
 EXISTING=""
 if [ "$USE_SYMLINKS" == "true" ]; then
-    EXISTING="`find_existing $ZIP_FILENAME`"
+    EXISTING="`find_existing $ZIP_FILENAME $ZIP_FILENAME`"
     if [ "$EXISTING" != "" ]; then
         TARGET="$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME"
-        if [ "$EXISTING" != "$TARGET" ]; then
-            ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $EXISTING $TARGET"
+        if [ "$EXISTING" != "$TARGET" ]; then
+            ssh_symlink "$EXISTING" "$TARGET"
         fi
     fi
 fi
@@ -140,8 +163,9 @@ while read branch; do
         
         # upload zip as pipeline/pipeline2_minimal.zip
         if [ "$USE_SYMLINKS" == "true" ]; then
-            ssh -n $REPO_USER@$REPO_HOST "rm $HOST_DIR/pipeline/pipeline2_minimal.zip || true"
-            ssh -n $REPO_USER@$REPO_HOST "ln --symbolic $HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME $HOST_DIR/pipeline/pipeline2_minimal.zip"
+            TARGET="$HOST_DIR/pipeline/pipeline2_minimal.zip"
+            ssh -n $REPO_USER@$REPO_HOST "rm $TARGET || true"
+            ssh_symlink "$HOST_DIR/pipeline/files/$GIT_FULL_SHA/$ZIP_FILENAME" "$TARGET"
         else
             rsync -av "$ZIP_FILENAME" $REPO_USER@$REPO_HOST:"$HOST_DIR/pipeline/pipeline2_minimal.zip"
         fi
