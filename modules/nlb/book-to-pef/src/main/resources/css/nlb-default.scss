@@ -684,38 +684,52 @@ list[type=ol], ol {
 
 table {
     display: table;
-}
+    
+    &.table-as-list {
+        display: block;
+        render-table-by: row;
+        th::after {
+            content: ': ';
+        }
+        &::list-item {
+            display: block;
+        }
+        &::table-by(row) {
+            display: block;
+            margin-left: 2;
+            &::list-item {
+                display: block;
+                &:first-child {
+                    text-indent: -2;
+                }
+            }
+        }
+    }
+    
+    caption {
+        display: block;
+        text-indent: 2;
+        margin-top: 1;
+        margin-bottom: 1;
+        text-align: left;
+    }
 
-table > caption {
-    display: block;
-    text-indent: 2;
-    margin-top: 1;
-    margin-bottom: 1;
-    text-align: left;
-}
-
-table > caption::after {
-    display: block;
-    text-indent: 2;
-    margin-top: 1;
-    margin-bottom: 1;
-    content: 'Tabell starter';
-}
-
-table:not(:has(caption))::before {
-    display: block;
-    text-indent: 2;
-    margin-top: 1;
-    margin-bottom: 1;
-    content: 'Tabell starter';
-}
-
-table::after {
-    display: block;
-    text-indent: 2;
-    margin-top: 1;
-    margin-bottom: 1;
-    content: 'Tabell slutter';
+    caption::after,
+    &:not(:has(caption))::before {
+        display: block;
+        text-indent: 2;
+        margin-top: 1;
+        margin-bottom: 1;
+        content: 'Tabell starter';
+    }
+    
+    &::after {
+        display: block;
+        text-indent: 2;
+        margin-top: 1;
+        margin-bottom: 1;
+        content: 'Tabell slutter';
+    }
 }
 
 /* -------------------------------------------------------------------------- */
