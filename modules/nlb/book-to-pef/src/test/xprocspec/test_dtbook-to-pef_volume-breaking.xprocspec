@@ -320,7 +320,7 @@
             <x:expect label="The PEF should be generated" type="count" min="1"/>
         </x:scenario>
         
-        <x:scenario label="prefer splitting at lower level headings" pending="https://github.com/nlbdev/pipeline/issues/63">
+        <x:scenario label="prefer splitting at lower level headings" pending="https://github.com/nlbdev/pipeline/issues/119">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
