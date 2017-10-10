@@ -56,6 +56,7 @@
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
+    <p:option name="maximum-number-of-pages"/>
     <p:option name="include-obfl"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
@@ -66,7 +67,6 @@
     <p:option name="show-print-page-numbers"/>
     <p:option name="toc-depth"/>
     <p:option name="colophon-metadata-placement"/>
-    <p:option name="maximum-number-of-sheets"/>
     <p:option name="pef-output-dir"/>
     <p:option name="preview-output-dir"/>
     <p:option name="temp-dir"/>
@@ -88,14 +88,16 @@
             <p:pipe step="main" port="parameters"/>
         </p:input>
     </px:merge-parameters>
+    <px:add-parameters>
+        <p:with-param name="maximum-number-of-sheets" select="xs:integer(number($maximum-number-of-pages) div 2)"/>
+        <p:with-param name="main-document-language" select="'no'"/>
+    </px:add-parameters>
     <px:delete-parameters parameter-names="stylesheet
                                            include-obfl
+                                           maximum-number-of-pages
                                            pef-output-dir
                                            preview-output-dir
                                            temp-dir"/>
-    <px:add-parameters>
-        <p:with-param name="main-document-language" select="'no'"/>
-    </px:add-parameters>
     <p:identity name="parameters"/>
     <p:sink/>
     

@@ -119,6 +119,11 @@ Eksempel på bruk av språkkode på et helt dokument
             <h2 px:role="name">Layout: Tosidig trykk</h2>
         </p:documentation>
     </p:option>
+    <p:option name="maximum-number-of-pages" select="'86'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Hefter: Største antall sider</h2>
+        </p:documentation>
+    </p:option>
     <p:option name="include-obfl" required="false" px:type="boolean" select="'false'">
         <p:documentation>
             <h2 px:role="name">Layout: Inkluder OBFL</h2>
@@ -224,26 +229,6 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
             <h2 px:role="name">Plassering av innhold: Plassering av baksidetekst</h2>
         </p:documentation>
     </p:option>-->
-    
-    <!-- ====== -->
-    <!-- Hefter -->
-    <!-- ====== -->
-    <!--<p:option name="number-of-sheets" select="'50'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Hefter: Antall sider</h2>
-        </p:documentation>
-    </p:option>-->
-    <p:option name="maximum-number-of-sheets" select="'70'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Hefter: Største antall sider</h2>
-        </p:documentation>
-    </p:option>
-    <!--<p:option name="minimum-number-of-sheets" select="'30'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Hefter: Minste antall sider</h2>
-        </p:documentation>
-    </p:option>-->
-    
     
     <!-- ====== -->
     <!-- Utputt -->

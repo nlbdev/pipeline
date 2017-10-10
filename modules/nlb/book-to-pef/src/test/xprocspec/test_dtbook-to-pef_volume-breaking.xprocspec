@@ -7,11 +7,11 @@
     
     <!--
         Notes for writing tests:
-        - Don't use a too low `maximum-number-of-sheets` (use at least 2); you may get an error if the script tries to insert a TOC and there's not enough room for it.
+        - Don't use a too low `maximum-number-of-pages` (use at least 4); you may get an error if the script tries to insert a TOC and there's not enough room for it.
         - Don't override the default `page-height` of 28, or at least don't set it too low; The NLB-stylesheet contains rules that depend on the page height (i.e. -obfl-vertical-position: 25;) which may give an error.
-        - If the input contains frontmatter, then at least 1 front page will be generated. So unless needed, just omit frontmatter.
+        - All volumes will start with a titlepage. The first volume will also contain an about page.
         - If the input contains headlines, then at least 1 toc page will be generated.
-        - Using the default `page-height` of 28, and a `maximum-number-of-sheets` for 4, and having content with a few headlines, there will be 7 braille pages with a total of 196 rows (minus margins, spacing etc.) available for content. 
+        - Using the default `page-height` of 28, a `maximum-number-of-pages` of 8, and no toc (toc-depth=0), there will be 6 braille pages with 168 rows in the first volume, and 7 braille pages with 196 rows, available for content. 
     -->
     
     <x:scenario label="_">
@@ -19,7 +19,7 @@
             <x:option name="show-print-page-numbers" select="'false'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="toc-depth" select="0"/>
-            <x:option name="maximum-number-of-sheets" select="4"/>
+            <x:option name="maximum-number-of-pages" select="8"/>
         </x:call>
         
         <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes: seeking a balanced page number between these volumes">
@@ -65,7 +65,7 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" />
             </x:context>
-            <x:expect label="190 short paragraphs, default page height (28) and max sheets 4 (1 sheet = 2 braille pages; 1 volume = 8 pages - 1 titlepage - 1 colopohon), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+            <x:expect label="190 short paragraphs, default page height (28) and max pages 8 (1 volume = 8 pages - 1 titlepage - 1 aboutpage), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
             <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
             <x:expect label="At least 20% of the content rows should be in the second bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
         </x:scenario>
@@ -285,7 +285,7 @@
             <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
         </x:scenario>
         
-        <x:scenario label="regression test: volume division fails with maximum-number-of-sheets = 4 and 81 headlines">
+        <x:scenario label="regression test: volume division fails with maximum-number-of-pages = 8 and 81 headlines">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
