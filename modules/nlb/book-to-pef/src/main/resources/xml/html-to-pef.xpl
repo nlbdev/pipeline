@@ -60,6 +60,7 @@
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
     <p:option name="include-notes"/>
+    <p:option name="notes-placement"/>
     <p:option name="include-production-notes"/>
     <p:option name="show-braille-page-numbers"/>
     <p:option name="show-print-page-numbers"/>
