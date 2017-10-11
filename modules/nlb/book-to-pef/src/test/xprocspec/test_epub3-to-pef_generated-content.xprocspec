@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               script="../resources/epub3-to-pef-test.xpl">
+    
+    <x:scenario label="basic test of complete titlepage" pending="https://github.com/nlbdev/pipeline/issues/78 https://github.com/nlbdev/pipeline/issues/97">
+        <x:call step="nlb:epub3-to-pef-test">
+            <x:input port="source">
+                <x:document type="inline">
+                    <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-identifier" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+                        <metadata>
+                            <dc:identifier id="pub-identifier">uid</dc:identifier>
+                            <dc:creator>author</dc:creator>
+                            <dc:title>title</dc:title>
+                            <dc:language>no</dc:language>
+                        </metadata>
+                        <manifest>
+                            <item id="item_0" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+                            <item id="item_1" media-type="application/xhtml+xml" href="content-1.xhtml"/>
+                        </manifest>
+                        <spine>
+                            <itemref id="itemref_1" idref="item_1"/>
+                        </spine>
+                    </package>
+                </x:document>
+                <x:document type="inline">
+                    <html xml:base="nav.xhtml" xml:lang="no" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+                        <head/>
+                        <body>
+                            <nav epub:type="toc">
+                                <h1/>
+                                <ol>
+                                    <li>
+                                        <a href="content-1.xhtml#content-1"/>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </body>
+                    </html>
+                </x:document>
+                <x:document type="inline">
+                    <html xml:base="content-1.xhtml" xmlns="http://www.w3.org/1999/xhtml" lang="no">
+                        <head/>
+                        <body id="content-1">
+                            <h1>bodymatter</h1>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+            <x:param name="pef-output-dir" select="resolve-uri('basic-titlepage/1/pef-output-dir',$temp-dir)"/>
+            <x:param name="preview-output-dir" select="resolve-uri('basic-titlepage/1/preview-output-dir',$temp-dir)"/>
+            <x:param name="temp-dir" select="resolve-uri('basic-titlepage/1/temp-dir',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the pef">
+            <x:document type="file" base-uri="temp-dir" href="basic-titlepage/1/pef-output-dir/uid.pef"/>
+        </x:context>
+        <x:expect label="the PEF should be 28 rows high" type="xpath" test="(//pef:volume)[1]/@rows" equals="28"/>
+        <x:expect label="the PEF should be 32 columns wide" type="xpath" test="(//pef:volume)[1]/@cols" equals="32"/>
+        
+        <x:context label="the rows on the first page of the pef">
+            <x:document type="file" base-uri="temp-dir" href="basic-titlepage/1/pef-output-dir/uid.pef" select="(//pef:page)[1]/pef:row"/>
+        </x:context>
+        <x:expect label="the titlepage should be as expected" type="compare">
+            <x:document type="inline" select="/*/*">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠥⠞⠓⠕⠗</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠞⠊⠞⠇⠑</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃⠀⠤⠀⠼⠃⠚⠁⠛</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠥⠇⠇⠎⠅⠗⠊⠋⠞</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠁⠀⠁⠧⠀⠼⠁</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
