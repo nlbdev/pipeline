@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xslt"
+               stylesheet="../../main/resources/xml/insert-boilerplate.xsl">
+    
+    <x:scenario label="Basic usage - DTBook">
+        <x:context>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/"/>
+        </x:context>
+        <x:expect>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <frontmatter>
+                    <level1 class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p class="pef-volume"> av </p>
+                    </level1>
+                    <level1 class="pef-about">
+                        <h1>Om boka</h1>
+                        <p class="pef-pages">Antall sider: </p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </level1>
+                </frontmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Basic usage - EPUB/HTML">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml"/>
+        </x:context>
+        <x:expect>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body class="pef-titlepage">
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p>NLB - 2017</p>
+                    <p>Fullskrift</p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                    <p class="pef-volume"> av </p>
+                </body>
+                <body class="pef-about">
+                    <h1>Om boka</h1>
+                    <p class="pef-pages">Antall sider: </p>
+                    <p>Boka skal ikke returneres.</p>
+                    <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('Johnnie','Andy','Mackenzie','Lou','Ikin','Harlow','Shelby','Merle',
+                                             'Raven','Varley','Taylor','Kelley','Darcy','Phoenix','Simms','Tibby',
+                                             'Pip','Shelly','Georgie','North','Lindsay','Mel','Joyce','Jules','Rennell')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="break-words" select="'avoid'"/>
+        </x:call>
+        <x:expect select="(
+                             'Johnnie Andy',
+                             'Mackenzie Lou',
+                             'Ikin Harlow',
+                             'Shelby Merle',
+                             'Raven Varley',
+                             'Taylor Kelley',
+                             'Darcy Phoenix',
+                             'Simms Tibby Pip',
+                             'Shelly Georgie',
+                             'North Lindsay Mel',
+                             'Joyce Jules',
+                             'Rennell'
+                          )"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines - words too long, but don't break them">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('Taylor','Kelley','Lou','Phoenix')"/>
+            <x:param name="line-length" select="4"/>
+            <x:param name="break-words" select="'never'"/>
+        </x:call>
+        <x:expect select="()"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines - if words are too long, break them, otherwise only break on spaces">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('Taylor','Kelly','Li','Phoenix')"/>
+            <x:param name="line-length" select="5"/>
+            <x:param name="break-words" select="'avoid'"/>
+        </x:call>
+        <x:expect select="('Tayl','or','Kell','y Li','Phoe','nix')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines - fill lines completely before breaking, regardless of where the spaces are">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('taylor','kelley','lou','phoenix')"/>
+            <x:param name="line-length" select="5"/>
+            <x:param name="break-words" select="'always'"/>
+        </x:call>
+        <x:expect select="('taylo','r kel','ley l','ou ph','oenix')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:fit-name-to-lines - 4 lines">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Johnnie Andy Mackenzie Lou Ikin Harlow Taylor'"/>
+            <x:param name="lines-available" select="4"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Johnnie Andy','Mackenzie Lou','Ikin Harlow','Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:fit-name-to-lines - 3 lines">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Johnnie Andy Mackenzie Lou Ikin Harlow Shelby Merle Raven Varley Taylor'"/>
+            <x:param name="lines-available" select="3"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Johnnie A. M. L.', 'I. H. S. M. R.', 'V. Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:fit-name-to-lines - 2 lines">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Johnnie Andy Mackenzie Lou Ikin Harlow Shelby Merle Raven Varley Taylor'"/>
+            <x:param name="lines-available" select="2"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Johnnie Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:fit-name-to-lines - 2 lines">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Johnnie Andy Mackenzie Lou Ikin Harlow Shelby Merle Taylor'"/>
+            <x:param name="lines-available" select="2"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('J. A. M. L. I.', 'H. S. M. Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:fit-name-to-lines - 1 lines">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Johnnie Andy Mackenzie Lou Ikin Harlow Shelby Merle Raven Varley Taylor'"/>
+            <x:param name="lines-available" select="1"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Johnnie Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:fit-name-to-lines - 1 lines">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Johnnie Andy Mackenzie Taylor'"/>
+            <x:param name="lines-available" select="1"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('J. A. M. Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:author-lines - 1 long author">
+        <x:call function="nlb:author-lines">
+            <x:param name="authors" select="('Johnnie Andy Mackenzie Lou Taylor')"/>
+            <x:param name="lines-available" select="3"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie Andy', 'Mackenzie Lou', 'Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:author-lines - 4 authors">
+        <x:call function="nlb:author-lines">
+            <x:param name="authors" select="('author 1', 'author 2', 'author 3', 'author 4')"/>
+            <x:param name="lines-available" select="3"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('author 1', 'author 2', 'mfl.')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:title-lines - long title">
+        <x:call function="nlb:title-lines">
+            <x:param name="title" select="'So Long, and Thanks for All the Fish'"/>
+            <x:param name="lines-available" select="5"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('So Long, and','Thanks for All the','Fish')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:title-lines - too long title">
+        <x:call function="nlb:title-lines">
+            <x:param name="title" select="'No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again'"/>
+            <x:param name="lines-available" select="5"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('No Matter How','Much You Promise','to Cook or Pay the','Rent You Blew It','Cauze Bill Bai...')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:title-lines - long title with too long words">
+        <x:call function="nlb:title-lines">
+            <x:param name="title" select="'Floccinaucinihilipilification of supercalifragilisticexpialidocious expressions'"/>
+            <x:param name="lines-available" select="5"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Floccinaucinih','ilipilification of','supercalifragi','listicexpialidocious','expressions')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:title-lines - too long title with too long words">
+        <x:call function="nlb:title-lines">
+            <x:param name="title" select="'Floccinaucinihilipilification of supercalifragilisticexpialidocious expressions and its strenghts with regards to incomprehensibilities'"/>
+            <x:param name="lines-available" select="5"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Floccinaucinih','ilipilification of','supercalifragi','listicexpialidocious','expressions and i...')"/>
+    </x:scenario>
+    
+</x:description>
