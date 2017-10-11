@@ -37,7 +37,7 @@
         </x:call>
         <x:context label="result">
             <x:document type="file" base-uri="temp-dir" href="notes-numbering/pef-output-dir/test_dtbook-to-pef_notes.pef"
-                        select="(//pef:section)[position() &gt; 2]//pef:page"/>
+                        select="(//pef:page)[position() &gt;= last() - 1]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">

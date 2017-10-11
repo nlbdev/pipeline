@@ -11,7 +11,7 @@
         - Don't override the default `page-height` of 28, or at least don't set it too low; The NLB-stylesheet contains rules that depend on the page height (i.e. -obfl-vertical-position: 25;) which may give an error.
         - All volumes will start with a titlepage. The first volume will also contain an about page.
         - If the input contains headlines, then at least 1 toc page will be generated.
-        - Using the default `page-height` of 28, a `maximum-number-of-pages` of 8, and no toc (toc-depth=0), there will be 6 braille pages with 168 rows in the first volume, and 7 braille pages with 196 rows, available for content. 
+        - Using the default `page-height` of 28, a `maximum-number-of-pages` of 10, and no toc (toc-depth=0), there will be 6 braille pages with 168 rows in the first volume, and 7 braille pages with 196 rows, available for content. 
     -->
     
     <x:scenario label="_">
@@ -19,10 +19,10 @@
             <x:option name="show-print-page-numbers" select="'false'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="toc-depth" select="0"/>
-            <x:option name="maximum-number-of-pages" select="8"/>
+            <x:option name="maximum-number-of-pages" select="10"/>
         </x:call>
         
-        <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes: seeking a balanced page number between these volumes">
+        <x:scenario label="There should always be something other than generated content in the PEF, even though that means splitting a chapter that would've fit in a separate volume" pending="https://github.com/nlbdev/pipeline/issues/122">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -30,28 +30,117 @@
                             <book>
                                 <bodymatter>
                                     <level1>
+                                        <!-- content page 1 -->
                                         <h1>big</h1>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         
-                                        <!-- 190 paragraphs -->
+                                        <!-- content page 2 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 3 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 4 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 5 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 6 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 7 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 8 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('0/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('0/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('0/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="0/pef-output-dir/book.pef" />
+            </x:context>
+            <x:expect label="8 pages of content, with 218 short paragraphs, should become 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            <x:expect label="At least 20% of the content rows should be in the first volume" type="xpath" test="count(//pef:volume[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="At least 20% of the content rows should be in the second volume" type="xpath" test="count(//pef:volume[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+        </x:scenario>
+        
+        <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes: seeking a balanced page number between these volumes" pending="https://github.com/nlbdev/pipeline/issues/122">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <!-- content page 1 -->
+                                        <h1>big</h1>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 2 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 3 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 4 -->
                                         <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 5 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 6 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 7 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 8 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- content page 9 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                     </level1>
                                 </bodymatter>
                             </book>
@@ -65,9 +154,9 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" />
             </x:context>
-            <x:expect label="190 short paragraphs, default page height (28) and max pages 8 (1 volume = 8 pages - 1 titlepage - 1 aboutpage), should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
-            <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
-            <x:expect label="At least 20% of the content rows should be in the second bodymatter volume" type="xpath" test="count((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="9 pages of content, with 246 short paragraphs, should become 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count(//pef:volume[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="At least 20% of the content rows should be in the second bodymatter volume" type="xpath" test="count(//pef:volume[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
         </x:scenario>
         
         <x:scenario label="with parts: parts will be top level splitting points">
@@ -95,7 +184,7 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" />
             </x:context>
-            <x:expect label="2 short paragraphs, but in different book 'parts', should become 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+            <x:expect label="2 short paragraphs, but in different book 'parts', should be split across 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
         </x:scenario>
         
         <x:scenario label="with parts: don't force a volume break before the first part">
@@ -133,138 +222,233 @@
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
                             <book>
+                                <frontmatter/>
                                 <bodymatter>
                                     <level1 class="part">
                                         <!-- small chapter -->
                                         <level2>
+                                            <!-- small content page 1 -->
                                             <h2>small</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             
-                                            <!-- 50 paragraphs -->
+                                            <!-- small content page 2 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         </level2>
                                         
                                         <!-- small chapter -->
                                         <level2>
+                                            <!-- small content page 1 -->
                                             <h2>small</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             
-                                            <!-- 50 paragraphs -->
+                                            <!-- small content page 2 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         </level2>
                                     </level1>
                                     <level1 class="part">
                                         <!-- medium chapter -->
                                         <level2>
+                                            <!-- medium content page 1 -->
                                             <h2>medium</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             
-                                            <!-- 140 paragraphs -->
+                                            <!-- medium content page 2 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 3 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 4 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 5 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 6 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         </level2>
                                         
                                         <!-- medium chapter -->
                                         <level2>
+                                            <!-- medium content page 1 -->
                                             <h2>medium</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             
-                                            <!-- 140 paragraphs -->
+                                            <!-- medium content page 2 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 3 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 4 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 5 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- medium content page 6 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         </level2>
                                     </level1>
                                     <level1 class="part">
                                         <!-- big chapter -->
                                         <level2>
+                                            <!-- big content page 1 -->
                                             <h2>big</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             
-                                            <!-- 250 paragraphs -->
+                                            <!-- big content page 2 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 3 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 4 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 5 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 6 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 7 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 8 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 9 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 10 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 11 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 12 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         </level2>
                                         
                                         <!-- big chapter -->
                                         <level2>
+                                            <!-- big content page 1 -->
                                             <h2>big</h2>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             
-                                            <!-- 250 paragraphs -->
+                                            <!-- big content page 2 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 3 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 4 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 5 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 6 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 7 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 8 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 9 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 10 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 11 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            
+                                            <!-- big content page 12 -->
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         </level2>
                                     </level1>
                                 </bodymatter>
@@ -279,10 +463,18 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef" />
             </x:context>
-            <x:expect label="1 volume with 2 small chapters" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]])" equals="1"/>
-            <x:expect label="2 volumes with 1 medium chapter each" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')]])" equals="2"/>
-            <x:expect label="2 big chapters spread across 4 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')] and not(.//pef:row[contains(text(),'⠎⠍⠁⠇⠇')]) and not(.//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])])" equals="4"/>
-            <x:expect label="a total of 7 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="7"/>
+            <x:expect label="there should be 7 volumes" type="xpath" test="count(//pef:volume)" equals="7"/>
+            <x:expect label="volume 1 should have the headlines for 2 small chapters" type="xpath" test="count(//pef:volume[1]//pef:row[contains(text(),'⠎⠍⠁⠇⠇')])" equals="2"/>
+            <x:expect label="volume 2 should have the headline for 1 medium chapter" type="xpath" test="count(//pef:volume[2]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])" equals="1"/>
+            <x:expect label="volume 2 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[2]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 3 should have the headline for 1 medium chapter" type="xpath" test="count(//pef:volume[3]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])" equals="1"/>
+            <x:expect label="volume 3 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[3]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 4 should have the headline for 1 big chapter" type="xpath" test="count(//pef:volume[4]//pef:row[contains(text(),'⠃⠊⠛')])" equals="1"/>
+            <x:expect label="volume 4 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[4]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠃⠊⠛')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 5 should have no content other than 'content' paragraphs" type="xpath" test="string-join((//pef:volume[5]/(.//pef:row except (.//pef:page)[1]//pef:row)/text()[not(contains(.,'⠉⠕⠝⠞⠑⠝⠞')) and matches(.,'[^⠀]')]/replace(.,'(^⠀+|⠀+$)$','')), ',')" equals="''"/>
+            <x:expect label="volume 6 should have the headline for 1 big chapter" type="xpath" test="count(//pef:volume[6]//pef:row[contains(text(),'⠃⠊⠛')])" equals="1"/>
+            <x:expect label="volume 6 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[6]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠃⠊⠛')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 7 should have no content other than 'content' paragraphs" type="xpath" test="string-join((//pef:volume[7]/(.//pef:row except (.//pef:page)[1]//pef:row)/text()[not(contains(.,'⠉⠕⠝⠞⠑⠝⠞')) and matches(.,'[^⠀]')]/replace(.,'(^⠀+|⠀+$)$','')), ',')" equals="''"/>
         </x:scenario>
         
         <x:scenario label="regression test: volume division fails with maximum-number-of-pages = 8 and 81 headlines">

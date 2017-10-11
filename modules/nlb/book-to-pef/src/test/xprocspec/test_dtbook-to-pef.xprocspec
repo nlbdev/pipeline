@@ -400,7 +400,6 @@
                 <x:document type="inline" select="//pef:row">
                     <_ xmlns="http://www.daisy.org/ns/2008/pef">
                         <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
                     </_>
                 </x:document>
             </x:expect>
@@ -474,7 +473,7 @@
             </x:call>
             
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"  select="(//pef:section)[position() &gt; 2]//pef:page"/>
+                <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"  select="(//pef:page)[last()]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
@@ -530,32 +529,20 @@
                             </head>
                             <book>
                                 <frontmatter>
-                                    <doctitle>aaa</doctitle>
-                                    <docauthor>bbb</docauthor>
-                                    <level1  class="titlepage">
-                                        <p class="docauthor author">Tor </p>
-                                    </level1>
-                                    <level1  class="colophon">
-                                        <p>aaa bbb ccc </p>
-                                        <p>lll lll lll </p>
-                                    </level1>
+                                    <doctitle>doctitle</doctitle>
                                 </frontmatter>
                                 <bodymatter>
-                                    <level1>
-                                        <h1>aaa</h1>
-                                        <p>lll</p>
+                                    <level1 class="part">
+                                        <p>volume 1</p>
                                     </level1>
-                                    <level1>
-                                        <h1>bbb</h1>
-                                        <p>lll</p>
+                                    <level1 class="part">
+                                        <p>volume 2</p>
                                     </level1>
-                                    <level1>
-                                        <h1>1</h1>
-                                        <p>1</p>
+                                    <level1 class="part">
+                                        <p>volume 3</p>
                                     </level1>
-                                    <level1>
-                                        <h1>2</h1>
-                                        <p>2</p>
+                                    <level1 class="part">
+                                        <p>volume 4</p>
                                     </level1>
                                 </bodymatter>
                             </book>
@@ -570,19 +557,19 @@
             </x:call>
             
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef" select="//pef:volume//pef:page/((pef:row[contains(text(),'⠠⠃⠊⠝⠙')], pef:row[1])[1])"/>
+                <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef" select="//pef:volume//pef:row[matches(text(),'.*⠠⠓⠑⠋⠞⠑⠀⠼.*⠀⠁⠧⠀⠼.*') or matches(text(),'.*⠧⠕⠇⠥⠍⠑⠀⠼*')]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="/*/*">
                     <_ xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠃⠊⠝⠙⠀⠼⠁⠀⠁⠧⠀⠼⠃</row>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠃⠊⠝⠙⠀⠼⠃⠀⠁⠧⠀⠼⠃</row>
-                        <row/>
-                        <row/>
-                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠁⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠁</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠃⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠃</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠉⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠙⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠙</row>
                     </_>
                 </x:document>
             </x:expect>
@@ -618,7 +605,7 @@
                 <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef"  select="(//pef:section)[position() &gt; 2]//pef:page"/>
+                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef"  select="(//pef:page)[last()]"/>
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
