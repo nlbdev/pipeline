@@ -113,13 +113,6 @@
         </p:with-option>
     </px:epub3-to-pef.load>
     
-    <px:message message="Running NLB-specific pre-processing steps"/>
-    <!--
-        Nothing here yet.
-        Wait for: https://github.com/snaekobbi/pipeline-mod-braille/issues/63 (=> this is fixed now)
-    -->
-    <px:message message="Finished running NLB-specific pre-processing steps" severity="DEBUG"/>
-    
     <px:epub3-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css"
                              name="convert">
         <p:with-option name="epub" select="$epub"/>
