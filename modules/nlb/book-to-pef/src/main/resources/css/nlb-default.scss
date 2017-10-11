@@ -83,9 +83,9 @@ pagenum, *[epub|type~='pagebreak'] {
                 /* to cancel out generic rule */
         }
 
-        frontmatter level1:not(.first-page):not(.second-page):not(.third-page):not(.titlepage):not(.colophon):not(.about),
+        frontmatter level1:not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc),
         bodymatter,
-        body:not([epub|type~='cover']):not([epub|type~='backmatter']):not(.titlepage):not(.colophon):not(.about) {
+        body:not([epub|type~='cover']):not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc) {
                 line-height: 2;
         }
 
@@ -251,130 +251,94 @@ h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                        Generated content CSS                               */
+/* -------------------------------------------------------------------------- */
+
 /* Insert generated content at start of volume */
 @volume {
         @begin {
                 content: flow(front) flow(volume-toc);
         }
 }
-
-level1.first-page, section.first-page {
-        flow: front;
-}
-
-.titlepage {
-        display: block;
-        page-break-before: always;
-        flow: titlepage;
-}
-
-@if $choice-of-colophon {
-        .colophon {
-                display: block;
-                page-break-before: always;
-                flow: titlepage;
-        }
-}
-
-#generated-volume-toc {
-        page-break-before: always;
-}
-
-#generated-volume-toc li {
-        display: block;
-        margin-left: 2;
-        margin-top: 2;
-        text-indent: -2;
-}
-
-#generated-volume-toc li a::after {
-        content: " " leader("⠄") " " target-counter(attr(href), page);
-        margin-left: 2;
-        margin-top: 2;
-        text-indent: -2;
-}
-
-/* -------------------------------------------------------------------------- */
-/*                        Generated content CSS                               */
-/* -------------------------------------------------------------------------- */
-.first-page {
-        flow: front;
-}
-
-.first-page p {
-        text-align: center;
-}
-
-.first-page p, .second-page p, .third-page p {
-        display: block;
-}
-
-.author-1 {
-        margin-top: 3;
-}
-
-.translator {
-        margin-top: 2;
-}
-
-.title-pef {
-        display: block;
-        margin-top: 1;
-}
-
-.nlb {
-        margin-top: 4;
-}
-
-.year {}
-
-.bind::before {
-        display: inline;
-        content: "Bind " -obfl-evaluate("(round $volume)");
-}
-
-.bind {
-        display: inline;
-        -obfl-vertical-position: 25;
-}
-
-.bind::after {
-        display: inline;
-        content: -obfl-evaluate("(round $volumes)");
-        page-break-after: always;
-}
-
-.second-page h1, third-page h1 {
-        display: block;
-        page-break-before: always;
-}
-
-.contraction-level {
-        margin-top: 1;
-}
-
-.contact {
-        page-break-after: always;
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                  Pages in document                         */
-/* -------------------------------------------------------------------------- */
-.second-page, .third-page {
-        flow: front-first;
-}
-
 @volume :first {
         @begin {
                 content: flow(front) flow(volume-toc) flow(front-first);
         }
 }
 
-.pages {
+.pef-titlepage {
+        flow: front;
+        display: block;
+        page-break-before: right;
+        volume-break-after: avoid;
+        text-transform: uncontracted;
+        margin-top: 0;
+        margin-left: 1;
+        margin-right: 1;
+        hyphens: none;
+        
+        & > p {
+            margin-top: 0;
+            margin-bottom: 0;
+            text-indent: 0;
+            text-align: center;
+        }
+}
+
+.pef-volume {
+        &::before {
+                content: "Hefte " -obfl-evaluate("(round $volume)");
+        }
+        
+        &::after {
+                content: -obfl-evaluate("(round $volumes)");
+        }
+}
+
+#generated-volume-toc {
+        page-break-before: right;
+        volume-break-after: avoid;
+        
+        li {
+                display: block;
+                margin-left: 2;
+                margin-top: 2;
+                text-indent: -2;
+                
+                & a::after {
+                        content: " " leader("⠄") " " target-counter(attr(href), page);
+                        margin-left: 2;
+                        margin-top: 2;
+                        text-indent: -2;
+                }
+        }
+}
+
+.pef-about {
+        flow: front-first;
+        page-break-before: right;
+        volume-break-after: avoid;
+        
+        h1 {
+                display: block;
+        }
+        
+        p {
+                display: block;
+        }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Pages in document                         */
+/* -------------------------------------------------------------------------- */
+
+.pef-pages {
         display: inline;
 }
 
-.pages::after {
+.pef-pages::after {
         display: inline;
         content: -obfl-evaluate("(round $sheets-in-document)");
 }
@@ -397,11 +361,7 @@ frontmatter, *[epub|type~='frontmatter'] {
                       h1[epub|type~='fulltitle'],
                       h1[epub|type~='z3998:covertitle'],
                       docauthor,
-                      h1[epub|type~='z3998:author'],
-                     .first-page,
-                     .second-page,
-                     .third-page,
-                     .titlepage)) {
+                      h1[epub|type~='z3998:author'])) {
                 display: block;
         }
 }
@@ -416,31 +376,15 @@ doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauth
 }
 
 /* -------------------------------------------------------------------------- */
-/*                Frontmatter                                                 */
+/*                Uncontracted content                                        */
 /* -------------------------------------------------------------------------- */
-
-frontmatter, level1[epub|type~='frontmatter'] {
-        margin-left: 3;
-        margin-right: 3;
-        text-align: left;
-}
 
 .uncontracted-letters, h1 {
         text-transform: uncontracted;
 }
 
-.titlepage {
-        text-transform: uncontracted;
-        margin-left: 1;
-        margin-top: 1;
-}
-
-/* -------------------------------------------------------------------------- */
-/*                other languages                                             */
-/* -------------------------------------------------------------------------- */
-
 *[xml|lang]:not([xml|lang|="no"]), *[lang]:not([lang|="no"]) {
-    text-transform: uncontracted;
+        text-transform: uncontracted;
 }
 
 /* -------------------------------------------------------------------------- */
