@@ -554,7 +554,7 @@ prodnote::after, aside[epub|type~='z3998:production']::after {
 
 /* Show alt text for images with alt text */
 @if $include-images {
-        img[alt]:not([alt=''])::after {
+        img[alt]:not([alt='']):not([alt='image'])::after {
                 display: block;
                 content: "Bildebeskrivelse: " attr(alt);
                 margin-top: 1;
@@ -565,7 +565,7 @@ prodnote::after, aside[epub|type~='z3998:production']::after {
         }
         
         /* Don't render decorative images */
-        img:not([alt])::after, img[alt='']::after {
+        img:not([alt])::after, img[alt='']::after, img[alt='image']::after {
                 content: none;
         }
 } @else {
