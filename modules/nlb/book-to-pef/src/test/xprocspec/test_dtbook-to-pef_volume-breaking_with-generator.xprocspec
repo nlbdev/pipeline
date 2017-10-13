@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               script="../resources/dtbook-to-pef-test.xpl">
+    
+    <x:scenario label="_">
+        <x:call step="nlb:dtbook-to-pef-test">
+            <x:param name="show-print-page-numbers" select="'false'"/>
+            <x:param name="show-braille-page-numbers" select="'false'"/>
+            <x:param name="toc-depth" select="0"/>
+            <x:param name="maximum-number-of-pages" select="10"/>
+        </x:call>
+        
+        <x:scenario label="Regression test for issue #118: Failed to complete volume division in dotify:obfl-to-pef" pending="https://github.com/nlbdev/pipeline/issues/118">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/> 
+                                <meta name="dc:Title" content="Title"/> 
+                                <meta name="dc:Identifier" content="123456"/> 
+                                <meta name="track:Guidelines" content="2015-1"/> 
+                                <meta name="track:Supplier" content="Supplier"/> 
+                                <meta name="dc:Creator" content="Lastname, Firstname"/> 
+                                <meta name="dc:Language" content="no"/> 
+                                <meta name="dc:Source" content="urn:isbn:123-45-678-9012-3"/> 
+                                <meta name="dc:Format" content="DTBook"/> 
+                                <meta name="dc:Publisher" content="NLB"/> 
+                                <meta name="dc:Date" content="2017-10-13"/> 
+                                <meta name="dcterms:modified" content="2017-10-13T11:27:16+00:00"/> 
+                            </head>
+                            <book>
+                                <frontmatter> 
+                                    <doctitle>doctitle</doctitle> 
+                                    <docauthor>docauthor</docauthor>
+                                    
+                                    <level1 id="ded" class="dedication">
+                                        <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                        <blockquote>
+                                            <generate generate-name="p" generate-text-length="100"/>
+                                        </blockquote> 
+                                        <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                    </level1>
+                                </frontmatter><bodymatter>
+                                    
+                                    <generate generate-name="level1" generate-id="chapter_" generate-count="45" class="chapter">
+                                        <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                        <h1>Chapter headline</h1>
+                                        <blockquote>
+                                            <p>
+                                                <generate generate-name="em" generate-text-length="70"/>
+                                            </p>
+                                        </blockquote>
+                                        <generate generate-count="8">
+                                            <p>
+                                                <generate generate-text-length="88"/>
+                                                <generate generate-name="em" generate-text-length="13"/>
+                                                <generate generate-text-length="6"/>
+                                                <generate generate-name="em" generate-text-length="8"/>
+                                                <generate generate-text-length="15"/>
+                                            </p>
+                                            <generate generate-count="3">
+                                                <generate generate-name="p" generate-text-length="222"/>
+                                                <generate generate-name="p" generate-text-length="25"/>
+                                                <generate generate-name="p" generate-text-length="678"/>
+                                                <generate generate-name="p" generate-text-length="329"/>
+                                                <generate generate-name="p" generate-text-length="80"/>
+                                            </generate>
+                                            <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                        </generate>
+                                        <generate generate-count="4">
+                                            <poem>
+                                                <linegroup>
+                                                    <generate generate-name="line" generate-text-length="38"/>
+                                                </linegroup> 
+                                            </poem>
+                                            <generate generate-count="5" generate-name="p" generate-text-length="100"/>
+                                        </generate>
+                                    </generate>
+                                    <generate generate-name="level1" generate-id="g_" class="glossary">
+                                        <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                        <h1>Glossary</h1> 
+                                        <list type="pl">
+                                            <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="56"/></generate>
+                                            <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="260"/></generate>
+                                            <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="350"/></generate>
+                                            <generate generate-count="10">
+                                                <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="123"/><generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/></generate>
+                                                <generate generate-count="5">
+                                                    <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="110"/></generate>
+                                                    <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="84"/></generate>
+                                                    <generate generate-name="li"><generate generate-name="em" generate-text-length="10"/>: <generate generate-text-length="60"/></generate>
+                                                    <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="24"/><generate generate-name="em" generate-text-length="20"/></generate>
+                                                    <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="33"/></generate>
+                                                </generate>
+                                            </generate>
+                                        </list>
+                                    </generate>
+                                </bodymatter>
+                                <rearmatter>
+                                    <level1 class="colophon">
+                                        <p>
+                                            <generate generate-text-length="20"/>
+                                            <generate generate-name="em" generate-text-length="60"/>
+                                        </p>
+                                        <generate generate-name="p" generate-count="20" generate-text-length="100"/>
+                                        <p><span>post@nlb.no</span></p> 
+                                        <p><span>www.nlb.no</span></p>
+                                        <generate generate-name="p" generate-text-length="100"/> 
+                                    </level1>
+                                </rearmatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('big-book/1/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('big-book/1/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('big-book/1/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="big-book/1/pef-output-dir/book.pef" />
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+    </x:scenario>
+</x:description>
