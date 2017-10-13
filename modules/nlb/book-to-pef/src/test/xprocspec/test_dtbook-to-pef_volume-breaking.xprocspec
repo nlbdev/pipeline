@@ -1003,5 +1003,53 @@
             <x:expect label="The chapter headline should be in the second volume" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/preceding::pef:volume)+1" equals="2"/>
         </x:scenario>
         
+        <x:scenario label="Regression test for issue #121: Coding error: unexpected /css:_/book[1]/@css:volume-break-before (mode was table-attr)" pending="https://github.com/nlbdev/pipeline/issues/121">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="Title"/>
+                                <meta name="dc:Identifier" content="123456"/>
+                                <meta name="track:Guidelines" content="2015-1"/>
+                                <meta name="track:Supplier" content="Supplier"/>
+                                <meta name="dc:Creator" content="Lastname, Firstname"/>
+                                <meta name="dc:Language" content="no"/>
+                                <meta name="dc:Source" content="urn:isbn:123-45-678-9012-3"/>
+                                <meta name="dc:Format" content="DTBook"/>
+                                <meta name="dc:Publisher" content="NLB"/>
+                                <meta name="dc:Date" content="2017-10-13"/>
+                                <meta name="dcterms:modified" content="2017-10-1314:32:16+00:00"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>doctitle</doctitle>
+                                    <docauthor>docauthor</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1 class="part"/>
+                                    <level1 class="part">
+                                        <table>
+                                            <tr>
+                                                <td>cell</td>
+                                            </tr>
+                                        </table>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('10/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('10/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('10/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
