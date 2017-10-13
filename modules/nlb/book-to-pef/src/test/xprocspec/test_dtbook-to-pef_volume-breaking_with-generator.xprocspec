@@ -19,33 +19,32 @@
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
                             <head>
-                                <meta name="dtb:uid" content="123456"/> 
-                                <meta name="dc:Title" content="Title"/> 
-                                <meta name="dc:Identifier" content="123456"/> 
-                                <meta name="track:Guidelines" content="2015-1"/> 
-                                <meta name="track:Supplier" content="Supplier"/> 
-                                <meta name="dc:Creator" content="Lastname, Firstname"/> 
-                                <meta name="dc:Language" content="no"/> 
-                                <meta name="dc:Source" content="urn:isbn:123-45-678-9012-3"/> 
-                                <meta name="dc:Format" content="DTBook"/> 
-                                <meta name="dc:Publisher" content="NLB"/> 
-                                <meta name="dc:Date" content="2017-10-13"/> 
-                                <meta name="dcterms:modified" content="2017-10-13T11:27:16+00:00"/> 
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="Title"/>
+                                <meta name="dc:Identifier" content="123456"/>
+                                <meta name="track:Guidelines" content="2015-1"/>
+                                <meta name="track:Supplier" content="Supplier"/>
+                                <meta name="dc:Creator" content="Lastname, Firstname"/>
+                                <meta name="dc:Language" content="no"/>
+                                <meta name="dc:Source" content="urn:isbn:123-45-678-9012-3"/>
+                                <meta name="dc:Format" content="DTBook"/>
+                                <meta name="dc:Publisher" content="NLB"/>
+                                <meta name="dc:Date" content="2017-10-13"/>
+                                <meta name="dcterms:modified" content="2017-10-13T11:27:16+00:00"/>
                             </head>
                             <book>
-                                <frontmatter> 
-                                    <doctitle>doctitle</doctitle> 
+                                <frontmatter>
+                                    <doctitle>doctitle</doctitle>
                                     <docauthor>docauthor</docauthor>
-                                    
                                     <level1 id="ded" class="dedication">
                                         <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
                                         <blockquote>
                                             <generate generate-name="p" generate-text-length="100"/>
-                                        </blockquote> 
+                                        </blockquote>
                                         <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
                                     </level1>
-                                </frontmatter><bodymatter>
-                                    
+                                </frontmatter>
+                                <bodymatter>
                                     <generate generate-name="level1" generate-id="chapter_" generate-count="45" class="chapter">
                                         <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
                                         <h1>Chapter headline</h1>
@@ -75,14 +74,14 @@
                                             <poem>
                                                 <linegroup>
                                                     <generate generate-name="line" generate-text-length="38"/>
-                                                </linegroup> 
+                                                </linegroup>
                                             </poem>
                                             <generate generate-count="5" generate-name="p" generate-text-length="100"/>
                                         </generate>
                                     </generate>
                                     <generate generate-name="level1" generate-id="g_" class="glossary">
                                         <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
-                                        <h1>Glossary</h1> 
+                                        <h1>Glossary</h1>
                                         <list type="pl">
                                             <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="56"/></generate>
                                             <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="260"/></generate>
@@ -107,9 +106,9 @@
                                             <generate generate-name="em" generate-text-length="60"/>
                                         </p>
                                         <generate generate-name="p" generate-count="20" generate-text-length="100"/>
-                                        <p><span>post@nlb.no</span></p> 
+                                        <p><span>post@nlb.no</span></p>
                                         <p><span>www.nlb.no</span></p>
-                                        <generate generate-name="p" generate-text-length="100"/> 
+                                        <generate generate-name="p" generate-text-length="100"/>
                                     </level1>
                                 </rearmatter>
                             </book>
