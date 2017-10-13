@@ -1267,5 +1267,58 @@
             <x:expect label="The two paragraphs should not be equal" type="xpath" test="(//pef:row[contains(.,'⠁⠃⠉')])[1]/replace(.,'⠀','')" equals="(//pef:row[contains(.,'⠁⠃⠉')])[2]/replace(.,'⠀','')" xfail=""/>
         </x:scenario>
         
+        <x:scenario label="Regression test for #120: UnsupportedOperationException: error in table model that cannot be fixed automatically" pending="https://github.com/nlbdev/pipeline/issues/120">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="Title"/>
+                                <meta name="dc:Identifier" content="123456"/>
+                                <meta name="track:Guidelines" content="2015-1"/>
+                                <meta name="track:Supplier" content="Supplier"/>
+                                <meta name="dc:Language" content="no"/>
+                                <meta name="dc:Format" content="DTBook"/>
+                                <meta name="dc:Creator" content="Lastname, Firstname"/>
+                                <meta name="dc:Date" content="2017-10-13"/>
+                                <meta name="dc:Publisher" content="NLB"/>
+                                <meta name="dc:Source" content="urn:isbn:123-45-67-89012-3"/>
+                                <meta name="dcterms:modified" content="2017-10-13T16:54:30+00:00"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>doctitle</doctitle>
+                                    <docauthor>docauthor</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <table>
+                                            <tr>
+                                                <th colspan="3"> </th>
+                                                <td> </td>
+                                                <td rowspan="2"> </td>
+                                            </tr>
+                                            <tr>
+                                                <td> </td>
+                                                <td> </td>
+                                            </tr>
+                                        </table>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('21/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('21/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('21/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output PEF">
+                <x:document type="directory" base-uri="temp-dir" href="21/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be an output PEF" type="count" min="1"/>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
