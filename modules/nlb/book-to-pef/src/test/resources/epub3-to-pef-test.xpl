@@ -40,6 +40,12 @@
                 <p:pipe port="source" step="main"/>
             </p:input>
         </p:split-sequence>
+        <p:xslt>
+            <p:input port="parameters"/>
+            <p:input port="stylesheet">
+                <p:document href="generate-content.xsl"/>
+            </p:input>
+        </p:xslt>
         <p:store name="opf">
             <p:with-option name="href" select="resolve-uri(if (/*/@xml:base) then replace(/*/@xml:base,'.*/','') else 'package.opf', $epub-temp-dir)"/>
         </p:store>
@@ -49,6 +55,12 @@
                 <p:pipe port="source" step="main"/>
             </p:input>
         </p:split-sequence>
+        <p:xslt>
+            <p:input port="parameters"/>
+            <p:input port="stylesheet">
+                <p:document href="generate-content.xsl"/>
+            </p:input>
+        </p:xslt>
         <p:store name="nav">
             <p:with-option name="href" select="resolve-uri(if (/*/@xml:base) then replace(/*/@xml:base,'.*/','') else 'nav.xhtml', $epub-temp-dir)"/>
         </p:store>
@@ -59,6 +71,12 @@
             </p:input>
         </p:split-sequence>
         <p:for-each>
+            <p:xslt>
+                <p:input port="parameters"/>
+                <p:input port="stylesheet">
+                    <p:document href="generate-content.xsl"/>
+                </p:input>
+            </p:xslt>
             <p:store name="content-iteration">
                 <p:with-option name="href" select="resolve-uri(if (/*/@xml:base) then replace(/*/@xml:base,'.*/','') else concat('content-',p:iteration-position(),'.xhtml'), $epub-temp-dir)"/>
             </p:store>
