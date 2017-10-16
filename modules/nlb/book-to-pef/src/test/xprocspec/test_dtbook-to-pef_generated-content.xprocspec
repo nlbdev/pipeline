@@ -7,73 +7,113 @@
     xmlns:pef="http://www.daisy.org/ns/2008/pef"
     script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
     
-    <x:scenario label="basic test of complete titlepage">
-        <x:call step="nlb:dtbook-to-pef">
-            <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
-                        <head>
-                            <meta name="dtb:uid" content="uid"/>
-                            <meta name="dc:Creator" content="author"/>
-                            <meta name="dc:Title" content="title"/>
-                        </head>
-                        <book>
-                            <bodymatter>
-                                <level1>
-                                    <h1>bodymatter</h1>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
+    <x:scenario label="titlepage">
+        <x:call step="nlb:dtbook-to-pef"/>
+        
+        <x:scenario label="basic test of complete titlepage">
+            <x:call step="nlb:dtbook-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="uid"/>
+                                <meta name="dc:Creator" content="author"/>
+                                <meta name="dc:Title" content="title"/>
+                            </head>
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>bodymatter</h1>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('titlepage/1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('titlepage/1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('titlepage/1/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the pef">
+                <x:document type="file" base-uri="temp-dir" href="titlepage/1/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="the PEF should be 28 rows high" type="xpath" test="(//pef:volume)[1]/@rows" equals="28"/>
+            <x:expect label="the PEF should be 32 columns wide" type="xpath" test="(//pef:volume)[1]/@cols" equals="32"/>
+            
+            <x:context label="the rows on the first page of the pef">
+                <x:document type="file" base-uri="temp-dir" href="titlepage/1/pef-output-dir/book.pef" select="(//pef:page)[1]/pef:row"/>
+            </x:context>
+            <x:expect label="the titlepage should be as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠥⠞⠓⠕⠗</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠞⠊⠞⠇⠑</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃⠀⠤⠀⠼⠃⠚⠁⠛</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠥⠇⠇⠎⠅⠗⠊⠋⠞</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠁⠀⠁⠧⠀⠼⠁</row>
+                    </page>
                 </x:document>
-            </x:input>
-            <x:option name="pef-output-dir" select="resolve-uri('basic-titlepage/1/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('basic-titlepage/1/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('basic-titlepage/1/temp-dir',$temp-dir)"/>
-        </x:call>
+            </x:expect>
+        </x:scenario>
         
-        <x:context label="the pef">
-            <x:document type="file" base-uri="temp-dir" href="basic-titlepage/1/pef-output-dir/book.pef"/>
-        </x:context>
-        <x:expect label="the PEF should be 28 rows high" type="xpath" test="(//pef:volume)[1]/@rows" equals="28"/>
-        <x:expect label="the PEF should be 32 columns wide" type="xpath" test="(//pef:volume)[1]/@cols" equals="32"/>
-        
-        <x:context label="the rows on the first page of the pef">
-            <x:document type="file" base-uri="temp-dir" href="basic-titlepage/1/pef-output-dir/book.pef" select="(//pef:page)[1]/pef:row"/>
-        </x:context>
-        <x:expect label="the titlepage should be as expected" type="compare">
-            <x:document type="inline" select="/*/*">
-                <page xmlns="http://www.daisy.org/ns/2008/pef">
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠥⠞⠓⠕⠗</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠞⠊⠞⠇⠑</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠠⠝⠇⠃⠀⠤⠀⠼⠃⠚⠁⠛</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠥⠇⠇⠎⠅⠗⠊⠋⠞</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠁⠀⠁⠧⠀⠼⠁</row>
-                </page>
-            </x:document>
-        </x:expect>
+        <x:scenario label="with existing titlepage">
+            <x:call step="nlb:dtbook-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="uid"/>
+                                <meta name="dc:Creator" content="author"/>
+                                <meta name="dc:Title" content="title"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <level1 class="titlepage">
+                                        <h1>existing titlepage</h1>
+                                    </level1>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>bodymatter</h1>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('titlepage/2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('titlepage/2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('titlepage/2/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the PEF">
+                <x:document type="file" base-uri="temp-dir" href="titlepage/2/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="the existing titlepage should be deleted" type="xpath" test="not(contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'),'⠑⠭⠊⠎⠞⠊⠝⠛⠀⠞⠊⠞⠇⠑⠏⠁⠛⠑'))"/>
+        </x:scenario>
     </x:scenario>
     
     <x:scenario label="author">
@@ -822,6 +862,232 @@
             <x:expect label="should equal rows 1-26 of the second volume" type="compare">
                 <x:document type="file" base-uri="temp-dir" href="volume/2/pef-output-dir/book.pef" select="(//pef:volume)[2]/(.//pef:page)[1]/pef:row[position() &lt;= 26]"/>
             </x:expect>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="about">
+        <x:call step="nlb:dtbook-to-pef"/>
+        
+        <x:scenario label="about page content">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="uid"/>
+                                <meta name="dc:Creator" content="author"/>
+                                <meta name="dc:Title" content="title"/>
+                            </head>
+                            <book>
+                                <bodymatter/>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('about/1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('about/1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('about/1/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="page 2">
+                <x:document type="file" base-uri="temp-dir" href="about/1/pef-output-dir/book.pef" select="(//pef:page)[2]"/>
+            </x:context>
+            <x:expect label="should contain 'Om boka'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠕⠍⠀⠃⠕⠅⠁')"/>
+            <x:expect label="should contain 'Antall sider'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠁⠝⠞⠁⠇⠇⠀⠎⠊⠙⠑⠗⠒⠀⠼')"/>
+            <x:expect label="should contain 'Boka skal ikke returneres.'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠃⠕⠅⠁⠀⠎⠅⠁⠇⠀⠊⠅⠅⠑⠀⠗⠑⠞⠥⠗⠝⠑⠗⠑⠎⠄')"/>
+            <x:expect label="should contain 'Feil eller mangler kan meldes til punkt@nlb.no.'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠋⠑⠊⠇⠀⠑⠇⠇⠑⠗⠀⠍⠁⠝⠛⠇⠑⠗⠀⠅⠁⠝⠀⠍⠑⠇⠙⠑⠎⠀⠞⠊⠇⠀⠣⠏⠥⠝⠅⠞⠈⠝⠇⠃⠄⠝⠕⠄⠜')"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="toc">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="uid"/>
+                            <meta name="dc:Creator" content="author"/>
+                            <meta name="dc:Title" content="title"/>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <h1>h1-1 short</h1>
+                                    <level2>
+                                        <h2>h2-1</h2>
+                                        <level3>
+                                            <h3>h3-1</h3>
+                                        </level3>
+                                        <level3>
+                                            <h3>h3-2</h3>
+                                        </level3>
+                                    </level2>
+                                    <level2>
+                                        <h2>h2-2</h2>
+                                    </level2>
+                                </level1>
+                                <level1>
+                                    <h1>h1-2 long headline</h1>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+        </x:call>
+        
+        <x:scenario label="toc-depth=0">
+            <x:call>
+                <x:option name="toc-depth" select="0"/>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/1/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the first page containing 'Innhold'">
+                <x:document type="file" base-uri="temp-dir" href="toc/1/pef-output-dir/book.pef" select="(//pef:page[contains(string-join(.//text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])[1]"/>
+            </x:context>
+            <x:expect label="there should not be a TOC" type="count" max="0"/>
+        </x:scenario>
+        
+        <x:scenario label="toc-depth=1">
+            <x:call>
+                <x:option name="toc-depth" select="1"/>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/2/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the first page containing 'Innhold'">
+                <x:document type="file" base-uri="temp-dir" href="toc/2/pef-output-dir/book.pef" select="(//pef:page[contains(string-join(.//text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])[1]"/>
+            </x:context>
+            <x:expect label="there should be a TOC" type="count" min="1" max="1"/>
+            <x:expect label="the TOC depth should be 1" type="xpath" test="count(distinct-values(.//text()[contains(.,'⠄⠄')]/string-length(replace(.,'[^⠀].*$',''))))" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="toc-depth=2">
+            <x:call>
+                <x:option name="toc-depth" select="2"/>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/3/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/3/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/3/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the first page containing 'Innhold'">
+                <x:document type="file" base-uri="temp-dir" href="toc/3/pef-output-dir/book.pef" select="(//pef:page[contains(string-join(.//text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])[1]"/>
+            </x:context>
+            <x:expect label="there should be a TOC" type="count" min="1" max="1"/>
+            <x:expect label="the TOC depth should be 2" type="xpath" test="count(distinct-values(.//text()[contains(.,'⠄⠄')]/string-length(replace(.,'[^⠀].*$',''))))" equals="2"/>
+        </x:scenario>
+        
+        <x:scenario label="toc-depth=3">
+            <x:call>
+                <x:option name="toc-depth" select="3"/>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/4/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/4/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/4/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the first page containing 'Innhold'">
+                <x:document type="file" base-uri="temp-dir" href="toc/4/pef-output-dir/book.pef" select="(//pef:page[contains(string-join(.//text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])[1]"/>
+            </x:context>
+            <x:expect label="there should be a TOC" type="count" min="1" max="1"/>
+            <x:expect label="the TOC depth should be 3" type="xpath" test="count(distinct-values(.//text()[contains(.,'⠄⠄')]/string-length(replace(.,'[^⠀].*$',''))))" equals="3"/>
+        </x:scenario>
+        
+        <x:scenario label="toc-depth=4">
+            <x:call>
+                <x:option name="toc-depth" select="4"/>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/5/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/5/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/5/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the first page containing 'Innhold'">
+                <x:document type="file" base-uri="temp-dir" href="toc/5/pef-output-dir/book.pef" select="(//pef:page[contains(string-join(.//text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])[1]"/>
+            </x:context>
+            <x:expect label="there should be a TOC" type="count" min="1" max="1"/>
+            <x:expect label="the TOC depth should be 3" type="xpath" test="count(distinct-values(.//text()[contains(.,'⠄⠄')]/string-length(replace(.,'[^⠀].*$',''))))" equals="3"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="pef-sections">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="tests"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <level1>
+                                    <h1>frontmatter</h1>
+                                </level1>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <h1>bodymatter</h1>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+        </x:call>
+        
+        <x:scenario label="duplex=true">
+            <x:call step="nlb:dtbook-to-pef">
+                <x:option name="duplex" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('pef-sections/1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('pef-sections/1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('pef-sections/1/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the sections containing the titlepage and about page">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/1/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼') or contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]"/>
+            </x:context>
+            <x:expect label="the titlepage and the about page should be in the same section" type="count" min="1" max="1"/>
+            
+            <x:context label="the pages in the section of the toc">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/1/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]//pef:page"/>
+            </x:context>
+            <x:expect label="there should not be other pages in the same section as the toc" type="count" min="1" max="1"/>
+            
+            <x:context label="the PEF">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/1/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="the titlepage should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼')]/preceding::pef:section) + 1" equals="1"/>
+            <x:expect label="the about page should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]/preceding::pef:section) + 1" equals="1"/>
+            <x:expect label="the toc should be in the second section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]/preceding::pef:section) + 1" equals="2"/>
+            <x:expect label="the non-generated content should start in the third section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/preceding::pef:section) + 1" equals="3"/>
+        </x:scenario>
+        
+        <x:scenario label="duplex=false">
+            <x:call step="nlb:dtbook-to-pef">
+                <x:option name="duplex" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('pef-sections/2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('pef-sections/2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('pef-sections/2/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the sections containing the titlepage and about page">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/2/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼') or contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]"/>
+            </x:context>
+            <x:expect label="the titlepage and the about page should be in the same section" type="count" min="1" max="1"/>
+            
+            <x:context label="the pages in the section of the toc">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/2/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]//pef:page"/>
+            </x:context>
+            <x:expect label="there should not be other pages in the same section as the toc" type="count" min="1" max="1"/>
+            
+            <x:context label="the PEF">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/2/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="the titlepage should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼')]/preceding::pef:section) + 1" equals="1"/>
+            <x:expect label="the about page should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]/preceding::pef:section) + 1" equals="1"/>
+            <x:expect label="the toc should be in the second section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]/preceding::pef:section) + 1" equals="2"/>
+            <x:expect label="the non-generated content should start in the third section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/preceding::pef:section) + 1" equals="3"/>
         </x:scenario>
     </x:scenario>
     

@@ -83,9 +83,9 @@ pagenum, *[epub|type~='pagebreak'] {
                 /* to cancel out generic rule */
         }
 
-        frontmatter level1:not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc),
+        frontmatter level1:not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc):not(#generated-document-toc),
         bodymatter,
-        body:not([epub|type~='cover']):not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc) {
+        body:not([epub|type~='cover']):not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc):not(#generated-document-toc) {
                 line-height: 2;
         }
 
@@ -263,20 +263,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 @volume :first {
         @begin {
-                content: flow(front) flow(volume-toc) flow(front-first);
+                content: flow(front) flow(front-first) flow(volume-toc);
         }
 }
 
 .pef-titlepage {
         flow: front;
         display: block;
-        page-break-before: right;
         volume-break-after: avoid;
         text-transform: uncontracted;
         margin-top: 0;
         margin-left: 1;
         margin-right: 1;
         hyphens: none;
+        
+        h1 {
+            page-break-before: avoid;
+        }
         
         & > p {
             margin-top: 0;
@@ -296,9 +299,20 @@ h1, h2, h3, h4, h5, h6 {
         }
 }
 
-#generated-volume-toc {
-        page-break-before: right;
+#generated-volume-toc, #generated-document-toc {
         volume-break-after: avoid;
+        
+        &::before {
+            content: 'Innhold';
+            display: block;
+            margin-top: 2;
+            margin-left: 5;
+            margin-right: 5;
+            margin-bottom: 1;
+            text-align: center;
+            border-top: ⠉;
+            border-bottom: ⠉;
+        }
         
         li {
                 display: block;
@@ -317,11 +331,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .pef-about {
         flow: front-first;
-        page-break-before: right;
         volume-break-after: avoid;
         
         h1 {
                 display: block;
+                page-break-before: avoid;
         }
         
         p {
