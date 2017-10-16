@@ -149,6 +149,15 @@
         <x:expect select="('taylo','r kel','ley l','ou ph','oenix')"/>
     </x:scenario>
     
+    <x:scenario label="nlb:fit-name-to-lines - lastname, firstname">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Mackenzie, Lou'"/>
+            <x:param name="lines-available" select="4"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Lou Mackenzie')"/>
+    </x:scenario>
+    
     <x:scenario label="nlb:fit-name-to-lines - 4 lines">
         <x:call function="nlb:fit-name-to-lines">
             <x:param name="name" select="'Johnnie Andy Mackenzie Lou Ikin Harlow Taylor'"/>
@@ -206,21 +215,64 @@
     <x:scenario label="nlb:author-lines - 1 long author">
         <x:call function="nlb:author-lines">
             <x:param name="authors" select="('Johnnie Andy Mackenzie Lou Taylor')"/>
-            <x:param name="lines-available" select="3"/>
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
         <x:expect select="('Johnnie Andy', 'Mackenzie Lou', 'Taylor')"/>
     </x:scenario>
     
+    <x:scenario label="nlb:author-lines - 2 authors">
+        <x:call function="nlb:author-lines">
+            <x:param name="authors" select="('Johnnie Mackenzie', 'Lou Taylor')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie Mackenzie', 'Lou Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:author-lines - 3 authors">
+        <x:call function="nlb:author-lines">
+            <x:param name="authors" select="('Johnnie Mackenzie', 'Lou Taylor', 'Phil Dunphy')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie Mackenzie', 'Lou Taylor', 'mfl.')"/>
+    </x:scenario>
+    
     <x:scenario label="nlb:author-lines - 4 authors">
         <x:call function="nlb:author-lines">
             <x:param name="authors" select="('author 1', 'author 2', 'author 3', 'author 4')"/>
-            <x:param name="lines-available" select="3"/>
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
         <x:expect select="('author 1', 'author 2', 'mfl.')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:translator-lines - 1 long translator">
+        <x:call function="nlb:translator-lines">
+            <x:param name="translators" select="('Johnnie Andy Lou Taylor')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie Andy Lou', 'Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:translator-lines - 2 translators">
+        <x:call function="nlb:translator-lines">
+            <x:param name="translators" select="('Johnnie Mackenzie', 'Lou Taylor')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie Mackenzie', 'Lou Taylor')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:translator-lines - 3 translators">
+        <x:call function="nlb:translator-lines">
+            <x:param name="translators" select="('Johnnie Mackenzie', 'Lou Taylor', 'Phil Dunphy')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie Mackenzie', 'mfl.')"/>
     </x:scenario>
     
     <x:scenario label="nlb:title-lines - long title">

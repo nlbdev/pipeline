@@ -129,7 +129,7 @@
             <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
             <xsl:variable name="lines-used" select="3"/>
             
-            <xsl:variable name="author-lines" select="nlb:author-lines($author, 3, $line-width, 'mfl.')"/>
+            <xsl:variable name="author-lines" select="nlb:author-lines($author, $line-width, 'mfl.')"/>
             <xsl:for-each select="$author-lines">
                 <xsl:call-template name="row">
                     <xsl:with-param name="content" select="."/>
@@ -155,7 +155,7 @@
             <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
             <xsl:variable name="lines-used" select="$lines-used + count($title-lines) + 2"/>
             
-            <xsl:variable name="translator-lines" select="nlb:author-lines($translator, 2, $line-width, 'mfl.')"/>
+            <xsl:variable name="translator-lines" select="nlb:translator-lines($translator, $line-width, 'mfl.')"/>
             <xsl:if test="count($translator-lines)">
                 <xsl:call-template name="row">
                     <xsl:with-param name="content" select="'Oversatt av:'"/>
@@ -368,6 +368,7 @@
         <xsl:variable name="first-name" select="if (contains($name,',')) then tokenize(normalize-space(substring-after($name,',')),'\s+')[1] else $tokenized-name[1]"/>
         <xsl:variable name="middle-name" select="if (contains($name,',')) then tokenize(normalize-space(substring-after($name,',')),'\s+')[position() &gt; 1] else $tokenized-name[not(position() = (1,last()))]"/>
         
+        <xsl:variable name="tokenized-first-middle-last" select="($first-name, $middle-name, $last-name)"/>
         <xsl:variable name="first-name-initials" select="for $n in ($first-name) return concat(substring($n,1,1),'.')"/>
         <xsl:variable name="middle-name-initials" select="for $n in ($middle-name) return concat(substring($n,1,1),'.')"/>
         
@@ -375,9 +376,9 @@
         <xsl:variable name="tokenized-name-first-and-middle-initials" select="tokenize(if (contains($name,',')) then string-join((string-join($last-name,' '),string-join(($first-name-initials, $middle-name-initials),' ')),',') else string-join(($first-name-initials, $middle-name-initials, $last-name),' '),' ')"/>
         <xsl:variable name="tokenized-name-no-middle" select="tokenize(if (contains($name,',')) then string-join((string-join($last-name,' '),string-join(($first-name),' ')),',') else string-join(($first-name, $last-name),' '),' ')"/>
         
-        <xsl:variable name="full-name-never-break" select="nlb:strings-to-lines($tokenized-name, $line-length, 'never')"/>
-        <xsl:variable name="full-name-avoid-break" select="nlb:strings-to-lines($tokenized-name, $line-length, 'avoid')"/>
-        <xsl:variable name="full-name-always-break" select="nlb:strings-to-lines($tokenized-name, $line-length, 'always')"/>
+        <xsl:variable name="full-name-never-break" select="nlb:strings-to-lines($tokenized-first-middle-last, $line-length, 'never')"/>
+        <xsl:variable name="full-name-avoid-break" select="nlb:strings-to-lines($tokenized-first-middle-last, $line-length, 'avoid')"/>
+        <xsl:variable name="full-name-always-break" select="nlb:strings-to-lines($tokenized-first-middle-last, $line-length, 'always')"/>
         <xsl:variable name="full-name-stripped" select="nlb:strip-last-line($full-name-avoid-break, $lines-available, $line-length)"/>
         
         <xsl:variable name="middle-initials-never-break" select="nlb:strings-to-lines($tokenized-name-middle-initials, $line-length, 'never')"/>
@@ -470,23 +471,43 @@
     
     <xsl:function name="nlb:author-lines" as="xs:string*">
         <xsl:param name="authors" as="xs:string*"/>
-        <xsl:param name="lines-available" as="xs:integer"/>
         <xsl:param name="line-length" as="xs:integer"/>
         <xsl:param name="last-line-if-cropped" as="xs:string"/>
         
         <xsl:choose>
             <xsl:when test="count($authors) = 1">
-                <xsl:sequence select="nlb:fit-name-to-lines($authors[1], $lines-available, $line-length)"/>
+                <xsl:sequence select="nlb:fit-name-to-lines($authors[1], 3, $line-length)"/>
             </xsl:when>
-            <xsl:when test="count($authors) = (2 to $lines-available)">
+            <xsl:when test="count($authors) = 2">
                 <xsl:for-each select="$authors">
                     <xsl:sequence select="nlb:fit-name-to-lines(., 1, $line-length)"/>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="count($authors) &gt; $lines-available">
-                <xsl:for-each select="$authors[position() = (1 to $lines-available - 1)]">
+            <xsl:when test="count($authors) &gt; 2">
+                <xsl:for-each select="$authors[position() &lt;= 2]">
                     <xsl:sequence select="nlb:fit-name-to-lines(., 1, $line-length)"/>
                 </xsl:for-each>
+                <xsl:sequence select="$last-line-if-cropped"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="nlb:translator-lines" as="xs:string*">
+        <xsl:param name="translators" as="xs:string*"/>
+        <xsl:param name="line-length" as="xs:integer"/>
+        <xsl:param name="last-line-if-cropped" as="xs:string"/>
+        
+        <xsl:choose>
+            <xsl:when test="count($translators) = 1">
+                <xsl:sequence select="nlb:fit-name-to-lines($translators[1], 2, $line-length)"/>
+            </xsl:when>
+            <xsl:when test="count($translators) = 2">
+                <xsl:for-each select="$translators">
+                    <xsl:sequence select="nlb:fit-name-to-lines(., 1, $line-length)"/>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:when test="count($translators) &gt; 2">
+                <xsl:sequence select="nlb:fit-name-to-lines($translators[1], 1, $line-length)"/>
                 <xsl:sequence select="$last-line-if-cropped"/>
             </xsl:when>
         </xsl:choose>
