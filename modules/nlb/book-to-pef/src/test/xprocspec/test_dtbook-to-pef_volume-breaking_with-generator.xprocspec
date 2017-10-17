@@ -115,12 +115,12 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:param name="pef-output-dir" select="resolve-uri('big-book/1/pef-output-dir',$temp-dir)"/>
-                <x:param name="preview-output-dir" select="resolve-uri('big-book/1/preview-output-dir',$temp-dir)"/>
-                <x:param name="temp-dir" select="resolve-uri('big-book/1/temp-dir',$temp-dir)"/>
+                <x:param name="pef-output-dir" select="resolve-uri('_/1/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('_/1/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('_/1/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="big-book/1/pef-output-dir/book.pef" />
+                <x:document type="file" base-uri="temp-dir" href="_/1/pef-output-dir/book.pef" />
             </x:context>
             <x:expect label="there should be a result PEF" type="count" min="1"/>
         </x:scenario>
