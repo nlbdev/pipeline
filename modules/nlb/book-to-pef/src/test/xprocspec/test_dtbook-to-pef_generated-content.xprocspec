@@ -848,7 +848,7 @@
             <x:context label="row 27 on first page of second volume">
                 <x:document type="file" base-uri="temp-dir" href="volume/2/pef-output-dir/book.pef" select="((//pef:volume)[2]//pef:page)[1]/pef:row[27]"/>
             </x:context>
-            <x:expect label="should contain 'Hefte 1 av 2'" type="compare">
+            <x:expect label="should contain 'Hefte 2 av 2'" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠃⠀⠁⠧⠀⠼⠃</row>
@@ -1012,82 +1012,165 @@
     </x:scenario>
     
     <x:scenario label="pef-sections">
-        <x:call step="nlb:dtbook-to-pef">
-            <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
-                        <head>
-                            <meta name="dtb:uid" content="tests"/>
-                        </head>
-                        <book>
-                            <frontmatter>
-                                <level1>
-                                    <h1>frontmatter</h1>
-                                </level1>
-                            </frontmatter>
-                            <bodymatter>
-                                <level1>
-                                    <h1>bodymatter</h1>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
-                </x:document>
-            </x:input>
-        </x:call>
+        <x:call step="nlb:dtbook-to-pef"/>
         
         <x:scenario label="duplex=true">
             <x:call step="nlb:dtbook-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="tests"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <level1>
+                                        <h1>frontmatter</h1>
+                                    </level1>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>bodymatter</h1>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
                 <x:option name="duplex" select="'true'"/>
                 <x:option name="pef-output-dir" select="resolve-uri('pef-sections/1/pef-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('pef-sections/1/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('pef-sections/1/temp-dir',$temp-dir)"/>
             </x:call>
             
-            <x:context label="the sections containing the titlepage and about page">
-                <x:document type="file" base-uri="temp-dir" href="pef-sections/1/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼') or contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]"/>
-            </x:context>
-            <x:expect label="the titlepage and the about page should be in the same section" type="count" min="1" max="1"/>
-            
-            <x:context label="the pages in the section of the toc">
-                <x:document type="file" base-uri="temp-dir" href="pef-sections/1/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]//pef:page"/>
-            </x:context>
-            <x:expect label="there should not be other pages in the same section as the toc" type="count" min="1" max="1"/>
-            
             <x:context label="the PEF">
                 <x:document type="file" base-uri="temp-dir" href="pef-sections/1/pef-output-dir/book.pef"/>
             </x:context>
             <x:expect label="the titlepage should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼')]/preceding::pef:section) + 1" equals="1"/>
             <x:expect label="the about page should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]/preceding::pef:section) + 1" equals="1"/>
-            <x:expect label="the toc should be in the second section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]/preceding::pef:section) + 1" equals="2"/>
-            <x:expect label="the non-generated content should start in the third section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/preceding::pef:section) + 1" equals="3"/>
+            <x:expect label="the toc should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]/preceding::pef:section) + 1" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            <x:expect label="the non-generated content should start in the second section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/preceding::pef:section) + 1" equals="2" pending="https://github.com/nlbdev/pipeline/issues/126"/>
         </x:scenario>
         
         <x:scenario label="duplex=false">
             <x:call step="nlb:dtbook-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="tests"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <level1>
+                                        <h1>frontmatter</h1>
+                                    </level1>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>bodymatter</h1>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
                 <x:option name="duplex" select="'false'"/>
                 <x:option name="pef-output-dir" select="resolve-uri('pef-sections/2/pef-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('pef-sections/2/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('pef-sections/2/temp-dir',$temp-dir)"/>
             </x:call>
             
-            <x:context label="the sections containing the titlepage and about page">
-                <x:document type="file" base-uri="temp-dir" href="pef-sections/2/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼') or contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]"/>
-            </x:context>
-            <x:expect label="the titlepage and the about page should be in the same section" type="count" min="1" max="1"/>
-            
-            <x:context label="the pages in the section of the toc">
-                <x:document type="file" base-uri="temp-dir" href="pef-sections/2/pef-output-dir/book.pef" select="//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]//pef:page"/>
-            </x:context>
-            <x:expect label="there should not be other pages in the same section as the toc" type="count" min="1" max="1"/>
-            
             <x:context label="the PEF">
                 <x:document type="file" base-uri="temp-dir" href="pef-sections/2/pef-output-dir/book.pef"/>
             </x:context>
             <x:expect label="the titlepage should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼')]/preceding::pef:section) + 1" equals="1"/>
             <x:expect label="the about page should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')]/preceding::pef:section) + 1" equals="1"/>
-            <x:expect label="the toc should be in the second section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]/preceding::pef:section) + 1" equals="2"/>
-            <x:expect label="the non-generated content should start in the third section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/preceding::pef:section) + 1" equals="3"/>
+            <x:expect label="the toc should be in the first section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')]/preceding::pef:section) + 1" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            <x:expect label="the non-generated content should start in the second section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/preceding::pef:section) + 1" equals="2" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+        </x:scenario>
+        
+        <x:scenario label="multiple volumes">
+            <x:call step="nlb:dtbook-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="uid"/>
+                                <meta name="dc:Creator" content="author"/>
+                                <meta name="dc:Title" content="title"/>
+                            </head>
+                            <book>
+                                <bodymatter>
+                                    <level1 class="part">
+                                        <h1>part 1</h1>
+                                        <p>content</p>
+                                        <level2>
+                                            <h2>chapter 1</h2>
+                                            <p>content</p>
+                                        </level2>
+                                        <level2>
+                                            <h2>chapter 2</h2>
+                                            <p>content</p>
+                                        </level2>
+                                    </level1>
+                                    <level1 class="part">
+                                        <h1>part 2</h1>
+                                        <p>content</p>
+                                        <level2>
+                                            <h2>chapter 3</h2>
+                                            <p>content</p>
+                                        </level2>
+                                        <level2>
+                                            <h2>chapter 4</h2>
+                                            <p>content</p>
+                                        </level2>
+                                    </level1>
+                                    <level1 class="part">
+                                        <h1>part 3</h1>
+                                        <p>content</p>
+                                        <level2>
+                                            <h2>chapter 5</h2>
+                                            <p>content</p>
+                                        </level2>
+                                        <level2>
+                                            <h2>chapter 6</h2>
+                                            <p>content</p>
+                                        </level2>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('pef-sections/3/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('pef-sections/3/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('pef-sections/3/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the PEF">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/3/pef-output-dir/book.pef"/>
+            </x:context>
+            
+            <x:expect label="there should be 3 volumes" type="xpath" test="count(//pef:volume)" equals="3"/>
+            
+            <x:expect label="the first section of the first volume should contain a titlepage" type="xpath" test="count(//pef:volume[1]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼')])" equals="1"/>
+            <x:expect label="the first section of the first volume should contain an about page" type="xpath" test="count(//pef:volume[1]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')])" equals="1"/>
+            <x:expect label="the first section of the first volume should contain a toc" type="xpath" test="count(//pef:volume[1]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            <x:expect label="the first section of the first volume should not contain any non-generated content" type="xpath" test="count(//pef:volume[1]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="0"/>
+            <x:expect label="the second section of the first volume should contain non-generated content" type="xpath" test="count(//pef:volume[1]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            
+            <x:expect label="the first section of the second volume should contain a titlepage" type="xpath" test="count(//pef:volume[2]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼')])" equals="1"/>
+            <x:expect label="the first section of the second volume should not contain an about page" type="xpath" test="count(//pef:volume[2]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')])" equals="0"/>
+            <x:expect label="the first section of the second volume should contain a toc" type="xpath" test="count(//pef:volume[2]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            <x:expect label="the first section of the second volume should not contain any non-generated content" type="xpath" test="count(//pef:volume[2]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="0"/>
+            <x:expect label="the second section of the second volume should contain non-generated content" type="xpath" test="count(//pef:volume[2]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            
+            <x:expect label="the first section of the third volume should contain a titlepage" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠠⠝⠇⠃⠀⠤⠀⠼')])" equals="1"/>
+            <x:expect label="the first section of the third volume should not contain an about page" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠕⠍⠀⠃⠕⠅⠁')])" equals="0"/>
+            <x:expect label="the first section of the third volume should contain a toc" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            <x:expect label="the first section of the third volume should not contain any non-generated content" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="0"/>
+            <x:expect label="the second section of the third volume should contain non-generated content" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
         </x:scenario>
     </x:scenario>
     

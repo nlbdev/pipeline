@@ -83,9 +83,9 @@ pagenum, *[epub|type~='pagebreak'] {
                 /* to cancel out generic rule */
         }
 
-        frontmatter level1:not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc):not(#generated-document-toc),
+        frontmatter level1:not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)),
         bodymatter,
-        body:not([epub|type~='cover']):not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(#generated-volume-toc):not(#generated-document-toc) {
+        body:not([epub|type~='cover']):not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) {
                 line-height: 2;
         }
 
@@ -100,6 +100,7 @@ pagenum, *[epub|type~='pagebreak'] {
 
 /* Parts */
 level1.part, *[epub|type~='part'] {
+    page-break-before: auto;
     
     & ~ level1.part,
     & ~ *[epub|type~='part'] {
@@ -112,8 +113,9 @@ level1.part, *[epub|type~='part'] {
 
 /* Rules depending on sectioning depth */
 /* Note: DTBook and EPUB rules are separated mainly to avoid bloating the compiled CSS. */
-level1:not(.part), level1.part > level2 {
+level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)), level1.part > level2 {
         /* level 1 */
+        page-break-before: right;
         volume-break-inside: -obfl-keep(8);
         
         & ~ level1:not(.part),
@@ -167,9 +169,10 @@ level1:not(.part) level6 {
         }
 }
 *[epub|type~='part'] section,
-body:not([epub|type~='part']),
-section:not([epub|type~='part']) {
+body:not([epub|type~='part']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)),
+section:not([epub|type~='part']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) {
         /* level 1 */
+        page-break-before: right;
         volume-break-inside: -obfl-keep(8);
         
         & ~ section:not([epub|type~='part']) {
@@ -178,6 +181,7 @@ section:not([epub|type~='part']) {
         
         section {
                 /* level 2 */
+                page-break-before: auto;
                 volume-break-inside: -obfl-keep(7);
                 
                 & ~ section {
@@ -299,6 +303,7 @@ h1, h2, h3, h4, h5, h6 {
         }
 }
 
+/* #generated-*-toc is a <list> in DTBook and <ol> in HTML */
 #generated-volume-toc, #generated-document-toc {
         volume-break-after: avoid;
         
@@ -402,18 +407,8 @@ doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauth
 }
 
 /* -------------------------------------------------------------------------- */
-/*                class                                                       */
+/*                Special classes                                                       */
 /* -------------------------------------------------------------------------- */
-.part h1, h1.part {
-        margin-left: 1;
-        margin-top: 2;
-        text-align: center;
-        page-break-before: right;
-        border-top: ⠉;
-        border-right: ⠸;
-        border-bottom: ⠤;
-        border-left: ⠇;
-}
 
 .precedingemptyline {
         margin-top: 1;
@@ -432,66 +427,111 @@ doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauth
 }
 
 /* -------------------------------------------------------------------------- */
-/*                element                                                     */
+/*                Headlines                                                     */
 /* -------------------------------------------------------------------------- */
 
-h1, .part h2 {
-        page-break-before: right;
-        margin-top: 2;
-        margin-left: 5;
-        margin-right: 5;
-        margin-bottom: 1;
-        text-align: center;
-        border-top: ⠉;
-        border-bottom: ⠉;
-}
-
-h2, .part h3 {
-        margin-top: 2;
-        margin-left: 5;
-        margin-right: 5;
-        margin-bottom: 1;
-        text-align: center;
-}
-
-h3, .part h4 {
-        margin-top: 1;
-        margin-left: 5;
-        margin-right: 5;
-        text-align: center;
-}
-
-h4, .part h5 {
-        margin-top: 1;
-        margin-left: 1;
-        margin-right: 5;
-        text-align: left;
-        text-indent: 0;
-}
-
-h5, .part h6 {
-        margin-top: 1;
-        margin-left: 1;
-        margin-right: 5;
-        text-align: left;
-        text-indent: 0;
-}
-
-h5::after, .part h6::after {
-        content: ":";
-}
-
+/* depth 6 */
 h6 {
-        margin-top: 1;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
         margin-left: 1;
         margin-right: 5;
+        margin-top: 1;
         text-align: left;
         text-indent: 0;
-        border-top: ⠉;
-        border-right: ⠉;
-        border-bottom: ⠉;
-        border-left: ⠉;
 }
+ 
+/* depth 5 */
+h5, level1.part h6, *[epub|type~='part'] h6 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
+        margin-left: 1;
+        margin-right: 5;
+        margin-top: 1;
+        text-align: left;
+        text-indent: 0;
+}
+ 
+/* depth 4 */
+h4, level1.part h5, *[epub|type~='part'] h5 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
+        margin-left: 1;
+        margin-right: 5;
+        margin-top: 1;
+        text-align: left;
+        text-indent: 0;
+}
+
+/* depth 3 */
+h3, level1.part h4, *[epub|type~='part'] h4 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
+        margin-left: 5;
+        margin-right: 5;
+        margin-top: 1;
+        text-align: center;
+        text-indent: 0;
+}
+ 
+/* depth 2 */
+h2, level1.part h3, *[epub|type~='part'] h3 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 1;
+        margin-left: 5;
+        margin-right: 5;
+        margin-top: 2;
+        text-align: center;
+        text-indent: 0;
+}
+
+/* depth 1 */
+h1, level1.part h2, *[epub|type~='part'] h2 {
+        border-bottom: ⠉;
+        border-left: none;
+        border-right: none;
+        border-top: ⠉;
+        margin-bottom: 1;
+        margin-left: 5;
+        margin-right: 5;
+        margin-top: 2;
+        text-align: center;
+        text-indent: 0;
+}
+ 
+
+/* part */
+level1.part h1, *[epub|type~='part'] h1 {
+        border-bottom: ⠤;
+        border-left: ⠇;
+        border-right: ⠸;
+        border-top: ⠉;
+        margin-bottom: 1;
+        margin-left: 1;
+        margin-right: 5;
+        margin-top: 2;
+        text-align: center;
+        text-indent: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                Other elements                                              */
+/* -------------------------------------------------------------------------- */
 
 p {
         text-indent: 2;

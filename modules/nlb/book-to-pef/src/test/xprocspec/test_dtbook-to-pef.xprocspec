@@ -1320,5 +1320,280 @@
             <x:expect label="There should be an output PEF" type="count" min="1"/>
         </x:scenario>
         
+        <x:scenario label="Headlines">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                            <head>
+                                <meta content="123456" name="dtb:uid"/>
+                                <meta content="Headlines" name="dc:Title"/>
+                                <meta content="123456" name="dc:Identifier"/>
+                                <meta content="no" name="dc:Language"/>
+                                <meta content="DTBook" name="dc:Format"/>
+                                <meta content="NLB" name="dc:Publisher"/>
+                                <meta content="2017-10-17" name="dc:Date"/>
+                                <meta content="2017-10-17T13:34:16+00:00" name="dcterms:modified"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>Headlines</doctitle>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1 style="page-break-before: always;">
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <h1>Chapter 1</h1>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                        <level2 style="page-break-before: always;">
+                                            <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                            
+                                            <h2>Chapter 2</h2>
+                                            
+                                            <p style="margin-top: 0; padding-top: 0;">after</p>
+                                            <level3 style="page-break-before: always;">
+                                                <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                
+                                                <h3>Chapter 3</h3>
+                                                
+                                                <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                <level4 style="page-break-before: always;">
+                                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                    
+                                                    <h4>Chapter 4</h4>
+                                                    
+                                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                    <level5 style="page-break-before: always;">
+                                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                        
+                                                        <h5>Chapter 5</h5>
+                                                        
+                                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                        <level6 style="page-break-before: always;">
+                                                            <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                            
+                                                            <h6>Chapter 6</h6>
+                                                            
+                                                            <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                        </level6>
+                                                    </level5>
+                                                </level4>
+                                            </level3>
+                                        </level2>
+                                    </level1>
+                                    <level1 class="part" style="page-break-before: always;">
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <h1>Part</h1>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                        <level2 style="page-break-before: always;">
+                                            <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                            
+                                            <h2>Part chapter 1</h2>
+                                            
+                                            <p style="margin-top: 0; padding-top: 0;">after</p>
+                                            <level3 style="page-break-before: always;">
+                                                <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                
+                                                <h3>Part chapter 2</h3>
+                                                
+                                                <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                <level4 style="page-break-before: always;">
+                                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                    
+                                                    <h4>Part chapter 3</h4>
+                                                    
+                                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                    <level5 style="page-break-before: always;">
+                                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                        
+                                                        <h5>Part chapter 4</h5>
+                                                        
+                                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                        <level6 style="page-break-before: always;">
+                                                            <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                            
+                                                            <h6>Part chapter 5</h6>
+                                                            
+                                                            <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                        </level6>
+                                                    </level5>
+                                                </level4>
+                                            </level3>
+                                        </level2>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('22/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('22/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('22/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the h1 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h2 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h3 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h4 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h5 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h6 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠋')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠋</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h1 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞') and not(contains(string-join(.//text(),''),'⠉⠓⠁⠏⠞⠑⠗'))]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare" pending="https://github.com/nlbdev/pipeline/issues/128">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                        <row>⠀⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h2 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h3 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h4 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h5 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h6 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
