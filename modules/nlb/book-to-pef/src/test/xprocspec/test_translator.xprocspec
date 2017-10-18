@@ -442,7 +442,7 @@
         <_ xmlns="" style="text-transform: none">
           <bodymatter xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
             <p style="display: block"> ⠨⠴⠦⠌⠖ </p>
-            <p style="display: block" xml:lang="en-Brai"> ⠈⠒⠏⠶⠸⠌⠈⠬ </p>
+            <p style="display: block" xml:lang="en-Brai"> ⠨⠴⠐⠣⠸⠌⠐⠖ </p>
           </bodymatter>
         </_>
       </x:document>
@@ -477,12 +477,12 @@
           <level1 xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/" >
             <p style="display: block">⠰⠁ ⠃ ⠁ ⠇⠇ ⠨⠴⠦⠌⠖</p>
             <level2 xml:lang="en-Brai">
-              <p style="display: block">⠰⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇ ⠈⠒⠏⠶⠸⠌⠈⠬</p>
+              <p style="display: block">⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇ ⠨⠴⠐⠣⠸⠌⠐⠖</p>
               <p style="display: block" xml:lang="no-Brai">⠰⠁ ⠃ ⠁ ⠇⠇ ⠨⠴⠦⠌⠖</p>
               <div xml:lang="no-Brai">
                 <p style="display: block">⠰⠁ ⠃ ⠁ ⠇⠇ ⠨⠴⠦⠌⠖</p>
               </div>
-              <p style="display: block">⠰⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇ ⠈⠒⠏⠶⠸⠌⠈⠬</p>
+              <p style="display: block">⠁ ⠃⠇⠑ ⠁⠞ ⠇⠇ ⠨⠴⠐⠣⠸⠌⠐⠖</p>
             </level2>
           </level1>
         </_>
