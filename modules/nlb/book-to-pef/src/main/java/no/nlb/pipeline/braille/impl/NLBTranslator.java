@@ -16,6 +16,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.Iterables.size;
+import com.google.common.collect.Lists;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Term;
@@ -333,21 +334,33 @@ public interface NLBTranslator {
 					for (CSSStyledText st : styledText) {
 						SimpleInlineStyle style = st.getStyle();
 						boolean uncontracted; {
-							uncontracted = computer == null ? false : computer.get(i);
+							uncontracted = false;
 							if (style != null) {
 								CSSProperty val = style.getProperty("text-transform");
 								if (val != null) {
 									if (val == TextTransform.list_values) {
 										TermList values = style.getValue(TermList.class, "text-transform");
-										Iterator<Term<?>> it = values.iterator();
+										
+										// According to the spec values should be "applied" from left to right, and
+										// values of inner elements always come before values of outer elements (see
+										// http://braillespecs.github.io/braille-css/#the-text-transform-property). This
+										// is the most logical situation in most cases. However the order in which
+										// "uncontracted" and "contracted" should overwrite each other is exactly the
+										// opposite. Therefore invert the list.
+										Iterator<Term<?>> it = Lists.reverse(values).iterator();
 										while (it.hasNext()) {
 											String tt = ((TermIdent)it.next()).getValue();
 											if (tt.equals("uncontracted")) {
 												uncontracted = true;
-												it.remove();
-												break; }}
+												it.remove(); }
+											else if (tt.equals("contracted")) { // means "allow contracted"
+												uncontracted = false; // "contracted" overwrites "uncontracted" if it comes later in the list
+												it.remove(); }}
 										if (values.isEmpty())
-											style.removeProperty("text-transform"); }}}}
+											style.removeProperty("text-transform"); }}}
+							if (computer != null)
+								uncontracted = uncontracted || computer.get(i);
+						}
 						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
 							for (String s : transformWithContractionGrade(buffer, lang, curUncontracted))
 								transformed.add(s);

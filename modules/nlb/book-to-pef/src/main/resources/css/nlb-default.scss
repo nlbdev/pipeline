@@ -421,8 +421,13 @@ doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauth
         text-transform: uncontracted;
 }
 
-*[xml|lang]:not([xml|lang|="no"]), *[lang]:not([lang|="no"]) {
+[xml|lang]:not([xml|lang|="no"]), [lang]:not([lang|="no"]) {
         text-transform: uncontracted;
+        
+        /* "contracted" means "allow contracted" */
+        [xml|lang|="no"], [lang|="no"] {
+                text-transform: contracted;
+        }
 }
 
 /* -------------------------------------------------------------------------- */

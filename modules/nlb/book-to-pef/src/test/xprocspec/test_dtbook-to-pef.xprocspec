@@ -268,7 +268,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="test for contracted norwegian inside other languages" pending="https://github.com/nlbdev/pipeline/issues/73">
+        <x:scenario label="test for contracted norwegian inside other languages">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -289,11 +289,9 @@
                                         content: none;
                                       }
                                     }
-                                    h1, h2, h3, p {
+                                    p {
                                       text-indent: 0;
-                                      text-align: left;
                                       margin-left: 0;
-                                      border: none;
                                     }
                                 </style>
                             </head>
@@ -304,14 +302,14 @@
                                 </frontmatter>
                                 <bodymatter>
                                     <level1>
-                                        <p>a ble at ll</p>
+                                        <p>a ble at ll %(/+</p>
                                         <level2 xml:lang="en">
-                                            <p>a ble at ll</p>
-                                            <p xml:lang="no">a ble at ll</p>
+                                            <p>a ble at ll %(/+</p>
+                                            <p xml:lang="no">a ble at ll %(/+</p>
                                             <div xml:lang="no">
-                                                <p>a ble at ll</p>
+                                                <p>a ble at ll %(/+</p>
                                             </div>
-                                            <p>a ble at ll</p>
+                                            <p>a ble at ll %(/+</p>
                                         </level2>
                                     </level1>
                                 </bodymatter>
@@ -331,11 +329,11 @@
             <x:expect label="result" type="compare">
                 <x:document type="inline" select="//pef:row">
                     <_ xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
-                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
-                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
-                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇⠀⠨⠴⠦⠌⠖</row>
+                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇⠀⠨⠴⠦⠌⠖</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇⠀⠨⠴⠦⠌⠖</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇⠀⠨⠴⠦⠌⠖</row>
+                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇⠀⠨⠴⠦⠌⠖</row>
                     </_>
                 </x:document>
             </x:expect>
