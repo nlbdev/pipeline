@@ -784,8 +784,14 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                         @footnotes {
                                 content: flow(footnotes);
                                 max-height: 15;
-                                -obfl-fallback-collection: endnotes-title;
+                                -obfl-fallback-collection: endnotes;
                         }
+                }
+                .notes-placement {
+                        -obfl-use-when-collection-not-empty: footnotes;
+                }
+                .notes-placement-fallback {
+                        -obfl-use-when-collection-not-empty: endnotes;
                 }
                 
         } @else if ($notes-placement == 'end-of-volume') {
@@ -793,12 +799,6 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                         &:has(noteref, a[epub|type~='noteref'])::alternate {
                                @include endnotes-title;
                                flow: endnotes-title;
-                        }
-                }
-                @volume {
-                        @end {
-                                content: flow(endnotes-title) flow(endnotes, volume);
-                                page: auto;
                         }
                 }
                 
@@ -810,6 +810,15 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                                         page-break-before: right;
                                 }
                                 content: flow(endnotes);
+                                page: auto;
+                        }
+                }
+        }
+        @if ($notes-placement == 'bottom-of-page' or $notes-placement == 'end-of-volume') {
+                @volume {
+                        @end {
+                                content: flow(endnotes-title) flow(endnotes, volume);
+                                page: auto;
                         }
                 }
         }

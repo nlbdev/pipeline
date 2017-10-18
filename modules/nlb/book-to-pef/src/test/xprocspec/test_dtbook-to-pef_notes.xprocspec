@@ -628,7 +628,7 @@
                 </x:input>
             </x:call>
             
-            <x:scenario label="with notes-placement=bottom-of-page" pending="https://github.com/nlbdev/pipeline/issues/99">
+            <x:scenario label="with notes-placement=bottom-of-page">
                 <x:call>
                     <x:option name="notes-placement" select="'bottom-of-page'"/>
                     <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
@@ -639,6 +639,7 @@
                 <x:context label="the page containing 'om boka'">
                     <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef"  select="//pef:page[.//text()[contains(.,'⠕⠍⠀⠃⠕⠅⠁')]]"/>
                 </x:context>
+                <x:expect label="the page should not contain 'Noter er plassert nederst på hver side.'" type="xpath" test="not(contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠝⠑⠙⠑⠗⠎⠞⠀⠏⠡⠀⠓⠧⠑⠗⠀⠎⠊⠙⠑⠄'))"/>
                 <x:expect label="the page should contain 'Noter er plassert i slutten av hvert hefte.'" type="xpath" test="contains(replace(string-join(.//text(),'⠀'),'[⠀\s]+','⠀'), '⠠⠝⠕⠞⠑⠗⠀⠑⠗⠀⠏⠇⠁⠎⠎⠑⠗⠞⠀⠊⠀⠎⠇⠥⠞⠞⠑⠝⠀⠁⠧⠀⠓⠧⠑⠗⠞⠀⠓⠑⠋⠞⠑⠄')"/>
             </x:scenario>
             

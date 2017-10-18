@@ -229,40 +229,27 @@
     <xsl:template name="generate-about">
         <xsl:variable name="namespace-uri" select="namespace-uri()"/>
         
-        <xsl:element name="{if ($namespace-uri = $dtbook-namespace) then 'level1' else 'body'}" namespace="{$namespace-uri}">
-            <xsl:attribute name="class" select="'pef-about'"/>
-            <xsl:element name="h1" namespace="{$namespace-uri}">
-                <xsl:text>Om boka</xsl:text>
-            </xsl:element>
-
-            <xsl:if test="count(//dtbook:note | //@epub:type[tokenize(.,'\s+') = ('note','footnote','endnote','rearnote')])">
-                <!-- TODO: handle fallback mechanism for footnotes (bottom-of-page = end-of-volume) -->
-                <xsl:variable name="notes-placement" as="xs:string">
-                    <xsl:choose>
-                        <xsl:when test="$notes-placement = 'bottom-of-page'">
-                            <xsl:text>Noter er plassert nederst på hver side.</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="$notes-placement = 'end-of-volume'">
-                            <xsl:text>Noter er plassert i slutten av hvert hefte.</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="$notes-placement = 'end-of-book'">
-                            <xsl:text>Noter er plassert bakerst i boken.</xsl:text>
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:call-template name="row">
-                    <xsl:with-param name="content" select="$notes-placement"/>
-                    <xsl:with-param name="classes" select="'notes-placement'"/>
-                    <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
-                </xsl:call-template>
-            </xsl:if>
-            
+        <xsl:variable name="notes-present" as="xs:boolean"
+                      select="exists(//dtbook:note|//@epub:type[tokenize(.,'\s+') = ('note','footnote','endnote','rearnote')])"/>
+        <xsl:variable name="notes-placement-text">
+            <xsl:choose>
+                <xsl:when test="$notes-placement = 'bottom-of-page'">
+                    <xsl:text>Noter er plassert nederst på hver side.</xsl:text>
+                </xsl:when>
+                <xsl:when test="$notes-placement = 'end-of-volume'">
+                    <xsl:text>Noter er plassert i slutten av hvert hefte.</xsl:text>
+                </xsl:when>
+                <xsl:when test="$notes-placement = 'end-of-book'">
+                    <xsl:text>Noter er plassert bakerst i boken.</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="final-rows" as="element()*">
             <xsl:call-template name="row">
                 <xsl:with-param name="content" select="'Antall sider: '"/>
                 <xsl:with-param name="classes" select="'pef-pages'"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
             </xsl:call-template>
-            
             <xsl:call-template name="row">
                 <xsl:with-param name="content" select="'Boka skal ikke returneres.'"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
@@ -271,8 +258,44 @@
                 <xsl:with-param name="content" select="'Feil eller mangler kan meldes til punkt@nlb.no.'"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
             </xsl:call-template>
-            
+        </xsl:variable>
+        <xsl:element name="{if ($namespace-uri = $dtbook-namespace) then 'level1' else 'body'}" namespace="{$namespace-uri}">
+            <xsl:attribute name="class" select="'pef-about'"/>
+            <xsl:element name="h1" namespace="{$namespace-uri}">
+                <xsl:text>Om boka</xsl:text>
+            </xsl:element>
+            <xsl:if test="not($notes-present and $notes-placement = 'bottom-of-page')">
+                <xsl:if test="$notes-present">
+                    <xsl:call-template name="row">
+                        <xsl:with-param name="content" select="$notes-placement-text"/>
+                        <xsl:with-param name="classes" select="'notes-placement'"/>
+                        <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:sequence select="$final-rows"/>
+            </xsl:if>
         </xsl:element>
+        <!--
+            in order for -obfl-use-when-collection-not-empty to work the "notes-placement" and
+            "notes-placement-fallback" elements must be added to a named flow directly (not via
+            their parent element)
+        -->
+        <xsl:if test="$notes-present and $notes-placement = 'bottom-of-page'">
+            <xsl:call-template name="row">
+                <xsl:with-param name="content" select="$notes-placement-text"/>
+                <xsl:with-param name="classes" select="('pef-about','notes-placement')"/>
+                <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+            </xsl:call-template>
+            <xsl:call-template name="row">
+                <xsl:with-param name="content">Noter er plassert i slutten av hvert hefte.</xsl:with-param>
+                <xsl:with-param name="classes" select="('pef-about','notes-placement-fallback')"/>
+                <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+            </xsl:call-template>
+            <xsl:element name="div" namespace="{$namespace-uri}">
+                <xsl:attribute name="class" select="'pef-about'"/>
+                <xsl:sequence select="$final-rows"/>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template name="empty-row" as="element()">
@@ -288,7 +311,7 @@
         <xsl:param name="classes" as="xs:string*"/>
         <xsl:param name="namespace-uri" as="xs:string"/>
         <xsl:element name="p" namespace="{$namespace-uri}">
-            <xsl:if test="$classes">
+            <xsl:if test="exists($classes)">
                 <xsl:attribute name="class" select="string-join($classes,' ')"/>
             </xsl:if>
             <xsl:value-of select="$content"/>
