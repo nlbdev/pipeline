@@ -483,11 +483,11 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="regression test for error 'pf:text-transform failed' when text-transform: uncontracted; is used together with force-norwegian=false" pending="https://github.com/nlbdev/pipeline/issues/89">
+  <x:scenario label="regression test for error 'pf:text-transform failed' when text-transform: uncontracted; is used together with force-norwegian=false">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <p xmlns="http://www.daisy.org/z3986/2005/dtbook/" style="text-transform: uncontracted;">content</p>
+          <p xmlns="http://www.daisy.org/z3986/2005/dtbook/" style="text-transform: uncontracted;" xml:lang="en">content</p>
         </x:document>
       </x:input>
     </x:call>
