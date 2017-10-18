@@ -83,15 +83,15 @@ public abstract class AbstractBraillo200Embosser extends BrailloEmbosser {
 			EmbosserWriterProperties ep = new SimpleEmbosserProperties(
 					Math.min(EmbosserTools.getWidth(printPage, getCellWidth()), 42),
 					EmbosserTools.getHeight(printPage, getCellHeight()))
-				.supportsDuplex(true)
-				.supportsAligning(true);
+					.supportsDuplex(true)
+					.supportsAligning(true);
 			ConfigurableEmbosser.Builder b = new ConfigurableEmbosser.Builder(os, tc.newBrailleConverter())
-				.breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
-				.padNewline(ConfigurableEmbosser.Padding.NONE) // JH100408: changed from BEFORE
-				.embosserProperties(ep)
-				.header(getBrailloHeader(ep.getMaxWidth(), printPage))
-				.fillSheet(true)
-				.autoLineFeedOnEmptyPage(true);
+					.breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
+					.padNewline(ConfigurableEmbosser.Padding.NONE) // JH100408: changed from BEFORE
+					.embosserProperties(ep)
+					.header(getBrailloHeader(ep.getMaxWidth(), printPage))
+					.fillSheet(true)
+					.autoLineFeedOnEmptyPage(true);
 			return b.build();
 		} catch (EmbosserFactoryException e) {
 			throw new IllegalArgumentException(e);
@@ -113,7 +113,7 @@ public abstract class AbstractBraillo200Embosser extends BrailloEmbosser {
 		}
 		throw new IllegalArgumentException("Embosser does not support this feature.");
 	}
-	
+
 	// B200, B400S, B400SR
 	// Supported paper width (chars): 10 <= width <= 42
 	// Supported paper height (inches): 4 <= height <= 14
@@ -129,45 +129,49 @@ public abstract class AbstractBraillo200Embosser extends BrailloEmbosser {
 		byte[] w = EmbosserTools.toBytes(width, 2);
 		byte[] h = EmbosserTools.toBytes(height, 2);
 		return new byte[] {
-			0x1b, 'S', '1', 		// Form Feed Mode. n can be 0 or 1, no form feed (0) or normal form feed (1).
-			0x1b, 'C', '1', 		// Print Format. n can be 0 or 1, single-sided (0) or interpoint (1).
-			0x1b, 'J', '0',			// 6 / 8 dot braille. n can be 0 or 1, 6 (0) or 8 (1) dot braille.
-			0x1b, 'A', h[0], h[1],	// Sheet length. nn can be from 08 to 28 (4 to14 inch)
-			0x1b, 'B', w[0], w[1],	// Line length. nn can be from 10 to 42 characters
-			0x1b, 'H', (byte)(zFoldingEnabled?'1':'0'), // Page Layout. n can be 0 or 1, Normal (0) or Z-fold printing (1).
-			0x1b, 'N', '0',			// Line Single/Double. n can be 0 or 1, single (0) or double line spacing (1)
-			0x1b, 'R', '0'			// Page adjust. n can be from 0 to 9 lines
+				0x1b, 'S', '1', 		// Form Feed Mode. n can be 0 or 1, no form feed (0) or normal form feed (1).
+				0x1b, 'C', '1', 		// Print Format. n can be 0 or 1, single-sided (0) or interpoint (1).
+				0x1b, 'J', '0',			// 6 / 8 dot braille. n can be 0 or 1, 6 (0) or 8 (1) dot braille.
+				0x1b, 'A', h[0], h[1],	// Sheet length. nn can be from 08 to 28 (4 to14 inch)
+				0x1b, 'B', w[0], w[1],	// Line length. nn can be from 10 to 42 characters
+				0x1b, 'H', (byte)(zFoldingEnabled?'1':'0'), // Page Layout. n can be 0 or 1, Normal (0) or Z-fold printing (1).
+				0x1b, 'N', '0',			// Line Single/Double. n can be 0 or 1, single (0) or double line spacing (1)
+				0x1b, 'R', '0'			// Page adjust. n can be from 0 to 9 lines
 		};
 	}
-	
+
 	@Override
 	public void setFeature(String key, Object value) {
 		if (EmbosserFeatures.Z_FOLDING.equals(key)) {
-            try {
-                zFoldingEnabled = (Boolean)value;
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException("Unsupported value for z-folding.");
-            }
+			try {
+				zFoldingEnabled = (Boolean)value;
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for z-folding.");
+			}
 		} else {
 			super.setFeature(key, value);
 		}
 	}
 
-    public boolean supports8dot() {
-        return false;
-    }
+	@Override
+	public boolean supports8dot() {
+		return false;
+	}
 
-    public boolean supportsDuplex() {
-        return true;
-    }
+	@Override
+	public boolean supportsDuplex() {
+		return true;
+	}
 
-    public boolean supportsAligning() {
-        return true;
-    }
+	@Override
+	public boolean supportsAligning() {
+		return true;
+	}
 
-    public boolean supportsVolumes() {
-        return false;
-    }
+	@Override
+	public boolean supportsVolumes() {
+		return false;
+	}
 
 	@Override
 	public Area getPrintableArea(PageFormat pageFormat) {
@@ -179,7 +183,8 @@ public abstract class AbstractBraillo200Embosser extends BrailloEmbosser {
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat, PrintDirection.UPRIGHT, PrintMode.REGULAR);
 	}
-	
+
+	@Override
 	public boolean supportsZFolding() {
 		// even 400SR supports z-folding! But since it uses roll paper, 
 		// that option will not be presented to a user at this moment.

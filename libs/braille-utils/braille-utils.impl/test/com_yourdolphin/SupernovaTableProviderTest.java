@@ -11,33 +11,33 @@ import org.junit.Test;
 
 public class SupernovaTableProviderTest {
 	private static SupernovaTableProvider bt = new SupernovaTableProvider(); 
-	
+
 	/*
 	@Test
 	public void testFeatureReplacement() {
 		assertEquals('\u2800', bt.getFeature("replacement"));
 	}
-	
+
 	@Test
 	public void testFeatureFallback() {
 		assertEquals(EightDotFallbackMethod.MASK, bt.getFeature("fallback"));
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testGetUnknownFeature() {
 		bt.getFeature("unknown-feature");
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testSetUnknownFeature() {
 		bt.setFeature("unknown-feature", null);
 	}*/
-	
+
 	@Test
 	public void testListLength() {
 		assertEquals("Assert that all tables have tests by counting the list length", 1, bt.list().size());
 	}
-	
+
 	@Test
 	public void testTableSV_SE_6DOT() {
 		//BrailloTableProvider bt = new BrailloTableProvider();

@@ -32,74 +32,74 @@ import org.xml.sax.SAXException;
  */
 public class BlueBarEmbosserTest {
 
-    private static EmbosserCatalog ec = EmbosserCatalog.newInstance();
-    private static BlueBarEmbosser e = (BlueBarEmbosser)ec.get("com_indexbraille.IndexEmbosserProvider.EmbosserType.INDEX_BASIC_BLUE_BAR");
-    private static PaperCatalog pc = PaperCatalog.newInstance();
-    private static PageFormat _210mm_12inch = new TractorPaperFormat((TractorPaper)pc.get("org_daisy.TractorPaperProvider.PaperSize.W210MM_X_H12INCH"));
-    private static PageFormat _280mm_12inch = new TractorPaperFormat((TractorPaper)pc.get("org_daisy.TractorPaperProvider.PaperSize.W280MM_X_H12INCH"));
+	private static EmbosserCatalog ec = EmbosserCatalog.newInstance();
+	private static BlueBarEmbosser e = (BlueBarEmbosser)ec.get("com_indexbraille.IndexEmbosserProvider.EmbosserType.INDEX_BASIC_BLUE_BAR");
+	private static PaperCatalog pc = PaperCatalog.newInstance();
+	private static PageFormat _210mm_12inch = new TractorPaperFormat((TractorPaper)pc.get("org_daisy.TractorPaperProvider.PaperSize.W210MM_X_H12INCH"));
+	private static PageFormat _280mm_12inch = new TractorPaperFormat((TractorPaper)pc.get("org_daisy.TractorPaperProvider.PaperSize.W280MM_X_H12INCH"));
 
-    @Test
-    public void testPrintableArea() {
+	@Test
+	public void testPrintableArea() {
 
-        assertEquals("Assert that max width for a 210mm by 12 inch paper is 35 cells",  e.getMaxWidth(_210mm_12inch),  35);
-        assertEquals("Assert that max width for a 280mm by 12 inch paper is 46 cells",  e.getMaxWidth(_280mm_12inch),  46);
-        assertEquals("Assert that max height for a 280mm by 12 inch paper is 30 lines", e.getMaxHeight(_280mm_12inch), 30);
-    }
+		assertEquals("Assert that max width for a 210mm by 12 inch paper is 35 cells",  e.getMaxWidth(_210mm_12inch),  35);
+		assertEquals("Assert that max width for a 280mm by 12 inch paper is 46 cells",  e.getMaxWidth(_280mm_12inch),  46);
+		assertEquals("Assert that max height for a 280mm by 12 inch paper is 30 lines", e.getMaxHeight(_280mm_12inch), 30);
+	}
 
-    @Test
-    public void testTableFilter() {
+	@Test
+	public void testTableFilter() {
 
-        TableCatalog tc = TableCatalog.newInstance();
-	assertTrue("Assert that encoding cannot be modified", tc.list(e.getTableFilter()).size() <= 1);
-    }
+		TableCatalog tc = TableCatalog.newInstance();
+		assertTrue("Assert that encoding cannot be modified", tc.list(e.getTableFilter()).size() <= 1);
+	}
 
-    @Test
-    public void testDuplex() {
-        assertTrue("Assert that duplex is not supported", !e.supportsDuplex());
-    }
+	@Test
+	public void testDuplex() {
+		assertTrue("Assert that duplex is not supported", !e.supportsDuplex());
+	}
 
-    @Test
-    public void test8dot() {
-        assertTrue("Assert that 8-dot is not supported", !e.supports8dot());
-    }
+	@Test
+	public void test8dot() {
+		assertTrue("Assert that 8-dot is not supported", !e.supports8dot());
+	}
 
-    @Test
-    public void testAligning() {
-        assertTrue("Assert that aligning is supported", e.supportsAligning());
-    }
+	@Test
+	public void testAligning() {
+		assertTrue("Assert that aligning is supported", e.supportsAligning());
+	}
 
-    @Test
-    public void testEmbosserWriter() throws IOException,
-                                            ParserConfigurationException,
-                                            SAXException,
-                                            UnsupportedWidthException {
+	@Test
+	public void testEmbosserWriter() throws IOException,
+	ParserConfigurationException,
+	SAXException,
+	UnsupportedWidthException {
 
-        File prn1 = File.createTempFile("test_bluebar", ".prn");
-        File prn2 = File.createTempFile("test_bluebar", ".prn");
-        File pef =  File.createTempFile("test_bluebar", ".pef");
+		File prn1 = File.createTempFile("test_bluebar", ".prn");
+		File prn2 = File.createTempFile("test_bluebar", ".prn");
+		File pef =  File.createTempFile("test_bluebar", ".pef");
 
-        FileCompare fc = new FileCompare();
-        PEFHandler.Builder builder;
-        EmbosserWriter w;
+		FileCompare fc = new FileCompare();
+		PEFHandler.Builder builder;
+		EmbosserWriter w;
 
-        e.setFeature(EmbosserFeatures.PAGE_FORMAT, _280mm_12inch);
+		e.setFeature(EmbosserFeatures.PAGE_FORMAT, _280mm_12inch);
 
-        w = e.newEmbosserWriter(new FileOutputStream(prn1));
-        builder = new PEFHandler.Builder(w)
-                          .range(null)
-                          .align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
-                          .offset(0)
-                          .topOffset(0);
+		w = e.newEmbosserWriter(new FileOutputStream(prn1));
+		builder = new PEFHandler.Builder(w)
+				.range(null)
+				.align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
+				.offset(0)
+				.topOffset(0);
 
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/bluebar_single_sided.prn"), new FileOutputStream(prn2));
-        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
-        assertTrue("Assert that the contents of the file is as expected.",
-                fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
-        );
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/bluebar_single_sided.prn"), new FileOutputStream(prn2));
+		new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
+		assertTrue("Assert that the contents of the file is as expected.",
+				fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
+				);
 
-        prn1.deleteOnExit();
-        prn2.deleteOnExit();
-        pef.deleteOnExit();
-    }
+		prn1.deleteOnExit();
+		prn2.deleteOnExit();
+		pef.deleteOnExit();
+	}
 }

@@ -36,10 +36,10 @@ public abstract class EmbosserTable extends AbstractTable {
 	 */
 	private static final long serialVersionUID = -3902130832797155793L;
 	private final HashMap<String, Object> props;
-	
+
 	protected EightDotFallbackMethod fallback;
 	protected char replacement;
-	
+
 	/**
 	 * Creates a new EmbosserTable with the supplied settings.
 	 * @param fp factory properties for this table
@@ -52,11 +52,11 @@ public abstract class EmbosserTable extends AbstractTable {
 		props = new HashMap<>();
 		props.put(TableProperties.IS_ONE_TO_ONE, true);
 		props.put(TableProperties.IS_DISPLAY_FORMAT, true);
-		
+
 		this.fallback = fallback;
 		this.replacement = replacement;
 	}
-	
+
 	EmbosserTable putProperty(String key, Object value) {
 		props.put(key, value);
 		return this;
@@ -64,7 +64,7 @@ public abstract class EmbosserTable extends AbstractTable {
 
 	@Override
 	public abstract BrailleConverter newBrailleConverter();
-	
+
 	@Override
 	public Object getProperty(String key) {
 		return props.get(key);
@@ -99,7 +99,8 @@ public abstract class EmbosserTable extends AbstractTable {
 			throw new IllegalArgumentException("Replacement value out of range");
 		}
 	}
-	
+
+	@Override
 	public void setFeature(String key, Object value) {
 		if ("replacement".equals(key)) {
 			if (value!=null) {
@@ -113,7 +114,8 @@ public abstract class EmbosserTable extends AbstractTable {
 			throw new IllegalArgumentException("Unknown feature: " + key);
 		}
 	}
-	
+
+	@Override
 	public Object getFeature(String key) {
 		if ("replacement".equals(key)) {
 			return replacement;

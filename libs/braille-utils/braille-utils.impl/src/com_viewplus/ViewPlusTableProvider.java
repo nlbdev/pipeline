@@ -42,8 +42,8 @@ import aQute.bnd.annotation.component.Component;
 @Component
 public class ViewPlusTableProvider implements TableProvider {
 
-    enum TableType implements FactoryProperties {
-    	TIGER_INLINE_SUBSTITUTION_8DOT("Tiger inline substitution 8-dot", "");
+	enum TableType implements FactoryProperties {
+		TIGER_INLINE_SUBSTITUTION_8DOT("Tiger inline substitution 8-dot", "");
 		private final String name;
 		private final String desc;
 		private final String identifier;
@@ -64,23 +64,24 @@ public class ViewPlusTableProvider implements TableProvider {
 		public String getDescription() {
 			return desc;
 		}
-    };
+	};
 
-    private final Map<String, FactoryProperties> tables;
+	private final Map<String, FactoryProperties> tables;
 
-    public ViewPlusTableProvider() {
-        tables = new HashMap<String, FactoryProperties>(); 
-        addTable(TableType.TIGER_INLINE_SUBSTITUTION_8DOT);
-    }
+	public ViewPlusTableProvider() {
+		tables = new HashMap<String, FactoryProperties>(); 
+		addTable(TableType.TIGER_INLINE_SUBSTITUTION_8DOT);
+	}
 
 	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
-    public BrailleConverter newTable(TableType t) {
-    	return newFactory(t.getIdentifier()).newBrailleConverter();
-    }
+	public BrailleConverter newTable(TableType t) {
+		return newFactory(t.getIdentifier()).newBrailleConverter();
+	}
 
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {
@@ -94,24 +95,24 @@ public class ViewPlusTableProvider implements TableProvider {
 
 				@Override
 				public BrailleConverter newBrailleConverter() {
-	                final String SUB = String.valueOf((char)0x1a);
-	                ArrayList<String> a = new ArrayList<>();
-	                for (int i=0; i<256; i++) {
-	                    a.add(SUB + (char)i);
-	                }
-	                return new AdvancedBrailleConverter(
-	                    a.toArray(new String[a.size()]),
-	                    Charset.forName("ISO-8859-1"),
-	                    false,
-	                    MatchMode.RELUCTANT);
+					final String SUB = String.valueOf((char)0x1a);
+					ArrayList<String> a = new ArrayList<>();
+					for (int i=0; i<256; i++) {
+						a.add(SUB + (char)i);
+					}
+					return new AdvancedBrailleConverter(
+							a.toArray(new String[a.size()]),
+							Charset.forName("ISO-8859-1"),
+							false,
+							MatchMode.RELUCTANT);
 				}};
 		default:
 			return null;
 		}
 	}
 
-    @Override
-    public Collection<FactoryProperties> list() {
-        return Collections.unmodifiableCollection(tables.values());
-    }
+	@Override
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(tables.values());
+	}
 }

@@ -34,25 +34,25 @@ import aQute.bnd.annotation.component.Reference;
 @Component
 public class IndexEmbosserProvider implements EmbosserProvider {
 	public static enum EmbosserType implements FactoryProperties {
-                INDEX_3_7("", ""), //Not implemented
-                INDEX_ADVANCED("", ""), //Not implemented
-                INDEX_CLASSIC("", ""), //Not implemented
-                INDEX_DOMINO("", ""), //Not implemented
-                INDEX_EVEREST_S_V1("", ""), //Not implemented
-                INDEX_EVEREST_D_V1("", ""), //Not implemented
-                INDEX_BASIC_BLUE_BAR("Index Basic Blue-Bar", "Early Index Basic embosser"),
-                INDEX_BASIC_S_V2("Index Basic-S V2",""),
-                INDEX_BASIC_D_V2("Index Basic-D V2",""),
-                INDEX_EVEREST_D_V2("Index Everest-D V2",""),
-                INDEX_4X4_PRO_V2("Index 4X4 Pro V2",""),
-                INDEX_BASIC_S_V3("Index Basic-S V3",""),
-                INDEX_BASIC_D_V3("Index Basic-D V3",""),
-                INDEX_EVEREST_D_V3("Index Everest-D V3",""),
-                INDEX_4X4_PRO_V3("Index 4X4 Pro V3",""),
-                INDEX_4WAVES_PRO_V3("Index 4Waves Pro",""),
-                INDEX_BASIC_D_V4("Index Basic-D V4",""),
-                INDEX_EVEREST_D_V4("Index Everest-D V4",""),
-                INDEX_BRAILLE_BOX_V4("Index Braille Box","");
+		INDEX_3_7("", ""), //Not implemented
+		INDEX_ADVANCED("", ""), //Not implemented
+		INDEX_CLASSIC("", ""), //Not implemented
+		INDEX_DOMINO("", ""), //Not implemented
+		INDEX_EVEREST_S_V1("", ""), //Not implemented
+		INDEX_EVEREST_D_V1("", ""), //Not implemented
+		INDEX_BASIC_BLUE_BAR("Index Basic Blue-Bar", "Early Index Basic embosser"),
+		INDEX_BASIC_S_V2("Index Basic-S V2",""),
+		INDEX_BASIC_D_V2("Index Basic-D V2",""),
+		INDEX_EVEREST_D_V2("Index Everest-D V2",""),
+		INDEX_4X4_PRO_V2("Index 4X4 Pro V2",""),
+		INDEX_BASIC_S_V3("Index Basic-S V3",""),
+		INDEX_BASIC_D_V3("Index Basic-D V3",""),
+		INDEX_EVEREST_D_V3("Index Everest-D V3",""),
+		INDEX_4X4_PRO_V3("Index 4X4 Pro V3",""),
+		INDEX_4WAVES_PRO_V3("Index 4Waves Pro",""),
+		INDEX_BASIC_D_V4("Index Basic-D V4",""),
+		INDEX_EVEREST_D_V4("Index Everest-D V4",""),
+		INDEX_BRAILLE_BOX_V4("Index Braille Box","");
 
 		private final String name;
 		private final String desc;
@@ -80,26 +80,27 @@ public class IndexEmbosserProvider implements EmbosserProvider {
 	private TableCatalogService tableCatalogService = null;
 
 	public IndexEmbosserProvider() {
-            embossers = new HashMap<String, FactoryProperties>();
-            addEmbosser(EmbosserType.INDEX_BASIC_BLUE_BAR);
-            addEmbosser(EmbosserType.INDEX_BASIC_S_V2);
-            addEmbosser(EmbosserType.INDEX_BASIC_D_V2);
-            addEmbosser(EmbosserType.INDEX_EVEREST_D_V2);
-            addEmbosser(EmbosserType.INDEX_4X4_PRO_V2);
-            addEmbosser(EmbosserType.INDEX_EVEREST_D_V3);
-            addEmbosser(EmbosserType.INDEX_BASIC_S_V3);
-            addEmbosser(EmbosserType.INDEX_BASIC_D_V3);
-            addEmbosser(EmbosserType.INDEX_4X4_PRO_V3);
-            addEmbosser(EmbosserType.INDEX_4WAVES_PRO_V3);
-            addEmbosser(EmbosserType.INDEX_BASIC_D_V4);
-            addEmbosser(EmbosserType.INDEX_EVEREST_D_V4);
-            addEmbosser(EmbosserType.INDEX_BRAILLE_BOX_V4);
-        }
-	
+		embossers = new HashMap<String, FactoryProperties>();
+		addEmbosser(EmbosserType.INDEX_BASIC_BLUE_BAR);
+		addEmbosser(EmbosserType.INDEX_BASIC_S_V2);
+		addEmbosser(EmbosserType.INDEX_BASIC_D_V2);
+		addEmbosser(EmbosserType.INDEX_EVEREST_D_V2);
+		addEmbosser(EmbosserType.INDEX_4X4_PRO_V2);
+		addEmbosser(EmbosserType.INDEX_EVEREST_D_V3);
+		addEmbosser(EmbosserType.INDEX_BASIC_S_V3);
+		addEmbosser(EmbosserType.INDEX_BASIC_D_V3);
+		addEmbosser(EmbosserType.INDEX_4X4_PRO_V3);
+		addEmbosser(EmbosserType.INDEX_4WAVES_PRO_V3);
+		addEmbosser(EmbosserType.INDEX_BASIC_D_V4);
+		addEmbosser(EmbosserType.INDEX_EVEREST_D_V4);
+		addEmbosser(EmbosserType.INDEX_BRAILLE_BOX_V4);
+	}
+
 	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
-	
+
+	@Override
 	public Embosser newFactory(String identifier) {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
@@ -138,12 +139,12 @@ public class IndexEmbosserProvider implements EmbosserProvider {
 	public Collection<FactoryProperties> list() {
 		return Collections.unmodifiableCollection(embossers.values());
 	}
-	
+
 	@Reference
 	public void setTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = service;
 	}
-	
+
 	public void unsetTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = null;
 	}

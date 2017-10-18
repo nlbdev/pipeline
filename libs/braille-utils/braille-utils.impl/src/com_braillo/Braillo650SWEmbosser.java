@@ -20,21 +20,21 @@ public class Braillo650SWEmbosser extends AbstractBraillo440Embosser {
 	 * 
 	 */
 	private static final long serialVersionUID = 5180536285534261888L;
-	private final static String EMBOSSER_UNSUPPORTED_MESSAGE = "Unsupported value for saddle stitch.";
+	private static final String EMBOSSER_UNSUPPORTED_MESSAGE = "Unsupported value for saddle stitch.";
 
 	public Braillo650SWEmbosser(TableCatalogService service, FactoryProperties props) {
 		super(service, props);
 	}
-	
+
 	@Override
 	public void setFeature(String key, Object value) {
 		if (EmbosserFeatures.SADDLE_STITCH.equals(key)) {
-            try {
-            	saddleStitchEnabled = (Boolean)value;
-            } 
-            catch (ClassCastException e) {
-            	throw new IllegalArgumentException(EMBOSSER_UNSUPPORTED_MESSAGE);
-            }
+			try {
+				saddleStitchEnabled = (Boolean)value;
+			} 
+			catch (ClassCastException e) {
+				throw new IllegalArgumentException(EMBOSSER_UNSUPPORTED_MESSAGE);
+			}
 		} 
 		else {
 			super.setFeature(key, value);

@@ -38,28 +38,28 @@ import aQute.bnd.annotation.component.Reference;
 @Component
 public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
 
-    public static enum EmbosserType implements FactoryProperties {
-        ROMEO_ATTACHE("Enabling Technologies - Romeo Attache", ""),
-        ROMEO_ATTACHE_PRO("Enabling Technologies - Romeo Attache Pro", ""),
-        ROMEO_25("Enabling Technologies - Romeo 25", ""),
-        ROMEO_PRO_50("Enabling Technologies - Romeo Pro 50", ""),
-        ROMEO_PRO_LE_NARROW("Enabling Technologies - Romeo Pro LE Narrow", ""),
-        ROMEO_PRO_LE_WIDE("Enabling Technologies - Romeo Pro LE Wide", ""),
-        THOMAS("Enabling Technologies - Thomas", ""),
-        THOMAS_PRO("Enabling Technologies - Thomas Pro", ""),
-        MARATHON("Enabling Technologies - Marathon", ""),
-        ET("Enabling Technologies - ET", ""),
-        JULIET_PRO("Enabling Technologies - Juliet Pro", ""),
-        JULIET_PRO_60("Enabling Technologies - Juliet Pro 60", ""),
-        JULIET_CLASSIC("Enabling Technologies - Juliet Classic", ""),
-        BOOKMAKER("Enabling Technologies - Bookmaker", ""),
-        BRAILLE_EXPRESS_100("Enabling Technologies - Braille Express 100", ""),
-        BRAILLE_EXPRESS_150("Enabling Technologies - Braille Express 150", ""),
-        BRAILLE_PLACE("Enabling Technologies - BraillePlace", "");
+	public static enum EmbosserType implements FactoryProperties {
+		ROMEO_ATTACHE("Enabling Technologies - Romeo Attache", ""),
+		ROMEO_ATTACHE_PRO("Enabling Technologies - Romeo Attache Pro", ""),
+		ROMEO_25("Enabling Technologies - Romeo 25", ""),
+		ROMEO_PRO_50("Enabling Technologies - Romeo Pro 50", ""),
+		ROMEO_PRO_LE_NARROW("Enabling Technologies - Romeo Pro LE Narrow", ""),
+		ROMEO_PRO_LE_WIDE("Enabling Technologies - Romeo Pro LE Wide", ""),
+		THOMAS("Enabling Technologies - Thomas", ""),
+		THOMAS_PRO("Enabling Technologies - Thomas Pro", ""),
+		MARATHON("Enabling Technologies - Marathon", ""),
+		ET("Enabling Technologies - ET", ""),
+		JULIET_PRO("Enabling Technologies - Juliet Pro", ""),
+		JULIET_PRO_60("Enabling Technologies - Juliet Pro 60", ""),
+		JULIET_CLASSIC("Enabling Technologies - Juliet Classic", ""),
+		BOOKMAKER("Enabling Technologies - Bookmaker", ""),
+		BRAILLE_EXPRESS_100("Enabling Technologies - Braille Express 100", ""),
+		BRAILLE_EXPRESS_150("Enabling Technologies - Braille Express 150", ""),
+		BRAILLE_PLACE("Enabling Technologies - BraillePlace", "");
 		private final String name;
 		private final String desc;
 		private final String identifier;
-    	EmbosserType (String name, String desc) {
+		EmbosserType (String name, String desc) {
 			this.name = name;
 			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
@@ -76,42 +76,43 @@ public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
 		public String getDescription() {
 			return desc;
 		}
-    };
+	};
 
-    private final Map<String, FactoryProperties> embossers;
-    private TableCatalogService tableCatalogService = null;
+	private final Map<String, FactoryProperties> embossers;
+	private TableCatalogService tableCatalogService = null;
 
-    public EnablingTechnologiesEmbosserProvider() {
-        embossers = new HashMap<String, FactoryProperties>();
+	public EnablingTechnologiesEmbosserProvider() {
+		embossers = new HashMap<String, FactoryProperties>();
 
-        // Single sided
-        addEmbosser(EmbosserType.ROMEO_ATTACHE);
-        addEmbosser(EmbosserType.ROMEO_ATTACHE_PRO);
-        addEmbosser(EmbosserType.ROMEO_25);
-        addEmbosser(EmbosserType.ROMEO_PRO_50);
-        addEmbosser(EmbosserType.ROMEO_PRO_LE_NARROW);
-        addEmbosser(EmbosserType.ROMEO_PRO_LE_WIDE);
-        addEmbosser(EmbosserType.THOMAS);
-        addEmbosser(EmbosserType.THOMAS_PRO);
-        addEmbosser(EmbosserType.MARATHON);
+		// Single sided
+		addEmbosser(EmbosserType.ROMEO_ATTACHE);
+		addEmbosser(EmbosserType.ROMEO_ATTACHE_PRO);
+		addEmbosser(EmbosserType.ROMEO_25);
+		addEmbosser(EmbosserType.ROMEO_PRO_50);
+		addEmbosser(EmbosserType.ROMEO_PRO_LE_NARROW);
+		addEmbosser(EmbosserType.ROMEO_PRO_LE_WIDE);
+		addEmbosser(EmbosserType.THOMAS);
+		addEmbosser(EmbosserType.THOMAS_PRO);
+		addEmbosser(EmbosserType.MARATHON);
 
-        // Double sided
-        addEmbosser(EmbosserType.ET);
-        addEmbosser(EmbosserType.JULIET_PRO);
-        addEmbosser(EmbosserType.JULIET_PRO_60);
-        addEmbosser(EmbosserType.JULIET_CLASSIC);
+		// Double sided
+		addEmbosser(EmbosserType.ET);
+		addEmbosser(EmbosserType.JULIET_PRO);
+		addEmbosser(EmbosserType.JULIET_PRO_60);
+		addEmbosser(EmbosserType.JULIET_CLASSIC);
 
-        // Production double sided
-        addEmbosser(EmbosserType.BOOKMAKER);
-        addEmbosser(EmbosserType.BRAILLE_EXPRESS_100);
-        addEmbosser(EmbosserType.BRAILLE_EXPRESS_150);
-        addEmbosser(EmbosserType.BRAILLE_PLACE);
-    }
+		// Production double sided
+		addEmbosser(EmbosserType.BOOKMAKER);
+		addEmbosser(EmbosserType.BRAILLE_EXPRESS_100);
+		addEmbosser(EmbosserType.BRAILLE_EXPRESS_150);
+		addEmbosser(EmbosserType.BRAILLE_PLACE);
+	}
 
 	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
-    
+
+	@Override
 	public Embosser newFactory(String identifier) {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
@@ -154,16 +155,16 @@ public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
 		}
 	}
 
-    @Override
-    public Collection<FactoryProperties> list() {
-        return Collections.unmodifiableCollection(embossers.values());
-    }
-    
+	@Override
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(embossers.values());
+	}
+
 	@Reference
 	public void setTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = service;
 	}
-	
+
 	public void unsetTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = null;
 	}

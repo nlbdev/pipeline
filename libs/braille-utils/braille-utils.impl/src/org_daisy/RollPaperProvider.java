@@ -36,9 +36,9 @@ public class RollPaperProvider implements PaperProvider {
 		W28CM,
 		W33CM
 	}
-	
+
 	private final Collection<Paper> papers;
-	
+
 	public RollPaperProvider() {
 		ArrayList<Paper> tmp = new ArrayList<Paper>();
 		tmp.add(new RollPaper("21 cm wide", "", PaperSize.W21CM, Length.newCentimeterValue(21)));
@@ -48,6 +48,7 @@ public class RollPaperProvider implements PaperProvider {
 		this.papers = Collections.unmodifiableCollection(tmp);
 	}
 
+	@Override
 	public Collection<Paper> list() {
 		return papers;
 	}

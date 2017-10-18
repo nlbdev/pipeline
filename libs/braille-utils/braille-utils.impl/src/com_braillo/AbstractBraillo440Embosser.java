@@ -42,10 +42,10 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 	 * 
 	 */
 	private static final long serialVersionUID = 3735464395595074473L;
-	private final static double cellWidth = 19*EmbosserTools.INCH_IN_MM/80d; //6;
-	private final static double cellHeight = 10;
-	private final static double constant = 11*EmbosserTools.INCH_IN_MM/80d;
-	
+	private static final double cellWidth = 19*EmbosserTools.INCH_IN_MM/80d; //6;
+	private static final double cellHeight = 10;
+	private static final double constant = 11*EmbosserTools.INCH_IN_MM/80d;
+
 	protected boolean saddleStitchEnabled;
 
 	public AbstractBraillo440Embosser(TableCatalogService service, FactoryProperties props) {
@@ -100,13 +100,13 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 		public int getMaxWidth() {	return width;}
 		 */
 		SimpleEmbosserProperties ep = new SimpleEmbosserProperties(width, height)
-			.supports8dot(false)
-			.supportsAligning(true)
-			.supportsDuplex(true);
+				.supports8dot(false)
+				.supportsAligning(true)
+				.supportsDuplex(true);
 		BufferedVolumeEmbosser.Builder b = new BufferedVolumeEmbosser.Builder(device, tc.newBrailleConverter(), bvw, ep)
-			.breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
-			.padNewline(BufferedVolumeEmbosser.Padding.NONE) // JH100408: changed from BEFORE
-			.autoLineFeedOnEmptyPage(true);
+				.breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
+				.padNewline(BufferedVolumeEmbosser.Padding.NONE) // JH100408: changed from BEFORE
+				.autoLineFeedOnEmptyPage(true);
 		return b.build();
 	}
 	/*
@@ -114,35 +114,41 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 		return (int)Math.floor((paper.getWidth()+constant-EmbosserTools.INCH_IN_MM) / getCellWidth());
 	}*/
 
-    public boolean supports8dot() {
-        return false;
-    }
+	@Override
+	public boolean supports8dot() {
+		return false;
+	}
 
-    public boolean supportsDuplex() {
-        return true;
-    }
+	@Override
+	public boolean supportsDuplex() {
+		return true;
+	}
 
-    public boolean supportsAligning() {
-        return true;
-    }
+	@Override
+	public boolean supportsAligning() {
+		return true;
+	}
 
-    public boolean supportsVolumes() {
-        return true;
-    }
+	@Override
+	public boolean supportsVolumes() {
+		return true;
+	}
 
+	@Override
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat,
 				PrintDirection.SIDEWAYS,
 				(saddleStitchEnabled?PrintMode.MAGAZINE:PrintMode.REGULAR)
-			);
+				);
 	}
 
-        @Override
+	@Override
 	public Area getPrintableArea(PageFormat pageFormat) {
 		PrintPage printPage = getPrintPage(pageFormat);
 		return new Area(printPage.getWidth(), printPage.getHeight(), 0, 0);
 	}
 
+	@Override
 	public boolean supportsZFolding() {
 		return false;
 	}

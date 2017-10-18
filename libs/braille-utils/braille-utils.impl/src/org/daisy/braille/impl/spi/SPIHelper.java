@@ -14,7 +14,7 @@ import org.daisy.braille.api.table.TableCatalogService;
  */
 public class SPIHelper {
 	private static TableCatalogService tableCatalog;
-	
+
 	/**
 	 * <p>Gets a table catalog instance, or null if not found.</p> 
 	 * 

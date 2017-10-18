@@ -25,28 +25,28 @@ import org.daisy.braille.impl.embosser.PageBreaks;
  */
 public class CidatPageBreaks implements PageBreaks {
 
-    public static enum Type { IMPACTO_TRANSPARENT,
-                              PORTATHIEL_TRANSPARENT
-    };
-    private final String newpage;
+	public static enum Type { IMPACTO_TRANSPARENT,
+		PORTATHIEL_TRANSPARENT
+	};
+	private final String newpage;
 
-    public CidatPageBreaks(Type type) {
+	public CidatPageBreaks(Type type) {
 
-        switch (type) {
-            case PORTATHIEL_TRANSPARENT:
-                newpage = "\u00c7";
-                break;
-            case IMPACTO_TRANSPARENT:
-                newpage = "\u001b\u000c";
-                break;
-            default:
-                newpage = "";
-                break;
-        }
-    }
+		switch (type) {
+		case PORTATHIEL_TRANSPARENT:
+			newpage = "\u00c7";
+			break;
+		case IMPACTO_TRANSPARENT:
+			newpage = "\u001b\u000c";
+			break;
+		default:
+			newpage = "";
+			break;
+		}
+	}
 
-    @Override
-    public String getString() {
-        return newpage;
-    }
+	@Override
+	public String getString() {
+		return newpage;
+	}
 }

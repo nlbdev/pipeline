@@ -34,97 +34,97 @@ import org.daisy.braille.impl.embosser.AbstractEmbosserWriter;
  */
 public class IndexTransparentEmbosserWriter extends AbstractEmbosserWriter {
 
-    private final OutputStream os;
-    private final BrailleConverter bc;
-    private final List<Byte> buf;
-    private int charsOnRow;
-    private final byte[] header;
-    private final byte[] footer;
+	private final OutputStream os;
+	private final BrailleConverter bc;
+	private final List<Byte> buf;
+	private int charsOnRow;
+	private final byte[] header;
+	private final byte[] footer;
 
-    public IndexTransparentEmbosserWriter(OutputStream os,
-                                          BrailleConverter bc,
-                                          byte[] header,
-                                          byte[] footer,
-                                          EmbosserWriterProperties props) {
-        init(props);
-        if (header != null) { this.header = header; }
-                       else { this.header = new byte[0]; }
-        if (footer != null) { this.footer = footer; }
-                       else { this.footer = new byte[0]; }
-        this.os = os;
-        this.bc = bc;
-        this.buf = new ArrayList<>();
-        charsOnRow = 0;
-    }
+	public IndexTransparentEmbosserWriter(OutputStream os,
+			BrailleConverter bc,
+			byte[] header,
+			byte[] footer,
+			EmbosserWriterProperties props) {
+		init(props);
+		if (header != null) { this.header = header; }
+		else { this.header = new byte[0]; }
+		if (footer != null) { this.footer = footer; }
+		else { this.footer = new byte[0]; }
+		this.os = os;
+		this.bc = bc;
+		this.buf = new ArrayList<>();
+		charsOnRow = 0;
+	}
 
-    @Override
-    public LineBreaks getLinebreakStyle() {
-        return new StandardLineBreaks(StandardLineBreaks.Type.DOS);
-    }
+	@Override
+	public LineBreaks getLinebreakStyle() {
+		return new StandardLineBreaks(StandardLineBreaks.Type.DOS);
+	}
 
-    @Override
-    public Padding getPaddingStyle() {
-        return Padding.NONE;
-    }
+	@Override
+	public Padding getPaddingStyle() {
+		return Padding.NONE;
+	}
 
-    @Override
-    public BrailleConverter getTable() {
-        return bc;
-    }
+	@Override
+	public BrailleConverter getTable() {
+		return bc;
+	}
 
-    @Override
-    protected void add(byte b) throws IOException {
-        buf.add(b);
-    }
+	@Override
+	protected void add(byte b) throws IOException {
+		buf.add(b);
+	}
 
-    @Override
-    protected void addAll(byte[] b) throws IOException {
-        for (byte bi : b) {
-            add(bi);
-        }
-    }
+	@Override
+	protected void addAll(byte[] b) throws IOException {
+		for (byte bi : b) {
+			add(bi);
+		}
+	}
 
-    private void flush() throws IOException {
-        if (charsOnRow>0) {
-            byte[] preamble = new byte[]{0x1b, 0x5c, (byte)charsOnRow, 0x00};
-            os.write(preamble);
-        }
-        for (byte b : buf) {
-            os.write(b);
-        }
-        charsOnRow = 0;
-        buf.clear();
-    }
+	private void flush() throws IOException {
+		if (charsOnRow>0) {
+			byte[] preamble = new byte[]{0x1b, 0x5c, (byte)charsOnRow, 0x00};
+			os.write(preamble);
+		}
+		for (byte b : buf) {
+			os.write(b);
+		}
+		charsOnRow = 0;
+		buf.clear();
+	}
 
-    @Override
-    protected void lineFeed() throws IOException {
-        super.lineFeed();
-        flush();
-    }
+	@Override
+	protected void lineFeed() throws IOException {
+		super.lineFeed();
+		flush();
+	}
 
-    @Override
-    protected void formFeed() throws IOException {
-        super.formFeed();
-        flush();
-    }
+	@Override
+	protected void formFeed() throws IOException {
+		super.formFeed();
+		flush();
+	}
 
-    @Override
-    public void write(String braille) throws IOException {
-        charsOnRow += braille.length();
-        super.write(braille);
-    }
+	@Override
+	public void write(String braille) throws IOException {
+		charsOnRow += braille.length();
+		super.write(braille);
+	}
 
-    @Override
-    public void open(boolean duplex) throws IOException {
-        super.open(duplex);
-        os.write(header);
-    }
+	@Override
+	public void open(boolean duplex) throws IOException {
+		super.open(duplex);
+		os.write(header);
+	}
 
-    @Override
-    public void close() throws IOException {
-        flush();
-        os.write(footer);
-        os.close();
-        super.close();
-    }
+	@Override
+	public void close() throws IOException {
+		flush();
+		os.write(footer);
+		os.close();
+		super.close();
+	}
 }

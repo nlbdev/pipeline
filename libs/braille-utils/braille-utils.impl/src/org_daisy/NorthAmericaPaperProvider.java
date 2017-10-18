@@ -33,32 +33,32 @@ public class NorthAmericaPaperProvider implements PaperProvider {
 	public static final double INCH_IN_MM = 25.4;
 	enum PaperSize {
 		LETTER,
-                LEGAL,
-                JUNIOR_LEGAL,
-                LEDGER,
-                TABLOID,
+		LEGAL,
+		JUNIOR_LEGAL,
+		LEDGER,
+		TABLOID,
 		W11500THOU_X_H11INCH
 	};
 
 	private final Collection<Paper> papers;
-	
+
 	public NorthAmericaPaperProvider() {
 		ArrayList<Paper> tmp = new ArrayList<Paper>();
 		tmp.add(new SheetPaper("Letter", "8.5 inch x 11 inch", PaperSize.LETTER,
 				Length.newInchValue(8.5), 
 				Length.newInchValue(11)));
-        tmp.add(new SheetPaper("Legal", " 8.5 inch x 14 inch", PaperSize.LEGAL, 
-        		Length.newInchValue(8.5), 
-        		Length.newInchValue(14)));
-        tmp.add(new SheetPaper("Junior Legal", "8 inch x 5 inch", PaperSize.JUNIOR_LEGAL, 
-        		Length.newInchValue(8), 
-        		Length.newInchValue(5)));
-        tmp.add(new SheetPaper("Ledger", "17 inch x 11 inch", PaperSize.LEDGER, 
-        		Length.newInchValue(17),
-        		Length.newInchValue(11)));
-        tmp.add(new SheetPaper("Tabloid", "11 inch x 17 inch", PaperSize.TABLOID,
-        		Length.newInchValue(11), 
-        		Length.newInchValue(17)));
+		tmp.add(new SheetPaper("Legal", " 8.5 inch x 14 inch", PaperSize.LEGAL, 
+				Length.newInchValue(8.5), 
+				Length.newInchValue(14)));
+		tmp.add(new SheetPaper("Junior Legal", "8 inch x 5 inch", PaperSize.JUNIOR_LEGAL, 
+				Length.newInchValue(8), 
+				Length.newInchValue(5)));
+		tmp.add(new SheetPaper("Ledger", "17 inch x 11 inch", PaperSize.LEDGER, 
+				Length.newInchValue(17),
+				Length.newInchValue(11)));
+		tmp.add(new SheetPaper("Tabloid", "11 inch x 17 inch", PaperSize.TABLOID,
+				Length.newInchValue(11), 
+				Length.newInchValue(17)));
 		tmp.add(new SheetPaper("11.5 inch x 11 inch", "11.5 inch wide, 11 inch high", PaperSize.W11500THOU_X_H11INCH, 
 				Length.newInchValue(11.5),
 				Length.newInchValue(11)));

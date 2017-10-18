@@ -33,22 +33,22 @@ import aQute.bnd.annotation.component.Reference;
 
 @Component
 public class ViewPlusEmbosserProvider implements EmbosserProvider {
-    
-    public static enum EmbosserType implements FactoryProperties {
-            PREMIER_80("ViewPlus - Premier 80","80 CPS"),
-            PREMIER_100("ViewPlus - Premier 100", "100 CPS"),
-            ELITE_150("ViewPlus - Elite 150", "150 CPS"),
-            ELITE_200("ViewPlus - Elite 200", "200 CPS"),
-            PRO_GEN_II("ViewPlus - Pro Gen II", "100 CPS"),
-            CUB_JR("ViewPlus - Cub Jr.", "30 CPS"),
-            CUB("ViewPlus - Cub", "50 CPS"),
-            MAX("ViewPlus - Max", "60 CPS"),
-            EMFUSE("ViewPlus - EmFuse", "Large-print, Color, and Braille. 400 CPS"),
-            EMPRINT_SPOTDOT("ViewPlus - Emprint SpotDot", "Ink and Braille. 40-50 CPS");
+
+	public static enum EmbosserType implements FactoryProperties {
+		PREMIER_80("ViewPlus - Premier 80","80 CPS"),
+		PREMIER_100("ViewPlus - Premier 100", "100 CPS"),
+		ELITE_150("ViewPlus - Elite 150", "150 CPS"),
+		ELITE_200("ViewPlus - Elite 200", "200 CPS"),
+		PRO_GEN_II("ViewPlus - Pro Gen II", "100 CPS"),
+		CUB_JR("ViewPlus - Cub Jr.", "30 CPS"),
+		CUB("ViewPlus - Cub", "50 CPS"),
+		MAX("ViewPlus - Max", "60 CPS"),
+		EMFUSE("ViewPlus - EmFuse", "Large-print, Color, and Braille. 400 CPS"),
+		EMPRINT_SPOTDOT("ViewPlus - Emprint SpotDot", "Ink and Braille. 40-50 CPS");
 		private final String name;
 		private final String desc;
 		private final String identifier;
-    	EmbosserType (String name, String desc) {
+		EmbosserType (String name, String desc) {
 			this.name = name;
 			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
@@ -65,40 +65,41 @@ public class ViewPlusEmbosserProvider implements EmbosserProvider {
 		public String getDescription() {
 			return desc;
 		}
-    };
+	};
 
-    private final Map<String, FactoryProperties> embossers;
-    private TableCatalogService tableCatalogService = null;
+	private final Map<String, FactoryProperties> embossers;
+	private TableCatalogService tableCatalogService = null;
 
-    public ViewPlusEmbosserProvider() {
-        embossers = new HashMap<String, FactoryProperties>();
+	public ViewPlusEmbosserProvider() {
+		embossers = new HashMap<String, FactoryProperties>();
 
-        // Elite Braille Printers
-        addEmbosser(EmbosserType.ELITE_150);
-        addEmbosser(EmbosserType.ELITE_200);
+		// Elite Braille Printers
+		addEmbosser(EmbosserType.ELITE_150);
+		addEmbosser(EmbosserType.ELITE_200);
 
-        // Premier Braille Printers
-        addEmbosser(EmbosserType.PREMIER_80);
-        addEmbosser(EmbosserType.PREMIER_100);
+		// Premier Braille Printers
+		addEmbosser(EmbosserType.PREMIER_80);
+		addEmbosser(EmbosserType.PREMIER_100);
 
-        // Pro Braille Printer
-        addEmbosser(EmbosserType.PRO_GEN_II);
+		// Pro Braille Printer
+		addEmbosser(EmbosserType.PRO_GEN_II);
 
-        // Desktop Braille Printers
-        addEmbosser(EmbosserType.CUB_JR);
-        addEmbosser(EmbosserType.CUB);
-        addEmbosser(EmbosserType.MAX);
+		// Desktop Braille Printers
+		addEmbosser(EmbosserType.CUB_JR);
+		addEmbosser(EmbosserType.CUB);
+		addEmbosser(EmbosserType.MAX);
 
-        // EmFuse Color Braille Station
-        addEmbosser(EmbosserType.EMFUSE);
-        // Emprint Spotdot Ink & Braille Embossers
-        addEmbosser(EmbosserType.EMPRINT_SPOTDOT);
-    }
+		// EmFuse Color Braille Station
+		addEmbosser(EmbosserType.EMFUSE);
+		// Emprint Spotdot Ink & Braille Embossers
+		addEmbosser(EmbosserType.EMPRINT_SPOTDOT);
+	}
 
 	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
 
+	@Override
 	public Embosser newFactory(String identifier) {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
@@ -127,15 +128,16 @@ public class ViewPlusEmbosserProvider implements EmbosserProvider {
 		}
 	}
 
-    public Collection<FactoryProperties> list() {
-        return Collections.unmodifiableCollection(embossers.values());
-    }
-    
+	@Override
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(embossers.values());
+	}
+
 	@Reference
 	public void setTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = service;
 	}
-	
+
 	public void unsetTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = null;
 	}

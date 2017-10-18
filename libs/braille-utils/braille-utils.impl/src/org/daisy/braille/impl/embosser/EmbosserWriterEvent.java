@@ -43,7 +43,7 @@ public class EmbosserWriterEvent {
 			super(t);
 			this.duplex = duplex;
 		}
-		
+
 		public boolean getDuplex() {
 			return duplex;
 		}
@@ -56,12 +56,12 @@ public class EmbosserWriterEvent {
 	 */
 	public static class WriteEvent extends EmbosserWriterEvent {
 		private final String braille;
-		
+
 		public WriteEvent(String braille) {
 			super(EventType.WRITE_EVENT);
 			this.braille = braille;
 		}
-		
+
 		public String getBraille() {
 			return braille;
 		}
@@ -100,7 +100,7 @@ public class EmbosserWriterEvent {
 		public Contract getContract() {
 			return contract;
 		}
-		
+
 		/**
 		 * Returns true if a contract has been defined
 		 * @return returns true if a contract has been defined, false otherwise
@@ -120,7 +120,7 @@ public class EmbosserWriterEvent {
 			super(EventType.CLOSE_EVENT);
 		}
 	}
-	
+
 	/**
 	 * Provides an object representation for an EmbosserWriter newSectionAndPage event
 	 * @author Joel Håkansson

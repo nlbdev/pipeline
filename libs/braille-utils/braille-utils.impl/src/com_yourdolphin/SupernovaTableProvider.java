@@ -60,7 +60,7 @@ public class SupernovaTableProvider implements TableProvider {
 	};
 
 	private final Map<String, FactoryProperties> tables;
-	
+
 	public SupernovaTableProvider() {
 		tables = new HashMap<String, FactoryProperties>(); 
 		addTable(TableType.SV_SE_6DOT);
@@ -82,6 +82,7 @@ public class SupernovaTableProvider implements TableProvider {
 		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {

@@ -32,6 +32,7 @@ public class CustomPaperProvider implements PaperProvider {
 	public CustomPaperProvider() {
 	}
 
+	@Override
 	public Collection<Paper> list() {
 		return Collections.unmodifiableCollection(CustomPaperCollection.getInstance().list());
 	}

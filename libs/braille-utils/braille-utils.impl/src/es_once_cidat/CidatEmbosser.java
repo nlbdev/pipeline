@@ -43,132 +43,138 @@ import es_once_cidat.CidatEmbosserProvider.EmbosserType;
  */
 public abstract class CidatEmbosser extends AbstractEmbosser {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1441333837477401994L;
 
 	protected EmbosserType type;
 
-    private double maxPageWidth = Double.MAX_VALUE;
-    private double maxPageHeight = Double.MAX_VALUE;
-    private double minPageWidth = 50d;
-    private double minPageHeight = 50d;
+	private double maxPageWidth = Double.MAX_VALUE;
+	private double maxPageHeight = Double.MAX_VALUE;
+	private double minPageWidth = 50d;
+	private double minPageHeight = 50d;
 
-    protected boolean duplexEnabled = true;
-    protected boolean eightDotsEnabled = false;
+	protected boolean duplexEnabled = true;
+	protected boolean eightDotsEnabled = false;
 
-    public CidatEmbosser(TableCatalogService service, EmbosserType props) {
+	public CidatEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
+		super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        type = props;
+		type = props;
 
-        setCellWidth(0.25*EmbosserTools.INCH_IN_MM);
-        setCellHeight((eightDotsEnabled?0.5:0.4)*EmbosserTools.INCH_IN_MM);
-        
-        switch (type) {
-            case IMPACTO_600:
-            case IMPACTO_TEXTO:
-                maxPageWidth = 42*getCellWidth();
-                maxPageHeight = 13*EmbosserTools.INCH_IN_MM;
-                minPageWidth = 12*getCellWidth();
-                minPageHeight = 6*EmbosserTools.INCH_IN_MM;
-                break;
-            case PORTATHIEL_BLUE:
-                maxPageWidth = 42*getCellWidth();
-                maxPageHeight = 13*EmbosserTools.INCH_IN_MM;
-                minPageWidth = 10*getCellWidth();
-                minPageHeight = 8*EmbosserTools.INCH_IN_MM;
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported embosser type");
-        }
-    }
+		setCellWidth(0.25*EmbosserTools.INCH_IN_MM);
+		setCellHeight((eightDotsEnabled?0.5:0.4)*EmbosserTools.INCH_IN_MM);
 
-    @Override
-    public boolean supportsPaper(Paper paper) {
-        if (paper == null) { return false; }
-        try {
-            SheetPaper p = paper.asSheetPaper();
-            if (supportsPageFormat(new SheetPaperFormat(p, Orientation.DEFAULT))) { return true; }
-            if (supportsPageFormat(new SheetPaperFormat(p, Orientation.REVERSED))) { return true; }
-        } catch (ClassCastException e) {
-        }
-        return false;
-    }
+		switch (type) {
+		case IMPACTO_600:
+		case IMPACTO_TEXTO:
+			maxPageWidth = 42*getCellWidth();
+			maxPageHeight = 13*EmbosserTools.INCH_IN_MM;
+			minPageWidth = 12*getCellWidth();
+			minPageHeight = 6*EmbosserTools.INCH_IN_MM;
+			break;
+		case PORTATHIEL_BLUE:
+			maxPageWidth = 42*getCellWidth();
+			maxPageHeight = 13*EmbosserTools.INCH_IN_MM;
+			minPageWidth = 10*getCellWidth();
+			minPageHeight = 8*EmbosserTools.INCH_IN_MM;
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported embosser type");
+		}
+	}
 
-    //jvw1.6@Override
-    public boolean supportsPageFormat(PageFormat format) {
-        if (format == null) { return false; }
-        try {
-            return supportsPrintPage(getPrintPage(format.asSheetPaperFormat()));
-        } catch (ClassCastException e) {
-            return false;
-        }
-    }
+	@Override
+	public boolean supportsPaper(Paper paper) {
+		if (paper == null) { return false; }
+		try {
+			SheetPaper p = paper.asSheetPaper();
+			if (supportsPageFormat(new SheetPaperFormat(p, Orientation.DEFAULT))) { return true; }
+			if (supportsPageFormat(new SheetPaperFormat(p, Orientation.REVERSED))) { return true; }
+		} catch (ClassCastException e) {
+		}
+		return false;
+	}
 
-    public boolean supportsPrintPage(PrintPage dim) {
-        if (dim==null) { return false; }
-        return (dim.getWidth()  <= maxPageWidth)  &&
-               (dim.getWidth()  >= minPageWidth)  &&
-               (dim.getHeight() <= maxPageHeight) &&
-               (dim.getHeight() >= minPageHeight);
-    }
+	@Override
+	public boolean supportsPageFormat(PageFormat format) {
+		if (format == null) { return false; }
+		try {
+			return supportsPrintPage(getPrintPage(format.asSheetPaperFormat()));
+		} catch (ClassCastException e) {
+			return false;
+		}
+	}
 
-    public boolean supportsVolumes() {
-        return false;
-    }
+	@Override
+	public boolean supportsPrintPage(PrintPage dim) {
+		if (dim==null) { return false; }
+		return (dim.getWidth()  <= maxPageWidth)  &&
+				(dim.getWidth()  >= minPageWidth)  &&
+				(dim.getHeight() <= maxPageHeight) &&
+				(dim.getHeight() >= minPageHeight);
+	}
 
-    public boolean supports8dot() {
-        return false;
-    }
+	@Override
+	public boolean supportsVolumes() {
+		return false;
+	}
 
-    public boolean supportsDuplex() {
-        return true;
-    }
+	@Override
+	public boolean supports8dot() {
+		return false;
+	}
 
-    public boolean supportsAligning() {
-        return true;
-    }
+	@Override
+	public boolean supportsDuplex() {
+		return true;
+	}
 
-    public EmbosserWriter newEmbosserWriter(Device device) {
+	@Override
+	public boolean supportsAligning() {
+		return true;
+	}
 
-        try {
-            File f = File.createTempFile(this.getClass().getCanonicalName(), ".tmp");
-            f.deleteOnExit();
-            EmbosserWriter ew = newEmbosserWriter(new FileOutputStream(f));
-            return new FileToDeviceEmbosserWriter(ew, f, device);
-        } catch (IOException e) {
-        }
-        throw new IllegalArgumentException("Embosser does not support this feature.");
-    }
+	@Override
+	public EmbosserWriter newEmbosserWriter(Device device) {
 
-    @Override
-    public void setFeature(String key, Object value) {
+		try {
+			File f = File.createTempFile(this.getClass().getCanonicalName(), ".tmp");
+			f.deleteOnExit();
+			EmbosserWriter ew = newEmbosserWriter(new FileOutputStream(f));
+			return new FileToDeviceEmbosserWriter(ew, f, device);
+		} catch (IOException e) {
+		}
+		throw new IllegalArgumentException("Embosser does not support this feature.");
+	}
 
-        if (EmbosserFeatures.TABLE.equals(key)) {
-            super.setFeature(key, value);
-          //eightDotsEnabled = supports8dot() && setTable.newBrailleConverter().supportsEightDot();
-          //setCellHeight((eightDotsEnabled?0.5:0.4)*EmbosserTools.INCH_IN_MM);
-        } else if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
-            try {
-                duplexEnabled = (Boolean)value;
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException("Unsupported value for duplex.");
-            }
-        } else {
-            super.setFeature(key, value);
-        }
-    }
+	@Override
+	public void setFeature(String key, Object value) {
 
-    @Override
-    public Object getFeature(String key) {
+		if (EmbosserFeatures.TABLE.equals(key)) {
+			super.setFeature(key, value);
+			//eightDotsEnabled = supports8dot() && setTable.newBrailleConverter().supportsEightDot();
+			//setCellHeight((eightDotsEnabled?0.5:0.4)*EmbosserTools.INCH_IN_MM);
+		} else if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
+			try {
+				duplexEnabled = (Boolean)value;
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for duplex.");
+			}
+		} else {
+			super.setFeature(key, value);
+		}
+	}
 
-        if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
-            return duplexEnabled;
-        } else {
-            return super.getFeature(key);
-        }
-    }
+	@Override
+	public Object getFeature(String key) {
+
+		if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
+			return duplexEnabled;
+		} else {
+			return super.getFeature(key);
+		}
+	}
 }

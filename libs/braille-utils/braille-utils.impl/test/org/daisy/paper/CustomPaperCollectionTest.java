@@ -10,7 +10,7 @@ import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.consumer.paper.PaperCatalog;
 import org.junit.Test;
 public class CustomPaperCollectionTest {
-	
+
 	@Test
 	public void customSheetPaper() throws IOException {
 		CustomPaperCollection c = CustomPaperCollection.getInstance();
@@ -22,7 +22,7 @@ public class CustomPaperCollectionTest {
 		//assert that paper is not in collection
 		assertTrue(PaperCatalog.newInstance().get(px1.getIdentifier())==null);
 	}
-	
+
 	@Test
 	public void customTractorPaper() throws IOException {
 		CustomPaperCollection c = CustomPaperCollection.getInstance();
@@ -34,7 +34,7 @@ public class CustomPaperCollectionTest {
 		//assert that paper is not in collection
 		assertTrue(PaperCatalog.newInstance().get(px1.getIdentifier())==null);
 	}
-	
+
 	@Test
 	public void customRollPaper() throws IOException {
 		CustomPaperCollection c = CustomPaperCollection.getInstance();

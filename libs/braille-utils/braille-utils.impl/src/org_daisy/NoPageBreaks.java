@@ -29,9 +29,9 @@ public class NoPageBreaks implements PageBreaks {
 	 * Creates a new object with the system's default page break style.
 	 */
 	public NoPageBreaks() {
-        }
+	}
 
-        @Override
+	@Override
 	public String getString() {
 		return "";
 	}

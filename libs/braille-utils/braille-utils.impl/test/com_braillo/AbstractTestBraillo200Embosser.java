@@ -40,11 +40,11 @@ public abstract class AbstractTestBraillo200Embosser {
 		this.tractor_210mm_x_12inch = new TractorPaperFormat(pc.get("org_daisy.TractorPaperProvider.PaperSize.W210MM_X_H12INCH").asTractorPaper());
 		this.roll_a4 = new RollPaperFormat(pc.get("org_daisy.RollPaperProvider.PaperSize.W21CM").asRollPaper(), Length.newMillimeterValue(297));
 		this.emb = emb;
-		
+
 		//emb.setFeature(EmbosserFeatures.PAGE_FORMAT, a4);
 		emb.setFeature(EmbosserFeatures.TABLE, tc.get("com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_001_00"));
 	}
-	
+
 	public void performTest(String resource, String expPath) throws IOException, ParserConfigurationException, SAXException, UnsupportedWidthException {
 		File tmp = File.createTempFile("BrailloEmbosserTest", ".tmp");
 		try {
@@ -54,8 +54,8 @@ public abstract class AbstractTestBraillo200Embosser {
 			new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(this.getClass().getResourceAsStream(resource), builder.build());
 			FileCompare fc = new FileCompare();
 			assertTrue("Assert that the contents of the file is as expected.",
-	                fc.compareBinary(new FileInputStream(tmp), this.getClass().getResourceAsStream(expPath))
-	        );
+					fc.compareBinary(new FileInputStream(tmp), this.getClass().getResourceAsStream(expPath))
+					);
 		} finally {
 			if (!tmp.delete()) {
 				tmp.deleteOnExit();

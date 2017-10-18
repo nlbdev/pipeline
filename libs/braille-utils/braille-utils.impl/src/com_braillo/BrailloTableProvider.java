@@ -35,23 +35,23 @@ import aQute.bnd.annotation.component.Component;
 
 @Component
 public class BrailloTableProvider implements TableProvider {
-	//public final static String IS_ONE_TO_ONE = "is one-to-one";
-	//public final static String IS_DISPLAY_FORMAT = "is display format";
-	
+	//public static final String IS_ONE_TO_ONE = "is one-to-one";
+	//public static final String IS_DISPLAY_FORMAT = "is display format";
+
 	enum TableType implements FactoryProperties {
 		BRAILLO_6DOT_001_00("Braillo USA 6 DOT 001.00", "Compatible with Braillo USA 6 DOT 001.00"), 
-				// US computer braille, compatible with
-				// "Braillo USA 6 DOT 001.00"
+		// US computer braille, compatible with
+		// "Braillo USA 6 DOT 001.00"
 		BRAILLO_6DOT_031_01("Braillo NETHERLANDS 6 DOT 031.01", "Compatible with Braillo NETHERLANDS 6 DOT 031.01"), 
-				// compatible with "Braillo NETHERLANDS 6 DOT 031.01"
+		// compatible with "Braillo NETHERLANDS 6 DOT 031.01"
 		BRAILLO_6DOT_044_00("Braillo ENGLAND 6 DOT 044.00", "Compatible with Braillo ENGLAND 6 DOT 044.00"), 
-				// US computer braille (lower case), compatible with
-				// "Braillo ENGLAND 6 DOT 044.00" which is identical to
-				// "Braillo USA 6 DOT 001.00"
+		// US computer braille (lower case), compatible with
+		// "Braillo ENGLAND 6 DOT 044.00" which is identical to
+		// "Braillo USA 6 DOT 001.00"
 		BRAILLO_6DOT_046_01("Braillo SWEDEN 6 DOT 046.01", "Compatible with Braillo SWEDEN 6 DOT 046.01"), 
-				// compatible with "Braillo SWEDEN 6 DOT 046.01"
+		// compatible with "Braillo SWEDEN 6 DOT 046.01"
 		BRAILLO_6DOT_047_01("Braillo NORWAY 6 DOT 047.01", "Compatible with Braillo NORWAY 6 DOT 047.01")
-				// compatible with "Braillo NORWAY 6 DOT 047.01"
+		// compatible with "Braillo NORWAY 6 DOT 047.01"
 		;
 		private final String name;
 		private final String desc;
@@ -85,7 +85,7 @@ public class BrailloTableProvider implements TableProvider {
 		addTable(TableType.BRAILLO_6DOT_046_01);
 		addTable(TableType.BRAILLO_6DOT_047_01);		
 	}
-	
+
 	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
@@ -102,6 +102,7 @@ public class BrailloTableProvider implements TableProvider {
 		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {
@@ -112,7 +113,7 @@ public class BrailloTableProvider implements TableProvider {
 				 * 
 				 */
 				private static final long serialVersionUID = -3728256382860405787L;
-				
+
 				@Override
 				public BrailleConverter newBrailleConverter() {
 					Map<Character, Character> supplements  = new HashMap<>();
@@ -128,7 +129,7 @@ public class BrailloTableProvider implements TableProvider {
 				}};
 		case BRAILLO_6DOT_031_01:
 			return new EmbosserTable(TableType.BRAILLO_6DOT_031_01, EightDotFallbackMethod.values()[0], '\u2800'){
-				 /**
+				/**
 				 * 
 				 */
 				private static final long serialVersionUID = -3339773640297501373L;
@@ -172,7 +173,7 @@ public class BrailloTableProvider implements TableProvider {
 				}};
 		case BRAILLO_6DOT_046_01:
 			return new EmbosserTable(TableType.BRAILLO_6DOT_046_01, EightDotFallbackMethod.values()[0], '\u2800'){
-				 /**
+				/**
 				 * 
 				 */
 				private static final long serialVersionUID = -5911455102023772974L;

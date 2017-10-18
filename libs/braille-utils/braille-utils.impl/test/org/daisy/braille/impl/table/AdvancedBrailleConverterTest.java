@@ -10,28 +10,28 @@ import org.daisy.braille.api.table.BrailleConstants;
 import org.daisy.braille.impl.table.StringTranslator.MatchMode;
 import org.junit.Test;
 public class AdvancedBrailleConverterTest {
-	private final static String[] glyphs = new String[]{
-		"a", "ab", "aba", "c", "d", "e", "f", "g", "h", "i", 
-		"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1", "i1", "j1",
-		"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2", "i2", "j2",
-		"a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3", "i3", "j3",
-		"a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4", "i4", "j4",
-		"a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5", "i5", "j5",
-		"a6", "b6", "c6", "d6"
-		};
+	private static final String[] glyphs = new String[]{
+			"a", "ab", "aba", "c", "d", "e", "f", "g", "h", "i", 
+			"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1", "i1", "j1",
+			"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2", "i2", "j2",
+			"a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3", "i3", "j3",
+			"a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4", "i4", "j4",
+			"a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5", "i5", "j5",
+			"a6", "b6", "c6", "d6"
+	};
 
 	@Test
 	public void testGreedyMatch() {
 		AdvancedBrailleConverter bc = new AdvancedBrailleConverter(glyphs, Charset.forName("utf-8"), EightDotFallbackMethod.MASK, '\u2800', true, MatchMode.GREEDY);
 		assertEquals("Assert greedy match", "⠀⠀⠂⠁⠊", bc.toBraille("aAABaaba1"));
 	}
-	
+
 	@Test
 	public void testReluctantMatch() {
 		AdvancedBrailleConverter bc = new AdvancedBrailleConverter(glyphs, Charset.forName("utf-8"), EightDotFallbackMethod.MASK, '\u2800', true, MatchMode.RELUCTANT);
 		assertEquals("Assert reluctant match", "⠀⠀⠁⠀⠁⠊", bc.toBraille("aAABaaba1"));
 	}
-	
+
 	@Test
 	public void testProperties() {
 		AdvancedBrailleConverter bc = new AdvancedBrailleConverter(glyphs, Charset.forName("utf-8"), EightDotFallbackMethod.MASK, '\u2800', true, MatchMode.GREEDY);

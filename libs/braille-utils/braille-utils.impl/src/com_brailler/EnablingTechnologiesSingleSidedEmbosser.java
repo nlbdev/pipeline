@@ -29,37 +29,39 @@ import com_brailler.EnablingTechnologiesEmbosserProvider.EmbosserType;
  */
 public class EnablingTechnologiesSingleSidedEmbosser extends EnablingTechnologiesEmbosser {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3602582375923051565L;
 
 	public EnablingTechnologiesSingleSidedEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(service, props);
+		super(service, props);
 
-        switch (type) {
-            case ROMEO_ATTACHE:
-            case ROMEO_ATTACHE_PRO:
-            case ROMEO_25:
-            case ROMEO_PRO_50:
-            case ROMEO_PRO_LE_NARROW:
-            case ROMEO_PRO_LE_WIDE:
-            case THOMAS:
-            case THOMAS_PRO:
-            case MARATHON:
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported embosser type");
-        }
+		switch (type) {
+		case ROMEO_ATTACHE:
+		case ROMEO_ATTACHE_PRO:
+		case ROMEO_25:
+		case ROMEO_PRO_50:
+		case ROMEO_PRO_LE_NARROW:
+		case ROMEO_PRO_LE_WIDE:
+		case THOMAS:
+		case THOMAS_PRO:
+		case MARATHON:
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported embosser type");
+		}
 
-        duplexEnabled = false;
-    }
+		duplexEnabled = false;
+	}
 
-    public boolean supportsDuplex() {
-        return false;
-    }
+	@Override
+	public boolean supportsDuplex() {
+		return false;
+	}
 
+	@Override
 	public boolean supportsZFolding() {
 		return false;
 	}

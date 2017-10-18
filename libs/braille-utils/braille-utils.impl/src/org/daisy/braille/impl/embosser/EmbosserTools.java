@@ -50,7 +50,7 @@ public class EmbosserTools {
 		sb.append(s);
 		return sb.toString().getBytes();
 	}
-	
+
 	/**
 	 * Get width, in units
 	 * @param unit unit in mm
@@ -59,7 +59,7 @@ public class EmbosserTools {
 	public static int getWidth(Dimensions dim, double unit) {
 		return (int)Math.floor(dim.getWidth() / unit);
 	}
-	
+
 	/**
 	 * Get height, in units
 	 * @param unit unit in mm

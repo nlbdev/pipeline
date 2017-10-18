@@ -38,14 +38,14 @@ import aQute.bnd.annotation.component.Reference;
 @Component
 public class CidatEmbosserProvider implements EmbosserProvider {
 
-    public static enum EmbosserType implements FactoryProperties {
-        IMPACTO_600("Cidat - Impacto 600", "High-quality, high-speed (600 pages per hour) double-sided embosser"),
-        IMPACTO_TEXTO("Cidat - Impacto Texto", "High-quality, high-speed (800 pages per hour) double-sided embosser"),
-        PORTATHIEL_BLUE("Cidat - Portathiel Blue", "Small, lightweight, portable double-sided embosser");
+	public static enum EmbosserType implements FactoryProperties {
+		IMPACTO_600("Cidat - Impacto 600", "High-quality, high-speed (600 pages per hour) double-sided embosser"),
+		IMPACTO_TEXTO("Cidat - Impacto Texto", "High-quality, high-speed (800 pages per hour) double-sided embosser"),
+		PORTATHIEL_BLUE("Cidat - Portathiel Blue", "Small, lightweight, portable double-sided embosser");
 		private final String name;
 		private final String desc;
 		private final String identifier;
-    	EmbosserType (String name, String desc) {
+		EmbosserType (String name, String desc) {
 			this.name = name;
 			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
@@ -62,22 +62,23 @@ public class CidatEmbosserProvider implements EmbosserProvider {
 		public String getDescription() {
 			return desc;
 		}
-    };
+	};
 
-    private final Map<String, FactoryProperties> embossers;
-    private TableCatalogService tableCatalogService = null;
+	private final Map<String, FactoryProperties> embossers;
+	private TableCatalogService tableCatalogService = null;
 
-    public CidatEmbosserProvider() {
-        embossers = new HashMap<String, FactoryProperties>();
-        addEmbosser(EmbosserType.IMPACTO_600);
-        addEmbosser(EmbosserType.IMPACTO_TEXTO);
-        addEmbosser(EmbosserType.PORTATHIEL_BLUE);
-    }
+	public CidatEmbosserProvider() {
+		embossers = new HashMap<String, FactoryProperties>();
+		addEmbosser(EmbosserType.IMPACTO_600);
+		addEmbosser(EmbosserType.IMPACTO_TEXTO);
+		addEmbosser(EmbosserType.PORTATHIEL_BLUE);
+	}
 
 	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
 
+	@Override
 	public Embosser newFactory(String identifier) {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
@@ -92,16 +93,16 @@ public class CidatEmbosserProvider implements EmbosserProvider {
 		}
 	}
 
-    @Override
-    public Collection<FactoryProperties> list() {
-        return Collections.unmodifiableCollection(embossers.values());
-    }
-    
+	@Override
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(embossers.values());
+	}
+
 	@Reference
 	public void setTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = service;
 	}
-	
+
 	public void unsetTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = null;
 	}

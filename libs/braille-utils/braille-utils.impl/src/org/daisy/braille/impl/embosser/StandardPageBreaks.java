@@ -28,9 +28,9 @@ public class StandardPageBreaks implements PageBreaks {
 	 * Creates a new object with the system's default page break style.
 	 */
 	public StandardPageBreaks() {
-        }
+	}
 
-        @Override
+	@Override
 	public String getString() {
 		return "\u000c";
 	}

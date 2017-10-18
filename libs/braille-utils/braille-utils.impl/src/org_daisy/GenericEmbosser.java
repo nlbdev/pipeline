@@ -43,8 +43,8 @@ public class GenericEmbosser extends AbstractEmbosser {
 	 * 
 	 */
 	private static final long serialVersionUID = -5756220386304696977L;
-	private final static TableFilter tableFilter;
-	
+	private static final TableFilter tableFilter;
+
 	static {
 		tableFilter = new TableFilter() {
 			@Override
@@ -55,7 +55,7 @@ public class GenericEmbosser extends AbstractEmbosser {
 			}
 		};
 	}
-	
+
 	public GenericEmbosser(TableCatalogService service, FactoryProperties props) {
 		super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 		setFeature(EmbosserFeatures.CELL_WIDTH, 6);
@@ -66,13 +66,13 @@ public class GenericEmbosser extends AbstractEmbosser {
 	public boolean supportsPrintPage(PrintPage dim) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean supportsPageFormat(PageFormat pageFormat) {
 		return true;
 	}
-	
-    @Override
+
+	@Override
 	public boolean supportsPaper(Paper paper) {
 		return true;
 	}
@@ -81,7 +81,7 @@ public class GenericEmbosser extends AbstractEmbosser {
 	public TableFilter getTableFilter() {
 		return tableFilter;
 	}
-	
+
 	@Override
 	public EmbosserWriter newEmbosserWriter(OutputStream os) {
 		PrintPage pp = new PrintPage(getPageFormat());
@@ -91,7 +91,7 @@ public class GenericEmbosser extends AbstractEmbosser {
 		tc.setFeature("replacement", getFeature("replacement"));
 		ConfigurableEmbosser.Builder b = new ConfigurableEmbosser.Builder(os, tc.newBrailleConverter());
 		b.breaks((String)getFeature("breaks"));
-        // b.padNewline(Padding.NONE);
+		// b.padNewline(Padding.NONE);
 		b.padNewline((String)getFeature("padNewline"));
 		SimpleEmbosserProperties sep;
 		if (getPageFormat()!=null) {
@@ -126,27 +126,32 @@ public class GenericEmbosser extends AbstractEmbosser {
 		throw new IllegalArgumentException("Embosser does not support this feature.");
 	}
 
-    public boolean supportsVolumes() {
-        return false;
-    }
+	@Override
+	public boolean supportsVolumes() {
+		return false;
+	}
 
-    public boolean supports8dot() {
-        return false;
-    }
+	@Override
+	public boolean supports8dot() {
+		return false;
+	}
 
-    public boolean supportsDuplex() {
-        return true;
-    }
+	@Override
+	public boolean supportsDuplex() {
+		return true;
+	}
 
-    public boolean supportsAligning() {
-    	//should this be true?
-        return true;
-    }
+	@Override
+	public boolean supportsAligning() {
+		//should this be true?
+		return true;
+	}
 
+	@Override
 	public boolean supportsZFolding() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return PrintMode.REGULAR == mode;

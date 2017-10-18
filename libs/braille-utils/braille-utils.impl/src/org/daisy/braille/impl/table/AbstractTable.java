@@ -26,7 +26,7 @@ import org.daisy.braille.api.table.Table;
  *
  */
 public abstract class AbstractTable extends AbstractFactory implements Table {
-	
+
 	/**
 	 * 
 	 */
@@ -41,11 +41,11 @@ public abstract class AbstractTable extends AbstractFactory implements Table {
 	public AbstractTable(String name, String desc, String identifier) {
 		super(name, desc, identifier);
 	}
-	
+
 	public AbstractTable(String name, String desc) {
 		this(name, desc, null);
 	}
-	
+
 	public AbstractTable(String name) {
 		this(name, "", null);
 	}

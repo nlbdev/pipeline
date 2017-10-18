@@ -43,13 +43,13 @@ import aQute.bnd.annotation.component.Component;
  */
 @Component
 public class CidatTableProvider implements TableProvider {
-    
-    enum TableType implements FactoryProperties {
-    		IMPACTO_TRANSPARENT_6DOT("Transparent mode", "Impacto 6-dot in transparent mode"),
-    		IMPACTO_TRANSPARENT_8DOT("Transparent mode (8 dot)", "Impacto 8-dot in transparent mode"),
-    		PORTATHIEL_TRANSPARENT_6DOT("Transparent mode", "Portathiel 6-dot in transparent mode"),
-    		//PORTATHIEL_TRANSPARENT_8DOT
-                     ;
+
+	enum TableType implements FactoryProperties {
+		IMPACTO_TRANSPARENT_6DOT("Transparent mode", "Impacto 6-dot in transparent mode"),
+		IMPACTO_TRANSPARENT_8DOT("Transparent mode (8 dot)", "Impacto 8-dot in transparent mode"),
+		PORTATHIEL_TRANSPARENT_6DOT("Transparent mode", "Portathiel 6-dot in transparent mode"),
+		//PORTATHIEL_TRANSPARENT_8DOT
+		;
 		private final String name;
 		private final String desc;
 		private final String identifier;
@@ -70,34 +70,35 @@ public class CidatTableProvider implements TableProvider {
 		public String getDescription() {
 			return desc;
 		}
-    };
+	};
 
-    private final Map<String, FactoryProperties> tables;
+	private final Map<String, FactoryProperties> tables;
 
-    public CidatTableProvider() {
-        tables = new HashMap<String, FactoryProperties>(); 
-        addTable(TableType.IMPACTO_TRANSPARENT_6DOT);
-        addTable(TableType.IMPACTO_TRANSPARENT_8DOT);
-        addTable(TableType.PORTATHIEL_TRANSPARENT_6DOT);
-      //tables.add(new EmbosserTable("Transparent mode (8 dot)", "Portathiel 8-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_8DOT, this));
-    }
+	public CidatTableProvider() {
+		tables = new HashMap<String, FactoryProperties>(); 
+		addTable(TableType.IMPACTO_TRANSPARENT_6DOT);
+		addTable(TableType.IMPACTO_TRANSPARENT_8DOT);
+		addTable(TableType.PORTATHIEL_TRANSPARENT_6DOT);
+		//tables.add(new EmbosserTable("Transparent mode (8 dot)", "Portathiel 8-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_8DOT, this));
+	}
 
 	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
-    /**
-     * Get a new table instance based on the factory's current settings.
-     *
-     * @param t
-     *            the type of table to return, this will override the factory's
-     *            default table type.
-     * @return returns a new table instance.
-     */
-    public BrailleConverter newTable(TableType t) {
-    	return newFactory(t.getIdentifier()).newBrailleConverter();
-    }
+	/**
+	 * Get a new table instance based on the factory's current settings.
+	 *
+	 * @param t
+	 *            the type of table to return, this will override the factory's
+	 *            default table type.
+	 * @return returns a new table instance.
+	 */
+	public BrailleConverter newTable(TableType t) {
+		return newFactory(t.getIdentifier()).newBrailleConverter();
+	}
 
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {
@@ -111,21 +112,21 @@ public class CidatTableProvider implements TableProvider {
 
 				@Override
 				public BrailleConverter newBrailleConverter() {
-	                ArrayList<String> al = new ArrayList<>();
-	                for (int i=0; i<0x1b; i++) {
-	                    al.add(String.valueOf((char)i));
-	                }
-	                al.add(String.copyValueOf(new char[]{(char)0x1b,(char)0x1b}));
-	                for (int i=0x1c; i<64; i++) {
-	                    al.add(String.valueOf((char)i));
-	                }
-	                return new AdvancedBrailleConverter(
-	                    al.toArray(new String[al.size()]),
-	                    Charset.forName("ISO-8859-1"),
-	                    fallback,
-	                    replacement,
-	                    false,
-	                    MatchMode.RELUCTANT);
+					ArrayList<String> al = new ArrayList<>();
+					for (int i=0; i<0x1b; i++) {
+						al.add(String.valueOf((char)i));
+					}
+					al.add(String.copyValueOf(new char[]{(char)0x1b,(char)0x1b}));
+					for (int i=0x1c; i<64; i++) {
+						al.add(String.valueOf((char)i));
+					}
+					return new AdvancedBrailleConverter(
+							al.toArray(new String[al.size()]),
+							Charset.forName("ISO-8859-1"),
+							fallback,
+							replacement,
+							false,
+							MatchMode.RELUCTANT);
 				}};
 		case IMPACTO_TRANSPARENT_8DOT:
 			return new EmbosserTable(TableType.IMPACTO_TRANSPARENT_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
@@ -137,19 +138,19 @@ public class CidatTableProvider implements TableProvider {
 
 				@Override
 				public BrailleConverter newBrailleConverter() {
-	                ArrayList<String> al = new ArrayList<>();
-	                for (int i=0; i<0x1b; i++) {
-	                    al.add(String.valueOf((char)i));
-	                }
-	                al.add(String.copyValueOf(new char[]{(char)0x1b,(char)0x1b}));
-	                for (int i=0x1c; i<256; i++) {
-	                    al.add(String.valueOf((char)i));
-	                }
-	                return new AdvancedBrailleConverter(
-	                    al.toArray(new String[al.size()]),
-	                    Charset.forName("ISO-8859-1"),
-	                    false,
-	                    MatchMode.RELUCTANT);
+					ArrayList<String> al = new ArrayList<>();
+					for (int i=0; i<0x1b; i++) {
+						al.add(String.valueOf((char)i));
+					}
+					al.add(String.copyValueOf(new char[]{(char)0x1b,(char)0x1b}));
+					for (int i=0x1c; i<256; i++) {
+						al.add(String.valueOf((char)i));
+					}
+					return new AdvancedBrailleConverter(
+							al.toArray(new String[al.size()]),
+							Charset.forName("ISO-8859-1"),
+							false,
+							MatchMode.RELUCTANT);
 				}};
 		case PORTATHIEL_TRANSPARENT_6DOT:
 			return new EmbosserTable(TableType.PORTATHIEL_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
@@ -161,28 +162,28 @@ public class CidatTableProvider implements TableProvider {
 
 				@Override
 				public BrailleConverter newBrailleConverter() {
-	                StringBuilder sb = new StringBuilder();
-	                for (int i=0; i<0x1b; i++) {
-	                    sb.append((char)i);
-	                }
-	                sb.append((char)0xf7);
-	                for (int i=0x1c; i<64; i++) {
-	                    sb.append((char)i);
-	                }
-	                return new EmbosserBrailleConverter(
-	                        sb.toString(),
-	                        Charset.forName("ISO-8859-1"),
-	                        fallback,
-	                        replacement,
-	                        false);
+					StringBuilder sb = new StringBuilder();
+					for (int i=0; i<0x1b; i++) {
+						sb.append((char)i);
+					}
+					sb.append((char)0xf7);
+					for (int i=0x1c; i<64; i++) {
+						sb.append((char)i);
+					}
+					return new EmbosserBrailleConverter(
+							sb.toString(),
+							Charset.forName("ISO-8859-1"),
+							fallback,
+							replacement,
+							false);
 				}};
 		default:
 			return null;
 		}
 	}
 
-    @Override
-    public Collection<FactoryProperties> list() {
-        return Collections.unmodifiableCollection(tables.values());
-    }
+	@Override
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(tables.values());
+	}
 }

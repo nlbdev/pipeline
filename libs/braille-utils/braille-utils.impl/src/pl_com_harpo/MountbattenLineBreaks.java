@@ -26,13 +26,14 @@ import org.daisy.braille.api.embosser.LineBreaks;
  */
 public class MountbattenLineBreaks implements LineBreaks {
 
-    private final String newline;
+	private final String newline;
 
-    public MountbattenLineBreaks() {
-        newline = "{np}";
-    }
+	public MountbattenLineBreaks() {
+		newline = "{np}";
+	}
 
-    public String getString() {
-        return newline;
-    }
+	@Override
+	public String getString() {
+		return newline;
+	}
 }

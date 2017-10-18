@@ -40,9 +40,9 @@ import aQute.bnd.annotation.component.Component;
  */
 @Component
 public class InterpointTableProvider implements TableProvider {
-    
-    enum TableType implements FactoryProperties { 
-    	USA1_8("USA1_8 font", "Interpoint 8-dot table");
+
+	enum TableType implements FactoryProperties { 
+		USA1_8("USA1_8 font", "Interpoint 8-dot table");
 		private final String name;
 		private final String desc;
 		private final String identifier;
@@ -63,32 +63,33 @@ public class InterpointTableProvider implements TableProvider {
 		public String getDescription() {
 			return desc;
 		}
-    };
+	};
 
-    private final Map<String, FactoryProperties> tables;
+	private final Map<String, FactoryProperties> tables;
 
-    public InterpointTableProvider() {
-        tables = new HashMap<String, FactoryProperties>();
-        //The implementation is intentionally excluded from listing
-        //addTable(TableType.USA1_8);
-    }
+	public InterpointTableProvider() {
+		tables = new HashMap<String, FactoryProperties>();
+		//The implementation is intentionally excluded from listing
+		//addTable(TableType.USA1_8);
+	}
 
 	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
-    /**
-     * Get a new table instance based on the factory's current settings.
-     *
-     * @param t
-     *            the type of table to return, this will override the factory's
-     *            default table type.
-     * @return returns a new table instance.
-     */
-    public BrailleConverter newTable(TableType t) {
-    	return newFactory(t.getIdentifier()).newBrailleConverter();
-    }
+	/**
+	 * Get a new table instance based on the factory's current settings.
+	 *
+	 * @param t
+	 *            the type of table to return, this will override the factory's
+	 *            default table type.
+	 * @return returns a new table instance.
+	 */
+	public BrailleConverter newTable(TableType t) {
+		return newFactory(t.getIdentifier()).newBrailleConverter();
+	}
 
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {
@@ -104,17 +105,17 @@ public class InterpointTableProvider implements TableProvider {
 				public BrailleConverter newBrailleConverter() {
 					String table = " a,b.k;l\"cif|msp!e:h*o+r>djg`ntq'1?2-u(v$3960x~&<5/8)z={\u007f4w7#y}%"; // TODO: add patterns U+2840 - U+28ff
 
-	                StringBuffer sb = new StringBuffer();
-	                sb.append(table);
-	                return new EmbosserBrailleConverter(sb.toString(), Charset.forName("ISO-8859-1"), fallback, replacement, true);
+					StringBuffer sb = new StringBuffer();
+					sb.append(table);
+					return new EmbosserBrailleConverter(sb.toString(), Charset.forName("ISO-8859-1"), fallback, replacement, true);
 				}};
 		default:
 			return null;
 		}
 	}
 
-    @Override
-    public Collection<FactoryProperties> list() {
-        return Collections.unmodifiableCollection(tables.values());
-    }
+	@Override
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(tables.values());
+	}
 }

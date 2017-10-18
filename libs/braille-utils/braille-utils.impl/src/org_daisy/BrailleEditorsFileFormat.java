@@ -43,147 +43,156 @@ import org_daisy.BrailleEditorsFileFormatProvider.FileType;
  */
 public class BrailleEditorsFileFormat extends AbstractFactory implements FileFormat {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4217010913717769350L;
 	private FileType type;
-    private Table table;
-    private final TableCatalogService tableCatalog;
-    private TableFilter tableFilter;
-    private final Collection<String> supportedTableIds = new ArrayList<>();
+	private Table table;
+	private final TableCatalogService tableCatalog;
+	private TableFilter tableFilter;
+	private final Collection<String> supportedTableIds = new ArrayList<>();
 
-    private final boolean duplexEnabled = false;
-    private final boolean eightDotsEnabled = false;
+	private final boolean duplexEnabled = false;
+	private final boolean eightDotsEnabled = false;
 
-    public BrailleEditorsFileFormat(FileType type, TableCatalogService tableCatalog) {
-        super(type.getDisplayName(), type.getDescription(), type.getIdentifier());
-        this.type = type;
-        switch (type) {
-            case BRF:
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.MIT");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.NABCC");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.NABCC_8DOT");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.EN_GB");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.NL_NL");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.EN_GB");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.DA_DK");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.DE_DE");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.CS_CZ");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.IT_IT_FIRENZE");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES_TABLE_2");
-                break;
-            case BRA:
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES");
-                supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES_TABLE_2");
-                break;
-            case BRL:
-                supportedTableIds.add("org_daisy.BrailleEditorsTableProvider.TableType.BRL");
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported filetype");
-        }
+	public BrailleEditorsFileFormat(FileType type, TableCatalogService tableCatalog) {
+		super(type.getDisplayName(), type.getDescription(), type.getIdentifier());
+		this.type = type;
+		switch (type) {
+		case BRF:
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.MIT");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.NABCC");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.NABCC_8DOT");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.EN_GB");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.NL_NL");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.EN_GB");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.DA_DK");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.DE_DE");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.CS_CZ");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.IT_IT_FIRENZE");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES_TABLE_2");
+			break;
+		case BRA:
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES");
+			supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.ES_ES_TABLE_2");
+			break;
+		case BRL:
+			supportedTableIds.add("org_daisy.BrailleEditorsTableProvider.TableType.BRL");
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported filetype");
+		}
 
-        tableFilter = new TableFilter() {
-            @Override
-            public boolean accept(FactoryProperties object) {
-                return supportedTableIds.contains(object.getIdentifier());
-            }
-        };
+		tableFilter = new TableFilter() {
+			@Override
+			public boolean accept(FactoryProperties object) {
+				return supportedTableIds.contains(object.getIdentifier());
+			}
+		};
 
-        this.tableCatalog = tableCatalog;
-        table = tableCatalog.newTable("org_daisy.EmbosserTableProvider.TableType.MIT");
-    }
+		this.tableCatalog = tableCatalog;
+		table = tableCatalog.newTable("org_daisy.EmbosserTableProvider.TableType.MIT");
+	}
 
-    public TableFilter getTableFilter() {
-            return tableFilter;
-    }
-    
-    public boolean supportsTable(Table table) {
-        return getTableFilter().accept(table);
-    }
+	@Override
+	public TableFilter getTableFilter() {
+		return tableFilter;
+	}
 
-    public boolean supportsDuplex() {
-        return false;
-    }
+	@Override
+	public boolean supportsTable(Table table) {
+		return getTableFilter().accept(table);
+	}
 
-    public boolean supports8dot() {
-        return false;
-    }
+	@Override
+	public boolean supportsDuplex() {
+		return false;
+	}
 
-    public EmbosserWriter newEmbosserWriter(OutputStream os) {
+	@Override
+	public boolean supports8dot() {
+		return false;
+	}
 
-        if (!supportsTable(table)) {
-            throw new IllegalArgumentException("Unsupported table: " + table.getDisplayName());
-        }
+	@Override
+	public EmbosserWriter newEmbosserWriter(OutputStream os) {
 
-        int maxCols = 1000;
-        int maxRows = 1000;
+		if (!supportsTable(table)) {
+			throw new IllegalArgumentException("Unsupported table: " + table.getDisplayName());
+		}
 
-        EmbosserWriterProperties props =
-            new SimpleEmbosserProperties(maxCols, maxRows)
-                .supports8dot(eightDotsEnabled)
-                .supportsDuplex(duplexEnabled)
-                .supportsAligning(false);
+		int maxCols = 1000;
+		int maxRows = 1000;
 
-        switch (type) {
-            case BRF:
-                return new ConfigurableEmbosser.Builder(os, table.newBrailleConverter())
-                                    .breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
-                                    .padNewline(Padding.BEFORE)
-                                    .embosserProperties(props)
-                                    .build();
-            case BRA:
-                return new ConfigurableEmbosser.Builder(os, table.newBrailleConverter())
-                                    .breaks(new StandardLineBreaks(StandardLineBreaks.Type.UNIX))
-                                    .pagebreaks(new NoPageBreaks())
-                                    .padNewline(Padding.AFTER)
-                                    .embosserProperties(props)
-                                    .build();
-            case BRL:
-                return new MicroBrailleFileFormatWriter(os);
-            default:
-                return null;
-        }
-    }
-    
-    public String getFileExtension() {
-        return "." + type.name().toLowerCase();
-    }
+		EmbosserWriterProperties props =
+				new SimpleEmbosserProperties(maxCols, maxRows)
+				.supports8dot(eightDotsEnabled)
+				.supportsDuplex(duplexEnabled)
+				.supportsAligning(false);
 
-    public void setFeature(String key, Object value) {
+		switch (type) {
+		case BRF:
+			return new ConfigurableEmbosser.Builder(os, table.newBrailleConverter())
+					.breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
+					.padNewline(Padding.BEFORE)
+					.embosserProperties(props)
+					.build();
+		case BRA:
+			return new ConfigurableEmbosser.Builder(os, table.newBrailleConverter())
+					.breaks(new StandardLineBreaks(StandardLineBreaks.Type.UNIX))
+					.pagebreaks(new NoPageBreaks())
+					.padNewline(Padding.AFTER)
+					.embosserProperties(props)
+					.build();
+		case BRL:
+			return new MicroBrailleFileFormatWriter(os);
+		default:
+			return null;
+		}
+	}
 
-        if (EmbosserFeatures.TABLE.equals(key)) {
-            if (value == null) {
-                throw new IllegalArgumentException("Unsupported value for table");
-            }
-            Table t;
-            try {
-                t = (Table)value;
-            } catch (ClassCastException e) {
-                t = tableCatalog.newTable(value.toString());
-            }
-            if (getTableFilter().accept(t)) {
-                table = t;
-            } else {
-                throw new IllegalArgumentException("Unsupported value for table.");
-            }
-        } else {
-            throw new IllegalArgumentException("Unsupported feature " + key);
-        }
-    }
+	@Override
+	public String getFileExtension() {
+		return "." + type.name().toLowerCase();
+	}
 
-    public Object getFeature(String key) {
+	@Override
+	public void setFeature(String key, Object value) {
 
-        if (EmbosserFeatures.TABLE.equals(key)) {
-            return table;
-        } else {
-            throw new IllegalArgumentException("Unsupported feature " + key);
-        }
-    }
+		if (EmbosserFeatures.TABLE.equals(key)) {
+			if (value == null) {
+				throw new IllegalArgumentException("Unsupported value for table");
+			}
+			Table t;
+			try {
+				t = (Table)value;
+			} catch (ClassCastException e) {
+				t = tableCatalog.newTable(value.toString());
+			}
+			if (getTableFilter().accept(t)) {
+				table = t;
+			} else {
+				throw new IllegalArgumentException("Unsupported value for table.");
+			}
+		} else {
+			throw new IllegalArgumentException("Unsupported feature " + key);
+		}
+	}
 
-    public Object getProperty(String key) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+	@Override
+	public Object getFeature(String key) {
+
+		if (EmbosserFeatures.TABLE.equals(key)) {
+			return table;
+		} else {
+			throw new IllegalArgumentException("Unsupported feature " + key);
+		}
+	}
+
+	@Override
+	public Object getProperty(String key) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

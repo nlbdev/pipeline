@@ -42,449 +42,455 @@ import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 
 public abstract class IndexEmbosser extends AbstractEmbosser {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4942671719606902452L;
 
 	protected EmbosserType type;
 
-    private double minPageLengthAlongFeed = 50d;
-    private double maxPageLengthAlongFeed = Double.MAX_VALUE;
-    private double minPageLengthAcrossFeed = 50d;
-    private double maxPageLengthAcrossFeed = Double.MAX_VALUE;
-    private double minPrintPageWidth = 50d;
-    private double maxPrintPageWidth = Double.MAX_VALUE;
-    private double minPrintPageHeight = 50d;
-    private double maxPrintPageHeight = Double.MAX_VALUE;
+	private double minPageLengthAlongFeed = 50d;
+	private double maxPageLengthAlongFeed = Double.MAX_VALUE;
+	private double minPageLengthAcrossFeed = 50d;
+	private double maxPageLengthAcrossFeed = Double.MAX_VALUE;
+	private double minPrintPageWidth = 50d;
+	private double maxPrintPageWidth = Double.MAX_VALUE;
+	private double minPrintPageHeight = 50d;
+	private double maxPrintPageHeight = Double.MAX_VALUE;
 
-    protected int numberOfCopies = 1;
-    protected boolean zFoldingEnabled = false;
-    protected boolean saddleStitchEnabled = false;
-    protected boolean duplexEnabled = false;
-    protected boolean eightDotsEnabled = false;
+	protected int numberOfCopies = 1;
+	protected boolean zFoldingEnabled = false;
+	protected boolean saddleStitchEnabled = false;
+	protected boolean duplexEnabled = false;
+	protected boolean eightDotsEnabled = false;
 
-    protected int maxNumberOfCopies = 1;
+	protected int maxNumberOfCopies = 1;
 
-    protected int marginInner = 0;
-    protected int marginOuter = 0;
-    protected int marginTop = 0;
-    protected int marginBottom = 0;
+	protected int marginInner = 0;
+	protected int marginOuter = 0;
+	protected int marginTop = 0;
+	protected int marginBottom = 0;
 
-    protected int minMarginInner = 0;
-    protected int minMarginOuter = 0;
-    protected int minMarginTop = 0;
-    protected int minMarginBottom = 0;
+	protected int minMarginInner = 0;
+	protected int minMarginOuter = 0;
+	protected int minMarginTop = 0;
+	protected int minMarginBottom = 0;
 
-    protected int maxMarginInner = 0;
-    protected int maxMarginOuter = 0;
-    protected int maxMarginTop = 0;
-    protected int maxMarginBottom = 0;
-    
-    protected int minCellsInWidth = 0;
-    protected int minLinesInHeight = 0;
-    protected int maxCellsInWidth = Integer.MAX_VALUE;
-    protected int maxLinesInHeight = Integer.MAX_VALUE;
-  
-    public IndexEmbosser(TableCatalogService service, EmbosserType props) {
+	protected int maxMarginInner = 0;
+	protected int maxMarginOuter = 0;
+	protected int maxMarginTop = 0;
+	protected int maxMarginBottom = 0;
 
-        super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
+	protected int minCellsInWidth = 0;
+	protected int minLinesInHeight = 0;
+	protected int maxCellsInWidth = Integer.MAX_VALUE;
+	protected int maxLinesInHeight = Integer.MAX_VALUE;
 
-        type = props;
+	public IndexEmbosser(TableCatalogService service, EmbosserType props) {
 
-        setCellWidth(6d);
-        setCellHeight(eightDotsEnabled?12.5d:10d);
+		super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        switch (type) {
-            case INDEX_BASIC_BLUE_BAR:
-                maxPrintPageWidth = 280d;
-                maxPrintPageHeight = 12*EmbosserTools.INCH_IN_MM;
-                break;
-            case INDEX_BASIC_S_V2:
-            case INDEX_BASIC_D_V2:
-                minPrintPageWidth = 138d; // = 23*6
-                minPrintPageHeight = 1*EmbosserTools.INCH_IN_MM;
-                maxPrintPageHeight = (20+2/3)*EmbosserTools.INCH_IN_MM;
-                break;
-            case INDEX_EVEREST_D_V2:
-                minPrintPageWidth = 138d; // = 23*6
-                minPrintPageHeight = 100d;
-                maxPrintPageHeight = 350d;
-                break;
-            case INDEX_4X4_PRO_V2:
-                minPrintPageWidth = 138d; // = 23*6
-                minPrintPageHeight = 100d;
-                maxPrintPageHeight = 297d;
-                minPageLengthAlongFeed = 110d;
-                maxPageLengthAlongFeed = 500d;
-                break;
-            case INDEX_BASIC_S_V3:
-            case INDEX_BASIC_D_V3:
-                minPrintPageWidth = 90d;
-                minPrintPageHeight = 1*EmbosserTools.INCH_IN_MM;
-                maxPrintPageWidth = 295d;
-                maxPrintPageHeight = 17*EmbosserTools.INCH_IN_MM;
-                break;
-            case INDEX_BASIC_D_V4:
-                minPrintPageWidth = 120d;
-                minPrintPageHeight = 1*EmbosserTools.INCH_IN_MM;
-                maxPrintPageWidth = 325d;
-                maxPrintPageHeight = 17*EmbosserTools.INCH_IN_MM;
-                break;
-            case INDEX_EVEREST_D_V3:
-            case INDEX_4X4_PRO_V3:
-                minPageLengthAcrossFeed = 130d;
-                maxPageLengthAcrossFeed = 297d;
-                minPageLengthAlongFeed = 120d;
-                maxPageLengthAlongFeed = 585d;
-                break;
-            case INDEX_EVEREST_D_V4:
-                minPageLengthAcrossFeed = 130d;
-                maxPageLengthAcrossFeed = 297d;
-                minPageLengthAlongFeed = 120d;
-                maxPageLengthAlongFeed = 590d;
-                break;
-            case INDEX_4WAVES_PRO_V3:
-                minPrintPageWidth = 90d;
-                minPrintPageHeight = 11*EmbosserTools.INCH_IN_MM;
-                maxPrintPageWidth = 295d;
-                maxPrintPageHeight = 12*EmbosserTools.INCH_IN_MM;
-                break;
-            case INDEX_BRAILLE_BOX_V4:
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported embosser type");
-        }
-    }
+		type = props;
 
-    @Override
-    public boolean supportsPaper(Paper paper) {
-        if (paper == null) { return false; }
-        try {
-            switch (getPaperType()) {
-                case SHEET:
-                    SheetPaper p = paper.asSheetPaper();
-                    if (supportsPageFormat(new SheetPaperFormat(p, Orientation.DEFAULT))) { return true; }
-                    if (supportsPageFormat(new SheetPaperFormat(p, Orientation.REVERSED))) { return true; }
-                    break;
-                case TRACTOR:
-                    return supportsPageFormat(new TractorPaperFormat(paper.asTractorPaper()));
-				default:
-					break;
-            }
-        } catch (ClassCastException e) {
-        }
-        return false;
-    }
+		setCellWidth(6d);
+		setCellHeight(eightDotsEnabled?12.5d:10d);
 
-    //jvw1.6@Override
-    public boolean supportsPageFormat(PageFormat format) {
-        if (format == null) { return false; }
-        try {
-            switch (getPaperType()) {
-                case SHEET:
-                    return supportsPrintPage(getPrintPage(format.asSheetPaperFormat()));
-                case TRACTOR:
-                    return supportsPrintPage(getPrintPage(format.asTractorPaperFormat()));
-				default:
-					break;
-            }
-        } catch (ClassCastException e) {
-        }
-        return false;
-    }
+		switch (type) {
+		case INDEX_BASIC_BLUE_BAR:
+			maxPrintPageWidth = 280d;
+			maxPrintPageHeight = 12*EmbosserTools.INCH_IN_MM;
+			break;
+		case INDEX_BASIC_S_V2:
+		case INDEX_BASIC_D_V2:
+			minPrintPageWidth = 138d; // = 23*6
+			minPrintPageHeight = 1*EmbosserTools.INCH_IN_MM;
+			maxPrintPageHeight = (20+2/3)*EmbosserTools.INCH_IN_MM;
+			break;
+		case INDEX_EVEREST_D_V2:
+			minPrintPageWidth = 138d; // = 23*6
+			minPrintPageHeight = 100d;
+			maxPrintPageHeight = 350d;
+			break;
+		case INDEX_4X4_PRO_V2:
+			minPrintPageWidth = 138d; // = 23*6
+			minPrintPageHeight = 100d;
+			maxPrintPageHeight = 297d;
+			minPageLengthAlongFeed = 110d;
+			maxPageLengthAlongFeed = 500d;
+			break;
+		case INDEX_BASIC_S_V3:
+		case INDEX_BASIC_D_V3:
+			minPrintPageWidth = 90d;
+			minPrintPageHeight = 1*EmbosserTools.INCH_IN_MM;
+			maxPrintPageWidth = 295d;
+			maxPrintPageHeight = 17*EmbosserTools.INCH_IN_MM;
+			break;
+		case INDEX_BASIC_D_V4:
+			minPrintPageWidth = 120d;
+			minPrintPageHeight = 1*EmbosserTools.INCH_IN_MM;
+			maxPrintPageWidth = 325d;
+			maxPrintPageHeight = 17*EmbosserTools.INCH_IN_MM;
+			break;
+		case INDEX_EVEREST_D_V3:
+		case INDEX_4X4_PRO_V3:
+			minPageLengthAcrossFeed = 130d;
+			maxPageLengthAcrossFeed = 297d;
+			minPageLengthAlongFeed = 120d;
+			maxPageLengthAlongFeed = 585d;
+			break;
+		case INDEX_EVEREST_D_V4:
+			minPageLengthAcrossFeed = 130d;
+			maxPageLengthAcrossFeed = 297d;
+			minPageLengthAlongFeed = 120d;
+			maxPageLengthAlongFeed = 590d;
+			break;
+		case INDEX_4WAVES_PRO_V3:
+			minPrintPageWidth = 90d;
+			minPrintPageHeight = 11*EmbosserTools.INCH_IN_MM;
+			maxPrintPageWidth = 295d;
+			maxPrintPageHeight = 12*EmbosserTools.INCH_IN_MM;
+			break;
+		case INDEX_BRAILLE_BOX_V4:
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported embosser type");
+		}
+	}
 
-    public boolean supportsPrintPage(PrintPage dim) {
+	@Override
+	public boolean supportsPaper(Paper paper) {
+		if (paper == null) { return false; }
+		try {
+			switch (getPaperType()) {
+			case SHEET:
+				SheetPaper p = paper.asSheetPaper();
+				if (supportsPageFormat(new SheetPaperFormat(p, Orientation.DEFAULT))) { return true; }
+				if (supportsPageFormat(new SheetPaperFormat(p, Orientation.REVERSED))) { return true; }
+				break;
+			case TRACTOR:
+				return supportsPageFormat(new TractorPaperFormat(paper.asTractorPaper()));
+			default:
+				break;
+			}
+		} catch (ClassCastException e) {
+		}
+		return false;
+	}
 
-        if (dim==null) { return false; }
-        double w = dim.getWidth();
-        double h = dim.getHeight();
-        double across = dim.getLengthAcrossFeed().asMillimeter();
-        double along = dim.getLengthAlongFeed().asMillimeter();
+	@Override
+	public boolean supportsPageFormat(PageFormat format) {
+		if (format == null) { return false; }
+		try {
+			switch (getPaperType()) {
+			case SHEET:
+				return supportsPrintPage(getPrintPage(format.asSheetPaperFormat()));
+			case TRACTOR:
+				return supportsPrintPage(getPrintPage(format.asTractorPaperFormat()));
+			default:
+				break;
+			}
+		} catch (ClassCastException e) {
+		}
+		return false;
+	}
 
-        return (w <= maxPrintPageWidth) &&
-               (w >= minPrintPageWidth) &&
-               (h <= maxPrintPageHeight) &&
-               (h >= minPrintPageHeight) &&
-               (across <= maxPageLengthAcrossFeed) &&
-               (across >= minPageLengthAcrossFeed) &&
-               (along <= maxPageLengthAlongFeed) &&
-               (along >= minPageLengthAlongFeed);
-    }
+	@Override
+	public boolean supportsPrintPage(PrintPage dim) {
 
-    public boolean supportsVolumes() {
-        return false;
-    }
+		if (dim==null) { return false; }
+		double w = dim.getWidth();
+		double h = dim.getHeight();
+		double across = dim.getLengthAcrossFeed().asMillimeter();
+		double along = dim.getLengthAlongFeed().asMillimeter();
 
-    public boolean supportsAligning() {
-        return true;
-    }
+		return (w <= maxPrintPageWidth) &&
+				(w >= minPrintPageWidth) &&
+				(h <= maxPrintPageHeight) &&
+				(h >= minPrintPageHeight) &&
+				(across <= maxPageLengthAcrossFeed) &&
+				(across >= minPageLengthAcrossFeed) &&
+				(along <= maxPageLengthAlongFeed) &&
+				(along >= minPageLengthAlongFeed);
+	}
 
-    public boolean supports8dot() {
-        return false;
-    }
+	@Override
+	public boolean supportsVolumes() {
+		return false;
+	}
 
-    public boolean supportsDuplex() {
-        switch (type) {
-            case INDEX_BASIC_D_V2:
-            case INDEX_EVEREST_D_V2:
-            case INDEX_4X4_PRO_V2:
-            case INDEX_BASIC_D_V3:
-            case INDEX_EVEREST_D_V3:
-            case INDEX_4X4_PRO_V3:
-            case INDEX_4WAVES_PRO_V3:
-            case INDEX_BASIC_D_V4:
-            case INDEX_EVEREST_D_V4:
-            case INDEX_BRAILLE_BOX_V4:
-                return true;
-            case INDEX_BASIC_BLUE_BAR:
-            case INDEX_BASIC_S_V2:
-            case INDEX_BASIC_S_V3:
-            default:
-                return false;
-        }
-    }
+	@Override
+	public boolean supportsAligning() {
+		return true;
+	}
 
-    @Override
-    public boolean supportsZFolding() {
-        switch (type) {
-            case INDEX_BASIC_S_V3:
-            case INDEX_BASIC_D_V2:
-            case INDEX_BASIC_D_V3:
-            case INDEX_BASIC_D_V4:
-            case INDEX_4WAVES_PRO_V3:
-                return true;
-            case INDEX_BASIC_BLUE_BAR:
-            case INDEX_BASIC_S_V2:
-            case INDEX_EVEREST_D_V2:
-            case INDEX_EVEREST_D_V3:
-            case INDEX_EVEREST_D_V4:
-            case INDEX_4X4_PRO_V2:
-            case INDEX_4X4_PRO_V3:
-            case INDEX_BRAILLE_BOX_V4:
-            default:
-                return false;
-        }
-    }
+	@Override
+	public boolean supports8dot() {
+		return false;
+	}
 
-    @Override
-    public boolean supportsPrintMode(PrintMode mode) {
-        switch (type) {
-            case INDEX_4X4_PRO_V2:
-            case INDEX_4X4_PRO_V3:
-            case INDEX_EVEREST_D_V4:
-            case INDEX_BRAILLE_BOX_V4:
-                return true;
-            case INDEX_BASIC_D_V2:
-            case INDEX_EVEREST_D_V2:
-            case INDEX_BASIC_D_V3:
-            case INDEX_EVEREST_D_V3:
-            case INDEX_4WAVES_PRO_V3:
-            case INDEX_BASIC_D_V4:
-            case INDEX_BASIC_BLUE_BAR:
-            case INDEX_BASIC_S_V2:
-            case INDEX_BASIC_S_V3:
-            default:
-                return PrintMode.REGULAR == mode;
-        }
-    }
+	@Override
+	public boolean supportsDuplex() {
+		switch (type) {
+		case INDEX_BASIC_D_V2:
+		case INDEX_EVEREST_D_V2:
+		case INDEX_4X4_PRO_V2:
+		case INDEX_BASIC_D_V3:
+		case INDEX_EVEREST_D_V3:
+		case INDEX_4X4_PRO_V3:
+		case INDEX_4WAVES_PRO_V3:
+		case INDEX_BASIC_D_V4:
+		case INDEX_EVEREST_D_V4:
+		case INDEX_BRAILLE_BOX_V4:
+			return true;
+		case INDEX_BASIC_BLUE_BAR:
+		case INDEX_BASIC_S_V2:
+		case INDEX_BASIC_S_V3:
+		default:
+			return false;
+		}
+	}
 
-    private Paper.Type getPaperType() {
-        switch (type) {
-            case INDEX_BASIC_BLUE_BAR:
-            case INDEX_BASIC_D_V2:
-            case INDEX_BASIC_D_V3:
-            case INDEX_BASIC_D_V4:
-            case INDEX_BASIC_S_V2:
-            case INDEX_BASIC_S_V3:
-            case INDEX_4WAVES_PRO_V3:
-                return Paper.Type.TRACTOR;
-            case INDEX_EVEREST_D_V2:
-            case INDEX_EVEREST_D_V3:
-            case INDEX_EVEREST_D_V4:
-            case INDEX_4X4_PRO_V2:
-            case INDEX_4X4_PRO_V3:
-            case INDEX_BRAILLE_BOX_V4:
-            default:
-                return Paper.Type.SHEET;
-        }
-    }
+	@Override
+	public boolean supportsZFolding() {
+		switch (type) {
+		case INDEX_BASIC_S_V3:
+		case INDEX_BASIC_D_V2:
+		case INDEX_BASIC_D_V3:
+		case INDEX_BASIC_D_V4:
+		case INDEX_4WAVES_PRO_V3:
+			return true;
+		case INDEX_BASIC_BLUE_BAR:
+		case INDEX_BASIC_S_V2:
+		case INDEX_EVEREST_D_V2:
+		case INDEX_EVEREST_D_V3:
+		case INDEX_EVEREST_D_V4:
+		case INDEX_4X4_PRO_V2:
+		case INDEX_4X4_PRO_V3:
+		case INDEX_BRAILLE_BOX_V4:
+		default:
+			return false;
+		}
+	}
 
-    private PrintDirection getPrintDirection() {
-        switch (type) {
-            case INDEX_4X4_PRO_V2:
-                return PrintDirection.SIDEWAYS;
-            case INDEX_4X4_PRO_V3:
-              //return saddleStitchEnabled?PrintDirection.SIDEWAYS:PrintDirection.UPRIGHT;
-                return PrintDirection.SIDEWAYS;
-            case INDEX_EVEREST_D_V4:
-                return saddleStitchEnabled?PrintDirection.SIDEWAYS:PrintDirection.UPRIGHT;
-          //case INDEX_BASIC_D_V4:
-              //return swZFoldingEnabled?PrintDirection.SIDEWAYS:PrintDirection.UPRIGHT;
-            case INDEX_BRAILLE_BOX_V4:
-                return PrintDirection.SIDEWAYS;
-            default:
-                return PrintDirection.UPRIGHT;
-        }
-    }
+	@Override
+	public boolean supportsPrintMode(PrintMode mode) {
+		switch (type) {
+		case INDEX_4X4_PRO_V2:
+		case INDEX_4X4_PRO_V3:
+		case INDEX_EVEREST_D_V4:
+		case INDEX_BRAILLE_BOX_V4:
+			return true;
+		case INDEX_BASIC_D_V2:
+		case INDEX_EVEREST_D_V2:
+		case INDEX_BASIC_D_V3:
+		case INDEX_EVEREST_D_V3:
+		case INDEX_4WAVES_PRO_V3:
+		case INDEX_BASIC_D_V4:
+		case INDEX_BASIC_BLUE_BAR:
+		case INDEX_BASIC_S_V2:
+		case INDEX_BASIC_S_V3:
+		default:
+			return PrintMode.REGULAR == mode;
+		}
+	}
 
-    public EmbosserWriter newEmbosserWriter(Device device) {
+	private Paper.Type getPaperType() {
+		switch (type) {
+		case INDEX_BASIC_BLUE_BAR:
+		case INDEX_BASIC_D_V2:
+		case INDEX_BASIC_D_V3:
+		case INDEX_BASIC_D_V4:
+		case INDEX_BASIC_S_V2:
+		case INDEX_BASIC_S_V3:
+		case INDEX_4WAVES_PRO_V3:
+			return Paper.Type.TRACTOR;
+		case INDEX_EVEREST_D_V2:
+		case INDEX_EVEREST_D_V3:
+		case INDEX_EVEREST_D_V4:
+		case INDEX_4X4_PRO_V2:
+		case INDEX_4X4_PRO_V3:
+		case INDEX_BRAILLE_BOX_V4:
+		default:
+			return Paper.Type.SHEET;
+		}
+	}
 
-        try {
-            File f = File.createTempFile(this.getClass().getCanonicalName(), ".tmp");
-            f.deleteOnExit();
-            EmbosserWriter ew = newEmbosserWriter(new FileOutputStream(f));
-            return new FileToDeviceEmbosserWriter(ew, f, device);
-        } catch (IOException e) {
-        }
-        throw new IllegalArgumentException("Embosser does not support this feature.");
-    }
+	private PrintDirection getPrintDirection() {
+		switch (type) {
+		case INDEX_4X4_PRO_V2:
+			return PrintDirection.SIDEWAYS;
+		case INDEX_4X4_PRO_V3:
+			//return saddleStitchEnabled?PrintDirection.SIDEWAYS:PrintDirection.UPRIGHT;
+			return PrintDirection.SIDEWAYS;
+		case INDEX_EVEREST_D_V4:
+			return saddleStitchEnabled?PrintDirection.SIDEWAYS:PrintDirection.UPRIGHT;
+			//case INDEX_BASIC_D_V4:
+			//return swZFoldingEnabled?PrintDirection.SIDEWAYS:PrintDirection.UPRIGHT;
+		case INDEX_BRAILLE_BOX_V4:
+			return PrintDirection.SIDEWAYS;
+		default:
+			return PrintDirection.UPRIGHT;
+		}
+	}
 
-    @Override
-    public void setFeature(String key, Object value) {
+	@Override
+	public EmbosserWriter newEmbosserWriter(Device device) {
 
-        if (EmbosserFeatures.TABLE.equals(key)) {
-            super.setFeature(key, value);
-          //eightDotsEnabled = supports8dot() && setTable.newBrailleConverter().supportsEightDot();
-          //setCellHeight(eightDotsEnabled?12.5d:10d);
-        } else if (EmbosserFeatures.NUMBER_OF_COPIES.equals(key) && maxNumberOfCopies > 1) {
-            try {
-                int copies = (Integer)value;
-                if (copies < 1 || copies > maxNumberOfCopies) {
-                    throw new IllegalArgumentException("Unsupported value for number of copies.");
-                }
-                numberOfCopies = copies;
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException("Unsupported value for number of copies.");
-            }
-        } else if (EmbosserFeatures.SADDLE_STITCH.equals(key) && supportsPrintMode(PrintMode.MAGAZINE)) {
-            try {
-                saddleStitchEnabled = (Boolean)value;
-//              if (!(type==EmbosserType.INDEX_EVEREST_D_V4 ||
-//                    type==EmbosserType.INDEX_BRAILLE_BOX_V4)) {
-                  duplexEnabled = duplexEnabled || saddleStitchEnabled;
-//              }
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException("Unsupported value for saddle stitch.");
-            }
-        } else if (EmbosserFeatures.Z_FOLDING.equals(key) && supportsZFolding()) {
-            try {
-                zFoldingEnabled = (Boolean)value;
-                if (type==EmbosserType.INDEX_BASIC_D_V2) {
-                    duplexEnabled = duplexEnabled || zFoldingEnabled;
-                }
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException("Unsupported value for z-folding.");
-            }
-        } else if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
-            try {
-                duplexEnabled = (Boolean)value;
-//              if (!(type==EmbosserType.INDEX_EVEREST_D_V4 ||
-//                    type==EmbosserType.INDEX_BRAILLE_BOX_V4)) {
-                  duplexEnabled = duplexEnabled || saddleStitchEnabled;
-//              }
-                if (type==EmbosserType.INDEX_BASIC_D_V2) {
-                    zFoldingEnabled = zFoldingEnabled && duplexEnabled;
-                }
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException("Unsupported value for duplex.");
-            }
-        } else {
-            super.setFeature(key, value);
-        }
-    }
+		try {
+			File f = File.createTempFile(this.getClass().getCanonicalName(), ".tmp");
+			f.deleteOnExit();
+			EmbosserWriter ew = newEmbosserWriter(new FileOutputStream(f));
+			return new FileToDeviceEmbosserWriter(ew, f, device);
+		} catch (IOException e) {
+		}
+		throw new IllegalArgumentException("Embosser does not support this feature.");
+	}
 
-    @Override
-    public Object getFeature(String key) {
+	@Override
+	public void setFeature(String key, Object value) {
 
-        if (EmbosserFeatures.NUMBER_OF_COPIES.equals(key) && maxNumberOfCopies > 1) {
-            return numberOfCopies;
-        } else if (EmbosserFeatures.SADDLE_STITCH.equals(key) && supportsPrintMode(PrintMode.MAGAZINE)) {
-            return saddleStitchEnabled;
-        } else if (EmbosserFeatures.Z_FOLDING.equals(key) && supportsZFolding()) {
-            return zFoldingEnabled;
-        } else if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
-            return duplexEnabled;
-        } else {
-            return super.getFeature(key);
-        }
-    }
+		if (EmbosserFeatures.TABLE.equals(key)) {
+			super.setFeature(key, value);
+			//eightDotsEnabled = supports8dot() && setTable.newBrailleConverter().supportsEightDot();
+			//setCellHeight(eightDotsEnabled?12.5d:10d);
+		} else if (EmbosserFeatures.NUMBER_OF_COPIES.equals(key) && maxNumberOfCopies > 1) {
+			try {
+				int copies = (Integer)value;
+				if (copies < 1 || copies > maxNumberOfCopies) {
+					throw new IllegalArgumentException("Unsupported value for number of copies.");
+				}
+				numberOfCopies = copies;
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for number of copies.");
+			}
+		} else if (EmbosserFeatures.SADDLE_STITCH.equals(key) && supportsPrintMode(PrintMode.MAGAZINE)) {
+			try {
+				saddleStitchEnabled = (Boolean)value;
+				//              if (!(type==EmbosserType.INDEX_EVEREST_D_V4 ||
+				//                    type==EmbosserType.INDEX_BRAILLE_BOX_V4)) {
+				duplexEnabled = duplexEnabled || saddleStitchEnabled;
+				//              }
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for saddle stitch.");
+			}
+		} else if (EmbosserFeatures.Z_FOLDING.equals(key) && supportsZFolding()) {
+			try {
+				zFoldingEnabled = (Boolean)value;
+				if (type==EmbosserType.INDEX_BASIC_D_V2) {
+					duplexEnabled = duplexEnabled || zFoldingEnabled;
+				}
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for z-folding.");
+			}
+		} else if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
+			try {
+				duplexEnabled = (Boolean)value;
+				//              if (!(type==EmbosserType.INDEX_EVEREST_D_V4 ||
+				//                    type==EmbosserType.INDEX_BRAILLE_BOX_V4)) {
+				duplexEnabled = duplexEnabled || saddleStitchEnabled;
+				//              }
+				if (type==EmbosserType.INDEX_BASIC_D_V2) {
+					zFoldingEnabled = zFoldingEnabled && duplexEnabled;
+				}
+			} catch (ClassCastException e) {
+				throw new IllegalArgumentException("Unsupported value for duplex.");
+			}
+		} else {
+			super.setFeature(key, value);
+		}
+	}
 
-    @Override
-    public PrintPage getPrintPage(PageFormat pageFormat) {
-        PrintMode mode = saddleStitchEnabled?PrintMode.MAGAZINE:PrintMode.REGULAR;
-        PrintDirection direction = getPrintDirection();
-        return new PrintPage(pageFormat, direction, mode);
-    }
+	@Override
+	public Object getFeature(String key) {
 
-    @Override
-    public Area getPrintableArea(PageFormat pageFormat) {
+		if (EmbosserFeatures.NUMBER_OF_COPIES.equals(key) && maxNumberOfCopies > 1) {
+			return numberOfCopies;
+		} else if (EmbosserFeatures.SADDLE_STITCH.equals(key) && supportsPrintMode(PrintMode.MAGAZINE)) {
+			return saddleStitchEnabled;
+		} else if (EmbosserFeatures.Z_FOLDING.equals(key) && supportsZFolding()) {
+			return zFoldingEnabled;
+		} else if (EmbosserFeatures.DUPLEX.equals(key) && supportsDuplex()) {
+			return duplexEnabled;
+		} else {
+			return super.getFeature(key);
+		}
+	}
 
-        Area maxArea = getPrintArea(pageFormat);
+	@Override
+	public PrintPage getPrintPage(PageFormat pageFormat) {
+		PrintMode mode = saddleStitchEnabled?PrintMode.MAGAZINE:PrintMode.REGULAR;
+		PrintDirection direction = getPrintDirection();
+		return new PrintPage(pageFormat, direction, mode);
+	}
 
-        double cellWidth = getCellWidth();
-        double cellHeight = getCellHeight();
-        
-     /* marginInner =  Math.min(maxMarginInner,  Math.max(minMarginInner,  marginInner));
+	@Override
+	public Area getPrintableArea(PageFormat pageFormat) {
+
+		Area maxArea = getPrintArea(pageFormat);
+
+		double cellWidth = getCellWidth();
+		double cellHeight = getCellHeight();
+
+		/* marginInner =  Math.min(maxMarginInner,  Math.max(minMarginInner,  marginInner));
         marginOuter =  Math.min(maxMarginOuter,  Math.max(minMarginOuter,  marginOuter));
         marginTop =    Math.min(maxMarginTop,    Math.max(minMarginTop,    marginTop));
         marginBottom = Math.min(maxMarginBottom, Math.max(minMarginBottom, marginBottom)); */
 
-        return new Area(maxArea.getWidth() - (marginInner + marginOuter) * cellWidth,
-                        maxArea.getHeight() - (marginTop + marginBottom) * cellHeight,
-                        maxArea.getOffsetX() + marginInner * cellWidth,
-                        maxArea.getOffsetY() + marginTop * cellHeight);
-    }
+		return new Area(maxArea.getWidth() - (marginInner + marginOuter) * cellWidth,
+				maxArea.getHeight() - (marginTop + marginBottom) * cellHeight,
+				maxArea.getOffsetX() + marginInner * cellWidth,
+				maxArea.getOffsetY() + marginTop * cellHeight);
+	}
 
-    protected Area getPrintArea(PageFormat pageFormat) {
+	protected Area getPrintArea(PageFormat pageFormat) {
 
-        PrintPage printPage = getPrintPage(pageFormat);
+		PrintPage printPage = getPrintPage(pageFormat);
 
-        double cellWidth = getCellWidth();
-        double cellHeight = getCellHeight();
-        double lengthAcrossFeed = printPage.getLengthAcrossFeed().asMillimeter();
+		double cellWidth = getCellWidth();
+		double cellHeight = getCellHeight();
+		double lengthAcrossFeed = printPage.getLengthAcrossFeed().asMillimeter();
 
-        double printablePageWidth = printPage.getWidth();
-        double printablePageHeight = printPage.getHeight();
+		double printablePageWidth = printPage.getWidth();
+		double printablePageHeight = printPage.getHeight();
 
-        switch (type) {
-            case INDEX_4X4_PRO_V2:
-                printablePageHeight = Math.min(lengthAcrossFeed, 248.5);
-                break;
-            case INDEX_BASIC_D_V4:
-                printablePageWidth = Math.min(lengthAcrossFeed, 301.152);
-                break;
-            case INDEX_EVEREST_D_V2:
-            case INDEX_EVEREST_D_V3:
-            case INDEX_BASIC_S_V2:
-            case INDEX_BASIC_D_V2:
-            case INDEX_BASIC_S_V3:
-            case INDEX_BASIC_D_V3:
-            case INDEX_4WAVES_PRO_V3:
-                printablePageWidth = Math.min(lengthAcrossFeed, 248.5);
-                break;
-			default:
-				break;
-        }
+		switch (type) {
+		case INDEX_4X4_PRO_V2:
+			printablePageHeight = Math.min(lengthAcrossFeed, 248.5);
+			break;
+		case INDEX_BASIC_D_V4:
+			printablePageWidth = Math.min(lengthAcrossFeed, 301.152);
+			break;
+		case INDEX_EVEREST_D_V2:
+		case INDEX_EVEREST_D_V3:
+		case INDEX_BASIC_S_V2:
+		case INDEX_BASIC_D_V2:
+		case INDEX_BASIC_S_V3:
+		case INDEX_BASIC_D_V3:
+		case INDEX_4WAVES_PRO_V3:
+			printablePageWidth = Math.min(lengthAcrossFeed, 248.5);
+			break;
+		default:
+			break;
+		}
 
-        printablePageWidth  = Math.min(printablePageWidth,  maxCellsInWidth  * cellWidth);
-        printablePageHeight = Math.min(printablePageHeight, maxLinesInHeight * cellHeight);
+		printablePageWidth  = Math.min(printablePageWidth,  maxCellsInWidth  * cellWidth);
+		printablePageHeight = Math.min(printablePageHeight, maxLinesInHeight * cellHeight);
 
-        double unprintableInner = 0;
-        double unprintableTop = 0;
+		double unprintableInner = 0;
+		double unprintableTop = 0;
 
-        switch (type) {
-            case INDEX_BASIC_S_V3:
-            case INDEX_BASIC_D_V3:
-                unprintableInner = Math.max(0, lengthAcrossFeed - 276.4);
-                break;
-            case INDEX_EVEREST_D_V3:
-                unprintableInner = Math.max(0, lengthAcrossFeed - 272.75);
-                break;
-			default:
-				break;
-        }
+		switch (type) {
+		case INDEX_BASIC_S_V3:
+		case INDEX_BASIC_D_V3:
+			unprintableInner = Math.max(0, lengthAcrossFeed - 276.4);
+			break;
+		case INDEX_EVEREST_D_V3:
+			unprintableInner = Math.max(0, lengthAcrossFeed - 272.75);
+			break;
+		default:
+			break;
+		}
 
-        return new Area(printablePageWidth, printablePageHeight, unprintableInner, unprintableTop);
-    }
+		return new Area(printablePageWidth, printablePageHeight, unprintableInner, unprintableTop);
+	}
 }

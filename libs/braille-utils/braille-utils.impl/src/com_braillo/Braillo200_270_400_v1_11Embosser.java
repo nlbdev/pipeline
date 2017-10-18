@@ -67,7 +67,7 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 		}
 		return true;
 	}
-	
+
 	public Braillo200_270_400_v1_11Embosser(TableCatalogService service, FactoryProperties props) {
 		super(service, props);
 	}
@@ -82,15 +82,15 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 			EmbosserWriterProperties ep = new SimpleEmbosserProperties(
 					Math.min(EmbosserTools.getWidth(printPage, getCellWidth()), 42),
 					EmbosserTools.getHeight(printPage, getCellHeight()))
-				.supportsDuplex(true)
-				.supportsAligning(true);
+					.supportsDuplex(true)
+					.supportsAligning(true);
 			ConfigurableEmbosser.Builder b = new ConfigurableEmbosser.Builder(os, tc.newBrailleConverter())
-				.breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
-				.padNewline(ConfigurableEmbosser.Padding.NONE)
-				.embosserProperties(ep)
-				.header(getBrailloHeader(ep.getMaxWidth(), printPage))
-				.fillSheet(true)
-				.autoLineFeedOnEmptyPage(true);
+					.breaks(new StandardLineBreaks(StandardLineBreaks.Type.DOS))
+					.padNewline(ConfigurableEmbosser.Padding.NONE)
+					.embosserProperties(ep)
+					.header(getBrailloHeader(ep.getMaxWidth(), printPage))
+					.fillSheet(true)
+					.autoLineFeedOnEmptyPage(true);
 			return b.build();
 		} catch (EmbosserFactoryException e) {
 			throw new IllegalArgumentException(e);
@@ -112,7 +112,7 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 		}
 		throw new IllegalArgumentException("Embosser does not support this feature.");
 	}
-	
+
 	// B200, B270, B400
 	// Supported paper width (chars): 27 <= width <= 42
 	// Supported paper height (inches): 10 <= height <= 14
@@ -127,31 +127,35 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 			throw new UnsupportedPaperException("Paper too narrow or short: " + width + " chars x " + height / 2d + " inches.");
 		}
 		return new byte[] {
-			0x1b, 'E',					// Normal form feed
-			0x1b, '6',					// 6 dot
-			0x1b, 0x1F,	(byte)Integer.toHexString(width-27).toUpperCase().charAt(0),
-										// Line length
-			0x1b, 0x1E,	(byte)(height-20+48),
-										// Sheet length
-			0x1b, 'A',					// Single line spacing
+				0x1b, 'E',					// Normal form feed
+				0x1b, '6',					// 6 dot
+				0x1b, 0x1F,	(byte)Integer.toHexString(width-27).toUpperCase().charAt(0),
+				// Line length
+				0x1b, 0x1E,	(byte)(height-20+48),
+				// Sheet length
+				0x1b, 'A',					// Single line spacing
 		};
 	}
-	
-    public boolean supports8dot() {
-        return false;
-    }
 
-    public boolean supportsDuplex() {
-        return true;
-    }
+	@Override
+	public boolean supports8dot() {
+		return false;
+	}
 
-    public boolean supportsAligning() {
-        return true;
-    }
+	@Override
+	public boolean supportsDuplex() {
+		return true;
+	}
 
-    public boolean supportsVolumes() {
-        return false;
-    }
+	@Override
+	public boolean supportsAligning() {
+		return true;
+	}
+
+	@Override
+	public boolean supportsVolumes() {
+		return false;
+	}
 
 	@Override
 	public Area getPrintableArea(PageFormat pageFormat) {
@@ -163,7 +167,8 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat, PrintDirection.UPRIGHT, PrintMode.REGULAR);
 	}
-	
+
+	@Override
 	public boolean supportsZFolding() {
 		return false;
 	}
@@ -173,19 +178,21 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 		return mode == PrintMode.REGULAR;
 	}
 
+	@Override
 	public boolean supportsPageFormat(PageFormat pageFormat) {
 		return pageFormat.getPageFormatType() == PageFormat.Type.TRACTOR
-		&& pageFormat.asTractorPaperFormat().getLengthAcrossFeed().asInches() >= 4
-		&& pageFormat.asTractorPaperFormat().getLengthAcrossFeed().asInches() <= 14
-		&& pageFormat.asTractorPaperFormat().getLengthAlongFeed().asInches() >= 10
-		&& pageFormat.asTractorPaperFormat().getLengthAlongFeed().asInches() <= 14;
+				&& pageFormat.asTractorPaperFormat().getLengthAcrossFeed().asInches() >= 4
+				&& pageFormat.asTractorPaperFormat().getLengthAcrossFeed().asInches() <= 14
+				&& pageFormat.asTractorPaperFormat().getLengthAlongFeed().asInches() >= 10
+				&& pageFormat.asTractorPaperFormat().getLengthAlongFeed().asInches() <= 14;
 	}
 
+	@Override
 	public boolean supportsPaper(Paper paper) {
 		return paper.getType() == Paper.Type.TRACTOR
-		&& paper.asTractorPaper().getLengthAcrossFeed().asInches() >= 4
-		&& paper.asTractorPaper().getLengthAcrossFeed().asInches() <= 14
-		&& paper.asTractorPaper().getLengthAlongFeed().asInches() >= 10
-		&& paper.asTractorPaper().getLengthAlongFeed().asInches() <= 14;
+				&& paper.asTractorPaper().getLengthAcrossFeed().asInches() >= 4
+				&& paper.asTractorPaper().getLengthAcrossFeed().asInches() <= 14
+				&& paper.asTractorPaper().getLengthAlongFeed().asInches() >= 10
+				&& paper.asTractorPaper().getLengthAlongFeed().asInches() <= 14;
 	}
 }

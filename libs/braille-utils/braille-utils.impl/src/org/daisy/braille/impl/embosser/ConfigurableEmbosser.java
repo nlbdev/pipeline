@@ -41,7 +41,7 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 	private final byte[] footer;
 	private final boolean fillSheet;
 	private final boolean lineFeedOnEmptySheet;
-	
+
 	/**
 	 * Provides a builder for ConfigurableEmbosser
 	 * @author Joel Håkansson
@@ -50,17 +50,17 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 		// required params
 		private OutputStream os;
 		private BrailleConverter bt;
-		
+
 		// optional params
 		private LineBreaks breaks = new StandardLineBreaks(StandardLineBreaks.Type.DEFAULT);
-                private PageBreaks pagebreaks = new StandardPageBreaks();
+		private PageBreaks pagebreaks = new StandardPageBreaks();
 		private Padding padNewline = Padding.values()[0];
 		private byte[] header = new byte[0];
 		private byte[] footer = new byte[0];
 		private boolean fillSheet = false;
 		private boolean lineFeedOnEmptySheet = false;
 		EmbosserWriterProperties props = new SimpleEmbosserProperties(Integer.MAX_VALUE, Integer.MAX_VALUE);
-		
+
 		/**
 		 * Creates a new builder with the suppled output stream and braille converter.
 		 * @param os the output stream to use
@@ -70,7 +70,7 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 			this.os = os;
 			this.bt = bt;
 		}
-		
+
 		/**
 		 * Sets the embosser properties for this object.
 		 * @param props the embosser properties to use
@@ -99,7 +99,7 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 		public Builder breaks(LineBreaks value) {
 			breaks = value; return this;
 		}
-                /**
+		/**
 		 * Sets the page break style
 		 * @param value the page break style to use
 		 * @return returns this object
@@ -157,8 +157,8 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 			return new ConfigurableEmbosser(this);
 		}
 	}
-	
-        @Override
+
+	@Override
 	protected void formFeed() throws IOException {
 		if (lineFeedOnEmptySheet && pageIsEmpty()) {
 			lineFeed();
@@ -169,7 +169,7 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 	private ConfigurableEmbosser(Builder builder) {
 		bf = builder.bt;
 		breaks = builder.breaks;
-                pagebreaks = builder.pagebreaks;
+		pagebreaks = builder.pagebreaks;
 		padNewline = builder.padNewline;
 		header = builder.header;
 		footer = builder.footer;
@@ -179,38 +179,38 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 		init(builder.props);
 	}
 
-        @Override
+	@Override
 	protected void add(byte b) throws IOException {
 		os.write(b);
 	}
-	
-        @Override
+
+	@Override
 	protected void addAll(byte[] bytes)  throws IOException {
 		os.write(bytes);
 	}
 
-        @Override
+	@Override
 	public BrailleConverter getTable() {
 		return bf;
 	}
 
-        @Override
+	@Override
 	public LineBreaks getLinebreakStyle() {
 		return breaks;
 	}
-	
-        @Override
+
+	@Override
 	public Padding getPaddingStyle() {
 		return padNewline;
 	}
-	
-        @Override
+
+	@Override
 	public void open(boolean duplex) throws IOException {
 		super.open(duplex);
 		os.write(header);
 	}
-	
-        @Override
+
+	@Override
 	public void close() throws IOException {
 		if (fillSheet && supportsDuplex() && currentPage() % 2 == 0) {
 			formFeed();

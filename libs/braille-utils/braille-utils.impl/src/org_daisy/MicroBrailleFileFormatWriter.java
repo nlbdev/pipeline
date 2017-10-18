@@ -33,87 +33,87 @@ import org_daisy.BrailleEditorsTableProvider.TableType;
  */
 public class MicroBrailleFileFormatWriter extends AbstractEmbosserWriter {
 
-    private OutputStream os = null;
-    private BrailleConverter table = null;
-    private LineBreaks breaks;
-    private Padding padding;
-    private byte[] header;
+	private OutputStream os = null;
+	private BrailleConverter table = null;
+	private LineBreaks breaks;
+	private Padding padding;
+	private byte[] header;
 
-    
-    public MicroBrailleFileFormatWriter(OutputStream os) {
 
-        int cols = 25; // ??? examine PEF file => Contract?
-        int rows = 40; // ??? examine PEF file
+	public MicroBrailleFileFormatWriter(OutputStream os) {
 
-        this.os = os;
-        header = ("$" + rows).getBytes();
-        breaks = new StandardLineBreaks(StandardLineBreaks.Type.DOS);
-        pagebreaks = new NoPageBreaks();
-        padding = Padding.AFTER;
-        table = new BrailleEditorsTableProvider().newTable(TableType.MICROBRAILLE);
+		int cols = 25; // ??? examine PEF file => Contract?
+		int rows = 40; // ??? examine PEF file
 
-        SimpleEmbosserProperties props = new SimpleEmbosserProperties(cols, rows)
-                       .supportsDuplex(false)
-                       .supports8dot(false)
-                       .supportsVolumes(false)
-                       .supportsAligning(false);
-        init(props);
-    }
+		this.os = os;
+		header = ("$" + rows).getBytes();
+		breaks = new StandardLineBreaks(StandardLineBreaks.Type.DOS);
+		pagebreaks = new NoPageBreaks();
+		padding = Padding.AFTER;
+		table = new BrailleEditorsTableProvider().newTable(TableType.MICROBRAILLE);
 
-    @Override
-    public LineBreaks getLinebreakStyle() {
-        return breaks;
-    }
+		SimpleEmbosserProperties props = new SimpleEmbosserProperties(cols, rows)
+				.supportsDuplex(false)
+				.supports8dot(false)
+				.supportsVolumes(false)
+				.supportsAligning(false);
+		init(props);
+	}
 
-    @Override
-    public Padding getPaddingStyle() {
-        return padding;
-    }
+	@Override
+	public LineBreaks getLinebreakStyle() {
+		return breaks;
+	}
 
-    @Override
-    public BrailleConverter getTable() {
-        return table;
-    }
+	@Override
+	public Padding getPaddingStyle() {
+		return padding;
+	}
 
-    @Override
-    protected void add(byte b) throws IOException {
-        os.write(b);
-    }
+	@Override
+	public BrailleConverter getTable() {
+		return table;
+	}
 
-    @Override
-    protected void addAll(byte[] bytes) throws IOException {
-        os.write(bytes);
-    }
+	@Override
+	protected void add(byte b) throws IOException {
+		os.write(b);
+	}
 
-    @Override
-    protected void formFeed() throws IOException {
-        super.formFeed();
-        if (currentPage()==1) {
-            byte[] pageBreak = "----|---|---------------------------|+-".getBytes();
-            if (getMaxWidth()<40) {
-                pageBreak[getMaxWidth()-1] = '>';
-            }
-            addAll(pageBreak);
-        }
-        addAll(getLinebreakStyle().getString().getBytes());
-    }
+	@Override
+	protected void addAll(byte[] bytes) throws IOException {
+		os.write(bytes);
+	}
 
-    @Override
-    public void open(boolean duplex)
-              throws IOException {
+	@Override
+	protected void formFeed() throws IOException {
+		super.formFeed();
+		if (currentPage()==1) {
+			byte[] pageBreak = "----|---|---------------------------|+-".getBytes();
+			if (getMaxWidth()<40) {
+				pageBreak[getMaxWidth()-1] = '>';
+			}
+			addAll(pageBreak);
+		}
+		addAll(getLinebreakStyle().getString().getBytes());
+	}
 
-        super.open(duplex);
-        addAll(header);
-        addAll(getLinebreakStyle().getString().getBytes());
-    }
+	@Override
+	public void open(boolean duplex)
+			throws IOException {
 
-    @Override
-    public void close() throws IOException {
-        os.close();
-        super.close();
-    }
+		super.open(duplex);
+		addAll(header);
+		addAll(getLinebreakStyle().getString().getBytes());
+	}
 
-    @Override
+	@Override
+	public void close() throws IOException {
+		os.close();
+		super.close();
+	}
+
+	@Override
 	public boolean supportsZFolding() {
 		// TODO Auto-generated method stub
 		return false;

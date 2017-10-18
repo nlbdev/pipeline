@@ -34,14 +34,14 @@ public class ISO216PaperProvider implements PaperProvider {
 	enum PaperSize {
 		A3,
 		A4,
-                A5,
-                B3,
-                B4,
-                B5
+		A5,
+		B3,
+		B4,
+		B5
 	};
 
 	private final Collection<Paper> papers;
-	
+
 	public ISO216PaperProvider() {
 		ArrayList<Paper> tmp = new ArrayList<Paper>();
 		tmp.add(new SheetPaper("A3", "297 mm x 420 mm", PaperSize.A3, 
@@ -50,19 +50,19 @@ public class ISO216PaperProvider implements PaperProvider {
 		tmp.add(new SheetPaper("A4", "210 mm x 297 mm", PaperSize.A4, 
 				Length.newMillimeterValue(210d),
 				Length.newMillimeterValue(297d)));
-        tmp.add(new SheetPaper("A5", "148 mm x 210 mm", PaperSize.A5, 
-        		Length.newMillimeterValue(148d), 
-        		Length.newMillimeterValue(210d)));
-        tmp.add(new SheetPaper("B3", "353 mm x 500 mm", PaperSize.B3, 
-        		Length.newMillimeterValue(353d), 
-        		Length.newMillimeterValue(500d)));
-        tmp.add(new SheetPaper("B4", "250 mm x 353 mm", PaperSize.B4, 
-        		Length.newMillimeterValue(250d), 
-        		Length.newMillimeterValue(353d)));
-        tmp.add(new SheetPaper("B5", "176 mm x 250 mm", PaperSize.B5, 
-        		Length.newMillimeterValue(176d), 
-        		Length.newMillimeterValue(250d)));
-        this.papers = Collections.unmodifiableCollection(tmp);
+		tmp.add(new SheetPaper("A5", "148 mm x 210 mm", PaperSize.A5, 
+				Length.newMillimeterValue(148d), 
+				Length.newMillimeterValue(210d)));
+		tmp.add(new SheetPaper("B3", "353 mm x 500 mm", PaperSize.B3, 
+				Length.newMillimeterValue(353d), 
+				Length.newMillimeterValue(500d)));
+		tmp.add(new SheetPaper("B4", "250 mm x 353 mm", PaperSize.B4, 
+				Length.newMillimeterValue(250d), 
+				Length.newMillimeterValue(353d)));
+		tmp.add(new SheetPaper("B5", "176 mm x 250 mm", PaperSize.B5, 
+				Length.newMillimeterValue(176d), 
+				Length.newMillimeterValue(250d)));
+		this.papers = Collections.unmodifiableCollection(tmp);
 	}
 
 	@Override

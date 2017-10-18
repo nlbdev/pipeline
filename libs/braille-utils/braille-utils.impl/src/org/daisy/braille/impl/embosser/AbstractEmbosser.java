@@ -62,7 +62,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 		defaultTable = service.newTable(DefaultTableProvider.class.getCanonicalName() + ".TableType.EN_US");
 		setTable = defaultTable;
 	}
-	
+
 	/**
 	 * Set cell width, in millimeters
 	 * @param val the width, in millimeters
@@ -70,7 +70,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 	protected void setCellWidth(double val) {
 		cellWidth = val;
 	}
-	
+
 	/**
 	 * Set cell height, in millimeters
 	 * @param val the height, in millimeters
@@ -78,7 +78,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 	protected void setCellHeight(double val) {
 		cellHeight = val;
 	}
-	
+
 	/**
 	 * Gets the page format
 	 * @return returns the page format
@@ -86,7 +86,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 	protected PageFormat getPageFormat() {
 		return pageFormat;
 	}
-	
+
 	/**
 	 * Gets cell width, in millimeters
 	 * @return returns cell width, in millimeters
@@ -94,7 +94,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 	public double getCellWidth() {
 		return cellWidth;
 	}
-	
+
 	/**
 	 * Gets cell height, in millimeters
 	 * @return returns cell height, in millimeters
@@ -119,6 +119,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 		return new Area(printPage.getWidth(), printPage.getHeight(), 0, 0);
 	}
 
+	@Override
 	public Object getFeature(String key) {
 		if (EmbosserFeatures.PAGE_FORMAT.equals(key)) {
 			return pageFormat;
@@ -133,15 +134,16 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 		return props.get(key);
 	}
 
-    /**
-     * Associates the specified value with the specified key in this map.
-     * If the map previously contained a mapping for this key, the old
-     * value is replaced.
-     *
-     * @param key key with which the specified value is to be associated.
-     * @param value value to be associated with the specified key.
-     */
- 	public void setFeature(String key, Object value) {
+	/**
+	 * Associates the specified value with the specified key in this map.
+	 * If the map previously contained a mapping for this key, the old
+	 * value is replaced.
+	 *
+	 * @param key key with which the specified value is to be associated.
+	 * @param value value to be associated with the specified key.
+	 */
+	@Override
+	public void setFeature(String key, Object value) {
 		if (EmbosserFeatures.PAGE_FORMAT.equals(key)) {
 			try {
 				if (!supportsPageFormat((PageFormat)value)) {
@@ -156,7 +158,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 			if (value == null) {
 				throw new IllegalArgumentException("Unsupported value for table: value = null");
 			}
-                        try {
+			try {
 				t = (Table)value;
 			} catch (ClassCastException e) {
 				t = tableCatalogService.newTable(value.toString());
@@ -164,7 +166,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 					throw new IllegalArgumentException("Unsupported value for table: '" + value + "'");
 				}
 			}
-                        setTable = t;
+			setTable = t;
 		}
 		else {
 			if (EmbosserFeatures.CELL_WIDTH.equals(key) && !"6".equals(value.toString())) {
@@ -185,8 +187,8 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 			settings.put(key, value.toString());
 		}
 	}
- 	
- 	@Override
+
+	@Override
 	public boolean supportsTable(Table table) {
 		return getTableFilter().accept(table);
 	}

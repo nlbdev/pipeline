@@ -20,7 +20,7 @@ public class Braillo440SW4PEmbosserTest extends AbstractTestBraillo440Embosser {
 		emb.setFeature(EmbosserFeatures.SADDLE_STITCH, true);
 		emb.setFeature(EmbosserFeatures.PAGE_FORMAT, fa44_4p);
 	}
-	
+
 	@Test
 	public void testEmbossing() throws IOException, ParserConfigurationException, SAXException, UnsupportedWidthException, TransformerException {
 		performTest("resource-files/test-input-1.pef", "resource-files/test-input-1_braillo440SW_4p_us_fa44-", ".prn", 3);

@@ -49,7 +49,7 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 	private boolean isOpen;
 	private boolean isClosed;
 	private Contract.Builder contractBuilder;
-	
+
 	public BufferedEmbosserWriter(EmbosserWriter writer) {
 		this.writer = writer;
 		this.isOpen = false;
@@ -86,11 +86,13 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 	public boolean supportsAligning() {
 		return writer.supportsAligning();
 	}
-	
+
+	@Override
 	public boolean supportsZFolding() {
 		return writer.supportsZFolding();
 	}
 
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return writer.supportsPrintMode(mode);
 	}
@@ -175,38 +177,38 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 	private void flush() throws IOException {
 		for (EmbosserWriterEvent event : events) {
 			switch (event.getEventType()) {
-				case OPEN_EVENT:
-					try {
-						writer.open(((OpenEvent)event).getDuplex(), contractBuilder.build());
-					} catch (ContractNotSupportedException e) {
-						IOException ex =new IOException("Contract not supported.");
-						ex.initCause(e);
-						throw ex;
-					}
-					break;
-				case NEW_LINE_EVENT:
-					writer.newLine();
-					break;
-				case NEW_PAGE_EVENT:
-					writer.newPage();
-					break;
-				case NEW_SECTION_AND_PAGE_EVENT: 
-					writer.newSectionAndPage(((NewSectionAndPageEvent)event).getDuplex());
-					break;
-				case NEW_VOLUME_SECTION_AND_PAGE_EVENT:
-					writer.newVolumeSectionAndPage(((NewVolumeSectionAndPageEvent)event).getDuplex());
-					break;
-				case WRITE_EVENT:
-					writer.write(((WriteEvent)event).getBraille());
-					break;
-				case SET_ROWGAP_EVENT:
-					writer.setRowGap(((SetRowGapEvent)event).getRowGap());
-					break;
-				case CLOSE_EVENT:
-					writer.close();
-					break;
-				default:
-					throw new RuntimeException("Unknown event: " + event.getEventType());
+			case OPEN_EVENT:
+				try {
+					writer.open(((OpenEvent)event).getDuplex(), contractBuilder.build());
+				} catch (ContractNotSupportedException e) {
+					IOException ex =new IOException("Contract not supported.");
+					ex.initCause(e);
+					throw ex;
+				}
+				break;
+			case NEW_LINE_EVENT:
+				writer.newLine();
+				break;
+			case NEW_PAGE_EVENT:
+				writer.newPage();
+				break;
+			case NEW_SECTION_AND_PAGE_EVENT: 
+				writer.newSectionAndPage(((NewSectionAndPageEvent)event).getDuplex());
+				break;
+			case NEW_VOLUME_SECTION_AND_PAGE_EVENT:
+				writer.newVolumeSectionAndPage(((NewVolumeSectionAndPageEvent)event).getDuplex());
+				break;
+			case WRITE_EVENT:
+				writer.write(((WriteEvent)event).getBraille());
+				break;
+			case SET_ROWGAP_EVENT:
+				writer.setRowGap(((SetRowGapEvent)event).getRowGap());
+				break;
+			case CLOSE_EVENT:
+				writer.close();
+				break;
+			default:
+				throw new RuntimeException("Unknown event: " + event.getEventType());
 			}
 		}
 	}

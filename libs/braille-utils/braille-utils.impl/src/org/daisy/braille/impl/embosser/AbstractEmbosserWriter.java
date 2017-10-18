@@ -62,7 +62,7 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 	private int charsOnRow;
 	private int rowsOnPage;
 	private EmbosserWriterProperties props;
-    protected PageBreaks pagebreaks = new StandardPageBreaks();
+	protected PageBreaks pagebreaks = new StandardPageBreaks();
 
 	/**
 	 * Gets the line break style for the EmbosserWriter
@@ -98,12 +98,14 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		isClosed = false;
 	}
 
+	@Override
 	public void newLine() throws IOException {
 		for (int i=0; i<((rowgap / 4)+1); i++) {
 			lineFeed();
 		}
 	}
 
+	@Override
 	public void setRowGap(int value) {
 		if (value<0) {
 			throw new IllegalArgumentException("Non negative integer expected.");
@@ -112,10 +114,12 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		}
 	}
 
+	@Override
 	public int getRowGap() {
 		return rowgap;
 	}
 
+	@Override
 	public void open(boolean duplex) throws IOException {
 		try {
 			open(duplex, new Contract.Builder().build());
@@ -126,6 +130,7 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		}
 	}
 
+	@Override
 	public void open(boolean duplex, Contract contract) throws IOException, ContractNotSupportedException {
 		charsOnRow = 0;
 		rowsOnPage = 0;
@@ -135,7 +140,7 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		currentDuplex = duplex;
 		// Contract does not affect the implementation here, subclasses should override this method,
 		// to make use of contract information
-		
+
 	}
 
 	/**
@@ -154,11 +159,13 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		return (charsOnRow+rowsOnPage)==0;
 	}
 
+	@Override
 	public void close() throws IOException {
 		isClosed=true;
 		isOpen=false;
 	}
 
+	@Override
 	public void write(String braille) throws IOException {
 		charsOnRow += braille.length();
 		if (charsOnRow>props.getMaxWidth()) {
@@ -187,19 +194,19 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 			throw new IOException("The maximum number of rows on a page was exceeded (page is too short)");
 		}
 		switch (getPaddingStyle()) {
-			case BEFORE:
-				lineFeed();
-			case NONE:
-				addAll(getPagebreakStyle().getString().getBytes());
-				break;
-			case BOTH:
-				lineFeed();
-			case AFTER:
-				addAll(getPagebreakStyle().getString().getBytes());
-				lineFeed();
-				break;
+		case BEFORE:
+			lineFeed();
+		case NONE:
+			addAll(getPagebreakStyle().getString().getBytes());
+			break;
+		case BOTH:
+			lineFeed();
+		case AFTER:
+			addAll(getPagebreakStyle().getString().getBytes());
+			lineFeed();
+			break;
 
-                
+
 
 		}
 		currentPage++;
@@ -207,10 +214,11 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		charsOnRow = 0;
 	}
 
-        protected PageBreaks getPagebreakStyle() {
-            return pagebreaks;
-        }
+	protected PageBreaks getPagebreakStyle() {
+		return pagebreaks;
+	}
 
+	@Override
 	public void newPage() throws IOException {
 		if (props.supportsDuplex() && !currentDuplex && (currentPage % 2)==1) {
 			formFeed();
@@ -218,6 +226,7 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		formFeed();
 	}
 
+	@Override
 	public void newSectionAndPage(boolean duplex) throws IOException {
 		if (props.supportsDuplex() && (currentPage % 2)==1) {
 			formFeed();
@@ -226,50 +235,61 @@ public abstract class AbstractEmbosserWriter implements EmbosserWriter {
 		currentDuplex = duplex;
 	}
 
+	@Override
 	public void newVolumeSectionAndPage(boolean duplex) throws IOException {
 		newSectionAndPage(duplex);
 	}
 
+	@Override
 	public boolean isOpen() {
 		return isOpen;
 	}
 
+	@Override
 	public boolean isClosed() {
 		return isClosed;
 	}
 
+	@Override
 	public int getMaxHeight() {
 		return props.getMaxHeight();
 	}
 
+	@Override
 	public int getMaxWidth() {
 		return props.getMaxWidth();
 	}
 
+	@Override
 	public boolean supports8dot() {
 		return props.supports8dot();
 	}
 
+	@Override
 	public boolean supportsAligning() {
 		return props.supportsAligning();
 	}
 
+	@Override
 	public boolean supportsDuplex() {
 		return props.supportsDuplex();
 	}
 
+	@Override
 	public boolean supportsVolumes() {
 		return props.supportsVolumes();
 	}
-	
+
+	@Override
 	public boolean supportsZFolding() {
 		return props.supportsZFolding();
 	}
-	
+
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return props.supportsPrintMode(mode);
 	}
-	
+
 
 
 }

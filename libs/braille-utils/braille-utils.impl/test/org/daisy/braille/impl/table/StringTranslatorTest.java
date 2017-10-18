@@ -5,7 +5,7 @@ import org.daisy.braille.impl.table.StringTranslator.MatchMode;
 import org.junit.Test;
 
 public class StringTranslatorTest {
-	
+
 	public StringTranslator getTranslator() {
 		StringTranslator t = new StringTranslator();
 		t.addToken("a", "x");
@@ -19,7 +19,7 @@ public class StringTranslatorTest {
 		StringTranslator t = getTranslator();
 		t.addToken("ab", "å");
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testUnknownTokens() {
 		StringTranslator t = getTranslator();
@@ -40,7 +40,7 @@ public class StringTranslatorTest {
 		assertEquals("Assert that greedy translation is correct", "yz", t.translate("ababa"));
 		assertEquals("Assert that greedy translation is correct", "xxzy", t.translate("aaabaab"));
 	}
-	
+
 	@Test
 	public void testReluctantTranslation() {
 		StringTranslator t = getTranslator();

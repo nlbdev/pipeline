@@ -10,26 +10,26 @@ import org.daisy.braille.api.table.BrailleConverter;
 import org.junit.Test;
 
 public class EmbosserTableProviderTest {
-	
+
 	/*
 	@Test
 	public void testFeatureReplacement() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
 		assertEquals('\u2800', bt.getFeature("replacement"));
 	}
-	
+
 	@Test
 	public void testFeatureFallback() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
 		assertEquals(EightDotFallbackMethod.MASK, bt.getFeature("fallback"));
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testGetUnknownFeature() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
 		bt.getFeature("unknown-feature");
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testSetUnknownFeature() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
@@ -41,7 +41,7 @@ public class EmbosserTableProviderTest {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
 		assertEquals("Assert that all tables have tests by counting the list length", 7, bt.list().size());
 	}*/
-/*
+	/*
 	@Test
 	public void testTableEN_US() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
@@ -55,9 +55,9 @@ public class EmbosserTableProviderTest {
 		assertTrue("Assert that table does not support 8-dot", !ta.supportsEightDot());
 		assertEquals("Assert that UTF-8 is the preferred charset", Charset.forName("UTF-8"), ta.getPreferredCharset());
 	}*/
-	
+
 	//TODO: more tests
-	
+
 	@Test
 	public void testTableUnicode() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();

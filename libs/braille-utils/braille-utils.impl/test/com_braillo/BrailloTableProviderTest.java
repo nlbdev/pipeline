@@ -17,31 +17,31 @@ public class BrailloTableProviderTest {
 		//bt = new BrailloTableProvider();
 		assertEquals('\u2800', bt.getFeature("replacement"));
 	}
-	
+
 	@Test
 	public void testFeatureFallback() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
 		assertEquals(EightDotFallbackMethod.MASK, bt.getFeature("fallback"));
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testGetUnknownFeature() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
 		bt.getFeature("unknown-feature");
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testSetUnknownFeature() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
 		bt.setFeature("unknown-feature", null);
 	}*/
-	
+
 	@Test
 	public void testListLength() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
 		assertEquals("Assert that all tables have tests by counting the list length", 5, bt.list().size());
 	}
-	
+
 	@Test
 	public void testTable6Dot_001_00() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
@@ -55,7 +55,7 @@ public class BrailloTableProviderTest {
 		assertTrue("Assert that table does not support 8-dot", !ta.supportsEightDot());
 		assertEquals("Assert that UTF-8 is the preferred charset", Charset.forName("UTF-8"), ta.getPreferredCharset());
 	}
-	
+
 	@Test
 	public void testTable6Dot_001_00Supplements() {
 		BrailloTableProvider.TableType t = BrailloTableProvider.TableType.BRAILLO_6DOT_001_00;
@@ -86,7 +86,7 @@ public class BrailloTableProviderTest {
 		assertTrue("Assert that table does not support 8-dot", !ta.supportsEightDot());
 		assertEquals("Assert that UTF-8 is the preferred charset", Charset.forName("UTF-8"), ta.getPreferredCharset());
 	}
-	
+
 	@Test
 	public void testTable6Dot_044_00() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
@@ -114,7 +114,7 @@ public class BrailloTableProviderTest {
 		assertTrue("Assert that table does not support 8-dot", !ta.supportsEightDot());
 		assertEquals("Assert that UTF-8 is the preferred charset", Charset.forName("UTF-8"), ta.getPreferredCharset());
 	}
-	
+
 	@Test
 	public void testTable6Dot_047_01() {
 		//BrailloTableProvider bt = new BrailloTableProvider();

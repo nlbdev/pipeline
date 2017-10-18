@@ -11,33 +11,33 @@ import org.junit.Test;
 
 public class IndexTableProviderTest {
 	private IndexTableProvider bt = new IndexTableProvider(); 
-	
+
 	/*
 	@Test
 	public void testFeatureReplacement() {
 		assertEquals('\u2800', bt.getFeature("replacement"));
 	}
-	
+
 	@Test
 	public void testFeatureFallback() {
 		assertEquals(EightDotFallbackMethod.MASK, bt.getFeature("fallback"));
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testGetUnknownFeature() {
 		bt.getFeature("unknown-feature");
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testSetUnknownFeature() {
 		bt.setFeature("unknown-feature", null);
 	}*/
-	
+
 	@Test
 	public void testListLength() {
 		assertEquals("Assert that all tables have tests by counting the list length", 1, bt.list().size());
 	}
-	
+
 	@Test
 	public void testTransparent6dotTable() {
 		String input = BrailleConstants.BRAILLE_PATTERNS_64;

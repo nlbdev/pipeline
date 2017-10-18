@@ -65,7 +65,7 @@ public class BrailleEditorsTableProvider implements TableProvider {
 	};
 
 	private final Map<String, FactoryProperties> tables;
-	
+
 	public BrailleEditorsTableProvider() {
 		tables = new HashMap<String, FactoryProperties>(); 
 		addTable(TableType.MICROBRAILLE);
@@ -87,6 +87,7 @@ public class BrailleEditorsTableProvider implements TableProvider {
 		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {

@@ -56,7 +56,7 @@ public class StringTranslator {
 		this.currentMax = 0;
 		this.tokenCount = 0;
 	}
-	
+
 	/**
 	 * Creates a new Translator with match mode set to "greedy"
 	 */
@@ -101,7 +101,7 @@ public class StringTranslator {
 	public void setMatchMode(MatchMode mode) {
 		this.mode = mode;
 	}
-	
+
 	/**
 	 * Gets the number of tokens in the translator
 	 * @return returns the number of tokens
@@ -109,8 +109,8 @@ public class StringTranslator {
 	public int getTokenCount() {
 		return tokenCount;
 	}
-	
-	
+
+
 	/**
 	 * Translates the given string with the specified match mode
 	 * @param str the string to translate
@@ -124,14 +124,14 @@ public class StringTranslator {
 			return "";
 		}
 		switch (mode) {
-			case GREEDY:
-				ret = translateGreedy(str);
-				break;
-			case RELUCTANT:
-				ret = translateReluctant(str);
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown mode: " + mode);
+		case GREEDY:
+			ret = translateGreedy(str);
+			break;
+		case RELUCTANT:
+			ret = translateReluctant(str);
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown mode: " + mode);
 		}
 		if (ret==null) {
 			throw new IllegalArgumentException("String could not be translated: '" + str + "'"); 

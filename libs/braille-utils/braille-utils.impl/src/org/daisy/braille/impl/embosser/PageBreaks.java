@@ -22,7 +22,7 @@ package org.daisy.braille.impl.embosser;
  * @author Bert Frees
  */
 public interface PageBreaks {
-	
+
 	/**
 	 * Gets the string used to represent page breaks
 	 * @return returns the string used to represent page breaks

@@ -46,7 +46,7 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 	private Stack<ArrayList<Byte>> pages;
 	private VolumeWriter vw;
 	private final boolean lineFeedOnEmptySheet;
-	
+
 	/**
 	 * Provides a builder for a BufferedVolumeEmbosser
 	 * @author Joel Håkansson
@@ -57,7 +57,7 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 		private final BrailleConverter bt;
 		private final VolumeWriter vw;
 		private final EmbosserWriterProperties ep;
-		
+
 		// optional params
 		private LineBreaks breaks = new StandardLineBreaks();
 		private Padding padNewline = Padding.values()[0];
@@ -118,7 +118,7 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 		 * @return returns this object
 		 */
 		public Builder autoLineFeedOnEmptyPage(boolean value) { lineFeedOnEmptySheet = value; return this; }
-		
+
 		/**
 		 * Builds a new BufferedVolumeEmbosser based on this builders current configuration.
 		 * @return returns a new BufferedVolumeEmbosser
@@ -127,7 +127,7 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 			return new BufferedVolumeEmbosser(this);
 		}
 	}
-	
+
 	private BufferedVolumeEmbosser(Builder builder) {
 		vw = builder.vw;
 		bf = builder.bt;
@@ -137,39 +137,39 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 		pd = builder.pd;
 		init(builder.ep);
 	}
-	
-        @Override
+
+	@Override
 	public void open(boolean duplex) throws IOException {
 		super.open(duplex);
 		initVolume();
 	}
-	
+
 	private void initVolume() {
 		pages = new Stack<>();
 		pages.add(new ArrayList<Byte>());
 	}
-	
-        @Override
+
+	@Override
 	public BrailleConverter getTable() {
 		return bf;
 	}
-	
-        @Override
+
+	@Override
 	public LineBreaks getLinebreakStyle() {
 		return breaks;
 	}
-	
-        @Override
+
+	@Override
 	public Padding getPaddingStyle() {
 		return padNewline;
 	}
 
-        @Override
+	@Override
 	protected void add(byte b) {
 		pages.peek().add(b);
 	}
-	
-        @Override
+
+	@Override
 	protected void addAll(byte[] bytes) {
 		ArrayList<Byte> page = pages.peek();
 		for (byte b : bytes) {
@@ -177,22 +177,22 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 		}
 	}
 
-        @Override
+	@Override
 	protected void formFeed() throws IOException {
 		if (lineFeedOnEmptySheet && pageIsEmpty()) {
 			lineFeed();
 		}
 		super.formFeed(); // form feed characters belong to the current page
-        pages.add(new ArrayList<Byte>()); // start a new page
+		pages.add(new ArrayList<Byte>()); // start a new page
 	}
 
-        @Override
+	@Override
 	public void newVolumeSectionAndPage(boolean duplex) throws IOException {
 		super.newVolumeSectionAndPage(duplex);
 		finalizeVolume();
 		initVolume();
 	}
-	
+
 	private void finalizeVolume() throws IOException {
 		File out = File.createTempFile("emboss", ".tmp");
 		pages.pop();
@@ -207,8 +207,8 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 			out.deleteOnExit();
 		}
 	}
-	
-        @Override
+
+	@Override
 	public void close() throws IOException {
 		finalizeVolume();
 		super.close();

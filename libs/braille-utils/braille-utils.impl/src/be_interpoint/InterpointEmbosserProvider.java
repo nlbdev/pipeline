@@ -36,12 +36,12 @@ import aQute.bnd.annotation.component.Reference;
  */
 public class InterpointEmbosserProvider implements EmbosserProvider {
 
-    public static enum EmbosserType implements FactoryProperties {
-    	INTERPOINT_55("Interpoint 55", "Robust, high-quality, high-speed (2000 pages per hour) double-sided embosser with paper supply from rolls");
+	public static enum EmbosserType implements FactoryProperties {
+		INTERPOINT_55("Interpoint 55", "Robust, high-quality, high-speed (2000 pages per hour) double-sided embosser with paper supply from rolls");
 		private final String name;
 		private final String desc;
 		private final String identifier;
-    	EmbosserType (String name, String desc) {
+		EmbosserType (String name, String desc) {
 			this.name = name;
 			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
@@ -58,20 +58,21 @@ public class InterpointEmbosserProvider implements EmbosserProvider {
 		public String getDescription() {
 			return desc;
 		}
-    }
+	}
 
-    private final Map<String, FactoryProperties> embossers;
+	private final Map<String, FactoryProperties> embossers;
 	private TableCatalogService tableCatalogService = null;
-    
-    public InterpointEmbosserProvider() {
-        embossers = new HashMap<String, FactoryProperties>();
-        addEmbosser(EmbosserType.INTERPOINT_55);
-    }
-    
+
+	public InterpointEmbosserProvider() {
+		embossers = new HashMap<String, FactoryProperties>();
+		addEmbosser(EmbosserType.INTERPOINT_55);
+	}
+
 	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
 
+	@Override
 	public Embosser newFactory(String identifier) {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
@@ -82,15 +83,16 @@ public class InterpointEmbosserProvider implements EmbosserProvider {
 		}
 	}
 
-    public Collection<FactoryProperties> list() {
-        return Collections.unmodifiableCollection(embossers.values());
-    }
+	@Override
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(embossers.values());
+	}
 
 	@Reference
 	public void setTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = service;
 	}
-	
+
 	public void unsetTableCatalog(TableCatalogService service) {
 		this.tableCatalogService = null;
 	}

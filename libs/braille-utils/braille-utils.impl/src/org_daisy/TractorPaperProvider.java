@@ -38,9 +38,9 @@ public class TractorPaperProvider implements PaperProvider {
 		W240MM_X_H12INCH,
 		W280MM_X_H12INCH
 	};
-	
+
 	private final Collection<Paper> papers;
-	
+
 	public TractorPaperProvider() {
 		ArrayList<Paper> tmp = new ArrayList<Paper>();
 		tmp.add(new TractorPaper("210 mm x 10 inch", "Tractor paper: 210 mm wide (excluding paper guides)", PaperSize.W210MM_X_H10INCH, 

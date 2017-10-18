@@ -33,126 +33,126 @@ import org.xml.sax.SAXException;
  */
 public class PortathielBlueEmbosserTest {
 
-    private static EmbosserCatalog ec = EmbosserCatalog.newInstance();
-    private static CidatEmbosser e = (CidatEmbosser)ec.get("es_once_cidat.CidatEmbosserProvider.EmbosserType.PORTATHIEL_BLUE");
+	private static EmbosserCatalog ec = EmbosserCatalog.newInstance();
+	private static CidatEmbosser e = (CidatEmbosser)ec.get("es_once_cidat.CidatEmbosserProvider.EmbosserType.PORTATHIEL_BLUE");
 
-    private static PaperCatalog pc = PaperCatalog.newInstance();
-    private static PageFormat a4 = new SheetPaperFormat((SheetPaper)pc.get("org_daisy.ISO216PaperProvider.PaperSize.A4"), SheetPaperFormat.Orientation.DEFAULT);
+	private static PaperCatalog pc = PaperCatalog.newInstance();
+	private static PageFormat a4 = new SheetPaperFormat((SheetPaper)pc.get("org_daisy.ISO216PaperProvider.PaperSize.A4"), SheetPaperFormat.Orientation.DEFAULT);
 
-    @Test
-    public void testPrintableArea() {
+	@Test
+	public void testPrintableArea() {
 
-        assertEquals("Assert that max width for a A4 paper is 33 cells",  e.getMaxWidth(a4),  33);
-        assertEquals("Assert that max height for a A4 paper is 29 lines", e.getMaxHeight(a4), 29);
-    }
+		assertEquals("Assert that max width for a A4 paper is 33 cells",  e.getMaxWidth(a4),  33);
+		assertEquals("Assert that max height for a A4 paper is 29 lines", e.getMaxHeight(a4), 29);
+	}
 
-    @Test
-    @Ignore
-    public void testTableFilter() {
+	@Test
+	@Ignore
+	public void testTableFilter() {
 
-        TableCatalog tc = TableCatalog.newInstance();
-	assertTrue("Assert that number of character sets is 2", tc.list(e.getTableFilter()).size() == 2);
-    }
+		TableCatalog tc = TableCatalog.newInstance();
+		assertTrue("Assert that number of character sets is 2", tc.list(e.getTableFilter()).size() == 2);
+	}
 
-    @Test
-    public void testDuplex() {
-        assertTrue("Assert that duplex is supported", e.supportsDuplex());
-    }
+	@Test
+	public void testDuplex() {
+		assertTrue("Assert that duplex is supported", e.supportsDuplex());
+	}
 
-    @Test
-    public void test8dot() {
-        assertTrue("Assert that 8-dot is not supported", !e.supports8dot());
-    }
+	@Test
+	public void test8dot() {
+		assertTrue("Assert that 8-dot is not supported", !e.supports8dot());
+	}
 
-    @Test
-    public void testAligning() {
-        assertTrue("Assert that aligning is supported", e.supportsAligning());
-    }
+	@Test
+	public void testAligning() {
+		assertTrue("Assert that aligning is supported", e.supportsAligning());
+	}
 
-    @Test
-    @Ignore
-    public void testEmbosserWriter() throws IOException,
-                                            ParserConfigurationException,
-                                            SAXException,
-                                            UnsupportedWidthException {
+	@Test
+	@Ignore
+	public void testEmbosserWriter() throws IOException,
+	ParserConfigurationException,
+	SAXException,
+	UnsupportedWidthException {
 
-        File prn1 = File.createTempFile("test_portathiel_", ".prn");
-        File prn2 = File.createTempFile("test_portathiel_", ".prn");
-        File pef =  File.createTempFile("test_portathiel_", ".pef");
+		File prn1 = File.createTempFile("test_portathiel_", ".prn");
+		File prn2 = File.createTempFile("test_portathiel_", ".prn");
+		File pef =  File.createTempFile("test_portathiel_", ".pef");
 
-        FileCompare fc = new FileCompare();
-        PEFHandler.Builder builder;
-        EmbosserWriter w;
+		FileCompare fc = new FileCompare();
+		PEFHandler.Builder builder;
+		EmbosserWriter w;
 
-        e.setFeature(EmbosserFeatures.PAGE_FORMAT, a4);
+		e.setFeature(EmbosserFeatures.PAGE_FORMAT, a4);
 
-        // Single sided, transparent mode
+		// Single sided, transparent mode
 
-        w = e.newEmbosserWriter(new FileOutputStream(prn1));
-        builder = new PEFHandler.Builder(w)
-                          .range(null)
-                          .align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
-                          .offset(0)
-                          .topOffset(0);
+		w = e.newEmbosserWriter(new FileOutputStream(prn1));
+		builder = new PEFHandler.Builder(w)
+				.range(null)
+				.align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
+				.offset(0)
+				.topOffset(0);
 
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_transparent_single_sided.prn"), new FileOutputStream(prn2));
-        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
-        assertTrue("Assert that the contents of the file is as expected.",
-                fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
-        );
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_transparent_single_sided.prn"), new FileOutputStream(prn2));
+		new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
+		assertTrue("Assert that the contents of the file is as expected.",
+				fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
+				);
 
-        // Double sided, transparent mode
+		// Double sided, transparent mode
 
-        w = e.newEmbosserWriter(new FileOutputStream(prn1));
-        builder = new PEFHandler.Builder(w)
-                          .range(null)
-                          .align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
-                          .offset(0)
-                          .topOffset(0);
+		w = e.newEmbosserWriter(new FileOutputStream(prn1));
+		builder = new PEFHandler.Builder(w)
+				.range(null)
+				.align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
+				.offset(0)
+				.topOffset(0);
 
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/double_sided.pef"), new FileOutputStream(pef));
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_transparent_double_sided.prn"), new FileOutputStream(prn2));
-        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
-        assertTrue("Assert that the contents of the file is as expected.",
-                fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
-        );
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/double_sided.pef"), new FileOutputStream(pef));
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_transparent_double_sided.prn"), new FileOutputStream(prn2));
+		new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
+		assertTrue("Assert that the contents of the file is as expected.",
+				fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
+				);
 
-        // Single sided, MIT set
+		// Single sided, MIT set
 
-        e.setFeature(EmbosserFeatures.TABLE, "org_daisy.EmbosserTableProvider.TableType.MIT");
-        w = e.newEmbosserWriter(new FileOutputStream(prn1));
-        builder = new PEFHandler.Builder(w)
-                          .range(null)
-                          .align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
-                          .offset(0)
-                          .topOffset(0);
+		e.setFeature(EmbosserFeatures.TABLE, "org_daisy.EmbosserTableProvider.TableType.MIT");
+		w = e.newEmbosserWriter(new FileOutputStream(prn1));
+		builder = new PEFHandler.Builder(w)
+				.range(null)
+				.align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
+				.offset(0)
+				.topOffset(0);
 
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_mit_single_sided.prn"), new FileOutputStream(prn2));
-        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
-        assertTrue("Assert that the contents of the file is as expected.",
-                fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
-        );
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_mit_single_sided.prn"), new FileOutputStream(prn2));
+		new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
+		assertTrue("Assert that the contents of the file is as expected.",
+				fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
+				);
 
-        // Double sided, MIT set
+		// Double sided, MIT set
 
-        w = e.newEmbosserWriter(new FileOutputStream(prn1));
-        builder = new PEFHandler.Builder(w)
-                          .range(null)
-                          .align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
-                          .offset(0)
-                          .topOffset(0);
+		w = e.newEmbosserWriter(new FileOutputStream(prn1));
+		builder = new PEFHandler.Builder(w)
+				.range(null)
+				.align(org.daisy.braille.pef.PEFHandler.Alignment.INNER)
+				.offset(0)
+				.topOffset(0);
 
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/double_sided.pef"), new FileOutputStream(pef));
-        FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_mit_double_sided.prn"), new FileOutputStream(prn2));
-        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
-        assertTrue("Assert that the contents of the file is as expected.",
-                fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
-        );
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/double_sided.pef"), new FileOutputStream(pef));
+		FileTools.copy(this.getClass().getResourceAsStream("resource-files/portathiel_mit_double_sided.prn"), new FileOutputStream(prn2));
+		new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
+		assertTrue("Assert that the contents of the file is as expected.",
+				fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
+				);
 
-        prn1.deleteOnExit();
-        prn2.deleteOnExit();
-        pef.deleteOnExit();
-    }
+		prn1.deleteOnExit();
+		prn2.deleteOnExit();
+		pef.deleteOnExit();
+	}
 }

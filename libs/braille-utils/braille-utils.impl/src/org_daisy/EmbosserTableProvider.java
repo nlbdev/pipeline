@@ -36,47 +36,47 @@ import aQute.bnd.annotation.component.Component;
 
 @Component
 public class EmbosserTableProvider implements TableProvider {
-	
+
 	enum TableType implements FactoryProperties {
-    //      EN_US,          // US computer braille, compatible with
-                            // "Braillo USA 6 DOT 001.00"
-            EN_GB("British", ""),          // US computer braille (lower case), compatible with
-                            // "Braillo ENGLAND 6 DOT 044.00" which is identical to
-                            // "Braillo USA 6 DOT 001.00"
-            DA_DK("Danish", ""),
-            DE_DE("German", ""),
-            CS_CZ("Czech", ""),
-            ES_ES("Spanish (classic)", "Classic Spanish braille table"),
-            ES_ES_TABLE_2("Spanish (modern)", "Modern Spanish braille table"),
-            IT_IT_FIRENZE("Italian", ""), 
-            UNICODE_BRAILLE("Unicode braille", ""),
-            MIT("US (MIT)", "Commonly used embosser table"),
-            			// = EN_US (http://www.dotlessbraille.org/asciibrltable.htm)
-            NABCC("US (NABCC)", "North American Braille Computer Code"),
-            			// http://www.accessibility.org/~max/doc/2004-jica/html/node9.html
-            NABCC_8DOT("US (NABCC 8 dot)", "North American Braille Computer Code (8 dot)")
-            			// http://mielke.cc/brltty//doc/Manual-BRLTTY/English/BRLTTY-14.html
-            ;
-    		private final String name;
-    		private final String desc;
-    		private final String identifier;
-    		TableType(String name, String desc) {
-    			this.name = name;
-    			this.desc = desc;
-    			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
-    		}
-    		@Override
-    		public String getIdentifier() {
-    			return identifier;
-    		}
-    		@Override
-    		public String getDisplayName() {
-    			return name;
-    		}
-    		@Override
-    		public String getDescription() {
-    			return desc;
-    		}
+		//      EN_US,          // US computer braille, compatible with
+		// "Braillo USA 6 DOT 001.00"
+		EN_GB("British", ""),          // US computer braille (lower case), compatible with
+		// "Braillo ENGLAND 6 DOT 044.00" which is identical to
+		// "Braillo USA 6 DOT 001.00"
+		DA_DK("Danish", ""),
+		DE_DE("German", ""),
+		CS_CZ("Czech", ""),
+		ES_ES("Spanish (classic)", "Classic Spanish braille table"),
+		ES_ES_TABLE_2("Spanish (modern)", "Modern Spanish braille table"),
+		IT_IT_FIRENZE("Italian", ""), 
+		UNICODE_BRAILLE("Unicode braille", ""),
+		MIT("US (MIT)", "Commonly used embosser table"),
+		// = EN_US (http://www.dotlessbraille.org/asciibrltable.htm)
+		NABCC("US (NABCC)", "North American Braille Computer Code"),
+		// http://www.accessibility.org/~max/doc/2004-jica/html/node9.html
+		NABCC_8DOT("US (NABCC 8 dot)", "North American Braille Computer Code (8 dot)")
+		// http://mielke.cc/brltty//doc/Manual-BRLTTY/English/BRLTTY-14.html
+		;
+		private final String name;
+		private final String desc;
+		private final String identifier;
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		@Override
+		public String getIdentifier() {
+			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
+		}
 	};
 
 	private final Map<String, FactoryProperties> tables;
@@ -92,9 +92,9 @@ public class EmbosserTableProvider implements TableProvider {
 		addTable(TableType.ES_ES_TABLE_2);
 		addTable(TableType.IT_IT_FIRENZE);
 		addTable(TableType.UNICODE_BRAILLE);
-                addTable(TableType.MIT);
-                addTable(TableType.NABCC);
-                addTable(TableType.NABCC_8DOT);
+		addTable(TableType.MIT);
+		addTable(TableType.NABCC);
+		addTable(TableType.NABCC_8DOT);
 	}
 
 	private void addTable(FactoryProperties t) {
@@ -113,6 +113,7 @@ public class EmbosserTableProvider implements TableProvider {
 		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {
@@ -235,7 +236,7 @@ public class EmbosserTableProvider implements TableProvider {
 				}};
 		case MIT:
 			return new EmbosserTable(TableType.MIT, EightDotFallbackMethod.values()[0], '\u2800'){
-            	/**
+				/**
 				 * 
 				 */
 				private static final long serialVersionUID = 6383725065146856776L;
@@ -306,7 +307,7 @@ public class EmbosserTableProvider implements TableProvider {
 							(char)213, (char)218, (char)212, (char)28,  (char)217, (char)26,  (char)200, (char)207,
 							(char)31,  (char)211, (char)23,  (char)29,  (char)223, (char)25,  (char)220, (char)203 };
 					StringBuffer sb = new StringBuffer();
-		                        sb.append(table);
+					sb.append(table);
 					return new EmbosserBrailleConverter(sb.toString(), Charset.forName("ISO-8859-1"), fallback, replacement, true);
 				}};
 		default:

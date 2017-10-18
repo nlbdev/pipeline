@@ -1,4 +1,6 @@
 language: java
+sudo: false 
+dist: precise
 jdk: oraclejdk7
 after_success:
 - ./upload.sh

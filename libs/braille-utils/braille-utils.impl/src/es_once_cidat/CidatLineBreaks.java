@@ -26,26 +26,27 @@ import org.daisy.braille.api.embosser.LineBreaks;
  */
 public class CidatLineBreaks implements LineBreaks {
 
-    public static enum Type { IMPACTO_TRANSPARENT,
-                              PORTATHIEL_TRANSPARENT
-    };
-    private final String newline;
+	public static enum Type { IMPACTO_TRANSPARENT,
+		PORTATHIEL_TRANSPARENT
+	};
+	private final String newline;
 
-    public CidatLineBreaks(Type type) {
+	public CidatLineBreaks(Type type) {
 
-        switch (type) {
-            case IMPACTO_TRANSPARENT:
-                newline = "\u001b\n";
-                break;
-            case PORTATHIEL_TRANSPARENT:
-                newline = "\u00cd\u00da";
-                break;
-            default:
-                newline = "";
-        }
-    }
+		switch (type) {
+		case IMPACTO_TRANSPARENT:
+			newline = "\u001b\n";
+			break;
+		case PORTATHIEL_TRANSPARENT:
+			newline = "\u00cd\u00da";
+			break;
+		default:
+			newline = "";
+		}
+	}
 
-    public String getString() {
-        return newline;
-    }
+	@Override
+	public String getString() {
+		return newline;
+	}
 }

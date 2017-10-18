@@ -37,10 +37,10 @@ import aQute.bnd.annotation.component.Component;
  */
 @Component
 public class DefaultTableProvider implements TableProvider {
-	
+
 	enum TableType implements FactoryProperties {
 		EN_US("US", "Commonly used embosser table"), // US computer braille, compatible with
-				// "Braillo USA 6 DOT 001.00"
+		// "Braillo USA 6 DOT 001.00"
 		;
 		private final String name;
 		private final String desc;
@@ -73,7 +73,7 @@ public class DefaultTableProvider implements TableProvider {
 		tables = new HashMap<String, FactoryProperties>(); 
 		addTable(TableType.EN_US);
 	}
-	
+
 	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
@@ -89,7 +89,8 @@ public class DefaultTableProvider implements TableProvider {
 	public BrailleConverter newTable(TableType t) {
 		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
-	
+
+	@Override
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {
