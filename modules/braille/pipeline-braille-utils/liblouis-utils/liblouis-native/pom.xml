@@ -57,6 +57,7 @@
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
+            <id>unpack-liblouis</id>
             <phase>generate-resources</phase>
             <goals>
               <goal>unpack</goal>
@@ -72,7 +73,6 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louis</artifactId>
-                  <version>${liblouis.version}</version>
                   <classifier>amd64-Linux-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
@@ -169,7 +169,8 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <phase>generate-resources</phase>
+            <id>prepare-package</id>
+            <phase>prepare-package</phase>
             <goals>
               <goal>run</goal>
             </goals>
@@ -259,4 +260,63 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <!--
+        this is a hack to reduce snapshot dependencies to current platform only
+    -->
+    <profile>
+      <id>liblouis-snapshot-dependency</id>
+      <activation>
+        <!--
+            enable if ${liblouis.version} is a SNAPSHOT
+        -->
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.maven-nar</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <version>3.4.0</version>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>nar-validate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <!--
+              don't bother to delete the non-snapshot, just overwrite it
+          -->
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-liblouis-snapshot</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.liblouis</groupId>
+                      <artifactId>louis</artifactId>
+                      <classifier>${nar.aol}-shared</classifier>
+                      <version>${liblouis.version}</version>
+                      <type>nar</type>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
