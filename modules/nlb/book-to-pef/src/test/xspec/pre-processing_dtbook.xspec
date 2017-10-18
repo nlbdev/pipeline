@@ -70,4 +70,19 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="the precedingseparator class should be replaced with a hr element">
+        <x:context>
+            <div>
+                <p class="other-class precedingseparator"/>
+            </div>
+        </x:context>
+        
+        <x:expect>
+            <div>
+                <hr/>
+                <p class="other-class"/>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

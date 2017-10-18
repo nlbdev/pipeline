@@ -447,7 +447,11 @@ doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauth
 }
 
 .Rammetekst::before {
-        content: "Rammetekst:";
+        content: "Rammetekst: ";
+}
+
+*[showin^="x"], *.hidden-braille {
+        display: none;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -581,7 +585,7 @@ sidebar, aside[epub|type~='sidebar'] {
 }
 
 sidebar::before, aside[epub|type~='sidebar']::before {
-        content: "Margtekst:";
+        content: "Margtekst: ";
 }
 
 epigraph, aside[epub|type~='epigraph'] {
@@ -592,12 +596,21 @@ epigraph, aside[epub|type~='epigraph'] {
         text-align: left;
 }
 
-prodnote::before, aside[epub|type~='z3998:production']::before {
-        content: "⠷";
+prodnote, aside[epub|type~='z3998:production'] {
+       display: block;
+       &::before {
+               content: "⠷";
+       }
+       &::after {
+               content: "⠾";
+       }
 }
 
-prodnote::after, aside[epub|type~='z3998:production']::after {
-        content: "⠾";
+hr::before {
+        display: block;
+        content: "⠔⠔⠔";
+        margin-bottom: 1;
+        margin-top: 1;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -680,12 +693,11 @@ line, p.line {
 
 list, ul, ol {
         margin-left: 2;
-        text-indent: -2;
         margin-bottom: 1;
 }
 
 li {
-        text-indent: 2;
+        text-indent: -2;
         text-align: left;
         display: list-item;
 }
@@ -695,7 +707,7 @@ list, ul, ol {
 }
 
 list[type=ul], ul {
-        list-style-type: '⠤';
+        list-style-type: '⠤⠤';
 }
 
 list[type=ol], ol {

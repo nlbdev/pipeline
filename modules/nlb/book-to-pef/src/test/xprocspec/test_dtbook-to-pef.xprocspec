@@ -475,36 +475,36 @@
             </x:context>
             <x:expect label="result" type="compare">
                 <x:document type="inline">
-                                <page xmlns="http://www.daisy.org/ns/2008/pef">
-                                    <row>⠀⠀⠀⠀⠁⠁⠁⠄</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠤⠀⠃⠃⠃⠀⠃⠃⠃</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠗⠗⠗⠀⠗⠗⠗</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                    <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠤⠀⠉⠉⠉⠀⠉⠉⠉</row>
-                                    <row/>
-                                    <row>⠀⠀⠀⠀⠃⠃⠃</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠼⠃⠀⠃⠃⠃⠀⠃⠃⠃</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠀⠗⠗⠗⠀⠗⠗⠗</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                    <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠼⠉⠀⠉⠉⠉⠀⠉⠉⠉</row>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                                </page>
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠁⠁⠁⠄</row>
+                        <row>⠀⠀⠤⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row>⠀⠀⠤⠤⠀⠃⠃⠃⠀⠃⠃⠃</row>
+                        <row>⠀⠀⠀⠀⠤⠤⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                        <row>⠀⠀⠀⠀⠤⠤⠀⠗⠗⠗⠀⠗⠗⠗</row>
+                        <row>⠀⠀⠀⠀⠤⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row/>
+                        <row>⠀⠀⠤⠤⠀⠉⠉⠉⠀⠉⠉⠉</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠃⠃⠃</row>
+                        <row>⠀⠀⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row>⠀⠀⠼⠃⠀⠃⠃⠃⠀⠃⠃⠃</row>
+                        <row>⠀⠀⠀⠀⠼⠁⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                        <row>⠀⠀⠀⠀⠼⠃⠀⠗⠗⠗⠀⠗⠗⠗</row>
+                        <row>⠀⠀⠀⠀⠼⠉⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row/>
+                        <row>⠀⠀⠼⠉⠀⠉⠉⠉⠀⠉⠉⠉</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
                 </x:document>
             </x:expect>
         </x:scenario>
@@ -1836,6 +1836,422 @@
                 <x:document type="file" base-uri="temp-dir" href="23/pef-output-dir/book.pef"/>
             </x:context>
             <x:expect label="There should be an output PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="Various element margins etc. (#102)">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="Title"/>
+                                <meta name="dc:Identifier" content="123456"/>
+                                <meta name="track:Guidelines" content="2015-1"/>
+                                <meta name="track:Supplier" content="Supplier"/>
+                                <meta name="dc:Language" content="no"/>
+                                <meta name="dc:Format" content="DTBook"/>
+                                <meta name="dc:Creator" content="Lastname, Firstname"/>
+                                <meta name="dc:Date" content="2017-10-13"/>
+                                <meta name="dc:Publisher" content="NLB"/>
+                                <meta name="dc:Source" content="urn:isbn:123-45-67-89012-3"/>
+                                <meta name="dcterms:modified" content="2017-10-13T16:54:30+00:00"/>
+                            </head>
+                            <book>
+                                <frontmatter>
+                                    <doctitle>doctitle</doctitle>
+                                    <docauthor>docauthor</docauthor>
+                                </frontmatter>
+                                <bodymatter>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-p]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <p>content content content content content content content content content content content</p>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-blockquote]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <blockquote>content content content content content content content content content content content</blockquote>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-sidebar]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <sidebar>content content content content content content content content content content content</sidebar>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-epigraph]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <epigraph>content content content content content content content content content content content</epigraph>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-Rammetekst]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <div class="Rammetekst">content content content content content content content content content content content</div>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-prodnote]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <prodnote><p>content content content content content content content content content content content</p></prodnote>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-list-ol]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <list type="ol">
+                                            <li>content content content content content content content content</li>
+                                            <li>content content content content content content content content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content content content content content content content content</li>
+                                        </list>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-list-ul]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <list type="ul">
+                                            <li>content content content content content content content content</li>
+                                            <li>content content content content content content content content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content content content content content content content content</li>
+                                        </list>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-list-pl]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <list type="pl">
+                                            <li>content content content content content content content content</li>
+                                            <li>content content content content content content content content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content</li>
+                                            <li>content content content content content content content content</li>
+                                        </list>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-preceding-separator]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <p class="precedingseparator">content content content content content content content content content content content</p>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-hr]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <hr/>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-em-strong]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <p>content</p>
+                                        <p><em>content</em></p>
+                                        <p><strong>content</strong></p>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-showin]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <p showin="xxx">xxx</p>
+                                        <p showin="xxp">xxp</p>
+                                        <p showin="xlx">xlx</p>
+                                        <p showin="xlp">xlp</p>
+                                        <p showin="bxx">bxx</p>
+                                        <p showin="bxp">bxp</p>
+                                        <p showin="blx">blx</p>
+                                        <p showin="blp">blp</p>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('24/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('24/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('24/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the p element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The p element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the blockquote element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠃⠇⠕⠉⠅⠟⠥⠕⠞⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The blockquote element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the sidebar element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠎⠊⠙⠑⠃⠁⠗⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The sidebar element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠠⠍⠁⠗⠛⠞⠑⠅⠎⠞⠒⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the epigraph element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠑⠏⠊⠛⠗⠁⠏⠓⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The epigraph element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the div with class='Rammetekst'">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠠⠗⠁⠍⠍⠑⠞⠑⠅⠎⠞⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The div with class='Rammetekst' should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠠⠗⠁⠍⠍⠑⠞⠑⠅⠎⠞⠒⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the prodnote element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠗⠕⠙⠝⠕⠞⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The prodnote element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠷</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠾</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the ordered list element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠕⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The ordered list element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠼⠁⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠃⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠉⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠙⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠑⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠋⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠛⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠓⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠊⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠁⠚⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the unordered list element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠥⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The caption element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the preformatted list element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠏⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The caption element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the p with the precedingseparator class">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠗⠑⠉⠑⠙⠊⠝⠛⠤⠎⠑⠏⠁⠗⠁⠞⠕⠗⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The p with the precedingseparator class should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠔⠔⠔</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the hr element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠓⠗⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The hr element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠔⠔⠔</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the em and strong elements">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠑⠍⠤⠎⠞⠗⠕⠝⠛⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The em and strong elements should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠆⠉⠕⠝⠞⠑⠝⠞⠰</row>
+                        <row>⠀⠀⠀⠀⠠⠄⠉⠕⠝⠞⠑⠝⠞⠠⠄</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the showin attribute">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠎⠓⠕⠺⠊⠝⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The showin attribute should behave as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠃⠭⠭</row>
+                        <row>⠀⠀⠀⠀⠃⠭⠏</row>
+                        <row>⠀⠀⠀⠀⠃⠇⠭</row>
+                        <row>⠀⠀⠀⠀⠃⠇⠏</row>
+                    </page>
+                </x:document>
+            </x:expect>
         </x:scenario>
         
     </x:scenario>
