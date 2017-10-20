@@ -15,8 +15,6 @@ import java.util.Set;
 class EvenSizeVolumeSplitterCalculator {
 	// number of sheets
 	private final int sheets;
-	// number of volumes
-	private final int volumes;
 	// breakpoints
 	private final Set<Integer> breakpoints;
 
@@ -50,7 +48,7 @@ class EvenSizeVolumeSplitterCalculator {
 	public EvenSizeVolumeSplitterCalculator(int sheets, SplitterLimit splitterMax, int volumeOffset) {
 		this.sheets = sheets;
 		SplitterSpecification spec = getSplitterSpecification(sheets, splitterMax, volumeOffset);
-		this.volumes = spec.volumeCount;
+		int volumes = spec.volumeCount;
 		this.volumeSize = trimHeadroom(makeVolumeSizes(volumes, splitterMax), spec.sheetCapacity - sheets);
 		this.breakpoints = makeBreakpoints(volumeSize);
 		this.volumeForSheet = makeVolumeForSheetMap(sheets, breakpoints);
@@ -185,16 +183,12 @@ class EvenSizeVolumeSplitterCalculator {
 		return volumeSize.get(volIndex-1);
 	}
 	
-	public int getSheetCount() {
-		return sheets;
-	}
-
 	/**
 	 * Gets the number of volumes.
 	 * @return returns the number of volumes
 	 */
 	public int getVolumeCount() {
-		return volumes;
+		return volumeSize.size();
 	}
 	
 	/**
@@ -214,18 +208,16 @@ class EvenSizeVolumeSplitterCalculator {
 		return volumeForSheet.get(sheetIndex);
 	}
 
-	//volumeForSheet and volumeSize are not included below, as their values can be determined from the other values
+	//volumeForSheet and breakpoints are not included below, as their values can be determined from the other values
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((breakpoints == null) ? 0 : breakpoints.hashCode());
-		result = prime * result + sheets;
-		result = prime * result + volumes;
+		result = prime * result + ((volumeSize == null) ? 0 : volumeSize.hashCode());
 		return result;
 	}
 
-	//volumeForSheet and volumeSize are not included below, as their values can be determined from the other values
+	//volumeForSheet and breakpoints are not included below, as their values can be determined from the other values
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -238,17 +230,11 @@ class EvenSizeVolumeSplitterCalculator {
 			return false;
 		}
 		EvenSizeVolumeSplitterCalculator other = (EvenSizeVolumeSplitterCalculator) obj;
-		if (breakpoints == null) {
-			if (other.breakpoints != null) {
+		if (volumeSize == null) {
+			if (other.volumeSize != null) {
 				return false;
 			}
-		} else if (!breakpoints.equals(other.breakpoints)) {
-			return false;
-		}
-		if (sheets != other.sheets) {
-			return false;
-		}
-		if (volumes != other.volumes) {
+		} else if (!volumeSize.equals(other.volumeSize)) {
 			return false;
 		}
 		return true;
