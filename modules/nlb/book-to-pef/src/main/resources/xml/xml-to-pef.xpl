@@ -64,19 +64,17 @@
     <p:option name="force-norwegian" select="'true'" required="false" px:type="boolean">
         <p:documentation>
             <h2 px:role="name">Tekstformatering: Bruk alltid norsk punktstandard</h2>
-            <p px:role="desc">Med dette valget brukes alltid norsk punktstandard, uavhengig av hvilket språk teksten er markert opp med.
+            <p px:role="desc" xml:space="preserve">Med dette valget brukes alltid norsk punktstandard, uavhengig av hvilket språk teksten er markert opp med.
 
-Hvis et element har attributtet `xml:lang` så endres språket for alt som står inni det elementet.
 Ved å deaktivere dette valget vil punktstandarden tilhørende hvert enkelt språk brukes, istedenfor norsk.
-For engelsk brukes UEB (Unified English Braille). Dersom språket ikke har en implementert punktstandard,
-så vil den norske standarden alikevel brukes.
-
-Kortskrift vil aldri brukes for fremmedspråklige tekster, uavhengig av dette valget.
+Dersom språket ikke har en implementert punktstandard, så vil den norske standarden alikevel brukes.
+Kortskrift vil aldri brukes for fremmedspråklige tekster.
 
 Eksempel på bruk av språkkode på del av dokument:
 
 ~~~xml
-&lt;p&gt;Amerikas forente stater (engelsk: &lt;span xml:lang="en"&gt;United States of America&lt;/span&gt;), er en forbundsrepublikk i Nord-Amerika.&lt;/p&gt;
+&lt;p&gt;Amerikas forente stater (engelsk: &lt;span xml:lang="en"&gt;United States of America&lt;/span&gt;),
+   er en forbundsrepublikk i Nord-Amerika.&lt;/p&gt;
 ~~~
 
 Eksempel på bruk av språkkode på et helt dokument
@@ -96,7 +94,7 @@ Eksempel på bruk av språkkode på et helt dokument
     <p:option name="stylesheet" px:type="anyFileURI" px:sequence="true" px:media-type="text/css text/scss" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Layout: CSS-stilark</h2>
-            <p px:role="desc">Valgfritt stilark som kan brukes for å legge til CSS-regler. NLBs standard-stilark brukes alltid, dette stilarket kommer i tillegg.</p>
+            <p px:role="desc" xml:space="preserve">Valgfritt stilark som kan brukes for å legge til CSS-regler. NLBs standard-stilark brukes alltid, dette stilarket kommer i tillegg.</p>
         </p:documentation>
     </p:option>
     <p:option name="page-width" select="'32'">
