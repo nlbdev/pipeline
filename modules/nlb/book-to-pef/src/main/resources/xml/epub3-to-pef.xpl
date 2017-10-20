@@ -89,7 +89,7 @@
         </p:input>
     </px:merge-parameters>
     <px:add-parameters>
-        <p:with-param name="maximum-number-of-sheets" select="xs:integer(number($maximum-number-of-pages) div 2)"/>
+        <p:with-param name="maximum-number-of-sheets" select="xs:integer(number(//c:param[@name='maximum-number-of-pages']/@value) div 2)"/>
         <p:with-param name="main-document-language" select="'no'"/>
     </px:add-parameters>
     <px:delete-parameters parameter-names="stylesheet
