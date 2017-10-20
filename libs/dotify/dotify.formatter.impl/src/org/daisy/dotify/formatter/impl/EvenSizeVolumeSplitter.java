@@ -39,7 +39,15 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 				} else {
 				
 					// Try increasing the volume count
-					volumeOffset++;
+					int volumeInc; {
+						if (remainingSheets >= sheets)
+							throw new IllegalStateException();
+						// factor 3/4 because we don't want to adapt too fast
+						volumeInc = prvSdc.getVolumeCount() * remainingSheets * 3 / 4 / (sheets - remainingSheets);
+						if (volumeInc == 0)
+							volumeInc = 1;
+					}
+					volumeOffset += volumeInc;
 					sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
 				}
 			} else {
