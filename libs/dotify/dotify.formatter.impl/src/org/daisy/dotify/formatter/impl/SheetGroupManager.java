@@ -130,24 +130,13 @@ class SheetGroupManager {
 	}
 	
 	/**
-	 * Updates the sheet count in every group.
+	 * Updates the sheet count and adjusts the volume count in every group.
 	 * <b>Note: only use after all volumes have been calculated.</b>
 	 */
 	void updateAll() {
 		for (SheetGroup g : groups) {
-			g.getSplitter().updateSheetCount(g.countTotalSheets());
-		}
-	}
-	
-	/**
-	 * Adjusts the volume count in every group (if needed).
-	 * <b>Note: only use after all volumes have been calculated.</b>
-	 */
-	void adjustVolumeCount() {
-		for (SheetGroup g : groups) {
-			if (g.hasNext()) {
-				g.getSplitter().adjustVolumeCount(g.countTotalSheets());
-			}
+			int remaining = g.hasNext() ? g.getUnits().getRemaining().size() : 0;
+			g.getSplitter().updateSheetCount(g.countTotalSheets(), remaining);
 		}
 	}
 	

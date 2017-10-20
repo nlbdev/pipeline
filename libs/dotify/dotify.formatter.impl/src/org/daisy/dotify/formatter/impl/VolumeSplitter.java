@@ -9,10 +9,13 @@ package org.daisy.dotify.formatter.impl;
 interface VolumeSplitter {
 
 	/**
-	 * Sets the number of sheets to distribute.
+	 * Sets the number of sheets to distribute and adjusts the number of volumes based on
+	 * the number of sheets that did not fit in the volumes of the previous iteration.
+	 *
 	 * @param sheets the total number of sheets
+	 * @param sheetsRemaining the number of sheets that did not fit in the previous iteration
 	 */
-	void updateSheetCount(int sheets);
+	void updateSheetCount(int sheets, int sheetsRemaining);
 
 	/**
 	 * Gets the number of sheets in a volume.
@@ -22,12 +25,6 @@ interface VolumeSplitter {
 	 */
 	public int sheetsInVolume(int volIndex);
 
-	/**
-	 * Tells the splitter to adjust the volume count, if required.
-	 * @param sheets the total number of sheets
-	 */
-	void adjustVolumeCount(int sheets);
-	
 	/**
 	 * Gets the number of volumes required according to this splitter.
 	 * @return returns the number of volumes required

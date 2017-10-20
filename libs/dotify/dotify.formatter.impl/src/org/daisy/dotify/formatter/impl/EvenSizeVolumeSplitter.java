@@ -11,13 +11,10 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 	int volumeOffset = 0;
 	
 	/*
-	 * Assuming that updateSheetCount() is called after each iteration, and that adjustVolumeCount()
-	 * is called if and only if some sheets did not fit within the predetermined volumes. This
-	 * allows us to keep track of which split suggestions resulted in a successful split. We make
-	 * use of this information in order to not get into an endless loop while looking for the
-	 * optimal number of volumes.
+	 * This map keeps track of which split suggestions resulted in a successful split. We
+	 * make use of this information in order to not get into an endless loop while looking
+	 * for the optimal number of volumes.
 	 */
-	private boolean sheetsFitInVolumes;
 	private Map<EvenSizeVolumeSplitterCalculator,Boolean> previouslyTried = new HashMap<>();
 	
 	EvenSizeVolumeSplitter(SplitterLimit splitterMax) {
@@ -25,10 +22,11 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 	}
 	
 	@Override
-	public void updateSheetCount(int sheets) {
+	public void updateSheetCount(int sheets, int remainingSheets) {
 		if (sdc == null) {
 			sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
 		} else {
+			boolean sheetsFitInVolumes = remainingSheets == 0;
 			EvenSizeVolumeSplitterCalculator prvSdc = sdc;
 			sdc = null;
 			previouslyTried.put(prvSdc, sheetsFitInVolumes);
@@ -66,12 +64,6 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 				}
 			}
 		}
-		sheetsFitInVolumes = true;
-	}
-	
-	@Override
-	public void adjustVolumeCount(int sheets) {
-		sheetsFitInVolumes = false;
 	}
 
 	@Override

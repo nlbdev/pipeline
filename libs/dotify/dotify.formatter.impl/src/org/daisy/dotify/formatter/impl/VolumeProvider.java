@@ -84,7 +84,7 @@ public class VolumeProvider {
 			for (SplitPointDataSource<Sheet> data : allUnits) {
 				SheetGroup g = groups.add();
 				g.setUnits(data);
-				g.getSplitter().updateSheetCount(data.getRemaining().size());
+				g.getSplitter().updateSheetCount(data.getRemaining().size(), data.getRemaining().size());
 				volCount += g.getSplitter().getVolumeCount();
 			}
 			crh.setVolumeCount(volCount);
@@ -272,7 +272,6 @@ public class VolumeProvider {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("There is more content (sheets: " + groups.countRemainingSheets() + ", pages: " + groups.countRemainingPages() + ")");
 			}
-			groups.adjustVolumeCount();
 		}
 		// this changes the value of groups.getVolumeCount() to the newly computed
 		// required number of volume based on groups.countTotalSheets()
