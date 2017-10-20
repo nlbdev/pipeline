@@ -132,7 +132,8 @@ public class FormatterImpl implements Formatter {
 
 		ArrayList<VolumeImpl> ret;
 
-		for (int j=1;j<=20;j++) {
+		int maxIterations = 25;
+		for (int j=1;j<=maxIterations;j++) {
 			try {
 				ret = new ArrayList<>();
 				volumeProvider.prepare();
