@@ -31,24 +31,31 @@ class EvenSizeVolumeSplitter implements VolumeSplitter {
 			sdc = null;
 			previouslyTried.put(prvSdc, sheetsFitInVolumes);
 			if (!sheetsFitInVolumes) {
-			
-				// Try with adjusted number of sheets
 				EvenSizeVolumeSplitterCalculator esc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
-				if (!previouslyTried.containsKey(esc) || previouslyTried.get(esc)) {
-					sdc = esc;
-				} else {
 				
-					// Try increasing the volume count
-					int volumeInc; {
-						if (remainingSheets >= sheets)
-							throw new IllegalStateException();
-						// factor 3/4 because we don't want to adapt too fast
-						volumeInc = prvSdc.getVolumeCount() * remainingSheets * 3 / 4 / (sheets - remainingSheets);
-						if (volumeInc == 0)
-							volumeInc = 1;
-					}
+				// Try increasing the volume count
+				if (remainingSheets >= sheets)
+					throw new IllegalStateException();
+				int volumeInc; {
+					double inc = (1.0 * prvSdc.getVolumeCount() * remainingSheets) / (sheets - remainingSheets);
+					// subtract increase in volume count due to increase in sheet count
+					inc -= (esc.getVolumeCount() - prvSdc.getVolumeCount());
+					// factor 3/4 because we don't want to adapt too fast
+					inc *= .75;
+					volumeInc = (int)Math.floor(inc);
+				}
+				if (volumeInc > 0) {
 					volumeOffset += volumeInc;
 					sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
+				} else {
+					
+					// Try with adjusted number of sheets
+					if (!previouslyTried.containsKey(esc) || previouslyTried.get(esc)) {
+						sdc = esc;
+					} else {
+						volumeOffset += 1;
+						sdc = new EvenSizeVolumeSplitterCalculator(sheets, splitterMax, volumeOffset);
+					}
 				}
 			} else {
 				if (volumeOffset > 0) {
