@@ -1003,7 +1003,7 @@
             <x:expect label="The chapter headline should be in the second volume" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/preceding::pef:volume)+1" equals="2"/>
         </x:scenario>
         
-        <x:scenario label="Regression test for issue #121: Coding error: unexpected /css:_/book[1]/@css:volume-break-before (mode was table-attr)" pending="https://github.com/nlbdev/pipeline/issues/121">
+        <x:scenario label="Regression test for issue #121: Coding error: unexpected /css:_/book[1]/@css:volume-break-before (mode was table-attr)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
