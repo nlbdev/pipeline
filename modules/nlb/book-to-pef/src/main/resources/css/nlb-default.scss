@@ -692,6 +692,7 @@ line, p.line {
 /* -------------------------------------------------------------------------- */
 
 list, ul, ol {
+        margin-top: 1;
         margin-left: 2;
         margin-bottom: 1;
 }
@@ -700,6 +701,11 @@ li {
         text-indent: -2;
         text-align: left;
         display: list-item;
+        
+        list, ul, ol {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
 }
 
 list, ul, ol {

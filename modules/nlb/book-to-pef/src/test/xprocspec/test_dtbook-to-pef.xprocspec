@@ -477,21 +477,21 @@
                 <x:document type="inline">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row>⠀⠀⠀⠀⠁⠁⠁⠄</row>
+                        <row/>
                         <row>⠀⠀⠤⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
                         <row>⠀⠀⠤⠤⠀⠃⠃⠃⠀⠃⠃⠃</row>
                         <row>⠀⠀⠀⠀⠤⠤⠀⠇⠇⠇⠀⠇⠇⠇</row>
                         <row>⠀⠀⠀⠀⠤⠤⠀⠗⠗⠗⠀⠗⠗⠗</row>
                         <row>⠀⠀⠀⠀⠤⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                        <row/>
                         <row>⠀⠀⠤⠤⠀⠉⠉⠉⠀⠉⠉⠉</row>
                         <row/>
                         <row>⠀⠀⠀⠀⠃⠃⠃</row>
+                        <row/>
                         <row>⠀⠀⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                         <row>⠀⠀⠼⠃⠀⠃⠃⠃⠀⠃⠃⠃</row>
                         <row>⠀⠀⠀⠀⠼⠁⠀⠇⠇⠇⠀⠇⠇⠇</row>
                         <row>⠀⠀⠀⠀⠼⠃⠀⠗⠗⠗⠀⠗⠗⠗</row>
                         <row>⠀⠀⠀⠀⠼⠉⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                        <row/>
                         <row>⠀⠀⠼⠉⠀⠉⠉⠉⠀⠉⠉⠉</row>
                         <row/>
                         <row/>
@@ -2121,6 +2121,7 @@
             <x:expect label="The ordered list element should look as expected" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
                         <row>⠀⠀⠼⠁⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
@@ -2148,6 +2149,7 @@
             <x:expect label="The caption element should look as expected" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
                         <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
@@ -2175,6 +2177,7 @@
             <x:expect label="The caption element should look as expected" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
                         <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
