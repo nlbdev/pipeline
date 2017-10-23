@@ -1051,5 +1051,20 @@
             <x:expect label="there should be a result PEF" type="count" min="1"/>
         </x:scenario>
         
+        <x:scenario label="Regression test for issue #118 (using a real book: 561691): Failed to complete volume division in dotify:obfl-to-pef" pending="https://github.com/nlbdev/pipeline/issues/118">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="file" href="../resources/DTBook/561691.xml"/>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('11/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/561691.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
