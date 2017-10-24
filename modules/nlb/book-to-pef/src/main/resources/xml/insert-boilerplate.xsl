@@ -222,6 +222,7 @@
                 <xsl:with-param name="content" select="' av '"/>
                 <xsl:with-param name="classes" select="'pef-volume'"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                <xsl:with-param name="inline" select="true()"/>
             </xsl:call-template>
         </xsl:element>
     </xsl:template>
@@ -249,6 +250,7 @@
                 <xsl:with-param name="content" select="'Antall sider: '"/>
                 <xsl:with-param name="classes" select="'pef-pages'"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                <xsl:with-param name="inline" select="true()"/>
             </xsl:call-template>
             <xsl:call-template name="row">
                 <xsl:with-param name="content" select="'Boka skal ikke returneres.'"/>
@@ -310,12 +312,27 @@
         <xsl:param name="content" as="xs:string"/>
         <xsl:param name="classes" as="xs:string*"/>
         <xsl:param name="namespace-uri" as="xs:string"/>
-        <xsl:element name="p" namespace="{$namespace-uri}">
-            <xsl:if test="exists($classes)">
-                <xsl:attribute name="class" select="string-join($classes,' ')"/>
-            </xsl:if>
-            <xsl:value-of select="$content"/>
-        </xsl:element>
+        <xsl:param name="inline" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$inline">
+                <xsl:element name="p" namespace="{$namespace-uri}">
+                    <xsl:element name="span" namespace="{$namespace-uri}">
+                        <xsl:if test="exists($classes)">
+                            <xsl:attribute name="class" select="string-join($classes,' ')"/>
+                        </xsl:if>
+                        <xsl:value-of select="$content"/>
+                    </xsl:element>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:element name="p" namespace="{$namespace-uri}">
+                    <xsl:if test="exists($classes)">
+                        <xsl:attribute name="class" select="string-join($classes,' ')"/>
+                    </xsl:if>
+                    <xsl:value-of select="$content"/>
+                </xsl:element>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:function name="nlb:strings-to-lines-always-break" as="xs:string*">

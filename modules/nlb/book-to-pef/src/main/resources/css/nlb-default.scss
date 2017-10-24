@@ -287,10 +287,6 @@ h1, h2, h3, h4, h5, h6 {
         margin-right: 1;
         hyphens: none;
         
-        h1 {
-            page-break-before: avoid;
-        }
-        
         & > p {
             margin-top: 0;
             margin-bottom: 0;
@@ -315,6 +311,7 @@ h1, h2, h3, h4, h5, h6 {
         // flow: volume-toc; // default for #generated-volume-toc
         // flow: document-toc; // default for #generated-document-toc
         volume-break-after: avoid;
+        page-break-before: always;
         
         &::before {
             content: 'Innhold';
@@ -353,15 +350,6 @@ h1, h2, h3, h4, h5, h6 {
         // fields are currently implemented
         flow: front-first;
         volume-break-after: avoid;
-        
-        h1 {
-                display: block;
-                page-break-before: avoid;
-        }
-        
-        p {
-                display: block;
-        }
 }
 
 

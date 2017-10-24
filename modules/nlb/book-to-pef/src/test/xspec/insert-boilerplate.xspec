@@ -40,11 +40,11 @@
                         <p>Fullskrift</p>
                         <p>&#160;</p>
                         <p>&#160;</p>
-                        <p class="pef-volume"> av </p>
+                        <p><span class="pef-volume"> av </span></p>
                     </level1>
                     <level1 class="pef-about">
                         <h1>Om boka</h1>
-                        <p class="pef-pages">Antall sider: </p>
+                        <p><span class="pef-pages">Antall sider: </span></p>
                         <p>Boka skal ikke returneres.</p>
                         <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
                     </level1>
@@ -86,11 +86,11 @@
                     <p>Fullskrift</p>
                     <p>&#160;</p>
                     <p>&#160;</p>
-                    <p class="pef-volume"> av </p>
+                    <p><span class="pef-volume"> av </span></p>
                 </body>
                 <body class="pef-about">
                     <h1>Om boka</h1>
-                    <p class="pef-pages">Antall sider: </p>
+                    <p><span class="pef-pages">Antall sider: </span></p>
                     <p>Boka skal ikke returneres.</p>
                     <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
                 </body>
