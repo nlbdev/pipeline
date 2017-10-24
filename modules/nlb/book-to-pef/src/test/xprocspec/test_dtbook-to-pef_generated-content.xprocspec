@@ -1183,9 +1183,9 @@
                         <page>
                             <row/>
                             <row/>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                             <row/>
                             <row/>
                             <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁</row>
@@ -1224,15 +1224,15 @@
             <x:context label="the toc in the second volume">
                 <x:document type="file" base-uri="temp-dir" href="pef-sections/3/pef-output-dir/book.pef" select="//pef:volume[2]//pef:page[contains(string-join(.//pef:row/text(),''),'⠄⠄⠄⠀⠼')]"/>
             </x:context>
-            <x:expect label="the second toc should be a volume toc with a headline" type="compare" pending="https://github.com/nlbdev/pipeline/issues/134">
+            <x:expect label="the second toc should be a volume toc with a headline" type="compare">
                 <x:document type="inline" select="/*/*">
                     <section xmlns="http://www.daisy.org/ns/2008/pef">
                         <page>
                             <row/>
                             <row/>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                             <row/>
                             <row/>
                             <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠛</row>
@@ -1250,15 +1250,15 @@
             <x:context label="the toc in the third volume">
                 <x:document type="file" base-uri="temp-dir" href="pef-sections/3/pef-output-dir/book.pef" select="//pef:volume[3]//pef:page[contains(string-join(.//pef:row/text(),''),'⠄⠄⠄⠀⠼')]"/>
             </x:context>
-            <x:expect label="the third toc should be a volume toc with a headline" type="compare" pending="https://github.com/nlbdev/pipeline/issues/134">
+            <x:expect label="the third toc should be a volume toc with a headline" type="compare">
                 <x:document type="inline" select="/*/*">
                     <section xmlns="http://www.daisy.org/ns/2008/pef">
                         <page>
                             <row/>
                             <row/>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
-                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                             <row/>
                             <row/>
                             <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠉⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠉</row>
