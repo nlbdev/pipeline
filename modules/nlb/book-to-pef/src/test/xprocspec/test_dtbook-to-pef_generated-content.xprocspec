@@ -1146,6 +1146,8 @@
                 <x:option name="pef-output-dir" select="resolve-uri('pef-sections/3/pef-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('pef-sections/3/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('pef-sections/3/temp-dir',$temp-dir)"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
             </x:call>
             
             <x:context label="the PEF">
@@ -1171,6 +1173,105 @@
             <x:expect label="the first section of the third volume should contain a toc" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
             <x:expect label="the first section of the third volume should not contain any non-generated content" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="0"/>
             <x:expect label="the second section of the third volume should contain non-generated content" type="xpath" test="count(//pef:volume[3]/pef:section[position() = 1 and contains(string-join(.//pef:row/text(),''),'⠉⠕⠝⠞⠑⠝⠞')])" equals="1" pending="https://github.com/nlbdev/pipeline/issues/126"/>
+            
+            <x:context label="the toc in the first volume">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/3/pef-output-dir/book.pef" select="//pef:volume[1]//pef:page[contains(string-join(.//pef:row/text(),''),'⠄⠄⠄⠀⠼')]"/>
+            </x:context>
+            <x:expect label="the first toc should be a document toc with a headline" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <section xmlns="http://www.daisy.org/ns/2008/pef">
+                        <page>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠉</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠑</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠛</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠊</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠁</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠉⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠉</row>
+                        </page>
+                        <page>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠑</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠋⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠛</row>
+                            <row/>
+                        </page>
+                    </section>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the toc in the second volume">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/3/pef-output-dir/book.pef" select="//pef:volume[2]//pef:page[contains(string-join(.//pef:row/text(),''),'⠄⠄⠄⠀⠼')]"/>
+            </x:context>
+            <x:expect label="the second toc should be a volume toc with a headline" type="compare" pending="https://github.com/nlbdev/pipeline/issues/134">
+                <x:document type="inline" select="/*/*">
+                    <section xmlns="http://www.daisy.org/ns/2008/pef">
+                        <page>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠛</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠊</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠁</row>
+                        </page>
+                    </section>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the toc in the third volume">
+                <x:document type="file" base-uri="temp-dir" href="pef-sections/3/pef-output-dir/book.pef" select="//pef:volume[3]//pef:page[contains(string-join(.//pef:row/text(),''),'⠄⠄⠄⠀⠼')]"/>
+            </x:context>
+            <x:expect label="the third toc should be a volume toc with a headline" type="compare" pending="https://github.com/nlbdev/pipeline/issues/134">
+                <x:document type="inline" select="/*/*">
+                    <section xmlns="http://www.daisy.org/ns/2008/pef">
+                        <page>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠏⠁⠗⠞⠀⠼⠉⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠉</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠑</row>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠋⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠛</row>
+                        </page>
+                    </section>
+                </x:document>
+            </x:expect>
         </x:scenario>
     </x:scenario>
     
