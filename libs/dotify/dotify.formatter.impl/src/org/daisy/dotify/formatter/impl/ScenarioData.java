@@ -91,6 +91,9 @@ class ScenarioData {
 			}
 			List<RowImpl> rl2 = bcm.getInnerPreContentRows();
 			if (!rl2.isEmpty()) {
+				for (RowImpl r : rl2) {
+					r.setAdjustedForMargin(true);
+				}
 				store.add(new RowGroup.Builder(master.getRowSpacing(), rl2).
 										collapsible(false).skippable(false).breakable(false).build());
 			}
@@ -131,6 +134,9 @@ class ScenarioData {
 				setKeepWithNext(getKeepWithNext()-1);
 			}
 			if (!rl3.isEmpty()) {
+				for (RowImpl r : rl3) {
+					r.setAdjustedForMargin(true);
+				}
 				store.add(new RowGroup.Builder(master.getRowSpacing(), rl3).
 					collapsible(false).skippable(false).breakable(getKeepWithNext()<0).build());
 			}

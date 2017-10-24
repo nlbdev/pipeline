@@ -1536,9 +1536,9 @@
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
                         <row/>
-                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
-                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                         <row/>
                     </page>
                 </x:document>
@@ -1609,14 +1609,14 @@
             <x:context label="the part h1 headline">
                 <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞') and not(contains(string-join(.//text(),''),'⠉⠓⠁⠏⠞⠑⠗'))]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
             </x:context>
-            <x:expect label="The headline should look as expected" type="compare" pending="https://github.com/nlbdev/pipeline/issues/128">
+            <x:expect label="The headline should look as expected" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
                         <row/>
-                        <row>⠀⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
-                        <row>⠀⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀</row>
-                        <row>⠀⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                        <row>⠀⠀⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                        <row>⠀⠀⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
                         <row/>
                     </page>
                 </x:document>
@@ -1630,9 +1630,9 @@
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
                         <row/>
-                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
-                        <row>⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                         <row/>
                     </page>
                 </x:document>

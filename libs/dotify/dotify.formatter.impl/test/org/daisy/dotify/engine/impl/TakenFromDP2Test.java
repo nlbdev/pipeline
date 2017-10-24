@@ -365,4 +365,9 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/manual-volume-breaking-toc-input.obfl",
 		        "resource-files/dp2/manual-volume-breaking-toc-expected.pef", false);
 	}
+	@Test
+	public void testMarginRegionAndBorder() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/margin-region-and-border-input.obfl",
+		        "resource-files/dp2/margin-region-and-border-expected.pef", false);
+	}
 }
