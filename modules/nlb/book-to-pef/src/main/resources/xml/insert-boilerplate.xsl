@@ -27,17 +27,24 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="html:body[not(preceding::html:body)]">
-        <xsl:call-template name="generate-titlepage"/>
-        <xsl:call-template name="generate-about"/>
+    <xsl:template match="html:html[count(html:body) &gt; 1]/html:body[not(preceding::html:body)]">
         <xsl:next-match/>
+        <xsl:call-template name="generate-frontmatter"/>
+    </xsl:template>
+    
+    <xsl:template match="html:html[count(html:body) = 1]/html:body">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates select="*[1][self::html:header]"/>
+            <xsl:call-template name="generate-frontmatter"/>
+            <xsl:apply-templates select="node() except *[1][self::html:header]"/>
+        </xsl:copy>
     </xsl:template>
     
     <xsl:template match="html:html[not(html:body)]">
         <xsl:copy>
             <xsl:apply-templates select="@* | node()"/>
-            <xsl:call-template name="generate-titlepage"/>
-            <xsl:call-template name="generate-about"/>
+            <xsl:call-template name="generate-frontmatter"/>
         </xsl:copy>
     </xsl:template>
     
@@ -45,8 +52,7 @@
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:element name="frontmatter" namespace="{namespace-uri()}">
-                <xsl:call-template name="generate-titlepage"/>
-                <xsl:call-template name="generate-about"/>
+                <xsl:call-template name="generate-frontmatter"/>
             </xsl:element>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -56,8 +62,7 @@
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:apply-templates select="node() except dtbook:level1[1]/(. | following-sibling::node())"/>
-            <xsl:call-template name="generate-titlepage"/>
-            <xsl:call-template name="generate-about"/>
+            <xsl:call-template name="generate-frontmatter"/>
             <xsl:apply-templates select="dtbook:level1[1]/(. | following-sibling::node())"/>
         </xsl:copy>
     </xsl:template>
@@ -66,61 +71,112 @@
     <xsl:template match="dtbook:frontmatter/dtbook:level1[tokenize(@class,'\s+') = 'titlepage']"/>
     <xsl:template match="html:body[tokenize(@class,'\s+') = 'titlepage' or tokenize(@epub:type,'\s+') = 'titlepage']"/>
 
-    <xsl:template name="generate-titlepage">
+    <xsl:template name="generate-frontmatter">
         <xsl:variable name="namespace-uri" select="namespace-uri()"/>
         
         <xsl:variable name="author" as="xs:string*">
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
-                    <xsl:sequence select="/*/dtbook:head/dtbook:meta[@name = 'dc:Creator']/string(@content)"/>
+                    <xsl:choose>
+                        <xsl:when test="//dtbook:frontmatter/dtbook:docauthor">
+                            <xsl:sequence select="//dtbook:frontmatter/dtbook:docauthor/nlb:element-text(.)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="(//dtbook:head/dtbook:meta[@name = 'dc:Creator'])/string(@content)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:sequence select="/*/html:head/html:meta[@name='dc:creator']/string(@content)"/>
+                    <xsl:choose>
+                        <xsl:when test="//html:body//html:*[tokenize(@epub:type,'\s+')='z3998:author']">
+                            <xsl:sequence select="//html:body//html:*[tokenize(@epub:type,'\s+')='z3998:author']/nlb:element-text(.)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="//html:head/html:meta[@name='dc:creator']/string(@content)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="title" as="xs:string">
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
-                    <xsl:sequence select="string((/*/dtbook:head/dtbook:meta[@name = 'dc:Title'])[1]/@content)"/>
+                    <xsl:choose>
+                        <xsl:when test="//dtbook:frontmatter/dtbook:doctitle">
+                            <xsl:sequence select="//dtbook:frontmatter/dtbook:doctitle/nlb:element-text(.)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="string((//dtbook:head/dtbook:meta[@name = 'dc:Title'])[1]/@content)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:sequence select="string((/*/html:head/html:title)[1]/text())"/>
+                    <xsl:choose>
+                        <xsl:when test="//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle']">
+                            <xsl:sequence select="//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle']/nlb:element-text(.)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="string((//html:head/html:title)[1]/text())"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="translator" as="xs:string*">
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
-                    <xsl:sequence select="/*/dtbook:head/dtbook:meta[@name = 'dc:Contributor' and @role = 'translator' or @name = 'marcrel:trl']/string(@content)"/>
+                    <xsl:sequence select="//dtbook:head/dtbook:meta[@name = 'dc:Contributor.Translator']/string(@content)"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:sequence select="/*/html:head/html:meta[@name = 'marcrel:trl']/string(@content)"/>
+                    <xsl:sequence select="//html:head/html:meta[@name = 'dc:contributor.translator']/string(@content)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="original-publisher" as="xs:string?">
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
-                    <xsl:sequence select="/*/dtbook:book/dtbook:frontmatter/dtbook:level1[tokenize(@class,'\s+')='colophon']/dtbook:p[not(*) and starts-with(text(),'&#x00A9;')]/replace(text(),'^&#x00A9;\s+','')"/>
+                    <xsl:sequence select="//dtbook:frontmatter/dtbook:level1[tokenize(@class,'\s+')='colophon']/dtbook:p[not(*) and starts-with(text(),'&#x00A9;')]/replace(text(),'^&#x00A9;\s+','')"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:sequence select="/*/html:body[(tokenize(@class,'\s+'),tokenize(@epub:type,'\s+'))='colophon']/html:p[not(*) and starts-with(text(),'&#x00A9;')]/replace(text(),'^&#x00A9;\s+','')"/>
+                    <xsl:sequence select="//html:body[(tokenize(@class,'\s+'),tokenize(@epub:type,'\s+'))='colophon']/html:p[not(*) and starts-with(text(),'&#x00A9;')]/replace(text(),'^&#x00A9;\s+','')"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="original-isbn" as="xs:string?">
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
-                    <xsl:sequence select="/*/dtbook:book/dtbook:frontmatter/dtbook:level1[tokenize(@class,'\s+')='colophon']/dtbook:p[not(*) and matches(text(),'^(ISBN\s*)?[\d-]+$')]/replace(text(),'^(ISBN\s*)?([\d-]+)$','$1')"/>
+                    <xsl:sequence select="//dtbook:frontmatter/dtbook:level1[tokenize(@class,'\s+')='colophon']/dtbook:p[not(*) and matches(text(),'^(ISBN\s*)?[\d-]+$')]/replace(text(),'^(ISBN\s*)?([\d-]+)$','$1')"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:sequence select="/*/html:body[(tokenize(@class,'\s+'),tokenize(@epub:type,'\s+'))='colophon']/dtbook:p[not(*) and matches(text(),'^(ISBN\s*)?[\d-]+$')]/replace(text(),'^(ISBN\s*)?([\d-]+)$','$1')"/>
+                    <xsl:sequence select="//html:body[(tokenize(@class,'\s+'),tokenize(@epub:type,'\s+'))='colophon']/dtbook:p[not(*) and matches(text(),'^(ISBN\s*)?[\d-]+$')]/replace(text(),'^(ISBN\s*)?([\d-]+)$','$1')"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         
-        <xsl:element name="{if ($namespace-uri = $dtbook-namespace) then 'level1' else 'body'}" namespace="{$namespace-uri}">
+        <xsl:variable name="author-lines" select="nlb:author-lines($author, $line-width, 'mfl.')"/>
+        <xsl:variable name="title-lines" select="nlb:title-lines($title, 5, $line-width)"/>
+        <xsl:variable name="translator-lines" select="nlb:translator-lines($translator, $line-width, 'mfl.')"/>
+        <xsl:variable name="grade-text" as="xs:string">
+            <xsl:choose>
+                <xsl:when test="$contraction-grade = '0'">
+                    <xsl:text>Fullskrift</xsl:text>
+                </xsl:when>
+                <xsl:when test="$contraction-grade = '1'">
+                    <xsl:text>Kortskrift 1</xsl:text>
+                </xsl:when>
+                <xsl:when test="$contraction-grade = '2'">
+                    <xsl:text>Kortskrift 2</xsl:text>
+                </xsl:when>
+                <xsl:when test="$contraction-grade = '3'">
+                    <xsl:text>Kortskrift 3</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text><![CDATA[]]></xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        
+        <xsl:element name="{nlb:level-element-name($namespace-uri, /*)}" namespace="{$namespace-uri}">
             <xsl:attribute name="class" select="'pef-titlepage'"/>
             
             <!-- 3 empty rows before author -->
@@ -129,7 +185,6 @@
             <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
             <xsl:variable name="lines-used" select="3"/>
             
-            <xsl:variable name="author-lines" select="nlb:author-lines($author, $line-width, 'mfl.')"/>
             <xsl:for-each select="$author-lines">
                 <xsl:call-template name="row">
                     <xsl:with-param name="content" select="."/>
@@ -138,11 +193,12 @@
             </xsl:for-each>
             
             <!-- 2 empty rows before title -->
-            <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
-            <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
-            <xsl:variable name="lines-used" select="$lines-used + count($author-lines) + 2"/>
+            <xsl:if test="count($author-lines)">
+                <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
+                <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
+            </xsl:if>
+            <xsl:variable name="lines-used" select="if (count($author-lines)) then $lines-used + count($author-lines) + 2 else $lines-used"/>
             
-            <xsl:variable name="title-lines" select="nlb:title-lines($title, 5, $line-width)"/>
             <xsl:for-each select="$title-lines">
                 <xsl:call-template name="row">
                     <xsl:with-param name="content" select="."/>
@@ -151,11 +207,12 @@
             </xsl:for-each>
             
             <!-- 2 empty rows before translator -->
-            <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
-            <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
-            <xsl:variable name="lines-used" select="$lines-used + count($title-lines) + 2"/>
+            <xsl:if test="count($title-lines)">
+                <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
+                <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
+            </xsl:if>
+            <xsl:variable name="lines-used" select="if (count($title-lines)) then $lines-used + count($title-lines) + 2 else $lines-used"/>
             
-            <xsl:variable name="translator-lines" select="nlb:translator-lines($translator, $line-width, 'mfl.')"/>
             <xsl:if test="count($translator-lines)">
                 <xsl:call-template name="row">
                     <xsl:with-param name="content" select="'Oversatt av:'"/>
@@ -182,33 +239,11 @@
                 </xsl:call-template>
             </xsl:for-each>
 
-            <xsl:variable name="nlb-year" as="xs:string">
-                <xsl:value-of select="concat('NLB - ',format-dateTime(current-dateTime(), '[Y]'))"/>
-            </xsl:variable>
             <xsl:call-template name="row">
-                <xsl:with-param name="content" select="$nlb-year"/>
+                <xsl:with-param name="content" select="concat('NLB - ',format-dateTime(current-dateTime(), '[Y]'))"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
             </xsl:call-template>
             
-            <xsl:variable name="grade-text" as="xs:string">
-                <xsl:choose>
-                    <xsl:when test="$contraction-grade = '0'">
-                        <xsl:text>Fullskrift</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$contraction-grade = '1'">
-                        <xsl:text>Kortskrift 1</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$contraction-grade = '2'">
-                        <xsl:text>Kortskrift 2</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$contraction-grade = '3'">
-                        <xsl:text>Kortskrift 3</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text><![CDATA[]]></xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
             <xsl:call-template name="row">
                 <xsl:with-param name="content" select="$grade-text"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
@@ -225,11 +260,9 @@
                 <xsl:with-param name="inline" select="true()"/>
             </xsl:call-template>
         </xsl:element>
-    </xsl:template>
-    
-    <xsl:template name="generate-about">
-        <xsl:variable name="namespace-uri" select="namespace-uri()"/>
         
+        <!-- end of titlepage, beginning of about page -->
+
         <xsl:variable name="notes-present" as="xs:boolean"
                       select="exists(//dtbook:note|//@epub:type[tokenize(.,'\s+') = ('note','footnote','endnote','rearnote')])"/>
         <xsl:variable name="notes-placement-text">
@@ -261,11 +294,17 @@
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:element name="{if ($namespace-uri = $dtbook-namespace) then 'level1' else 'body'}" namespace="{$namespace-uri}">
+        <xsl:element name="{nlb:level-element-name($namespace-uri, /*)}" namespace="{$namespace-uri}">
             <xsl:attribute name="class" select="'pef-about'"/>
             <xsl:element name="h1" namespace="{$namespace-uri}">
                 <xsl:text>Om boka</xsl:text>
             </xsl:element>
+            <xsl:if test="normalize-space(string-join($title-lines,' ')) != normalize-space($title)">
+                <xsl:call-template name="row">
+                    <xsl:with-param name="content" select="concat('Full tittel: ',normalize-space($title),'.')"/>
+                    <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                </xsl:call-template>
+            </xsl:if>
             <xsl:if test="not($notes-present and $notes-placement = 'bottom-of-page')">
                 <xsl:if test="$notes-present">
                     <xsl:call-template name="row">
@@ -335,6 +374,22 @@
         </xsl:choose>
     </xsl:template>
     
+    <xsl:function name="nlb:level-element-name" as="xs:string">
+        <xsl:param name="namespace-uri" as="xs:string"/>
+        <xsl:param name="document" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="$namespace-uri = $dtbook-namespace">
+                <xsl:sequence select="'level1'"/>
+            </xsl:when>
+            <xsl:when test="count($document/html:body) = 1">
+                <xsl:sequence select="'section'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="'body'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <xsl:function name="nlb:strings-to-lines-always-break" as="xs:string*">
         <xsl:param name="strings" as="xs:string*"/>
         <xsl:param name="line-length" as="xs:integer"/>
@@ -373,17 +428,18 @@
                         <xsl:sequence select="()"/>
                     </xsl:when>
                     <xsl:when test="nlb:braille-length($strings[1]) &gt; $line-length">
-                        <xsl:variable name="braille-extras" select="max((floor($line-length div 3),nlb:braille-length($strings[1]) - string-length($strings[1])))"/>
-                        <xsl:sequence select="nlb:strings-to-lines((tokenize(replace($strings[1],concat('^(.{',$line-length - $braille-extras,'})'),'$1 '),' '), $strings[position() &gt; 1]), $line-length, $break-words)"/>
+                        <xsl:variable name="first-string" select="replace($strings[1], '&#10;', '')"/>
+                        <xsl:variable name="braille-extras" select="max((floor($line-length div 3),nlb:braille-length($first-string) - string-length($first-string)))"/>
+                        <xsl:sequence select="nlb:strings-to-lines((tokenize(replace($first-string,concat('^(.{',$line-length - $braille-extras,'})'),'$1 '),' '), $strings[position() &gt; 1]), $line-length, $break-words)"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="first-line" as="xs:string?">
                             <xsl:variable name="potential-lines" as="xs:string*">
                                 <xsl:for-each select="reverse(1 to count($strings))">
-                                    <xsl:sequence select="string-join($strings[position() &lt;= current()],' ')"/>
+                                    <xsl:sequence select="replace(string-join($strings[position() &lt;= current()],' '),'^&#10;','')"/>
                                 </xsl:for-each>
                             </xsl:variable>
-                            <xsl:sequence select="($potential-lines[nlb:braille-length(.) &lt;= $line-length])[1]"/>
+                            <xsl:sequence select="($potential-lines[nlb:braille-length(.) &lt;= $line-length and not(contains(.,'&#10;'))])[1]"/>
                         </xsl:variable>
                         <xsl:sequence select="$first-line"/>
                         
@@ -402,15 +458,15 @@
         <xsl:param name="lines-available" as="xs:integer"/>
         <xsl:param name="line-length" as="xs:integer"/>
         
-        <xsl:variable name="tokenized-name" select="tokenize($name,'\s+')"/>
+        <xsl:variable name="tokenized-name" select="tokenize($name,' +')"/>
         
         <xsl:variable name="last-name" select="if (contains($name,',')) then substring-before($name,',') else $tokenized-name[position() &gt; 1][last()]"/>
-        <xsl:variable name="first-name" select="if (contains($name,',')) then tokenize(normalize-space(substring-after($name,',')),'\s+')[1] else $tokenized-name[1]"/>
-        <xsl:variable name="middle-name" select="if (contains($name,',')) then tokenize(normalize-space(substring-after($name,',')),'\s+')[position() &gt; 1] else $tokenized-name[not(position() = (1,last()))]"/>
+        <xsl:variable name="first-name" select="if (contains($name,',')) then tokenize(normalize-space(substring-after($name,',')),' +')[1] else $tokenized-name[1]"/>
+        <xsl:variable name="middle-name" select="if (contains($name,',')) then tokenize(normalize-space(substring-after($name,',')),' +')[position() &gt; 1] else $tokenized-name[not(position() = (1,last()))]"/>
         
         <xsl:variable name="tokenized-first-middle-last" select="($first-name, $middle-name, $last-name)"/>
-        <xsl:variable name="first-name-initials" select="for $n in ($first-name) return concat(substring($n,1,1),'.')"/>
-        <xsl:variable name="middle-name-initials" select="for $n in ($middle-name) return concat(substring($n,1,1),'.')"/>
+        <xsl:variable name="first-name-initials" select="for $n in ($first-name) return if (starts-with($n,'&#10;')) then concat('&#10;',substring($n,2,1),'.') else concat(substring($n,1,1),'.')"/>
+        <xsl:variable name="middle-name-initials" select="for $n in ($middle-name) return if (starts-with($n,'&#10;')) then concat('&#10;',substring($n,2,1),'.') else concat(substring($n,1,1),'.')"/>
         
         <xsl:variable name="tokenized-name-middle-initials" select="tokenize(if (contains($name,',')) then string-join((string-join($last-name,' '),string-join(($first-name, $middle-name-initials),' ')),',') else string-join(($first-name, $middle-name-initials, $last-name),' '),' ')"/>
         <xsl:variable name="tokenized-name-first-and-middle-initials" select="tokenize(if (contains($name,',')) then string-join((string-join($last-name,' '),string-join(($first-name-initials, $middle-name-initials),' ')),',') else string-join(($first-name-initials, $middle-name-initials, $last-name),' '),' ')"/>
@@ -439,6 +495,9 @@
         <xsl:variable name="last-name-stripped" select="nlb:strip-last-line($last-name-avoid-break, $lines-available, $line-length)"/>
         
         <xsl:choose>
+            <xsl:when test="count($tokenized-name) = 0">
+                <xsl:sequence select="()"/>
+            </xsl:when>
             <xsl:when test="count($full-name-never-break) &gt; 0 and count($full-name-never-break) &lt;= $lines-available">
                 <xsl:sequence select="$full-name-never-break"/>
             </xsl:when>
@@ -501,7 +560,8 @@
                 <xsl:value-of select="0"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="expanded-string" select="replace($string,'[A-Z]','aa')"/>                            <!-- braille character before upper case characters -->
+                <xsl:variable name="expanded-string" select="replace($string,'&#10;','')"/>                              <!-- ignore newline characters; they are only used to suggest line breaks -->
+                <xsl:variable name="expanded-string" select="replace($expanded-string,'[A-Z]','aa')"/>                   <!-- braille character before upper case characters -->
                 <xsl:variable name="expanded-string" select="replace($expanded-string,'(^|[^\d])(\d)','$1.$2')"/>        <!-- braille character before numbers -->
                 <xsl:variable name="expanded-string" select="replace($expanded-string,'([^a-zA-Z0-9 ,.;:!-])','$1$1')"/> <!-- special characters might be represented with two braille characters -->
                 <xsl:value-of select="string-length($expanded-string)"/>
@@ -558,7 +618,7 @@
         <xsl:param name="lines-available" as="xs:integer"/>
         <xsl:param name="line-length" as="xs:integer"/>
         
-        <xsl:variable name="tokenized-title" select="tokenize($title,'\s+')"/>
+        <xsl:variable name="tokenized-title" select="tokenize($title,' +')"/>
         
         <xsl:variable name="title-never-break" select="nlb:strings-to-lines($tokenized-title, $line-length, 'never')"/>
         <xsl:variable name="title-avoid-break" select="nlb:strings-to-lines($tokenized-title, $line-length, 'avoid')"/>
@@ -595,6 +655,30 @@
         <xsl:variable name="last-line" select="concat($last-line,'...')"/>
         
         <xsl:sequence select="($lines[position() &lt; $lines-available], $last-line)"/>
+    </xsl:function>
+    
+    <xsl:function name="nlb:element-text" as="xs:string?">
+        <xsl:param name="element" as="element()"/>
+        
+        <xsl:variable name="result" as="xs:string*">
+            <xsl:for-each select="$element/node()">
+                <xsl:if test="(tokenize(@class,'\s+'), tokenize(@epub:type,'\s+')) = ('title', 'subtitle')">
+                    <xsl:sequence select="'&#10;'"/>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="self::text()">
+                        <xsl:sequence select="replace(.,'\s+',' ')"/>
+                    </xsl:when>
+                    <xsl:when test="(self::html:br | self::dtbook:br)[tokenize(@class,'\s+') = 'display-braille']">
+                        <xsl:sequence select="'&#10;'"/>
+                    </xsl:when>
+                    <xsl:when test="self::*">
+                        <xsl:sequence select="nlb:element-text(.)"/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:value-of select="if (count($result)) then replace(replace(replace(replace(string-join($result,''),' +',' '),'(^ | $)',''),'&#10; ','&#10;'),'^&#10;+','') else ()"/>
     </xsl:function>
     
 </xsl:stylesheet>

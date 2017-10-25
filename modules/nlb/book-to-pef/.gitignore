@@ -4,3 +4,4 @@
 /.project
 /.settings/
 /src/test/xspec/*.html
+/src/test/xspec/xspec

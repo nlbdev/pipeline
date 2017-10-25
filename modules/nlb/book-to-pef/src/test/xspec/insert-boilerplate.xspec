@@ -6,7 +6,7 @@
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xslt"
                stylesheet="../../main/resources/xml/insert-boilerplate.xsl">
     
-    <x:scenario label="Basic usage - DTBook">
+    <x:scenario label="DTBook: Basic usage">
         <x:context>
             <book xmlns="http://www.daisy.org/z3986/2005/dtbook/"/>
         </x:context>
@@ -53,7 +53,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="Basic usage - EPUB/HTML">
+    <x:scenario label="EPUB/HTML: Basic usage">
         <x:context>
             <html xmlns="http://www.w3.org/1999/xhtml"/>
         </x:context>
@@ -93,6 +93,496 @@
                     <p><span class="pef-pages">Antall sider: </span></p>
                     <p>Boka skal ikke returneres.</p>
                     <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="DTBook: Use title and author from doctitle and docauthor">
+        <x:context>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <head>
+                    <meta name="dc:Contributor.Translator" content="Translator, Tex the"/>
+                </head>
+                <frontmatter>
+                    <doctitle>Lord of the Rings: The Two Towers</doctitle>
+                    <docauthor>John Ronald Reuel Tolkien</docauthor>
+                    <docauthor>Bilbo Baggins</docauthor>
+                </frontmatter>
+            </book>
+        </x:context>
+        <x:expect>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <head>
+                    <meta name="dc:Contributor.Translator" content="Translator, Tex the"/>
+                </head>
+                <frontmatter>
+                    <doctitle>Lord of the Rings: The Two Towers</doctitle>
+                    <docauthor>John Ronald Reuel Tolkien</docauthor>
+                    <docauthor>Bilbo Baggins</docauthor>
+                    <level1 class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>John R. R. Tolkien</p>
+                        <p>Bilbo Baggins</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings: The</p>
+                        <p>Two Towers</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Oversatt av:</p>
+                        <p>Tex the Translator</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </level1>
+                    <level1 class="pef-about">
+                        <h1>Om boka</h1>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </level1>
+                </frontmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="DTBook: normalize whitespace and respect suggested braille line breaks">
+        <x:context>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <head>
+                    <meta name="dc:Contributor.Translator" content="Translator, Tex the"/>
+                </head>
+                <frontmatter>
+                    <doctitle><![CDATA[ Lord
+                        of the Rings: ]]><br class="display-braille"/><![CDATA[The Two
+                        Towers ]]></doctitle>
+                    <docauthor><![CDATA[ John ]]><br class="display-braille"/><![CDATA[ Ronald
+                        Reuel Tolkien ]]></docauthor>
+                </frontmatter>
+            </book>
+        </x:context>
+        <x:expect>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <head>
+                    <meta name="dc:Contributor.Translator" content="Translator, Tex the"/>
+                </head>
+                <frontmatter>
+                    <doctitle><![CDATA[ Lord
+                        of the Rings: ]]><br class="display-braille"/><![CDATA[The Two
+                        Towers ]]></doctitle>
+                    <docauthor><![CDATA[ John ]]><br class="display-braille"/><![CDATA[ Ronald
+                        Reuel Tolkien ]]></docauthor>
+                    <level1 class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>John</p>
+                        <p>Ronald Reuel Tolkien</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings:</p>
+                        <p>The Two Towers</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Oversatt av:</p>
+                        <p>Tex the Translator</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </level1>
+                    <level1 class="pef-about">
+                        <h1>Om boka</h1>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </level1>
+                </frontmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="DTBook: insert suggested line break between title and subtitle">
+        <x:context>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <frontmatter>
+                    <doctitle>
+                        <span class="title">Lord of the Rings</span>:
+                        <span class="subtitle">The Two Towers</span>
+                    </doctitle>
+                </frontmatter>
+            </book>
+        </x:context>
+        <x:expect>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <frontmatter>
+                    <doctitle>
+                        <span class="title">Lord of the Rings</span>:
+                        <span class="subtitle">The Two Towers</span>
+                    </doctitle>
+                    <level1 class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings:</p>
+                        <p>The Two Towers</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </level1>
+                    <level1 class="pef-about">
+                        <h1>Om boka</h1>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </level1>
+                </frontmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="DTBook: inform about shortened title">
+        <x:context>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <frontmatter>
+                    <doctitle>No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again</doctitle>
+                </frontmatter>
+            </book>
+        </x:context>
+        <x:expect>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <frontmatter>
+                    <doctitle>No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again</doctitle>
+                    <level1 class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>No Matter How Much</p>
+                        <p>You Promise to Cook or</p>
+                        <p>Pay the Rent You Blew</p>
+                        <p>It Cauze Bill Bailey</p>
+                        <p>Ain''t Never Comin...</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </level1>
+                    <level1 class="pef-about">
+                        <h1>Om boka</h1>
+                        <p>Full tittel: No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again.</p>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </level1>
+                </frontmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="EPUB/HTML: Use title and author from doctitle and docauthor">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta name="dc:contributor.translator" content="Translator, Tex the"/>
+                </head>
+                <body>
+                    <header>
+                       <h1 epub:type="fulltitle">Lord of the Rings: The Two Towers</h1>
+                       <p epub:type="z3998:author">John Ronald Reuel Tolkien</p>
+                       <p epub:type="z3998:author">Bilbo Baggins</p>
+                   </header>
+                </body>
+            </html>
+        </x:context>
+        <x:expect>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta name="dc:contributor.translator" content="Translator, Tex the"/>
+                </head>
+                <body>
+                    <header>
+                       <h1 epub:type="fulltitle">Lord of the Rings: The Two Towers</h1>
+                       <p epub:type="z3998:author">John Ronald Reuel Tolkien</p>
+                       <p epub:type="z3998:author">Bilbo Baggins</p>
+                    </header>
+                    <section class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>John R. R. Tolkien</p>
+                        <p>Bilbo Baggins</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings: The</p>
+                        <p>Two Towers</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Oversatt av:</p>
+                        <p>Tex the Translator</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </section>
+                    <section class="pef-about">
+                        <h1>Om boka</h1>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="EPUB/HTML: normalize whitespace and respect suggested braille line breaks">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta name="dc:contributor.translator" content="Translator, Tex the"/>
+                </head>
+                <body>
+                    <header>
+                       <h1 epub:type="fulltitle"><![CDATA[ Lord
+                           of the Rings: ]]><br class="display-braille"/><![CDATA[The Two
+                           Towers ]]></h1>
+                       <p epub:type="z3998:author"><![CDATA[ John ]]><br class="display-braille"/><![CDATA[ Ronald
+                           Reuel Tolkien ]]></p>
+                    </header>
+                </body>
+            </html>
+        </x:context>
+        <x:expect>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta name="dc:contributor.translator" content="Translator, Tex the"/>
+                </head>
+                <body>
+                    <header>
+                       <h1 epub:type="fulltitle"><![CDATA[ Lord
+                           of the Rings: ]]><br class="display-braille"/><![CDATA[The Two
+                           Towers ]]></h1>
+                       <p epub:type="z3998:author"><![CDATA[ John ]]><br class="display-braille"/><![CDATA[ Ronald
+                           Reuel Tolkien ]]></p>
+                    </header>
+                    <section class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>John</p>
+                        <p>Ronald Reuel Tolkien</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings:</p>
+                        <p>The Two Towers</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Oversatt av:</p>
+                        <p>Tex the Translator</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </section>
+                    <section class="pef-about">
+                        <h1>Om boka</h1>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="EPUB/HTML: insert suggested line break between title and subtitle">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body>
+                    <header>
+                        <h1 epub:type="fulltitle">
+                            <span class="title">Lord of the Rings</span>:
+                            <span class="subtitle">The Two Towers</span>
+                        </h1>
+                    </header>
+                </body>
+            </html>
+        </x:context>
+        <x:expect>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body>
+                    <header>
+                        <h1 epub:type="fulltitle">
+                            <span class="title">Lord of the Rings</span>:
+                            <span class="subtitle">The Two Towers</span>
+                        </h1>
+                    </header>
+                    <section class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings:</p>
+                        <p>The Two Towers</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </section>
+                    <section class="pef-about">
+                        <h1>Om boka</h1>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="EPUB/HTML: inform about shortened title">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body>
+                    <header>
+                        <h1 epub:type="fulltitle">No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again</h1>
+                    </header>
+                </body>
+            </html>
+        </x:context>
+        <x:expect>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body>
+                    <header>
+                        <h1 epub:type="fulltitle">No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again</h1>
+                    </header>
+                    <section class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>No Matter How Much</p>
+                        <p>You Promise to Cook or</p>
+                        <p>Pay the Rent You Blew</p>
+                        <p>It Cauze Bill Bailey</p>
+                        <p>Ain''t Never Comin...</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </section>
+                    <section class="pef-about">
+                        <h1>Om boka</h1>
+                        <p>Full tittel: No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again.</p>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </section>
                 </body>
             </html>
         </x:expect>
@@ -147,6 +637,42 @@
             <x:param name="break-words" select="'always'"/>
         </x:call>
         <x:expect select="('taylo','r kel','ley l','ou ph','oenix')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines - 'The Lord of the Rings: The Two Towers' - 0 explicit line breaks">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('The','Lord','of','the','Rings:','The','Two','Towers')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="break-words" select="'avoid'"/>
+        </x:call>
+        <x:expect select="('The Lord of the','Rings: The Two','Towers')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines - 'The Lord of the Rings: The Two Towers' - 1 explicit line break">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('The','Lord','of','the','Rings:','&#10;The','Two','Towers')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="break-words" select="'avoid'"/>
+        </x:call>
+        <x:expect select="('The Lord of the','Rings:','The Two Towers')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines - 'The Lord of the Rings: The Two Towers' - 2 explicit line break">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('The','Lord','of','the','Rings:','&#10;The','Two','&#10;Towers')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="break-words" select="'avoid'"/>
+        </x:call>
+        <x:expect select="('The Lord of the','Rings:','The Two','Towers')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:strings-to-lines - 'The Lord of the Rings: The Two Towers' - 3 explicit line break">
+        <x:call function="nlb:strings-to-lines">
+            <x:param name="strings" select="('The','Lord','&#10;of','the','Rings:','&#10;The','Two','&#10;Towers')"/>
+            <x:param name="line-length" select="20"/>
+            <x:param name="break-words" select="'avoid'"/>
+        </x:call>
+        <x:expect select="('The Lord','of the Rings:','The Two','Towers')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - lastname, firstname">
@@ -212,6 +738,15 @@
         <x:expect select="('J. A. M. Taylor')"/>
     </x:scenario>
     
+    <x:scenario label="nlb:fit-name-to-lines - ability to suggest line break with names with initials">
+        <x:call function="nlb:fit-name-to-lines">
+            <x:param name="name" select="'Johnnie Andy Mackenzie &#10;Lou Ikin Taylor'"/>
+            <x:param name="lines-available" select="2"/>
+            <x:param name="line-length" select="20"/>
+        </x:call>
+        <x:expect select="('Johnnie A. M.', 'L. I. Taylor')"/>
+    </x:scenario>
+    
     <x:scenario label="nlb:author-lines - 1 long author">
         <x:call function="nlb:author-lines">
             <x:param name="authors" select="('Johnnie Andy Mackenzie Lou Taylor')"/>
@@ -248,6 +783,15 @@
         <x:expect select="('author 1', 'author 2', 'mfl.')"/>
     </x:scenario>
     
+    <x:scenario label="nlb:author-lines - ability to suggest line break">
+        <x:call function="nlb:author-lines">
+            <x:param name="authors" select="'Johnnie &#10;Mackenzie'"/>
+            <x:param name="line-length" select="100"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie','Mackenzie')"/>
+    </x:scenario>
+    
     <x:scenario label="nlb:translator-lines - 1 long translator">
         <x:call function="nlb:translator-lines">
             <x:param name="translators" select="('Johnnie Andy Lou Taylor')"/>
@@ -273,6 +817,15 @@
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
         <x:expect select="('Johnnie Mackenzie', 'mfl.')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:translator-lines - ability to suggest line break">
+        <x:call function="nlb:translator-lines">
+            <x:param name="translators" select="'Johnnie &#10;Mackenzie'"/>
+            <x:param name="line-length" select="100"/>
+            <x:param name="last-line-if-cropped" select="'mfl.'"/>
+        </x:call>
+        <x:expect select="('Johnnie','Mackenzie')"/>
     </x:scenario>
     
     <x:scenario label="nlb:title-lines - long title">
@@ -309,6 +862,37 @@
             <x:param name="line-length" select="20"/>
         </x:call>
         <x:expect select="('Floccinaucinih','ilipilification of','supercalifragi','listicexpialidocious','expressions and i...')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:title-lines - ability to suggest line break between">
+        <x:call function="nlb:title-lines">
+            <x:param name="title" select="'The Lord of the Rings: &#10;The Two Towers'"/>
+            <x:param name="lines-available" select="5"/>
+            <x:param name="line-length" select="100"/>
+        </x:call>
+        <x:expect select="('The Lord of the Rings:','The Two Towers')"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:element-text - ' John [br] Ronald[newline]  Reuel Tolkien '">
+        <x:call function="nlb:element-text">
+            <x:param name="element">
+                <docauthor xmlns="http://www.daisy.org/z3986/2005/dtbook/"><![CDATA[ John ]]><br class="display-braille"/><![CDATA[ Ronald
+                        Reuel Tolkien ]]></docauthor>
+            </x:param>
+        </x:call>
+        <x:expect label="text should be normalized and have newlines at the position of the br element" select="'John &#10;Ronald Reuel Tolkien'"/>
+    </x:scenario>
+    
+    <x:scenario label="nlb:element-text - title/subtitle classes">
+        <x:call function="nlb:element-text">
+            <x:param name="element">
+                <doctitle xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                    <span class="title">Lord of the Rings</span>:
+                    <span class="subtitle">The Two Towers</span>
+                </doctitle>
+            </x:param>
+        </x:call>
+        <x:expect label="text should have a newline before the subtitle" select="'Lord of the Rings: &#10;The Two Towers'"/>
     </x:scenario>
     
 </x:description>
