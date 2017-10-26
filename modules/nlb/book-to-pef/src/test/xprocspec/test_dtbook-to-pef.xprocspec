@@ -421,10 +421,10 @@
                                 <meta name="dc:Creator" content="ll"/>
                                 <meta name="dc:Creator" content="rr"/>
                                 <meta name="dc:Creator" content="zz"/>
-                                <meta name="dc:Contributor" content="ll"/>
-                                <meta name="dc:Contributor" content="cc"/>
-                                <meta name="dc:Contributor" content="gg"/>
-                                <meta name="dc:Contributor" content="xx"/>
+                                <meta name="dc:Contributor.Translator" content="ll"/>
+                                <meta name="dc:Contributor.Translator" content="cc"/>
+                                <meta name="dc:Contributor.Translator" content="gg"/>
+                                <meta name="dc:Contributor.Translator" content="xx"/>
                                 <meta name="dc:Date" content="2015-11-07"/>
                                 <meta name="dc:Publisher" content="NLB"/>
                                 <meta name="dc:Source" content="urn:isbn:9788202459543"/>
@@ -653,7 +653,7 @@
                             <meta name="dc:Language" content="no"/>
                             <meta name="dc:Format" content="DTBook"/>
                             <meta name="dc:Creator" content="Creator"/>
-                            <meta name="dc:Contributor" content="Contributor"/>
+                            <meta name="dc:Contributor.Translator" content="Contributor"/>
                             <meta name="dc:Date" content="2017-06-30"/>
                             <meta name="dc:Publisher" content="NLB"/>
                             <meta name="dc:Source" content="urn:isbn:9781111111111"/>
@@ -756,7 +756,7 @@
                             <meta name="dc:Language" content="no"/>
                             <meta name="dc:Format" content="DTBook"/>
                             <meta name="dc:Creator" content="Creator"/>
-                            <meta name="dc:Contributor" content="Contributor"/>
+                            <meta name="dc:Contributor.Translator" content="Contributor"/>
                             <meta name="dc:Date" content="2017-06-30"/>
                             <meta name="dc:Publisher" content="NLB"/>
                             <meta name="dc:Source" content="urn:isbn:9781111111111"/>

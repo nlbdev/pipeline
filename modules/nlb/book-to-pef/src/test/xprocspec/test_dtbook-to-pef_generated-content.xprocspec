@@ -440,7 +440,7 @@
                                 <meta name="dtb:uid" content="uid"/>
                                 <meta name="dc:Creator" content="author"/>
                                 <meta name="dc:Title" content="title"/>
-                                <meta name="dc:Contributor" role="translator" content="translator"/>
+                                <meta name="dc:Contributor.Translator" content="translator"/>
                             </head>
                             <book>
                                 <bodymatter/>
@@ -478,8 +478,8 @@
                                 <meta name="dtb:uid" content="uid"/>
                                 <meta name="dc:Creator" content="author"/>
                                 <meta name="dc:Title" content="title"/>
-                                <meta name="dc:Contributor" role="translator" content="translator 1"/>
-                                <meta name="dc:Contributor" role="translator" content="translator 2"/>
+                                <meta name="dc:Contributor.Translator" content="translator 1"/>
+                                <meta name="dc:Contributor.Translator" content="translator 2"/>
                             </head>
                             <book>
                                 <bodymatter/>
@@ -517,9 +517,9 @@
                                 <meta name="dtb:uid" content="uid"/>
                                 <meta name="dc:Creator" content="author"/>
                                 <meta name="dc:Title" content="title"/>
-                                <meta name="dc:Contributor" role="translator" content="translator 1"/>
-                                <meta name="dc:Contributor" role="translator" content="translator 2"/>
-                                <meta name="dc:Contributor" role="translator" content="translator 3"/>
+                                <meta name="dc:Contributor.Translator" content="translator 1"/>
+                                <meta name="dc:Contributor.Translator" content="translator 2"/>
+                                <meta name="dc:Contributor.Translator" content="translator 3"/>
                             </head>
                             <book>
                                 <bodymatter/>
@@ -557,7 +557,7 @@
                                 <meta name="dtb:uid" content="uid"/>
                                 <meta name="dc:Creator" content="author"/>
                                 <meta name="dc:Title" content="title"/>
-                                <meta name="dc:Contributor" role="translator" content="Translator Translator Translator Translator Translator Translator"/>
+                                <meta name="dc:Contributor.Translator" content="Translator Translator Translator Translator Translator Translator"/>
                             </head>
                             <book>
                                 <bodymatter/>
@@ -595,8 +595,8 @@
                                 <meta name="dtb:uid" content="uid"/>
                                 <meta name="dc:Creator" content="author"/>
                                 <meta name="dc:Title" content="title"/>
-                                <meta name="dc:Contributor" role="translator" content="Translator Translator Translator Translator"/>
-                                <meta name="dc:Contributor" role="translator" content="Translateur Translateur Translateur Translateur"/>
+                                <meta name="dc:Contributor.Translator" content="Translator Translator Translator Translator"/>
+                                <meta name="dc:Contributor.Translator" content="Translateur Translateur Translateur Translateur"/>
                             </head>
                             <book>
                                 <bodymatter/>
