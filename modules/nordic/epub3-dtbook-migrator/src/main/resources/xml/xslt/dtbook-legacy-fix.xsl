@@ -4,7 +4,7 @@
 
     <!-- TODO: fix capitalization for language codes in xml:lang -->
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <!-- TODO: move these functions to numeral-conversion.xsl -->
     <xsl:function name="pf:numeric-decimal-to-alpha" as="xs:string">
         <xsl:param name="integer" as="xs:integer"/>

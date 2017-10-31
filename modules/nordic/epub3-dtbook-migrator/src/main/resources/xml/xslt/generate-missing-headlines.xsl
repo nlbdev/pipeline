@@ -3,7 +3,7 @@
     xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all" xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/i18n.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <!--    <xsl:import href="../../../../test/xspec/mock/i18n.xsl"/>-->
 
     <xsl:variable name="partition-types" select="('cover','frontmatter','bodymatter','backmatter')"/>

@@ -6,7 +6,7 @@
     <!-- Creates a text-only NCX based on a EPUB3 Navigation Document -->
     <!-- TODO: pages and landmarks will not be in reading order. to determine their reading order, the content documents would have to be inspected. -->
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/i18n.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
 
     <xsl:output indent="yes"/>
 
