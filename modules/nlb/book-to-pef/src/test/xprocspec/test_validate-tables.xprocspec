@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               script="../../main/resources/xml/validate-tables.xpl">
+    
+    <x:scenario label="only well-formed tables">
+        <x:call step="nlb:validate-tables">
+            <x:input port="source">
+                <x:document type="inline">
+                    <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                        <p>A well-formed table:</p>
+                        <table>
+                            <tr>
+                                <th colspan="3"> </th>
+                                <td> </td>
+                                <td rowspan="2"> </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                        </table>
+                    </book>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="report port">
+            <x:document type="port" port="report"/>
+        </x:context>
+        <x:expect label="there should be no documents on the report port" type="count" max="0"/>
+    </x:scenario>
+    
+    <x:scenario label="one malformed table">
+        <x:call step="nlb:validate-tables">
+            <x:input port="source">
+                <x:document type="inline">
+                    <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                        <p>A well-formed table:</p>
+                        <table>
+                            <tr>
+                                <th colspan="3"> </th>
+                                <td> </td>
+                                <td rowspan="2"> </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                        </table>
+                        <p>A malformed table:</p>
+                        <table>
+                            <tr>
+                                <th colspan="3"> </th>
+                                <td> </td>
+                                <td rowspan="2"> </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                        </table>
+                    </book>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="report">
+            <x:document type="port" port="report"/>
+        </x:context>
+        <x:expect label="there should be a single report document on the report port" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <h1>Malformed tables</h1>
+                    <p>1 malformed table was found.</p>
+                    <ol>
+                        <li>
+                            <table style="border-collapse: collapse; background: red">
+                                <tr>
+                                    <th style="border: 1px solid black; background: white" colspan="3"> </th>
+                                    <td style="border: 1px solid black; background: white"> </td>
+                                    <td style="border: 1px solid black; background: white" rowspan="2"> </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; background: white"> </td>
+                                    <td style="border: 1px solid black; background: white"> </td>
+                                </tr>
+                            </table>
+                        </li>
+                    </ol>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

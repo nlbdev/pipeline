@@ -5,6 +5,7 @@
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
     xmlns:pef="http://www.daisy.org/ns/2008/pef"
+    xmlns:d="http://www.daisy.org/ns/pipeline/data"
     script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
     
     <x:scenario label="_">
@@ -21,6 +22,10 @@
                 <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
             </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the conversion should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
             <x:context label="the output directory contents">
                 <x:document type="directory" base-uri="temp-dir" href="1/pef-output-dir/"/>
             </x:context>

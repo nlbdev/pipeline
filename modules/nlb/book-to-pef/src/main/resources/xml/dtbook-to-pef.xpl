@@ -36,14 +36,22 @@
         </p:documentation>
     </p:input>
     
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the conversion was successful and has produced a valid PEF.
 
 [More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="validation-status" step="validate-pef"/>
+        <p:pipe step="try-convert-and-store" port="status"/>
+    </p:output>
+    
+    <p:output port="table-issues-report" px:media-type="application/vnd.pipeline.report+xml" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">Table issues</h1>
+            <p px:role="desc" xml:space="preserve">An HTML report listing problematic tables.</p>
+        </p:documentation>
+        <p:pipe step="validate-tables" port="report"/>
     </p:output>
     
     <p:option name="braille-standard"/>
@@ -105,44 +113,80 @@
     </px:tempdir>
     <p:sink/>
     
+    <p:identity>
+        <p:input port="source">
+            <p:pipe port="source" step="main"/>
+        </p:input>
+    </p:identity>
+    
+    <nlb:validate-tables name="validate-tables"/>
+    
     <nlb:pre-processing>
         <p:input port="parameters">
             <p:pipe port="result" step="parameters"/>
         </p:input>
-        <p:input port="source">
-            <p:pipe port="source" step="main"/>
-        </p:input>
     </nlb:pre-processing>
     
-    <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
-                              name="convert">
-        <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss',
-                                                        if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
-        <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
-        <p:input port="parameters">
-            <p:pipe port="result" step="parameters"/>
-        </p:input>
-        <p:with-option name="temp-dir" select="string(/c:result)">
-            <p:pipe step="temp-dir" port="result"/>
-        </p:with-option>
-    </px:dtbook-to-pef.convert>
-    
-    <pef:validate name="validate-pef" assert-valid="false">
-        <p:with-option name="temp-dir" select="string(/c:result)">
-            <p:pipe step="temp-dir" port="result"/>
-        </p:with-option>
-    </pef:validate>
-    
-    <px:dtbook-to-pef.store include-preview="true">
-        <p:input port="dtbook">
-            <p:pipe step="main" port="source"/>
-        </p:input>
-        <p:input port="obfl">
-            <p:pipe step="convert" port="obfl"/>
-        </p:input>
-        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-    </px:dtbook-to-pef.store>
+    <p:try name="try-convert-and-store">
+        <p:group>
+            <p:output port="status"/>
+            <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
+                                      name="convert">
+                <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss',
+                                                                if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
+                <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
+                <p:with-option name="include-obfl" select="$include-obfl"/>
+                <p:input port="parameters">
+                    <p:pipe port="result" step="parameters"/>
+                </p:input>
+                <p:with-option name="temp-dir" select="string(/c:result)">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </px:dtbook-to-pef.convert>
+            <p:choose>
+                <p:xpath-context>
+                    <p:pipe step="convert" port="status"/>
+                </p:xpath-context>
+                <p:when test="/d:validation-status[@result='ok']">
+                    <p:output port="status">
+                        <p:pipe step="validate-pef" port="validation-status"/>
+                    </p:output>
+                    <pef:validate name="validate-pef" assert-valid="false">
+                        <p:with-option name="temp-dir" select="string(/c:result)">
+                            <p:pipe step="temp-dir" port="result"/>
+                        </p:with-option>
+                    </pef:validate>
+                    <px:dtbook-to-pef.store include-preview="true">
+                        <p:input port="dtbook">
+                            <p:pipe step="main" port="source"/>
+                        </p:input>
+                        <p:input port="obfl">
+                            <p:pipe step="convert" port="obfl"/>
+                        </p:input>
+                        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
+                        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+                    </px:dtbook-to-pef.store>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="status"/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe step="convert" port="status"/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+        </p:group>
+        <p:catch>
+            <p:output port="status"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:inline>
+                        <d:validation-status result="error"/>
+                    </p:inline>
+                </p:input>
+            </p:identity>
+        </p:catch>
+    </p:try>
     
 </p:declare-step>
