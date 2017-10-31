@@ -147,6 +147,7 @@ public class NLBTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("mediatype-utils"),
 			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),
+			pipelineModule("common-entities"),
 			"org.daisy.pipeline:calabash-adapter:?",
 			// logging
 			"org.slf4j:jul-to-slf4j:?",
