@@ -30,6 +30,11 @@
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         test dependencies
     -->
@@ -60,6 +65,7 @@
         <configuration>
           <instructions>
             <Service-Component>OSGI-INF/message.xml</Service-Component>
+            <_dsannotations>org.daisy.pipeline.common.saxon.impl.LineNumberDefinition</_dsannotations>
           </instructions>
         </configuration>
         <executions>
@@ -71,6 +77,18 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <!--
+                line-number.xspec is run via surefire-plugin
+            -->
+            <exclude>line-number.xspec</exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>

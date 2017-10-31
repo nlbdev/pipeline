@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               stylesheet="../../main/resources/xml/xslt/library.xsl">
+
+    <x:scenario label="Test pf:line-number">
+        <x:call function="pf:line-number">
+            <x:param select="document('../resources/test-line-number.xml')/hello/world"/>
+        </x:call>
+        <x:expect label="The result should be 6" select="6"/>
+    </x:scenario>
+
+</x:description>

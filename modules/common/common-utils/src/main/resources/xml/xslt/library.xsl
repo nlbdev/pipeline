@@ -4,4 +4,9 @@
     <xsl:include href="i18n.xsl"/>
     <xsl:include href="numeral-conversion.xsl"/>
     
+    <!--
+        Also import this library whenever one of the following functions is used:
+        * pf:line-number
+    -->
+    
 </xsl:stylesheet>
