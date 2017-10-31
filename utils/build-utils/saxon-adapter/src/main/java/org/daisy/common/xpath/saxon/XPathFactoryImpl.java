@@ -33,6 +33,7 @@ public class XPathFactoryImpl extends net.sf.saxon.xpath.XPathFactoryImpl {
 	
 	public void activate() {
 		Configuration config = getConfiguration();
+		config.setLineNumbering(true);
 		if (uriResolver != null)
 			config.setURIResolver(uriResolver);
 		for (Object function : xpathExtensionFunctions)

@@ -38,6 +38,7 @@ public class ProcessorImpl extends Processor {
 	
 	public void activate() {
 		Configuration config = getUnderlyingConfiguration();
+		config.setLineNumbering(true);
 		if (uriResolver != null)
 			config.setURIResolver(uriResolver);
 		for (Object function : xpathExtensionFunctions)
