@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
 
-    <title>Nordic EPUB3 and HTML5 rules (based on MTMs DTBook schematron rules, targeting nordic guidelines 2015-1)</title>
+    <title>NLBPUB (én HTML5-fil i en unzippet EPUB3)</title>
+    <!-- TODO: update rule ids -->
 
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
-    <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
     <ns prefix="mathml" uri="http://www.w3.org/1998/Math/MathML"/>
 
     <!-- Rule 7: No <ul>, <ol> or <dl> inside <p> -->
+    <!-- TODO: prøve å flytte til RNG -->
     <pattern id="epub_nordic_7">
         <rule context="html:p">
             <report test="html:ul | html:ol">[nordic07] Lists (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>) are
@@ -18,7 +19,7 @@
         </rule>
     </pattern>
 
-    <!-- Rule 8: Only allow pagebreak w/page-front in frontmatter -->
+    <!-- Rule 8: Page break with class=page-front is only allowed to occur in frontmatter -->
     <pattern id="epub_nordic_8">
         <rule context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front']">
             <assert test="ancestor::html:*[self::html:section or self::html:article or self::html:body]/tokenize(@epub:type,'\s+') = ('frontmatter','cover')">[nordic08] &lt;span epub:type="pagebreak"
@@ -28,6 +29,7 @@
     </pattern>
 
     <!-- Rule 9: Disallow empty elements (with a few exceptions) -->
+    <!-- vurderer å fjerne dd, kan fjerne flere ting etter behov senere -->
     <pattern id="epub_nordic_9">
         <rule context="html:*">
             <report
@@ -37,6 +39,8 @@
     </pattern>
 
     <!-- Rule 10: Metadata for dc:language, dc:date and dc:publisher must exist in the single-HTML representation -->
+    <!-- TODO: forbedre dc:date-format-sjekk -->
+    <!-- kanskje droppe metadata-validering? skrive om hele denne greia? -->
     <pattern id="epub_nordic_10">
         <rule context="html:head[following-sibling::html:body/html:header]">
             <!-- dc:language -->
@@ -50,14 +54,16 @@
         </rule>
     </pattern>
 
-    <!-- Rule 11: Root element must have @xml:lang -->
+    <!-- Rule 11: Root element must have @xml:lang and @lang -->
     <pattern id="epub_nordic_11">
         <rule context="html:html">
             <assert test="@xml:lang">[nordic11] &lt;html&gt; element must have an xml:lang attribute</assert>
+            <assert test="@lang">[nordic11] &lt;html&gt; element must have a lang attribute</assert>
         </rule>
     </pattern>
 
     <!-- Rule 12: Frontmatter starts with doctitle and docauthor -->
+    <!-- TODO: generere dette basert på eksterne metadata -->
     <pattern id="epub_nordic_12">
         <rule context="html:body/html:header">
             <assert test="html:*[1][self::html:h1[tokenize(@epub:type,' ')='fulltitle']]">[nordic12] Single-HTML document must begin with a fulltitle headline in its header element (xpath:
@@ -65,18 +71,7 @@
         </rule>
     </pattern>
 
-    <!-- Rule 13: All books must have frontmatter and bodymatter -->
-    <pattern id="epub_nordic_13_a">
-        <!-- see also nordic2015-1.opf-and-html.sch for multi-document version -->
-        <rule context="html:body[html:header]">
-            <assert test="((html:section|html:article)/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[nordic13a] A single-HTML document must have at least one frontmatter or cover
-                section</assert>
-            <assert test="((html:section|html:article)/tokenize(@epub:type,'\s+')='bodymatter') = true()">[nordic13a] A single-HTML document must have at least one bodymatter section</assert>
-            <assert test="not(tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter'))">[nordic13a] The single-HTML document must not have cover, frontmatter, bodymatter or
-                backmatter as epub:type on its body element</assert>
-        </rule>
-    </pattern>
-
+    <!-- TODO: tillat også på top-level innenfor kompendie (som er top-level i boka med epub:type="bodymatter volume") -->
     <pattern id="epub_nordic_13_b">
         <rule context="html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,'\s+')='part'])]">
             <assert test="not((tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter')) = true())">[nordic13b] The single-HTML document must not have cover, frontmatter,
@@ -84,35 +79,28 @@
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_13_c">
-        <rule context="html:body[not(html:header|html:nav)]">
-            <assert test="tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter')">[nordic13c] The document must have either cover, frontmatter, bodymatter or backmatter as
-                epub:type on its body element.</assert>
-        </rule>
-    </pattern>
-
-    <pattern id="epub_nordic_13_d">
-        <rule context="html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]">
-            <assert test="not((tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter')) = true())">[nordic13d] The document must not have cover, frontmatter, bodymatter or
-                backmatter on any of its sectioning elements (they are only allowed on the body element).</assert>
-        </rule>
-    </pattern>
-
     <!-- Rule 14:  Don't allow <h x+1> in section w/depth x+1 unless <h x> in section w/depth x is present -->
     <pattern id="epub_nordic_14">
         <rule
-            context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]">
+            context="html:*[self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]">
             <assert test="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">[nordic14] sectioning element with no headline (h1-h6) when sub-section is present (is only allowed for sectioning
                 element with epub:type="cover" or when sub-section is a poem): <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
+    <!--
+        imprimatur: lydbokavtalen
+        imprint: informasjon om den trykte boka og lydboka
+        (eneste section som er tillatt før cover)
+        TODO: oppdater xpaths
+        TODO: blir front/body/rear-matter-rekkefølge sjekket av epubcheck? fjern herifra isåfall
+    -->
     <pattern id="epub_nordic_15">
         <!-- see also nordic2015-1.opf-and-html.sch for multi-document version -->
         <rule context="html:body[html:header]/html:*[self::html:section or self::html:article]">
             <report test="tokenize(@epub:type,'\s+')[.='cover'] and preceding-sibling::html:*[self::html:section or self::html:article]">[nordic15] Cover must not be preceded by any other top-level
-                sections (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
+                sections other than those with epub:type="frontmatter imprimatur" or epub:type="frontmatter imprint" (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
             <report test="tokenize(@epub:type,'\s+')[.='frontmatter'] and preceding-sibling::html:*[self::html:section or self::html:article]/tokenize(@epub:type,'\s') = ('bodymatter', 'backmatter')"
                 >[nordic15] Frontmatter must not be preceded by bodymatter or rearmatter (<value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
@@ -150,6 +138,7 @@
     </pattern>
 
     <!-- Rule 23: Increasing pagebreak values for page-normal -->
+    <!-- TODO: ignorer pagebreak innenfor kompendier (som er top-level i boka med epub:type="bodymatter volume") -->
     <pattern id="epub_nordic_23">
         <rule
             context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]">
@@ -160,6 +149,7 @@
     </pattern>
 
     <!-- Rule 24: Values of pagebreak must be unique for page-front -->
+    <!-- kan fjernes senere hvis behov -->
     <pattern id="epub_nordic_24">
         <rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']">
             <assert test="count(//html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front' and @title=current()/@title])=1">[nordic24] pagebreak values must be unique for
@@ -168,6 +158,7 @@
     </pattern>
 
     <!-- Rule 26a: Each note must have a noteref -->
+    <!-- sjekkes dette i epubcheck? -->
     <pattern id="epub_nordic_26_a">
         <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
@@ -177,6 +168,7 @@
     </pattern>
 
     <!-- Rule 26b: Each noteref must reference a note -->
+    <!-- sjekkes dette i epubcheck? -->
     <pattern id="epub_nordic_26_b">
         <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
@@ -187,6 +179,7 @@
     </pattern>
 
     <!-- Rule 27a: Each annotation must have an annoref -->
+    <!-- sjekkes dette i epubcheck? -->
     <pattern id="epub_nordic_27_a">
         <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
@@ -196,6 +189,7 @@
     </pattern>
 
     <!-- Rule 27b: Each annoref must reference a annotation -->
+    <!-- sjekkes dette i epubcheck? -->
     <pattern id="epub_nordic_27_b">
         <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
@@ -273,6 +267,7 @@
     </pattern>
 
     <!-- Rule 50: image alt attribute -->
+    <!-- epubbcheck plukker opp ikke-eksisterende @alt for andre bilder? -->
     <pattern id="epub_nordic_50_a">
         <rule context="html:img[parent::html:figure/tokenize(@class,'\s+')='image']">
             <assert test="@alt and @alt!=''">[nordic50a] an image inside a figure with class='image' must have a non-empty alt attribute: <value-of
@@ -281,51 +276,26 @@
     </pattern>
 
     <!-- Rule 51 & 52: -->
+    <!-- sjekkes sannsynligvis av epubcheck? -->
     <pattern id="epub_nordic_5152">
         <rule context="html:img">
-            <assert test="contains(@src,'.jpg') and substring-after(@src,'.jpg')=''">[nordic52] Images must have the .jpg file extension: <value-of
+            <assert test="@src">[nordic52] Images must have a src attribute: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <report test="contains(@src,'.jpg') and string-length(@src)=4">[nordic52] Images must have a base name, not just an extension: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
-            <report test="not(matches(@src,'^images/[^/]+$'))">[nordic51] Images must be in the "images" folder (relative to the HTML file).</report>
-            <assert test="string-length(translate(substring(@src,1,string-length(@src)-4),'-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/',''))=0">[nordic52] Image file name
-                contains an illegal character (must be -_a-zA-Z0-9): <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
-                /></assert>
         </rule>
     </pattern>
 
     <!-- Rule 59: No pagegnum between a term and a definition in definition lists -->
     <pattern id="epub_nordic_59">
-        <rule context="html:dl/html:*[tokenize(@epub:type,' ')='pagebreak']">
-            <assert test="not(parent::*/html:dd or parent::*/html:dt)">[nordic59] pagebreak in definition list must not occur as siblings to dd or dt: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-    <!-- Rule 63: Only note references within the same document -->
-    <pattern id="epub_nordic_63">
-        <rule context="html:a[tokenize(@epub:type,' ')='noteref']">
-            <report test="matches(@href,'^[^/]+:')">[nordic63] Only note references within the same publication are allowed: <value-of
+        <rule context="html:dl">
+            <report test="html:*[tokenize(@epub:type,' ')='pagebreak']">[nordic59] pagebreak in definition list must not occur as siblings to dd or dt: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
 
-    <!-- Rule 64: Only annotation references within the same document -->
-    <pattern id="epub_nordic_64">
-        <rule context="html:a[tokenize(@epub:type,' ')='annoref']">
-            <report test="matches(@href,'^[^/]+:')">[nordic64] Only annotation references within the same publication are allowed</report>
-        </rule>
-    </pattern>
+    <!-- TODO: nå tillater vi note and annotation references to external documents!! (tidligere rule 63/64) -->
 
-    <!-- Rule 93: Some elements may not start of end with whitespace -->
-    <pattern id="epub_nordic_93">
-        <rule context="html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]">
-            <report test="matches((.//text()[normalize-space()])[1],'^\s')">[nordic93] element <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> may not have leading whitespace</report>
-            <report test="matches((.//text()[normalize-space()])[last()],'\s$')">[nordic93] element <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> may not have trailing whitespace</report>
-        </rule>
-    </pattern>
+
+    <!-- TODO: hit kom vi. Må sjekke videre nedover. -->
 
     <!-- Rule 96: no nested prodnotes or image groups -->
     <pattern id="epub_nordic_96_a">
