@@ -58,10 +58,18 @@ public class SheetIdentity {
 		if (sheetIndex != other.sheetIndex) {
 			return false;
 		}
-		if (volumeIndex != other.volumeIndex) {
+		if (volumeIndex == null) {
+			if (other.volumeIndex != null) {
+				return false;
+			}
+		} else if (!volumeIndex.equals(other.volumeIndex)) {
 			return false;
 		}
-		if (volumeGroup != other.volumeGroup) {
+		if (volumeGroup == null) {
+			if (other.volumeGroup != null) {
+				return false;
+			}
+		} else if (!volumeGroup.equals(other.volumeGroup)) {
 			return false;
 		}
 		return true;
