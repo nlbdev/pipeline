@@ -403,17 +403,19 @@
                 no - error
                 nn - error
                 nb - error
-                no-NB - ok
-                no-NN - ok
+                no-NB - error
+                no-NN - error
+                nb-NO - ok
+                nn-NO - ok
                 nor - error
                 nob - error
                 nno - error
                 non - error
             -->
-            <report test="@xml:lang = 'no' or (starts-with(@xml:lang,'no-') and not(tokenize(@xml:lang,'-')[2] = ('NB','NN')))">[TODO] The language code "no" must have specified a suffix; either "-NB" or "-NN" (<value-of
-                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
-            <report test="@xml:lang = ('nn','nb','nor','nob','nno','non')">[TODO] The norwegian language must not be specified by one of the language codes nn/nb/nor/nob/nno/non. The language code must be either "no-NB" or "no-NN" (<value-of
-                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
+            <report test="tokenize(@xml:lang,'-')[1] = ('no', 'nor', 'nob', 'nno', 'non')">[TODO] Language codes cannot start with no/nor/nob/nno/non. Allowed norwegian language codes are "nb-NO" and "nn-NO".
+                                                                           (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
+            <report test="tokenize(@xml:lang,'-')[1] = ('nb', 'nn') and not(substring-after(@xml:lang,'-') = 'NO')">[TODO] Norwegian language codes must have the suffix "-NO".
+                                                                                                                    (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
         </rule>
     </pattern>
     
