@@ -3,15 +3,21 @@ package org.daisy.dotify.common.io;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Logger;
 
+/**
+ * Provides file IO tools.
+ * @author Joel Håkansson
+ *
+ */
 public class FileIO {
+	
+	private FileIO() {}
 
 	/**
 	 * Copies an input stream to an output stream
@@ -23,49 +29,36 @@ public class FileIO {
 	 * @throws IOException
 	 *             if IO fails
 	 */
+	//TODO: deprecate this in Java 9: is.transferTo(OutputStream)
 	public static void copy(InputStream is, OutputStream os) throws IOException {
-		InputStream bis = new BufferedInputStream(is);
-		OutputStream bos = new BufferedOutputStream(os);
-		int b;
-		while ((b = bis.read()) != -1) {
-			bos.write(b);
-		}
-		bos.flush();
-		bos.close();
-		bis.close();
-	}
-
-	public static void copy(File input, File output) throws IOException {
-		copy(new FileInputStream(input), new FileOutputStream(output));
-	}
-
-	public static void copyFile(File sourceFile, File destFile) throws IOException {
-		if (!destFile.exists()) {
-			destFile.createNewFile();
-		}
-
-		FileChannel source = null;
-		FileChannel destination = null;
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
-			destination.transferFrom(source, 0, source.size());
-		} finally {
-			if (source != null) {
-				source.close();
+		try (
+			InputStream bis = new BufferedInputStream(is);
+			OutputStream bos = new BufferedOutputStream(os);
+		) {
+			int b;
+			while ((b = bis.read()) != -1) {
+				bos.write(b);
 			}
-			if (destination != null) {
-				destination.close();
-			}
+			bos.flush();
 		}
 	}
 
+	/**
+	 * Creates a temp file
+	 * @return returns a the created file
+	 * @throws IOException if IO fails
+	 */
 	public static File createTempFile() throws IOException {
 		File ret = File.createTempFile("temp", null, null);
 		ret.deleteOnExit();
 		return ret;
 	}
 
+	/**
+	 * Creates a temp folder
+	 * @return returns the created folder
+	 * @throws IOException if IO fails
+	 */
 	public static File createTempDir() throws IOException {
 		File temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
 		if (!temp.delete()) {
@@ -87,6 +80,11 @@ public class FileIO {
 		return f;
 	}
 
+	/**
+	 * Copies a folder recursively
+	 * @param f the source folder
+	 * @param out the destination folder
+	 */
 	public static void copyRecursive(File f, File out) {
 		if (f.isDirectory()) {
 			out.mkdirs();
@@ -95,13 +93,17 @@ public class FileIO {
 			}
 		} else {
 			try {
-				copyFile(f, out);
+				Files.copy(f.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+	/**
+	 * Deletes a folder recursively
+	 * @param f the folder to delete
+	 */
 	public static void deleteRecursive(File f) {
 		if (f.isDirectory()) {
 			for (File f1 : f.listFiles()) {
@@ -126,9 +128,10 @@ public class FileIO {
 	 *             if IO fails
 	 */
 	public static long diff(InputStream f1, InputStream f2) throws IOException {
-		InputStream bf1 = new BufferedInputStream(f1);
-		InputStream bf2 = new BufferedInputStream(f2);
-		try {
+		try (
+			InputStream bf1 = new BufferedInputStream(f1);
+			InputStream bf2 = new BufferedInputStream(f2)
+		) {
 			int b1;
 			int b2;
 			long pos = 0;
@@ -140,9 +143,6 @@ public class FileIO {
 				return pos;
 			}
 			return -1;
-		} finally {
-			bf1.close();
-			bf2.close();
 		}
 	}
 }

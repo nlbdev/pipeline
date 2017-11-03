@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Given an initial input file and a final output file, this class can be
@@ -56,7 +58,9 @@ public class TempFileHandler implements StreamJuggler {
 	 *             files could not be created.
 	 */
 	public TempFileHandler(File input, File output) throws IOException {
-		if (!input.exists()) { throw new FileNotFoundException(); }
+		if (!input.exists()) {
+			throw new FileNotFoundException(input.getAbsolutePath());
+		}
 		if (!input.isFile() || (output.exists() && !output.isFile())) {
 			throw new IOException("Cannot perform this operation on directories.");
 		}
@@ -64,7 +68,7 @@ public class TempFileHandler implements StreamJuggler {
 		this.output = output;
 		this.t1 = FileIO.createTempFile();
 		this.t2 = FileIO.createTempFile();
-		FileIO.copy(input, this.t1);
+		Files.copy(input.toPath(), this.t1.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		is = null;
 		os = null;
 	}
@@ -106,7 +110,9 @@ public class TempFileHandler implements StreamJuggler {
 		if (getOutput().length()>0) {
 			toggle = !toggle;
 			// reset the new output to length()=0
-			new FileOutputStream(getOutput()).close();
+			try (OutputStream unused = new FileOutputStream(getOutput())) {
+				//this is empty because we only need to close it
+			}
 		} else {
 			throw new IOException("Cannot swap to an empty file.");
 		}
@@ -127,8 +133,12 @@ public class TempFileHandler implements StreamJuggler {
 			return;
 		}
 		try {
-			if (getOutput().length() > 0) { FileIO.copy(getOutput(), output); }
-			else if (getInput().length() > 0) { FileIO.copy(getInput(), output); }
+			if (getOutput().length() > 0) {
+				Files.copy(getOutput().toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			}
+			else if (getInput().length() > 0) {
+				Files.copy(getInput().toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			}
 			else {
 				throw new IOException("Temporary files corrupted.");
 			}

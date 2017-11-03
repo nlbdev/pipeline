@@ -27,12 +27,12 @@ import java.util.Set;
  * <p>
  * Usage example:
  * </p>
- * <pre><code>
+ * <pre>
  * SimpleCharReplacer ucr = new SimpleCharReplacer();
  * ucr.addSubstitutionTable(fileURL);
  * ucr.addSubstitutionTable(fileURL2);
  * String ret = ucr.replace(input);
- * </code></pre>
+ * </pre>
  * 
  * <p>
  * The translation table file is using the same xml format as that of
@@ -73,10 +73,19 @@ public class SimpleUCharReplacer extends HashMap<Integer, String> {
 	 */
 	private static final long serialVersionUID = -3238811228931823883L;
 
+	/**
+	 * Creates a new instance.
+	 */
 	public SimpleUCharReplacer() {
 		super();
 	}
 
+	/**
+	 * Adds a substitution table to this instance. See the class description for
+	 * the format.
+	 * @param table the url to the substitution table.
+	 * @throws IOException if the table could not be added
+	 */
 	public void addSubstitutionTable(URL table) throws IOException {
 		try {
 			loadTable(table);
@@ -85,6 +94,11 @@ public class SimpleUCharReplacer extends HashMap<Integer, String> {
 		}
 	}
 
+	/**
+	 * Replaces characters in the input according to this object's current configuration.
+	 * @param input the input
+	 * @return returns a modified string
+	 */
 	public CharSequence replace(String input) {
 		int codePoint;
 

@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+@Deprecated
+@SuppressWarnings("javadoc")
 public class SplitPointHandlerTest {
 
 	DummySplitPoint c = new DummySplitPoint.Builder().breakable(false).skippable(false).size(1).build();

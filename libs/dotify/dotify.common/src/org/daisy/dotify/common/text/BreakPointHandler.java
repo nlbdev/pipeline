@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 /**
  * Breaks a paragraph of text into rows. It is assumed that all 
- * preferred break points are supplied with the input String.
+ * preferred break points are supplied with the input string.
  * 
  * Soft hyphen (0x00ad) and zero width space (0x200b) characters
  * can also be used for non-standard hyphenation.
@@ -19,20 +19,31 @@ import java.util.regex.Pattern;
  *
  */
 public class BreakPointHandler {
-	private final static char SOFT_HYPHEN = '\u00ad';
-	private final static char ZERO_WIDTH_SPACE = '\u200b';
-	private final static char DASH = '-';
-	private final static char SPACE = ' ';
-	private final static Pattern LEADING_WHITESPACE = Pattern.compile("\\A[\\s\u200b]+");
-	private final static Pattern TRAILING_WHITESPACE = Pattern.compile("[\\s\u200b]+\\z");
+	private static final char SOFT_HYPHEN = '\u00ad';
+	private static final char ZERO_WIDTH_SPACE = '\u200b';
+	private static final char DASH = '-';
+	private static final char SPACE = ' ';
+	private static final Pattern LEADING_WHITESPACE = Pattern.compile("\\A[\\s\u200b]+");
+	private static final Pattern TRAILING_WHITESPACE = Pattern.compile("[\\s\u200b]+\\z");
 	private String charsStr;
 	private int offset;
 	private TreeMap<Integer, NonStandardHyphenationInfo> meta;
 	
+	/**
+	 * Provides a builder for break point handlers
+	 * @author Joel Håkansson
+	 *
+	 */
 	public static class Builder {
 		private final String str;
 		private final TreeMap<Integer, NonStandardHyphenationInfo> meta;
 		
+		/**
+		 * Creates a new builder with the string to break.
+		 * All regular break points must be in supplied with the input string,
+		 * represented by hyphen 0x2d, soft hyphen 0xad or space 0x20.
+		 * @param str the string
+		 */
 		public Builder(String str) {
 			this.str = str;
 			this.meta = new TreeMap<>();
@@ -82,11 +93,7 @@ public class BreakPointHandler {
 	public BreakPointHandler(String str) {
 		this(str, null, 0);
 	}
-/*
-	public BreakPointHandler(String str, TreeMap<Integer, NonStandardHyphenationInfo> meta) {
-		this(str, meta, 0);
-	}*/
-	
+
 	@SuppressWarnings("unchecked")
 	private BreakPointHandler(String str, TreeMap<Integer, NonStandardHyphenationInfo> meta, int offset) {
 		if (str==null) {
@@ -112,6 +119,7 @@ public class BreakPointHandler {
 	/**
 	 * Gets the next row from this BreakPointHandler
 	 * @param breakPoint the desired breakpoint for this row
+	 * @param force if force is allowed if no breakpoint is found
 	 * @return returns the next BreakPoint
 	 */
 	public BreakPoint nextRow(int breakPoint, boolean force) {
@@ -215,6 +223,10 @@ public class BreakPointHandler {
 		return new BreakPoint(head, tail, hard);
 	}
 
+	/**
+	 * Counts the remaining characters, excluding unused breakpoints.
+	 * @return returns the number of remaining characters
+	 */
 	public int countRemaining() {
 		if (charsStr==null) {
 			return 0;
@@ -222,6 +234,10 @@ public class BreakPointHandler {
 		return getRemaining().length();
 	}
 	
+	/**
+	 * Gets the remaining characters, removing unused breakpoint characters.
+	 * @return returns the remaining characters
+	 */
 	public String getRemaining() {
 		return finalizeResult(charsStr);
 	}
