@@ -147,7 +147,7 @@ public class VolumeProvider {
 				double priorityPenalty = 0;
 				int sheetCount = index + 1;
 				// Calculates a maximum offset based on the maximum possible number of sheets
-				double range = splitterMax * 0.2;
+				double range = splitterMax * 0.4;
 				if (!units.isEmpty()) {
 					Integer avoid = lastSheet.getAvoidVolumeBreakAfterPriority();
 					if (avoid!=null) {
