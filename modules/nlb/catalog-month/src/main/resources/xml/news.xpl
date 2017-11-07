@@ -243,15 +243,17 @@
     <p:unwrap match="html:html"/>
     <p:unwrap match="html:body"/>
     <p:viewport match="*[@src]">
+        <p:variable name="src" select="replace(replace(replace(replace(replace(/*/@src, ' ', '%20'), '&quot;', '%22'), &quot;&apos;&quot;, '%27'), '&lt;', '%3C'), '&gt;', '%3E')"/>
         <p:add-attribute match="/*" attribute-name="src">
-            <p:with-option name="attribute-value" select="resolve-uri(/*/@src,'http://www.nlb.no/')"/>
+            <p:with-option name="attribute-value" select="resolve-uri($src,'http://www.nlb.no/')"/>
         </p:add-attribute>
     </p:viewport>
     <p:viewport match="*[@href]">
         <p:try>
             <p:group>
+                <p:variable name="href" select="replace(replace(replace(replace(replace(/*/@href, ' ', '%20'), '&quot;', '%22'), &quot;&apos;&quot;, '%27'), '&lt;', '%3C'), '&gt;', '%3E')"/>
                 <p:add-attribute match="/*" attribute-name="href">
-                    <p:with-option name="attribute-value" select="resolve-uri(/*/@href,'http://www.nlb.no/')"/>
+                    <p:with-option name="attribute-value" select="resolve-uri($href,'http://www.nlb.no/')"/>
                 </p:add-attribute>
             </p:group>
             <p:catch>
