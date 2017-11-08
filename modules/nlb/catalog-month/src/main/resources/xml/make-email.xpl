@@ -58,6 +58,12 @@
                 </p:otherwise>
             </p:choose>
         </p:viewport>
+        <p:viewport match="html:*[contains(@style,'float')]">
+            <!-- remove float styles -->
+            <p:add-attribute match="/*" attribute-name="style">
+                <p:with-option name="attribute-value" select="string-join(for $s in (tokenize(/*/@style,';')) return (if (matches($s,'^\s*float\s*:.*$')) then () else $s), '; ')"/>
+            </p:add-attribute>
+        </p:viewport>
         <p:viewport match="html:iframe[matches(@src,'^https?://[^/]*youtube.com/')]">
             <p:variable name="youtube" select="replace(/*/@src,'.*/([^?/]*).*','$1')"/>
             <p:identity name="iframe"/>
