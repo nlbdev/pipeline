@@ -947,7 +947,7 @@
             <x:expect label="The fifth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[5]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
         </x:scenario>
         
-        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter)" pending="https://github.com/nlbdev/pipeline/issues/88">
+        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -998,9 +998,9 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"/>
             </x:context>
-            <x:expect label="There should be 3 volumes" type="xpath" test="count(//pef:volume)" equals="3"/>
-            <x:expect label="The part headline should be in the second volume" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠁')]/preceding::pef:volume)+1" equals="2"/>
-            <x:expect label="The chapter headline should be in the second volume" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/preceding::pef:volume)+1" equals="2"/>
+            <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            <x:expect label="The part headline should be in the first volume" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠁')]/preceding::pef:volume)+1" equals="1"/>
+            <x:expect label="The chapter headline should be in the first volume as well" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/preceding::pef:volume)+1" equals="1"/>
         </x:scenario>
         
         <x:scenario label="Regression test for issue #121: Coding error: unexpected /css:_/book[1]/@css:volume-break-before (mode was table-attr)">
