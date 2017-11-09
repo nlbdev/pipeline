@@ -7,7 +7,7 @@
 						<string value=""/>
 					</field>
 					<field>
-						<current-page style="roman"/>
+						<current-page number-format="roman"/>
 					</field>
 				</header>
 				<footer>
@@ -27,7 +27,7 @@
 			<template use-when="(= (% $page 2) 0)">
 				<header>
 					<field>
-						<current-page style="default"/>
+						<current-page number-format="default"/>
 					</field>
 					<field>
 						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
@@ -43,7 +43,7 @@
 						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
 					</field>
 					<field>
-						<current-page style="default"/>
+						<current-page number-format="default"/>
 					</field>
 				</header>
 				<footer/>
@@ -53,7 +53,7 @@
 			<default-template>
 				<header>
 					<field>
-						<current-page style="default"/>
+						<current-page number-format="default"/>
 					</field>
 				</header>
 				<footer/>

@@ -14,11 +14,6 @@ sourceSets {
 	test {	java { srcDir 'test' }	resources { srcDir 'test' } }
 }
 
-configurations {
-	provided
-	compile { extendsFrom provided }
-}
-
 compileJava {
     options.encoding = 'UTF-8'
 }
@@ -37,14 +32,14 @@ javadoc {
 repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/groups/staging" }
-    mavenLocal()
+    //mavenLocal()
     //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
-    provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-    compile "org.daisy.dotify:dotify.api:3.1.0"
-    compile "org.daisy.dotify:dotify.common:3.2.0"
+    compileOnly group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
+    compile "org.daisy.dotify:dotify.api:3.2.0"
+    compile "org.daisy.dotify:dotify.common:3.6.0"
     compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
 	}
@@ -67,9 +62,11 @@ buildscript {
     dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.4" }
 }
 
-task updateBndVersion() << {
-	String contents = file('bnd.bnd').getText('UTF-8')
-	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
+task updateBndVersion() {
+	doLast() {
+		String contents = file('bnd.bnd').getText('UTF-8')
+		file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
+	}
 }
 
 ext.writeTestsOverviewFile = { folderPath, fileName ->
@@ -93,37 +90,39 @@ ext.writeTestsOverviewFile = { folderPath, fileName ->
 
 javadoc.dependsOn('updateTestsOverviewFile')
 
-task updateTestsOverviewFile() << {
-	// There are more tests in this folder with another naming standard, but they
-	// don't suit the presentational format and are more of integration tests.
-	// Additional tests should be written based on these.
-	def r = writeTestsOverviewFile('test/org/daisy/dotify/engine/impl/resource-files', 'tests-overview.xml')
-	ant {
-		xslt (
-			basedir: "test",
-			destdir: (new File("${buildDir}/docs/tests")),
-			style: "build-resources/display.xslt",
-			includes: "**/tests-overview.xml",
-			filenameparameter: "filename"
-		) {
-			mapper (
-				type: "package",
-				from: "*.xml",
-				to: "*.html"
-			)
-			xmlcatalog {
-				dtd (
-					publicId: "-//W3C//DTD XHTML 1.0 Strict//EN",
-					location: "build-resources/xhtml10/xhtml1-strict.dtd"
+task updateTestsOverviewFile() {
+	doLast() {
+		// There are more tests in this folder with another naming standard, but they
+		// don't suit the presentational format and are more of integration tests.
+		// Additional tests should be written based on these.
+		def r = writeTestsOverviewFile('test/org/daisy/dotify/engine/impl/resource-files', 'tests-overview.xml')
+		ant {
+			xslt (
+				basedir: "test",
+				destdir: (new File("${buildDir}/docs/tests")),
+				style: "build-resources/display.xslt",
+				includes: "**/tests-overview.xml",
+				filenameparameter: "filename"
+			) {
+				mapper (
+					type: "package",
+					from: "*.xml",
+					to: "*.html"
+				)
+				xmlcatalog {
+					dtd (
+						publicId: "-//W3C//DTD XHTML 1.0 Strict//EN",
+						location: "build-resources/xhtml10/xhtml1-strict.dtd"
+					)
+				}
+				param (
+					name: 'timestamp', 
+					expression: new Date().format("yyyy-MM-dd'T'HH:mmXXX")
 				)
 			}
-			param (
-				name: 'timestamp', 
-				expression: new Date().format("yyyy-MM-dd'T'HH:mmXXX")
-			)
 		}
+		r.delete()
 	}
-	r.delete()
 }
 
 bundle {

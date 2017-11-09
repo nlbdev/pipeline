@@ -19,8 +19,8 @@ public final class DocumentSpace {
 
 	/**
 	 * Note that Space.BODY ignores volumeNumber
-	 * @param space
-	 * @param volumeNumber
+	 * @param space the space
+	 * @param volumeNumber the volume number
 	 */
 	public DocumentSpace(Space space, Integer volumeNumber) {
 		this.space = space;
@@ -49,6 +49,11 @@ public final class DocumentSpace {
 		if (volumeNumber != other.volumeNumber)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "DocumentSpace [volumeNumber=" + volumeNumber + ", space=" + space + "]";
 	}
 	
 }

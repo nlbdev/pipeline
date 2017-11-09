@@ -7,39 +7,43 @@ import org.daisy.dotify.api.formatter.Marker;
 
 public class PageDetails {
 	private final boolean duplex;
-	private final int ordinal;
-	private final int globalStartIndex;
-	private final SequenceId sequenceId;
+	private final PageId pageId;
+	private final int pageNumberOffset;
 	private int volumeNumber;
-	int contentMarkersBegin;
+	private int contentMarkersBegin;
 	
 	private final ArrayList<Marker> markers;
 	
-	public PageDetails(boolean duplex, int ordinal, int globalStartIndex, SequenceId sequenceId) {
+	public PageDetails(boolean duplex, PageId pageId, int pageNumberOffset) {
 		this.duplex = duplex;
-		this.ordinal = ordinal;
-		this.globalStartIndex = globalStartIndex;
-		this.sequenceId = sequenceId;
-		//FIXME: for this to work as intended, the markers have to have some way of remaining while being updated
+		this.pageId = pageId;
+		this.pageNumberOffset = pageNumberOffset;
 		this.markers = new ArrayList<>();
 		this.contentMarkersBegin = 0;
 		this.volumeNumber = 0;
+	}
+	
+	public PageDetails with(int ordinal) {
+		return new PageDetails(
+				this.duplex, 
+				this.pageId.with(ordinal),
+				pageNumberOffset);
 	}
 
 	private boolean duplex() {
 		return duplex;
 	}
 	
-	private int getOrdinal() {
-		return ordinal;
-	}
-	
-	int getPageId() {
-		return globalStartIndex + ordinal;
-	}
-	
 	SequenceId getSequenceId() {
-		return sequenceId;
+		return pageId.getSequenceId();
+	}
+	
+	public PageId getPageId() {
+		return pageId;
+	}
+	
+	public int getPageNumber() {
+		return pageId.getOrdinal() + pageNumberOffset + 1;
 	}
 	
 	int getVolumeNumber() {
@@ -67,20 +71,20 @@ public class PageDetails {
 				(
 					duplex() && 
 					(
-						(offset == 1 && getOrdinal() % 2 == 1) ||
-						(offset == -1 && getOrdinal() % 2 == 0)
+						(offset == 1 && pageId.getOrdinal() % 2 == 1) ||
+						(offset == -1 && pageId.getOrdinal() % 2 == 0)
 					)
 				);
 	}
 	
 	boolean isWithinSpreadScope(int offset, PageDetails other) {
 		if (other==null) { 
-			return ((offset == 1 && getOrdinal() % 2 == 1) ||
-					(offset == -1 && getOrdinal() % 2 == 0));
+			return ((offset == 1 && pageId.getOrdinal() % 2 == 1) ||
+					(offset == -1 && pageId.getOrdinal() % 2 == 0));
 		} else {
 			return (
-					(offset == 1 && getOrdinal() % 2 == 1 && duplex()==true) ||
-					(offset == -1 && getOrdinal() % 2 == 0 && other.duplex()==true && other.getOrdinal() % 2 == 1)
+					(offset == 1 && pageId.getOrdinal() % 2 == 1 && duplex()==true) ||
+					(offset == -1 && pageId.getOrdinal() % 2 == 0 && other.duplex()==true && other.pageId.getOrdinal() % 2 == 1)
 				);
 		}
 	}
@@ -106,7 +110,7 @@ public class PageDetails {
 			return this;
 		} else {
 			if (pageView!=null) {
-				int next = pageView.toLocalIndex(getPageId())+offset;
+				int next = pageView.toLocalIndex(pageId.getPageIndex())+offset;
 				int size = pageView.size();
 				if (adjustOutOfBounds) {
 					next = Math.min(size-1, Math.max(0, next));
@@ -124,10 +128,53 @@ public class PageDetails {
 				(
 					duplex() &&
 					(
-						(offset == 1 && getOrdinal() % 2 == 0) ||
-						(offset == -1 && getOrdinal() % 2 == 1)
+						(offset == 1 && pageId.getOrdinal() % 2 == 0) ||
+						(offset == -1 && pageId.getOrdinal() % 2 == 1)
 					)
 				);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + contentMarkersBegin;
+		result = prime * result + (duplex ? 1231 : 1237);
+		result = prime * result + ((markers == null) ? 0 : markers.hashCode());
+		result = prime * result + ((pageId == null) ? 0 : pageId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PageDetails other = (PageDetails) obj;
+		if (contentMarkersBegin != other.contentMarkersBegin)
+			return false;
+		if (duplex != other.duplex)
+			return false;
+		if (markers == null) {
+			if (other.markers != null)
+				return false;
+		} else if (!markers.equals(other.markers))
+			return false;
+		if (pageId == null) {
+			if (other.pageId != null)
+				return false;
+		} else if (!pageId.equals(other.pageId))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "PageDetails [duplex=" + duplex + ", pageId=" + pageId + ", volumeNumber=" + volumeNumber
+				+ ", contentMarkersBegin=" + contentMarkersBegin + ", markers=" + markers + "]";
 	}
 	
 }

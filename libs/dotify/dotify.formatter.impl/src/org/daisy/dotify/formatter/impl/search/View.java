@@ -35,15 +35,6 @@ public class View<T> {
 	public List<T> getItems() {
 		return items.subList(fromIndex, getToIndex());
 	}
-
-	private boolean isSequenceEmpty() {
-		return getToIndex()-fromIndex == 0;
-	}
-	
-	protected T peek() {
-		return items.get(getToIndex()-1);
-	}
-	
 	int toLocalIndex(int globalIndex) {
 		return globalIndex-fromIndex;
 	}

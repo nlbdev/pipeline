@@ -3,6 +3,8 @@ package org.daisy.dotify.formatter.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.dotify.formatter.impl.core.Block;
+
 class UnwriteableAreaInfo {
 	
 	static class UnwriteableArea {

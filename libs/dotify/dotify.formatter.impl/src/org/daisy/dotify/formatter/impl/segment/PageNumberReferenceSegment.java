@@ -13,7 +13,9 @@ public class PageNumberReferenceSegment extends PageNumberReference implements S
 	}
 	
 	/**
+	 * @param refid The reference id
 	 * @param style Array of styles to apply (from outer to inner).
+	 * @param textStyle the text styles
 	 */
 	public PageNumberReferenceSegment(String refid, NumeralStyle style, String[] textStyle) {
 		super(refid, style);
@@ -21,7 +23,9 @@ public class PageNumberReferenceSegment extends PageNumberReference implements S
 	}
 
 	/**
+	 * Creates a new text attribute with the specified width.
 	 * @param width The width of the evaluated expression.
+	 * @return returns a new text attribute
 	 */
 	public TextAttribute getTextAttribute(int width) {
 		if (textStyle == null || textStyle.length == 0) {

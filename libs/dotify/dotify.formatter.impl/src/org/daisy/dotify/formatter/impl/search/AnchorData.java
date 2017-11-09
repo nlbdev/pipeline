@@ -3,16 +3,16 @@ package org.daisy.dotify.formatter.impl.search;
 import java.util.List;
 
 public class AnchorData {
-	private final int pageIndex;
+	private final int pageNumber;
 	private final List<String> refs;
 	
-	public AnchorData(int pageIndex, List<String> refs) {
-		this.pageIndex = pageIndex;
+	public AnchorData(List<String> refs, int pageNumber) {
+		this.pageNumber = pageNumber;
 		this.refs = refs;
 	}
 
-	public int getPageIndex() {
-		return pageIndex;
+	public int getPageNumber() {
+		return pageNumber;
 	}
 	
 	public List<String> getAnchors() {
@@ -23,7 +23,7 @@ public class AnchorData {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + pageIndex;
+		result = prime * result + pageNumber;
 		result = prime * result + ((refs == null) ? 0 : refs.hashCode());
 		return result;
 	}
@@ -40,7 +40,7 @@ public class AnchorData {
 			return false;
 		}
 		AnchorData other = (AnchorData) obj;
-		if (pageIndex != other.pageIndex) {
+		if (pageNumber != other.pageNumber) {
 			return false;
 		}
 		if (refs == null) {

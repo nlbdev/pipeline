@@ -5,19 +5,18 @@ Import-Package:  \
 	org.daisy.dotify.api.writer; provide:=true, *
 Private-Package: org.daisy.dotify.engine.impl,\
 	org.daisy.dotify.formatter.impl,\
+	org.daisy.dotify.formatter.impl.common,\
+	org.daisy.dotify.formatter.impl.core,\
+	org.daisy.dotify.formatter.impl.page,\
+	org.daisy.dotify.formatter.impl.row,\
 	org.daisy.dotify.formatter.impl.search,\
 	org.daisy.dotify.formatter.impl.segment,\
+	org.daisy.dotify.formatter.impl.sheet,\
+	org.daisy.dotify.formatter.impl.volume,\
 	org.daisy.dotify.obfl.impl,\
 	org.daisy.dotify.writer.impl
 Service-Component: *
 Include-Resource: / = src/
 -sources: false
--buildpath: osgi.core,\
-	osgi.cmpn,\
-	biz.aQute.bnd.annotation,\
-	junit.osgi,\
-	dotify.api;version=latest,\
-	dotify.common;version=latest,\
-	dotify.translator.impl;version=latest
 Export-Package:  \
 	org.daisy.dotify.obfl

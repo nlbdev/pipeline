@@ -7,7 +7,7 @@
 					<string value=""/>
 				</field>
 				<field>
-					<current-page style="default"/>
+					<current-page number-format="default"/>
 				</field>
 			</header>
 			<footer/>

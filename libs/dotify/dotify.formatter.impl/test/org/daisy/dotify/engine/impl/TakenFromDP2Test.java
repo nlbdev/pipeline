@@ -121,13 +121,13 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test
 	public void testWhiteSpaceNormalizationAroundMarker() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/white-space-normalization-around-marker-input.obfl",
-		        "resource-files/dp2/white-space-normalization-around-marker-expected.pef", true);
+		        "resource-files/dp2/white-space-normalization-around-marker-expected.pef", false);
 	}
 	@Ignore // white space around comment is dropped
 	@Test
 	public void testCommentInWhiteSpace() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/comment-in-white-space-input.obfl",
-		        "resource-files/dp2/comment-in-white-space-expected.pef", true);
+		        "resource-files/dp2/comment-in-white-space-expected.pef", false);
 	}
 	@Test
 	public void testMarkerReferenceSequenceBackward() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
@@ -142,7 +142,7 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test
 	public void testMarkerReferencePageContentForwardBackward() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/marker-reference-page-content-forward-backward-input.obfl",
-		        "resource-files/dp2/marker-reference-page-content-forward-backward-expected.pef", true);
+		        "resource-files/dp2/marker-reference-page-content-forward-backward-expected.pef", false);
 	}
 	@Test
 	public void testMarkerReferenceAcrossSequenceWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
@@ -172,19 +172,19 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test
 	public void testMarkerReferencePageStartWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/marker-reference-page-start-workaround-input.obfl",
-		        "resource-files/dp2/marker-reference-page-start-workaround-expected.pef", true);
+		        "resource-files/dp2/marker-reference-page-start-workaround-expected.pef", false);
 	}
 	@Test
 	public void testMarkerReferenceSpreadStartWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/marker-reference-spread-start-workaround-input.obfl",
-		        "resource-files/dp2/marker-reference-spread-start-workaround-expected.pef", true);
+		        "resource-files/dp2/marker-reference-spread-start-workaround-expected.pef", false);
 	}
 	@Ignore // position of middle field of header/footer depends on width of fields in
 	        // left and right corner, so centering is not perfect
 	@Test
 	public void testFooterMiddleFieldCentering() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/footer-middle-field-centering-input.obfl",
-		        "resource-files/dp2/footer-middle-field-centering-expected.pef", true);
+		        "resource-files/dp2/footer-middle-field-centering-expected.pef", false);
 	}
 	@Test
 	public void testVariousPageWidths() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
@@ -251,7 +251,7 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test
 	public void testMultiLineHeaderPartlyEmpty() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/multi-line-header-partly-empty-input.obfl",
-		        "resource-files/dp2/multi-line-header-partly-empty-expected.pef", true);
+		        "resource-files/dp2/multi-line-header-partly-empty-expected.pef", false);
 	}
 	@Test
 	public void testHeaderVaryHeightLeftRightPages() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
@@ -347,13 +347,13 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test
 	public void testMarkerIndicatorBeforeBlock() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/marker-indicator-before-block-input.obfl",
-		        "resource-files/dp2/marker-indicator-before-block-expected.pef", true);
+		        "resource-files/dp2/marker-indicator-before-block-expected.pef", false);
 	}
 	@Ignore // see https://github.com/joeha480/dotify/issues/195
 	@Test
 	public void testMarginRegionAndBorders() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/margin-region-and-borders-input.obfl",
-		        "resource-files/dp2/margin-region-and-borders-expected.pef", true);
+		        "resource-files/dp2/margin-region-and-borders-expected.pef", false);
 	}
 	@Test
 	public void testRowSpacingAndFooter() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
@@ -364,10 +364,5 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	public void testManualVolumeBreakingTOC() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/manual-volume-breaking-toc-input.obfl",
 		        "resource-files/dp2/manual-volume-breaking-toc-expected.pef", false);
-	}
-	@Test
-	public void testMarginRegionAndBorder() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/margin-region-and-border-input.obfl",
-		        "resource-files/dp2/margin-region-and-border-expected.pef", false);
 	}
 }

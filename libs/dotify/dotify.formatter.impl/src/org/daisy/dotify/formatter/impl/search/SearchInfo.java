@@ -3,29 +3,50 @@ package org.daisy.dotify.formatter.impl.search;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.api.formatter.MarkerReferenceField;
 import org.daisy.dotify.api.formatter.MarkerReferenceField.MarkerSearchDirection;
 import org.daisy.dotify.api.formatter.MarkerReferenceField.MarkerSearchScope;
 
-public class SearchInfo {
+class SearchInfo {
 
 	private final Map<DocumentSpace, DocumentSpaceData> spaces;
+	private final Map<String, PageDetails> uncommitted;
+	private boolean dirty;
 	
 	SearchInfo() {
 		this.spaces = new HashMap<>();
+		this.uncommitted = new HashMap<>();
+		this.dirty = false;
 	}
-
-	public void addPageDetails(PageDetails value) {
-		if (value.getPageId()<0) {
+	
+	private static String toKey(PageDetails value) {
+		return value.getSequenceId().getSpace() + "-" + value.getPageId();
+	}
+	
+	void keepPageDetails(PageDetails value) {
+		if (value.getPageId().getPageIndex()<0) {
 			throw new IllegalArgumentException("Negative page id not allowed.");
 		}
-		DocumentSpaceData data = getViewForSpace(value.getSequenceId().getSpace());
-		while (value.getPageId()>=data.pageDetails.size()) {
-			data.pageDetails.add(null);
+		uncommitted.put(toKey(value), value);
+	}
+	
+	void commitPageDetails() {
+		for (Entry<String, PageDetails> entry : uncommitted.entrySet()) {
+			PageDetails value = entry.getValue();
+			DocumentSpaceData data = getViewForSpace(value.getSequenceId().getSpace());
+			while (value.getPageId().getPageIndex()>=data.pageDetails.size()) {
+				data.pageDetails.add(null);
+			}
+			PageDetails old = data.pageDetails.set(value.getPageId().getPageIndex(), value);
+			// Only check the previous value if dirty isn't already true
+			if (!dirty && !value.equals(old)) {
+				dirty = true;
+			}
 		}
-		data.pageDetails.set(value.getPageId(), value);
+		uncommitted.clear();
 	}
 
 	View<PageDetails> getPageView(DocumentSpace space) {
@@ -40,12 +61,12 @@ public class SearchInfo {
 		return getViewForSpace(seqId.getSpace()).sequenceViews.get(seqId.getOrdinal());
 	}
 	
-	public void setSequenceScope(DocumentSpace space, int sequenceNumber, int fromIndex, int toIndex) {
+	void setSequenceScope(DocumentSpace space, int sequenceNumber, int fromIndex, int toIndex) {
 		View<PageDetails> pw = new View<PageDetails>(getViewForSpace(space).pageDetails, fromIndex, toIndex);
 		getViewForSpace(space).sequenceViews.put(sequenceNumber, pw);
 	}
 	
-	public void setVolumeScope(int volumeNumber, int fromIndex, int toIndex) {
+	void setVolumeScope(int volumeNumber, int fromIndex, int toIndex) {
 		setVolumeScope(volumeNumber, fromIndex, toIndex, DocumentSpace.BODY);
 	}
 
@@ -187,15 +208,37 @@ public class SearchInfo {
 		}
 	}
 	
-	public String findStartAndMarker(PageDetails p, MarkerReferenceField f2) {
-		PageDetails start;
-		if (f2.getSearchScope()==MarkerSearchScope.SPREAD ||
-			f2.getSearchScope()==MarkerSearchScope.SPREAD_CONTENT) {
-			start = getPageInVolumeWithOffset(p, f2.getOffset(), shouldAdjustOutOfBounds(p, f2));
+	private PageDetails getPageDetails(PageId p) {
+		DocumentSpaceData data = getViewForSpace(p.getSequenceId().getSpace());
+		if (p.getPageIndex()<data.pageDetails.size()) {
+			return data.pageDetails.get(p.getPageIndex());
 		} else {
-			//Keep while moving: start = p.getPageInScope(p.getSequenceParent(), f2.getOffset(), shouldAdjustOutOfBounds(p, f2));
-			start = p.getPageInScope(getContentsInSequence(p.getSequenceId()), f2.getOffset(), shouldAdjustOutOfBounds(p, f2));
+			return null;
 		}
-		return findMarker(start, f2);
+	}
+	
+	String findStartAndMarker(PageId id, MarkerReferenceField f2) {
+		PageDetails p = getPageDetails(id);
+		if (p!=null) { 
+			PageDetails start;
+			if (f2.getSearchScope()==MarkerSearchScope.SPREAD ||
+				f2.getSearchScope()==MarkerSearchScope.SPREAD_CONTENT) {
+				start = getPageInVolumeWithOffset(p, f2.getOffset(), shouldAdjustOutOfBounds(p, f2));
+			} else {
+				//Keep while moving: start = p.getPageInScope(p.getSequenceParent(), f2.getOffset(), shouldAdjustOutOfBounds(p, f2));
+				start = p.getPageInScope(getContentsInSequence(p.getSequenceId()), f2.getOffset(), shouldAdjustOutOfBounds(p, f2));
+			}
+			return findMarker(start, f2);
+		} else {
+			return "";
+		}
+	}
+	
+	boolean isDirty() {
+		return dirty;
+	}
+	
+	void setDirty(boolean value) {
+		this.dirty = value;
 	}
 }

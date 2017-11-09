@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/brailleapps/dotify.formatter.impl
 	branch = master
-	commit = 5fb3be5a7451a81049985d22f8e1d8578fd37f6c
-	parent = a85f2fd9eb7e5a8789dca9a25f29d39db8ce9dc3
+	commit = 9f4d3d9796b8ce374c47a24c771305831577e211
+	parent = 7e226dbc22f0ef68e65043af0d1b42d139ffc565
 	cmdver = 0.3.1

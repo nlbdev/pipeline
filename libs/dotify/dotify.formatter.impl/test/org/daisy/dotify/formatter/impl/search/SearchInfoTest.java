@@ -7,12 +7,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.daisy.dotify.api.formatter.Marker;
-import org.daisy.dotify.formatter.impl.search.DocumentSpace;
-import org.daisy.dotify.formatter.impl.search.PageDetails;
-import org.daisy.dotify.formatter.impl.search.SearchInfo;
-import org.daisy.dotify.formatter.impl.search.SequenceId;
-import org.daisy.dotify.formatter.impl.search.Space;
-import org.daisy.dotify.formatter.impl.search.View;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
@@ -45,13 +39,14 @@ public class SearchInfoTest {
 	
 	private static void addPages(SearchInfo si, int count, int offset, boolean duplex, int globalStartIndex, int sequenceId, DocumentSpace space, Map<Integer, ArrayList<Marker>> marker) {
 		for (int i=0; i<count; i++) {
-			PageDetails pd = new PageDetails(true, i+offset, globalStartIndex, new SequenceId(sequenceId, space));
+			PageDetails pd = new PageDetails(true, new PageId(i+offset, globalStartIndex, new SequenceId(sequenceId, space)), i+offset);
 			ArrayList<Marker> m = marker.get(i+offset);
 			if (m!=null) {
 				pd.getMarkers().addAll(m);
 			}
-			si.addPageDetails(pd);
+			si.keepPageDetails(pd);
 		}
+		si.commitPageDetails();
 	}
 
 }

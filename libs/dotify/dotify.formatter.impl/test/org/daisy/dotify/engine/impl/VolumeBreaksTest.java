@@ -46,7 +46,7 @@ public class VolumeBreaksTest extends AbstractFormatterEngineTest {
 	
 	@Test @Ignore
 	public void testKeeVolumeKeepPrevious() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/volume-breaks-keep-previous-input.obfl", "resource-files/volume-breaks-keep-previous-expected.pef", true);
+		testPEF("resource-files/volume-breaks-keep-previous-input.obfl", "resource-files/volume-breaks-keep-previous-expected.pef", false);
 	}
 
 }

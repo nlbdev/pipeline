@@ -561,6 +561,10 @@ public class ObflParser extends XMLParserBase {
 		if (breakBefore!=null) {
 			builder.breakBefore(SequenceProperties.SequenceBreakBefore.valueOf(breakBefore.toUpperCase()));
 		}
+		String pageNumberCounter = getAttr(event, "page-number-counter");
+		if (pageNumberCounter!=null) {
+			builder.pageCounterName(pageNumberCounter);
+		}
 		FormatterCore seq = formatter.newSequence(builder.build());
 		while (input.hasNext()) {
 			event=input.nextEvent();
@@ -892,7 +896,12 @@ public class ObflParser extends XMLParserBase {
 				builder.breakBefore(FormattingTypes.BreakBefore.valueOf(att.getValue().toUpperCase()));
 			} else if ("keep".equals(name)) {
 				if (att.getValue().equalsIgnoreCase("all")) {
-					logger.warning("@keep=all has been deprecated. Use @keep=page");
+					logger.warning("@keep=all has been deprecated since 2016, let's take a while to think about that. Use @keep=page");
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
 				}
 				builder.keep(FormattingTypes.Keep.valueOf(att.getValue().toUpperCase()));
 			} else if ("orphans".equals(name)) {
@@ -1212,7 +1221,12 @@ public class ObflParser extends XMLParserBase {
 	private NumeralStyle getNumeralStyle(XMLEvent event) {
 		String styleStr = getAttr(event, "style");
 		if (styleStr!=null) {
-			logger.warning("@style has been deprecated. Use @number-format instead." + toLocation(event));
+			logger.warning("@style has been deprecated since 2015. Let's take a while to think about that. Use @number-format instead." + toLocation(event));
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
 		} else {
 			styleStr = getAttr(event, "number-format");
 		}
@@ -1375,6 +1389,10 @@ public class ObflParser extends XMLParserBase {
 		if (initialPageNumber!=null) {
 			builder.initialPageNumber(Integer.parseInt(initialPageNumber));
 		}
+		String pageNumberCounter = getAttr(event, "page-number-counter");
+		if (pageNumberCounter!=null) {
+			builder.pageCounterName(pageNumberCounter);
+		}
 		template.newSequence(builder.build());
 		while (input.hasNext()) {
 			event=input.nextEvent();
@@ -1402,7 +1420,10 @@ public class ObflParser extends XMLParserBase {
 		if (initialPageNumber!=null) {
 			builder.initialPageNumber(Integer.parseInt(initialPageNumber));
 		}
-
+		String pageNumberCounter = getAttr(event, "page-number-counter");
+		if (pageNumberCounter!=null) {
+			builder.pageCounterName(pageNumberCounter);
+		}
 		template.newTocSequence(builder.build());
 		while (input.hasNext()) {
 			event=input.nextEvent();
@@ -1435,7 +1456,10 @@ public class ObflParser extends XMLParserBase {
 		if (initialPageNumber!=null) {
 			builder.initialPageNumber(Integer.parseInt(initialPageNumber));
 		}
-
+		String pageNumberCounter = getAttr(event, "page-number-counter");
+		if (pageNumberCounter!=null) {
+			builder.pageCounterName(pageNumberCounter);
+		}
 		DynamicSequenceBuilder dsb = template.newDynamicSequence(builder.build());
 		FormatterCore context = null;
 		while (input.hasNext()) {

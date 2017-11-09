@@ -22,7 +22,10 @@ public class Evaluate implements Segment {
 	}
 	
 	/**
+	 * @param expression the expression
+	 * @param props the text properties
 	 * @param textStyle Array of styles to apply (from outer to inner).
+	 * 
 	 */
 	public Evaluate(DynamicContent expression, TextProperties props, String[] textStyle) {
 		this.expression = expression;
@@ -39,7 +42,9 @@ public class Evaluate implements Segment {
 	}
 
 	/**
+	 * Creates a new text attribute with the specified width.
 	 * @param width The width of the evaluated expression.
+	 * @return returns the new text attribute
 	 */
 	public TextAttribute getTextAttribute(int width) {
 		if (textStyle == null || textStyle.length == 0) {

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.daisy.dotify.formatter.impl.search.LookupHandler;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
