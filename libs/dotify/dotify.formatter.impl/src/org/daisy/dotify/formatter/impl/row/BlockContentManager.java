@@ -5,6 +5,7 @@ import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.daisy.dotify.api.formatter.Context;
@@ -139,8 +140,20 @@ public class BlockContentManager extends AbstractBlockContentManager {
 				return false;
 			}
 			Segment s = segments.get(segmentIndex);
-			if (testOnly && s.getSegmentType()!=SegmentType.Marker && s.getSegmentType()!=SegmentType.Anchor) {
-				return true;
+			if (testOnly) {
+				switch (s.getSegmentType()) {
+				case Marker:
+				case Anchor:
+					break;
+				case Evaluate:
+					if (!((Evaluate)s).getExpression().render(context).isEmpty()) {
+						return true;
+					} else {
+						break;
+					}
+				default:
+					return true;
+				}
 			}
 			layoutSegment(s);
 			segmentIndex++;
@@ -364,9 +377,13 @@ public class BlockContentManager extends AbstractBlockContentManager {
     @Override
     public RowImpl getNext() {
     	ensureBuffer(rowIndex+1);
-        RowImpl ret = rows.get(rowIndex);
-        rowIndex++;
-        return ret;
+        try {
+            RowImpl ret = rows.get(rowIndex);
+            rowIndex++;
+            return ret;
+        } catch (IndexOutOfBoundsException e) {
+            throw new NoSuchElementException();
+        }
     }
 
 	private void layout(String c, String locale, String mode) {
