@@ -511,8 +511,8 @@ h3, level1.part h4, *[epub|type~='part'] h4 {
         border-right: none;
         border-top: none;
         margin-bottom: 0;
-        margin-left: 5;
-        margin-right: 5;
+        margin-left: 2;
+        margin-right: 2;
         margin-top: 1;
         text-align: center;
         text-indent: 0;
@@ -525,8 +525,8 @@ h2, level1.part h3, *[epub|type~='part'] h3 {
         border-right: none;
         border-top: none;
         margin-bottom: 1;
-        margin-left: 5;
-        margin-right: 5;
+        margin-left: 2;
+        margin-right: 2;
         margin-top: 2;
         text-align: center;
         text-indent: 0;
@@ -539,13 +539,12 @@ h1, level1.part h2, *[epub|type~='part'] h2 {
         border-right: none;
         border-top: ⠉;
         margin-bottom: 1;
-        margin-left: 5;
-        margin-right: 5;
+        margin-left: 0;
+        margin-right: 0;
         margin-top: 2;
         text-align: center;
         text-indent: 0;
 }
- 
 
 /* part */
 level1.part h1, *[epub|type~='part'] h1 {
@@ -794,8 +793,8 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
 @mixin endnotes-title {
         display: block;
         margin-top: 2;
-        margin-left: 5;
-        margin-right: 5;
+        margin-left: 0;
+        margin-right: 0;
         margin-bottom: 1;
         text-align: center;
         border-top: ⠉;
