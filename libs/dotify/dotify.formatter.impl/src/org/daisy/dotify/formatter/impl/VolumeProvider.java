@@ -225,7 +225,27 @@ public class VolumeProvider {
 			sb.addSheet(sheet);
 		}
 		groups.currentGroup().setSheetCount(groups.currentGroup().getSheetCount() + contents.size());
-		groups.nextVolume();
+		if (groups.currentGroup().getUnits().isEmpty()) {
+			PageStruct startOfNextGroup; {
+				if (data instanceof SheetDataSource) {
+					startOfNextGroup = new PageStruct(((SheetDataSource)data).struct);
+				} else {
+					startOfNextGroup = null;
+				}
+			}
+			groups.nextVolume();
+			if (startOfNextGroup != null) {
+				try {
+					SplitPointDataSource<Sheet> spd = groups.currentGroup().getUnits();
+					if (spd instanceof SheetDataSource) {
+						((SheetDataSource)spd).struct = startOfNextGroup;
+					}
+				} catch (IndexOutOfBoundsException e) {
+				}
+			}
+		} else {
+			groups.nextVolume();
+		}
 		return sb;
 	}
 	

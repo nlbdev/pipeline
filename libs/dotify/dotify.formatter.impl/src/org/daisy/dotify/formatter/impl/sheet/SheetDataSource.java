@@ -27,7 +27,7 @@ import org.daisy.dotify.formatter.impl.search.SheetIdentity;
  */
 public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	//Global state
-	private final PageStruct struct;
+	public PageStruct struct;
 	private final FormatterContext context;
 	//Input data
 	private final DefaultContext rcontext;

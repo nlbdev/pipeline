@@ -4,10 +4,14 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">manual-and-automatic-volume-breaking</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests combination of manual and automatic volume breaking.</dc:description>
    </meta>
-   <layout-master name="main" duplex="true" page-width="10" page-height="5">
+   <layout-master name="main" duplex="true" page-width="10" page-height="6">
       <default-template>
          <header/>
-         <footer/>
+         <footer>
+			 <field>
+                 <current-page number-format="default"/>
+             </field>
+		 </footer>
       </default-template>
    </layout-master>
    <volume-template sheets-in-volume-max="3"/>
