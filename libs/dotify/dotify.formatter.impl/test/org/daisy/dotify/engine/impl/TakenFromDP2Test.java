@@ -365,7 +365,7 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/manual-volume-breaking-toc-input.obfl",
 		        "resource-files/dp2/manual-volume-breaking-toc-expected.pef", false);
 	}
-	@Ignore // currently failing
+
 	@Test
 	public void testManualAndAutomaticVolumeBreaking() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/manual-and-automatic-volume-breaking-input.obfl",

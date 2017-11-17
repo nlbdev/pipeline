@@ -41,7 +41,7 @@ class TableCell extends FormatterCoreImpl {
 		int forceCount = 0;
 		for (Block block : blocks) {
 			AbstractBlockContentManager bcm = block.getBlockContentManager(
-					new BlockContext(flowWidth, crh, c, context)
+					BlockContext.from(c).flowWidth(flowWidth).formatterContext(context).build()
 					);
 			rowData.addAll(bcm.getCollapsiblePreContentRows());
 			rowData.addAll(bcm.getInnerPreContentRows());

@@ -1,7 +1,6 @@
 package org.daisy.dotify.formatter.impl.page;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.daisy.dotify.api.formatter.BlockPosition;
 import org.daisy.dotify.api.formatter.FallbackRule;
@@ -36,14 +35,14 @@ import org.daisy.dotify.formatter.impl.search.SequenceId;
 
 public class PageSequenceBuilder2 {
 	private final FormatterContext context;
-	private final CrossReferenceHandler crh;
 	private final PageAreaContent staticAreaContent;
 	private final PageAreaProperties areaProps;
 
 	private final ContentCollectionImpl collection;
 	private final BlockContext blockContext;
+	private final CollectionData cd;
 	private final LayoutMaster master;
-	private final List<RowGroupDataSource> dataGroups;
+	private final List<RowGroupSequence> dataGroups;
 	private final FieldResolver fieldResolver;
 	private final SequenceId seqId;
 	private final SplitPointHandler<RowGroup> sph;
@@ -59,13 +58,11 @@ public class PageSequenceBuilder2 {
 	private final int fromIndex;
 	private int toIndex;
 	
-	public PageSequenceBuilder2(int fromIndex, LayoutMaster master, int pageOffset, CrossReferenceHandler crh,
-	                     BlockSequence seq, FormatterContext context, DefaultContext rcontext, int sequenceId) {
+	public PageSequenceBuilder2(int fromIndex, LayoutMaster master, int pageOffset, BlockSequence seq, FormatterContext context, DefaultContext rcontext, int sequenceId) {
 		this.fromIndex = fromIndex;
 		this.toIndex = fromIndex;
 		this.master = master;
 		this.context = context;
-		this.crh = crh;
 		this.sph = new SplitPointHandler<>();
 		this.areaProps = seq.getLayoutMaster().getPageArea();
 		if (this.areaProps!=null) {
@@ -75,24 +72,33 @@ public class PageSequenceBuilder2 {
 		}
 		keepNextSheets = 0;
 		
-		this.blockContext = new BlockContext(seq.getLayoutMaster().getFlowWidth(), crh, rcontext, context);
+		this.blockContext = BlockContext.from(rcontext)
+				.flowWidth(seq.getLayoutMaster().getFlowWidth())
+				.formatterContext(context)
+				.build();
 		this.staticAreaContent = new PageAreaContent(seq.getLayoutMaster().getPageAreaBuilder(), blockContext);
-		this.dataGroups = prepareResult(master, seq, blockContext, new CollectionData(staticAreaContent, blockContext, master, collection));
+		//For the scenario processing, it is assumed that all page templates have margin regions that are of the same width.
+		//However, it is unlikely to have a big impact on the selection.
+		BlockContext bc = BlockContext.from(blockContext)
+				.flowWidth(master.getFlowWidth() - master.getTemplate(1).getTotalMarginRegionWidth())
+				.build();
+		this.dataGroups = seq.selectScenario(master, bc, true);
+		this.cd = new CollectionData(staticAreaContent, blockContext, master, collection);
 		this.dataGroupsIndex = 0;
-		this.seqId = new SequenceId(sequenceId, new DocumentSpace(blockContext.getContext().getSpace(), blockContext.getContext().getCurrentVolume()));
+		this.seqId = new SequenceId(sequenceId, new DocumentSpace(blockContext.getSpace(), blockContext.getCurrentVolume()));
 		PageDetails details = new PageDetails(master.duplex(), new PageId(pageCount, getGlobalStartIndex(), seqId), pageOffset);
-		this.fieldResolver = new FieldResolver(master, context, crh, details);
+		this.fieldResolver = new FieldResolver(master, context, rcontext.getRefs(), details);
 	}
 
 	public PageSequenceBuilder2(PageSequenceBuilder2 template) {
 		this.context = template.context;
-		this.crh = template.crh;
 		this.staticAreaContent = template.staticAreaContent;
 		this.areaProps = template.areaProps;
 		this.collection = template.collection;
 		this.blockContext = template.blockContext;
 		this.master = template.master;
 		this.dataGroups = template.dataGroups;
+		this.cd = template.cd;
 		this.dataGroupsIndex = template.dataGroupsIndex;
 		this.fieldResolver = template.fieldResolver;
 		this.seqId = template.seqId;
@@ -115,15 +121,6 @@ public class PageSequenceBuilder2 {
 	
 	public static PageSequenceBuilder2 copyUnlessNull(PageSequenceBuilder2 template) {
 		return template==null?null:new PageSequenceBuilder2(template);
-	}
-
-	private static List<RowGroupDataSource> prepareResult(LayoutMaster master, BlockSequence in, BlockContext blockContext, CollectionData cd) {
-		//TODO: This assumes that all page templates have margin regions that are of the same width  
-		final BlockContext bc = new BlockContext(in.getLayoutMaster().getFlowWidth() - master.getTemplate(1).getTotalMarginRegionWidth(), blockContext.getRefs(), blockContext.getContext(), blockContext.getFcontext());
-		return in.selectScenario(master, bc, true)
-				.stream()
-				.map(rgs -> new RowGroupDataSource(master, bc, rgs.getBlocks(), rgs.getVerticalSpacing(), cd))
-				.collect(Collectors.toList());
 	}
 
 	private PageImpl newPage(int pageNumberOffset) {
@@ -156,11 +153,11 @@ public class PageSequenceBuilder2 {
 	public PageImpl nextPage(int pageNumberOffset) throws PaginatorException, RestartPaginationException // pagination must be restarted in PageStructBuilder.paginateInner
 	{
 		PageImpl ret = nextPageInner(pageNumberOffset);
-		crh.keepPageDetails(ret.getDetails());
+		blockContext.getRefs().keepPageDetails(ret.getDetails());
 		//This is for pre/post volume contents, where the volume number is known
-		if (blockContext.getContext().getCurrentVolume()!=null) {
+		if (blockContext.getCurrentVolume()!=null) {
 			for (String id : ret.getIdentifiers()) {
-				crh.setVolumeNumber(id, blockContext.getContext().getCurrentVolume());
+				blockContext.getRefs().setVolumeNumber(id, blockContext.getCurrentVolume());
 			}
 		}
 		toIndex++;
@@ -173,7 +170,12 @@ public class PageSequenceBuilder2 {
 		while (dataGroupsIndex<dataGroups.size() || (data!=null && !data.isEmpty())) {
 			if ((data==null || data.isEmpty()) && dataGroupsIndex<dataGroups.size()) {
 				//pick up next group
-				data = dataGroups.get(dataGroupsIndex);
+				RowGroupSequence rgs = dataGroups.get(dataGroupsIndex);
+				//TODO: This assumes that all page templates have margin regions that are of the same width
+				BlockContext bc = BlockContext.from(blockContext)
+						.flowWidth(master.getFlowWidth() - master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth())
+						.build();
+				data = new RowGroupDataSource(master, bc, rgs.getBlocks(), rgs.getVerticalSpacing(), cd);
 				dataGroupsIndex++;
 				if (((RowGroupDataSource)data).getVerticalSpacing()!=null) {
 					VerticalSpacing vSpacing = ((RowGroupDataSource)data).getVerticalSpacing();
@@ -189,8 +191,12 @@ public class PageSequenceBuilder2 {
 				}
 				force = false;
 			}
-			((RowGroupDataSource)data).setContext(((RowGroupDataSource)data).getContext().copyWithContext(
-					DefaultContext.from(blockContext.getContext()).currentPage(current.getDetails().getPageNumber()).build()));
+			((RowGroupDataSource)data).setContext(
+							BlockContext.from(((RowGroupDataSource)data).getContext())
+							.currentPage(current.getDetails().getPageNumber())
+							.flowWidth(master.getFlowWidth() - master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth())
+							.build()
+					);
 			if (!data.isEmpty()) {
 				SplitPointDataSource<RowGroup> copy = new RowGroupDataSource((RowGroupDataSource)data);
 				// Using a copy to find the skippable data, so that only the required data is rendered
@@ -254,17 +260,19 @@ public class PageSequenceBuilder2 {
 				if (r.shouldAdjustForMargin() || (i == 0 && j == 0)) {
 					// clone the row as not to append the margins twice
 					RowImpl.Builder b = new RowImpl.Builder(r);
-					MarkerRef rf = r::hasMarkerWithName;
-					MarginProperties margin = r.getLeftMargin();
-					for (MarginRegion mr : p.getPageTemplate().getLeftMarginRegion()) {
-						margin = getMarginRegionValue(mr, rf, false).append(margin);
+					if (r.shouldAdjustForMargin()) {
+						MarkerRef rf = r::hasMarkerWithName;
+						MarginProperties margin = r.getLeftMargin();
+						for (MarginRegion mr : p.getPageTemplate().getLeftMarginRegion()) {
+							margin = getMarginRegionValue(mr, rf, false).append(margin);
+						}
+						b.leftMargin(margin);
+						margin = r.getRightMargin();
+						for (MarginRegion mr : p.getPageTemplate().getRightMarginRegion()) {
+							margin = margin.append(getMarginRegionValue(mr, rf, true));
+						}
+						b.rightMargin(margin);
 					}
-					b.leftMargin(margin);
-					margin = r.getRightMargin();
-					for (MarginRegion mr : p.getPageTemplate().getRightMarginRegion()) {
-						margin = margin.append(getMarginRegionValue(mr, rf, true));
-					}
-					b.rightMargin(margin);
 					if (i == 0 && j == 0) {
 						// this is the last row; set row spacing to 1 because this is how sph treated it
 						b.rowSpacing(null);
@@ -339,7 +347,7 @@ public class PageSequenceBuilder2 {
 	
 	private void addProperties(PageImpl p, RowGroup rg) {
 		if (rg.getIdentifier()!=null) {
-			crh.setPageNumber(rg.getIdentifier(), p.getPageNumber());
+			blockContext.getRefs().setPageNumber(rg.getIdentifier(), p.getPageNumber());
 			p.addIdentifier(rg.getIdentifier());
 		}
 		p.addMarkers(rg.getMarkers());

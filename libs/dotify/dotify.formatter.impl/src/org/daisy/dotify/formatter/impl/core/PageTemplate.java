@@ -119,7 +119,7 @@ public class PageTemplate implements PageTemplateBuilder {
 		if (appliesTo.containsKey(pagenum)) {
 			return appliesTo.get(pagenum);
 		}
-		boolean applies = condition.evaluate(new DefaultContext.Builder().currentPage(pagenum).build());
+		boolean applies = condition.evaluate(new DefaultContext.Builder(null).currentPage(pagenum).build());
 		appliesTo.put(pagenum, applies);
 		return applies;
 	}

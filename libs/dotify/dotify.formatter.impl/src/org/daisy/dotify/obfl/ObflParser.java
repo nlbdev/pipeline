@@ -263,19 +263,10 @@ public class ObflParser extends XMLParserBase {
 			}
 		}
 		LayoutMasterBuilder master = formatter.newLayoutMaster(masterName, masterConfig.build());
-		Integer w = null;
 		while (input.hasNext()) {
 			event=input.nextEvent();
-			if (equalsStart(event, ObflQName.TEMPLATE, ObflQName.DEFAULT_TEMPLATE)) {
-				int wa = parseTemplate(master, event, input);
-				if (w!=null && w!=wa) {
-					throw new XMLStreamException("Due to a limitation in the implementation, "
-							+ "the total width of all margin-regions must be the same in all templates. "
-							+ "For more information, "
-							+ "see https://github.com/joeha480/dotify/issues/148", event.getLocation());
-				} else {
-					w = wa;
-				}
+			if (equalsStart(event, ObflQName.TEMPLATE, ObflQName.DEFAULT_TEMPLATE)) { 
+				parseTemplate(master, event, input);
 			} else if (equalsStart(event, ObflQName.PAGE_AREA)) {
 				parsePageArea(master, event, input);
 			} else if (equalsEnd(event, ObflQName.LAYOUT_MASTER)) {
@@ -365,14 +356,13 @@ public class ObflParser extends XMLParserBase {
 		}
 	}
 	
-	private int parseTemplate(LayoutMasterBuilder master, XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private void parseTemplate(LayoutMasterBuilder master, XMLEvent event, XMLEventReader input) throws XMLStreamException {
 		PageTemplateBuilder template;
 		if (equalsStart(event, ObflQName.TEMPLATE)) {
 			template = master.newTemplate(new OBFLCondition(getAttr(event, ObflQName.ATTR_USE_WHEN), fm.getExpressionFactory(), false));
 		} else {
 			template = master.newTemplate(null);
 		}
-		int width = 0;
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (equalsStart(event, ObflQName.HEADER)) {
@@ -388,7 +378,6 @@ public class ObflParser extends XMLParserBase {
 			} else if (equalsStart(event, ObflQName.MARGIN_REGION)) {
 				String align = getAttr(event, ObflQName.ATTR_ALIGN);
 				MarginRegion region = parseMarginRegion(event, input);
-				width += region.getWidth();
 				if ("right".equals(align.toLowerCase())) {
 					template.addToRightMargin(region);
 				} else {
@@ -401,7 +390,6 @@ public class ObflParser extends XMLParserBase {
 				report(event);
 			}
 		}
-		return width;
 	}
 	
 	private FieldList parseHeaderFooter(XMLEvent event, XMLEventReader input) throws XMLStreamException {

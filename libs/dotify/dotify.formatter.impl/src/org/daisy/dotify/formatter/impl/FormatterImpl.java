@@ -44,8 +44,6 @@ class FormatterImpl implements Formatter {
 	private boolean unopened;
 	private final Stack<BlockSequence> blocks;
 	
-	//CrossReferenceHandler
-	private final CrossReferenceHandler crh;
 	private final LazyFormatterContext context;
 
 	/**
@@ -64,9 +62,6 @@ class FormatterImpl implements Formatter {
 		this.volumeTemplates = new Stack<>();
 		
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
-		
-		//CrossReferenceHandler
-		this.crh = new CrossReferenceHandler();
 	}
 	
 
@@ -132,7 +127,7 @@ class FormatterImpl implements Formatter {
 	}
 
 	private Iterable<? extends Volume> getVolumes() {
-
+		CrossReferenceHandler crh = new CrossReferenceHandler();
 		VolumeProvider volumeProvider = new VolumeProvider(blocks, volumeTemplates, context, crh);
 
 		ArrayList<VolumeImpl> ret;

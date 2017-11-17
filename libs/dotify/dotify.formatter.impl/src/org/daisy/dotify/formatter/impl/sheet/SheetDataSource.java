@@ -15,19 +15,26 @@ import org.daisy.dotify.formatter.impl.page.PageImpl;
 import org.daisy.dotify.formatter.impl.page.PageSequenceBuilder2;
 import org.daisy.dotify.formatter.impl.page.PageStruct;
 import org.daisy.dotify.formatter.impl.page.RestartPaginationException;
-import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.DocumentSpace;
 import org.daisy.dotify.formatter.impl.search.SheetIdentity;
 
+/**
+ * Provides a data source for sheets. Given a list of 
+ * BlockSequences, sheets are produced one by one.
+ * 
+ * @author Joel Håkansson
+ */
 public class SheetDataSource implements SplitPointDataSource<Sheet> {
+	//Global state
 	private final PageStruct struct;
-	private final CrossReferenceHandler crh;
 	private final FormatterContext context;
+	//Input data
 	private final DefaultContext rcontext;
 	private final Integer volumeGroup;
 	private final List<BlockSequence> seqsIterator;
 	private final int sheetOffset;
+	//Local state
 	private int seqsIndex;
 	private PageSequenceBuilder2 psb;
 	private SectionProperties sectionProperties;
@@ -35,15 +42,15 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	private int pageIndex;
 	private String counter;
 	private int initialPageOffset;
-	
-	private List<Sheet> sheetBuffer;
 	private boolean volBreakAllowed;
 	private boolean updateCounter;
+	//Output buffer
+	private List<Sheet> sheetBuffer;
+
 	private int keepNextSheets = 0;
 
-	public SheetDataSource(PageStruct struct, CrossReferenceHandler crh, FormatterContext context, DefaultContext rcontext, Integer volumeGroup, List<BlockSequence> seqsIterator) {
+	public SheetDataSource(PageStruct struct, FormatterContext context, DefaultContext rcontext, Integer volumeGroup, List<BlockSequence> seqsIterator) {
 		this.struct = struct;
-		this.crh = crh;
 		this.context = context;
 		this.rcontext = rcontext;
 		this.volumeGroup = volumeGroup;
@@ -67,7 +74,6 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	
 	private SheetDataSource(SheetDataSource template, int offset) {
 		this.struct = new PageStruct(template.struct);
-		this.crh = template.crh;
 		this.context = template.context;
 		this.rcontext = template.rcontext;
 		this.volumeGroup = template.volumeGroup;
@@ -152,7 +158,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 		while (index<0 || sheetBuffer.size()<index) {
 			if (updateCounter) { 
 				if(counter!=null) {
-					initialPageOffset = crh.getPageNumberOffset(counter) - psb.size();
+					initialPageOffset = rcontext.getRefs().getPageNumberOffset(counter) - psb.size();
 				} else {
 					initialPageOffset = struct.getDefaultPageOffset() - psb.size();
 				}
@@ -176,11 +182,11 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 				if (bs.getInitialPageNumber()!=null) {
 					 initialPageOffset = bs.getInitialPageNumber() - 1;
 				} else if (counter!=null) {
-					initialPageOffset = Optional.ofNullable(crh.getPageNumberOffset(counter)).orElse(0);
+					initialPageOffset = Optional.ofNullable(rcontext.getRefs().getPageNumberOffset(counter)).orElse(0);
 				} else {
 					 initialPageOffset = struct.getDefaultPageOffset();
 				}
-				psb = new PageSequenceBuilder2(struct.getPageCount(), bs.getLayoutMaster(), initialPageOffset, crh, bs, context, rcontext, seqsIndex);
+				psb = new PageSequenceBuilder2(struct.getPageCount(), bs.getLayoutMaster(), initialPageOffset, bs, context, rcontext, seqsIndex);
 				if (keepNextSheets > 0) {
 					psb.keepNextSheets = keepNextSheets;
 					keepNextSheets = 0;
@@ -208,7 +214,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 				PageImpl p = psb.nextPage(initialPageOffset);
 				struct.increasePageCount();
 				s.avoidVolumeBreakAfterPriority(p.getAvoidVolumeBreakAfter());
-				boolean br = crh.getBreakable(si);
+				boolean br = rcontext.getRefs().getBreakable(si);
 				//TODO: the following is a low effort way of giving existing uses of non-breakable units a high priority, but it probably shouldn't be done this way
 				if (!br) {
 					s.avoidVolumeBreakAfterPriority(1);
@@ -218,7 +224,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 				setPreviousSheet(si.getSheetIndex()-1, Math.min(p.keepPreviousSheets(), sheetIndex-1), rcontext);
 				volBreakAllowed &= p.allowsVolumeBreak();
 				if (!sectionProperties.duplex() || pageIndex % 2 == 1) {
-					crh.keepBreakable(si, volBreakAllowed);
+					rcontext.getRefs().keepBreakable(si, volBreakAllowed);
 				}
 				s.add(p);
 				pageIndex++;
@@ -228,13 +234,13 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 						keepNextSheets--;
 						volBreakAllowed = false;
 					}
-					crh.keepBreakable(si, volBreakAllowed);
+					rcontext.getRefs().keepBreakable(si, volBreakAllowed);
 				}
 			}
 			if (!psb.hasNext()) {
-				crh.setSequenceScope(new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), seqsIndex, psb.getGlobalStartIndex(), psb.getToIndex());
+				rcontext.getRefs().setSequenceScope(new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), seqsIndex, psb.getGlobalStartIndex(), psb.getToIndex());
 				if (counter!=null) {
-					crh.setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
+					rcontext.getRefs().setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
 				} else {
 					struct.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
 				}
@@ -248,7 +254,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 		//TODO: simplify this?
 		for (int x = start; i < p && x > 0; x--) {
 			SheetIdentity si = new SheetIdentity(rcontext.getSpace(), rcontext.getCurrentVolume(), volumeGroup, x);
-			crh.keepBreakable(si, false);
+			rcontext.getRefs().keepBreakable(si, false);
 			i++;
 		}
 	}
@@ -259,7 +265,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 			throw new IndexOutOfBoundsException("" + atIndex);
 		}
 		if (counter!=null) {
-			crh.setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
+			rcontext.getRefs().setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
 		} else {
 			struct.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
 		}

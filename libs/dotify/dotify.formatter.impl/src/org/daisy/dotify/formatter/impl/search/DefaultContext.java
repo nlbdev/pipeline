@@ -6,7 +6,7 @@ public class DefaultContext implements Context {
 
 	private final Integer currentVolume, currentPage, metaVolume, metaPage;
 	private final Space space;
-	private final CrossReferenceHandler crh;
+	protected final CrossReferenceHandler crh;
 	
 	public static class Builder {
 		private Integer	currentVolume=null, 
@@ -14,13 +14,14 @@ public class DefaultContext implements Context {
 						metaVolume=null,
 						metaPage=null;
 		private Space space = null;
-		private CrossReferenceHandler crh = null;
+		private final CrossReferenceHandler crh;
 						
 		
-		public Builder() {
+		public Builder(CrossReferenceHandler crh) {
+			this.crh = crh;
 		}
 		
-		private Builder(DefaultContext base) {
+		protected Builder(DefaultContext base) {
 			this.currentVolume = base.getCurrentVolume();
 			this.currentPage = base.getCurrentPage();
 			this.metaVolume = base.getMetaVolume();
@@ -36,11 +37,6 @@ public class DefaultContext implements Context {
 		
 		public Builder currentPage(Integer value) {
 			this.currentPage = value;
-			return this;
-		}
-		
-		public Builder referenceHandler(CrossReferenceHandler value) {
-			this.crh = value;
 			return this;
 		}
 		
@@ -67,7 +63,7 @@ public class DefaultContext implements Context {
 		return new DefaultContext.Builder(base);
 	}
 	
-	private DefaultContext(Builder builder) {
+	protected DefaultContext(Builder builder) {
 		this.currentVolume = builder.currentVolume;
 		this.currentPage = builder.currentPage;
 		this.metaVolume = builder.metaVolume;
@@ -119,6 +115,10 @@ public class DefaultContext implements Context {
 	@Override
 	public Integer getSheetsInDocument() {
 		return (crh==null?null:crh.getSheetsInDocument());
+	}
+
+	public CrossReferenceHandler getRefs() {
+		return crh;
 	}
 	
 	public Space getSpace() {

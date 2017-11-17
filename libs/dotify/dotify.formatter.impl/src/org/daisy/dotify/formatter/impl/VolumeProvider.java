@@ -70,9 +70,8 @@ public class VolumeProvider {
 	VolumeProvider(List<BlockSequence> blocks, Stack<VolumeTemplate> volumeTemplates, LazyFormatterContext context, CrossReferenceHandler crh) {
 		this.blocks = blocks;
 		this.splitterLimit = volumeNumber -> {
-            final DefaultContext c = new DefaultContext.Builder()
+            final DefaultContext c = new DefaultContext.Builder(crh)
                     .currentVolume(volumeNumber)
-                    .referenceHandler(crh)
                     .build();
             Optional<VolumeTemplate> ot = volumeTemplates.stream().filter(t -> t.appliesTo(c)).findFirst();
             if (ot.isPresent()) {
@@ -97,7 +96,7 @@ public class VolumeProvider {
 		if (!init) {
 			groups = new SheetGroupManager(splitterLimit);
 			// make a preliminary calculation based on a contents only
-			Iterable<SplitPointDataSource<Sheet>> allUnits = prepareToPaginateWithVolumeGroups(blocks, new DefaultContext.Builder().space(Space.BODY).build());
+			Iterable<SplitPointDataSource<Sheet>> allUnits = prepareToPaginateWithVolumeGroups(blocks, new DefaultContext.Builder(crh).space(Space.BODY).build());
 			int volCount = 0;
 			for (SplitPointDataSource<Sheet> data : allUnits) {
 				SheetGroup g = groups.add();
@@ -109,7 +108,7 @@ public class VolumeProvider {
 			//if there is an error, we won't have a proper initialization and have to retry from the beginning
 			init = true;
 		}
-		Iterable<SplitPointDataSource<Sheet>> allUnits = prepareToPaginateWithVolumeGroups(blocks, new DefaultContext.Builder().space(Space.BODY).build());
+		Iterable<SplitPointDataSource<Sheet>> allUnits = prepareToPaginateWithVolumeGroups(blocks, new DefaultContext.Builder(crh).space(Space.BODY).build());
 		int i=0;
 		for (SplitPointDataSource<Sheet> unit : allUnits) {
 			groups.atIndex(i).setUnits(unit);
@@ -231,9 +230,8 @@ public class VolumeProvider {
 	}
 	
 	private SectionBuilder updateVolumeContents(int volumeNumber, ArrayList<AnchorData> ad, boolean pre) {
-		DefaultContext c = new DefaultContext.Builder()
+		DefaultContext c = new DefaultContext.Builder(crh)
 						.currentVolume(volumeNumber)
-						.referenceHandler(crh)
 						.space(pre?Space.PRE_CONTENT:Space.POST_CONTENT)
 						.build();
 		try {
@@ -303,7 +301,7 @@ public class VolumeProvider {
 	}
 	
 	private SplitPointDataSource<Sheet> prepareToPaginate(PageStruct struct, DefaultContext rcontext, Integer volumeGroup, List<BlockSequence> seqs) throws PaginatorException {
-		return new SheetDataSource(struct, crh, fcontext, rcontext, volumeGroup, seqs);
+		return new SheetDataSource(struct, fcontext, rcontext, volumeGroup, seqs);
 	}
 	
 	/**

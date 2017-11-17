@@ -3,11 +3,13 @@ package org.daisy.dotify.formatter.impl.search;
 public final class PageId {
 	private final int ordinal;
 	private final int globalStartIndex;
+	private final int pageIndex;
 	private final SequenceId sequenceId;
 	
 	public PageId(int ordinal, int globalStartIndex, SequenceId sequenceId) {
 		this.ordinal = ordinal;
 		this.globalStartIndex = globalStartIndex;
+		this.pageIndex = ordinal + globalStartIndex;
 		this.sequenceId = sequenceId;		
 	}
 	
@@ -20,7 +22,7 @@ public final class PageId {
 	}
 	
 	int getPageIndex() {
-		return globalStartIndex + ordinal;
+		return pageIndex;
 	}
 	
 	SequenceId getSequenceId() {
@@ -31,8 +33,7 @@ public final class PageId {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + globalStartIndex;
-		result = prime * result + ordinal;
+		result = prime * result + pageIndex;
 		result = prime * result + ((sequenceId == null) ? 0 : sequenceId.hashCode());
 		return result;
 	}
@@ -46,9 +47,7 @@ public final class PageId {
 		if (getClass() != obj.getClass())
 			return false;
 		PageId other = (PageId) obj;
-		if (globalStartIndex != other.globalStartIndex)
-			return false;
-		if (ordinal != other.ordinal)
+		if (pageIndex != other.pageIndex)
 			return false;
 		if (sequenceId == null) {
 			if (other.sequenceId != null)
@@ -60,8 +59,8 @@ public final class PageId {
 
 	@Override
 	public String toString() {
-		return "PageId [ordinal=" + ordinal + ", globalStartIndex=" + globalStartIndex + ", sequenceId=" + sequenceId
-				+ "]";
+		return "PageId [ordinal=" + ordinal + ", globalStartIndex=" + globalStartIndex + ", pageIndex=" + pageIndex
+				+ ", sequenceId=" + sequenceId + "]";
 	}
 
 }

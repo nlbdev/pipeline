@@ -103,7 +103,7 @@ public class BlockContentManagerTest {
 	private static Context createContext() {
 		CrossReferenceHandler crh = new CrossReferenceHandler();
 		crh.setVolumeCount(1);
-		return new DefaultContext.Builder().currentVolume(1).referenceHandler(crh).build();
+		return new DefaultContext.Builder(crh).currentVolume(1).build();
 	}
 
 }
