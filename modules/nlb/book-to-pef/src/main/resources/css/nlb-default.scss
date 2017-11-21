@@ -344,13 +344,13 @@ h1, h2, h3, h4, h5, h6 {
         li {
                 display: block;
                 margin-left: 2;
-                margin-top: 2;
+                margin-top: 0;
                 text-indent: -2;
                 
                 & a::after {
                         content: " " leader("⠄") " " target-counter(attr(href), page);
                         margin-left: 2;
-                        margin-top: 2;
+                        margin-top: 0;
                         text-indent: -2;
                 }
         }
