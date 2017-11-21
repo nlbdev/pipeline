@@ -419,22 +419,32 @@
         </rule>
     </pattern>
     
-    <!-- TODO: Vi kom hit. -->
-
+    <!-- TODO: validate tables -->
+    
+    <!-- TODO: validate that there are no entities except from &lt; &gt; &amp; -->
+    
     <!-- Rule 135: Poem contents -->
-    <pattern id="epub_nordic_135_a">
-        <rule context="html:*[tokenize(@epub:type,'\s+')='z3998:poem'] | html:*[tokenize(@epub:type,'\s+')='z3998:verse' and not(ancestor::html:*/tokenize(@epub:type,'\s+')='z3998:poem')]">
-            <assert test="html:*[tokenize(@class,'\s+')='linegroup']">[nordic135] Every poem must contain a linegroup: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <report test="html:p[tokenize(@class,'\s+')='line']">[nordic135] Poem lines must be wrapped in a linegroup: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> contains; <value-of
+    <pattern id="nlbpub_135_a">
+        <rule context="html:*[tokenize(@epub:type,'\s+')='z3998:poem']">
+            <assert test="html:*[tokenize(@class,'\s+')='linegroup']">[nordic135a] Every poem must contain a linegroup: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <report test="html:p[tokenize(@class,'\s+')='line']">[nordic135a] Poem lines must be wrapped in a linegroup: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> contains; <value-of
                     select="concat('&lt;',html:p[tokenize(@class,'\s+')='line'][1]/name(),string-join(for $a in (html:p[tokenize(@class,'\s+')='line'][1]/@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
                 /></report>
         </rule>
     </pattern>
-
-    <!-- Rule 140: Jacket copy must contain at least one part of the cover, at most one of each @class value and no other elements -->
-    <pattern id="epub_nordic_140">
+    
+    <pattern id="nlbpub_135_b">
+        <rule context="html:*[tokenize(@class,'\s+')='linegroup']">
+            <assert test="parent::html:*[tokenize(@epub:type,'\s+')='z3998:poem']">[nordic135b] Linegroups must be wrapped in a poem: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+    
+    <!-- Rule 140: Cover must contain at least one part of the cover, at most one of each @class value and no other elements -->
+    <!-- TODO: make sure that it is allowed to omit cover -->
+    <pattern id="nlbpub_140">
         <rule context="html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']">
             <assert test="count(*[not(matches(local-name(),'h\d'))])=count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])">[nordic140] Only sections with one
                 of the classes 'frontcover', 'rearcover', 'leftflap' or 'rightflap' is allowed in cover</assert>
@@ -448,45 +458,54 @@
     </pattern>
 
     <!-- Rule 142: Only tokenize(@class,' ')='page-special' in level1/@class='nonstandardpagination' -->
-    <pattern id="epub_nordic_142">
-        <rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:section[@class='nonstandardpagination']]">
-            <assert test="tokenize(@class,' ')='page-special'">[nordic142] The class page-special must be used in section/@class='nonstandardpagination': <value-of
+    <pattern id="nlbpub_142">
+        <rule context="html:*[tokenize(@epub:type,'\s+')='pagebreak'][ancestor::html:section[@class='nonstandardpagination']]">
+            <assert test="tokenize(@class,'\s+')='page-special'">[nordic142] The class page-special must be used in section/@class='nonstandardpagination': <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
     <!-- Rule 143: Don't allow pagebreak as siblings to list items or inside the first list item -->
-    <pattern id="epub_nordic_143_a">
+    <pattern id="nlbpub_143_a">
         <rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:ul or parent::html:ol]">
             <report test="../html:li">[nordic143a] pagebreak is not allowed as sibling to list items: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
-
-    <pattern id="epub_nordic_143_b">
-        <rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:li]">
-            <assert test="../preceding-sibling::html:li or preceding-sibling::* or preceding-sibling::text()[normalize-space()]">[nordic143b] pagebreak is not allowed at the beginning of the first
+    
+    <pattern id="nlbpub_143_a_a">
+        <rule context="html:li">
+            <report test="(.//node()[not(self::text()) or normalize-space(.)])[last()][self::* and tokenize(@epub:type,'\s+')='pagebreak']">[nordic143aa] pagebreak is not allowed as the last node of a list item: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+    
+    <pattern id="nlbpub_143_b">
+        <rule context="html:li[position()=1 and .//*[tokenize(@epub:type,'\s+')='pagebreak']]">
+            <assert test=".//node() intersect .//*[@type='pagebreak']/preceding::node()">[nordic143b] pagebreak is not allowed at the beginning of the first
                 list item; it should be placed before the list: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
                 /></assert>
         </rule>
     </pattern>
 
     <!-- Rule 200: The title element must not be empty -->
-    <pattern id="epub_nordic_200">
+    <pattern id="nlbpub_200">
         <rule context="html:title">
             <assert test="text() and not(normalize-space(.)='')">[nordic200] The title element must not be empty.</assert>
         </rule>
     </pattern>
 
-    <!-- Rule 201: cover -->
-    <pattern id="epub_nordic_201">
-        <rule context="html:*[tokenize(@epub:type,'\s+')='cover']">
-            <assert test="not(tokenize(@epub:type,'\s+')=('frontmatter','bodymatter','backmatter'))">[nordic201] cover is not allowed in frontmatter, bodymatter or backmatter.</assert>
+    <!-- Rule 201: cover, frontmatter, bodymatter and backmatter -->
+    <pattern id="nlbpub_201">
+        <rule context="html:*[tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter')]">
+            <report test="count(for $t in (tokenize(@epub:type,'\s+')) return if $t=('cover','frontmatter','bodymatter','backmatter') then $t else ()) gt 1">[nordic201] cover, frontmatter, bodymatter and backmatter
+                cannot be used together on the same element: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
 
     <!-- Rule 202: frontmatter -->
-    <pattern id="epub_nordic_202">
+    <!-- TODO: is this checked by epubcheck? -->
+    <pattern id="nlbpub_202">
         <rule context="html:*[tokenize(@epub:type,' ')='frontmatter']">
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
@@ -497,67 +516,60 @@
             <let name="allowed-types" value="($always-allowed-types, 'titlepage')"/>
             <assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=$allowed-types">[nordic202] '<value-of
                     select="(tokenize(@epub:type,'\s+')[not(.='frontmatter')],'(missing type)')[1]"/>' is not an allowed type in frontmatter. On elements with the epub:type "frontmatter", you can
-                either leave the type blank<value-of select="if (ancestor::html:body[not(html:header)]) then '(and just use ''frontmatter'' as the type in the filename)' else ''"/>, or you can use one
+                either leave the type blank, or you can use one
                 of the following types: <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of select="$allowed-types[last()]"/>'.</assert>
         </rule>
     </pattern>
 
     <!-- Rule 203: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
-    <pattern id="epub_nordic_203_a">
+    <pattern id="nlbpub_203_a">
         <rule context="html:*[tokenize(@epub:type,'\s+')='rearnote']">
-            <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203a] 'rearnote' must have a section<value-of
-                    select="if (ancestor::html:body[html:section]) then '' else ' or body'"/> ancestor with 'rearnotes': <value-of
+            <assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203a] 'rearnote' must have a section ancestor with 'rearnotes': <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_203_c">
-        <rule context="html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']">
-            <assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
-                'rearnotes' must have descendants with 'rearnote'.</assert>
-            <assert test=".//html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'rearnotes' must have &lt;ol&gt; descendant
-                elements.</assert>
+    <pattern id="nlbpub_203_c">
+        <rule context="html:section[tokenize(@epub:type,'\s+')='rearnotes']">
+            <assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203c] sections with the epub:type 'rearnotes' must have descendants with 'rearnote'.</assert>
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_203_d">
+    <pattern id="nlbpub_203_d">
         <rule context="html:*[tokenize(@epub:type,'\s+')='rearnote']">
+            <assert test="parent::html:ol">[nordic203d] rearnotes must be part of an ordered list: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert test="self::html:li">[nordic203d] 'rearnote' can only be applied to &lt;li&gt; elements: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="tokenize(@class,'\s+')='notebody'">[nordic203d] The 'notebody' class must be applied to all rearnotes: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
     <!-- Rule 204: Check that both the epub:types "footnote" and "footnotes" are used in rearnotes -->
-    <pattern id="epub_nordic_204_a">
+    <pattern id="nlbpub_204_a">
         <rule context="html:*[tokenize(@epub:type,'\s+')='footnote']">
-            <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type,'\s+')='footnotes']">[nordic204a] 'footnote' must have a section<value-of
-                    select="if (ancestor::html:body[html:header]) then '' else ' or body'"/> ancestor with 'footnotes': <value-of
+            <assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='footnotes']">[nordic204a] 'footnote' must have a section ancestor with 'footnotes': <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_204_c">
-        <rule context="html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']">
-            <assert test="descendant::html:*[tokenize(@epub:type,'\s+')='footnote']">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
-                'footnotes' must have descendants with 'footnote'.</assert>
-            <assert test=".//html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'footnotes' must have &lt;ol&gt; descendant
-                elements.</assert>
+    <pattern id="nlbpub_204_c">
+        <rule context="html:section[tokenize(@epub:type,'\s+')='footnotes']">
+            <assert test="descendant::html:*[tokenize(@epub:type,'\s+')='footnote']">[nordic204c] sections with the epub:type 'footnotes' must have descendants with 'footnote'.</assert>
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_204_d">
+    <pattern id="nlbpub_204_d">
         <rule context="html:*[tokenize(@epub:type,'\s+')='footnote']">
+            <assert test="parent::html:ol">[nordic203d] footnotes must be part of an ordered list: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert test="self::html:li">[nordic204d] 'footnote' can only be applied to &lt;li&gt; elements: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="tokenize(@class,'\s+')='notebody'">[nordic204d] The 'notebody' class must be applied to all footnotes: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
     <!-- Rule 208: bodymatter -->
-    <pattern id="epub_nordic_208">
+    <!-- TODO: is this checked by epubcheck? -->
+    <pattern id="nlbpub_208">
         <rule context="html:*[tokenize(@epub:type,' ')='bodymatter']">
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
@@ -573,7 +585,8 @@
     </pattern>
 
     <!-- Rule 211: bodymatter.part -->
-    <pattern id="epub_nordic_211">
+    <!-- TODO: is this checked by epubcheck? -->
+    <pattern id="nlbpub_211">
         <rule context="html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type,' ')=('part','volume')]]">
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
@@ -589,7 +602,8 @@
     </pattern>
 
     <!-- Rule 215: backmatter -->
-    <pattern id="epub_nordic_215">
+    <!-- TODO: is this checked by epubcheck? -->
+    <pattern id="nlbpub_215">
         <rule context="html:*[tokenize(@epub:type,'\s+')='backmatter']">
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
@@ -600,38 +614,47 @@
             <let name="allowed-types" value="($always-allowed-types)"/>
             <assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=$allowed-types">[nordic215] '<value-of
                     select="(tokenize(@epub:type,'\s+')[not(.='backmatter')],'(missing type)')[1]"/>' is not an allowed type in backmatter. On elements with the epub:type "backmatter", you can either
-                leave the type blank<value-of select="if (ancestor::html:body[not(html:header)]) then '(and just use ''backmatter'' as the type in the filename)' else ''"/>, or you can use one of the
+                leave the type blank, or you can use one of the
                 following types: <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of select="$allowed-types[last()]"/>'.</assert>
         </rule>
     </pattern>
 
     <!-- Rule 224: linenum - span -->
-    <pattern id="epub_nordic_224">
-        <rule context="html:span[tokenize(@class,' ')='linenum']">
-            <assert test="ancestor::html:p[tokenize(@class,' ')='line']">[nordic224] linenums (span class="linenum") must be part of a line (p class="line"): <value-of
+    <pattern id="nlbpub_224">
+        <rule context="html:*[tokenize(@class,'\s+')='linenum']">
+            <assert test="self::html:span">[nordic224] linenums must be spans: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="parent::html:p[tokenize(@class,'\s+')='line']">[nordic224] linenums (span class="linenum") must be part of a line (p class="line"): <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;',string-join(.//text()[normalize-space()],' '),'&lt;/',name(),'&gt;')"
                 /></assert>
         </rule>
     </pattern>
 
     <!-- Rule 225: pagebreak -->
-    <pattern id="epub_nordic_225">
-        <rule context="html:*[tokenize(@epub:type,' ')='pagebreak' and text()]">
+    <pattern id="nlbpub_225">
+        <rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
+            <assert test="@title = normalize-space(@title)">[nordic225] the title attribute must be normalized (no preceding or trailing whitespace): <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;',string-join(.//text()[normalize-space()],' '),'&lt;/',name(),'&gt;')"
+            /></assert>
+            <assert test="not(text()) or text() = @title">[nordic225] if text is present in the pagebreak, then it must be equal to the title attribute: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;',string-join(.//text()[normalize-space()],' '),'&lt;/',name(),'&gt;')"
+            /></assert>
             <assert test="matches(@title,'.+')">[nordic225] The title attribute must be used to describe the page number: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;',string-join(.//text()[normalize-space()],' '),'&lt;/',name(),'&gt;')"
                 /></assert>
         </rule>
     </pattern>
 
+    <!-- Vi kom hit -->
+
     <!-- Rule 247: doctitle.headline - h1 -->
-    <pattern id="epub_nordic_247">
+    <pattern id="nlbpub_247">
         <rule context="html:body/html:header/html:h1">
             <assert test="tokenize(@epub:type,' ')='fulltitle'">[nordic247] The first headline in the html:body/html:header element must have the 'fulltitle' epub:type.</assert>
         </rule>
     </pattern>
 
     <!-- Rule 248: docauthor - p -->
-    <pattern id="epub_nordic_248">
+    <pattern id="nlbpub_248">
         <rule context="html:body/html:header/html:*[not(self::html:h1)]">
             <assert test="self::html:p">[nordic248] The only allowed element inside html/header besides "h1" is "p".</assert>
             <!--<assert test="tokenize(@epub:type,' ')=('z3998:author','covertitle')">[nordic248] Inside body/header; all p elements must have a epub:type and they must be either 'z3998:author' or
