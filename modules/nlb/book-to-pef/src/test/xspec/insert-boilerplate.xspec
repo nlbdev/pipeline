@@ -895,4 +895,17 @@
         <x:expect label="text should have a newline before the subtitle" select="'Lord of the Rings: &#10;The Two Towers'"/>
     </x:scenario>
     
+    <x:scenario label="Regression test: br element in doctitle causes too many nested function calls">
+        <x:context>
+            <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                <book>
+                    <frontmatter>
+                        <doctitle>Testbook XML-element<br class="display-braille"/> roman</doctitle> 
+                    </frontmatter>
+                </book>
+            </dtbook>
+        </x:context>
+        <x:expect label="There should not be an error" test="count(/*) = 1"/>
+    </x:scenario>
+    
 </x:description>

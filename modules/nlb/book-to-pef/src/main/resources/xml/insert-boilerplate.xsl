@@ -685,7 +685,7 @@
                 </xsl:choose>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:value-of select="if (count($result)) then replace(replace(replace(replace(string-join($result,''),' +',' '),'(^ | $)',''),'&#10; ','&#10;'),'^&#10;+','') else ()"/>
+        <xsl:value-of select="if (count($result)) then replace(replace(replace(replace(string-join($result,''),'&#10; ',' &#10;'),' +',' '),'(^ | $)',''),'^&#10;+','') else ()"/>
     </xsl:function>
     
 </xsl:stylesheet>
