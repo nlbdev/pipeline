@@ -27,24 +27,30 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="html:html[count(html:body) &gt; 1]/html:body[not(preceding::html:body)]">
-        <xsl:next-match/>
-        <xsl:call-template name="generate-frontmatter"/>
-    </xsl:template>
-    
-    <xsl:template match="html:html[count(html:body) = 1]/html:body">
+    <xsl:template match="html:html">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates select="*[1][self::html:header]"/>
-            <xsl:call-template name="generate-frontmatter"/>
-            <xsl:apply-templates select="node() except *[1][self::html:header]"/>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="html:html[not(html:body)]">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-            <xsl:call-template name="generate-frontmatter"/>
+            <xsl:apply-templates select="html:head"/>
+            <xsl:choose>
+                <!-- single body element => insert section after header -->
+                <xsl:when test="count(html:body) = 1">
+                    <xsl:for-each select="html:body">
+                        <xsl:copy>
+                            <xsl:apply-templates select="@*"/>
+                            <xsl:apply-templates select="*[1][self::html:header]/(. | preceding-sibling::comment())"/>
+                            <xsl:call-template name="generate-frontmatter"/>
+                            <xsl:apply-templates select="node() except *[1][self::html:header]/(. | preceding-sibling::comment())"/>
+                        </xsl:copy>
+                    </xsl:for-each>
+                </xsl:when>
+                
+                <!-- multiple body elements => create new body element -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="node() except html:body[1]/(. | following-sibling::node())"/>
+                    <xsl:call-template name="generate-frontmatter"/>
+                    <xsl:apply-templates select="html:body[1]/(. | following-sibling::node())"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:copy>
     </xsl:template>
     
@@ -70,6 +76,7 @@
     <!-- remove existing titlepage if present -->
     <xsl:template match="dtbook:frontmatter/dtbook:level1[tokenize(@class,'\s+') = 'titlepage']"/>
     <xsl:template match="html:body[tokenize(@class,'\s+') = 'titlepage' or tokenize(@epub:type,'\s+') = 'titlepage']"/>
+    <xsl:template match="html:section[tokenize(@class,'\s+') = 'titlepage' or tokenize(@epub:type,'\s+') = 'titlepage']"/>
 
     <xsl:template name="generate-frontmatter">
         <xsl:variable name="namespace-uri" select="namespace-uri()"/>
