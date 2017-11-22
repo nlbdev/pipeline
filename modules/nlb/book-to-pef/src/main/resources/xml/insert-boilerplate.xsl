@@ -85,7 +85,7 @@
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
                     <xsl:choose>
-                        <xsl:when test="//dtbook:frontmatter/dtbook:docauthor">
+                        <xsl:when test="count(//dtbook:frontmatter/dtbook:docauthor)">
                             <xsl:sequence select="//dtbook:frontmatter/dtbook:docauthor/nlb:element-text(.)"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -95,7 +95,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:choose>
-                        <xsl:when test="//html:body//html:*[tokenize(@epub:type,'\s+')='z3998:author']">
+                        <xsl:when test="count(//html:body//html:*[tokenize(@epub:type,'\s+')='z3998:author'])">
                             <xsl:sequence select="//html:body//html:*[tokenize(@epub:type,'\s+')='z3998:author']/nlb:element-text(.)"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -109,7 +109,7 @@
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
                     <xsl:choose>
-                        <xsl:when test="//dtbook:frontmatter/dtbook:doctitle">
+                        <xsl:when test="count(//dtbook:frontmatter/dtbook:doctitle)">
                             <xsl:sequence select="//dtbook:frontmatter/dtbook:doctitle/nlb:element-text(.)"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -119,7 +119,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:choose>
-                        <xsl:when test="//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle']">
+                        <xsl:when test="count(//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle'])">
                             <xsl:sequence select="//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle']/nlb:element-text(.)"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -237,7 +237,7 @@
                 <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
                 <xsl:call-template name="empty-row"><xsl:with-param name="namespace-uri" select="$namespace-uri"/></xsl:call-template>
             </xsl:if>
-            <xsl:variable name="lines-used" select="if (count($translator-lines)) then $lines-used + 1 + count($author-lines) + 2 else $lines-used"/>
+            <xsl:variable name="lines-used" select="if (count($translator-lines)) then $lines-used + 1 + count($translator-lines) + 2 else $lines-used"/>
             
             <!-- fill empty lines up to and including page height minus 6 (i.e. row 22) -->
             <xsl:for-each select="($lines-used + 1) to xs:integer($page-height) - 6">
@@ -472,34 +472,9 @@
         <xsl:variable name="middle-name" select="if (contains($name,',')) then tokenize(normalize-space(substring-after($name,',')),' +')[position() &gt; 1] else $tokenized-name[not(position() = (1,last()))]"/>
         
         <xsl:variable name="tokenized-first-middle-last" select="($first-name, $middle-name, $last-name)"/>
-        <xsl:variable name="first-name-initials" select="for $n in ($first-name) return if (starts-with($n,'&#10;')) then concat('&#10;',substring($n,2,1),'.') else concat(substring($n,1,1),'.')"/>
-        <xsl:variable name="middle-name-initials" select="for $n in ($middle-name) return if (starts-with($n,'&#10;')) then concat('&#10;',substring($n,2,1),'.') else concat(substring($n,1,1),'.')"/>
-        
-        <xsl:variable name="tokenized-name-middle-initials" select="tokenize(if (contains($name,',')) then string-join((string-join($last-name,' '),string-join(($first-name, $middle-name-initials),' ')),',') else string-join(($first-name, $middle-name-initials, $last-name),' '),' ')"/>
-        <xsl:variable name="tokenized-name-first-and-middle-initials" select="tokenize(if (contains($name,',')) then string-join((string-join($last-name,' '),string-join(($first-name-initials, $middle-name-initials),' ')),',') else string-join(($first-name-initials, $middle-name-initials, $last-name),' '),' ')"/>
-        <xsl:variable name="tokenized-name-no-middle" select="tokenize(if (contains($name,',')) then string-join((string-join($last-name,' '),string-join(($first-name),' ')),',') else string-join(($first-name, $last-name),' '),' ')"/>
         
         <xsl:variable name="full-name-never-break" select="nlb:strings-to-lines($tokenized-first-middle-last, $line-length, 'never')"/>
         <xsl:variable name="full-name-avoid-break" select="nlb:strings-to-lines($tokenized-first-middle-last, $line-length, 'avoid')"/>
-        <xsl:variable name="full-name-always-break" select="nlb:strings-to-lines($tokenized-first-middle-last, $line-length, 'always')"/>
-        <xsl:variable name="full-name-stripped" select="nlb:strip-last-line($full-name-avoid-break, $lines-available, $line-length)"/>
-        
-        <xsl:variable name="middle-initials-never-break" select="nlb:strings-to-lines($tokenized-name-middle-initials, $line-length, 'never')"/>
-        <xsl:variable name="middle-initials-avoid-break" select="nlb:strings-to-lines($tokenized-name-middle-initials, $line-length, 'avoid')"/>
-        <xsl:variable name="middle-initials-always-break" select="nlb:strings-to-lines($tokenized-name-middle-initials, $line-length, 'always')"/>
-        
-        <xsl:variable name="first-and-middle-initials-never-break" select="nlb:strings-to-lines($tokenized-name-first-and-middle-initials, $line-length, 'never')"/>
-        <xsl:variable name="first-and-middle-initials-avoid-break" select="nlb:strings-to-lines($tokenized-name-first-and-middle-initials, $line-length, 'avoid')"/>
-        <xsl:variable name="first-and-middle-initials-always-break" select="nlb:strings-to-lines($tokenized-name-first-and-middle-initials, $line-length, 'always')"/>
-        
-        <xsl:variable name="no-middle-never-break" select="nlb:strings-to-lines($tokenized-name-no-middle, $line-length, 'never')"/>
-        <xsl:variable name="no-middle-avoid-break" select="nlb:strings-to-lines($tokenized-name-no-middle, $line-length, 'avoid')"/>
-        <xsl:variable name="no-middle-always-break" select="nlb:strings-to-lines($tokenized-name-no-middle, $line-length, 'always')"/>
-        
-        <xsl:variable name="last-name-never-break" select="nlb:strings-to-lines($last-name, $line-length, 'never')"/>
-        <xsl:variable name="last-name-avoid-break" select="nlb:strings-to-lines($last-name, $line-length, 'avoid')"/>
-        <xsl:variable name="last-name-always-break" select="nlb:strings-to-lines($last-name, $line-length, 'always')"/>
-        <xsl:variable name="last-name-stripped" select="nlb:strip-last-line($last-name-avoid-break, $lines-available, $line-length)"/>
         
         <xsl:choose>
             <xsl:when test="count($tokenized-name) = 0">
@@ -508,53 +483,8 @@
             <xsl:when test="count($full-name-never-break) &gt; 0 and count($full-name-never-break) &lt;= $lines-available">
                 <xsl:sequence select="$full-name-never-break"/>
             </xsl:when>
-            <xsl:when test="count($full-name-avoid-break) &gt; 0 and count($full-name-avoid-break) &lt;= $lines-available">
-                <xsl:sequence select="$full-name-avoid-break"/>
-            </xsl:when>
-            <xsl:when test="count($full-name-always-break) &gt; 0 and count($full-name-always-break) &lt;= $lines-available">
-                <xsl:sequence select="$full-name-always-break"/>
-            </xsl:when>
-            <xsl:when test="count($middle-initials-never-break) &gt; 0 and count($middle-initials-never-break) &lt;= $lines-available">
-                <xsl:sequence select="$middle-initials-never-break"/>
-            </xsl:when>
-            <xsl:when test="count($middle-initials-avoid-break) &gt; 0 and count($middle-initials-avoid-break) &lt;= $lines-available">
-                <xsl:sequence select="$middle-initials-avoid-break"/>
-            </xsl:when>
-            <xsl:when test="count($middle-initials-always-break) &gt; 0 and count($middle-initials-always-break) &lt;= $lines-available">
-                <xsl:sequence select="$middle-initials-always-break"/>
-            </xsl:when>
-            <xsl:when test="count($first-and-middle-initials-never-break) &gt; 0 and count($first-and-middle-initials-never-break) &lt;= $lines-available">
-                <xsl:sequence select="$first-and-middle-initials-never-break"/>
-            </xsl:when>
-            <xsl:when test="count($first-and-middle-initials-avoid-break) &gt; 0 and count($first-and-middle-initials-avoid-break) &lt;= $lines-available">
-                <xsl:sequence select="$first-and-middle-initials-avoid-break"/>
-            </xsl:when>
-            <xsl:when test="count($first-and-middle-initials-always-break) &gt; 0 and count($first-and-middle-initials-always-break) &lt;= $lines-available">
-                <xsl:sequence select="$first-and-middle-initials-always-break"/>
-            </xsl:when>
-            <xsl:when test="count($no-middle-never-break) &gt; 0 and count($no-middle-never-break) &lt;= $lines-available">
-                <xsl:sequence select="$no-middle-never-break"/>
-            </xsl:when>
-            <xsl:when test="count($no-middle-avoid-break) &gt; 0 and count($no-middle-avoid-break) &lt;= $lines-available">
-                <xsl:sequence select="$no-middle-avoid-break"/>
-            </xsl:when>
-            <xsl:when test="count($no-middle-always-break) &gt; 0 and count($no-middle-always-break) &lt;= $lines-available">
-                <xsl:sequence select="$no-middle-always-break"/>
-            </xsl:when>
-            <xsl:when test="count($last-name-never-break) &gt; 0 and count($last-name-never-break) &lt;= $lines-available">
-                <xsl:sequence select="$last-name-never-break"/>
-            </xsl:when>
-            <xsl:when test="count($last-name-avoid-break) &gt; 0 and count($last-name-avoid-break) &lt;= $lines-available">
-                <xsl:sequence select="$last-name-avoid-break"/>
-            </xsl:when>
-            <xsl:when test="count($last-name-always-break) &gt; 0 and count($last-name-always-break) &lt;= $lines-available">
-                <xsl:sequence select="$last-name-always-break"/>
-            </xsl:when>
-            <xsl:when test="count($last-name-stripped) &gt; 0 and count($last-name-stripped) &lt;= $lines-available">
-                <xsl:sequence select="$last-name-stripped"/>
-            </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="$full-name-stripped"/>
+                <xsl:sequence select="$full-name-avoid-break[position() le $lines-available]"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
@@ -582,18 +512,45 @@
         <xsl:param name="last-line-if-cropped" as="xs:string"/>
         
         <xsl:choose>
+            <xsl:when test="count($authors) = 0">
+                <xsl:sequence select="()"/>
+            </xsl:when>
             <xsl:when test="count($authors) = 1">
-                <xsl:sequence select="nlb:fit-name-to-lines($authors[1], 3, $line-length)"/>
+                <xsl:sequence select="nlb:fit-name-to-lines($authors[1], 3, $line-length)[position() le 3]"/>
             </xsl:when>
             <xsl:when test="count($authors) = 2">
-                <xsl:for-each select="$authors">
-                    <xsl:sequence select="nlb:fit-name-to-lines(., 1, $line-length)"/>
-                </xsl:for-each>
+                <xsl:variable name="authors-1-2" select="(nlb:fit-name-to-lines($authors[1], 1, $line-length), nlb:fit-name-to-lines($authors[2], 2, $line-length))" as="xs:string*"/>
+                <xsl:variable name="authors-2-1" select="(nlb:fit-name-to-lines($authors[1], 2, $line-length), nlb:fit-name-to-lines($authors[2], 1, $line-length))" as="xs:string*"/>
+                <xsl:variable name="authors-string" select="string-join(for $a in $authors return tokenize($a,'\s+'),' ')" as="xs:string"/>
+                <xsl:choose>
+                    <xsl:when test="$authors-string = string-join($authors-1-2,' ')">
+                        <!-- first author on 1 line, second author on 2 lines -->
+                        <xsl:sequence select="$authors-1-2"/>
+                    </xsl:when>
+                    <xsl:when test="$authors-string = string-join($authors-2-1,' ')">
+                        <!-- first author on 2 lines, second author on 1 line -->
+                        <xsl:sequence select="$authors-2-1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- can't make 2 authors fit on 3 lines; use only first author -->
+                        <xsl:sequence select="(nlb:fit-name-to-lines($authors[1], 2, $line-length)[position() le 2], $last-line-if-cropped)"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
-            <xsl:when test="count($authors) &gt; 2">
-                <xsl:for-each select="$authors[position() &lt;= 2]">
-                    <xsl:sequence select="nlb:fit-name-to-lines(., 1, $line-length)"/>
-                </xsl:for-each>
+            <xsl:when test="count($authors) gt 2">
+                <xsl:variable name="author-1" select="nlb:fit-name-to-lines($authors[1], 1, $line-length)" as="xs:string*"/>
+                <xsl:variable name="author-2" select="nlb:fit-name-to-lines($authors[2], 1, $line-length)" as="xs:string*"/>
+                <xsl:variable name="authors-string" select="string-join(for $a in $authors[position() le 2] return tokenize($a,'\s+'),' ')" as="xs:string"/>
+                <xsl:choose>
+                    <xsl:when test="$authors-string = concat($author-1, ' ', $author-2)">
+                        <!-- 2 authors fit on 2 lines -->
+                        <xsl:sequence select="($author-1, $author-2)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- can't make 2 authors fit on 2 lines; use only first author -->
+                        <xsl:sequence select="nlb:fit-name-to-lines($authors[1], 2, $line-length)"/>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:sequence select="$last-line-if-cropped"/>
             </xsl:when>
         </xsl:choose>
@@ -609,9 +566,17 @@
                 <xsl:sequence select="nlb:fit-name-to-lines($translators[1], 2, $line-length)"/>
             </xsl:when>
             <xsl:when test="count($translators) = 2">
-                <xsl:for-each select="$translators">
-                    <xsl:sequence select="nlb:fit-name-to-lines(., 1, $line-length)"/>
-                </xsl:for-each>
+                <xsl:variable name="translator-1" select="nlb:fit-name-to-lines($translators[1], 1, $line-length)"/>
+                <xsl:variable name="translator-2" select="nlb:fit-name-to-lines($translators[2], 1, $line-length)"/>
+                <xsl:variable name="translators-string" select="string-join(for $t in $translators return tokenize($t,'\s+'),' ')"/>
+                <xsl:choose>
+                    <xsl:when test="$translators-string = concat($translator-1,' ',$translator-2)">
+                        <xsl:sequence select="($translator-1, $translator-2)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="($translator-1, $last-line-if-cropped)"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:when test="count($translators) &gt; 2">
                 <xsl:sequence select="nlb:fit-name-to-lines($translators[1], 1, $line-length)"/>
