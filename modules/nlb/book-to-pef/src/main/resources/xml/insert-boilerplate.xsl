@@ -161,6 +161,7 @@
         </xsl:variable>
         
         <xsl:variable name="author-lines" select="nlb:author-lines($author, $line-width, 'mfl.')"/>
+        <xsl:variable name="author-lines" select="if (count($author) gt 1 and not(count($author-lines))) then 'Flere forfattere' else $author-lines"/>
         <xsl:variable name="title-lines" select="nlb:title-lines($title, 5, $line-width)"/>
         <xsl:variable name="translator-lines" select="nlb:translator-lines($translator, $line-width, 'mfl.')"/>
         <xsl:variable name="grade-text" as="xs:string">
