@@ -2262,5 +2262,311 @@
             </x:expect>
         </x:scenario>
         
+        <x:scenario label="Regression test for 'xml:lang=&quot;en&quot; and &quot;not Norwegian&quot; makes 8-dots?' (issue #146)" pending="https://github.com/nlbdev/pipeline/issues/146">
+            <x:call>
+                <x:input port="source" xml:base="">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <p id="u0000"></p>
+                                        <p id="u0010"></p>
+                                        <p id="u0020">!"#$%&amp;'()*+,-./</p>
+                                        <p id="u0030">0123456789:;&lt;=&gt;?</p>
+                                        <p id="u0040">@ABCDEFGHIJKLMNO</p>
+                                        <p id="u0050">PQRSTUVWXYZ[\]^_</p>
+                                        <p id="u0060">`abcdefghijklmno</p>
+                                        <p id="u0070">pqrstuvwxyz{|}~␡</p>
+                                        <p id="u0080"></p>
+                                        <p id="u0090"></p>
+                                        <p id="u00A0"> ¡¢£¤¥¦§¨©ª«¬ ®¯</p>
+                                        <p id="u00B0">°±²³´µ¶·¸¹º»¼½¾¿</p>
+                                        <p id="u00C0">ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ</p>
+                                        <p id="u00D0">ÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</p>
+                                        <p id="u00E0">àáâãäåæçèéêëìíîï</p>
+                                        <p id="u00F0">ðñòóôõö÷øùúûüýþÿ</p>
+                                        <p id="u0100">ĀāĂăĄąĆćĈĉĊċČčĎď</p>
+                                        <p id="u0110">ĐđĒēĔĕĖėĘęĚěĜĝĞğ</p>
+                                        <p id="u0120">ĠġĢģĤĥĦħĨĩĪīĬĭĮį</p>
+                                        <p id="u0130">İıĲĳĴĵĶķĸĹĺĻļĽľĿ</p>
+                                        <p id="u0140">ŀŁłŃńŅņŇňŉŊŋŌōŎŏ</p>
+                                        <p id="u0150">ŐőŒœŔŕŖŗŘřŚśŜŝŞş</p>
+                                        <p id="u0160">ŠšŢţŤťŦŧŨũŪūŬŭŮů</p>
+                                        <p id="u0170">ŰűŲųŴŵŶŷŸŹźŻżŽžſ</p>
+                                        <p id="u0180">ƀƁƂƃƄƅƆƇƈƉƊƋƌƍƎƏ</p>
+                                        <p id="u0190">ƐƑƒƓƔƕƖƗƘƙƚƛƜƝƞƟ</p>
+                                        <p id="u01A0">ƠơƢƣƤƥƦƧƨƩƪƫƬƭƮƯ</p>
+                                        <p id="u01B0">ưƱƲƳƴƵƶƷƸƹƺƻƼƽƾƿ</p>
+                                        <p id="u01C0">ǀǁǂǃǄǅǆǇǈǉǊǋǌǍǎǏ</p>
+                                        <p id="u01D0">ǐǑǒǓǔǕǖǗǘǙǚǛǜǝǞǟ</p>
+                                        <p id="u01E0">ǠǡǢǣǤǥǦǧǨǩǪǫǬǭǮǯ</p>
+                                        <p id="u01F0">ǰǱǲǳǴǵǶǷǸǹǺǻǼǽǾǿ</p>
+                                        <p id="u0200">ȀȁȂȃȄȅȆȇȈȉȊȋȌȍȎȏ</p>
+                                        <p id="u0210">ȐȑȒȓȔȕȖȗȘșȚțȜȝȞȟ</p>
+                                        <p id="u0220">ȠȡȢȣȤȥȦȧȨȩȪȫȬȭȮȯ</p>
+                                        <p id="u0230">ȰȱȲȳȴȵȶȷȸȹȺȻȼȽȾȿ</p>
+                                        <p id="u0240">ɀɁɂɃɄɅɆɇɈɉɊɋɌɍɎɏ</p>
+                                        <p id="u0250">ɐɑɒɓɔɕɖɗɘəɚɛɜɝɞɟ</p>
+                                        <p id="u0260">ɠɡɢɣɤɥɦɧɨɩɪɫɬɭɮɯ</p>
+                                        <p id="u0270">ɰɱɲɳɴɵɶɷɸɹɺɻɼɽɾɿ</p>
+                                        <p id="u0280">ʀʁʂʃʄʅʆʇʈʉʊʋʌʍʎʏ</p>
+                                        <p id="u0290">ʐʑʒʓʔʕʖʗʘʙʚʛʜʝʞʟ</p>
+                                        <p id="u02A0">ʠʡʢʣʤʥʦʧʨʩʪʫʬʭʮʯ</p>
+                                        <p id="u02B0">ʰʱʲʳʴʵʶʷʸʹʺʻʼʽʾʿ</p>
+                                        <p id="u02C0">ˀˁ˂˃˄˅ˆˇˈˉˊˋˌˍˎˏ</p>
+                                        <p id="u02D0">ːˑ˒˓˔˕˖˗˘˙˚˛˜˝˞˟</p>
+                                        <p id="u02E0">ˠˡˢˣˤ˥˦˧˨˩˪˫ˬ˭ˮ˯</p>
+                                        <p id="u02F0">˰˱˲˳˴˵˶˷˸˹˺˻˼˽˾˿</p>
+                                        <p id="u0300">̀́̂̃̄̅̆̇̈̉̊̋̌̍̎̏</p>
+                                        <p id="u0310">̛̖̗̘̙̜̝̞̟̐̑̒̓̔̕̚</p>
+                                        <p id="u0320">̡̢̧̨̠̣̤̥̦̩̪̫̬̭̮̯</p>
+                                        <p id="u0330">̴̵̶̷̸̰̱̲̳̹̺̻̼̽̾̿</p>
+                                        <p id="u0340">͇͈͉͍͎̀́͂̓̈́͆͊͋͌ͅ͏</p>
+                                        <p id="u0350">͓͔͕͖͙͚͐͑͒͗͛͘͜͟͝͞</p>
+                                        <p id="u0360">ͣͤͥͦͧͨͩͪͫͬͭͮͯ͢͠͡</p>
+                                        <p id="u0370">ͰͱͲͳʹ͵Ͷͷ͸͹ͺͻͼͽ;Ϳ</p>
+                                        <p id="u0380">΀΁΂΃΄΅Ά·ΈΉΊ΋Ό΍ΎΏ</p>
+                                        <p id="u0390">ΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟ</p>
+                                        <p id="u03A0">ΠΡ΢ΣΤΥΦΧΨΩΪΫάέήί</p>
+                                        <p id="u03B0">ΰαβγδεζηθικλμνξο</p>
+                                        <p id="u03C0">πρςστυφχψωϊϋόύώϏ</p>
+                                        <p id="u03D0">ϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟ</p>
+                                        <p id="u03E0">ϠϡϢϣϤϥϦϧϨϩϪϫϬϭϮϯ</p>
+                                        <p id="u03F0">ϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿ</p>
+                                        <p id="u0400">ЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏ</p>
+                                        <p id="u0410">АБВГДЕЖЗИЙКЛМНОП</p>
+                                        <p id="u0420">РСТУФХЦЧШЩЪЫЬЭЮЯ</p>
+                                        <p id="u0430">абвгдежзийклмноп</p>
+                                        <p id="u0440">рстуфхцчшщъыьэюя</p>
+                                        <p id="u0450">ѐёђѓєѕіїјљњћќѝўџ</p>
+                                        <p id="u0460">ѠѡѢѣѤѥѦѧѨѩѪѫѬѭѮѯ</p>
+                                        <p id="u0470">ѰѱѲѳѴѵѶѷѸѹѺѻѼѽѾѿ</p>
+                                        <p id="u0480">Ҁҁ҂҃҄҅҆҇҈҉ҊҋҌҍҎҏ</p>
+                                        <p id="u0490">ҐґҒғҔҕҖҗҘҙҚқҜҝҞҟ</p>
+                                        <p id="u04A0">ҠҡҢңҤҥҦҧҨҩҪҫҬҭҮү</p>
+                                        <p id="u04B0">ҰұҲҳҴҵҶҷҸҹҺһҼҽҾҿ</p>
+                                        <p id="u04C0">ӀӁӂӃӄӅӆӇӈӉӊӋӌӍӎӏ</p>
+                                        <p id="u04D0">ӐӑӒӓӔӕӖӗӘәӚӛӜӝӞӟ</p>
+                                        <p id="u04E0">ӠӡӢӣӤӥӦӧӨөӪӫӬӭӮӯ</p>
+                                        <p id="u04F0">ӰӱӲӳӴӵӶӷӸӹӺӻӼӽӾӿ</p>
+                                        <p id="u0500">ԀԁԂԃԄԅԆԇԈԉԊԋԌԍԎԏ</p>
+                                        <p id="u0510">ԐԑԒԓԔԕԖԗԘԙԚԛԜԝԞԟ</p>
+                                        <p id="u0520">ԠԡԢԣԤԥԦԧԨԩԪԫԬԭԮԯ</p>
+                                        <p id="u0530">԰ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿ</p>
+                                        <p id="u0540">ՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏ</p>
+                                        <p id="u0550">ՐՑՒՓՔՕՖ՗՘ՙ՚՛՜՝՞՟</p>
+                                        <p id="u0560">ՠաբգդեզէըթժիլխծկ</p>
+                                        <p id="u0570">հձղճմյնշոչպջռսվտ</p>
+                                        <p id="u0580">րցւփքօֆև</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('25/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('25/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('25/temp-dir',$temp-dir)"/>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="force-norwegian" select="'false'"/>
+            </x:call>
+            <x:context label="the PEF">
+                <x:document type="file" base-uri="temp-dir" href="25/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="should not contain the braille character '⡀'" type="xpath" test="not(contains(string-join(//text(),''),'⡀'))"/>
+            <x:expect label="should not contain the braille character '⡁'" type="xpath" test="not(contains(string-join(//text(),''),'⡁'))"/>
+            <x:expect label="should not contain the braille character '⡂'" type="xpath" test="not(contains(string-join(//text(),''),'⡂'))"/>
+            <x:expect label="should not contain the braille character '⡃'" type="xpath" test="not(contains(string-join(//text(),''),'⡃'))"/>
+            <x:expect label="should not contain the braille character '⡄'" type="xpath" test="not(contains(string-join(//text(),''),'⡄'))"/>
+            <x:expect label="should not contain the braille character '⡅'" type="xpath" test="not(contains(string-join(//text(),''),'⡅'))"/>
+            <x:expect label="should not contain the braille character '⡆'" type="xpath" test="not(contains(string-join(//text(),''),'⡆'))"/>
+            <x:expect label="should not contain the braille character '⡇'" type="xpath" test="not(contains(string-join(//text(),''),'⡇'))"/>
+            <x:expect label="should not contain the braille character '⡈'" type="xpath" test="not(contains(string-join(//text(),''),'⡈'))"/>
+            <x:expect label="should not contain the braille character '⡉'" type="xpath" test="not(contains(string-join(//text(),''),'⡉'))"/>
+            <x:expect label="should not contain the braille character '⡊'" type="xpath" test="not(contains(string-join(//text(),''),'⡊'))"/>
+            <x:expect label="should not contain the braille character '⡋'" type="xpath" test="not(contains(string-join(//text(),''),'⡋'))"/>
+            <x:expect label="should not contain the braille character '⡌'" type="xpath" test="not(contains(string-join(//text(),''),'⡌'))"/>
+            <x:expect label="should not contain the braille character '⡍'" type="xpath" test="not(contains(string-join(//text(),''),'⡍'))"/>
+            <x:expect label="should not contain the braille character '⡎'" type="xpath" test="not(contains(string-join(//text(),''),'⡎'))"/>
+            <x:expect label="should not contain the braille character '⡏'" type="xpath" test="not(contains(string-join(//text(),''),'⡏'))"/>
+            <x:expect label="should not contain the braille character '⡐'" type="xpath" test="not(contains(string-join(//text(),''),'⡐'))"/>
+            <x:expect label="should not contain the braille character '⡑'" type="xpath" test="not(contains(string-join(//text(),''),'⡑'))"/>
+            <x:expect label="should not contain the braille character '⡒'" type="xpath" test="not(contains(string-join(//text(),''),'⡒'))"/>
+            <x:expect label="should not contain the braille character '⡓'" type="xpath" test="not(contains(string-join(//text(),''),'⡓'))"/>
+            <x:expect label="should not contain the braille character '⡔'" type="xpath" test="not(contains(string-join(//text(),''),'⡔'))"/>
+            <x:expect label="should not contain the braille character '⡕'" type="xpath" test="not(contains(string-join(//text(),''),'⡕'))"/>
+            <x:expect label="should not contain the braille character '⡖'" type="xpath" test="not(contains(string-join(//text(),''),'⡖'))"/>
+            <x:expect label="should not contain the braille character '⡗'" type="xpath" test="not(contains(string-join(//text(),''),'⡗'))"/>
+            <x:expect label="should not contain the braille character '⡘'" type="xpath" test="not(contains(string-join(//text(),''),'⡘'))"/>
+            <x:expect label="should not contain the braille character '⡙'" type="xpath" test="not(contains(string-join(//text(),''),'⡙'))"/>
+            <x:expect label="should not contain the braille character '⡚'" type="xpath" test="not(contains(string-join(//text(),''),'⡚'))"/>
+            <x:expect label="should not contain the braille character '⡛'" type="xpath" test="not(contains(string-join(//text(),''),'⡛'))"/>
+            <x:expect label="should not contain the braille character '⡜'" type="xpath" test="not(contains(string-join(//text(),''),'⡜'))"/>
+            <x:expect label="should not contain the braille character '⡝'" type="xpath" test="not(contains(string-join(//text(),''),'⡝'))"/>
+            <x:expect label="should not contain the braille character '⡞'" type="xpath" test="not(contains(string-join(//text(),''),'⡞'))"/>
+            <x:expect label="should not contain the braille character '⡟'" type="xpath" test="not(contains(string-join(//text(),''),'⡟'))"/>
+            <x:expect label="should not contain the braille character '⡠'" type="xpath" test="not(contains(string-join(//text(),''),'⡠'))"/>
+            <x:expect label="should not contain the braille character '⡡'" type="xpath" test="not(contains(string-join(//text(),''),'⡡'))"/>
+            <x:expect label="should not contain the braille character '⡢'" type="xpath" test="not(contains(string-join(//text(),''),'⡢'))"/>
+            <x:expect label="should not contain the braille character '⡣'" type="xpath" test="not(contains(string-join(//text(),''),'⡣'))"/>
+            <x:expect label="should not contain the braille character '⡤'" type="xpath" test="not(contains(string-join(//text(),''),'⡤'))"/>
+            <x:expect label="should not contain the braille character '⡥'" type="xpath" test="not(contains(string-join(//text(),''),'⡥'))"/>
+            <x:expect label="should not contain the braille character '⡦'" type="xpath" test="not(contains(string-join(//text(),''),'⡦'))"/>
+            <x:expect label="should not contain the braille character '⡧'" type="xpath" test="not(contains(string-join(//text(),''),'⡧'))"/>
+            <x:expect label="should not contain the braille character '⡨'" type="xpath" test="not(contains(string-join(//text(),''),'⡨'))"/>
+            <x:expect label="should not contain the braille character '⡩'" type="xpath" test="not(contains(string-join(//text(),''),'⡩'))"/>
+            <x:expect label="should not contain the braille character '⡪'" type="xpath" test="not(contains(string-join(//text(),''),'⡪'))"/>
+            <x:expect label="should not contain the braille character '⡫'" type="xpath" test="not(contains(string-join(//text(),''),'⡫'))"/>
+            <x:expect label="should not contain the braille character '⡬'" type="xpath" test="not(contains(string-join(//text(),''),'⡬'))"/>
+            <x:expect label="should not contain the braille character '⡭'" type="xpath" test="not(contains(string-join(//text(),''),'⡭'))"/>
+            <x:expect label="should not contain the braille character '⡮'" type="xpath" test="not(contains(string-join(//text(),''),'⡮'))"/>
+            <x:expect label="should not contain the braille character '⡯'" type="xpath" test="not(contains(string-join(//text(),''),'⡯'))"/>
+            <x:expect label="should not contain the braille character '⡰'" type="xpath" test="not(contains(string-join(//text(),''),'⡰'))"/>
+            <x:expect label="should not contain the braille character '⡱'" type="xpath" test="not(contains(string-join(//text(),''),'⡱'))"/>
+            <x:expect label="should not contain the braille character '⡲'" type="xpath" test="not(contains(string-join(//text(),''),'⡲'))"/>
+            <x:expect label="should not contain the braille character '⡳'" type="xpath" test="not(contains(string-join(//text(),''),'⡳'))"/>
+            <x:expect label="should not contain the braille character '⡴'" type="xpath" test="not(contains(string-join(//text(),''),'⡴'))"/>
+            <x:expect label="should not contain the braille character '⡵'" type="xpath" test="not(contains(string-join(//text(),''),'⡵'))"/>
+            <x:expect label="should not contain the braille character '⡶'" type="xpath" test="not(contains(string-join(//text(),''),'⡶'))"/>
+            <x:expect label="should not contain the braille character '⡷'" type="xpath" test="not(contains(string-join(//text(),''),'⡷'))"/>
+            <x:expect label="should not contain the braille character '⡸'" type="xpath" test="not(contains(string-join(//text(),''),'⡸'))"/>
+            <x:expect label="should not contain the braille character '⡹'" type="xpath" test="not(contains(string-join(//text(),''),'⡹'))"/>
+            <x:expect label="should not contain the braille character '⡺'" type="xpath" test="not(contains(string-join(//text(),''),'⡺'))"/>
+            <x:expect label="should not contain the braille character '⡻'" type="xpath" test="not(contains(string-join(//text(),''),'⡻'))"/>
+            <x:expect label="should not contain the braille character '⡼'" type="xpath" test="not(contains(string-join(//text(),''),'⡼'))"/>
+            <x:expect label="should not contain the braille character '⡽'" type="xpath" test="not(contains(string-join(//text(),''),'⡽'))"/>
+            <x:expect label="should not contain the braille character '⡾'" type="xpath" test="not(contains(string-join(//text(),''),'⡾'))"/>
+            <x:expect label="should not contain the braille character '⡿'" type="xpath" test="not(contains(string-join(//text(),''),'⡿'))"/>
+            <x:expect label="should not contain the braille character '⢀'" type="xpath" test="not(contains(string-join(//text(),''),'⢀'))"/>
+            <x:expect label="should not contain the braille character '⢁'" type="xpath" test="not(contains(string-join(//text(),''),'⢁'))"/>
+            <x:expect label="should not contain the braille character '⢂'" type="xpath" test="not(contains(string-join(//text(),''),'⢂'))"/>
+            <x:expect label="should not contain the braille character '⢃'" type="xpath" test="not(contains(string-join(//text(),''),'⢃'))"/>
+            <x:expect label="should not contain the braille character '⢄'" type="xpath" test="not(contains(string-join(//text(),''),'⢄'))"/>
+            <x:expect label="should not contain the braille character '⢅'" type="xpath" test="not(contains(string-join(//text(),''),'⢅'))"/>
+            <x:expect label="should not contain the braille character '⢆'" type="xpath" test="not(contains(string-join(//text(),''),'⢆'))"/>
+            <x:expect label="should not contain the braille character '⢇'" type="xpath" test="not(contains(string-join(//text(),''),'⢇'))"/>
+            <x:expect label="should not contain the braille character '⢈'" type="xpath" test="not(contains(string-join(//text(),''),'⢈'))"/>
+            <x:expect label="should not contain the braille character '⢉'" type="xpath" test="not(contains(string-join(//text(),''),'⢉'))"/>
+            <x:expect label="should not contain the braille character '⢊'" type="xpath" test="not(contains(string-join(//text(),''),'⢊'))"/>
+            <x:expect label="should not contain the braille character '⢋'" type="xpath" test="not(contains(string-join(//text(),''),'⢋'))"/>
+            <x:expect label="should not contain the braille character '⢌'" type="xpath" test="not(contains(string-join(//text(),''),'⢌'))"/>
+            <x:expect label="should not contain the braille character '⢍'" type="xpath" test="not(contains(string-join(//text(),''),'⢍'))"/>
+            <x:expect label="should not contain the braille character '⢎'" type="xpath" test="not(contains(string-join(//text(),''),'⢎'))"/>
+            <x:expect label="should not contain the braille character '⢏'" type="xpath" test="not(contains(string-join(//text(),''),'⢏'))"/>
+            <x:expect label="should not contain the braille character '⢐'" type="xpath" test="not(contains(string-join(//text(),''),'⢐'))"/>
+            <x:expect label="should not contain the braille character '⢑'" type="xpath" test="not(contains(string-join(//text(),''),'⢑'))"/>
+            <x:expect label="should not contain the braille character '⢒'" type="xpath" test="not(contains(string-join(//text(),''),'⢒'))"/>
+            <x:expect label="should not contain the braille character '⢓'" type="xpath" test="not(contains(string-join(//text(),''),'⢓'))"/>
+            <x:expect label="should not contain the braille character '⢔'" type="xpath" test="not(contains(string-join(//text(),''),'⢔'))"/>
+            <x:expect label="should not contain the braille character '⢕'" type="xpath" test="not(contains(string-join(//text(),''),'⢕'))"/>
+            <x:expect label="should not contain the braille character '⢖'" type="xpath" test="not(contains(string-join(//text(),''),'⢖'))"/>
+            <x:expect label="should not contain the braille character '⢗'" type="xpath" test="not(contains(string-join(//text(),''),'⢗'))"/>
+            <x:expect label="should not contain the braille character '⢘'" type="xpath" test="not(contains(string-join(//text(),''),'⢘'))"/>
+            <x:expect label="should not contain the braille character '⢙'" type="xpath" test="not(contains(string-join(//text(),''),'⢙'))"/>
+            <x:expect label="should not contain the braille character '⢚'" type="xpath" test="not(contains(string-join(//text(),''),'⢚'))"/>
+            <x:expect label="should not contain the braille character '⢛'" type="xpath" test="not(contains(string-join(//text(),''),'⢛'))"/>
+            <x:expect label="should not contain the braille character '⢜'" type="xpath" test="not(contains(string-join(//text(),''),'⢜'))"/>
+            <x:expect label="should not contain the braille character '⢝'" type="xpath" test="not(contains(string-join(//text(),''),'⢝'))"/>
+            <x:expect label="should not contain the braille character '⢞'" type="xpath" test="not(contains(string-join(//text(),''),'⢞'))"/>
+            <x:expect label="should not contain the braille character '⢟'" type="xpath" test="not(contains(string-join(//text(),''),'⢟'))"/>
+            <x:expect label="should not contain the braille character '⢠'" type="xpath" test="not(contains(string-join(//text(),''),'⢠'))"/>
+            <x:expect label="should not contain the braille character '⢡'" type="xpath" test="not(contains(string-join(//text(),''),'⢡'))"/>
+            <x:expect label="should not contain the braille character '⢢'" type="xpath" test="not(contains(string-join(//text(),''),'⢢'))"/>
+            <x:expect label="should not contain the braille character '⢣'" type="xpath" test="not(contains(string-join(//text(),''),'⢣'))"/>
+            <x:expect label="should not contain the braille character '⢤'" type="xpath" test="not(contains(string-join(//text(),''),'⢤'))"/>
+            <x:expect label="should not contain the braille character '⢥'" type="xpath" test="not(contains(string-join(//text(),''),'⢥'))"/>
+            <x:expect label="should not contain the braille character '⢦'" type="xpath" test="not(contains(string-join(//text(),''),'⢦'))"/>
+            <x:expect label="should not contain the braille character '⢧'" type="xpath" test="not(contains(string-join(//text(),''),'⢧'))"/>
+            <x:expect label="should not contain the braille character '⢨'" type="xpath" test="not(contains(string-join(//text(),''),'⢨'))"/>
+            <x:expect label="should not contain the braille character '⢩'" type="xpath" test="not(contains(string-join(//text(),''),'⢩'))"/>
+            <x:expect label="should not contain the braille character '⢪'" type="xpath" test="not(contains(string-join(//text(),''),'⢪'))"/>
+            <x:expect label="should not contain the braille character '⢫'" type="xpath" test="not(contains(string-join(//text(),''),'⢫'))"/>
+            <x:expect label="should not contain the braille character '⢬'" type="xpath" test="not(contains(string-join(//text(),''),'⢬'))"/>
+            <x:expect label="should not contain the braille character '⢭'" type="xpath" test="not(contains(string-join(//text(),''),'⢭'))"/>
+            <x:expect label="should not contain the braille character '⢮'" type="xpath" test="not(contains(string-join(//text(),''),'⢮'))"/>
+            <x:expect label="should not contain the braille character '⢯'" type="xpath" test="not(contains(string-join(//text(),''),'⢯'))"/>
+            <x:expect label="should not contain the braille character '⢰'" type="xpath" test="not(contains(string-join(//text(),''),'⢰'))"/>
+            <x:expect label="should not contain the braille character '⢱'" type="xpath" test="not(contains(string-join(//text(),''),'⢱'))"/>
+            <x:expect label="should not contain the braille character '⢲'" type="xpath" test="not(contains(string-join(//text(),''),'⢲'))"/>
+            <x:expect label="should not contain the braille character '⢳'" type="xpath" test="not(contains(string-join(//text(),''),'⢳'))"/>
+            <x:expect label="should not contain the braille character '⢴'" type="xpath" test="not(contains(string-join(//text(),''),'⢴'))"/>
+            <x:expect label="should not contain the braille character '⢵'" type="xpath" test="not(contains(string-join(//text(),''),'⢵'))"/>
+            <x:expect label="should not contain the braille character '⢶'" type="xpath" test="not(contains(string-join(//text(),''),'⢶'))"/>
+            <x:expect label="should not contain the braille character '⢷'" type="xpath" test="not(contains(string-join(//text(),''),'⢷'))"/>
+            <x:expect label="should not contain the braille character '⢸'" type="xpath" test="not(contains(string-join(//text(),''),'⢸'))"/>
+            <x:expect label="should not contain the braille character '⢹'" type="xpath" test="not(contains(string-join(//text(),''),'⢹'))"/>
+            <x:expect label="should not contain the braille character '⢺'" type="xpath" test="not(contains(string-join(//text(),''),'⢺'))"/>
+            <x:expect label="should not contain the braille character '⢻'" type="xpath" test="not(contains(string-join(//text(),''),'⢻'))"/>
+            <x:expect label="should not contain the braille character '⢼'" type="xpath" test="not(contains(string-join(//text(),''),'⢼'))"/>
+            <x:expect label="should not contain the braille character '⢽'" type="xpath" test="not(contains(string-join(//text(),''),'⢽'))"/>
+            <x:expect label="should not contain the braille character '⢾'" type="xpath" test="not(contains(string-join(//text(),''),'⢾'))"/>
+            <x:expect label="should not contain the braille character '⢿'" type="xpath" test="not(contains(string-join(//text(),''),'⢿'))"/>
+            <x:expect label="should not contain the braille character '⣀'" type="xpath" test="not(contains(string-join(//text(),''),'⣀'))"/>
+            <x:expect label="should not contain the braille character '⣁'" type="xpath" test="not(contains(string-join(//text(),''),'⣁'))"/>
+            <x:expect label="should not contain the braille character '⣂'" type="xpath" test="not(contains(string-join(//text(),''),'⣂'))"/>
+            <x:expect label="should not contain the braille character '⣃'" type="xpath" test="not(contains(string-join(//text(),''),'⣃'))"/>
+            <x:expect label="should not contain the braille character '⣄'" type="xpath" test="not(contains(string-join(//text(),''),'⣄'))"/>
+            <x:expect label="should not contain the braille character '⣅'" type="xpath" test="not(contains(string-join(//text(),''),'⣅'))"/>
+            <x:expect label="should not contain the braille character '⣆'" type="xpath" test="not(contains(string-join(//text(),''),'⣆'))"/>
+            <x:expect label="should not contain the braille character '⣇'" type="xpath" test="not(contains(string-join(//text(),''),'⣇'))"/>
+            <x:expect label="should not contain the braille character '⣈'" type="xpath" test="not(contains(string-join(//text(),''),'⣈'))"/>
+            <x:expect label="should not contain the braille character '⣉'" type="xpath" test="not(contains(string-join(//text(),''),'⣉'))"/>
+            <x:expect label="should not contain the braille character '⣊'" type="xpath" test="not(contains(string-join(//text(),''),'⣊'))"/>
+            <x:expect label="should not contain the braille character '⣋'" type="xpath" test="not(contains(string-join(//text(),''),'⣋'))"/>
+            <x:expect label="should not contain the braille character '⣌'" type="xpath" test="not(contains(string-join(//text(),''),'⣌'))"/>
+            <x:expect label="should not contain the braille character '⣍'" type="xpath" test="not(contains(string-join(//text(),''),'⣍'))"/>
+            <x:expect label="should not contain the braille character '⣎'" type="xpath" test="not(contains(string-join(//text(),''),'⣎'))"/>
+            <x:expect label="should not contain the braille character '⣏'" type="xpath" test="not(contains(string-join(//text(),''),'⣏'))"/>
+            <x:expect label="should not contain the braille character '⣐'" type="xpath" test="not(contains(string-join(//text(),''),'⣐'))"/>
+            <x:expect label="should not contain the braille character '⣑'" type="xpath" test="not(contains(string-join(//text(),''),'⣑'))"/>
+            <x:expect label="should not contain the braille character '⣒'" type="xpath" test="not(contains(string-join(//text(),''),'⣒'))"/>
+            <x:expect label="should not contain the braille character '⣓'" type="xpath" test="not(contains(string-join(//text(),''),'⣓'))"/>
+            <x:expect label="should not contain the braille character '⣔'" type="xpath" test="not(contains(string-join(//text(),''),'⣔'))"/>
+            <x:expect label="should not contain the braille character '⣕'" type="xpath" test="not(contains(string-join(//text(),''),'⣕'))"/>
+            <x:expect label="should not contain the braille character '⣖'" type="xpath" test="not(contains(string-join(//text(),''),'⣖'))"/>
+            <x:expect label="should not contain the braille character '⣗'" type="xpath" test="not(contains(string-join(//text(),''),'⣗'))"/>
+            <x:expect label="should not contain the braille character '⣘'" type="xpath" test="not(contains(string-join(//text(),''),'⣘'))"/>
+            <x:expect label="should not contain the braille character '⣙'" type="xpath" test="not(contains(string-join(//text(),''),'⣙'))"/>
+            <x:expect label="should not contain the braille character '⣚'" type="xpath" test="not(contains(string-join(//text(),''),'⣚'))"/>
+            <x:expect label="should not contain the braille character '⣛'" type="xpath" test="not(contains(string-join(//text(),''),'⣛'))"/>
+            <x:expect label="should not contain the braille character '⣜'" type="xpath" test="not(contains(string-join(//text(),''),'⣜'))"/>
+            <x:expect label="should not contain the braille character '⣝'" type="xpath" test="not(contains(string-join(//text(),''),'⣝'))"/>
+            <x:expect label="should not contain the braille character '⣞'" type="xpath" test="not(contains(string-join(//text(),''),'⣞'))"/>
+            <x:expect label="should not contain the braille character '⣟'" type="xpath" test="not(contains(string-join(//text(),''),'⣟'))"/>
+            <x:expect label="should not contain the braille character '⣠'" type="xpath" test="not(contains(string-join(//text(),''),'⣠'))"/>
+            <x:expect label="should not contain the braille character '⣡'" type="xpath" test="not(contains(string-join(//text(),''),'⣡'))"/>
+            <x:expect label="should not contain the braille character '⣢'" type="xpath" test="not(contains(string-join(//text(),''),'⣢'))"/>
+            <x:expect label="should not contain the braille character '⣣'" type="xpath" test="not(contains(string-join(//text(),''),'⣣'))"/>
+            <x:expect label="should not contain the braille character '⣤'" type="xpath" test="not(contains(string-join(//text(),''),'⣤'))"/>
+            <x:expect label="should not contain the braille character '⣥'" type="xpath" test="not(contains(string-join(//text(),''),'⣥'))"/>
+            <x:expect label="should not contain the braille character '⣦'" type="xpath" test="not(contains(string-join(//text(),''),'⣦'))"/>
+            <x:expect label="should not contain the braille character '⣧'" type="xpath" test="not(contains(string-join(//text(),''),'⣧'))"/>
+            <x:expect label="should not contain the braille character '⣨'" type="xpath" test="not(contains(string-join(//text(),''),'⣨'))"/>
+            <x:expect label="should not contain the braille character '⣩'" type="xpath" test="not(contains(string-join(//text(),''),'⣩'))"/>
+            <x:expect label="should not contain the braille character '⣪'" type="xpath" test="not(contains(string-join(//text(),''),'⣪'))"/>
+            <x:expect label="should not contain the braille character '⣫'" type="xpath" test="not(contains(string-join(//text(),''),'⣫'))"/>
+            <x:expect label="should not contain the braille character '⣬'" type="xpath" test="not(contains(string-join(//text(),''),'⣬'))"/>
+            <x:expect label="should not contain the braille character '⣭'" type="xpath" test="not(contains(string-join(//text(),''),'⣭'))"/>
+            <x:expect label="should not contain the braille character '⣮'" type="xpath" test="not(contains(string-join(//text(),''),'⣮'))"/>
+            <x:expect label="should not contain the braille character '⣯'" type="xpath" test="not(contains(string-join(//text(),''),'⣯'))"/>
+            <x:expect label="should not contain the braille character '⣰'" type="xpath" test="not(contains(string-join(//text(),''),'⣰'))"/>
+            <x:expect label="should not contain the braille character '⣱'" type="xpath" test="not(contains(string-join(//text(),''),'⣱'))"/>
+            <x:expect label="should not contain the braille character '⣲'" type="xpath" test="not(contains(string-join(//text(),''),'⣲'))"/>
+            <x:expect label="should not contain the braille character '⣳'" type="xpath" test="not(contains(string-join(//text(),''),'⣳'))"/>
+            <x:expect label="should not contain the braille character '⣴'" type="xpath" test="not(contains(string-join(//text(),''),'⣴'))"/>
+            <x:expect label="should not contain the braille character '⣵'" type="xpath" test="not(contains(string-join(//text(),''),'⣵'))"/>
+            <x:expect label="should not contain the braille character '⣶'" type="xpath" test="not(contains(string-join(//text(),''),'⣶'))"/>
+            <x:expect label="should not contain the braille character '⣷'" type="xpath" test="not(contains(string-join(//text(),''),'⣷'))"/>
+            <x:expect label="should not contain the braille character '⣸'" type="xpath" test="not(contains(string-join(//text(),''),'⣸'))"/>
+            <x:expect label="should not contain the braille character '⣹'" type="xpath" test="not(contains(string-join(//text(),''),'⣹'))"/>
+            <x:expect label="should not contain the braille character '⣺'" type="xpath" test="not(contains(string-join(//text(),''),'⣺'))"/>
+            <x:expect label="should not contain the braille character '⣻'" type="xpath" test="not(contains(string-join(//text(),''),'⣻'))"/>
+            <x:expect label="should not contain the braille character '⣼'" type="xpath" test="not(contains(string-join(//text(),''),'⣼'))"/>
+            <x:expect label="should not contain the braille character '⣽'" type="xpath" test="not(contains(string-join(//text(),''),'⣽'))"/>
+            <x:expect label="should not contain the braille character '⣾'" type="xpath" test="not(contains(string-join(//text(),''),'⣾'))"/>
+            <x:expect label="should not contain the braille character '⣿'" type="xpath" test="not(contains(string-join(//text(),''),'⣿'))"/>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
