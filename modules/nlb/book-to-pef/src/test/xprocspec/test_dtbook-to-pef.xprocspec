@@ -2227,7 +2227,7 @@
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
-                        <row>⠀⠀⠔⠔⠔</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠄⠄⠄⠄⠄⠄⠄</row>
                         <row/>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
@@ -2259,7 +2259,7 @@
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
-                        <row>⠀⠀⠔⠔⠔</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠄⠄⠄⠄⠄⠄⠄</row>
                         <row/>
                     </page>
                 </x:document>

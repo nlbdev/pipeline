@@ -443,7 +443,8 @@ doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauth
 
 hr::before {
         display: block;
-        content: "⠔⠔⠔";
+        text-align: center;
+        content: "⠄⠄⠄⠄⠄⠄⠄⠄";
         margin-bottom: 1;
         margin-top: 1;
 }
