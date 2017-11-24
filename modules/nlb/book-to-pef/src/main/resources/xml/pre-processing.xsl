@@ -24,7 +24,7 @@
     <xsl:template name="class-attribute">
         <xsl:if test="@class">
             <xsl:variable name="classes" select="f:classes(.)"/>
-            <xsl:variable name="classes" select="for $class in $classes return if ($class = 'precedingseparator') then () else $class"/>
+            <xsl:variable name="classes" select="for $class in $classes return if ($class = ('precedingseparator','precedingemptyline')) then () else $class"/>
             <xsl:if test="count($classes)">
                 <xsl:attribute name="class" select="string-join($classes,' ')"/>
             </xsl:if>
@@ -57,8 +57,12 @@
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="*[f:classes(.)='precedingseparator']">
-        <xsl:element name="hr" namespace="{namespace-uri()}"/>
+    <xsl:template match="*[f:classes(.)=('precedingseparator','precedingemptyline')]">
+        <xsl:element name="hr" namespace="{namespace-uri()}">
+            <xsl:if test="f:classes(.) = 'precedingemptyline'">
+                <xsl:attribute name="class" select="'emptyline'"/>
+            </xsl:if>
+        </xsl:element>
         <xsl:next-match/>
     </xsl:template>
     

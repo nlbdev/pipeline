@@ -435,12 +435,27 @@ doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauth
 }
 
 /* -------------------------------------------------------------------------- */
-/*                Special classes                                                       */
+/*                Thematic breaks                                             */
 /* -------------------------------------------------------------------------- */
 
-.precedingemptyline {
+/* Note: The DTBook classes precedingseparator and precedingemptyline */
+/*       are replaced with hr elements during preprocessing.          */
+
+hr::before {
+        display: block;
+        content: "⠔⠔⠔";
+        margin-bottom: 1;
         margin-top: 1;
 }
+
+hr.emptyline::before {
+        content: "";
+        margin-bottom: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                Special classes                                             */
+/* -------------------------------------------------------------------------- */
 
 .Rammetekst {
         margin-top: 1;
@@ -607,13 +622,6 @@ prodnote, aside[epub|type~='z3998:production'] {
        &::after {
                content: "⠾";
        }
-}
-
-hr::before {
-        display: block;
-        content: "⠔⠔⠔";
-        margin-bottom: 1;
-        margin-top: 1;
 }
 
 /* -------------------------------------------------------------------------- */

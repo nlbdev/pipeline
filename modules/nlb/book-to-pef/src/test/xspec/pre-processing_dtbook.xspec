@@ -85,4 +85,19 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="the precedingemptyline class should be replaced with a hr element with a emptyline class">
+        <x:context>
+            <div>
+                <p class="other-class precedingemptyline"/>
+            </div>
+        </x:context>
+        
+        <x:expect>
+            <div>
+                <hr class="emptyline"/>
+                <p class="other-class"/>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

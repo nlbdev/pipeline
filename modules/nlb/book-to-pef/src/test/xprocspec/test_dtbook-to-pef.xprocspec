@@ -1982,10 +1982,26 @@
                                         <p style="margin-top: 0; padding-top: 0;">after</p>
                                     </level1>
                                     <level1 style="page-break-before: always;">
+                                        <h1>[test-preceding-emptyline]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <p class="precedingemptyline">content content content content content content content content content content content</p>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
                                         <h1>[test-hr]</h1>
                                         <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
                                         
                                         <hr/>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    </level1>
+                                    <level1 style="page-break-before: always;">
+                                        <h1>[test-hr-emptyline]</h1>
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <hr class="emptyline"/>
                                         
                                         <p style="margin-top: 0; padding-top: 0;">after</p>
                                     </level1>
@@ -2221,6 +2237,21 @@
                 </x:document>
             </x:expect>
             
+            <x:context label="the p with the precedingemptyline class">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠗⠑⠉⠑⠙⠊⠝⠛⠤⠑⠍⠏⠞⠽⠇⠊⠝⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The p with the precedingseparator class should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
             <x:context label="the hr element">
                 <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠓⠗⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
             </x:context>
@@ -2229,6 +2260,17 @@
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
                         <row>⠀⠀⠔⠔⠔</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the hr element with an emptyline class">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠓⠗⠤⠑⠍⠏⠞⠽⠇⠊⠝⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The hr element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
                     </page>
                 </x:document>
