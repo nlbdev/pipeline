@@ -120,7 +120,7 @@
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="count(//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle'])">
-                            <xsl:sequence select="//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle']/nlb:element-text(.)"/>
+                            <xsl:sequence select="(//html:body//html:*[tokenize(@epub:type,'\s+')='fulltitle'])[1]/nlb:element-text(.)"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:sequence select="string((//html:head/html:title)[1]/text())"/>
