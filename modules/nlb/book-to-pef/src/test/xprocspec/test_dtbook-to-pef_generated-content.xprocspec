@@ -152,6 +152,11 @@
                     </page>
                 </x:document>
             </x:expect>
+            
+            <x:context label="authors on about page">
+                <x:document type="file" base-uri="temp-dir" href="author/1/pef-output-dir/book.pef" select="(//pef:page)[2]"/>
+            </x:context>
+            <x:expect label="there should be none" type="xpath" test="contains(., '⠠⠋⠕⠗⠋⠁⠞⠞⠑⠗')" equals="false()"/>
         </x:scenario>
         
         <x:scenario label="2 authors">
@@ -268,6 +273,19 @@
                     </page>
                 </x:document>
             </x:expect>
+            
+            <x:context label="authors on about page">
+                <x:document type="file" base-uri="temp-dir" href="author/4/pef-output-dir/book.pef" select="(//pef:page)[2]/(if (count(.//*[contains(.,'⠠⠋⠕⠗⠋⠁⠞⠞⠑⠗')])) then .//pef:row[contains(text(), '⠠⠋⠕⠗⠋⠁⠞⠞⠑⠗')]/(. | following-sibling::*[position() le 2]) else .//pef:row)"/>
+            </x:context>
+            <x:expect label="should all be listed in full" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠠⠋⠕⠗⠋⠁⠞⠞⠑⠗⠑⠒⠀⠁⠥⠞⠓⠕⠗⠀⠼⠁⠂</row>
+                        <row>⠀⠀⠁⠥⠞⠓⠕⠗⠀⠼⠃⠂⠀⠁⠥⠞⠓⠕⠗⠀⠼⠉⠀⠕⠛⠀⠁⠥⠞⠤</row>
+                        <row>⠀⠀⠓⠕⠗⠀⠼⠙</row>
+                    </page>
+                </x:document>
+            </x:expect>
         </x:scenario>
     </x:scenario>
     
@@ -311,6 +329,11 @@
                     </page>
                 </x:document>
             </x:expect>
+            
+            <x:context label="full title on about page">
+                <x:document type="file" base-uri="temp-dir" href="title/1/pef-output-dir/book.pef" select="(//pef:page)[2]//*[contains(.,'⠠⠋⠥⠇⠇⠀⠞⠊⠞⠞⠑⠇')]"/>
+            </x:context>
+            <x:expect label="should not be listed" type="count" max="0"/>
         </x:scenario>
         <x:scenario label="long title that does not fit">
             <x:call>
@@ -346,6 +369,22 @@
                         <row>⠀⠀⠀⠀⠠⠁⠊⠝⠐⠞⠀⠠⠝⠑⠧⠑⠗⠀⠠⠉⠕⠍⠊⠝⠛⠄⠄⠄</row>
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="full title on about page">
+                <x:document type="file" base-uri="temp-dir" href="title/2/pef-output-dir/book.pef" select="(//pef:page)[2]/(if (count(.//*[contains(.,'⠠⠋⠥⠇⠇⠀⠞⠊⠞⠞⠑⠇')])) then .//pef:row[contains(text(), '⠠⠋⠥⠇⠇⠀⠞⠊⠞⠞⠑⠇')]/(. | following-sibling::*[position() le 5]) else .//pef:row)"/>
+            </x:context>
+            <x:expect label="should be listed in full" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠠⠋⠥⠇⠇⠀⠞⠊⠞⠞⠑⠇⠒⠀⠠⠝⠕⠀⠠⠍⠁⠞⠞⠑⠗</row>
+                        <row>⠀⠀⠠⠓⠕⠺⠀⠠⠍⠥⠉⠓⠀⠠⠽⠕⠥⠀⠠⠏⠗⠕⠍⠊⠎⠑⠀⠞⠕</row>
+                        <row>⠀⠀⠠⠉⠕⠕⠅⠀⠕⠗⠀⠠⠏⠁⠽⠀⠞⠓⠑⠀⠠⠗⠑⠝⠞⠀⠠⠽⠕⠥</row>
+                        <row>⠀⠀⠠⠃⠇⠑⠺⠀⠠⠊⠞⠀⠠⠉⠁⠥⠵⠑⠀⠠⠃⠊⠇⠇</row>
+                        <row>⠀⠀⠠⠃⠁⠊⠇⠑⠽⠀⠠⠁⠊⠝⠐⠞⠀⠠⠝⠑⠧⠑⠗⠀⠠⠉⠕⠍⠊⠝⠛</row>
+                        <row>⠀⠀⠠⠓⠕⠍⠑⠀⠠⠁⠛⠁⠊⠝</row>
                     </page>
                 </x:document>
             </x:expect>
@@ -467,6 +506,11 @@
                     </page>
                 </x:document>
             </x:expect>
+            
+            <x:context label="translators on about page">
+                <x:document type="file" base-uri="temp-dir" href="translator/1/pef-output-dir/book.pef" select="(//pef:page)[2]"/>
+            </x:context>
+            <x:expect label="there should be none" type="xpath" test="contains(., '⠠⠕⠧⠑⠗⠎⠁⠞⠞')" equals="false()"/>
         </x:scenario>
         
         <x:scenario label="2 translators">
@@ -543,6 +587,19 @@
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠍⠋⠇⠄</row>
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="translators on about page">
+                <x:document type="file" base-uri="temp-dir" href="translator/3/pef-output-dir/book.pef" select="(//pef:page)[2]/(if (count(.//*[contains(.,'⠠⠕⠧⠑⠗⠎⠁⠞⠞')])) then .//pef:row[contains(text(), '⠠⠕⠧⠑⠗⠎⠁⠞⠞')]/(. | following-sibling::*[position() le 2]) else .//pef:row)"/>
+            </x:context>
+            <x:expect label="should all be listed in full" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠠⠕⠧⠑⠗⠎⠁⠞⠞⠀⠁⠧⠒⠀⠞⠗⠁⠝⠎⠇⠁⠞⠕⠗</row>
+                        <row>⠀⠀⠼⠁⠂⠀⠞⠗⠁⠝⠎⠇⠁⠞⠕⠗⠀⠼⠃⠀⠕⠛</row>
+                        <row>⠀⠀⠞⠗⠁⠝⠎⠇⠁⠞⠕⠗⠀⠼⠉</row>
                     </page>
                 </x:document>
             </x:expect>

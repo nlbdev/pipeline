@@ -307,11 +307,43 @@
             <xsl:element name="h1" namespace="{$namespace-uri}">
                 <xsl:text>Om boka</xsl:text>
             </xsl:element>
+            <xsl:if test="normalize-space(string-join($author-lines,' ')) != normalize-space(string-join($author,' '))">
+                <xsl:choose>
+                    <xsl:when test="count($author) = 1">
+                        <xsl:call-template name="row">
+                            <xsl:with-param name="content" select="concat('Forfatter: ',normalize-space($author))"/>
+                            <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:when test="count($author) gt 1">
+                        <xsl:call-template name="row">
+                            <xsl:with-param name="content" select="concat('Forfattere: ',string-join(for $a in $author[not(position()=last())] return normalize-space($a), ', '), ' og ', normalize-space($author[last()]))"/>
+                            <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:if>
             <xsl:if test="normalize-space(string-join($title-lines,' ')) != normalize-space($title)">
                 <xsl:call-template name="row">
-                    <xsl:with-param name="content" select="concat('Full tittel: ',normalize-space($title),'.')"/>
+                    <xsl:with-param name="content" select="concat('Full tittel: ',normalize-space($title))"/>
                     <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
                 </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="normalize-space(string-join($translator-lines,' ')) != normalize-space(string-join($translator,' '))">
+                <xsl:choose>
+                    <xsl:when test="count($translator) = 1">
+                        <xsl:call-template name="row">
+                            <xsl:with-param name="content" select="concat('Oversatt av: ',normalize-space($translator))"/>
+                            <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:when test="count($translator) gt 1">
+                        <xsl:call-template name="row">
+                            <xsl:with-param name="content" select="concat('Oversatt av: ',string-join(for $t in $translator[not(position()=last())] return normalize-space($t), ', '), ' og ', normalize-space($translator[last()]))"/>
+                            <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:if>
             <xsl:if test="not($notes-present and $notes-placement = 'bottom-of-page')">
                 <xsl:if test="$notes-present">
