@@ -57,6 +57,53 @@
         </xsl:element>
     </xsl:template>
     
+    <!-- remove existing titlepage if present -->
+    <xsl:template match="dtbook:level1[tokenize(@class,'\s+') = 'titlepage']"/>
+    <xsl:template match="html:body[tokenize(@epub:type,'\s+') = 'titlepage']"/>
+    <xsl:template match="html:body/html:section[tokenize(@epub:type,'\s+') = 'titlepage']"/>
+    
+    <!-- remove print toc if present -->
+    <xsl:template match="dtbook:level1[tokenize(@class,'\s+') = ('toc','print_toc')]"/>
+    <xsl:template match="html:body[tokenize(@epub:type,'\s+') = ('toc','toc-brief')]"/>
+    <xsl:template match="html:body/html:section[tokenize(@epub:type,'\s+') = ('toc','toc-brief')]"/>
+    
+    <!-- move colophon to the end of the book -->
+    <xsl:template match="html:*[tokenize(@epub:type,'\s+') = 'colophon'] | dtbook:level1[tokenize(@class,'\s+') = 'colophon']"/>
+    <xsl:template match="html:body[count(../html:body) = 1]">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <xsl:for-each select="*[tokenize(@epub:type,'\s+') = 'colophon']">
+                <xsl:copy>
+                    <xsl:apply-templates select="@*"/>
+                    <xsl:attribute name="epub:type" select="string-join(distinct-values((tokenize(@epub:type,'\s+')[not(.=('cover','frontmatter','bodymatter'))], 'backmatter')),' ')"/>
+                    <xsl:apply-templates select="node()"/>
+                </xsl:copy>
+            </xsl:for-each>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="html:body[preceding-sibling::html:body and not(following-sibling::html:body)]">
+        <xsl:next-match/>
+        <xsl:for-each select="preceding-sibling::html:body[tokenize(@epub:type,'\s+') = 'colophon']">
+            <xsl:copy>
+                <xsl:apply-templates select="@*"/>
+                <xsl:attribute name="epub:type" select="string-join(distinct-values((tokenize(@epub:type,'\s+')[not(.=('cover','frontmatter','bodymatter'))], 'backmatter')),' ')"/>
+                <xsl:apply-templates select="node()"/>
+            </xsl:copy>
+        </xsl:for-each>
+    </xsl:template>
+    <xsl:template match="dtbook:rearmatter">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <xsl:copy-of select="../*/dtbook:level1[tokenize(@class,'\s+') = 'colophon']"/>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="dtbook:bodymatter[not(../dtbook:rearmatter)]">
+        <xsl:next-match/>
+        <rearmatter xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <xsl:copy-of select="../*/dtbook:level1[tokenize(@class,'\s+') = 'colophon']"/>
+        </rearmatter>
+    </xsl:template>
+    
     <xsl:template match="*[f:classes(.)=('precedingseparator','precedingemptyline')]">
         <xsl:element name="hr" namespace="{namespace-uri()}">
             <xsl:if test="f:classes(.) = 'precedingemptyline'">

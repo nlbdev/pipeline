@@ -73,11 +73,6 @@
         </xsl:copy>
     </xsl:template>
     
-    <!-- remove existing titlepage if present -->
-    <xsl:template match="dtbook:frontmatter/dtbook:level1[tokenize(@class,'\s+') = 'titlepage']"/>
-    <xsl:template match="html:body[tokenize(@class,'\s+') = 'titlepage' or tokenize(@epub:type,'\s+') = 'titlepage']"/>
-    <xsl:template match="html:section[tokenize(@class,'\s+') = 'titlepage' or tokenize(@epub:type,'\s+') = 'titlepage']"/>
-
     <xsl:template name="generate-frontmatter">
         <xsl:variable name="namespace-uri" select="namespace-uri()"/>
         

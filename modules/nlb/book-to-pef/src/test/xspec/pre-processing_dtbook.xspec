@@ -100,4 +100,82 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="move colophon to rearmatter (with existing rearmatter)">
+        <x:context>
+            <book>
+                <frontmatter>
+                    <level1 class="cover"/>
+                    <level1/>
+                    <level1 class="colophon"/>
+                </frontmatter>
+                <bodymatter>
+                    <level1/>
+                </bodymatter>
+                <rearmatter>
+                    <level1/>
+                </rearmatter>
+            </book>
+        </x:context>
+        <x:expect>
+            <book>
+                <frontmatter>
+                    <level1 class="cover"/>
+                    <level1/>
+                </frontmatter>
+                <bodymatter>
+                    <level1/>
+                </bodymatter>
+                <rearmatter>
+                    <level1/>
+                    <level1 class="colophon"/>
+                </rearmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="move colophon to rearmatter (without existing rearmatter)">
+        <x:context>
+            <book>
+                <frontmatter>
+                    <level1 class="cover"/>
+                    <level1/>
+                    <level1 class="colophon"/>
+                </frontmatter>
+                <bodymatter>
+                    <level1/>
+                </bodymatter>
+            </book>
+        </x:context>
+        <x:expect>
+            <book>
+                <frontmatter>
+                    <level1 class="cover"/>
+                    <level1/>
+                </frontmatter>
+                <bodymatter>
+                    <level1/>
+                </bodymatter>
+                <rearmatter>
+                    <level1 class="colophon"/>
+                </rearmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="remove titlepage and print toc">
+        <x:context>
+            <frontmatter>
+                <level1 class="cover"/>
+                <level1 class="titlepage"/>
+                <level1 class="toc"/>
+                <level1 class="print_toc"/>
+            </frontmatter>
+        </x:context>
+        <x:expect>
+            <frontmatter>
+                <level1 class="cover"/>
+            </frontmatter>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

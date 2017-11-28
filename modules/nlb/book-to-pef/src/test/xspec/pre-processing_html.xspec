@@ -98,4 +98,76 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="move colophon to backmatter (multiple body elements)">
+        <x:context>
+            <html>
+                <body epub:type="cover"/>
+                <body epub:type="frontmatter"/>
+                <body epub:type="frontmatter colophon"/>
+                <body epub:type="bodymatter"/>
+                <body epub:type="backmatter"/>
+            </html>
+        </x:context>
+        <x:expect>
+            <html>
+                <body epub:type="cover"/>
+                <body epub:type="frontmatter"/>
+                <body epub:type="bodymatter"/>
+                <body epub:type="backmatter"/>
+                <body epub:type="colophon backmatter"/>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="move colophon to backmatter (single body element)">
+        <x:context>
+            <body>
+                <section epub:type="cover"/>
+                <section epub:type="frontmatter"/>
+                <section epub:type="frontmatter colophon"/>
+                <section epub:type="bodymatter"/>
+                <section epub:type="backmatter"/>
+            </body>
+        </x:context>
+        <x:expect>
+            <body>
+                <section epub:type="cover"/>
+                <section epub:type="frontmatter"/>
+                <section epub:type="bodymatter"/>
+                <section epub:type="backmatter"/>
+                <section epub:type="colophon backmatter"/>
+            </body>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="remove titlepage and print toc (multiple body elements)">
+        <x:context>
+            <html>
+                <body epub:type="cover"/>
+                <body epub:type="titlepage"/>
+                <body epub:type="toc"/>
+            </html>
+        </x:context>
+        <x:expect>
+            <html>
+                <body epub:type="cover"/>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="remove titlepage and print toc (single body element)">
+        <x:context>
+            <body>
+                <section epub:type="cover"/>
+                <section epub:type="titlepage"/>
+                <section epub:type="toc"/>
+            </body>
+        </x:context>
+        <x:expect>
+            <body>
+                <section epub:type="cover"/>
+            </body>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>
