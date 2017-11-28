@@ -661,7 +661,7 @@ prodnote, aside[epub|type~='z3998:production'] {
 @if $include-images {
         img[alt]:not([alt='']):not([alt='image'])::after {
                 display: block;
-                content: attr(alt);
+                content: "Bilde. " attr(alt);
                 margin-top: 1;
                 margin-bottom: 1;
                 margin-left: 2;
