@@ -327,7 +327,7 @@
                     </level1>
                     <level1 class="pef-about">
                         <h1>Om boka</h1>
-                        <p>Full tittel: No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again.</p>
+                        <p>Full tittel: No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again</p>
                         <p><span class="pef-pages">Antall sider: </span></p>
                         <p>Boka skal ikke returneres.</p>
                         <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
@@ -582,7 +582,7 @@
                     </section>
                     <section class="pef-about">
                         <h1>Om boka</h1>
-                        <p>Full tittel: No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again.</p>
+                        <p>Full tittel: No Matter How Much You Promise to Cook or Pay the Rent You Blew It Cauze Bill Bailey Ain''t Never Coming Home Again</p>
                         <p><span class="pef-pages">Antall sider: </span></p>
                         <p>Boka skal ikke returneres.</p>
                         <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
@@ -685,7 +685,7 @@
             <x:param name="lines-available" select="4"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Lou Mackenzie')"/>
+        <x:expect select="('true', 'Lou Mackenzie')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - 4 lines">
@@ -694,7 +694,7 @@
             <x:param name="lines-available" select="4"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Johnnie Andy','Mackenzie Lou','Ikin Harlow','Taylor')"/>
+        <x:expect select="('true', 'Johnnie Andy','Mackenzie Lou','Ikin Harlow','Taylor')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - 3 lines">
@@ -703,7 +703,7 @@
             <x:param name="lines-available" select="3"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Johnnie Andy','Mackenzie Lou','Ikin Harlow')"/>
+        <x:expect select="('false', 'Johnnie Andy','Mackenzie Lou','Ikin Harlow')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - 2 lines">
@@ -712,7 +712,7 @@
             <x:param name="lines-available" select="2"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Johnnie Andy','Mackenzie Lou')"/>
+        <x:expect select="('false', 'Johnnie Andy','Mackenzie Lou')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - 2 lines">
@@ -721,7 +721,7 @@
             <x:param name="lines-available" select="2"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Johnnie Andy','Mackenzie Lou')"/>
+        <x:expect select="('false', 'Johnnie Andy','Mackenzie Lou')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - 1 lines">
@@ -730,7 +730,7 @@
             <x:param name="lines-available" select="1"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Johnnie Andy')"/>
+        <x:expect select="('false', 'Johnnie Andy')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - 1 lines">
@@ -739,7 +739,7 @@
             <x:param name="lines-available" select="1"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Johnnie Andy')"/>
+        <x:expect select="('false', 'Johnnie Andy')"/>
     </x:scenario>
     
     <x:scenario label="nlb:fit-name-to-lines - ability to suggest line break with names with initials">
@@ -748,7 +748,7 @@
             <x:param name="lines-available" select="3"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Johnnie Andy','Mackenzie','Lou Ikin Taylor')"/>
+        <x:expect select="('true', 'Johnnie Andy','Mackenzie','Lou Ikin Taylor')"/>
     </x:scenario>
     
     <x:scenario label="nlb:author-lines - 1 long author">
@@ -757,7 +757,7 @@
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie Andy', 'Mackenzie Lou', 'Taylor')"/>
+        <x:expect select="('true', 'Johnnie Andy', 'Mackenzie Lou', 'Taylor')"/>
     </x:scenario>
     
     <x:scenario label="nlb:author-lines - 2 authors">
@@ -766,7 +766,7 @@
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie Mackenzie', 'Lou Taylor')"/>
+        <x:expect select="('true', 'Johnnie Mackenzie', 'Lou Taylor')"/>
     </x:scenario>
     
     <x:scenario label="nlb:author-lines - 3 authors">
@@ -775,7 +775,7 @@
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie Mackenzie', 'Lou Taylor', 'mfl.')"/>
+        <x:expect select="('false', 'Johnnie Mackenzie', 'Lou Taylor', 'mfl.')"/>
     </x:scenario>
     
     <x:scenario label="nlb:author-lines - 4 authors">
@@ -784,7 +784,7 @@
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('author 1', 'author 2', 'mfl.')"/>
+        <x:expect select="('false', 'author 1', 'author 2', 'mfl.')"/>
     </x:scenario>
     
     <x:scenario label="nlb:author-lines - ability to suggest line break">
@@ -793,7 +793,7 @@
             <x:param name="line-length" select="100"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie','Mackenzie')"/>
+        <x:expect select="('true', 'Johnnie','Mackenzie')"/>
     </x:scenario>
     
     <x:scenario label="nlb:translator-lines - 1 long translator">
@@ -802,7 +802,7 @@
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie Andy Lou', 'Taylor')"/>
+        <x:expect select="('true', 'Johnnie Andy Lou', 'Taylor')"/>
     </x:scenario>
     
     <x:scenario label="nlb:translator-lines - 2 translators">
@@ -811,7 +811,7 @@
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie Mackenzie', 'Lou Taylor')"/>
+        <x:expect select="('true', 'Johnnie Mackenzie', 'Lou Taylor')"/>
     </x:scenario>
     
     <x:scenario label="nlb:translator-lines - 3 translators">
@@ -820,7 +820,7 @@
             <x:param name="line-length" select="20"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie Mackenzie', 'mfl.')"/>
+        <x:expect select="('false', 'Johnnie Mackenzie', 'mfl.')"/>
     </x:scenario>
     
     <x:scenario label="nlb:translator-lines - ability to suggest line break">
@@ -829,7 +829,7 @@
             <x:param name="line-length" select="100"/>
             <x:param name="last-line-if-cropped" select="'mfl.'"/>
         </x:call>
-        <x:expect select="('Johnnie','Mackenzie')"/>
+        <x:expect select="('true', 'Johnnie','Mackenzie')"/>
     </x:scenario>
     
     <x:scenario label="nlb:title-lines - long title">
@@ -838,7 +838,7 @@
             <x:param name="lines-available" select="5"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('So Long, and','Thanks for All the','Fish')"/>
+        <x:expect select="('true', 'So Long, and','Thanks for All the','Fish')"/>
     </x:scenario>
     
     <x:scenario label="nlb:title-lines - too long title">
@@ -847,7 +847,7 @@
             <x:param name="lines-available" select="5"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('No Matter How','Much You Promise','to Cook or Pay the','Rent You Blew It','Cauze Bill Bai...')"/>
+        <x:expect select="('false', 'No Matter How','Much You Promise','to Cook or Pay the','Rent You Blew It','Cauze Bill Bai...')"/>
     </x:scenario>
     
     <x:scenario label="nlb:title-lines - long title with too long words">
@@ -856,7 +856,7 @@
             <x:param name="lines-available" select="5"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Floccinaucinih','ilipilification of','supercalifragi','listicexpialidocious','expressions')"/>
+        <x:expect select="('true', 'Floccinaucinih','ilipilification of','supercalifragi','listicexpialidocious','expressions')"/>
     </x:scenario>
     
     <x:scenario label="nlb:title-lines - too long title with too long words">
@@ -865,7 +865,7 @@
             <x:param name="lines-available" select="5"/>
             <x:param name="line-length" select="20"/>
         </x:call>
-        <x:expect select="('Floccinaucinih','ilipilification of','supercalifragi','listicexpialidocious','expressions and i...')"/>
+        <x:expect select="('false', 'Floccinaucinih','ilipilification of','supercalifragi','listicexpialidocious','expressions and i...')"/>
     </x:scenario>
     
     <x:scenario label="nlb:title-lines - ability to suggest line break between">
@@ -874,7 +874,7 @@
             <x:param name="lines-available" select="5"/>
             <x:param name="line-length" select="100"/>
         </x:call>
-        <x:expect select="('The Lord of the Rings:','The Two Towers')"/>
+        <x:expect select="('true', 'The Lord of the Rings:','The Two Towers')"/>
     </x:scenario>
     
     <x:scenario label="nlb:element-text - ' John [br] Ronald[newline]  Reuel Tolkien '">
