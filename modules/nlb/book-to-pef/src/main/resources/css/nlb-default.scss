@@ -14,7 +14,12 @@ $notes-placement: end-of-volume !default;
 /*                page                                                        */
 /* -------------------------------------------------------------------------- */
 
+/* Count pages continuously but hide them in generated pages */
 @page {
+        // set counter-increment explicitly because otherwise it will
+        // be implicitly set to "pre-page" or "post-page" when in a
+        // volume area context.
+        counter-increment: page;
         margin-right: 1;
         @if $show-print-page-numbers {
             margin-left: 2;
@@ -24,7 +29,6 @@ $notes-placement: end-of-volume !default;
 }
 
 book, body {
-        counter-set: page 1;
         page: body;
 }
 
@@ -45,7 +49,8 @@ pagenum, *[epub|type~='pagebreak'] {
 
 /* Show page numbers in bodymatter. */
 @if $show-print-page-numbers {
-        bodymatter pagenum {
+        bodymatter pagenum,
+        rearmatter pagenum {
                 string-set: print-page "⠿" content();
         }
         
@@ -836,6 +841,14 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
 
 @if ($include-notes) {
         
+        @page notes {
+                @if $show-braille-page-numbers {
+                        @bottom-center {
+                                content: counter(page);
+                        }
+                }
+        }
+
         @if ($notes-placement == 'bottom-of-page') {
                 @page {
                         @footnotes {
@@ -867,7 +880,7 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                                         page-break-before: right;
                                 }
                                 content: flow(endnotes);
-                                page: auto;
+                                page: notes;
                         }
                 }
         }
@@ -875,7 +888,7 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                 @volume {
                         @end {
                                 content: flow(endnotes-title) flow(endnotes, volume);
-                                page: auto;
+                                page: notes;
                         }
                 }
         }
