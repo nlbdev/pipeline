@@ -165,6 +165,7 @@
                         </p:input>
                         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
                         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+                        <p:with-option name="ascii-table" select="'(table:&quot;no.nlb.pipeline.braille.impl.PreviewTableProvider&quot;)'"/>
                     </px:dtbook-to-pef.store>
                 </p:when>
                 <p:otherwise>
