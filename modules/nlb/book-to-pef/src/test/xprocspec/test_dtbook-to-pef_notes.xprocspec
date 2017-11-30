@@ -69,7 +69,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
             </x:document>
             <x:document type="inline">
@@ -83,6 +83,25 @@
                                 <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
             </x:document>
         </x:expect>
@@ -161,7 +180,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
             </x:document>
@@ -202,7 +221,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
             </x:document>
@@ -217,6 +236,26 @@
                                 <row/>
                                 <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
             </x:document>
@@ -257,7 +296,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
             </x:document>
@@ -271,6 +310,27 @@
                                 <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
                                 <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
             </x:document>
@@ -345,7 +405,7 @@
                                 <row/>
                                 <row>⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                             <page>
                                 <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
@@ -375,7 +435,7 @@
                                 <row/>
                                 <row/>
                                 <row>⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠙⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
             </x:document>
@@ -424,7 +484,6 @@
             <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_dtbook-to-pef_notes.pef"
                         select="(//pef:volume)[1]//pef:section[last()]"/>
         </x:context>
-        
         <x:expect label="result - first volume" type="compare">
             <x:document type="inline">
                         <section xmlns="http://www.daisy.org/ns/2008/pef">
@@ -456,7 +515,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
             </x:document>
@@ -499,7 +558,7 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                         <section>
@@ -513,6 +572,25 @@
                                 <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
                                 <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row/>
+                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
                     </_>
