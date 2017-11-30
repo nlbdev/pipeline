@@ -538,4 +538,43 @@
     <x:expect label="There should be exactly 1 output document" type="count" min="1" max="1"/>
   </x:scenario>
   
+  <x:scenario label="undefined characters should translate to ⠢ in all languages">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <bodymatter xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <p style="display: block">
+              % ( / +
+              汉语拼音
+            </p>
+            <p style="display: block" xml:lang="en">
+              % ( / +
+              汉语拼音
+            </p>
+          </bodymatter>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="1"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_ xmlns="" style="text-transform: none">
+          <bodymatter xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <p style="display: block">
+              ⠨⠴ ⠦ ⠌ ⠖
+              ⠢⠢⠢⠢
+            </p>
+            <p style="display: block" xml:lang="en-Brai">
+              ⠨⠴ ⠐⠣ ⠸⠌ ⠐⠖
+              ⠢⠢⠢⠢
+            </p>
+          </bodymatter>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

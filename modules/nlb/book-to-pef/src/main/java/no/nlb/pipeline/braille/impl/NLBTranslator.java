@@ -1,15 +1,16 @@
 package no.nlb.pipeline.braille.impl;
 
 import java.net.URI;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import static java.util.Arrays.copyOfRange;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Objects;
@@ -52,6 +53,7 @@ import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import static org.daisy.pipeline.braille.common.util.URIs.asURI;
+import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 
 import org.osgi.service.component.annotations.Activate;
@@ -77,6 +79,8 @@ public interface NLBTranslator {
 		@Activate
 		private void activate(ComponentContext context, final Map<?,?> properties) {
 			href = asURI(context.getBundleContext().getBundle().getEntry("xml/block-translate.xpl"));
+			otherLanguagesProvider
+			= memoize(new LiblouisTranslatorWithUndefinedDotsProvider(liblouisTranslatorProvider, "26", context));
 		}
 		
 		private final static Query grade0Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g0.utb");
@@ -191,8 +195,7 @@ public interface NLBTranslator {
 																		return __apply(
 																			logCreate(
 																				new TransformImpl(grade, dots, translator, grade0Translator,
-																				                  // FIXME: other languages provider does not need to be liblouis
-																				                  liblouisTranslatorProvider,
+																				                  otherLanguagesProvider,
 																				                  htmlOrDtbookOut))); }} ); }} )); }} )); }}
 			return empty;
 		}
@@ -638,8 +641,8 @@ public interface NLBTranslator {
 			liblouisTranslatorProvider.invalidateCache();
 		}
 	
-		private List<TransformProvider<LiblouisTranslator>> liblouisTranslatorProviders
-		= new ArrayList<TransformProvider<LiblouisTranslator>>();
+		private List<LiblouisTranslator.Provider> liblouisTranslatorProviders
+		= new ArrayList<LiblouisTranslator.Provider>();
 		private TransformProvider.util.MemoizingProvider<LiblouisTranslator> liblouisTranslatorProvider
 		= memoize(dispatch(liblouisTranslatorProviders));
 		
@@ -666,6 +669,72 @@ public interface NLBTranslator {
 		= new ArrayList<TransformProvider<Hyphenator>>();
 		private TransformProvider.util.MemoizingProvider<Hyphenator> hyphenatorProvider
 		= memoize(dispatch(hyphenatorProviders));
+		// created in activate method
+		private TransformProvider.util.MemoizingProvider<LiblouisTranslator> otherLanguagesProvider;
 		
+		/*
+		 * Provides Liblouis translators that return a fixed dot pattern for unknown
+		 * characters. Only works correctly when based on Liblouis translators that can be
+		 * represented correctly by their table URL only. That means that the queries may
+		 * not contain "hyphenator" or "handle-non-standard-hyphenation".
+		 */
+		private static class LiblouisTranslatorWithUndefinedDotsProvider extends AbstractTransformProvider<LiblouisTranslator> {
+			
+			final TransformProvider<LiblouisTranslator> backingProvider;
+			final File undefinedTable;
+				
+			LiblouisTranslatorWithUndefinedDotsProvider(TransformProvider<LiblouisTranslator> backingProvider,
+			                                            String dots,
+			                                            ComponentContext componentContext) {
+				this.backingProvider = backingProvider;
+				File directory;
+				for (int i = 0; true; i++) {
+					directory = componentContext.getBundleContext().getDataFile("resources" + i);
+					if (!directory.exists()) break; }
+				directory.mkdirs();
+				this.undefinedTable = new File(directory, "undefined.cti");
+				try {
+					undefinedTable.createNewFile();
+					FileOutputStream writer = new FileOutputStream(undefinedTable);
+					// FIXME: avoid error "Dot pattern \.../ is not defined"
+					// -> this should be fixed properly in Liblouis!
+					// writer.write(("sign ... " + dots + "\n").getBytes());
+					writer.write(("undefined " + dots + "\n").getBytes());
+					writer.flush();
+					writer.close();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+				
+			protected final Iterable<LiblouisTranslator> _get(Query query) {
+				// locale needed to select correct hyphenator
+				final String locale = query.containsKey("locale")
+					? query.get("locale").iterator().next().getValue().get()
+					: null;
+				query = mutableQuery(query).add("output", "ascii");
+				return Iterables.concat(
+					Iterables.transform(
+						logSelect(query, backingProvider.get(query)),
+						new Function<LiblouisTranslator,Iterable<LiblouisTranslator>>() {
+							public Iterable<LiblouisTranslator> _apply(LiblouisTranslator t) {
+								URI[] table = t.asLiblouisTable().asURIs();
+								LiblouisTable tableWithUndefinedDots; {
+									URI[] uris = new URI[table.length + 1];
+									System.arraycopy(table, 0, uris, 0, uris.length - 1);
+									// adding the "undefined" rule to the end overwrites any previous rules
+									uris[uris.length - 1] = asURI(undefinedTable);
+									tableWithUndefinedDots = new LiblouisTable(uris);
+								}
+								MutableQuery newQuery = mutableQuery().add("table", tableWithUndefinedDots.toString());
+								if (locale != null)
+									newQuery.add("locale", locale);
+								return logSelect(newQuery, backingProvider);
+							}
+						}
+					)
+				);
+			}
+		}
 	}
 }
