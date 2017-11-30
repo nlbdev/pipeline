@@ -18,7 +18,7 @@
     <xsl:function name="pxi:layout-master-name" as="xs:string">
         <xsl:param name="page-stylesheet" as="xs:string"/>
         <xsl:sequence select="concat('master_',
-                                     index-of($page-stylesheets/@style, $page-stylesheet))"/>
+                                     index-of($page-stylesheets/@style, $page-stylesheet)[1])"/>
     </xsl:function>
     
     <xsl:template match="/*">
