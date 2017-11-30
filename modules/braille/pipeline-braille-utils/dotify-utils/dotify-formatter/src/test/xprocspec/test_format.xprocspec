@@ -445,7 +445,7 @@
               </section>
               <section style="display: block;
                               page-break-before: always;
-                              counter-set: page 10">
+                              counter-set: page 11">
                 ⠤⠤⠤
               </section>
               <section style="display: block;
@@ -522,7 +522,7 @@
               ⠤⠤⠤
             </block>
           </sequence>
-          <sequence master="a" initial-page-number="10">
+          <sequence master="a" initial-page-number="11">
             <block>
               ⠤⠤⠤
             </block>
@@ -580,19 +580,19 @@
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠚</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠁</row>
                 </page>
                 <page>
                   <row>⠤⠤⠤</row>
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠁</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠃</row>
                 </page>
               </section>
               <section>
                 <page>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠃</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉</row>
                   <row>⠤⠤⠤</row>
                 </page>
               </section>
@@ -8352,7 +8352,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_76" xfail="true">
+  <x:scenario label="test_76" pending="true">
     <x:documentation>
       Tests combination of @page:left and @page:right with counter-set of 'page' to an even number.
       
@@ -10763,7 +10763,7 @@
                           content: flow(titlepage) }}
                       { text-transform: none }">
             <front>
-              <titlepage style="display: block; flow: titlepage; counter-set: pre-page 10">
+              <titlepage style="display: block; flow: titlepage; counter-set: pre-page 11">
                 ⠿⠿⠿
               </titlepage>
             </front>
@@ -10798,7 +10798,7 @@
           </layout-master>
           <volume-template sheets-in-volume-max="1000">
             <pre-content>
-              <sequence master="a" initial-page-number="10">
+              <sequence master="a" initial-page-number="11">
                 <block> ⠿⠿⠿ </block>
               </sequence>
             </pre-content>
@@ -10829,7 +10829,7 @@
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠚</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠁</row>
                 </page>
               </section>
               <section>
