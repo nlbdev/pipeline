@@ -374,6 +374,11 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test
 	public void testMarginRegionAndBorder() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/margin-region-and-border-input.obfl",
-		        "resource-files/dp2/margin-region-and-border-expected.pef", true);
+		        "resource-files/dp2/margin-region-and-border-expected.pef", false);
+	}
+	@Test // see https://github.com/nlbdev/pipeline/issues/147
+	public void testTableIssue147() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/table-issue-147-input.obfl",
+		        "resource-files/dp2/table-issue-147-expected.pef", true);
 	}
 }
