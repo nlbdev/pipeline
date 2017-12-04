@@ -126,14 +126,16 @@ level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volu
         /* level 1 */
         page-break-before: right;
         volume-break-inside: auto;
-        
-        &:first-child,
-        ~ level1:not(.part),
-        ~ level2 {
-                /* level 1 except first sibling level 1 */
-                volume-break-inside: -obfl-keep(8);
-        }
 }
+
+frontmatter > level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) ~ level1,
+frontmatter:has(> level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc))) ~ bodymatter level1,
+frontmatter:not(:has(> level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)))) ~ bodymatter level1 ~ level1,
+level1.part > level2 ~ level2 {
+        /* level 1 except first sibling level 1 */
+        volume-break-inside: -obfl-keep(8);
+}
+
 level1:not(.part) level2, level1.part level3 {
         /* level 2 */
         volume-break-inside: -obfl-keep(8);
