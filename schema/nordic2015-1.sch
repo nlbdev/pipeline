@@ -643,33 +643,55 @@
                 /></assert>
         </rule>
     </pattern>
-
-    <!-- Vi kom hit -->
-
-    <!-- Rule 247: doctitle.headline - h1 -->
-    <pattern id="nlbpub_247">
-        <rule context="html:body/html:header/html:h1">
-            <assert test="tokenize(@epub:type,' ')='fulltitle'">[nordic247] The first headline in the html:body/html:header element must have the 'fulltitle' epub:type.</assert>
+    
+    <!-- 
+        fulltitle må finnes minst en gang i enten cover eller titlepage
+        det kan ikke være mer enn en fulltitle i hver av cover og titlepage
+        begge fulltitle må være like hvis de forekommer begge steder (normalize-space(.))
+        
+        det kan ikke være mer enn en title i hver av cover og titlepage
+        begge title må være like hvis de forekommer i både cover og titlepage (normalize-space(.))
+        
+        det kan ikke være mer enn en subTitle i hver av cover titlepage
+        begge subTitle må være like hvis de forekommer i både cover og titlepage (normalize-space(.))
+        
+        hvis z3998:author finnes så må den stemme overens med [meta name="dc:creator" content="..."/]
+            - like mange z3998:author som dc:creator
+            - alle z3998:author har en dc:creator med samme innhold
+        hvis z3998:author finnes i både cover og titlepage så må de stemme overens (normalize-space(.))
+            - like mange z3998:author i begge
+            - alle z3998:author har en z3998:author i den andre section'en med samme innhold
+        alle z3998:author må være p- eller span-elementer
+        alle z3998:author må være samme type element (alle p eller alle span)
+    -->
+    
+    <!-- Rule 263: there must be a headline on the titlepage -->
+    <pattern id="nlbpub_263">
+        <rule context="html:section[tokenize(@epub:type,'\s+')='titlepage']">
+            <assert test="count(html:*[matches(local-name(),'h\d')])">[nordic263] the titlepage must have a headline (and the headline must have epub:type="fulltitle" and class="title")</assert>
         </rule>
     </pattern>
-
-    <!-- Rule 248: docauthor - p -->
-    <pattern id="nlbpub_248">
-        <rule context="html:body/html:header/html:*[not(self::html:h1)]">
-            <assert test="self::html:p">[nordic248] The only allowed element inside html/header besides "h1" is "p".</assert>
-            <!--<assert test="tokenize(@epub:type,' ')=('z3998:author','covertitle')">[nordic248] Inside body/header; all p elements must have a epub:type and they must be either 'z3998:author' or
-                'covertitle'.</assert>-->
+    
+    <!-- Rule 264: h1 on titlepage must be epub:type=fulltitle with class=title -->
+    <pattern id="nlbpub_264">
+        <rule context="html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]">
+            <assert test="tokenize(@epub:type,'\s+') = 'fulltitle'">[nordic264] the headline on the titlepage must have a epub:type with the value "fulltitle": <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
+    
+    
+    <!-- note to ourselves: lage egne filer for forskjellige typer tester. f.eks. egen fil for titlepage-ting -->
+    
+    <!-- merk: vi dropper header-elementet -->
 
-    <!-- Rule 251: lic - span -->
-    <pattern id="nlbpub_251">
-        <rule context="html:span[tokenize(@class,' ')='lic']">
-            <assert test="parent::html:li or parent::html:a/parent::html:li">[nordic251] The parent of a list item component (span class="lic") must be either a "li" or a "a" (where the "a" has "li"
-                as parent): <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
+    <!--
+        - bruker ikke 'lic'-klassen lenger
+        - innfører 'pageref'-klassen
+            - tillatt på enten span eller a
+            - elementet må være siste non-whitespace-node innenfor en li og et direkte barn av li
+    -->
+    
     <!-- Rule 253: figures and captions -->
     <pattern id="nlbpub_253_a">
         <rule context="html:figure">
@@ -719,15 +741,6 @@
         </rule>
     </pattern>
 
-    <!-- Rule 256: HTML documents with only a headline -->
-    <pattern id="nlbpub_256">
-        <rule
-            context="html:body[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0] | html:section[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0]">
-            <assert test="tokenize(@epub:type,'\s+') = 'part'">[nordic256] In bodymatter, "<name/>" elements must contain more than just a headline and pagebreaks (except when epub:type="part"):
-                    <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
     <!-- Rule 257: always require both xml:lang and lang -->
     <pattern id="nlbpub_257">
         <rule context="*[@xml:lang or @lang]">
@@ -738,13 +751,13 @@
 
     <!-- Rule 258: allow at most one pagebreak before any content in each content file -->
     <pattern id="nlbpub_258">
-        <rule context="html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']">
-            <report test="preceding-sibling::html:div[tokenize(@epub:type,'\s')='pagebreak']">[nordic258] Only one pagebreak is allowed before any content in each content file: <value-of
+        <rule context="html:body/html:section/html:div[tokenize(@epub:type,'\s')='pagebreak']">
+            <report test="count(preceding-sibling::*) and count(preceding-sibling::html:div[tokenize(@epub:type,'\s')='pagebreak']) = count(preceding-sibling::*)">[nordic258] Only one pagebreak is allowed before any content in each content file: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
 
-    <!-- Rule 259: don't allow pagebreak in thead -->
+    <!-- Rule 259: don't allow pagebreak in thead or tfoot -->
     <pattern id="nlbpub_259">
         <rule context=".[tokenize(@epub:type,'\s+')='pagebreak']">
             <report test="ancestor::html:thead">[nordic259] Pagebreaks can not occur within table headers (thead): <value-of
@@ -756,8 +769,8 @@
 
     <!-- Rule 260: img must be first in image figure, and non-image content must be placed first in image-series -->
     <pattern id="nlbpub_260_a">
-        <rule context="html:figure[tokenize(@class,'\s+')='image']">
-            <assert test="html:img intersect *[1]">[nordic260a] The first element in a figure with class="image" must be a "img" element: <value-of
+        <rule context="html:figure[tokenize(@class,'\s+')='image']/html:img">
+            <assert test="not(preceding-sibling::*)">[nordic260a] The first element in a figure with class="image" must be a "img" element: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
@@ -770,27 +783,11 @@
     </pattern>
 
     <!-- Rule 261: Text can't be direct child of div -->
+    <!-- TODO; sjekkes ikke dette i relaxng? evt html5-validator / epubcheck? -->
     <pattern id="nlbpub_261">
         <rule context="html:div">
             <report test="text()[normalize-space(.)]">[nordic261] Text can't be placed directly inside div elements. Try wrapping it in a p element: <value-of
                     select="normalize-space(string-join(text(),' '))"/></report>
-        </rule>
-    </pattern>
-
-    <!-- Rule 263: there must be a headline on the titlepage -->
-    <pattern id="nlbpub_263">
-        <rule context="html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']">
-            <assert test="count(html:*[matches(local-name(),'h\d')])">[nordic263] the titlepage must have a headline (and the headline must have epub:type="fulltitle" and class="title")</assert>
-        </rule>
-    </pattern>
-
-    <!-- Rule 264: h1 on titlepage must be epub:type=fulltitle with class=title -->
-    <pattern id="nlbpub_264">
-        <rule context="html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]">
-            <assert test="tokenize(@epub:type,'\s+') = 'fulltitle'">[nordic264] the headline on the titlepage must have a epub:type with the value "fulltitle": <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="tokenize(@class,'\s+') = 'title'">[nordic264] the headline on the titlepage must have a class with the value "title": <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
@@ -803,34 +800,34 @@
         </rule>
     </pattern>
 
-    <pattern id="nlbpub_266_a">
-        <rule context="html:*[*[tokenize(@epub:type,'\s+')='footnote']]">
-            <assert test="self::html:ol">[nordic266a] Footnotes must be wrapped in a "ol" element, but is currently wrapped in a <name/>: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="nlbpub_266_b">
-        <rule context="html:section[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li">
-            <assert test="tokenize(@epub:type,'\s+')='footnote'">[nordic266b] List items inside a footnotes list must use epub:type="footnote": <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="nlbpub_267_a">
-        <rule context="html:*[*[tokenize(@epub:type,'\s+')='rearnote']]">
-            <assert test="self::html:ol">[nordic267a] Rearnotes must be wrapped in a "ol" element, but is currently wrapped in a <name/>: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="nlbpub_267_b">
-        <rule context="html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li">
-            <assert test="tokenize(@epub:type,'\s+')='rearnote'">[nordic267b] List items inside a rearnotes list must use epub:type="rearnote": <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
+    <!--
+            - alle noter må være aside (footnote / rearnote)
+            - kun block-content tillatt inni
+            - kun inline-elementer er tillatt mellom notereferansen og noten bortsett fra andre noter
+        
+        <blockquote>
+            <p>...</p>
+            <p>
+                <strong>In that
+                year<a href="#ft2f" epub:type="noteref">2</a>
+                there were 67</strong> mills engaged in the manufacture of
+                cotton goods …
+            </p>
+            <p>...</p>
+        </blockquote>
+        <aside id="ft2f" epub:type="footnote">
+            <p>
+                2 The manufacturing statistics for 1900 which
+                follow are not those given in the Twelfth
+                Census, but are taken from the 
+                <em>Census of Manufactures</em> …
+            </p>
+        </aside>
+        
+        -->
+    
+    <!-- Vi kom hit -->
+    
     <!-- Rule 268: Check that the heading levels are nested correctly (necessary for sidebars and poems, and maybe other structures as well where the RelaxNG is unable to enforce the level) -->
     <pattern id="nlbpub_268">
         <rule context="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
