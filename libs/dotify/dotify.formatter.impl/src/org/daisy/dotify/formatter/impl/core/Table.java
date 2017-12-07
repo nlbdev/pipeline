@@ -100,10 +100,11 @@ class Table extends Block {
 		//int[] rowSpace = calcSpacings(new RowSpaceCalculator(rowCount, columnCount));
 		MarginProperties leftMargin = rdp.getLeftMargin().buildMargin(context.getFcontext().getSpaceCharacter());
 		MarginProperties rightMargin = rdp.getRightMargin().buildMargin(context.getFcontext().getSpaceCharacter());
-		int columnWidth = (context.getFlowWidth() 
+		int maxWidth = (context.getFlowWidth() 
 				- leftMargin.getContent().length() 
 				- rightMargin.getContent().length()
 				);
+		int columnWidth = maxWidth;
 		for (int i : colSpace) {
 			columnWidth -= i; 
 		}
@@ -112,11 +113,11 @@ class Table extends Block {
 		Arrays.fill(currentColumnWidth, columnWidth);
 		DefaultContext dc = DefaultContext.from(context).metaVolume(metaVolume).metaPage(metaPage).build();
 		resultCache = new HashMap<>();
-		Result r = minimizeCost(currentColumnWidth, colSpace, tableProps.getPreferredEmtpySpace(), context, dc, leftMargin, rightMargin);
+		Result r = minimizeCost(maxWidth, currentColumnWidth, colSpace, tableProps.getPreferredEmtpySpace(), context, dc, leftMargin, rightMargin);
 		return new TableBlockContentManager(context.getFlowWidth(), r.minWidth, r.forceCount, r.rows, rdp, context.getFcontext());
 	}
 	
-	private Result minimizeCost(int[] columnWidth, int[] colSpacing, int spacePreferred, BlockContext context, DefaultContext dc, MarginProperties leftMargin, MarginProperties rightMargin) {
+	private Result minimizeCost(int maxTableWidth, int[] columnWidth, int[] colSpacing, int spacePreferred, BlockContext context, DefaultContext dc, MarginProperties leftMargin, MarginProperties rightMargin) {
 		int columnCount = columnWidth.length;
 		int[] currentColumnWidth = Arrays.copyOf(columnWidth, columnWidth.length);
 		Result[] results = new Result[columnCount];
@@ -150,7 +151,7 @@ class Table extends Block {
 				tableWidth += currentColumnWidth[j];
 			}
 			Result min;
-			if (tableWidth<=context.getFlowWidth()) {
+			if (tableWidth<=maxTableWidth) {
 				min = min(currentResult, results);
 			} else {
 				//since reduction is required at this point, choose the best new solution (even if it is worse than the current)
@@ -164,7 +165,7 @@ class Table extends Block {
 				min = min(results[x], results);
 				x = (x+1) % columnCount;
 			}
-			if (min==currentResult && tableWidth<=context.getFlowWidth()) {
+			if (min==currentResult && tableWidth<=maxTableWidth) {
 				break;
 			} else {
 				currentResult = min;

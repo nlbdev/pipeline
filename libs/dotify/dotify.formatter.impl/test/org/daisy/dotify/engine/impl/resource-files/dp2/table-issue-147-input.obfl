@@ -11,7 +11,7 @@
       </default-template>
    </layout-master>
    <sequence master="master">
-      <table padding-left="2" table-col-spacing="1">
+      <table padding-left="2" border-left-style="solid" table-col-spacing="1">
          <tr>
             <td>⠿⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</td>
             <td>⠿⠿⠿⠿⠿⠿ ⠿⠿</td>

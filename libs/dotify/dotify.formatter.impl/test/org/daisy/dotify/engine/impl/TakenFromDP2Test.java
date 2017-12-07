@@ -379,6 +379,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	@Test // see https://github.com/nlbdev/pipeline/issues/147
 	public void testTableIssue147() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/table-issue-147-input.obfl",
-		        "resource-files/dp2/table-issue-147-expected.pef", true);
+		        "resource-files/dp2/table-issue-147-expected.pef", false);
 	}
 }
