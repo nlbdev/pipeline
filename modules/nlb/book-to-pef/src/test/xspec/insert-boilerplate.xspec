@@ -284,6 +284,65 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="DTBook: use only title if fulltitle doesn't fit and title is defined">
+        <x:context>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <frontmatter>
+                    <doctitle>
+                        <span class="title">Lord of the Rings</span>:
+                        <span class="subtitle">The Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty Towers</span>
+                    </doctitle>
+                </frontmatter>
+            </book>
+        </x:context>
+        <x:expect>
+            <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <frontmatter>
+                    <doctitle>
+                        <span class="title">Lord of the Rings</span>:
+                        <span class="subtitle">The Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty Towers</span>
+                    </doctitle>
+                    <level1 class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </level1>
+                    <level1 class="pef-about">
+                        <h1>Om boka</h1>
+                        <p>Full tittel: Lord of the Rings: The Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty Towers</p>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </level1>
+                </frontmatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+    
     <x:scenario label="DTBook: inform about shortened title">
         <x:context>
             <book xmlns="http://www.daisy.org/z3986/2005/dtbook/">
@@ -479,8 +538,8 @@
                 <body>
                     <header>
                         <h1 epub:type="fulltitle">
-                            <span class="title">Lord of the Rings</span>:
-                            <span class="subtitle">The Two Towers</span>
+                            <span epub:type="title">Lord of the Rings</span>:
+                            <span epub:type="subtitle">The Two Towers</span>
                         </h1>
                     </header>
                 </body>
@@ -491,8 +550,8 @@
                 <body>
                     <header>
                         <h1 epub:type="fulltitle">
-                            <span class="title">Lord of the Rings</span>:
-                            <span class="subtitle">The Two Towers</span>
+                            <span epub:type="title">Lord of the Rings</span>:
+                            <span epub:type="subtitle">The Two Towers</span>
                         </h1>
                     </header>
                     <section class="pef-titlepage">
@@ -526,6 +585,69 @@
                     </section>
                     <section class="pef-about">
                         <h1>Om boka</h1>
+                        <p><span class="pef-pages">Antall sider: </span></p>
+                        <p>Boka skal ikke returneres.</p>
+                        <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="EPUB/HTML: use only title if fulltitle doesn't fit and title is defined">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body>
+                    <header>
+                        <h1 epub:type="fulltitle">
+                            <span epub:type="title">Lord of the Rings</span>:
+                            <span epub:type="subtitle">The Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty Towers</span>
+                        </h1>
+                    </header>
+                </body>
+            </html>
+        </x:context>
+        <x:expect>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body>
+                    <header>
+                        <h1 epub:type="fulltitle">
+                            <span epub:type="title">Lord of the Rings</span>:
+                            <span epub:type="subtitle">The Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty Towers</span>
+                        </h1>
+                    </header>
+                    <section class="pef-titlepage">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>Lord of the Rings</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>NLB - 2017</p>
+                        <p>Fullskrift</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p><span class="pef-volume"> av </span></p>
+                    </section>
+                    <section class="pef-about">
+                        <h1>Om boka</h1>
+                        <p>Full tittel: Lord of the Rings: The Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty Towers</p>
                         <p><span class="pef-pages">Antall sider: </span></p>
                         <p>Boka skal ikke returneres.</p>
                         <p>Feil eller mangler kan meldes til punkt@nlb.no.</p>

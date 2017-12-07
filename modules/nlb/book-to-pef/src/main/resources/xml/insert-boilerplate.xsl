@@ -100,7 +100,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="title" as="xs:string">
+        <xsl:variable name="fulltitle" as="xs:string">
             <xsl:choose>
                 <xsl:when test="$namespace-uri = $dtbook-namespace">
                     <xsl:choose>
@@ -121,6 +121,26 @@
                             <xsl:sequence select="string((//html:head/html:title)[1]/text())"/>
                         </xsl:otherwise>
                     </xsl:choose>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="title" as="xs:string?">
+            <xsl:choose>
+                <xsl:when test="$namespace-uri = $dtbook-namespace">
+                    <xsl:sequence select="(//dtbook:frontmatter/dtbook:doctitle//*[@class='title'])[1]/nlb:element-text(.)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="(//html:body//html:*[tokenize(@epub:type,'\s+')='title'])[1]/nlb:element-text(.)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="subtitle" as="xs:string?">
+            <xsl:choose>
+                <xsl:when test="$namespace-uri = $dtbook-namespace">
+                    <xsl:sequence select="(//dtbook:frontmatter/dtbook:doctitle//*[@class='subtitle'])[1]/nlb:element-text(.)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="(//html:body//html:*[tokenize(@epub:type,'\s+')='subtitle'])[1]/nlb:element-text(.)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -160,8 +180,9 @@
         <xsl:variable name="author-lines" select="$author-lines[position() gt 1]" as="xs:string*"/>
         <xsl:variable name="author-lines" select="if (count($author) gt 1 and not(count($author-lines))) then 'Flere forfattere' else $author-lines"/>
         
-        <xsl:variable name="title-lines" select="nlb:title-lines($title, 5, $line-width)" as="xs:string*"/>
+        <xsl:variable name="title-lines" select="nlb:title-lines($fulltitle, 5, $line-width)" as="xs:string*"/>
         <xsl:variable name="title-fits" select="$title-lines[1] = 'true'" as="xs:boolean"/>
+        <xsl:variable name="title-lines" select="if (not($title-fits) and count($title)) then nlb:title-lines($title, 5, $line-width) else $title-lines"/>
         <xsl:variable name="title-lines" select="$title-lines[position() gt 1]" as="xs:string*"/>
         
         <xsl:variable name="translator-lines" select="nlb:translator-lines($translator, $line-width, 'mfl.')" as="xs:string*"/>
@@ -329,7 +350,7 @@
             </xsl:if>
             <xsl:if test="not($title-fits)">
                 <xsl:call-template name="row">
-                    <xsl:with-param name="content" select="concat('Full tittel: ',normalize-space($title))"/>
+                    <xsl:with-param name="content" select="concat('Full tittel: ',normalize-space($fulltitle))"/>
                     <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
                 </xsl:call-template>
             </xsl:if>
