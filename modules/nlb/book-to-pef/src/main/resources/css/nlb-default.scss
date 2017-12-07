@@ -335,6 +335,7 @@ h1, h2, h3, h4, h5, h6 {
         // flow: document-toc; // default for #generated-document-toc
         volume-break-after: avoid;
         page-break-before: always;
+        margin-left: 0; // no left margin on toc lists
         
         &::-obfl-on-toc-start {
             content: 'Innhold';
