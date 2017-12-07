@@ -389,7 +389,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .pef-pages::after {
         display: inline;
-        content: -obfl-evaluate("(round $sheets-in-document)");
+        content: -obfl-evaluate("(round (/ $sheets-in-document 2))");
 }
 
 /* -------------------------------------------------------------------------- */
