@@ -229,6 +229,8 @@ updater/cli/.install : updater/cli/*.go
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 
+libs/liblouis/.install : $(call rwildcard,libs/liblouis/src/liblouis,*)
+
 .SECONDARY : \
 	libs/liblouis/.install.nar \
 	libs/liblouis/.install-noarch.nar \
@@ -427,3 +429,5 @@ help :
 ifndef VERBOSE
 .SILENT:
 endif
+
+.SUFFIXES:
