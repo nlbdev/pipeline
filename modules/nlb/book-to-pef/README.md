@@ -1,6 +1,12 @@
 # pipeline-mod-nlb
 NLB specific modules for the DAISY Pipeline 2
 
+## Regenerating hyphenation table
+
+In order to regenerate the hyphenation table simply delete the file
+`src/main/resources/hyph/hyph_nb_NO.dic` and run `mvn
+generate-resources`.
+
 ## Release procedure
 - View changes since previous release and update version number according to semantic versioning.
 

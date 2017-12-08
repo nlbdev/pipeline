@@ -190,83 +190,6 @@
       </resource>
     </resources>
     <plugins>
-      <!--
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
-        <executions>
-          <execution>
-            <id>process-whitelist</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <ac:if xmlns:ac="antlib:net.sf.antcontrib">
-                  <available file="target/generated-resources/hyph/hyph_nb_NO.dic" />
-                  <ac:then>
-                    <echo message="Won't recompile hyph_nb_NO.dic. Use `mvn clean` first if you need to recompile it." />
-                  </ac:then>
-                  <ac:else>
-                    <echo message="Will compile hyph_nb_NO.dic. This may take a few minutes..." />
-                    <mkdir dir="target/generated-resources/hyph" />
-                    <concat destfile="target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt" encoding="ISO-8859-1">
-                      <fileset dir="src/main/resources/hyph/hyph_nb_NO_standard_dictionary" />
-                    </concat>
-                    <exec executable="bash" failonerror="yes">
-                      <arg value="patgen.sh" />
-                      <arg value="target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt" />
-                      <arg value="src/main/resources/hyph/hyph_nb_NO_standard_base.pat" />
-                      <arg value="target/generated-resources/hyph/hyph_nb_NO_standard.pat" />
-                      <arg value="src/main/resources/hyph/alphabet" />
-                      <arg value="1" />   <!- - LEFT_HYPHEN_MIN - ->
-                      <arg value="1" />   <!- - RIGHT_HYPHEN_MIN - ->
-                      <arg value="1" />   <!- - HYPH_LEVEL - ->
-                      <arg value="1" />   <!- - PAT_START - ->
-                      <arg value="15" />  <!- - PAT_FINISH - ->
-                      <arg value="1" />   <!- - GOOD_WEIGHT - ->
-                      <arg value="100" /> <!- - BAD_WEIGHT - ->
-                      <arg value="1" />   <!- - THRESHOLD - ->
-                      <redirector output="target/patgen.log" />
-                    </exec>
-                    <concat destfile="target/generated-resources/hyph/hyph_nb_NO.dic" encoding="ISO-8859-1">
-                      <header trimleading="yes">
-                        ISO8859-1
-                        LEFTHYPHENMIN 1
-                        RIGHTHYPHENMIN 1${line.separator}
-                      </header>
-                      <filelist>
-                        <file name="target/generated-resources/hyph/hyph_nb_NO_standard.pat" />
-                        <file name="src/main/resources/hyph/hyph_nb_NO_nonstandard.pat" />
-                      </filelist>
-                    </concat>
-                  </ac:else>
-                </ac:if>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>ant-contrib</groupId>
-            <artifactId>ant-contrib</artifactId>
-            <version>1.0b3</version>
-            <exclusions>
-              <exclusion>
-                <groupId>ant</groupId>
-                <artifactId>ant</artifactId>
-              </exclusion>
-            </exclusions>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant-nodeps</artifactId>
-            <version>1.8.1</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      -->
       <plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
@@ -338,4 +261,127 @@
       </plugin>
     </plugins>
   </build>
+  
+  <profiles>
+    <profile>
+      <id>generate-hyphenation-table</id>
+      <activation>
+        <file>
+          <missing>src/main/resources/hyph/hyph_nb_NO.dic</missing>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.maven-nar</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <version>3.4.0</version>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>nar-validate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-substrings-pl</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.libs</groupId>
+                      <artifactId>hyphen</artifactId>
+                      <classifier>${nar.aol}-executable</classifier>
+                      <version>2.6.0</version>
+                      <type>nar</type>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.8</version>
+            <executions>
+              <execution>
+                <id>generate-hyphenation-table</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <echo message="Will compile hyph_nb_NO.dic. This may take a few minutes..." />
+                    <mkdir dir="${project.basedir}/target/generated-resources/hyph" />
+                    <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt"
+                            encoding="ISO-8859-1">
+                      <fileset dir="${project.basedir}/src/main/resources/hyph/hyph_nb_NO_standard_dictionary" />
+                    </concat>
+                    <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard_dictionary.txt"
+                            encoding="ISO-8859-1">
+                      <fileset dir="${project.basedir}/src/main/resources/hyph/hyph_nb_NO_nonstandard_dictionary" />
+                    </concat>
+                    <exec executable="bash" failonerror="yes"
+                          input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt"
+                          output="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard.pat"
+                          error="${project.basedir}/target/make-standard-patterns.log">
+                      <arg value="${project.basedir}/make-standard-patterns.sh" />
+                    </exec>
+                    <exec executable="perl" failonerror="yes"
+                          input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard_dictionary.txt"
+                          output="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard.pat"
+                          error="${project.basedir}/target/make-nonstandard-patterns.log">
+                      <arg value="${project.basedir}/make-nonstandard-patterns.pl" />
+                    </exec>
+                    <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO.pat" encoding="ISO-8859-1">
+                      <filelist>
+                        <file name="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard.pat" />
+                        <file name="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard.pat" />
+                      </filelist>
+                    </concat>
+                    <exec executable="perl" failonerror="yes"
+                          output="${project.basedir}/target/substrings.log">
+                      <arg value="${project.basedir}/target/dependency/bin/${nar.aol}/substrings.pl"/>
+                      <arg value="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO.pat"/>
+                      <arg value="${project.basedir}/src/main/resources/hyph/hyph_nb_NO.dic"/>
+                      <arg value="ISO8859-1"/>
+                      <arg value="1"/> <!-- LEFT_HYPHEN_MIN -->
+                      <arg value="1"/> <!-- RIGHT_HYPHEN_MIN -->
+                    </exec>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>ant-contrib</groupId>
+                <artifactId>ant-contrib</artifactId>
+                <version>1.0b3</version>
+                <exclusions>
+                  <exclusion>
+                    <groupId>ant</groupId>
+                    <artifactId>ant</artifactId>
+                  </exclusion>
+                </exclusions>
+              </dependency>
+              <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant-nodeps</artifactId>
+                <version>1.8.1</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

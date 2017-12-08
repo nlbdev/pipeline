@@ -1,10 +1,8 @@
 ﻿#!/usr/bin/env bash
+
+set -e
 if ! which patgen >/dev/null; then
     echo "patgen is required but not installed"
-    exit 1
-fi
-if ! which timeout >/dev/null && ! which gtimeout >/dev/null; then
-    echo "(g)timeout is required but not installed"
     exit 1
 fi
 DICTIONARY_FILE=${1}
@@ -23,14 +21,19 @@ cd $(dirname "$0")
 FIFO=tmp
 rm -f $FIFO
 mkfifo $FIFO
-$(which timeout || which gtimeout) 300 patgen $DICTIONARY_FILE $PATTERN_FILE $PATOUT_FILE $TRANSLATE_FILE <$FIFO &
+patgen $DICTIONARY_FILE $PATTERN_FILE $PATOUT_FILE $TRANSLATE_FILE <$FIFO &
 echo $LEFT_HYPHEN_MIN $RIGHT_HYPHEN_MIN >$FIFO
 echo $HYPH_LEVEL $HYPH_LEVEL >$FIFO
 echo $PAT_START $PAT_FINISH >$FIFO
 echo $GOOD_WEIGHT $BAD_WEIGHT $THRESHOLD >$FIFO
 echo y >$FIFO
 wait $!
-ret=$?
-rm -f $FIFO
-rm pattmp.$HYPH_LEVEL
-exit $ret
+if [ $? == 0 ]; then
+    rm -f $FIFO
+    touch $PATOUT_FILE pattmp.$HYPH_LEVEL
+    exit 0
+else
+    rm -f $PATOUT_FILE pattmp.$HYPH_LEVEL $FIFO
+    exit 1
+fi
+
