@@ -73,7 +73,6 @@
     <p:option name="show-braille-page-numbers"/>
     <p:option name="show-print-page-numbers"/>
     <p:option name="toc-depth"/>
-    <p:option name="colophon-metadata-placement"/>
     <p:option name="pef-output-dir"/>
     <p:option name="preview-output-dir"/>
     <p:option name="temp-dir"/>

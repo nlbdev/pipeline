@@ -107,11 +107,6 @@ Eksempel på bruk av språkkode på et helt dokument
             <h2 px:role="name">Layout: Sidehøyde</h2>
         </p:documentation>
     </p:option>
-    <!--<p:option name="left-margin" select="'0'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Layout: Venstre marg</h2>
-        </p:documentation>
-    </p:option>-->
     <p:option name="duplex" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Layout: Tosidig trykk</h2>
@@ -148,11 +143,6 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
     <!-- =============== -->
     <!-- Tekst-elementer -->
     <!-- =============== -->
-    <!--<p:option name="text-level-formatting" select="'true'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Tekstelementer: Marker uthevet tekst (fet/kursiv)</h2>
-        </p:documentation>
-    </p:option>-->
     <p:option name="include-notes" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Tekstelementer: Inkluder noter</h2>
@@ -203,30 +193,6 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
             <h2 px:role="name">Generert innhold: Dybde på innholdsfortegnelse</h2>
         </p:documentation>
     </p:option>
-    <!--<p:option name="choice-of-colophon" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Generert innhold: Valg av kolofon</h2>
-        </p:documentation>
-    </p:option>-->
-    
-    <!-- ===================== -->
-    <!-- Plassering av innhold -->
-    <!-- ===================== -->
-    <!--<p:option name="footnotes-placement" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Plassering av innhold: Plassering av fotnoter</h2>
-        </p:documentation>
-    </p:option>-->
-    <p:option name="colophon-metadata-placement" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Plassering av innhold: Plassering av kolofon/metadata</h2>
-        </p:documentation>
-    </p:option>
-    <!--<p:option name="rear-cover-placement" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Plassering av innhold: Plassering av baksidetekst</h2>
-        </p:documentation>
-    </p:option>-->
     
     <!-- ====== -->
     <!-- Utputt -->
