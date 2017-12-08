@@ -38,7 +38,7 @@ public class LiblouisTablesTest extends AbstractXSpecAndXProcSpecTest {
 	public void testUnicodeBraille() {
 		assertTrue(provider.get(query("(locale:nl-BE)")).iterator().next()
 		           .fromTypeformedTextToBraille()
-		           .transform(new String[]{"foobar"}, new byte[]{LiblouisTranslator.Typeform.PLAIN})[0]
+		           .transform(new String[]{"foobar"}, new short[]{LiblouisTranslator.Typeform.PLAIN})[0]
 		           .matches("[\\s\\t\\n\u00a0\u00ad\u200b\u2800-\u28ff]*"));
 	}
 	

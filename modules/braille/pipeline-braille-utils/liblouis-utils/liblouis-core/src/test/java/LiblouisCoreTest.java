@@ -133,7 +133,7 @@ public class LiblouisCoreTest extends AbstractTest {
 		assertArrayEquals(new String[]{"⠋⠕⠕⠃⠁⠗"},
 		                  provider.withContext(messageBus)
 		                          .get(query("(table:'foobar.cti')")).iterator().next()
-		                          .fromTypeformedTextToBraille().transform(new String[]{"foobar"}, new byte[]{Typeform.ITALIC}));
+		                          .fromTypeformedTextToBraille().transform(new String[]{"foobar"}, new short[]{Typeform.ITALIC}));
 	}
 	
 	@Test
