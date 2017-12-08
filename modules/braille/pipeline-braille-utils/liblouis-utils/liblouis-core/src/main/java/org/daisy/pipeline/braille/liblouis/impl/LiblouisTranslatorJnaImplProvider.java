@@ -1524,7 +1524,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				text = text.toUpperCase();
 			else if (tt.equals("lowercase"))
 				text = text.toLowerCase();
-			else
+			else if (!LOUIS_TEXT_TRANSFORM.matcher(tt).matches())
 				logger.warn("text-transform: {} not supported", tt);
 		}
 		return text;
@@ -1534,10 +1534,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	 * @param textTransform A text-transform value as a space separated list of keywords.
 	 * @return the corresponding typeform. Possible values are:
 	 * - 0 = PLAIN
-	 * - 1 = ITALIC (louis-ital)
-	 * - 2 = BOLD (louis-bold)
-	 * - 4 = UNDERLINE (louis-under)
-	 * - 8 = COMPUTER (louis-comp)
+	 * - 1 = ITALIC (-louis-italic)
+	 * - 2 = UNDERLINE (-louis-underline)
+	 * - 4 = BOLD (-louis-bold)
+	 * - 1024 = COMPUTER (-louis-computer)
 	 * These values can be added for multiple emphasis.
 	 * @see <a href="http://liblouis.googlecode.com/svn/documentation/liblouis.html#lou_translateString">lou_translateString</a>
 	 */
@@ -1545,18 +1545,41 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		byte typeform = Typeform.PLAIN;
 		for (Term<?> t : textTransform) {
 			String tt = ((TermIdent)t).getValue();
-			if (tt.equals("louis-ital"))
-				typeform |= Typeform.ITALIC;
-			else if (tt.equals("louis-bold"))
-				typeform |= Typeform.BOLD;
-			else if (tt.equals("louis-under"))
-				typeform |= Typeform.UNDERLINE;
-			else if (tt.equals("louis-comp"))
-				typeform |= Typeform.COMPUTER;
-			else
-				logger.warn("text-transform: {} not supported", tt); }
+			Matcher m = LOUIS_TEXT_TRANSFORM.matcher(tt);
+			if (m.matches()) {
+				String emphClass = m.group("class");
+				if (emphClass.equals("italic") || emphClass.equals("ital")) {
+					typeform |= Typeform.ITALIC;
+					continue;
+				} else if (emphClass.equals("underline") || emphClass.equals("under")) {
+					typeform |= Typeform.UNDERLINE;
+					continue;
+				} else if (emphClass.equals("bold")) {
+					typeform |= Typeform.BOLD;
+					continue;
+				} else if (emphClass.equals("computer") || emphClass.equals("comp")) {
+					typeform |= Typeform.COMPUTER;
+					continue;
+				} else {
+					m = LOUIS_NUMBERED_EMPH_CLASS.matcher(emphClass);
+					if (m.matches()) {
+						int num = Integer.parseInt(m.group("num"));
+						typeform |= (((byte)0x1) <<(num - 1));
+						continue;
+					} else {
+						// FIXME: use lou_getTypeformForEmphClass function
+					}
+				}
+			} else if (tt.equals("uppercase") || tt.equals("lowercase")) {
+				continue;
+			}
+			logger.warn("text-transform: {} not supported", tt);
+		}
 		return typeform;
 	}
+	
+	private final static Pattern LOUIS_TEXT_TRANSFORM = Pattern.compile("^-?(lib)?louis-(?<class>.+)$");
+	private final static Pattern LOUIS_NUMBERED_EMPH_CLASS = Pattern.compile("^emph-(?<num>[1-9]|10)$");
 	
 	@SuppressWarnings("unused")
 	private static int mod(int a, int n) {

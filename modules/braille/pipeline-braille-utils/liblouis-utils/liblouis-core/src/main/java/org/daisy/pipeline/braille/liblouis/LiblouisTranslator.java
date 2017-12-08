@@ -12,9 +12,9 @@ public interface LiblouisTranslator extends BrailleTranslator {
 	public static abstract class Typeform {
 		public static final byte PLAIN = 0;
 		public static final byte ITALIC = 1;
-		public static final byte BOLD = 2;
-		public static final byte UNDERLINE = 4;
-		public static final byte COMPUTER = 8;
+		public static final byte BOLD = 4;
+		public static final byte UNDERLINE = 2;
+		public static final byte COMPUTER = 1024;
 	}
 	
 	public interface FromTypeformedTextToBraille {
