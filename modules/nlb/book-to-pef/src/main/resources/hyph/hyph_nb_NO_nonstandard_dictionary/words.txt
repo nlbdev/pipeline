@@ -349,7 +349,6 @@ bren-nesleyyyy/nn-n,4,2
 brennstof-forbruk/ff-f,9,2
 brennstof-forbruket/ff-f,9,2
 brennstof-forbrukets/ff-f,9,2
-budsjet-ekniske/ee-e,7,2
 budsjet-tak/tt-t,7,2
 budsjet-taket/tt-t,7,2
 budsjet-takets/tt-t,7,2
