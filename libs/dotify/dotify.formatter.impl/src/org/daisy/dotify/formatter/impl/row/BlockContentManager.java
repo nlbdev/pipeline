@@ -140,20 +140,8 @@ public class BlockContentManager extends AbstractBlockContentManager {
 				return false;
 			}
 			Segment s = segments.get(segmentIndex);
-			if (testOnly) {
-				switch (s.getSegmentType()) {
-				case Marker:
-				case Anchor:
-					break;
-				case Evaluate:
-					if (!((Evaluate)s).getExpression().render(context).isEmpty()) {
-						return true;
-					} else {
-						break;
-					}
-				default:
-					return true;
-				}
+			if (testOnly && couldTriggerNewRow(s)) {
+				return true;
 			}
 			layoutSegment(s);
 			segmentIndex++;
@@ -174,6 +162,20 @@ public class BlockContentManager extends AbstractBlockContentManager {
 			}
 		}
 		return true;
+	}
+	
+	private boolean couldTriggerNewRow(Segment s) {
+		switch (s.getSegmentType()) {
+			case Marker:
+			case Anchor:
+				return false;
+			case Evaluate:
+				return !((Evaluate)s).getExpression().render(context).isEmpty();
+			case Text:
+				return !((TextSegment)s).getText().isEmpty();
+			default:
+				return true;
+		}
 	}
 	
 	private void layoutSegment(Segment s) {
@@ -374,17 +376,13 @@ public class BlockContentManager extends AbstractBlockContentManager {
         return ensureBuffer(rowIndex+1, true);
     }
 
-    @Override
-    public RowImpl getNext() {
-    	ensureBuffer(rowIndex+1);
-        try {
-            RowImpl ret = rows.get(rowIndex);
-            rowIndex++;
-            return ret;
-        } catch (IndexOutOfBoundsException e) {
-            throw new NoSuchElementException();
-        }
-    }
+	@Override
+	public RowImpl getNext() {
+		ensureBuffer(rowIndex+1);
+		RowImpl ret = rows.get(rowIndex);
+		rowIndex++;
+		return ret;
+	}
 
 	private void layout(String c, String locale, String mode) {
 		layout(Translatable.text(fcontext.getConfiguration().isMarkingCapitalLetters()?c:c.toLowerCase()).locale(locale).build(), mode);

@@ -27,7 +27,7 @@ import org.daisy.dotify.formatter.impl.search.SheetIdentity;
  */
 public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	//Global state
-	public PageStruct struct;
+	private final PageStruct struct;
 	private final FormatterContext context;
 	//Input data
 	private final DefaultContext rcontext;
@@ -44,6 +44,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	private int initialPageOffset;
 	private boolean volBreakAllowed;
 	private boolean updateCounter;
+	private boolean allowsSplit;
 	//Output buffer
 	private List<Sheet> sheetBuffer;
 
@@ -66,20 +67,30 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 		this.counter = null;
 		this.initialPageOffset = 0;
 		this.updateCounter = false;
+		this.allowsSplit = true;
 	}
 	
 	public SheetDataSource(SheetDataSource template) {
-		this(template, 0);
+		this(template, 0, false);
 	}
-	
-	private SheetDataSource(SheetDataSource template, int offset) {
-		this.struct = new PageStruct(template.struct);
+
+	/**
+	 * Creates a new instance with the specified data source as template
+	 * @param template the template
+	 * @param offset the sheetBuffer offset (items before the offset are discarded)
+	 * @param tail true if the purpose of this instance is to become the template's
+	 * 		tail. This information is required because the page number counter
+	 * 		must be the same instance in this case. The reverse is true in other
+	 * 		cases.
+	 */
+	private SheetDataSource(SheetDataSource template, int offset, boolean tail) {
+		this.struct = tail?template.struct:new PageStruct(template.struct);
 		this.context = template.context;
 		this.rcontext = template.rcontext;
 		this.volumeGroup = template.volumeGroup;
 		this.seqsIterator = template.seqsIterator;
 		this.seqsIndex = template.seqsIndex;
-		this.psb = PageSequenceBuilder2.copyUnlessNull(template.psb);
+		this.psb = tail?template.psb:PageSequenceBuilder2.copyUnlessNull(template.psb);
 		this.sectionProperties = template.sectionProperties;
 		this.sheetOffset = template.sheetOffset+offset;
 		this.sheetIndex = template.sheetIndex;
@@ -92,7 +103,8 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 		this.volBreakAllowed = template.volBreakAllowed;
 		this.counter = template.counter;
 		this.initialPageOffset = template.initialPageOffset;
-		this.updateCounter = template.updateCounter;
+		this.updateCounter = tail?true:template.updateCounter;
+		this.allowsSplit = true;
 	}
 	
 	@Override
@@ -261,6 +273,10 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 
 	@Override
 	public SplitResult<Sheet> split(int atIndex) {
+		if (!allowsSplit) {
+			throw new IllegalStateException();
+		}
+		allowsSplit = false;
 		if (!ensureBuffer(atIndex)) {
 			throw new IndexOutOfBoundsException("" + atIndex);
 		}
@@ -269,12 +285,10 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 		} else {
 			struct.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
 		}
-		SheetDataSource tail = new SheetDataSource(this, atIndex);
-		tail.updateCounter = true;
 		if (atIndex==0) {
-			return new SplitResult<Sheet>(Collections.emptyList(), tail);
+			return new SplitResult<Sheet>(Collections.emptyList(), new SheetDataSource(this, atIndex, true));
 		} else {
-			return new SplitResult<Sheet>(sheetBuffer.subList(0, atIndex), tail);
+			return new SplitResult<Sheet>(sheetBuffer.subList(0, atIndex), new SheetDataSource(this, atIndex, true));
 		}
 	}
 
