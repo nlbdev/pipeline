@@ -281,12 +281,12 @@
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.formatter.impl</artifactId>
-                <version>3.2.1-SNAPSHOT</version>
+                <version>3.2.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.task-api</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
@@ -296,7 +296,7 @@
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.task.impl</artifactId>
-                <version>3.0.0</version>
+                <version>3.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
