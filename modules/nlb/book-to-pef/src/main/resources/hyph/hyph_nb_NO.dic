@@ -1,6 +1,6 @@
 ISO8859-1
-LEFTHYPHENMIN 1
-RIGHTHYPHENMIN 1
+LEFTHYPHENMIN 2
+RIGHTHYPHENMIN 2
 .agn1
 .ake1l
 .alba1
@@ -2517,6 +2517,7 @@ amne1d
 a1mod
 am1om
 am1op
+amord1s
 amp1akt
 amp1ei
 ampe1ria
@@ -3890,6 +3891,9 @@ bak1vi
 bale1s
 bal1in
 bal1kl
+balleder1en
+balleder1es
+balleder1n
 1balleg
 1ballene
 ball1id
@@ -3984,6 +3988,8 @@ bbe1k
 bbel1a
 bbel1i
 bbel1l
+bbensbrudd1
+bbens1b
 bb1erf
 bbe1sl
 bbe1sp
@@ -8335,6 +8341,8 @@ ell1t
 el1luk
 ell1v
 el1lys
+ellærerhøg1
+ellærer1hø
 el1løp
 el1løy
 el1lå
@@ -34762,6 +34770,7 @@ s1oppb
 1s2oppe
 s1oppg
 s1opph
+s1oppl
 s1oppn
 s1oppr
 so1pro
@@ -36285,7 +36294,6 @@ tat1ma
 tat1ne
 tat1om
 tat1ri
-tats1o
 tats1p
 tat1sty
 tat1v
@@ -45321,9 +45329,6 @@ zz1le
 .brennstof1forb
 .brennstof9forbruket./ff=f,9,2
 .brennstof9forbrukets./ff=f,9,2
-.budsjet9ekniske./ee=e,7,2
-.budsje1tekn
-.budsje1teknis
 .budsjet9tak./tt=t,7,2
 .budsjet9taket./tt=t,7,2
 .budsjet9takets./tt=t,7,2
@@ -46055,9 +46060,12 @@ zz1le
 .fotbal9lede2r./ll=l,6,2
 .fotbal9ledere./ll=l,6,2
 .fotbal9lederen./ll=l,6,2
+.fotballeder1en
 .fotbal9lederens./ll=l,6,2
 .fotbal9lederes./ll=l,6,2
+.fotballeder1es
 .fotbal9lederne./ll=l,6,2
+.fotballeder1n
 .fotbal9ledernes./ll=l,6,2
 .fotbal9leders./ll=l,6,2
 .fotbal9legende./ll=l,6,2
@@ -46111,6 +46119,7 @@ zz1le
 .fotbal9løkke2r./ll=l,6,2
 .fotsop9plagede./pp=p,6,2
 .fot1sop
+.fots1oppl
 .fotsop9plaget./pp=p,6,2
 .frit9talende./tt=t,4,2
 .frit9tenkende./tt=t,4,2
@@ -46459,9 +46468,12 @@ zz1le
 .handbal9lede2r./ll=l,7,2
 .handbal9ledere./ll=l,7,2
 .handbal9lederen./ll=l,7,2
+.handballeder1en
 .handbal9lederens./ll=l,7,2
 .handbal9lederes./ll=l,7,2
+.handballeder1es
 .handbal9lederne./ll=l,7,2
+.handballeder1n
 .handbal9ledernes./ll=l,7,2
 .handbal9lege./ll=l,7,2
 .hand1balleg
@@ -46630,6 +46642,7 @@ zz1le
 .husstel9lærerens./ll=l,7,2
 .husstel9læreres./ll=l,7,2
 .husstel9lærerhøgskole./ll=l,7,2
+.husstellærerhøg1
 .husstellærer1hø
 .husstellærer1høgs2
 .husstel9lærerhøgskolen./ll=l,7,2
@@ -46674,9 +46687,12 @@ zz1le
 .håndbal9lede2r./ll=l,7,2
 .håndbal9ledere./ll=l,7,2
 .håndbal9lederen./ll=l,7,2
+.håndballeder1en
 .håndbal9lederens./ll=l,7,2
 .håndbal9lederes./ll=l,7,2
+.håndballeder1es
 .håndbal9lederne./ll=l,7,2
+.håndballeder1n
 .håndbal9ledernes./ll=l,7,2
 .håndbal9lege./ll=l,7,2
 .hånd1balleg
@@ -48069,6 +48085,7 @@ zz1le
 .prinsip9programordskifta./pp=p,7,2
 .prinsipprogram1o
 .prinsipprogram1or
+.prinsipprogramord1s
 .prinsipprogramordski2ft
 .prinsip9programordskifte./pp=p,7,2
 .prinsip9programordskiftet./pp=p,7,2
@@ -48238,6 +48255,7 @@ zz1le
 .rib1benet
 .rib9benets./bb=b,3,2
 .rib9bensbrudd./bb=b,3,2
+.ribbensbrudd1
 .ribbens1b
 .rib9bensbruddene./bb=b,3,2
 .rib9bensbruddet./bb=b,3,2
@@ -48527,6 +48545,7 @@ zz1le
 .1snøg
 .snøg1gåa
 .sop9plukke2r./pp=p,3,2
+.s1oppl
 .sopp1lu
 .sop9plukkere./pp=p,3,2
 .sop9plukkeren./pp=p,3,2
@@ -48972,9 +48991,12 @@ zz1le
 .topp1fot
 .toppfotbal9ledere./ll=l,10,2
 .toppfotbal9lederen./ll=l,10,2
+.toppfotballeder1en
 .toppfotbal9lederens./ll=l,10,2
 .toppfotbal9lederes./ll=l,10,2
+.toppfotballeder1es
 .toppfotbal9lederne./ll=l,10,2
+.toppfotballeder1n
 .toppfotbal9ledernes./ll=l,10,2
 .trafik9kamera./kk=k,6,2
 .trafikk1a
@@ -49310,9 +49332,12 @@ zz1le
 .volley1balle
 .volleybal9ledere./ll=l,9,2
 .volleybal9lederen./ll=l,9,2
+.volleyballeder1en
 .volleybal9lederens./ll=l,9,2
 .volleybal9lederes./ll=l,9,2
+.volleyballeder1es
 .volleybal9lederne./ll=l,9,2
+.volleyballeder1n
 .volleybal9ledernes./ll=l,9,2
 .øredob9behengt./bb=b,6,2
 .øre1dobb

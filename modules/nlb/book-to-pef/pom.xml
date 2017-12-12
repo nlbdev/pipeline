@@ -354,8 +354,8 @@
                       <arg value="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO.pat"/>
                       <arg value="${project.basedir}/src/main/resources/hyph/hyph_nb_NO.dic"/>
                       <arg value="ISO8859-1"/>
-                      <arg value="1"/> <!-- LEFT_HYPHEN_MIN -->
-                      <arg value="1"/> <!-- RIGHT_HYPHEN_MIN -->
+                      <arg value="2"/> <!-- LEFT_HYPHEN_MIN -->
+                      <arg value="2"/> <!-- RIGHT_HYPHEN_MIN -->
                     </exec>
                   </target>
                 </configuration>
