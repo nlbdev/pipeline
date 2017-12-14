@@ -5,7 +5,7 @@
     xmlns:pef="http://www.daisy.org/ns/2008/pef"
     script="../resources/dtbook-to-pef-test.xpl">
     
-    <x:scenario label="basic structure" pending="Takes ≈ 20 minutes to run. Succeeds as of 1ba1b4aac9.">
+    <x:scenario label="basic structure" pending="Takes ≈ 20 minutes to run. Succeeds as of 6738c7d96.">
         <x:scenario label="≈ 10 kB">
             <x:call step="nlb:dtbook-to-pef-test">
                 <x:input port="source">
