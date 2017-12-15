@@ -94,7 +94,8 @@ pagenum, *[epub|type~='pagebreak'] {
 
         frontmatter level1:not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)),
         bodymatter,
-        body:not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) {
+        body:not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)),
+        section:not([epub|type~='backmatter']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) {
                 line-height: 2;
         }
 
@@ -120,144 +121,51 @@ level1.part, *[epub|type~='part'] {
     }
 }
 
-/* Rules depending on sectioning depth */
-/* Note: DTBook and EPUB rules are separated mainly to avoid bloating the compiled CSS. */
+/* Always start top-level chapters on right-hand page: DTBook */
 level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)), level1.part > level2 {
-        /* level 1 */
         page-break-before: right;
-        volume-break-inside: auto;
 }
 
+/* Always start top-level chapters on right-hand page: EPUB/HTML */
+html:has(body ~ body) > body, html:not(:has(body ~ body)) > body > section {
+        &:not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) {
+                &:not([epub|type~='part']), &[epub|type~='part'] > section {
+                        page-break-before: right;
+                }
+        }
+}
+
+/* Volume breaking rules based on level depth: DTBook */
 frontmatter > level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) ~ level1,
-frontmatter:has(> level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc))) ~ bodymatter level1,
-frontmatter:not(:has(> level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)))) ~ bodymatter level1 ~ level1,
-level1.part > level2 ~ level2 {
-        /* level 1 except first sibling level 1 */
+frontmatter:has(level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc))) ~ bodymatter > level1
+bodymatter > level1:not(.part) ~ level1:not(.part),
+rearmatter > level1:not(.part) {
+        /* level1 except first non-generated level1 */
         volume-break-inside: -obfl-keep(8);
 }
+level1.part ~ level1.part level2 { volume-break-inside: -obfl-keep(8); }
+level2 ~ level2 { volume-break-inside: -obfl-keep(7); }
+level3 ~ level3 { volume-break-inside: -obfl-keep(6); }
+level4 ~ level4 { volume-break-inside: -obfl-keep(5); }
+level5 ~ level5 { volume-break-inside: -obfl-keep(4); }
+level6 ~ level6 { volume-break-inside: -obfl-keep(3); }
 
-level1:not(.part) level2, level1.part level3 {
-        /* level 2 */
-        volume-break-inside: -obfl-keep(8);
-        
-        &:first-child,
-        ~ level2,
-        ~ level3 {
-                /* level 2 except first sibling level 2 */
-                volume-break-inside: -obfl-keep(7);
-        }
-}
-level1:not(.part) level3, level1.part level4 {
-        /* level 3 */
-        volume-break-inside: -obfl-keep(7);
-        
-        &:first-child,
-        ~ level3,
-        ~ level4 {
-                /* level 3 except first sibling level 3 */
-                volume-break-inside: -obfl-keep(6);
-        }
-}
-level1:not(.part) level4, level1.part level5 {
-        /* level 4 */
-        volume-break-inside: -obfl-keep(6);
-        
-        &:first-child,
-        ~ level4,
-        ~ level5 {
-                /* level 4 except first sibling level 4 */
-                volume-break-inside: -obfl-keep(5);
-        }
-}
-level1:not(.part) level5, level1.part level6 {
-        /* level 5 */
-        volume-break-inside: -obfl-keep(5);
-        
-        &:first-child,
-        ~ level5,
-        ~ level6 {
-                /* level 5 except first sibling level 5 */
-                volume-break-inside: -obfl-keep(4);
-        }
-}
-level1:not(.part) level6 {
-        /* level 6 */
-        volume-break-inside: -obfl-keep(4);
-        
-        &:first-child,
-        ~ level6 {
-                /* level 6 except first sibling level 6 */
-                volume-break-inside: -obfl-keep(3);
-        }
-}
-*[epub|type~='part'] section,
-body:not([epub|type~='part']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)),
-section:not([epub|type~='part']):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) {
-        /* level 1 */
-        page-break-before: right;
-        volume-break-inside: -obfl-keep(8);
-        
-        &:first-child,
-        ~ section:not([epub|type~='part']) {
-                /* level 1 except first sibling level 1 */
-        }
-        
-        > section {
-                /* level 2 */
-                page-break-before: auto;
-                volume-break-inside: -obfl-keep(8);
-                
-                &:first-child,
-                ~ section {
-                        /* level 2 except first sibling level 2 */
-                        volume-break-inside: -obfl-keep(7);
-                }
-                
-                > section {
-                        /* level 3 */
-                        volume-break-inside: -obfl-keep(7);
-                        
-                        &:first-child,
-                        ~ section {
-                                /* level 3 except first sibling level 3 */
-                                volume-break-inside: -obfl-keep(6);
-                        }
-                        
-                        > section {
-                                /* level 4 */
-                                volume-break-inside: -obfl-keep(6);
-                                
-                                &:first-child,
-                                ~ section {
-                                        /* level 4 except first sibling level 4 */
-                                        volume-break-inside: -obfl-keep(5);
-                                }
-                                
-                                > section {
-                                        /* level 5 */
-                                        volume-break-inside: -obfl-keep(5);
-                                        
-                                        &:first-child,
-                                        ~ section {
-                                                /* level 5 except first sibling level 5 */
-                                                volume-break-inside: -obfl-keep(4);
-                                        }
-                                        
-                                        > section {
-                                                /* level 6 */
-                                                volume-break-inside: -obfl-keep(4);
-                                                
-                                                &:first-child,
-                                                ~ section {
-                                                        /* level 6 except first sibling level 6 */
-                                                        volume-break-inside: -obfl-keep(3);
-                                                }
-                                        }
-                                }
-                        }
+/* Volume breaking rules based on level depth: EPUB/HTML */
+html:has(body ~ body) > body, html:not(:has(body ~ body)) > body > section {
+        &:not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) {
+                & ~ body, & ~ section {
+                        /* level1 except first non-generated level1 */
+                        volume-break-inside: -obfl-keep(8);
                 }
         }
 }
+body[epub|type~='part'] ~ body[epub|type~='part'] > section,
+body > section[epub|type~='part'] ~ section[epub|type~='part'] > section { volume-break-inside: -obfl-keep(8); }
+body > section ~ section { volume-break-inside: -obfl-keep(7); }
+body > section > section ~ section { volume-break-inside: -obfl-keep(6); }
+body > section > section > section ~ section { volume-break-inside: -obfl-keep(5); }
+body > section > section > section > section ~ section { volume-break-inside: -obfl-keep(4); }
+body > section > section > section > section > section ~ section { volume-break-inside: -obfl-keep(3); }
 
 /* Avoid volume breaking inside certain DTBook elements (mainly block-level) */
 h1, h2, h3, h4, h5, h6,
