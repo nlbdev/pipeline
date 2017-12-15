@@ -1,6 +1,6 @@
 ISO8859-1
 LEFTHYPHENMIN 2
-RIGHTHYPHENMIN 2
+RIGHTHYPHENMIN 3
 .agn1
 .ake1l
 .alba1
@@ -280,6 +280,7 @@ RIGHTHYPHENMIN 2
 .fly1d
 .fly1plass.
 .1flyp
+.flypl2
 .fly1plassane
 .fly1plass2a2r.
 .fly1plasse
@@ -293,7 +294,6 @@ RIGHTHYPHENMIN 2
 .fly1vi
 .for1anstal
 .for1beredt
-.1forb
 .fore1bygge
 .fore1bygging.
 .fore1bygginge
@@ -649,7 +649,7 @@ RIGHTHYPHENMIN 2
 .jul1a
 .kal2k
 .kapp1k
-.kapp1l
+.kapp1l2
 .karm1
 .kart1legging.
 .1kartl
@@ -934,6 +934,7 @@ RIGHTHYPHENMIN 2
 .opp1kjør
 .opp1kr
 .opp1lat
+.oppl2
 .opp1les
 .opp1livn
 .opp1løse
@@ -1104,6 +1105,7 @@ RIGHTHYPHENMIN 2
 .penge1in
 .pest1
 .plan1ko
+.pl2
 .plan1leggj2
 .1planl
 .pop1p
@@ -1229,6 +1231,7 @@ RIGHTHYPHENMIN 2
 .sjuke1huset
 .sjuke1m
 .sjuke1plei2a2r.
+.sjukepl2
 .sjuke1pleiara
 .sjuke1pleiaren
 .sjuke1pleie2r.
@@ -1312,6 +1315,7 @@ RIGHTHYPHENMIN 2
 .syke1husy
 .syke1m
 .syke1pleie2r.
+.sykepl2
 .syke1pleiere.
 .syke1pleieren
 .syke1pleieres
@@ -1351,6 +1355,7 @@ RIGHTHYPHENMIN 2
 .tann1læk
 .tann1pleia
 .1tannp
+.tannpl2
 .tann1pleie.
 .tann1pleien
 .1tann1r
@@ -1412,6 +1417,7 @@ RIGHTHYPHENMIN 2
 .tone1
 .t2opp1e
 .topp1la
+.toppl2
 .topp1møta
 .topp1møte.
 .topp1møtet
@@ -1462,7 +1468,6 @@ RIGHTHYPHENMIN 2
 .ut1flyttinga
 .ut1flyttinge
 .ut1fol
-.ut2for
 .ut1fylle
 .ut1gy
 .1utg
@@ -1749,7 +1754,7 @@ ads1mi
 ads1mo
 ads1n
 ads1o
-ads1pl
+ads1pl2
 ads1po
 ads1pr
 ads1sv
@@ -2183,12 +2188,13 @@ al1dat
 al1deb
 al1def
 al1dem
-alde1pl
+alde1pl2
 alde1pu
 1alderbo1plass.
 alder1b
 alder1bo
 alder1bop
+alderbopl2
 1alderbo1plasser
 1alderlege
 1alderlig
@@ -2219,7 +2225,7 @@ ale1me
 al1emu
 al1entr
 ale1pe
-ale1pl
+ale1pl2
 ale1pr
 ale1ret
 ale1ro
@@ -2344,6 +2350,7 @@ a1lova
 a1lovg
 al1pal
 al1plan.
+alpl2
 al1plana
 al1plane
 al1po
@@ -2377,7 +2384,7 @@ als1mu
 als1må
 al1sni
 als1pa
-als1pl
+als1pl2
 als1pu
 al1strø
 als1va
@@ -2525,6 +2532,7 @@ ampe1rie
 ampe1s
 amp1inn
 amp1led
+ampl2
 am1plet
 am1pos
 am1pri
@@ -2840,6 +2848,7 @@ apir1k
 api1s
 ap1ja
 ap1lei
+apl2
 ap1m
 a1poe
 a1pom
@@ -2850,6 +2859,7 @@ app1f
 app1g
 app1ho
 app1lan
+appl2
 ap1plas
 app1ri
 app1ru
@@ -2868,7 +2878,7 @@ aps1m
 aps1o
 aps1pa
 aps1pe
-aps1pl
+aps1pl2
 aps1pri
 aps1r
 aps1ta
@@ -2992,7 +3002,7 @@ a1renten
 a1renter
 are1pa
 are1pe
-are1pl
+are1pl2
 ar1erk
 are1ro
 are1sa
@@ -3109,7 +3119,7 @@ arn1banene.
 arn1bane2r.
 arne1k
 arne1o
-arne1pl
+arne1pl2
 arne1ra
 arne1s
 arn1h
@@ -3274,7 +3284,7 @@ ase1m
 a1send
 a1seng
 as1enk
-ase1pl
+ase1pl2
 aser1s
 ase1sa
 ase1se
@@ -3342,7 +3352,7 @@ as1ovn
 1aspirante
 1aspirant1k
 1aspiranty
-as1pl
+as1pl2
 as1po
 as1py
 as1re
@@ -3576,6 +3586,7 @@ ato1s
 ato1t
 ato1u
 at1pla
+atpl2
 at1pr
 at1pu
 a1trak
@@ -4605,6 +4616,7 @@ bringer1sys
 1broe
 bro1kar
 bro1l
+brom1
 bro1p
 1bro2r.
 1brore
@@ -5014,7 +5026,7 @@ cud1
 1cupan
 1cupar
 1cupe
-cup1l
+cup1l2
 cup1p
 cup1r
 cup1s
@@ -5039,7 +5051,7 @@ d1afri
 dag1br
 da1gj2
 dag1lei
-dag1pl
+dag1pl2
 dag1r
 dag1skol
 dags1pro
@@ -5093,7 +5105,7 @@ dan1ti
 d1anv
 da1ny
 da1o
-da1pl
+da1pl2
 da1pr
 d1arbeid.
 d1arbeidsx
@@ -5271,7 +5283,7 @@ ddel1sv
 ddel1v
 dde1ma
 dde1må
-dde1pl
+dde1pl2
 dder1a
 dder1h
 dder1s
@@ -5319,7 +5331,7 @@ dds1l
 dds1ma
 dds1o
 dds1pe
-dds1pl
+dds1pl2
 dds1pr
 dds1s
 dds1tab
@@ -5593,6 +5605,7 @@ de1pel
 de1per
 de1pik
 d1eple
+depl2
 de1plikta
 de1pri
 de1pro
@@ -5612,6 +5625,7 @@ der1bi
 der1bo
 derbo1plass.
 der1bop
+derbopl2
 derbo1plasser
 der1br
 der1byg
@@ -5664,7 +5678,7 @@ der1partiledere.
 derparti1l
 derparti1ledere
 der1pe
-der1pl
+der1pl2
 der1reg
 der1retn
 der1rev
@@ -5746,7 +5760,7 @@ de1son
 des1op
 de1spa
 des1pik
-des1pl
+des1pl2
 de1spo
 de1spr
 de1spø
@@ -5953,7 +5967,7 @@ di1ori
 dio1se
 dio1sk
 dio1tr
-1dipl
+1dipl2
 di1po
 di1pr
 dir1d
@@ -6060,7 +6074,6 @@ d1lav
 d1ledd.
 d1ledde
 d1ledn
-dle1f
 dle1gat
 d1legge.
 d1leggelsesx
@@ -6210,7 +6223,7 @@ don1tu
 do1o
 do1pan
 d1oper
-do1pl
+do1pl2
 d1opn
 do1po
 d1oppd
@@ -6261,6 +6274,7 @@ d1pa
 d1pe
 d1pi
 d1plag
+dpl2
 d1plan.
 d1plane
 d1plat
@@ -6337,6 +6351,7 @@ dre1me
 d1rent
 dre1o
 dre1pla
+drepl2
 dre1pri
 dre1pro
 drer1and
@@ -6525,6 +6540,9 @@ ds1kas
 d1skik
 ds1kin
 ds1kir
+dskjel1ven
+d1skjelve
+dskjel1vet.
 ds1kjen
 ds1kl
 ds1kob
@@ -6651,6 +6669,7 @@ d1spek
 d1spel
 ds1pen
 ds1plan
+dspl2
 ds1ple
 ds1pli
 ds1pol
@@ -6831,6 +6850,7 @@ d1tektsreglar
 dtekts1re
 dtekts1reg
 d1tel
+dte1le
 d1teo
 d1terr
 dt1ev
@@ -7013,7 +7033,7 @@ døds1t
 1døgns.
 1døgnsplasser
 døgns1p
-døgns1pl
+døgns1pl2
 døgns1plasse
 1døgnsy
 d1øk
@@ -7074,7 +7094,7 @@ e1alle
 eal1lin
 eal1me
 eal1o
-eal1pl
+eal1pl2
 eal1sa
 eal1si
 eal1sku
@@ -7303,7 +7323,7 @@ ed1emne
 ed1enh
 edens1
 e1depa
-ede1pl
+ede1pl2
 eder1a
 eder1h
 eder1p
@@ -7404,7 +7424,7 @@ eds1mak
 eds1mu
 eds1mø
 ed1snø
-eds1pl
+eds1pl2
 eds1sv
 ed1stadene
 ed1stader
@@ -7555,6 +7575,7 @@ e1fob
 e1fog
 e1fo2r.
 e1fora
+e1forb
 e1fore
 e1forf
 e1forh
@@ -7715,6 +7736,7 @@ e1hagefor1bundet.
 ehage1f
 ehage1fo
 ehage1forb
+ehage1forbu
 e1hak
 e1haldsx
 e1har
@@ -7908,7 +7930,7 @@ eis1ko
 ei1sku
 ei1spe
 eis1pi
-eis1pl
+eis1pl2
 eis1se
 eis1st
 eis1tak
@@ -8225,7 +8247,7 @@ el1enh
 e1lense
 ele1pe
 ele1pi
-ele1pl
+ele1pl2
 el1erg
 e1lerk
 ele1ro
@@ -8885,7 +8907,7 @@ en1ol
 e1nomi
 en1op
 en1ori
-en1pl
+en1pl2
 enpå1
 en1rei
 en1rø
@@ -9017,7 +9039,7 @@ eon1g
 e1onk
 eon1p
 eo1o
-eo1pl
+eo1pl2
 e1opn
 e1opp
 eo1pr
@@ -9072,6 +9094,7 @@ e1pir
 1episo
 e1pj
 1epla.
+epl2
 e1plan.
 e1planane
 e1planar
@@ -9217,7 +9240,7 @@ er1cel
 er1dale
 er1dat
 er1deler
-erde1pl
+erde1pl2
 er1dj
 erd1l
 erd1n
@@ -9329,6 +9352,7 @@ er1flytting.
 er1flyttinga
 erfor1pliktelser
 er1forp
+erforpl2
 er1ful
 er1fy
 er1føl
@@ -9506,6 +9530,7 @@ er1pan
 er1pens
 er1pik
 er1pli
+erpl2
 er1por
 er1pos
 er1pr
@@ -9751,6 +9776,7 @@ e1senters
 e1sentr
 ese1pa
 ese1pla
+esepl2
 e1seria
 e1serier
 es1erkl
@@ -10271,6 +10297,7 @@ ets1pen
 ets1per
 et1spi
 ets1ple
+etspl2
 ets1pre
 ets1råd.
 ets1råde
@@ -10941,7 +10968,7 @@ fin1tre
 fin1v
 1fio
 fi1pa
-fi1pl
+fi1pl2
 fi1po
 fipp1
 fi1pr
@@ -11104,7 +11131,7 @@ folle1
 fo1ma
 fo1mø
 1fond.
-1fonda.
+1fonda
 1fonde
 1fonds.
 1fonds1p
@@ -11121,9 +11148,9 @@ fon1tr
 fon1v
 f1ops
 fo1ram
-1forb
 for1ba
 for1bil
+1forbu
 for1byg
 for1dan
 for1drei
@@ -11369,7 +11396,7 @@ ft1or
 ft1ov
 ft1pa
 ft1pi
-ft1pl
+ft1pl2
 ft1pr
 ft1ra
 ft1reg
@@ -11418,7 +11445,7 @@ fts1no
 fts1op
 fts1pa
 fts1per
-fts1pl
+fts1pl2
 ft1sprø
 ft1spø
 fts1r
@@ -11551,7 +11578,7 @@ g1ansv
 g1anv
 ga1o
 1gap
-gap1l
+gap1l2
 gap1sk
 gar1ak
 1garas
@@ -12058,7 +12085,7 @@ ge1son
 ge1sor
 ge1spe
 ge1spi
-ges1pl
+ges1pl2
 ge1spra
 ge1spø
 ges1s
@@ -12154,6 +12181,7 @@ g1fjella
 g1fl
 g1folk
 g1fora
+g1forb
 g1ford
 g1foreining.
 g1foreininga
@@ -12351,7 +12379,7 @@ gi1op
 gi1or
 gi1ov
 gi1pa
-gi1pl
+gi1pl2
 gi1po
 gi1pr
 gips1
@@ -12668,7 +12696,7 @@ gn1sku
 gn1sky
 gn1sla
 gns1op
-gns1pl
+gns1pl2
 gn1sta
 gns1ti
 gn1str
@@ -12758,6 +12786,7 @@ g1pio
 g1pip
 g1pis
 g1plan.
+gpl2
 g1plana
 g1plane
 g1po
@@ -13115,7 +13144,7 @@ g1spes
 gs1pila
 gs1pile
 g1spill
-gs1pl
+gs1pl2
 gs1pol
 gs1porta
 gs1pos
@@ -13449,6 +13478,7 @@ ha1fi
 hage1f
 hage1fo
 hage1forb
+hage1forbu
 1hagenes
 1hageonkler
 hage1on
@@ -13650,7 +13680,6 @@ hia1
 hiba1
 1hie
 hi1h
-hikste1
 hili1
 1hind
 hin1m
@@ -13668,7 +13697,7 @@ hiv1
 1hjelp.
 1hjel2pa.
 1hjelpen
-1hjelpl
+1hjelpl2
 1hjelps.
 1hjelps1i
 1hjelpsskrinet.
@@ -13730,13 +13759,13 @@ hol1v
 1hom
 hon1g
 1hopi
-ho1pl
+ho1pl2
 1hoppa
 1hoppe1a
 h2oppe
 1hoppes
 1hoppey
-hopp1l
+hopp1l2
 hopp1sp
 hopp1st
 hopp1t
@@ -13878,7 +13907,7 @@ hå1br
 1håndsx
 1håndsy
 1håndsz
-håp1l
+håp1l2
 1hår
 hår1b
 hår1l
@@ -14068,7 +14097,7 @@ ide1me
 iden1sv
 ideo1v
 ide1pe
-ide1pl
+ide1pl2
 ide1po
 idere1f
 ider1k
@@ -14353,7 +14382,7 @@ i1etat
 ie1tea
 ie1teg
 ie1tek
-ie1tel
+ie1te1l
 ie1tem
 ie1ten
 ie1teo
@@ -14735,7 +14764,6 @@ ild1sk
 ild1st
 ile1b
 i1ledel
-ile1f
 ile1gif
 ile1h
 i1lei2a2r.
@@ -14758,7 +14786,7 @@ ile1må
 i1leng
 ile1o
 ile1pe
-ile1pl
+ile1pl2
 il1epo
 ile1ret
 il1ernæ
@@ -14844,7 +14872,7 @@ i1lov.
 i1lova
 il1overs.
 il1pe
-il1pl
+il1pl2
 il1po
 il1ra
 il1rei
@@ -14990,6 +15018,7 @@ imotor1
 im1ov
 im1pi
 im1pla
+impl2
 im1pos
 1impu
 im1ro
@@ -15244,7 +15273,7 @@ in1sor
 ins1par
 in1spel
 in1spil
-in1spl
+in1spl2
 in1spo
 ins1tak
 1instal
@@ -15366,7 +15395,7 @@ ion1v
 io1o
 io1pe
 io1pi
-io1pl
+io1pl2
 io1po
 i1opp
 io1pr
@@ -15429,13 +15458,14 @@ ipe1tan
 ip1f
 ip1h
 i1plan.
+ipl2
 i1plane
 iplan1k
 i1plu
 i1pol
 ippel1s
 ipp1fo
-ipp1l
+ipp1l2
 ipps1t
 ipp1sy
 ipps1ø
@@ -15612,7 +15642,7 @@ ise1løy
 ise1me
 ise1mu
 ise1pi
-ise1pl
+ise1pl2
 ise1ret
 iser1ti
 iser1ve
@@ -16304,6 +16334,7 @@ je1love
 jels1t
 jels1v
 je1lu
+jel1venes
 je1lys
 je1læ
 je1lå
@@ -16328,7 +16359,7 @@ jem1mi
 je1mod
 je1mog
 je1mon
-jem1pl
+jem1pl2
 jem1sen
 jems1p
 jem1sø
@@ -16367,7 +16398,7 @@ je1nø
 je1o
 je1pa
 je1pe
-je1pl
+je1pl2
 je1po
 je1pr
 je1pu
@@ -16400,7 +16431,7 @@ jern1h
 jern1k
 jern1st
 je1ro
-jer1pl
+jer1pl2
 jer1set
 jers1p
 jers1ve
@@ -16439,7 +16470,7 @@ je1songe
 je1sos
 je1spe
 je1spi
-je1spl
+je1spl2
 je1spo
 je1spr
 je1spø
@@ -16583,7 +16614,7 @@ jule1l
 jule1s
 jul1l
 jul1m
-jup1l
+jup1l2
 jup1s
 ju1ro
 jur1t
@@ -16635,7 +16666,7 @@ jønns1å
 jø1no
 jøns1
 jø1pi
-jø1pl
+jø1pl2
 jøp1sle
 jøp1ste
 jør1b
@@ -17199,6 +17230,7 @@ ke1pend
 ke1per
 ke1pi
 ke1pla
+kepl2
 ke1po
 ke1pri
 ke1pro
@@ -17913,13 +17945,12 @@ klar1v
 k1lati
 1klave
 kle1ba
-kle1f
 kle1ga
 kle1h
 k1leid
 1klem.
 1klep
-kle1pl
+kle1pl2
 kler1a
 kles1i
 kles1j
@@ -18002,6 +18033,7 @@ kmåls1
 k1nav
 kne1dj
 1kneet
+kne1fo
 kne1h
 kne1ky
 kne1l
@@ -18113,7 +18145,7 @@ komi1se
 ko1mom
 1kompe
 1kompi
-1kompl
+1kompl2
 1komponé
 1komposisjoners
 1komposisjons.
@@ -18148,6 +18180,7 @@ ko1om
 ko1pas
 ko1pei
 1kopla
+kopl2
 1kopled
 1kopler
 1koples
@@ -18245,7 +18278,7 @@ k1pap
 k1par
 k1pe
 k1pi
-k1pl
+k1pl2
 k1po
 k1pre
 k1pris.
@@ -18393,6 +18426,10 @@ ks1dag.
 ks1dage
 ks1dale
 ks1de
+ksdepartement1en
+ks1dep
+ksdepartement1er
+ksdeparte1ments
 ks1di
 ks1do
 ks1dr
@@ -18416,7 +18453,7 @@ ks1enh
 ksen1se
 ksen1to
 kse1pa
-kse1pl
+kse1pl2
 kser1b
 kse1ret
 ks1erf
@@ -18552,6 +18589,7 @@ k1spille
 ks1pio
 k1spis
 ks1pla
+kspl2
 ks1pli
 ks1pol
 ksport1r
@@ -18583,6 +18621,7 @@ kst1b
 ksted1si
 kste1g
 k1stei
+kste1le
 k1stem
 ks1teo
 ks1tep
@@ -18837,6 +18876,7 @@ kts1å
 kt1tak
 kt1tap
 kt1te
+ktte1l
 kt1ti
 kt1tj
 kt1to
@@ -18905,7 +18945,7 @@ k1ung
 1kunnskapa
 1kunnskape
 1kuns2
-kupp1l
+kupp1l2
 kup1s
 ku1ras
 ku1rop
@@ -19140,7 +19180,7 @@ l1antr
 lan1ø
 la1o
 l1appara
-lapp1l
+lapp1l2
 l1arab
 lar1ap
 lar1av
@@ -19404,7 +19444,7 @@ lds1la
 lds1li
 lds1m
 lds1pe
-lds1pl
+lds1pl2
 lds1po
 lds1pro
 lds1s
@@ -19528,9 +19568,9 @@ le1fin
 le1fis
 le1fj
 le1fl
-le1fol
+le1fo
+1lefon
 lefon1t
-le1for
 le1fr
 l1e2ft
 le1fu
@@ -19715,6 +19755,7 @@ le1pa
 lep1ende
 le1pil
 le1plan
+lepl2
 le1plas
 le1por
 le1pre
@@ -19816,7 +19857,7 @@ le1spar
 le1spe
 le1spill.
 le1spille
-les1pl
+les1pl2
 le1spø
 les1sam
 les1sek
@@ -20908,10 +20949,11 @@ lo1nu
 lo1o
 lo1pa
 lo1pi
-lo1pl
+lo1pl2
 l1opn
 lo1po
 lopp1lø
+loppl2
 lopp1sp
 l1oppv
 lo1pr
@@ -20991,6 +21033,7 @@ l1pil
 lpin1s
 l1pip
 l1ple
+lpl2
 l1pli
 l1plom
 l1plu
@@ -21294,6 +21337,7 @@ l1spek
 l1spel
 l1spi
 ls1pla
+lspl2
 ls1pol
 l1spors
 l1sports
@@ -22050,7 +22094,7 @@ man1vi
 1manø
 ma1om
 ma1pa
-ma1pl
+ma1pl2
 ma1po
 ma1pr
 mar1ant
@@ -22456,7 +22500,7 @@ mens1ka
 men1skre
 men1skri
 men1sm
-men1spl
+men1spl2
 ment1in
 men1tren
 men1v
@@ -22466,7 +22510,7 @@ meny1d
 me1o
 me1pa
 me1pe
-me1pl
+me1pl2
 me1pr
 me1pu
 me1rad
@@ -22568,6 +22612,7 @@ me1sit
 me1sj
 mesjuke1pleia
 me1sjuk
+mesjukepl2
 me1sk
 me1sl
 me1sm
@@ -22663,6 +22708,7 @@ m1fly1r
 m1fol
 m1fo2r.
 m1fora
+m1forb
 m1fore
 m1forh
 m1format
@@ -23125,7 +23171,7 @@ mon1l
 1monopole
 1monopoly
 mon1p
-mo1pl
+mo1pl2
 m1opp
 1moral
 mor1c
@@ -23220,9 +23266,9 @@ mp1inj
 mp1ins
 mp1k
 m1plan
+mpl2
 mp1lei
 mp1lev
-mp1lo
 mp1ly
 mp1lø
 mp1m
@@ -23312,7 +23358,7 @@ ms1enh
 m1senk
 m1sent
 ms1epi
-ms1epl
+ms1epl2
 ms1erf
 ms1erv
 mse1st
@@ -23420,7 +23466,7 @@ m1spiller
 m1spillet
 m1spills
 m1spilt
-ms1pl
+ms1pl2
 ms1pos
 ms1pot
 m1spø
@@ -23718,7 +23764,7 @@ må1ny
 må1pa
 må1pe
 må1pin
-må1pl
+må1pl2
 må1ra
 mår1h
 må1ro
@@ -23859,7 +23905,7 @@ nan1ti
 na1ny
 na1o
 na1pas
-na1pl
+na1pl2
 na1pr
 nap1s
 n2a1pu
@@ -23915,6 +23961,7 @@ nat1re
 nat1sa
 nat1se
 nat1sp
+natt1f
 1nattings.
 1nattings1b
 1nattings1f
@@ -24085,7 +24132,7 @@ n1demp
 nde1må
 nd1ener
 nde1o
-nde1pl
+nde1pl2
 nde1pr
 nde1punkt.
 nde1punkte
@@ -24144,7 +24191,7 @@ nd1ope
 nd1opp
 nd1ops
 nd1org
-nd1pl
+nd1pl2
 nd1po
 nd1pr
 n1drad
@@ -24210,7 +24257,7 @@ nds1of
 nds1par
 nds1per
 nd1spi
-nds1pl
+nds1pl2
 nds1pre
 nds1pri
 nds1pro
@@ -24540,6 +24587,7 @@ ne1ov
 ne1par
 ne1pel
 ne1pla
+nepl2
 ne1pleia
 ne1pleie2r.
 ne1pleiere
@@ -24665,7 +24713,7 @@ ne1son
 ne1sop
 ne1spe
 ne1spi
-ne1spl
+ne1spl2
 ne1spo
 ne1spr
 ne1spø
@@ -24789,6 +24837,7 @@ n1folka.
 n1folke
 n1fon
 n1fo2r.
+n1forb
 n1foren.
 n1forf
 n1forh
@@ -24917,7 +24966,7 @@ ng1ope
 ng1ord
 ngo1s
 ng1pe
-ng1pl
+ng1pl2
 ng1pr
 ng1rat
 ngra2
@@ -25554,6 +25603,7 @@ nn1ord
 nn1ori
 nn1pe
 nn1pla
+nnpl2
 nn1po
 nn1pr
 nn1ra
@@ -25612,7 +25662,7 @@ nns1pan
 nn1spare
 nn1spart
 nns1pen
-nns1pl
+nns1pl2
 nn1språ
 nn1stad
 nns1taka
@@ -25749,7 +25799,7 @@ non1t
 non1v
 no1o
 no1pa
-no1pl
+no1pl2
 nopp1rei
 no1pr
 no1pu
@@ -25804,6 +25854,7 @@ n1pel
 n1pen
 n1pi
 n1plate.
+npl2
 n1plater
 n1pleiar
 n1pleie2r.
@@ -25934,7 +25985,7 @@ n1sendt
 nse1net
 ns1enti
 nse1pa
-nse1pl
+nse1pl2
 ns1erf
 n1seria
 n1serie
@@ -26343,7 +26394,7 @@ nter1fo
 nter1k
 nter1l
 nter1m
-nter1pl
+nter1pl2
 nter1sk
 nter1van
 nte1sel
@@ -26438,7 +26489,7 @@ nt1omn
 nt1oppd
 nt1oppg
 nt1opph
-nt1oppl
+nt1oppl2
 ntopp1m
 ntor1b
 nto1rent
@@ -26545,7 +26596,7 @@ nums1
 n1und
 nu1o
 nu1pe
-nu1pl
+nu1pl2
 nus1h
 nusk1l
 nus1p
@@ -26649,7 +26700,7 @@ ny1me
 1nymf
 ny1mo
 nype1
-ny1pl
+ny1pl2
 ny1po
 ny1pr
 ny1rak
@@ -26885,7 +26936,7 @@ od1m
 od1of
 od1or
 od1ov
-od1pl
+od1pl2
 od1po
 od1pu
 od1re
@@ -27368,7 +27419,7 @@ olo1sa
 ol1ose
 o1lov1b
 olo1ver
-ol1pl
+ol1pl2
 ol1po
 ol1ps
 ol1pu
@@ -27680,7 +27731,7 @@ ons1ne
 ons1op
 ons1org
 ons1pa
-ons1pl
+ons1pl2
 ons1po
 ons1pu
 on1stad
@@ -27768,6 +27819,7 @@ oppgj2
 1oppgjøry
 1oppgå
 opp1las
+oppl2
 opp1lau
 opp1lei
 1opply
@@ -27852,7 +27904,7 @@ or1eks
 ore1kv
 ore1la
 o1renta
-ore1pl
+ore1pl2
 o1repo
 or1erf
 ore1sa
@@ -28258,7 +28310,7 @@ otor1m
 oto1se
 oto1t
 oto1u
-ot1pl
+ot1pl2
 ot1pr
 ot1rap
 ot1red
@@ -28281,7 +28333,7 @@ ot1sol
 ot1sop
 ot1spe
 ot1spi
-ots1pl
+ots1pl2
 ot1spo
 ots1pr
 ot1spø
@@ -28703,6 +28755,7 @@ penge1l
 1pengeopplegget.
 penge1op
 penge1opp
+pengeoppl2
 1penge2r.
 pen1gl
 pen1gr
@@ -28729,6 +28782,7 @@ pe1o
 pe1pe
 pe1pi
 pe1pla
+pepl2
 pe1pleia
 pe1pleie2r.
 pe1pleiere
@@ -28862,6 +28916,7 @@ p1fiske
 p1flyv
 p1fol
 p1fo2r.
+p1forb
 p1fore
 p1form
 p1fors
@@ -29005,6 +29060,7 @@ p1kri
 p1ku
 p1kv
 p1kø
+pl2
 p1lad
 p1lagr
 plags1
@@ -29055,7 +29111,10 @@ plid1
 1ploga
 1ploge
 1plogy
+p1lok
+1plot
 p1lov
+plut1
 ply1sk
 ply1v
 p1løf
@@ -29135,6 +29194,7 @@ pon1tak
 po1nu
 pop1a
 po1pla
+popl2
 p1opn
 pop1s
 por1anl
@@ -29220,6 +29280,7 @@ pp1inn
 pp1ir
 pp1j
 pp1lande
+ppl2
 pp1led
 pp1len
 pp1lett
@@ -29462,6 +29523,7 @@ ps1ov
 ps1pak
 p1spi
 ps1pla
+pspl2
 ps1ple
 ps1pol
 ps1pos
@@ -29805,8 +29867,9 @@ rant1s
 ra1nøt
 ra1o
 ra1pla
+rapl2
 1rapph
-r1appl
+r1appl2
 1rappo
 ra1pr
 raps1e
@@ -30048,6 +30111,7 @@ rdens1e
 rden1ta
 rde1o
 rde1pli
+rdepl2
 rde1po
 rde1reg
 rde1rik
@@ -30103,7 +30167,7 @@ rd1op
 rd1or
 r1dot
 rd1ov
-rd1pl
+rd1pl2
 rd1pr
 rd1pu
 r1drad
@@ -30158,7 +30222,7 @@ rds1n
 rds1of
 rds1pa
 rd1spi
-rds1pl
+rds1pl2
 rds1po
 rds1s
 rd1stad
@@ -30461,6 +30525,7 @@ re1parte
 re1pat
 re1pi
 re1plas
+repl2
 re1pok
 re1porn
 re1pot
@@ -30557,7 +30622,7 @@ re1spela
 re1spele
 re1spill.
 re1spille
-res1pl
+res1pl2
 res1pri
 re1spu
 ress1p
@@ -30676,8 +30741,8 @@ r1flyttinge
 r1fol
 r1fon
 r1fo2r.
-rfor1bruka
 r1forb
+rfor1bruka
 r1ford
 r1foren
 r1forf
@@ -30809,6 +30874,7 @@ rg1t
 rg1ub
 r1gud
 r1gul
+rgut1f
 r1gutte
 rg1vei
 rg1vek
@@ -30992,7 +31058,7 @@ ri1op
 ri1org
 rio1v
 ri1pap
-ri1pl
+ri1pl2
 ripos1
 ri1pr
 ri1r
@@ -31658,6 +31724,7 @@ rn1sor
 rn1spen
 rn1spi
 rns1pla
+rnspl2
 rn1spr
 rn1sta
 rn1stei
@@ -31768,6 +31835,7 @@ ro1o
 ro1pip
 r1opn
 ropp1løsninger
+roppl2
 r1opt
 ror1a
 ror1f
@@ -31852,6 +31920,7 @@ r1pil
 r1pinn
 r1pj
 r1plag
+rpl2
 r1plan.
 r1planan
 r1plan2a2r.
@@ -31919,7 +31988,7 @@ r1renn
 r1rense
 r1rensi
 r1repe
-rre1pl
+rre1pl2
 rre1ru
 rre1sk
 rre1so
@@ -32235,7 +32304,7 @@ r1spes
 r1spin
 r1spio
 r1spir
-rs1pl
+rs1pl2
 r1spor
 rs1pos
 rs1pot
@@ -32515,7 +32584,7 @@ r1tona
 r1tone
 rt1oper
 rt1oppd
-rt1oppl
+rt1oppl2
 rt1oppt
 rt1ord
 rt1ori
@@ -32836,7 +32905,7 @@ ry1lek
 ry1ma
 ry1me
 ryp1i
-ry1pl
+ry1pl2
 ry1pr
 ry1ro
 ry1ru
@@ -32927,7 +32996,7 @@ rål1f
 rå1lo
 rål1t
 rå1ly
-rå1pl
+rå1pl2
 r1åra
 r1års.
 r1årstall.
@@ -33315,6 +33384,7 @@ s1eieres
 s1eierforbundets
 seier1fo
 seier1forb
+seier1forbu
 s1eiern
 s1eiet
 sei1f
@@ -33624,7 +33694,7 @@ se1sol
 ses1op
 ses1or
 se1spi
-ses1pl
+ses1pl2
 ses1pol
 ses1pri
 se1spø
@@ -33734,6 +33804,7 @@ s1flu
 sfly1stasjon.
 s1fol
 s1fon
+s1forb
 s1fore
 sfor1kv
 s1fors
@@ -34442,7 +34513,7 @@ sle1ner
 1slengy
 1sle1pa
 1slepi
-sle1pl
+sle1pl2
 1sleppsprognosan
 slepps1pro
 1slepy
@@ -34567,7 +34638,7 @@ s1mau
 1smedforbunds
 smed1f
 smed1fo
-smed1forb
+smed1forbu
 s1medi
 s1medl
 1smedy
@@ -34770,7 +34841,7 @@ s1oppb
 1s2oppe
 s1oppg
 s1opph
-s1oppl
+s1oppl2
 s1oppn
 s1oppr
 so1pro
@@ -34893,7 +34964,7 @@ spiller1p
 1spilleryy
 1spilles
 1spillingsx
-1spillpl
+1spillpl2
 spill1p
 1spilly
 spinn1s
@@ -34907,6 +34978,7 @@ spis1k
 1spissy
 1spj
 s1plan.
+spl2
 s1plana
 s1plane
 splan1ko
@@ -35084,7 +35156,7 @@ ss1elv.
 sse1læ
 sse1lø
 ss1enh
-sse1pl
+sse1pl2
 sse1ro
 sse1rul
 sse1sa
@@ -35190,6 +35262,7 @@ ss1ope
 ss1opt
 ss1pas
 ss1pla
+sspl2
 ss1ple
 s1spor
 ss1pres
@@ -35582,7 +35655,7 @@ st2oppe
 1stoppern
 1stoppery
 st1oppg
-st1oppl
+st1oppl2
 1stort
 st1os
 st1ou
@@ -36194,7 +36267,7 @@ ta1o
 1tapen
 1tapet
 1tapey
-ta1pl
+ta1pl2
 ta1pol
 1tapp.
 1tappi
@@ -36750,6 +36823,10 @@ tenn1s
 te1not
 ten1ov
 ten1r
+tenriks1de1p
+tenriks1de
+tenriksdepar1
+tenriksdeparte1
 tens1aker
 ten1sal
 ten1sat
@@ -36783,7 +36860,7 @@ te1pet
 te1pik
 te1pil
 te1pin
-te1pl
+te1pl2
 te1po
 1teppa
 te1pra
@@ -36805,6 +36882,7 @@ ter1at.
 ter1b
 terbo1plassen.
 ter1bop
+terbopl2
 ter1de
 ter1di
 ter1do
@@ -37217,7 +37295,7 @@ tids1ma
 1tidspensjonere.
 tids1pe
 tids1pen
-tids1pl
+tids1pl2
 1tidspu
 tids1t
 1tidsyy
@@ -37403,6 +37481,7 @@ tison1
 tis1or
 ti1sos
 tis1pla
+tispl2
 tis1st
 tis1tur
 ti1sty
@@ -37755,13 +37834,14 @@ to1nu
 to1ny
 to1o
 to1pap
-to1pl
+to1pl2
 t1opn
 to1pos
 topp1da
 topp1de
 topp1kj
 topp1løse
+toppl2
 topp1løst
 topp1ma
 topp1me
@@ -37825,7 +37905,7 @@ tor1nø
 tor1op
 tor1or
 tor1ov
-tor1pl
+tor1pl2
 tor1po
 tor1re
 tor1rå
@@ -37896,6 +37976,7 @@ t1pau
 t1pe
 t1pis
 t1pleia
+tpl2
 t1pleie.
 t1pleien
 t1pli
@@ -37995,6 +38076,7 @@ t1rens
 t1renta
 t1repe
 tre1pla
+trepl2
 t1repres
 tre1pro
 t1repu
@@ -38048,7 +38130,9 @@ tri1ska
 tri1sko
 tri1sku
 tri1sp
-tri1st
+tri1sta
+tri1ste
+tri1str
 tri1to
 tri1var
 tri1vek
@@ -38179,7 +38263,6 @@ t1seir
 t1sekk
 t1sekr
 ts1ela
-ts1eli
 ts1enh
 ts1enk
 t1sente
@@ -38344,6 +38427,7 @@ t1spet
 t1spin
 t1spis
 ts1pla
+tspl2
 ts1pol
 ts1pos
 ts1pot
@@ -38551,7 +38635,7 @@ tteri1v
 tter1ka
 tter1lan
 tter1pa
-tter1pl
+tter1pl2
 tter1u
 tter1ø
 tte1sa
@@ -38671,7 +38755,7 @@ tt1ove2r.
 tt1pak
 tt1pan
 tt1pi
-tt1pl
+tt1pl2
 tt1pr
 tt1ram
 t1tran
@@ -38704,6 +38788,7 @@ tt1sed
 tt1seie
 tts1ele
 tt1selg
+tts1eli
 tt1selj
 tt1sels
 tt1serv
@@ -38736,6 +38821,7 @@ tts1per
 tt1spill.
 tt1spille
 tts1pli
+ttspl2
 tts1pro
 tt1spø
 tts1r
@@ -39013,7 +39099,7 @@ tål1v
 t1ånda
 t1ånde
 tå1ne
-tå1pl
+tå1pl2
 t1åpn
 t1året
 t1åri
@@ -39245,7 +39331,7 @@ ue1sko
 ue1sla
 ues1li
 ue1sme
-ues1pl
+ues1pl2
 ues1s
 ue1sta
 ue1ste
@@ -39498,7 +39584,7 @@ ull1far
 ull1iv
 ull1men
 ull1op
-ull1pl
+ull1pl2
 ull1ska
 ull1skr
 ull1sle
@@ -39598,6 +39684,7 @@ um1ok
 um1om
 um1ord
 um1pla
+umpl2
 um1pli
 um1pol
 um1pr
@@ -39783,12 +39870,14 @@ up1fr
 up1fø
 up1h
 up1lø
+upl2
 up1m
 upne1
 up1op
 uppe1la
 upp1f
 upp1li
+uppl2
 upp1s
 up1ru
 ups1en
@@ -39939,7 +40028,7 @@ uro1st
 uro1vi
 ur1pa
 ur1pi
-ur1pl
+ur1pl2
 ur1po
 ur1pr
 ur1på
@@ -40142,7 +40231,7 @@ u1sovere
 us1pa
 us1per
 u1spi
-us1pl
+us1pl2
 us1po
 us1pr
 us1pu
@@ -40291,6 +40380,7 @@ ut1rå
 ut1sam
 1utseg
 ut1sei
+utse1l
 ut1ses
 ut1sil
 ut1sin
@@ -40406,7 +40496,7 @@ vall1s
 vall1t
 val1med
 val1o
-val1pl
+val1pl2
 val1sak
 val1sam
 val1sj
@@ -40776,7 +40866,7 @@ vel1me
 ve1lok
 vel1or
 ve1lot
-vel1pl
+vel1pl2
 vel1set
 vel1skr
 vel1sm
@@ -40815,7 +40905,7 @@ ve1o
 ve1pa
 ve1pel
 ve1pi
-ve1pl
+ve1pl2
 ve1pr
 ve1pu
 ver1ak
@@ -40888,7 +40978,7 @@ vern1ut
 vern1utv
 1verny
 ver1pa
-ver1pl
+ver1pl2
 ver1po
 ver1reg
 ver1ren
@@ -41421,7 +41511,7 @@ vn1si
 vn1sj
 vns1m
 vns1pa
-vns1pl
+vns1pl2
 vn1spu
 vn1sva
 vn1ta
@@ -41475,6 +41565,7 @@ v1pa
 v1pe
 v1pi
 v1ple
+vpl2
 v1plu
 v1po
 v1pre
@@ -41644,7 +41735,7 @@ v1spillinga
 v1spillinge
 v1spilt
 v1spis
-vs1pl
+vs1pl2
 vs1pol
 vs1pri
 vs1pro
@@ -41884,7 +41975,7 @@ vå1m
 1våpene
 1våpens.
 1våpeny
-vå1pl
+vå1pl2
 vår1d
 vår1n
 v1års.
@@ -42045,7 +42136,7 @@ yd1l
 yd1m
 yd1op
 y1dot
-yd1pl
+yd1pl2
 yd1pr
 yd1rem
 yd1sau
@@ -42377,7 +42468,7 @@ yn1sod
 yns1op
 yns1or
 yns1pa
-yns1pl
+yns1pl2
 yns1pr
 yns1t
 yns1u
@@ -42415,6 +42506,7 @@ yp1g
 yp1hu
 y1pist
 y1plan.
+ypl2
 y1plana
 y1planen
 y1planer
@@ -42474,7 +42566,7 @@ yre1man
 yre1me
 y1rems
 yre1pe
-yre1pl
+yre1pl2
 yre1pr
 yre1ret
 yre1ro
@@ -42665,7 +42757,7 @@ yss1l
 yss1me
 ys1smø
 yss1pe
-yss1pl
+yss1pl2
 yss1pre
 yss1ta
 ys1ste
@@ -43128,7 +43220,7 @@ zz1le
 øde1kv
 øde1la
 øde1o
-øde1pl
+øde1pl2
 øde1ri
 øde1ro
 øde1sk
@@ -43394,7 +43486,7 @@ zz1le
 ø1lose
 ø1lov.
 ø1love
-øl1pl
+øl1pl2
 øl1r
 øl1råde1
 øls1d
@@ -43734,7 +43826,7 @@ zz1le
 ør1or
 ør1ov
 ør1pi
-ør1pl
+ør1pl2
 ør1po
 ør1pr
 ør1rad
@@ -44032,7 +44124,7 @@ zz1le
 øy1må
 øy1o
 øy1pis
-øy1pl
+øy1pl2
 øy1po
 øy1pr
 øy1ram
@@ -44501,6 +44593,7 @@ zz1le
 å1piken
 å1piker
 åp1lø
+åpl2
 å1po
 åp1p
 å1pr
@@ -44680,7 +44773,7 @@ zz1le
 å1sona
 å1sonen
 å1soner
-ås1pl
+ås1pl2
 ås1si
 åss1k
 å1stene
@@ -45104,7 +45197,6 @@ zz1le
 .bestik9knivens./kk=k,6,2
 .bif9forbruk./ff=f,3,2
 .1biff
-.bif1forb
 .bif9forbruket./ff=f,3,2
 .bif9forbrukets./ff=f,3,2
 .bilcros9stevne./ss=s,7,2
@@ -45120,6 +45212,8 @@ zz1le
 .billet9tallets./tt=t,6,2
 .billet9telefon./tt=t,6,2
 .billet1telef
+.billettele1fo
+.billette1lefon
 .billet9telefonen./tt=t,6,2
 .billet9telefonene./tt=t,6,2
 .billet9telefonens./tt=t,6,2
@@ -45199,7 +45293,7 @@ zz1le
 .blok9katten./kk=k,4,2
 .blok9kattens./kk=k,4,2
 .blok9kompleks./kk=k,4,2
-.blok1kompl
+.blok1kompl2
 .blok9kompleksene./kk=k,4,2
 .blok9komplekse2r./kk=k,4,2
 .blok9komplekset./kk=k,4,2
@@ -45277,6 +45371,7 @@ zz1le
 .boligskat9tilhengerne./tt=t,9,2
 .boligskat9tilhengernes./tt=t,9,2
 .boplas9spo2r./ss=s,6,2
+.bopl2
 .boplass1p
 .boplas1spor
 .boplas9sporene./ss=s,6,2
@@ -45326,7 +45421,6 @@ zz1le
 .bren9nesleyyyy./nn=n,4,2
 .brennstof9forbruk./ff=f,9,2
 .brennstoff1o
-.brennstof1forb
 .brennstof9forbruket./ff=f,9,2
 .brennstof9forbrukets./ff=f,9,2
 .budsjet9tak./tt=t,7,2
@@ -45471,7 +45565,7 @@ zz1le
 .bus9snikingen./ss=s,3,2
 .bus9snikingens./ss=s,3,2
 .bus9snuplass./ss=s,3,2
-.bussnu1pl
+.bussnu1pl2
 .bus9snuplassen./ss=s,3,2
 .bus9snuplassens./ss=s,3,2
 .bus9standard./ss=s,3,2
@@ -45556,7 +45650,7 @@ zz1le
 .butikk1l
 .butik9klare./kk=k,5,2
 .butik9kompleks./kk=k,5,2
-.butik1kompl
+.butik1kompl2
 .butik9komplekset./kk=k,5,2
 .butik9kompleksets./kk=k,5,2
 .butik9konsept./kk=k,5,2
@@ -45678,7 +45772,6 @@ zz1le
 .dres9stoffets./ss=s,4,2
 .drivstof9forbrenning./ff=f,8,2
 .drivstoff1o
-.drivstof1forb
 .drivstof9forbrenningen./ff=f,8,2
 .drivstof9forbrenningens./ff=f,8,2
 .drivstof9forbruk./ff=f,8,2
@@ -45783,7 +45876,7 @@ zz1le
 .etik9kurset./kk=k,4,2
 .etik9kursets./kk=k,4,2
 .fabrik9kompleks./kk=k,6,2
-.fabrik1kompl
+.fabrik1kompl2
 .fabrik9komplekset./kk=k,6,2
 .fabrik9kompleksets./kk=k,6,2
 .fal9lem./ll=l,3,2
@@ -46119,7 +46212,7 @@ zz1le
 .fotbal9løkke2r./ll=l,6,2
 .fotsop9plagede./pp=p,6,2
 .fot1sop
-.fots1oppl
+.fots1oppl2
 .fotsop9plaget./pp=p,6,2
 .frit9talende./tt=t,4,2
 .frit9tenkende./tt=t,4,2
@@ -46139,6 +46232,7 @@ zz1le
 .ful9lastede./ll=l,3,2
 .ful9lastet./ll=l,3,2
 .fyllplas9sjef./ss=s,8,2
+.fyllpl2
 .fyllplas9sjefen./ss=s,8,2
 .fyllplas9sjefens./ss=s,8,2
 .fysik9karakte2r./kk=k,5,2
@@ -46280,6 +46374,7 @@ zz1le
 .glas9splint./ss=s,4,2
 .glass1p
 .glas1splin
+.glasspl2
 .glas9splinten./ss=s,4,2
 .glas9splintene./ss=s,4,2
 .glas9splintens./ss=s,4,2
@@ -46548,6 +46643,7 @@ zz1le
 .hof9fotograferingen./ff=f,3,2
 .hof9fotograferingens./ff=f,3,2
 .holdeplas9skilt./ss=s,9,2
+.holdepl2
 .holde1plassk
 .holdeplas9skiltet./ss=s,9,2
 .holdeplas9skiltets./ss=s,9,2
@@ -46620,6 +46716,7 @@ zz1le
 .hovedflyplas9sak./ss=s,12,2
 .hoved1fl
 .hoved1flyp
+.hovedflypl2
 .hovedflyplas9saken./ss=s,12,2
 .hovedflyplas9sakens./ss=s,12,2
 .husstel9linje./ll=l,7,2
@@ -46716,6 +46813,8 @@ zz1le
 .internet9teknologiens./tt=t,8,2
 .internet9telefon./tt=t,8,2
 .internet1telef
+.internettele1fo
+.internette1lefon
 .internet9telefonen./tt=t,8,2
 .internet9telefonens./tt=t,8,2
 .internet9tilbud./tt=t,8,2
@@ -47262,7 +47361,7 @@ zz1le
 .kul9lagrene./ll=l,3,2
 .kul1lagr
 .kup9plan./pp=p,3,2
-.kupp1l
+.kupp1l2
 .kup9planen./pp=p,3,2
 .kup9planene./pp=p,3,2
 .kup9planens./pp=p,3,2
@@ -47615,6 +47714,7 @@ zz1le
 .musik9korpsforbund./kk=k,5,2
 .musikkorps1fo
 .musikkorps1forb
+.musikkorps1forbu
 .musik9korpsforbunda./kk=k,5,2
 .musik9korpsforbundet./kk=k,5,2
 .musik9korpsyyyy./kk=k,5,2
@@ -47801,6 +47901,7 @@ zz1le
 .net1trafikke
 .net9trafikkens./tt=t,3,2
 .nordkap9platået./pp=p,7,2
+.nordkappl2
 .nul9løsning./ll=l,3,2
 .null1ø
 .nul9løsningen./ll=l,3,2
@@ -47902,6 +48003,7 @@ zz1le
 .panik9knappen./kk=k,5,2
 .panik9knappens./kk=k,5,2
 .pap9plakat./pp=p,3,2
+.pappl2
 .pap1plak
 .pap9plakaten./pp=p,3,2
 .pap9plakatene./pp=p,3,2
@@ -48057,7 +48159,7 @@ zz1le
 .prik9kommandoens./kk=k,4,2
 .prik9kommandoe2r./kk=k,4,2
 .prinsip9plan./pp=p,7,2
-.prinsipp1l
+.prinsipp1l2
 .prinsip9planen./pp=p,7,2
 .prinsip9planens./pp=p,7,2
 .prinsip9program./pp=p,7,2
@@ -48107,7 +48209,7 @@ zz1le
 .prof9fiaskoens./ff=f,4,2
 .prof9forbud./ff=f,4,2
 .proff1o
-.prof1forb
+.prof1forbu
 .prof9forbudet./ff=f,4,2
 .prof9forbudets./ff=f,4,2
 .prof9forbund./ff=f,4,2
@@ -48220,6 +48322,7 @@ zz1le
 .raudekros9systrene./ss=s,9,2
 .raudekros9systre2r./ss=s,9,2
 .replik9kunst./kk=k,6,2
+.repl2
 .replikk1un
 .replik1kuns2
 .replik9kunsta./kk=k,6,2
@@ -48271,7 +48374,6 @@ zz1le
 .råstof9fabrikkens./ff=f,6,2
 .råstof9forbruk./ff=f,6,2
 .råstoff1o
-.råstof1forb
 .råstof9forbruket./ff=f,6,2
 .råstof9forbrukets./ff=f,6,2
 .råstof9forskrift./ff=f,6,2
@@ -48305,6 +48407,8 @@ zz1le
 .satellit9teknologiens./tt=t,8,2
 .satellit9telefon./tt=t,8,2
 .satellit1telef
+.satellittele1fo
+.satellitte1lefon
 .satellit9telefonen./tt=t,8,2
 .satellit9telefonene./tt=t,8,2
 .satellit9telefonens./tt=t,8,2
@@ -48545,7 +48649,7 @@ zz1le
 .1snøg
 .snøg1gåa
 .sop9plukke2r./pp=p,3,2
-.s1oppl
+.s1oppl2
 .sopp1lu
 .sop9plukkere./pp=p,3,2
 .sop9plukkeren./pp=p,3,2
@@ -48646,7 +48750,6 @@ zz1le
 .stik9kontrolle2r./kk=k,4,2
 .stof9forbruk./ff=f,4,2
 .stoff1o
-.stof1forb
 .stof9forbruket./ff=f,4,2
 .stof9forbrukets./ff=f,4,2
 .stof9fri./ff=f,4,2
@@ -48829,6 +48932,8 @@ zz1le
 .tarif9forslagets./ff=f,5,2
 .telefonkontrol9lov./ll=l,14,2
 .1telef
+.tele1fo
+.te1lefon
 .telefon1k
 .telefon1ko
 .telefonkontrol9lova./ll=l,14,2
