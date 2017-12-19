@@ -224,6 +224,14 @@
         </executions>
       </plugin>
       <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>HyphenationTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.vafer</groupId>
         <artifactId>jdeb</artifactId>
         <version>1.0</version>
