@@ -112,6 +112,9 @@
         </p:with-option>
     </px:epub3-to-pef.load>
     
+    <!--
+        FIXME: pre-processing-epub.xsl is not used
+    -->
     <px:epub3-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css"
                              name="convert">
         <p:with-option name="epub" select="$epub"/>

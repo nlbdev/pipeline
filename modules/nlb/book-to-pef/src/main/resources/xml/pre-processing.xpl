@@ -31,16 +31,6 @@
         </p:input>
     </p:xslt>
     
-    <px:message message="Inserting boilerplate text" severity="DEBUG"/>
-    <p:xslt>
-        <p:input port="parameters">
-            <p:pipe step="main" port="parameters"/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="insert-boilerplate.xsl"/>
-        </p:input>
-    </p:xslt>
-    
     <px:message message="Finished running NLB-specific pre-processing steps" severity="DEBUG"/>
     
 </p:declare-step>
