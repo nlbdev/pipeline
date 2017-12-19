@@ -1068,6 +1068,50 @@
         </x:scenario>
     </x:scenario>
     
+    <x:scenario label="No headings, no TOC">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="uid"/>
+                            <meta name="dc:Creator" content="author"/>
+                            <meta name="dc:Title" content="title"/>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <p>h1-1 short</p>
+                                    <level2>
+                                        <p>h2-1</p>
+                                        <level3>
+                                            <p>h3-1</p>
+                                        </level3>
+                                        <level3>
+                                            <p>h3-2</p>
+                                        </level3>
+                                    </level2>
+                                    <level2>
+                                        <p>h2-2</p>
+                                    </level2>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="toc-depth" select="1"/>
+            <x:option name="pef-output-dir" select="resolve-uri('toc/6/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('toc/6/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('toc/6/temp-dir',$temp-dir)"/>
+        </x:call>
+            
+        <x:context label="the first page containing 'Innhold'">
+            <x:document type="file" base-uri="temp-dir" href="toc/6/pef-output-dir/book.pef" select="(//pef:page[contains(string-join(.//text(),''),'⠠⠊⠝⠝⠓⠕⠇⠙')])[1]"/>
+        </x:context>
+        <x:expect label="there should not be a TOC" type="count" max="0"/>
+    </x:scenario>
+    
     <x:scenario label="pef-sections">
         <x:call step="nlb:dtbook-to-pef"/>
         
