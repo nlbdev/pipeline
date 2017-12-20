@@ -796,14 +796,6 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                         -obfl-use-when-collection-not-empty: endnotes;
                 }
                 
-        } @else if ($notes-placement == 'end-of-volume') {
-                book, html {
-                        &:has(noteref, a[epub|type~='noteref'])::alternate {
-                               @include endnotes-title;
-                               flow: endnotes-title;
-                        }
-                }
-                
         } @else if ($notes-placement == 'end-of-book') {
                 book, html {
                         &:has(noteref, a[epub|type~='noteref'])::after {
@@ -817,6 +809,12 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                 }
         }
         @if ($notes-placement == 'bottom-of-page' or $notes-placement == 'end-of-volume') {
+                book, html {
+                        &:has(noteref, a[epub|type~='noteref'])::alternate {
+                               @include endnotes-title;
+                               flow: endnotes-title;
+                        }
+                }
                 @volume {
                         @end {
                                 content: flow(endnotes-title) flow(endnotes, volume);

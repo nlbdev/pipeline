@@ -598,6 +598,121 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="Notes fallback mechanism">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <h1>abc</h1>
+                                    <p>aa <noteref id="noteref_1" idref="#note001">*</noteref> ll</p>
+                                    <p>bb <noteref id="noteref_2" idref="#note002">*</noteref> ll</p>
+                                    <p>cc <noteref id="noteref_3" idref="#note003">*</noteref> ll</p>
+                                </level1>
+                            </bodymatter>
+                            <rearmatter>
+                                <level1 class="footnotes">
+                                    <h1>notes</h1>
+                                    <note id="note001"> <p>* aaa aaa</p> </note>
+                                    <note id="note002"> <p>* rrr bbb</p> </note>
+                                    <note id="note003">
+                                       <p>* lll lll lll lll lll lll lll lll lll lll lll lll
+                                       lll lll lll lll lll lll lll lll lll lll lll lll lll
+                                       lll lll lll lll lll lll lll lll lll lll lll lll lll
+                                       lll lll lll lll lll lll lll lll lll lll lll lll lll
+                                       lll lll lll lll lll lll lll lll lll lll lll lll lll
+                                       lll lll lll lll lll lll lll lll lll lll lll lll lll
+                                       lll lll lll lll lll lll lll lll lll lll lll lll lll</p>
+                                    </note>
+                                </level1>
+                            </rearmatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="notes-placement" select="'bottom-of-page'"/>
+            <x:option name="pef-output-dir" select="resolve-uri('notes-fallback/pef-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('notes-fallback/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="notes-fallback/pef-output-dir/test_dtbook-to-pef_notes.pef"
+                        select="//pef:section[position() &gt; 1]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+           <x:document type="inline" select="/*/*">
+              <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                 <section>
+                    <page>
+                       <row/>
+                       <row/>
+                       <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
+                       <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                       <row/>
+                       <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠃⠃⠀⠠⠼⠃⠀⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                 </section>
+                 <section>
+                    <page>
+                       <row/>
+                       <row/>
+                       <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
+                       <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                       <row/>
+                       <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                       <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
+                       <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row/>
+                       <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                 </section>
+              </_>
+           </x:document>
+        </x:expect>
+     </x:scenario>
+    
     <x:scenario label="test for text describing placement of notes in generated content ('om boka')">
         <x:call step="nlb:dtbook-to-pef"/>
         
