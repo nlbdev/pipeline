@@ -409,4 +409,10 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		testPEF("resource-files/dp2/break-before-sheet-input.obfl",
 		        "resource-files/dp2/break-before-sheet-expected.pef", false);
 	}
+	@Ignore // see https://github.com/brailleapps/dotify.formatter.impl/issues/39
+	@Test
+	public void testIssue39() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/issue-39-input.obfl",
+		        "resource-files/dp2/issue-39-expected.pef", true);
+	}
 }

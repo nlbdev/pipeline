@@ -43,14 +43,23 @@ pagenum, *[epub|type~='pagebreak'] {
         }*/
         bodymatter pagenum,
         rearmatter pagenum {
-                string-set: print-page "⠿" content();
+                string-set: print-page content()
+                            print-page-break-indicator "⠿";
+                &::after {
+                        string-set: print-page-break-indicator "";
+                }
         }
         [epub|type~='pagebreak'] {
                 &[title] {
-                        string-set: print-page "⠿" attr(title);
+                        string-set: print-page attr(title)
+                                    print-page-break-indicator "⠿";
                 }
                 &:not([title]) {
-                        string-set: print-page "⠿" content();
+                        string-set: print-page content()
+                                    print-page-break-indicator "⠿";
+                }
+                &::after {
+                        string-set: print-page-break-indicator "";
                 }
         }
         [epub|type~='frontmatter'] [epub|type~='pagebreak'] {
@@ -76,10 +85,11 @@ pagenum, *[epub|type~='pagebreak'] {
 @page body {
         @if $show-print-page-numbers {
                 @bottom-right {
-                        content: string(print-page, last);
+                        content: string(print-page-break-indicator, first)
+                                 string(print-page, last);
                 }
                 @left {
-                    content: -obfl-marker-indicator(pagenum, '⠿');
+                        content: -obfl-marker-indicator(pagenum, '⠿');
                 }
         }
 
