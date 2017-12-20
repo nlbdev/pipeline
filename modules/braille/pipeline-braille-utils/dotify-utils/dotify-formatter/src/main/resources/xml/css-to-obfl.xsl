@@ -677,7 +677,8 @@
     
     <xsl:template mode="block-attr span-attr td-attr table-attr toc-entry-attr assert-nil-attr"
                   match="css:box/@name|
-                         css:box/css:_/@name"/>
+                         css:box/css:_/@name|
+                         css:_/css:_/@name"/>
     
     <!-- =========== -->
     <!-- Block boxes -->
@@ -793,7 +794,7 @@
                       select="$first-inline/@css:string-set|
                               $first-inline/css:_[not(preceding-sibling::*) and
                                                   not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
-                                           /@css:string-set"/>
+                                           //@css:string-set"/>
         <xsl:choose>
             <xsl:when test="$string-set-on-first-inline
                             and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:padding-top
@@ -819,7 +820,7 @@
                       select="$first-inline/@css:string-set|
                               $first-inline/css:_[not(preceding-sibling::*) and
                                                   not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
-                                           /@css:string-set"/>
+                                           //@css:string-set"/>
         <xsl:choose>
             <xsl:when test="$string-set-on-first-inline
                             and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:padding-top
@@ -1177,7 +1178,8 @@
     <!-- ===================== -->
     
     <xsl:template mode="block span td table toc-entry"
-                  match="css:box/css:_">
+                  match="css:box/css:_|
+                         css:_/css:_">
         <xsl:apply-templates mode="assert-nil-attr" select="@* except (@css:id|@css:string-set|@css:_obfl-marker)"/>
         <xsl:apply-templates mode="marker" select="@css:string-set|@css:_obfl-marker"/>
         <xsl:apply-templates mode="#current"/>
@@ -1186,7 +1188,7 @@
     
     <xsl:template priority="2"
                   mode="block span toc-entry"
-                  match="css:box/css:_/node()">
+                  match="css:_/text()">
         <xsl:call-template name="coding-error"/>
     </xsl:template>
     
@@ -1914,11 +1916,11 @@
     
     <xsl:template priority="0.6"
                   mode="marker"
-                  match="css:box[@type='block']/css:box[@type='inline'][1]/@css:string-set|
-                         css:box[@type='block']/css:box[@type='inline'][1]
+                  match="css:box[@type='block']/css:box[@type='inline'][not(preceding-sibling::css:box)]/@css:string-set|
+                         css:box[@type='block']/css:box[@type='inline'][not(preceding-sibling::css:box)]
                          /css:_[not(preceding-sibling::*) and
                                 not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
-                         /@css:string-set">
+                         //@css:string-set">
         <block>
             <xsl:next-match/>
         </block>
@@ -1926,7 +1928,8 @@
     
     <xsl:template mode="marker"
                   match="css:box[@type='inline']/@css:string-set|
-                         css:box[@type='inline']/css:_/@css:string-set">
+                         css:box[@type='inline']/css:_/@css:string-set|
+                         css:_/css:_/@css:string-set">
         <xsl:for-each select="css:parse-string-set(.)">
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
@@ -1944,7 +1947,8 @@
     
     <xsl:template mode="marker"
                   match="css:box/@css:_obfl-marker|
-                         css:box/css:_/@css:_obfl-marker">
+                         css:box/css:_/@css:_obfl-marker|
+                         css:_/css:_/@css:_obfl-marker">
         <xsl:for-each select="tokenize(.,' ')">
             <marker class="indicator/{.}" value="x"/>
         </xsl:for-each>
@@ -2105,7 +2109,8 @@
     <xsl:template priority="-10"
                   mode="#default sequence item table-of-contents block span table tr td toc-entry assert-nil
                         sequence-attr item-attr table-of-contents-attr block-attr span-attr
-                        table-attr tr-attr td-attr toc-entry-attr assert-nil-attr"
+                        table-attr tr-attr td-attr toc-entry-attr assert-nil-attr
+                        marker"
                   match="@*|node()">
         <xsl:call-template name="coding-error"/>
     </xsl:template>
@@ -2165,6 +2170,7 @@
     <xsl:template match="pxi:print-mode" mode="td-attr">td-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="toc-entry-attr">toc-entry-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="assert-nil-attr">assert-nil-attr</xsl:template>
+    <xsl:template match="pxi:print-mode" mode="marker">marker</xsl:template>
     <xsl:template match="pxi:print-mode" mode="#all" priority="-1">?</xsl:template>
     
     <!-- =========== -->
