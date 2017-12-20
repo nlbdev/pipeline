@@ -207,6 +207,7 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
             <h2 px:role="name">Forhåndsvisning</h2>
         </p:documentation>
     </p:option>
+    <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Midlertidige filer</h2>

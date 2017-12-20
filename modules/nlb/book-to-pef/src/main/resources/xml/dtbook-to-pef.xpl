@@ -75,6 +75,7 @@
     <p:option name="toc-depth"/>
     <p:option name="pef-output-dir"/>
     <p:option name="preview-output-dir"/>
+    <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
     
     <!-- for testing purposes -->
@@ -103,6 +104,7 @@
                                            maximum-number-of-pages
                                            pef-output-dir
                                            preview-output-dir
+                                           obfl-output-dir
                                            temp-dir"/>
     <p:identity name="parameters"/>
     <p:sink/>
@@ -166,6 +168,7 @@
                         </p:input>
                         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
                         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+                        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
                     </px:dtbook-to-pef.store>
                 </p:when>
                 <p:otherwise>
