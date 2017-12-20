@@ -785,6 +785,7 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
                         @footnotes {
                                 content: flow(footnotes);
                                 max-height: 15;
+                                border-top: ⠤;
                                 -obfl-fallback-collection: endnotes;
                         }
                 }
