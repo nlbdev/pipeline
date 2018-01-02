@@ -6,6 +6,8 @@
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xslt"
                stylesheet="../../main/resources/xml/insert-boilerplate.xsl">
     
+    <x:param name="datetime" select="xs:dateTime('2017-12-01T10:01:02.123+01:00')"/>
+    
     <x:scenario label="DTBook: Basic usage">
         <x:context>
             <book xmlns="http://www.daisy.org/z3986/2005/dtbook/"/>

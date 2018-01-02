@@ -14,6 +14,7 @@
     <xsl:param name="notes-placement" select="''"/>
     <xsl:param name="page-width" select="'32'"/>
     <xsl:param name="page-height" select="'28'"/>
+    <xsl:param name="datetime" select="current-dateTime()"/>
     
     <xsl:variable name="contraction-grade" select="replace($braille-standard, '.*\(grade:(.*)\).*', '$1')"/>
     <xsl:variable name="line-width" select="xs:integer($page-width) - 6"/>
@@ -273,7 +274,7 @@
             </xsl:for-each>
 
             <xsl:call-template name="row">
-                <xsl:with-param name="content" select="concat('NLB - ',format-dateTime(current-dateTime(), '[Y]'))"/>
+                <xsl:with-param name="content" select="concat('NLB - ',format-dateTime($datetime, '[Y]'))"/>
                 <xsl:with-param name="namespace-uri" select="$namespace-uri"/>
             </xsl:call-template>
             
