@@ -845,7 +845,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="print page numbers enabled (marks in left margin and page footer)">
+    <x:scenario label="print page numbers enabled (marks in left margin and page footer)" pending="https://github.com/nlbdev/pipeline/issues/165">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -916,7 +916,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="print page numbers enabled; some braille pages without marks">
+    <x:scenario label="print page numbers enabled; some braille pages without marks" pending="https://github.com/nlbdev/pipeline/issues/165">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
