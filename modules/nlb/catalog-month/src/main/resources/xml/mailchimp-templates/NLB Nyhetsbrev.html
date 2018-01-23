@@ -1,13 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>*|MC:SUBJECT|*</title>
-<style type="text/css">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>*|MC:SUBJECT|*</title>
+    
+  <style type="text/css">
 		#outlook a{
 			padding:0;
 		}
-		body{
+		body,#backgroundTable{
 			width:100% !important;
 		}
 		.ReadMsgBody{
@@ -16,14 +17,22 @@
 		.ExternalClass{
 			width:100%;
 		}
-		body{
+		body,#backgroundTable{
 			-webkit-text-size-adjust:none;
 		}
-		body{
+		body,#backgroundTable{
 			margin:0;
 			padding:0;
 		}
-		img{
+		body,#backgroundTable{
+			font-size:16px;
+		}
+	@media only screen and (max-width: 480px){
+		body,#backgroundTable{
+			font-size:32px !important;
+		}
+
+}		img{
 			border:0;
 			height:auto;
 			line-height:100%;
@@ -54,7 +63,7 @@
 	@tip Set the border for your email.
 	*/
 		#templateContainer{
-			/*@editable*/border:0px none #E3E4E6;
+			/*@editable*/border:0 none #E3E4E6;
 		}
 	/*
 	@tab Page
@@ -66,7 +75,7 @@
 			/*@editable*/color:#202020;
 			display:inline;
 			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:40px;
+			font-size:2.5em;
 			/*@editable*/font-weight:bold;
 			/*@editable*/line-height:normal;
 			margin-top:2%;
@@ -85,7 +94,7 @@
 			/*@editable*/color:#404040;
 			display:block;
 			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:18px;
+			font-size:1.125em;
 			/*@editable*/font-weight:bold;
 			/*@editable*/line-height:100%;
 			margin-top:2%;
@@ -131,7 +140,7 @@
 		.preheaderContent div{
 			/*@editable*/color:#FFFFFF;
 			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:10px;
+			/*@editable*/font-size:.625em;
 			/*@editable*/line-height:100%;
 			/*@editable*/text-align:left;
 		}
@@ -171,7 +180,7 @@
 		.headerContent{
 			/*@editable*/color:#FFFFFF;
 			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:34px;
+			/*@editable*/font-size:2.125em;
 			/*@editable*/font-weight:bold;
 			/*@editable*/line-height:100%;
 			/*@editable*/text-align:left;
@@ -208,7 +217,7 @@
 		.bodyContent div{
 			/*@editable*/color:#000000;
 			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:14px;
+			/*@editable*/font-size:1em;
 			/*@editable*/line-height:150%;
 			/*@editable*/text-align:justify;
 		}
@@ -250,7 +259,7 @@
 		.sidebarContent div{
 			/*@editable*/color:#000000;
 			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:10px;
+			/*@editable*/font-size:.625em;
 			/*@editable*/line-height:150%;
 			/*@editable*/text-align:left;
 		}
@@ -287,7 +296,7 @@
 		.footerContent div{
 			/*@editable*/color:#FFFFFF;
 			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:11px;
+			/*@editable*/font-size:.825em;
 			/*@editable*/line-height:125%;
 			/*@editable*/text-align:left;
 		}
@@ -377,142 +386,143 @@
 			font-size:1.65em;
 		}
 </style></head>
-<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
-<center>
-<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable" datatable="0" role="presentation">
-<tr>
-<td align="center" valign="top">
-<!-- // Begin Template Preheader \\ -->
-<table border="0" cellpadding="10" cellspacing="0" width="600" id="templatePreheader" datatable="0" role="presentation">
-<tr>
-<td valign="top" class="preheaderContent">
-<!-- // Begin Module: Standard Preheader \ -->
-<table border="0" cellpadding="10" cellspacing="0" width="100%" datatable="0" role="presentation">
-<tr>
-<td valign="top">
-<div mc:edit="teaser">Velkommen til NLBs nyhetsbrev</div>
-</td>
-<!-- *|IFNOT:ARCHIVE_PAGE|* -->
-<td valign="top" width="170">
-<div mc:edit="std_preheader_links">Vises ikke e-posten riktig?<br>
-<a href="*|ARCHIVE|*" target="_blank">åpne den i nettleseren</a>.</div>
-</td>
-<!-- *|END:IF|* -->
-</tr>
-</table>
-<!-- // End Module: Standard Preheader \ -->
-</td>
-</tr>
-</table>
-<!-- // End Template Preheader \\ -->
-<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer" datatable="0" role="presentation">
-<tr style="background-color:black;">
-<td align="center" valign="top">
-<!-- // Begin Template Header \\ -->
-<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader" datatable="0" role="presentation">
-<tr>
-<td class="headerContent" width="100%" style="vertical-align:bottom;padding:10px 10px 10px 20px;white-space:nowrap;">
-<h1 class="HeaderText" style="margin-bottom:0;font-size:0px;">
-<span mc:edit="header_image"><img align="none" height="92" id="headerImage campaign-icon" mc:allowtext="" mc:label="header_image" src="http://gallery.mailchimp.com/3c55b291cdcd82ece169afccc/images/logo_green.1.png" style="max-width: 180px; width: 140px; height: 92px; " width="140"> </span><span style="font-size:24px;">&nbsp;Biblioteket for lyd og punkt</span>
-</h1>
-</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-</tr>
-</table>
-<!-- // End Template Header \\ -->
-</td>
-</tr>
-<tr>
-<td align="center" valign="top">
-<!-- // Begin Template Body \\ -->
-<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateBody" datatable="0" role="presentation">
-<tr>
-<td valign="top" class="bodyContent">
-<!-- // Begin Module: Standard Content \\ -->
-<table border="0" cellpadding="10" cellspacing="0" width="100%" datatable="0" role="presentation">
-<tr>
-<td valign="top">
-<div>
-<h2><span mc:edit="header_issuetitle">Nyhetsbrev for måned år</span></h2>
-<div mc:edit="frontmatter"><p>Her finner du nyheter og lister med bøker NLB har produsert siste måned. For å bestille bøker du finner i listene - klikk på boknummeret og du sendes videre til NLBs bokbase.</p><p>Du kan også kontakte oss på e-post: <a href="mailto:utlaan@nlb.no">utlaan@nlb.no</a> eller telefon: 22 06 88 10.</p></div>
-</div>
-<hr>
-<div mc:edit="toc">
-<h2>I dette nummeret</h2>
-</div>
-<br>
-<div mc:edit="body"><span class="h2">TOC Heading 1<br>
-<br>
-TOC Heading 2<br>
-<br>
-<span class="mc-toc-title">TOC title</span><br>
-<br>
-Heading 2</span> <span class="h3">Heading 3</span> <span class="h4">Heading 4</span> <strong>Getting started:</strong> Customize your template by clicking on the style editor tabs up above. Set your fonts, colors, and styles. After setting your styling is all done you can click here in this area, delete the text, and start adding your own awesome content!<br>
-<br>
-After you enter your content, highlight the text you want to style and select the options you set in the style editor in the &quot;styles&quot; drop down box. Want to <a href="http://www.mailchimp.com/kb/article/im-using-the-style-designer-and-i-cant-get-my-formatting-to-change" target="_blank">get rid of styling on a bit of text</a>, but having trouble doing it? Just use the &quot;clear styles&quot; button to strip the text of any formatting and reset your style. </div>
-</td>
-</tr>
-</table>
-<!-- // End Module: Standard Content \\ -->
-</td>
-</tr>
-</table>
-<!-- // End Template Body \\ -->
-</td>
-</tr>
-<tr>
-<td align="center" valign="top" style="background-color:#000000;">
-<!-- // Begin Template Footer \\ -->
-<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateFooter" datatable="0" role="presentation">
-<tr>
-<td valign="top" class="footerContent">
-<!-- // Begin Module: Standard Footer \\ -->
-<table border="0" cellpadding="10" cellspacing="0" width="100%" datatable="0" role="presentation">
-<tr>
-<td colspan="2" valign="middle" id="social">
-<div mc:edit="std_social">&nbsp;<!--<a href="*|TWITTER:PROFILEURL|*" target="_blank">--><a href="https://twitter.com/NLBNorge" target="_blank">følg på Twitter</a> | <!--<a href="*|FACEBOOK:PROFILEURL|*" target="_blank">--><a href="http://www.facebook.com/pages/NLB-Norsk-lyd-og-blindeskriftbibliotek/328029534808" target="_blank">bli venn på Facebook</a> | <a href="*|FORWARD|*" target="_blank">videresend til en venn</a>&nbsp; </div>
-</td>
-</tr>
-<tr>
-<td valign="top" width="350">
-<div mc:edit="std_footer">
-<em>&copy; *|CURRENT_YEAR|* *|LIST:COMPANY|*</em>
-<br>
-*|IFNOT:ARCHIVE_PAGE|* *|LIST:DESCRIPTION|*
-<br>
-<strong>Postadresse:</strong>
-<br>
-*|LIST:ADDRESS|**|END:IF|* 
-</div>
-</td>
-<td valign="top" width="190" id="monkeyRewards">
-<div mc:edit="monkeyrewards">
-*|IF:REWARDS|* *|HTML:REWARDS|* *|END:IF|*
-</div>
-</td>
-</tr>
-<tr>
-<td colspan="2" valign="middle" id="utility">
-<div mc:edit="std_utility">
-&nbsp;<a href="*|UNSUB|*">meld deg av denne listen</a> | <a href="*|UPDATE_PROFILE|*">endre innstillinger</a>&nbsp;
-</div>
-</td>
-</tr>
-</table>
-<!-- // End Module: Standard Footer \\ -->
-</td>
-</tr>
-</table>
-<!-- // End Template Footer \\ -->
-</td>
-</tr>
-</table>
-<br>
-</td>
-</tr>
-</table>
-</center>
-</body>
+  <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+    <center>
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" id="backgroundTable" role="presentation" style="height:100%;">
+        <tr>
+          <td align="center" valign="top">
+            <!-- // Begin Template Preheader \\ -->
+            <table border="0" cellpadding="10" cellspacing="0" width="600" id="templatePreheader" role="presentation">
+              <tr>
+                <td valign="top" class="preheaderContent">
+                  <!-- // Begin Module: Standard Preheader \ -->
+                  <table border="0" cellpadding="10" cellspacing="0" width="100%" role="presentation">
+                    <tr>
+                      <td valign="top">
+                        <div mc:edit="teaser">Velkommen til NLBs nyhetsbrev</div>
+                      </td>
+                      <!-- *|IFNOT:ARCHIVE_PAGE|* -->
+                      <td valign="top" width="170">
+                        <div mc:edit="std_preheader_links">Vises ikke e-posten riktig?<br><a href="*|ARCHIVE|*" target="_blank">åpne den i nettleseren</a>.</div>
+                      </td>
+                      <!-- *|END:IF|* -->
+                    </tr>
+                  </table>
+                  <!-- // End Module: Standard Preheader \ -->
+                </td>
+              </tr>
+            </table>
+            <!-- // End Template Preheader \\ -->
+            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer" role="presentation">
+              <tr style="background-color:#000000;">
+                <td align="center" valign="top">
+                  <!-- // Begin Template Header \\ -->
+                  <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader" role="presentation">
+                    <tr>
+                      <td class="headerContent" width="100%" style="vertical-align:bottom;padding:10px 10px 10px 20px;white-space:nowrap;">
+                        <h1 class="HeaderText" style="margin-bottom:0;font-size:0px;">
+                          <span mc:edit="header_image"><img height="92" mc:allowtext="" mc:label="header_image" src="http://gallery.mailchimp.com/3c55b291cdcd82ece169afccc/images/logo_green.1.png" style="max-width: 180px; width: 140px; height: 92px;" width="140" alt="logo_green.1.png"></span><span style="font-size:1.500em;"> Biblioteket for lyd og punkt</span>
+                        </h1>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td> </td>
+                    </tr>
+                  </table>
+                  <!-- // End Template Header \\ -->
+                </td>
+              </tr>
+              <tr>
+                <td align="center" valign="top">
+                  <!-- // Begin Template Body \\ -->
+                  <table border="0" cellpadding="10" cellspacing="0" width="600" id="templateBody" role="presentation">
+                    <tr>
+                      <td valign="top" class="bodyContent">
+                        <!-- // Begin Module: Standard Content \\ -->
+                        <table border="0" cellpadding="10" cellspacing="0" width="100%" role="presentation">
+                          <tr>
+                            <td valign="top">
+                              <div>
+                                <h2><span mc:edit="header_issuetitle">Nyhetsbrev for måned år</span>
+                              </h2>
+                              <div mc:edit="frontmatter">
+                                <p>Her finner du nyheter og lister med bøker NLB har produsert siste måned. For å bestille bøker du finner i listene - klikk på boknummeret og du sendes videre til NLBs bokbase.</p>
+                                <p>Du kan også kontakte oss på e-post: <a href="mailto:utlaan@nlb.no">utlaan@nlb.no</a> eller telefon: 22 06 88 10.</p>
+                              </div>
+                            </div>
+                            <hr>
+                            <div mc:edit="toc">
+                              <h2>I dette nummeret</h2>
+                            </div>
+                            <br>
+                            <div mc:edit="body">
+                              <span class="h2">TOC Heading 1<br>
+                                <br>
+                                TOC Heading 2<br>
+                                <br><span class="mc-toc-title">TOC title</span>
+                                <br>
+                                <br>
+                                Heading 2</span> <span class="h3">Heading 3</span> <span class="h4">Heading 4</span> <strong>Getting started:</strong> Customize your template by clicking on the style editor tabs up above. Set your fonts, colors, and styles. After setting your styling is all done you can click here in this area, delete the text, and start adding your own awesome content!<br>
+                                <br>
+                                After you enter your content, highlight the text you want to style and select the options you set in the style editor in the "styles" drop down box. Want to <a href="http://www.mailchimp.com/kb/article/im-using-the-style-designer-and-i-cant-get-my-formatting-to-change" target="_blank">get rid of styling on a bit of text</a>, but having trouble doing it? Just use the "clear styles" button to strip the text of any formatting and reset your style. </div>
+                              </td>
+                            </tr>
+                          </table>
+                          <!-- // End Module: Standard Content \\ -->
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- // End Template Body \\ -->
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" valign="top" style="background-color:#000000;">
+                    <!-- // Begin Template Footer \\ -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateFooter" role="presentation">
+                      <tr>
+                        <td valign="top" class="footerContent">
+                          <!-- // Begin Module: Standard Footer \\ -->
+                          <table border="0" cellpadding="10" cellspacing="0" width="100%" role="presentation">
+                            <tr>
+                              <td colspan="2" valign="middle" id="social">
+                                <div mc:edit="std_social"> <!--<a href="*|TWITTER:PROFILEURL|*" target="_blank">--><a href="https://twitter.com/NLBNorge" target="_blank">følg på Twitter</a> | <!--<a href="*|FACEBOOK:PROFILEURL|*" target="_blank">--><a href="http://www.facebook.com/pages/NLB-Norsk-lyd-og-blindeskriftbibliotek/328029534808" target="_blank">bli venn på Facebook</a> | <a href="*|FORWARD|*" target="_blank">videresend til en venn</a>  </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td valign="top" width="350">
+                                <div mc:edit="std_footer">
+                                  <em>© *|CURRENT_YEAR|* *|LIST:COMPANY|*</em>
+                                  <br>*|IFNOT:ARCHIVE_PAGE|* *|LIST:DESCRIPTION|*
+                                  <br><strong>Postadresse:</strong>
+                                  <br>*|LIST:ADDRESS|**|END:IF|*
+                                </div>
+                              </td>
+                              <td valign="top" width="190" id="monkeyRewards">
+                                <div mc:edit="monkeyrewards">
+                                  *|IF:REWARDS|* *|HTML:REWARDS|* *|END:IF|*
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" valign="middle" id="utility">
+                                <div mc:edit="std_utility">
+                                   <a href="*|UNSUB|*">meld deg av denne listen</a> | <a href="*|UPDATE_PROFILE|*">endre innstillinger</a> 
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
+                          <!-- // End Module: Standard Footer \\ -->
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- // End Template Footer \\ -->
+                  </td>
+                </tr>
+              </table>
+              <br>
+            </td>
+          </tr>
+        </table>
+      </center>
+    </body>
 </html>
