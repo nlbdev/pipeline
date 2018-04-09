@@ -1,20 +1,17 @@
-package org.daisy.dotify.consumer.translator;
+package org.daisy.dotify.api.translator;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.translator.TextBorderConfigurationException;
-import org.daisy.dotify.api.translator.TextBorderFactory;
-import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
-import org.daisy.dotify.api.translator.TextBorderFactoryService;
-import org.daisy.dotify.api.translator.TextBorderStyle;
-
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Provides a text border factory maker. This class will look for
@@ -75,9 +72,11 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 	 * Adds a factory (intended for use by the OSGi framework)
 	 * @param factory the factory to add
 	 */
-	@Reference(type = '*')
+	@Reference(cardinality=ReferenceCardinality.MULTIPLE, policy=ReferencePolicy.DYNAMIC)
 	public void addFactory(TextBorderFactoryService factory) {
-		logger.finer("Adding factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Adding factory: " + factory);
+		}
 		factories.add(factory);
 	}
 
@@ -87,7 +86,9 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(TextBorderFactoryService factory) {
-		logger.finer("Removing factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Removing factory: " + factory);
+		}
 		// this is to avoid adding items to the cache that were removed while
 		// iterating
 		factories.remove(factory);

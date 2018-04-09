@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.text;
+package org.daisy.dotify.api.text;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,16 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.text.Integer2Text;
-import org.daisy.dotify.api.text.Integer2TextConfigurationException;
-import org.daisy.dotify.api.text.Integer2TextFactory;
-import org.daisy.dotify.api.text.Integer2TextFactoryMakerService;
-import org.daisy.dotify.api.text.Integer2TextFactoryService;
-
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Provides a integer2text factory maker. This is the entry point for
@@ -73,9 +70,11 @@ public class Integer2TextFactoryMaker implements
 	 * Adds a factory (intended for use by the OSGi framework)
 	 * @param factory the factory to add
 	 */
-	@Reference(type = '*')
+	@Reference(cardinality=ReferenceCardinality.MULTIPLE, policy=ReferencePolicy.DYNAMIC)
 	public void addFactory(Integer2TextFactoryService factory) {
-		logger.finer("Adding factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Adding factory: " + factory);
+		}
 		filters.add(factory);
 	}
 
@@ -85,7 +84,9 @@ public class Integer2TextFactoryMaker implements
 	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(Integer2TextFactoryService factory) {
-		logger.finer("Removing factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Removing factory: " + factory);
+		}
 		// this is to avoid adding items to the cache that were removed while
 		// iterating
 		synchronized (map) {
@@ -103,7 +104,9 @@ public class Integer2TextFactoryMaker implements
 			synchronized (map) {
 				for (Integer2TextFactoryService h : filters) {
 					if (h.supportsLocale(target)) {
-						logger.fine("Found an integer2text factory for " + target + " (" + h.getClass() + ")");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Found an integer2text factory for " + target + " (" + h.getClass() + ")");
+						}
 						map.put(target.toLowerCase(), h);
 						template = h;
 						break;

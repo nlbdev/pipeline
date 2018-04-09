@@ -1,15 +1,12 @@
-package org.daisy.dotify.consumer.formatter;
+package org.daisy.dotify.api.formatter;
 
 import java.util.ServiceLoader;
-
-import org.daisy.dotify.api.formatter.Formatter;
-import org.daisy.dotify.api.formatter.FormatterFactory;
 
 /**
  * <p>Provides a factory for formatters. The factory will instantiate 
  * the first Formatter it encounters when querying the services API.</p> 
 
- * <p>Like all classes in the org.daisy.dotify.consumer sub packages, this
+ * <p>Like all maker classes in the api, this
  * class is only used directly in SPI context. Unlike some other classes however,
  * this class does not implement a service interface that can be used from
  * OSGi. The reason for this is that the implementation <i>simply returns

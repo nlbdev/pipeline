@@ -1,13 +1,11 @@
-package org.daisy.dotify.consumer.engine;
+package org.daisy.dotify.api.engine;
 
 import java.util.ServiceLoader;
 
-import org.daisy.dotify.api.engine.FormatterEngine;
-import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 
 /**
- * <p>Like all classes in the org.daisy.dotify.consumer sub packages, this
+ * <p>Like all maker classes in the api, this
  * class is only used directly in SPI context. Unlike some other classes however,
  * this class does not implement a service interface that can be used from
  * OSGi. The reason for this is that the implementation <i>simply returns
