@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.10.2-SNAPSHOT</version>
+    <version>1.11.1-SNAPSHOT</version>
     <relativePath>../../braille/maven/parent/</relativePath>
   </parent>
 
@@ -16,7 +16,19 @@
 
   <name>DP2 Braille Modules :: NLB</name>
   <description>Module for the Norwegian Library of Talking Books and Braille to produce Norwegian braille.</description>
-  
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>scripts-bom</artifactId>
+        <version>1.11.1-SNAPSHOT</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>

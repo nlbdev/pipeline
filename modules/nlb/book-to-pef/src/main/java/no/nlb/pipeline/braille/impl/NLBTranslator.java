@@ -534,7 +534,7 @@ public interface NLBTranslator {
 				remainder = string;
 			}
 			
-			public String nextTranslatedRow(int limit, boolean force) {
+			public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly) {
 				if (remainder.length() <= limit) {
 					String next = remainder;
 					remainder = null;
@@ -559,6 +559,10 @@ public interface NLBTranslator {
 				return (remainder != null);
 			}
 			
+			public NonBreakingBrailleString copy() {
+				return new NonBreakingBrailleString(remainder);
+			}
+			
 			public boolean supportsMetric(String metric) {
 				return false;
 			}
@@ -568,61 +572,13 @@ public interface NLBTranslator {
 			}
 		}
 		
-		private static BrailleTranslator.LineIterator concatLineIterators(final List<BrailleTranslator.LineIterator> iterators) {
+		private static BrailleTranslator.LineIterator concatLineIterators(List<BrailleTranslator.LineIterator> iterators) {
 			if (iterators.size() == 0)
 				return new NonBreakingBrailleString(null);
 			else if (iterators.size() == 1)
 				return iterators.get(0);
 			else
-				return new BrailleTranslator.LineIterator() {
-					
-					private BrailleTranslator.LineIterator current = iterators.get(0);
-					private int currentIndex = 0;
-					
-					public String nextTranslatedRow(int limit, boolean force) {
-						String row = "";
-						while (limit > row.length()) {
-							row += current.nextTranslatedRow(limit - row.length(), force);
-							if (!current.hasNext() && currentIndex + 1 < iterators.size())
-								current = iterators.get(++currentIndex);
-							else
-								break; }
-						return row;
-					}
-					
-					public String getTranslatedRemainder() {
-						String remainder = "";
-						for (int i = currentIndex; i < iterators.size(); i++)
-							remainder += iterators.get(i).getTranslatedRemainder();
-						return remainder;
-					}
-					
-					public int countRemaining() {
-						int remaining = 0;
-						for (int i = currentIndex; i < iterators.size(); i++)
-							remaining += iterators.get(i).countRemaining();
-						return remaining;
-					}
-					
-					public boolean hasNext() {
-						if (current.hasNext())
-							return true;
-					else {
-						while (currentIndex + 1 < iterators.size()) {
-							current = iterators.get(++currentIndex);
-							if (current.hasNext())
-								return true; }}
-						return false;
-					}
-					
-					public boolean supportsMetric(String metric) {
-						return false;
-					}
-					
-					public double getMetric(String metric) {
-						throw new UnsupportedMetricException("Metric not supported: " + metric);
-					}
-				};
+				return new ConcatLineIterators(iterators);
 		}
 		
 		@Reference(
@@ -734,6 +690,69 @@ public interface NLBTranslator {
 						}
 					)
 				);
+			}
+		}
+		
+		private static class ConcatLineIterators implements BrailleTranslator.LineIterator {
+			
+			final List<BrailleTranslator.LineIterator> iterators;
+			BrailleTranslator.LineIterator current;
+			int currentIndex = 0;
+			
+			ConcatLineIterators(List<BrailleTranslator.LineIterator> iterators) {
+				this.iterators = iterators;
+				this.current = iterators.get(currentIndex);
+			}
+			
+			public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly) {
+				String row = "";
+				while (limit > row.length()) {
+					row += current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
+					if (!current.hasNext() && currentIndex + 1 < iterators.size())
+						current = iterators.get(++currentIndex);
+					else
+						break; }
+				return row;
+			}
+			
+			public String getTranslatedRemainder() {
+				String remainder = "";
+				for (int i = currentIndex; i < iterators.size(); i++)
+					remainder += iterators.get(i).getTranslatedRemainder();
+				return remainder;
+			}
+			
+			public int countRemaining() {
+				int remaining = 0;
+				for (int i = currentIndex; i < iterators.size(); i++)
+					remaining += iterators.get(i).countRemaining();
+				return remaining;
+			}
+			
+			public boolean hasNext() {
+				if (current.hasNext())
+					return true;
+				else {
+					while (currentIndex + 1 < iterators.size()) {
+						current = iterators.get(++currentIndex);
+						if (current.hasNext())
+							return true; }}
+				return false;
+			}
+			
+			public ConcatLineIterators copy() {
+				List<BrailleTranslator.LineIterator> iteratorsCopy = new ArrayList<>(iterators.size() - currentIndex);
+				for (int i = currentIndex; i < iterators.size(); i++)
+					iteratorsCopy.add((BrailleTranslator.LineIterator)iterators.get(i).copy());
+				return new ConcatLineIterators(iterators);
+			}
+			
+			public boolean supportsMetric(String metric) {
+				return false;
+			}
+			
+			public double getMetric(String metric) {
+				throw new UnsupportedMetricException("Metric not supported: " + metric);
 			}
 		}
 	}
