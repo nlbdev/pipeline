@@ -9,7 +9,7 @@ if [ "$1" == "--dry-run" ]; then
     if [[ "${HOST_PLATFORM}" == "batch" ]]; then
         for arg in "$@"; do
             echo pushd $arg
-            echo mvn clean install -DskipTests -Dinvoker.skip=true
+            echo mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -DpomFile=pom.xml -Dfile=./pom.xml
             echo popd
         done
     else
@@ -19,10 +19,9 @@ else
     if [[ -z ${HOST_PLATFORM} ]]; then
         for arg in "$@"; do
             cd $arg
-            eval $MVN clean install -DskipTests -Dinvoker.skip=true | eval $MVN_LOG
+            eval $MVN org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -DpomFile=pom.xml -Dfile=./pom.xml | eval $MVN_LOG
         done
     else
         exit 1
     fi
 fi
-
