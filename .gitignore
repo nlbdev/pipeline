@@ -8,26 +8,32 @@ ehthumbs.db
 Thumbs.db
 
 # "super project"-files
-/.maven-cache/
-/.maven-modules
-/.maven-workspace/
-/maven.log
-/.gradle-pom.xml
-/.gradle-settings/
-/.gradle/
-/*.zip
+.deps.mk
+.last-tested
 /*.deb
 /*.rpm
-.deps.mk
-.effective-pom.xml
-.last-tested
+/*.zip
+/.gradle/
+/.make-target/
+/.maven-cache/
+/.maven-workspace/
+/maven.log
 
 # Eclipse
+bin/
 eclipse/
 eclipse/*
-.project
-.settings
 .classpath
+.project
+.settings/
+/eclimd.log
+/.metadata/
+/.recommenders/
+
+# for build remainders on subrepo branches
+target/
+/build/
+/node-modules/
 
 # vim files
 *~
