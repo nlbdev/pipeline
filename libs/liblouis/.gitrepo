@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:liblouis/liblouis-nar.git
 	branch = include-source
-	commit = 5030e379f2669a1ea242107d44709c1b041d397b
-	parent = 434d586f7856960f9a0b2cc392babb0628cd0927
+	commit = 8b0b1450ea35c9a5b27ff63c5e0293c5ac486731
+	parent = ebb9b8adefa59b89273fb30273de312e1e86e14a
 	cmdver = 0.3.1
