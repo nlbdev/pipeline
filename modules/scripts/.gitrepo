@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-scripts.git
 	branch = master
-	commit = fc36ae398dd0d620d267b760c54a359e8065d345
-	parent = 502fe16da15050c5aa6dd6c961fc18664bbc57d4
+	commit = 7b9c1ab0098ab4994b9b462320f3af48ebd81c6f
+	parent = 852f85f45519b0cb1a437cbc28de750cafb4f54a
 	cmdver = 0.3.1

@@ -96,7 +96,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			"org.daisy.pipeline:xproc-api:?",
 			// for dtbook-tss mock
 			pipelineModule("dtbook-break-detection"),
-			pipelineModule("nlp-omnilang-lexer")
+			pipelineModule("nlp-omnilang-lexer"),
 		};
 	}
 	
@@ -155,8 +155,8 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 					                           "javax.xml.transform.TransformerFactory%23newInstance"),
 				wrappedBundle(mavenBundle("xerces:xercesImpl:?"))
 					.instructions("SPI-Provider=*"),
-				mavenBundle("org.daisy.libs:saxon-he:?"),
-				mavenBundle("org.daisy.libs:jing:?"),
+				// mavenBundle("org.daisy.libs:saxon-he:?"),
+				// mavenBundle("org.daisy.libs:jing:?"),
 				mavenBundle("commons-cli:commons-cli:?"),
 				wrappedBundle(mavenBundle("org.w3c.css:sac:?")),
 				// wrappedBundle(mavenBundle("javazoom:jlayer:?")),
@@ -322,7 +322,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 						numErrors.incrementAndGet();
 					}
 				}
-				System.err.println("zeval error: " + m.getText());
+				System.err.println("zedval error: " + m.getText());
 			}
 
 			public void close() throws ZedReporterException {
