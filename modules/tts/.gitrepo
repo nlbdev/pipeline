@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-mod-tts.git
 	branch = master
-	commit = e999a2529d42b04ebec3893042d52d1612b661dd
-	parent = a44b7ad209be71c79fea3dc4a4cffb309a218b25
+	commit = af8501cd59c342132617e2189487f2df64210e2e
+	parent = 1a941a89e70d9ebdd08911c3d5fe323adb2599f0
 	cmdver = 0.3.1
