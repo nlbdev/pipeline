@@ -134,7 +134,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 					xmlReport.info(null, FeatureEnum.TOOL_DATE, toolDate);
 
 				if (mode != null) {
-					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.get("single_file"), "opf", epubVersion.toString(), EPUBProfile.DEFAULT));
+					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.get("single_file"), mode, epubVersion.toString(), EPUBProfile.DEFAULT));
 
 					if ("expanded".equals(mode) || "exp".equals(mode)) {
 						if (new File(path+".epub").exists()) {

@@ -5,7 +5,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/metadata-utils/library.xpl">
   
-  <x:scenario label="test hauy_valid.xml with default.css" pending="You need the Enterprise Edition of Saxon (with an EnterpriseConfiguration) for this operation">
+  <x:scenario label="test hauy_valid.xml with default.css">
     <x:call step="px:dtbook-to-mods-meta">
       <x:input port="source">
         <x:document type="file" href="../resources/hauy_valid.xml"/>
