@@ -36,7 +36,7 @@
     <module>modules/nlb</module>
     <module>modules/nlp</module>
     <module>modules/nordic</module>
-    <module>clientlib-java</module>
+    <module>clientlib/java</module>
     <module>cli</module>
     <module>gui</module>
     <module>updater/cli</module>
