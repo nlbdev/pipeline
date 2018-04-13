@@ -2,7 +2,7 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
     stylesheet="../../main/resources/xml/xslt/uri-functions.xsl">
 
-    <x:scenario pending="Not yet implemented" label="function tokenize-uri">
+    <x:scenario label="function tokenize-uri">
         <x:call function="pf:tokenize-uri"/>
         <x:scenario label="example from the RFC">
             <x:call>
@@ -575,6 +575,20 @@
                 <x:param name="base" select="''"/>
             </x:call>
             <x:expect label="test #20" select="''"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/file.xml/index.html'"/>
+            </x:call>
+            <x:expect label="test #21" select="'../file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml/'"/>
+                <x:param name="base" select="'file:/dir/file.xml/index.html'"/>
+            </x:call>
+            <x:expect label="test #22" select="''"/>
         </x:scenario>
     </x:scenario>
 
