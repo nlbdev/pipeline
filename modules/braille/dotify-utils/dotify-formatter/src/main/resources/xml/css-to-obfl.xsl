@@ -414,9 +414,9 @@
                 Note that a volume-keep-priority attribute is not needed to prefer volume breaking
                 before a block over inside a block, but for now we have the conditional anyway.
             -->
-            <xsl:if test="$sections//@css:volume-break-inside">
-              <volume-transition range="sheet"/>
-            </xsl:if>
+            <!-- <xsl:if test="$sections//@css:volume-break-inside"> -->
+            <!--   <volume-transition range="sheet"/> -->
+            <!-- </xsl:if> -->
             <xsl:apply-templates mode="assert-nil" select="$sections/*[not(self::css:_)]"/>
             <xsl:for-each select="$sections/css:_[@css:flow=$collection-flows]">
                 <xsl:variable name="flow" as="xs:string" select="@css:flow"/>
