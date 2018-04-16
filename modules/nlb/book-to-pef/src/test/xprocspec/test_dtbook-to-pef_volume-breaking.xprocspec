@@ -216,7 +216,7 @@
             <x:expect label="everything should fit in a single volume" type="xpath" test="count(//pef:volume)" equals="1"/>
         </x:scenario>
         
-        <x:scenario label="with parts: fit small chapters in same volume, medium chapters in separate volume, and big chapters in multiple volumes">
+        <x:scenario label="with parts: fit small chapters in same volume, medium chapters in separate volumes, and big chapters in multiple volumes">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -947,7 +947,7 @@
             <x:expect label="The fifth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[5]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
         </x:scenario>
         
-        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter)">
+        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter) - short level1, long level2">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -990,17 +990,65 @@
                     </x:document>
                 </x:input>
                 <x:option name="include-obfl" select="'true'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('9/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('9/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('9/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('9.1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('9.1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('9.1/temp-dir',$temp-dir)"/>
             </x:call>
             
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef"/>
+                <x:document type="file" base-uri="temp-dir" href="9.1/pef-output-dir/book.pef"/>
             </x:context>
             <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
             <x:expect label="The part headline should be in the first volume" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠁')]/preceding::pef:volume)+1" equals="1"/>
             <x:expect label="The chapter headline should be in the first volume as well" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/preceding::pef:volume)+1" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter) - long level1, short level2">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>content h1</h1>
+                                        
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        
+                                        <level2>
+                                            <h2>content h2</h2>
+                                            
+                                            <p style="page-break-after: always;">content</p>
+                                            <p style="page-break-after: always;">content</p>
+                                            <p style="page-break-after: always;">content</p>
+                                            <p style="page-break-after: always;">content</p>
+                                            <p style="page-break-after: always;">content</p>
+                                            <p style="page-break-after: always;">content</p>
+                                            <p style="page-break-after: always;">content</p>
+                                            <p style="page-break-after: always;">content</p>
+                                        </level2>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="include-obfl" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('9.2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('9.2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('9.2/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="9.2/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="The h2 should be in the same volume as the following page of content" type="xpath" test="exists(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/parent::pef:page/(following-sibling::pef:page | parent::pef:section/following-sibling::pef:section/pef:page)/pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])"/>
         </x:scenario>
         
         <x:scenario label="Regression test for issue #121: Coding error: unexpected /css:_/book[1]/@css:volume-break-before (mode was table-attr)">
