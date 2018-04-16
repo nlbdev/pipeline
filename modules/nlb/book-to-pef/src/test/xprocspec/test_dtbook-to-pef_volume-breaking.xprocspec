@@ -20,6 +20,7 @@
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="toc-depth" select="0"/>
             <x:option name="maximum-number-of-pages" select="10"/>
+            <x:option name="include-obfl" select="'true'"/>
         </x:call>
         
         <x:scenario label="There should always be something other than generated content in the PEF, even though that means splitting a chapter that would've fit in a separate volume" pending="https://github.com/nlbdev/pipeline/issues/122">
@@ -77,6 +78,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('0/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('0/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('0/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('0/temp-dir',$temp-dir)"/>
             </x:call>
@@ -148,6 +150,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('1/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
             </x:call>
@@ -178,6 +181,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('2/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
             </x:call>
@@ -207,6 +211,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('3/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
             </x:call>
@@ -457,6 +462,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('4/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
             </x:call>
@@ -502,6 +508,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('5/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
             </x:call>
@@ -719,6 +726,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('6/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('6/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('6/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
             </x:call>
@@ -826,6 +834,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('7/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('7/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('7/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('7/temp-dir',$temp-dir)"/>
             </x:call>
@@ -933,6 +942,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('8/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('8/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('8/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('8/temp-dir',$temp-dir)"/>
             </x:call>
@@ -989,8 +999,8 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="include-obfl" select="'true'"/>
                 <x:option name="pef-output-dir" select="resolve-uri('9.1/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('9.1/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('9.1/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('9.1/temp-dir',$temp-dir)"/>
             </x:call>
@@ -1039,8 +1049,8 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:option name="include-obfl" select="'true'"/>
                 <x:option name="pef-output-dir" select="resolve-uri('9.2/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('9.2/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('9.2/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('9.2/temp-dir',$temp-dir)"/>
             </x:call>
@@ -1090,6 +1100,7 @@
                     </x:document>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('10/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('10/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('10/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('10/temp-dir',$temp-dir)"/>
             </x:call>
@@ -1105,6 +1116,7 @@
                     <x:document type="file" href="../resources/DTBook/561691.xml"/>
                 </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('11/obfl-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('11/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
             </x:call>
