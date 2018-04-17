@@ -151,7 +151,7 @@ html:has(body ~ body) > body, html:not(:has(body ~ body)) > body > section {
 
 /* Volume breaking rules based on level depth: DTBook */
 frontmatter > level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc)) ~ level1,
-frontmatter:has(level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc))) ~ bodymatter > level1
+frontmatter:has(level1:not(.part):not(.pef-titlepage):not(.pef-about):not(:has(> #generated-volume-toc)):not(:has(> #generated-document-toc))) ~ bodymatter > level1,
 bodymatter > level1:not(.part) ~ level1:not(.part),
 rearmatter > level1:not(.part) {
         /* level1 except first non-generated level1 */
