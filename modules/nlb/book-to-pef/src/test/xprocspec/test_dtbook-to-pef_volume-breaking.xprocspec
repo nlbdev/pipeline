@@ -23,54 +23,24 @@
             <x:option name="include-obfl" select="'true'"/>
         </x:call>
         
-        <x:scenario label="There should always be something other than generated content in the PEF, even though that means splitting a chapter that would've fit in a separate volume" pending="https://github.com/nlbdev/pipeline/issues/122">
+        <x:scenario label="There should always be something other than generated content in the PEF, even though that means splitting a chapter that would've fit in a separate volume">
             <x:call>
+                <x:option name="toc-depth" select="1"/>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
                             <book>
                                 <bodymatter>
                                     <level1>
-                                        <!-- content page 1 -->
-                                        <h1>big</h1>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        
-                                        <!-- content page 2 -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        
-                                        <!-- content page 3 -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        
-                                        <!-- content page 4 -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        
-                                        <!-- content page 5 -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        
-                                        <!-- content page 6 -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        
-                                        <!-- content page 7 -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        
-                                        <!-- content page 8 -->
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
-                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <h1>headline</h1>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
                                     </level1>
                                 </bodymatter>
                             </book>
@@ -85,12 +55,12 @@
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="0/pef-output-dir/book.pef" />
             </x:context>
-            <x:expect label="8 pages of content, with 218 short paragraphs, should become 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            <x:expect label="8 pages of content, including 1 headline, and with toc enabled, should become 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
             <x:expect label="At least 20% of the content rows should be in the first volume" type="xpath" test="count(//pef:volume[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
             <x:expect label="At least 20% of the content rows should be in the second volume" type="xpath" test="count(//pef:volume[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
         </x:scenario>
         
-        <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes: seeking a balanced page number between these volumes" pending="https://github.com/nlbdev/pipeline/issues/122">
+        <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes: seeking a balanced page number between these volumes">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
