@@ -38,7 +38,7 @@ $(TARGET_DIR)/effective-settings.xml : $(MVN_SETTINGS) $(TARGET_DIR)/properties
 	# cd into random directory in order to force Maven "stub" project
 	if ! [ -e $@ ] || [[ -n $$(find $^ -newer $@ 2>/dev/null) ]]; then \
 		cd $(TARGET_DIR) && \
-		$(MVN) org.apache.maven.plugins:maven-help-plugin:2.2:effective-settings -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
+		$(MVN) org.apache.maven.plugins:maven-help-plugin:2.2:effective-settings -Doutput=$(ROOT_DIR)/$@ | $(MVN_LOG); \
 	fi
 
 .SECONDARY : poms parents aggregators
@@ -122,7 +122,7 @@ export SAXON
 $(SAXON) : | .maven-init
 	# cd into random directory in order to force Maven "stub" project
 	cd $(TARGET_DIR) && \
-	$(MVN) org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get -Dartifact=net.sf.saxon:Saxon-HE:9.4:jar >$(ROOT_DIR)/maven.log
+	$(MVN) org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get -Dartifact=net.sf.saxon:Saxon-HE:9.4:jar | $(MVN_LOG)
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # MAVEN_MODULES computed here because maven.mk may not be up to date yet
@@ -154,7 +154,7 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON)
 		done && \
 		$(MVN) -Dworkspace="$(TARGET_DIR)/poms" \
 		       --projects $$(printf "%s\n" $$MAVEN_MODULES |paste -sd , -) \
-		       org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
+		       org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom -Doutput=$(ROOT_DIR)/$@ | $(MVN_LOG); \
 	else \
 		touch $@; \
 	fi
