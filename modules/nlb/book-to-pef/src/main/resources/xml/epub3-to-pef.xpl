@@ -53,6 +53,7 @@
     <p:option name="capital-letters"/>
     <p:option name="force-norwegian"/>
     <p:option name="stylesheet"/>
+    <p:option name="apply-default-stylesheet"/>
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>

@@ -8,9 +8,9 @@
     exclude-inline-prefixes="#all"
     name="main">
     
-    <!-- ====== -->
-    <!-- Layout -->
-    <!-- ====== -->
+    <!-- ================ -->
+    <!-- Tekstformatering -->
+    <!-- ================ -->
     <p:option name="braille-standard" select="'(dots:6)(grade:0)'">
         <p:pipeinfo>
             <px:data-type>
@@ -94,7 +94,13 @@ Eksempel på bruk av språkkode på et helt dokument
     <p:option name="stylesheet" px:type="anyFileURI" px:sequence="true" px:media-type="text/css text/scss" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Layout: CSS-stilark</h2>
-            <p px:role="desc" xml:space="preserve">Valgfritt stilark som kan brukes for å legge til CSS-regler. NLBs standard-stilark brukes alltid, dette stilarket kommer i tillegg.</p>
+            <p px:role="desc" xml:space="preserve">Valgfritt stilark som kan brukes for å legge til CSS-regler.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="apply-default-stylesheet" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Layout: Bruk standard-stilark</h2>
+            <p px:role="desc" xml:space="preserve">Det innebygde stilarket som definerer det meste av layout.</p>
         </p:documentation>
     </p:option>
     <p:option name="page-width" select="'32'">

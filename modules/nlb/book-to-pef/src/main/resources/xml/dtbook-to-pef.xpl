@@ -60,6 +60,7 @@
     <p:option name="capital-letters"/>
     <p:option name="force-norwegian"/>
     <p:option name="stylesheet"/>
+    <p:option name="apply-default-stylesheet"/>
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
@@ -135,7 +136,7 @@
                                       name="convert">
                 <p:with-option name="stylesheet" select="string-join((
                                                            'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl',
-                                                           'http://www.nlb.no/pipeline/modules/braille/default.scss',
+                                                           if ($stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                            if ($stylesheet) then $stylesheet else ()),' ')"/>
                 <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
                 <p:with-option name="include-obfl" select="$include-obfl"/>
