@@ -8,8 +8,14 @@ node {
     sh 'make SKIP_RELEASE=true dist-zip-linux'
     
     stage 'Test'
-    sh 'make SKIP_RELEASE=true check-modules/nlb'
-    sh 'make SKIP_RELEASE=true check-modules/nordic'
+    sh 'make check-modules/nlb/book-to-pef'
+    sh 'make check-modules/nlb/html-to-dtbook'
+    sh 'make check-modules/nlb/mailchimp'
+    sh 'make check-modules/nlb/catalog-month'
+    sh 'make check-modules/nlb/catalog-year'
+    sh 'make check-modules/nlb/metadata-utils'
+    sh 'make check-modules/nlb/tts-adapter-filibuster'
+    sh 'make check-modules/nordic/epub3-dtbook-migrator'
     
     stage 'Distribute'
     sh './distribute.sh'
