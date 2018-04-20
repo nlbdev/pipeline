@@ -1,5 +1,7 @@
-node {
-    try {
+pipeline {
+    agent any
+    
+    stages {
         stage('Checkout') {
             checkout scm
         }
@@ -23,17 +25,6 @@ node {
         
         stage('Distribute') {
             sh './distribute.sh'
-        }
-        
-    } catch (e) {
-        currentBuild.result = "FAILED"
-        
-    } finally {
-        buildStatus = currentBuild.result ?: "SUCCESSFUL"
-        if (buildStatus == "SUCCESSFUL") {
-            sh '. /home/*/config/set-env.sh && curl --data "Build successful :D" "$SLACK_URL&channel=%23test"'
-        } else {
-            sh '. /home/*/config/set-env.sh && curl --data "Build failed :(" "$SLACK_URL&channel=%23test"'
         }
     }
 }
