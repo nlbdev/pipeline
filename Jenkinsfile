@@ -54,7 +54,7 @@ pipeline {
         }
         
         failure {
-            sh 'tail -n 30 maven.log | slack-cli -d braille-in-pipeline || true'
+            sh 'echo "(...)" > /tmp/maven.log && tail -n 30 maven.log >> /tmp/maven.log && | slack-cli -d braille-in-pipeline -f /tmp/maven.log || true'
             sh 'echo "Build failed: \"$JOB_NAME [$BUILD_NUMBER]\"" | slack-cli -d braille-in-pipeline || true'
         }
         
