@@ -41,25 +41,25 @@ pipeline {
                 sh './distribute.sh'
             }
         }
+    }
+    
+    post {
+        always {
+            junit "**/target/surefire-reports/*.xml"
+            archiveArtifacts artifacts: "modules/nlb/**/*.jar"
+            archiveArtifacts artifacts: "modules/nordic/**/*.jar"
+            archiveArtifacts artifacts: "**/target/test.log"
+            archiveArtifacts artifacts: "maven.log"
+            archiveArtifacts artifacts: "descriptor-current.xml"
+        }
         
-        post {
-            always {
-                junit "**/target/surefire-reports/*.xml"
-                archiveArtifacts artifacts: "modules/nlb/**/*.jar"
-                archiveArtifacts artifacts: "modules/nordic/**/*.jar"
-                archiveArtifacts artifacts: "**/target/test.log"
-                archiveArtifacts artifacts: "maven.log"
-                archiveArtifacts artifacts: "descriptor-current.xml"
-            }
-            
-            failure {
-                sh 'tail -n 30 maven.log | slack-cli -d braille-in-pipeline || true'
-                sh 'echo "Build failed: \"$JOB_NAME [$BUILD_NUMBER]\"" | slack-cli -d braille-in-pipeline || true'
-            }
-            
-            success {
-                sh 'echo "Build successful: \"$JOB_NAME [$BUILD_NUMBER]\"" | slack-cli -d braille-in-pipeline || true'
-            }
+        failure {
+            sh 'tail -n 30 maven.log | slack-cli -d braille-in-pipeline || true'
+            sh 'echo "Build failed: \"$JOB_NAME [$BUILD_NUMBER]\"" | slack-cli -d braille-in-pipeline || true'
+        }
+        
+        success {
+            sh 'echo "Build successful: \"$JOB_NAME [$BUILD_NUMBER]\"" | slack-cli -d braille-in-pipeline || true'
         }
     }
 }
