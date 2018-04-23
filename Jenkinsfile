@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'echo "Started job \"$JOB_NAME [$BUILD_NUMBER]\". Check console output at $BUILD_URL" | slack-cli -d braille-in-pipeline || true'
+                sh 'echo "Started job \"$JOB_NAME [$BUILD_NUMBER]\". Check console output at $RUN_DISPLAY_URL" | slack-cli -d braille-in-pipeline || true'
                 checkout scm
             }
         }
