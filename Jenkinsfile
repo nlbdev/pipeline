@@ -18,8 +18,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'make clean'
-                sh 'make SKIP_RELEASE=true dist-zip-minimal'
-                sh 'make SKIP_RELEASE=true dist-zip-linux'
+                sh 'make dist-zip-minimal'
+                sh 'make dist-zip-linux'
             }
         }
         
