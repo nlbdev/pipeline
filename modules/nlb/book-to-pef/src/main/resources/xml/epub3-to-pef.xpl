@@ -123,6 +123,7 @@
         </p:input>
         <p:with-option name="stylesheet" select="string-join((
                                                    'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
+                                                   'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
                                                    'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl',
                                                    if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                    if ($stylesheet) then $stylesheet else ()),' ')"/>
