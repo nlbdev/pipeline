@@ -9,9 +9,10 @@
         <version>1.11.1-SNAPSHOT</version>
         <relativePath>../../scripts/parent/</relativePath>
     </parent>
-
+    
+    <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>nordic-epub3-dtbook-migrator</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: Nordic EPUB3/DTBook Migrator</name>
@@ -90,11 +91,6 @@
             <artifactId>validation-utils</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <!--<scope>test</scope>-->
-        </dependency>
         <!--
             test dependencies
         -->
