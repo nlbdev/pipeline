@@ -115,9 +115,6 @@
         </p:with-option>
     </px:epub3-to-pef.load>
     
-    <!--
-        FIXME: pre-processing-epub.xsl is not used
-    -->
     <px:epub3-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css"
                              name="convert">
         <p:with-option name="epub" select="$epub"/>
@@ -125,6 +122,7 @@
             <p:pipe step="load" port="in-memory.out"/>
         </p:input>
         <p:with-option name="stylesheet" select="string-join((
+                                                   'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
                                                    'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl',
                                                    if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                    if ($stylesheet) then $stylesheet else ()),' ')"/>

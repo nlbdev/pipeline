@@ -112,16 +112,11 @@
         <p:with-option name="href" select="$html"/>
     </px:html-load>
     
-    <px:message message="Running NLB-specific pre-processing steps"/>
-    <!--
-        Nothing here yet.
-        Wait for: https://github.com/snaekobbi/pipeline-mod-braille/issues/63 (=> this is fixed now)
-    -->
-    <px:message message="Finished running NLB-specific pre-processing steps" severity="DEBUG"/>
-        
     <px:html-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
                             name="convert">
         <p:with-option name="stylesheet" select="string-join((
+                                                        'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
+                                                        'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl',
                                                         if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                         if ($stylesheet) then $stylesheet else ()),' ')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>

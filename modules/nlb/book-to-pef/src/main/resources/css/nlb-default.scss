@@ -804,7 +804,7 @@ rearmatter:not(:has(> *:not(level1.footnotes))) {
 }
 
 /*
- * noteref numbering is implemented in pre-processing.xsl (and pre-processing-epub.xsl)
+ * noteref numbering is implemented in pre-processing.xsl
  * FIXME: could be implemented in CSS
  */
 @mixin noteref($refattr) {

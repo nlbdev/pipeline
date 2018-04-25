@@ -123,18 +123,13 @@
     
     <nlb:validate-tables name="validate-tables"/>
     
-    <nlb:pre-processing>
-        <p:input port="parameters">
-            <p:pipe port="result" step="parameters"/>
-        </p:input>
-    </nlb:pre-processing>
-    
     <p:try name="try-convert-and-store">
         <p:group>
             <p:output port="status"/>
             <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
                                       name="convert">
                 <p:with-option name="stylesheet" select="string-join((
+                                                           'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
                                                            'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl',
                                                            if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                            if ($stylesheet) then $stylesheet else ()),' ')"/>

@@ -11,6 +11,7 @@
 
   <!-- utilities -->
   <uri name="http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl" uri="../xml/insert-boilerplate.xsl"/>
+  <uri name="http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl" uri="../xml/pre-processing.xsl"/>
 
   <!-- xproc library -->
   <uri name="http://www.nlb.no/pipeline/modules/braille/library.xpl" uri="../xml/library.xpl"/>
