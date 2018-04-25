@@ -121,8 +121,9 @@
         
     <px:html-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
                             name="convert">
-        <p:with-option name="stylesheet" select="concat('http://www.nlb.no/pipeline/modules/braille/default.scss',
-                                                        if ($stylesheet) then concat(' ',$stylesheet) else '')"/>
+        <p:with-option name="stylesheet" select="string-join((
+                                                        if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
+                                                        if ($stylesheet) then $stylesheet else ()),' ')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
