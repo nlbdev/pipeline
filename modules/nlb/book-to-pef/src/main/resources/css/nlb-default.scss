@@ -744,10 +744,22 @@ table {
             margin-left: 2;
             &::list-item {
                 display: block;
+                margin-left: 2;
+                text-indent: -2;
                 &:first-child {
-                    text-indent: -2;
+                    text-indent: -4;
+                    // does not work:
+                    // > p { ... }
                 }
             }
+        }
+        td > p,
+        th > p {
+            // "text-indent: inherit" does not work so we just drop p's altogether
+            display: inline;
+        }
+        td:blank::after {
+            content: "(tom)";
         }
     }
     

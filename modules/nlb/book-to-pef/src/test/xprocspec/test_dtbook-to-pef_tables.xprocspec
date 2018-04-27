@@ -205,6 +205,86 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="table with empty cells as list">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <table class="table-as-list">
+                                        <tr>
+                                            <td>MATVARE</td>
+                                            <td>GI</td>
+                                            <td>GB</td>
+                                            <td>PORSJONSSTØRRELSE (GRAM)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Havregryn</td>
+                                            <td> </td>
+                                            <td>10</td>
+                                            <td>50</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Frokostblanding</td>
+                                            <td>43</td>
+                                            <td>7</td>
+                                            <td>30</td>
+                                        </tr>
+                                    </table>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠠⠠⠍⠁⠞⠧⠁⠗⠑</row>
+                    <row>⠀⠀⠀⠀⠠⠠⠛⠊</row>
+                    <row>⠀⠀⠀⠀⠠⠠⠛⠃</row>
+                    <row>⠀⠀⠀⠀⠠⠠⠏⠕⠗⠎⠚⠕⠝⠎⠎⠞⠪⠗⠗⠑⠇⠎⠑</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠦⠠⠠⠛⠗⠁⠍⠴</row>
+                    <row>⠀⠀⠠⠓⠁⠧⠗⠑⠛⠗⠽⠝</row>
+                    <row>⠀⠀⠀⠀⠦⠞⠕⠍⠴</row>
+                    <row>⠀⠀⠀⠀⠼⠁⠚</row>
+                    <row>⠀⠀⠀⠀⠼⠑⠚</row>
+                    <row>⠀⠀⠠⠋⠗⠕⠅⠕⠎⠞⠃⠇⠁⠝⠙⠊⠝⠛</row>
+                    <row>⠀⠀⠀⠀⠼⠙⠉</row>
+                    <row>⠀⠀⠀⠀⠼⠛</row>
+                    <row>⠀⠀⠀⠀⠼⠉⠚</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
     <x:scenario label="Regression test for #120: UnsupportedOperationException: error in table model that cannot be fixed automatically">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
@@ -248,12 +328,12 @@
                     </dtbook>
                 </x:document>
             </x:input>
-            <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="the output PEF">
-            <x:document type="directory" base-uri="temp-dir" href="3/pef-output-dir"/>
+            <x:document type="directory" base-uri="temp-dir" href="5/pef-output-dir"/>
         </x:context>
         <x:expect label="There should be no output PEF" type="compare"/>
         <x:context label="validation-status">
@@ -432,12 +512,12 @@
                     </dtbook>
                 </x:document>
             </x:input>
-            <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
+            <x:option name="pef-output-dir" select="resolve-uri('6/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('6/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="the output PEF">
-            <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef"/>
+            <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef"/>
         </x:context>
         <x:expect label="There should be an output PEF" type="count" min="1"/>
     </x:scenario>
