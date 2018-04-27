@@ -9,6 +9,7 @@ $include-notes: true !default;
 $include-images: true !default;
 $include-captions: true !default;
 $notes-placement: end-of-volume !default;
+$default-table-class: table-matrix !default;
 
 /* -------------------------------------------------------------------------- */
 /*                page                                                        */
@@ -728,9 +729,30 @@ list[type=ol], ol {
 /* -------------------------------------------------------------------------- */
 
 table {
-    display: table;
+    &%table-matrix {
+        display: table;
+    }
     
-    &.table-as-list {
+    &%table-linearized {
+        display: block;
+        tr {
+            display: block;
+            text-indent: -2;
+            margin-left: 2;
+        }
+        td > p,
+        th > p {
+            display: inline;
+        }
+        td + td::before,
+        th + th::before {
+            content:" ⠆ ";
+            text-transform: none;
+            hyphens: initial;
+        }
+    }
+    
+    &%table-as-list {
         display: block;
         render-table-by: row;
         th::after {
@@ -760,6 +782,59 @@ table {
         }
         td:blank::after {
             content: "(tom)";
+        }
+    }
+    
+    &.table-matrix {
+        @extend %table-matrix;
+    }
+    
+    &.table-linearized {
+        @extend %table-linearized;
+    }
+    
+    &.table-as-list {
+        @extend %table-as-list;
+    }
+    
+    @if ($default-table-class != 'table-as-list') {
+        &:not([class]) {
+            @extend %#{$default-table-class};
+        }
+    } @else {
+        &:not([class]) {
+            display: block;
+            render-table-by: row;
+            th::after {
+                content: ': ';
+            }
+            &::list-item {
+                display: block;
+            }
+            td {
+                margin-left: 2;
+                text-indent: -2;
+            }
+            td > p,
+            th > p {
+                display: inline;
+            }
+            td:empty::after {
+                content: "(tom)";
+            }
+        }
+        // FIXME: otherwise SASS moves the :not([class]) after the ::table-by(row)
+        &:not([class])::table-by(row) {
+            display: block;
+            margin-left: 2;
+            &::list-item {
+                display: block;
+                margin-left: 2;
+                text-indent: -2;
+                &:first-child {
+                    text-indent: -4;
+                }
+            }
         }
     }
     
