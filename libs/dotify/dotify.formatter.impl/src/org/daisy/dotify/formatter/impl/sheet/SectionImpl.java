@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.daisy.dotify.api.writer.SectionProperties;
-import org.daisy.dotify.writer.impl.Page;
-import org.daisy.dotify.writer.impl.Section;
+import org.daisy.dotify.formatter.impl.writer.Page;
+import org.daisy.dotify.formatter.impl.writer.Section;
 
 class SectionImpl implements Section {
 	private final List<Page> pages;

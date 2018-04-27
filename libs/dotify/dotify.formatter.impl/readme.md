@@ -4,6 +4,16 @@
 # dotify.formatter.impl #
 dotify.formatter.impl contains an implementation of the formatter interfaces of [dotify.api](https://github.com/brailleapps/dotify.api).
 
+## Techniques ##
+Java, StAX, OBFL, Java SPI, OSGi
+
+## Functionality and features ##
+  * Implements most aspects of OBFL (including some experimental additions)
+  * Extends the currently described specification for the evaluation language with features such as:
+    * Converting numbers to text, e.g. 1 becomes “one”.
+    * Formatting localized messages
+    * Formatting dates
+
 ## Using ##
 Download the [latest release](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.dotify%22%20%20a%3A%22dotify.formatter.impl%22) from maven central and add it to your runtime environment.
 

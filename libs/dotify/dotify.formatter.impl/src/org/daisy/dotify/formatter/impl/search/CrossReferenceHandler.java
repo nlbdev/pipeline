@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.daisy.dotify.api.formatter.Marker;
@@ -20,6 +21,8 @@ public class CrossReferenceHandler {
 	private final LookupHandler<BlockAddress, Integer> rowCount;
     private final LookupHandler<BlockAddress, List<String>> groupAnchors;
     private final LookupHandler<BlockAddress, List<Marker>> groupMarkers;
+    private final LookupHandler<BlockAddress, List<String>> groupIdentifiers;
+	private final LookupHandler<PageId, TransitionProperties> transitionProperties;
 	private final Map<Integer, Overhead> volumeOverhead;
     private final Map<String, Integer> counters;
 	private final SearchInfo searchInfo;
@@ -41,6 +44,8 @@ public class CrossReferenceHandler {
 		this.rowCount = new LookupHandler<>();
         this.groupAnchors = new LookupHandler<>();
         this.groupMarkers = new LookupHandler<>();
+        this.groupIdentifiers = new LookupHandler<>();
+		this.transitionProperties = new LookupHandler<>();
 		this.volumeOverhead = new HashMap<>();
 		this.counters = new HashMap<>();
 		this.searchInfo = new SearchInfo();
@@ -132,6 +137,16 @@ public class CrossReferenceHandler {
 		breakable.commit();
 	}
 	
+	public void keepTransitionProperties(PageId id, TransitionProperties value) {
+		if (readOnly) { return; }
+		transitionProperties.keep(id, value);
+	}
+	
+	public void commitTransitionProperties() {
+		if (readOnly) { return; }
+		transitionProperties.commit();
+	}
+	
 	public void setRowCount(BlockAddress blockId, int value) {
 		if (readOnly) { return; }
 		rowCount.put(blockId, value);
@@ -154,6 +169,13 @@ public class CrossReferenceHandler {
 			return;
 		}
 		groupMarkers.put(blockId, markers.isEmpty() ? Collections.emptyList() : new ArrayList<>(markers));
+	}
+	
+	public void setGroupIdentifiers(BlockAddress blockId, List<String> identifiers) {
+		if (readOnly) {
+			return;
+		}
+		groupIdentifiers.put(blockId, identifiers.isEmpty() ? Collections.emptyList() : new ArrayList<>(identifiers));
 	}
 	
 	public Overhead getOverhead(int volumeNumber) {
@@ -209,6 +231,10 @@ public class CrossReferenceHandler {
 	public boolean getBreakable(SheetIdentity ident) {
 		return breakable.get(ident, true);
 	}
+	
+	public TransitionProperties getTransitionProperties(PageId id) {
+		return transitionProperties.get(id, TransitionProperties.empty());
+	}
 
 	public List<String> getGroupAnchors(BlockAddress blockId) {
 		return groupAnchors.get(blockId, Collections.emptyList());
@@ -216,6 +242,10 @@ public class CrossReferenceHandler {
 
 	public List<Marker> getGroupMarkers(BlockAddress blockId) {
 		return groupMarkers.get(blockId, Collections.emptyList());
+	}
+	
+	public List<String> getGroupIdentifiers(BlockAddress blockId) {
+		return groupIdentifiers.get(blockId, Collections.emptyList());
 	}
 	
 	public int getRowCount(BlockAddress blockId) {
@@ -274,13 +304,19 @@ public class CrossReferenceHandler {
 		return searchInfo.findStartAndMarker(id, spec);
 	}
 
+	public Optional<PageDetails> findNextPageInSequence(PageId id) {
+		return searchInfo.findNextPageInSequence(id);
+	}
+	
 	/**
 	 * Returns true if some information has been changed since last use.
 	 * @return true if some information has been changed, false otherwise
 	 */
 	public boolean isDirty() {
 		//TODO: fix dirty flag for anchors/markers
-		return pageRefs.isDirty() || volumeRefs.isDirty() || anchorRefs.isDirty() || variables.isDirty() || breakable.isDirty() || overheadDirty || searchInfo.isDirty();
+		return pageRefs.isDirty() || volumeRefs.isDirty() || anchorRefs.isDirty() || variables.isDirty() || breakable.isDirty() || overheadDirty || searchInfo.isDirty()
+				|| transitionProperties.isDirty()
+				;
 		 //|| groupAnchors.isDirty()
 		 //|| groupMarkers.isDirty() || rowCount.isDirty()
 	}
@@ -300,6 +336,7 @@ public class CrossReferenceHandler {
 		variables.setDirty(value);
 		breakable.setDirty(value);
 		searchInfo.setDirty(value);
+		transitionProperties.setDirty(value);
 		//TODO: fix dirty flag for anchors/markers
 		//rowCount.setDirty(value);
 		//groupAnchors.setDirty(value);

@@ -2,6 +2,7 @@ package org.daisy.dotify.formatter.impl.core;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
@@ -52,12 +53,16 @@ class TableBlockContentManager extends AbstractBlockContentManager {
     	initFields();
     }
 	
-    @Override
-    public RowImpl getNext() {
-    	RowImpl ret = rows.get(rowIndex);
-    	rowIndex++;
-        return ret;
-    }
+	@Override
+	public Optional<RowImpl> getNext(boolean wholeWordsOnly) {
+		if (rowIndex<rows.size()) {
+			RowImpl ret = rows.get(rowIndex);
+			rowIndex++;
+			return Optional.of(ret);
+		} else {
+			return Optional.empty();
+		}
+	}
 
     @Override
     public boolean hasNext() {
@@ -82,6 +87,16 @@ class TableBlockContentManager extends AbstractBlockContentManager {
 	@Override
 	public List<String> getGroupAnchors() {
 		return Collections.emptyList();
+	}
+
+	@Override
+	public List<String> getGroupIdentifiers() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public boolean hasSignificantContent() {
+		return hasNext();
 	}
 
 }

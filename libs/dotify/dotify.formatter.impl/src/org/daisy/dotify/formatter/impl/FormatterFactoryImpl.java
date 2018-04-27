@@ -2,12 +2,15 @@ package org.daisy.dotify.formatter.impl;
 
 import org.daisy.dotify.api.formatter.Formatter;
 import org.daisy.dotify.api.formatter.FormatterFactory;
+import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMaker;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
+import org.daisy.dotify.api.translator.MarkerProcessorFactoryMaker;
 import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
+import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
-
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
  * Provides a formatter proxy implementation. This class is intended to be instantiated
@@ -29,7 +32,7 @@ public class FormatterFactoryImpl implements FormatterFactory {
 	 * Sets a factory dependency.
 	 * @param service the dependency
 	 */
-	@Reference
+	@Reference(cardinality=ReferenceCardinality.MANDATORY)
 	public void setTranslator(BrailleTranslatorFactoryMakerService service) {
 		this.translatorFactory = service;
 	}
@@ -46,7 +49,7 @@ public class FormatterFactoryImpl implements FormatterFactory {
 	 * Sets a factory dependency.
 	 * @param service the dependency
 	 */
-	@Reference
+	@Reference(cardinality=ReferenceCardinality.MANDATORY)
 	public void setTextBorderFactory(TextBorderFactoryMakerService service) {
 		this.borderFactory = service;
 	}
@@ -63,7 +66,7 @@ public class FormatterFactoryImpl implements FormatterFactory {
 	 * Sets a factory dependency.
 	 * @param service the dependency
 	 */
-	@Reference
+	@Reference(cardinality=ReferenceCardinality.MANDATORY)
 	public void setMarkerProcessorFactory(MarkerProcessorFactoryMakerService service) {
 		this.markerProcessorFactory = service;
 	}
@@ -78,9 +81,9 @@ public class FormatterFactoryImpl implements FormatterFactory {
 
 	@Override
 	public void setCreatedWithSPI() {
-		setTranslator(SPIHelper.getBrailleTranslatorFactoryMaker());
-		setTextBorderFactory(SPIHelper.getTextBorderFactoryMaker());
-		setMarkerProcessorFactory(SPIHelper.getMarkerProcessorFactoryMaker());
+		setTranslator(BrailleTranslatorFactoryMaker.newInstance());
+		setTextBorderFactory(TextBorderFactoryMaker.newInstance());
+		setMarkerProcessorFactory(MarkerProcessorFactoryMaker.newInstance());
 	}
 
 }

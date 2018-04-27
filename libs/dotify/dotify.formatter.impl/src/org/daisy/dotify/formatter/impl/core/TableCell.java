@@ -3,6 +3,7 @@ package org.daisy.dotify.formatter.impl.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.daisy.dotify.api.formatter.TableCellProperties;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
@@ -45,8 +46,9 @@ class TableCell extends FormatterCoreImpl {
 					);
 			rowData.addAll(bcm.getCollapsiblePreContentRows());
 			rowData.addAll(bcm.getInnerPreContentRows());
-			while (bcm.hasNext()) {
-				rowData.add(bcm.getNext());
+			Optional<RowImpl> r;
+			while ((r=bcm.getNext()).isPresent()) {
+				rowData.add(r.get());
 			}
 			forceCount += bcm.getForceBreakCount();
 			minWidth = Math.min(bcm.getMinimumAvailableWidth(), minWidth);

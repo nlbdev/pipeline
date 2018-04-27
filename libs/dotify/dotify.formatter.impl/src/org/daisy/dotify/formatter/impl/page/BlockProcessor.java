@@ -44,9 +44,9 @@ abstract class BlockProcessor {
 		rowGroupProvider = new RowGroupProvider(master, g, bcm, bc, keepWithNext);
 	}
 	
-	protected void processNextRowGroup(DefaultContext context) {
+	protected void processNextRowGroup(DefaultContext context, boolean wholeWordsOnly) {
 		if (hasNextInBlock()) {
-			addRowGroup(rowGroupProvider.next(context));
+			addRowGroup(rowGroupProvider.next(context, wholeWordsOnly));
 		}
 	}
 	

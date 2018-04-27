@@ -1,5 +1,7 @@
 package org.daisy.dotify.formatter.impl.row;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,31 +13,39 @@ import org.daisy.dotify.common.text.StringTools;
 
 class LeaderManager {
 	private static final Logger logger = Logger.getLogger(LeaderManager.class.getCanonicalName());
-	private Leader currentLeader;
+	private Deque<Leader> leaders;
 
 	LeaderManager() {
-		this.currentLeader = null;
+		this.leaders = new ArrayDeque<>();
 	}
 
 	LeaderManager(LeaderManager template) {
-		this.currentLeader = template.currentLeader;
+		this.leaders = new ArrayDeque<>(template.leaders);
 	}
 
-	void setLeader(Leader leader) {
-		this.currentLeader = leader;
+	void addLeader(Leader leader) {
+		this.leaders.addLast(leader);
 	}
 
 	boolean hasLeader() {
-		return currentLeader!=null;
+		return !leaders.isEmpty();
 	}
 
-	void discardLeader() {
-		currentLeader = null;
+	void removeLeader() {
+		leaders.pollFirst();
+	}
+	
+	void discardAllLeaders() {
+		leaders.clear();
+	}
+	
+	Leader getCurrentLeader() {
+		return leaders.getFirst();
 	}
 
 	int getLeaderPosition(int width) {
 		if (hasLeader()) {
-			return currentLeader.getPosition().makeAbsolute(width);
+			return getCurrentLeader().getPosition().makeAbsolute(width);
 		} else {
 			return 0;
 		}
@@ -43,7 +53,7 @@ class LeaderManager {
 
 	int getLeaderAlign(int length) {
 		if (hasLeader()) {
-			switch (currentLeader.getAlignment()) {
+			switch (getCurrentLeader().getAlignment()) {
 				case LEFT:
 					return 0;
 				case RIGHT:
@@ -61,7 +71,7 @@ class LeaderManager {
 		} else if (len > 0) {
 			String leaderPattern;
 			try {
-				leaderPattern = translator.translate(Translatable.text(currentLeader.getPattern()).build()).getTranslatedRemainder();
+				leaderPattern = translator.translate(Translatable.text(getCurrentLeader().getPattern()).build()).getTranslatedRemainder();
 			} catch (TranslationException e) {
 				throw new RuntimeException(e);
 			}

@@ -15,6 +15,7 @@ import org.daisy.dotify.api.formatter.LayoutMasterBuilder;
 import org.daisy.dotify.api.formatter.LayoutMasterProperties;
 import org.daisy.dotify.api.formatter.SequenceProperties;
 import org.daisy.dotify.api.formatter.TableOfContents;
+import org.daisy.dotify.api.formatter.TransitionBuilder;
 import org.daisy.dotify.api.formatter.VolumeTemplateBuilder;
 import org.daisy.dotify.api.formatter.VolumeTemplateProperties;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
@@ -27,8 +28,8 @@ import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.sheet.VolumeImpl;
 import org.daisy.dotify.formatter.impl.volume.TableOfContentsImpl;
 import org.daisy.dotify.formatter.impl.volume.VolumeTemplate;
-import org.daisy.dotify.writer.impl.Volume;
-import org.daisy.dotify.writer.impl.WriterHandler;
+import org.daisy.dotify.formatter.impl.writer.Volume;
+import org.daisy.dotify.formatter.impl.writer.WriterHandler;
 
 
 /**
@@ -152,6 +153,11 @@ class FormatterImpl implements Formatter {
 			}
 		}
 		throw new RuntimeException("Failed to complete volume division.");
+	}
+
+	@Override
+	public TransitionBuilder getTransitionBuilder() {
+		return context.getFormatterContext().getTransitionBuilder();
 	}
 
 }

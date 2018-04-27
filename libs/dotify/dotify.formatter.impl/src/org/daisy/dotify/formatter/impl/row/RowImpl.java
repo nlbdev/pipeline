@@ -16,6 +16,7 @@ public final class RowImpl implements Row {
 	private final String chars;
 	private final List<Marker> markers;
 	private final List<String> anchors;
+	private final List<String> identifiers;
 	private final MarginProperties leftMargin;
 	private final MarginProperties rightMargin;
 	private final Alignment alignment;
@@ -28,6 +29,7 @@ public final class RowImpl implements Row {
 		private String chars;
 		private List<Marker> markers = new ArrayList<>();
 		private List<String> anchors = new ArrayList<>();
+		private List<String> identifiers = new ArrayList<>();
 		private MarginProperties leftMargin = MarginProperties.EMPTY_MARGIN;
 		private MarginProperties rightMargin = MarginProperties.EMPTY_MARGIN;
 		private Alignment alignment = Alignment.LEFT;
@@ -45,6 +47,7 @@ public final class RowImpl implements Row {
 			this.chars = template.chars;
 			this.markers = new ArrayList<>(template.markers);
 			this.anchors = new ArrayList<>(template.anchors);
+			this.identifiers = new ArrayList<>(template.identifiers);
 			this.leftMargin = template.leftMargin;
 			this.rightMargin = template.rightMargin;
 			this.alignment = template.alignment;
@@ -58,6 +61,7 @@ public final class RowImpl implements Row {
 			this.chars = template.chars;
 			this.markers = new ArrayList<>(template.markers);
 			this.anchors = new ArrayList<>(template.anchors);
+			this.identifiers = new ArrayList<>(template.identifiers);
 			this.leftMargin = template.leftMargin;
 			this.rightMargin = template.rightMargin;
 			this.alignment = template.alignment;
@@ -173,6 +177,40 @@ public final class RowImpl implements Row {
 			markers.addAll(index, list);
 		}
 		
+		/**
+		 * Add a collection of identifiers to the Row
+		 * @param refs a list of identifiers
+		 * @return returns this builder
+		 */
+		public Builder addIdentifiers(List<String> refs) {
+			assertNotBuilt();
+			identifiers.addAll(refs);
+			return this;
+		}
+
+		/**
+		 * Add an identifier to the Row
+		 * @param id the identifier
+		 * @return returns this builder
+		 */
+		Builder addIdentifier(String id) {
+			assertNotBuilt();
+			identifiers.add(id);
+			return this;
+		}
+
+		/**
+		 * Add a collection of identifiers to the Row
+		 * @param index the position in the identifier list to insert the identifiers
+		 * @param list the list of identifiers
+	     * @throws IndexOutOfBoundsException if the index is out of range
+	     *         (<tt>index &lt; 0 || index &gt; getIdentifiers().size()</tt>)
+		 */
+		public void addIdentifiers(int index, List<String> list) {
+			assertNotBuilt();
+			identifiers.addAll(index, list);
+		}
+
 		private void assertNotBuilt() {
 			// We're using this method to check if the builder has been used instead of 
 			// copying the internal lists. This is assumed to be faster.
@@ -192,6 +230,7 @@ public final class RowImpl implements Row {
 		this.chars = builder.chars;
 		this.markers = Collections.unmodifiableList(builder.markers);
 		this.anchors = Collections.unmodifiableList(builder.anchors);
+		this.identifiers = Collections.unmodifiableList(builder.identifiers);
 		this.leftMargin = builder.leftMargin;
 		this.rightMargin = builder.rightMargin;
 		this.alignment = builder.alignment;
@@ -212,6 +251,7 @@ public final class RowImpl implements Row {
 		this.chars = chars;
 		this.markers = Collections.emptyList();
 		this.anchors = Collections.emptyList();
+		this.identifiers = Collections.emptyList();
 		this.leftMargin = leftMargin;
 		this.rightMargin = rightMargin;
 		this.alignment = Alignment.LEFT;
@@ -271,6 +311,14 @@ public final class RowImpl implements Row {
 	}
 
 	/**
+	 * Get all identifiers on this Row
+	 * @return returns an ArrayList of identifiers
+	 */
+	public List<String> getIdentifiers() {
+		return identifiers;
+	}
+
+	/**
 	 * Get the left margin value for the Row, in characters
 	 * @return returns the left margin
 	 */
@@ -317,6 +365,7 @@ public final class RowImpl implements Row {
 		result = prime * result + ((markers == null) ? 0 : markers.hashCode());
 		result = prime * result + ((rightMargin == null) ? 0 : rightMargin.hashCode());
 		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
+		result = prime * result + ((identifiers == null) ? 0 : identifiers.hashCode());
 		return result;
 	}
 	@Override
@@ -383,6 +432,13 @@ public final class RowImpl implements Row {
 				return false;
 			}
 		} else if (!rowSpacing.equals(other.rowSpacing)) {
+			return false;
+		}
+		if (identifiers == null) {
+			if (other.identifiers != null) {
+				return false;
+			}
+		} else if (!identifiers.equals(other.identifiers)) {
 			return false;
 		}
 		return true;

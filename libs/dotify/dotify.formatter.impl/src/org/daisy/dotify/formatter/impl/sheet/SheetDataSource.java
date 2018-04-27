@@ -5,19 +5,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.daisy.dotify.api.formatter.TransitionBuilderProperties.ApplicationRange;
 import org.daisy.dotify.api.writer.SectionProperties;
-import org.daisy.dotify.common.split.SplitPointDataSource;
-import org.daisy.dotify.common.split.SplitResult;
-import org.daisy.dotify.common.split.Supplements;
+import org.daisy.dotify.common.splitter.DefaultSplitResult;
+import org.daisy.dotify.common.splitter.SplitPointDataSource;
+import org.daisy.dotify.common.splitter.SplitResult;
+import org.daisy.dotify.common.splitter.Supplements;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
+import org.daisy.dotify.formatter.impl.core.TransitionContent;
+import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.page.BlockSequence;
 import org.daisy.dotify.formatter.impl.page.PageImpl;
 import org.daisy.dotify.formatter.impl.page.PageSequenceBuilder2;
-import org.daisy.dotify.formatter.impl.page.PageStruct;
 import org.daisy.dotify.formatter.impl.page.RestartPaginationException;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.DocumentSpace;
+import org.daisy.dotify.formatter.impl.search.PageDetails;
+import org.daisy.dotify.formatter.impl.search.PageId;
 import org.daisy.dotify.formatter.impl.search.SheetIdentity;
+import org.daisy.dotify.formatter.impl.search.TransitionProperties;
 
 /**
  * Provides a data source for sheets. Given a list of 
@@ -25,9 +31,9 @@ import org.daisy.dotify.formatter.impl.search.SheetIdentity;
  * 
  * @author Joel Håkansson
  */
-public class SheetDataSource implements SplitPointDataSource<Sheet> {
+public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSource> {
 	//Global state
-	private final PageStruct struct;
+	private final PageCounter pageCounter;
 	private final FormatterContext context;
 	//Input data
 	private final DefaultContext rcontext;
@@ -45,13 +51,13 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	private boolean volBreakAllowed;
 	private boolean updateCounter;
 	private boolean allowsSplit;
+	private boolean wasSplitInsideSequence;
+	private boolean volumeEnded;
 	//Output buffer
 	private List<Sheet> sheetBuffer;
 
-	private int keepNextSheets = 0;
-
-	public SheetDataSource(PageStruct struct, FormatterContext context, DefaultContext rcontext, Integer volumeGroup, List<BlockSequence> seqsIterator) {
-		this.struct = struct;
+	public SheetDataSource(PageCounter pageCounter, FormatterContext context, DefaultContext rcontext, Integer volumeGroup, List<BlockSequence> seqsIterator) {
+		this.pageCounter = pageCounter;
 		this.context = context;
 		this.rcontext = rcontext;
 		this.volumeGroup = volumeGroup;
@@ -68,6 +74,8 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 		this.initialPageOffset = 0;
 		this.updateCounter = false;
 		this.allowsSplit = true;
+		this.wasSplitInsideSequence = false;
+		this.volumeEnded = false;
 	}
 	
 	public SheetDataSource(SheetDataSource template) {
@@ -84,7 +92,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	 * 		cases.
 	 */
 	private SheetDataSource(SheetDataSource template, int offset, boolean tail) {
-		this.struct = tail?template.struct:new PageStruct(template.struct);
+		this.pageCounter = tail?template.pageCounter:new PageCounter(template.pageCounter);
 		this.context = template.context;
 		this.rcontext = template.rcontext;
 		this.volumeGroup = template.volumeGroup;
@@ -105,6 +113,8 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 		this.initialPageOffset = template.initialPageOffset;
 		this.updateCounter = tail?true:template.updateCounter;
 		this.allowsSplit = true;
+		this.wasSplitInsideSequence = template.wasSplitInsideSequence;
+		this.volumeEnded = false;
 	}
 	
 	@Override
@@ -116,21 +126,9 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	}
 
 	@Override
-	@Deprecated
-	public List<Sheet> head(int toIndex) throws RestartPaginationException {
-		throw new UnsupportedOperationException("Method is deprecated.");
-	}
-
-	@Override
 	public List<Sheet> getRemaining() throws RestartPaginationException {
 		ensureBuffer(-1);
 		return sheetBuffer;
-	}
-
-	@Override
-	@Deprecated
-	public SplitPointDataSource<Sheet> tail(int fromIndex) throws RestartPaginationException {
-		throw new UnsupportedOperationException("Method is deprecated.");
 	}
 
 	@Override
@@ -172,7 +170,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 				if(counter!=null) {
 					initialPageOffset = rcontext.getRefs().getPageNumberOffset(counter) - psb.size();
 				} else {
-					initialPageOffset = struct.getDefaultPageOffset() - psb.size();
+					initialPageOffset = pageCounter.getDefaultPageOffset() - psb.size();
 				}
 				updateCounter = false;
 			}
@@ -196,13 +194,9 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 				} else if (counter!=null) {
 					initialPageOffset = Optional.ofNullable(rcontext.getRefs().getPageNumberOffset(counter)).orElse(0);
 				} else {
-					 initialPageOffset = struct.getDefaultPageOffset();
+					 initialPageOffset = pageCounter.getDefaultPageOffset();
 				}
-				psb = new PageSequenceBuilder2(struct.getPageCount(), bs.getLayoutMaster(), initialPageOffset, bs, context, rcontext, seqsIndex);
-				if (keepNextSheets > 0) {
-					psb.keepNextSheets = keepNextSheets;
-					keepNextSheets = 0;
-				}
+				psb = new PageSequenceBuilder2(pageCounter.getPageCount(), bs.getLayoutMaster(), initialPageOffset, bs, context, rcontext, seqsIndex);
 				sectionProperties = bs.getLayoutMaster().newSectionProperties();
 				s = null;
 				si = null;
@@ -211,27 +205,81 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 			}
 			int currentSize = sheetBuffer.size();
 			while (psb.hasNext() && currentSize == sheetBuffer.size()) {
-				if (!sectionProperties.duplex() || pageIndex % 2 == 0) {
+				if (!sectionProperties.duplex() || pageIndex % 2 == 0 || volumeEnded || s==null) {
 					if (s!=null) {
 						Sheet r = s.build();
 						sheetBuffer.add(r);
 						s = null;
+						if (volumeEnded) {
+							pageIndex += pageIndex%2==1?1:0;
+						}
 						continue;
+					} else if (volumeEnded) {
+						throw new AssertionError("Error in code.");
 					}
 					volBreakAllowed = true;
 					s = new Sheet.Builder(sectionProperties);
 					si = new SheetIdentity(rcontext.getSpace(), rcontext.getCurrentVolume(), volumeGroup, sheetBuffer.size()+sheetOffset);
 					sheetIndex++;
 				}
-				PageImpl p = psb.nextPage(initialPageOffset);
-				struct.increasePageCount();
-				s.avoidVolumeBreakAfterPriority(p.getAvoidVolumeBreakAfter());
-				boolean br = rcontext.getRefs().getBreakable(si);
-				//TODO: the following is a low effort way of giving existing uses of non-breakable units a high priority, but it probably shouldn't be done this way
-				if (!br) {
-					s.avoidVolumeBreakAfterPriority(1);
+
+				TransitionContent transition = null;
+				if (context.getTransitionBuilder().getProperties().getApplicationRange()!=ApplicationRange.NONE) {
+					if (!allowsSplit && index-1==sheetBuffer.size()) {
+						if ((!sectionProperties.duplex() || pageIndex % 2 == 1)) {
+							transition = context.getTransitionBuilder().getInterruptTransition();
+						} else if (context.getTransitionBuilder().getProperties().getApplicationRange()==ApplicationRange.SHEET) {
+							// This id is the same id as the one created below in the call to nextPage
+							PageId thisPageId = psb.nextPageId(0);
+							// This gets the page details for the next page in this sequence (if any)
+							Optional<PageDetails> next = rcontext.getRefs().findNextPageInSequence(thisPageId);
+							// If there is a page details in this sequence and volume break is preferred on this page
+							if (next.isPresent()) {
+								TransitionProperties st = rcontext.getRefs().getTransitionProperties(thisPageId);
+								double v1 = st.getVolumeKeepPriority().orElse(10) + (st.hasBlockBoundary()?0.5:0);
+								st = rcontext.getRefs().getTransitionProperties(next.get().getPageId());
+								double v2 = st.getVolumeKeepPriority().orElse(10) + (st.hasBlockBoundary()?0.5:0);
+								if (v1>v2) {
+									//break here
+									transition = context.getTransitionBuilder().getInterruptTransition();
+								}
+							}
+						}
+						volumeEnded = transition!=null;
+					} else if (wasSplitInsideSequence && sheetBuffer.size()==0  && (!sectionProperties.duplex() || pageIndex % 2 == 0)) {
+						transition = context.getTransitionBuilder().getResumeTransition();
+					}
 				}
-				s.breakable(br);
+				boolean hyphenateLastLine = 
+						!(	!context.getConfiguration().allowsEndingVolumeOnHyphen() 
+								&& sheetBuffer.size()==index-1 
+								&& (!sectionProperties.duplex() || pageIndex % 2 == 1));
+				
+				PageImpl p = psb.nextPage(initialPageOffset, hyphenateLastLine, Optional.ofNullable(transition));
+				pageCounter.increasePageCount();
+				VolumeKeepPriority vpx = p.getAvoidVolumeBreakAfter();
+				if (context.getTransitionBuilder().getProperties().getApplicationRange()==ApplicationRange.SHEET) {
+					Sheet sx = s.build();
+					if (!sx.getPages().isEmpty()) {
+						VolumeKeepPriority vp = sx.getAvoidVolumeBreakAfterPriority();
+						if (vp.orElse(10)>vpx.orElse(10)) {
+							vpx = vp;
+						}
+					}
+				}
+				s.avoidVolumeBreakAfterPriority(vpx);
+				if (!psb.hasNext()) {
+					s.avoidVolumeBreakAfterPriority(VolumeKeepPriority.empty());
+					//Don't get or store this value in crh as it is transient and not a property of the sheet context
+					s.breakable(true);
+				} else {
+					boolean br = rcontext.getRefs().getBreakable(si);
+					//TODO: the following is a low effort way of giving existing uses of non-breakable units a high priority, but it probably shouldn't be done this way
+					if (!br) {
+						s.avoidVolumeBreakAfterPriority(VolumeKeepPriority.of(1));
+					}
+					s.breakable(br);
+				}
 
 				setPreviousSheet(si.getSheetIndex()-1, Math.min(p.keepPreviousSheets(), sheetIndex-1), rcontext);
 				volBreakAllowed &= p.allowsVolumeBreak();
@@ -240,21 +288,15 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 				}
 				s.add(p);
 				pageIndex++;
-				if (!psb.hasNext()) {
-					keepNextSheets = psb.keepNextSheets;
-					if (keepNextSheets > 0 && (!sectionProperties.duplex() || pageIndex % 2 == 1)) {
-						keepNextSheets--;
-						volBreakAllowed = false;
-					}
-					rcontext.getRefs().keepBreakable(si, volBreakAllowed);
-				}
 			}
-			if (!psb.hasNext()) {
-				rcontext.getRefs().setSequenceScope(new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), seqsIndex, psb.getGlobalStartIndex(), psb.getToIndex());
+			if (!psb.hasNext()||volumeEnded) {
+				if (!psb.hasNext()) {
+					rcontext.getRefs().setSequenceScope(new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), seqsIndex, psb.getGlobalStartIndex(), psb.getToIndex());
+				}
 				if (counter!=null) {
 					rcontext.getRefs().setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
 				} else {
-					struct.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
+					pageCounter.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
 				}
 			}
 		}
@@ -272,24 +314,40 @@ public class SheetDataSource implements SplitPointDataSource<Sheet> {
 	}
 
 	@Override
-	public SplitResult<Sheet> split(int atIndex) {
+	public SplitResult<Sheet, SheetDataSource> split(int atIndex) {
 		if (!allowsSplit) {
 			throw new IllegalStateException();
 		}
 		allowsSplit = false;
+		return SplitPointDataSource.super.split(atIndex);
+	}
+
+	@Override
+	public SplitResult<Sheet, SheetDataSource> splitInRange(int atIndex) {
 		if (!ensureBuffer(atIndex)) {
 			throw new IndexOutOfBoundsException("" + atIndex);
 		}
 		if (counter!=null) {
 			rcontext.getRefs().setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
 		} else {
-			struct.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
+			pageCounter.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
 		}
+		wasSplitInsideSequence = psb.hasNext();
 		if (atIndex==0) {
-			return new SplitResult<Sheet>(Collections.emptyList(), new SheetDataSource(this, atIndex, true));
+			return new DefaultSplitResult<Sheet, SheetDataSource>(Collections.emptyList(), new SheetDataSource(this, atIndex, true));
 		} else {
-			return new SplitResult<Sheet>(sheetBuffer.subList(0, atIndex), new SheetDataSource(this, atIndex, true));
+			return new DefaultSplitResult<Sheet, SheetDataSource>(sheetBuffer.subList(0, atIndex), new SheetDataSource(this, atIndex, true));
 		}
+	}
+
+	@Override
+	public SheetDataSource createEmpty() {
+		return new SheetDataSource(pageCounter, context, rcontext, volumeGroup, Collections.emptyList());
+	}
+
+	@Override
+	public SheetDataSource getDataSource() {
+		return this;
 	}
 
 }

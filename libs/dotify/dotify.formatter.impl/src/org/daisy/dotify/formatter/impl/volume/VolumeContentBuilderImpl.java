@@ -15,6 +15,7 @@ import org.daisy.dotify.api.formatter.Leader;
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.api.formatter.NumeralStyle;
 import org.daisy.dotify.api.formatter.SequenceProperties;
+import org.daisy.dotify.api.formatter.SpanProperties;
 import org.daisy.dotify.api.formatter.TableCellProperties;
 import org.daisy.dotify.api.formatter.TableProperties;
 import org.daisy.dotify.api.formatter.TextProperties;
@@ -197,6 +198,16 @@ class VolumeContentBuilderImpl extends Stack<VolumeSequence> implements VolumeCo
 	@Override
 	public void endStyle() {
 		current().endStyle();
+	}
+
+	@Override
+	public void startSpan(SpanProperties props) {
+		current().startSpan(props);
+	}
+
+	@Override
+	public void endSpan() {
+		current().endSpan();
 	}
 
 }

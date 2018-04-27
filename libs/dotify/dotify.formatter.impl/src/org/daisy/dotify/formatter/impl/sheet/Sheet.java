@@ -3,22 +3,24 @@ package org.daisy.dotify.formatter.impl.sheet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.daisy.dotify.api.writer.SectionProperties;
-import org.daisy.dotify.common.split.SplitPointUnit;
+import org.daisy.dotify.common.splitter.SplitPointUnit;
+import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.page.PageImpl;
 public class Sheet implements SplitPointUnit {
 	private static final List<String> SUPPLEMENTS = Collections.unmodifiableList(new ArrayList<String>());
 	private final SectionProperties master;
 	private final List<PageImpl> pages;
 	private final boolean breakable, skippable, collapsible;
-	private final Integer avoidVolumeBreakAfterPriority;
+	private final VolumeKeepPriority avoidVolumeBreakAfterPriority;
 	
 	static class Builder {
 		private final SectionProperties sectionProperties;
 		private final List<PageImpl> pages;
 		private boolean breakable = false;
-		private Integer avoidVolumeBreakAfterPriority = null;
+		private VolumeKeepPriority avoidVolumeBreakAfterPriority = VolumeKeepPriority.empty();
 
 		/**
 		 * Creates a new builder.
@@ -56,8 +58,8 @@ public class Sheet implements SplitPointUnit {
 			return this;
 		}
 
-		Builder avoidVolumeBreakAfterPriority(Integer value) {
-			this.avoidVolumeBreakAfterPriority = value;
+		Builder avoidVolumeBreakAfterPriority(VolumeKeepPriority value) {
+			this.avoidVolumeBreakAfterPriority = Objects.requireNonNull(value);
 			return this;
 		}
 
@@ -72,7 +74,7 @@ public class Sheet implements SplitPointUnit {
 		}
 		this.master = builder.sectionProperties;
 		this.pages = Collections.unmodifiableList(new ArrayList<>(builder.pages));
-		this.breakable = builder.breakable && builder.avoidVolumeBreakAfterPriority==null;
+		this.breakable = builder.breakable && !builder.avoidVolumeBreakAfterPriority.hasValue();
 		this.avoidVolumeBreakAfterPriority = builder.avoidVolumeBreakAfterPriority;
 		this.skippable = pages.isEmpty();
 		this.collapsible = pages.isEmpty();
@@ -111,7 +113,7 @@ public class Sheet implements SplitPointUnit {
 		return 1;
 	}
 	
-	public Integer getAvoidVolumeBreakAfterPriority() {
+	public VolumeKeepPriority getAvoidVolumeBreakAfterPriority() {
 		return avoidVolumeBreakAfterPriority;
 	}
 

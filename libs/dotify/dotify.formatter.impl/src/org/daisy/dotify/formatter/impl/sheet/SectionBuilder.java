@@ -5,7 +5,7 @@ import java.util.Stack;
 
 import org.daisy.dotify.api.writer.SectionProperties;
 import org.daisy.dotify.formatter.impl.page.PageImpl;
-import org.daisy.dotify.writer.impl.Section;
+import org.daisy.dotify.formatter.impl.writer.Section;
 
 public class SectionBuilder {
     private Stack<Section> ret = new Stack<Section>();

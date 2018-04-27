@@ -1,8 +1,8 @@
 package org.daisy.dotify.formatter.impl.sheet;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 import java.util.Map;
+import java.util.logging.Logger;
 
 class EvenSizeVolumeSplitter implements VolumeSplitter {
 	private static final Logger logger = Logger.getLogger(EvenSizeVolumeSplitter.class.getCanonicalName());

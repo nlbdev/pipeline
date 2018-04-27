@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.daisy.dotify.formatter.impl.search.Overhead;
-import org.daisy.dotify.writer.impl.Section;
-import org.daisy.dotify.writer.impl.Volume;
+import org.daisy.dotify.formatter.impl.writer.Section;
+import org.daisy.dotify.formatter.impl.writer.Volume;
 
 /**
  * Provides a container for a physical volume of braille

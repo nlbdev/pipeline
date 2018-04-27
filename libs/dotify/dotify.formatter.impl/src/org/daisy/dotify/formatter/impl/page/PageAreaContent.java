@@ -3,6 +3,7 @@ package org.daisy.dotify.formatter.impl.page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
@@ -31,8 +32,9 @@ class PageAreaContent {
 		List<RowImpl> ret = new ArrayList<>();
 		for (Block b : blocks) {
 			AbstractBlockContentManager bcm = b.getBlockContentManager(bc);
-			while (bcm.hasNext()) {
-				ret.add(bcm.getNext());
+			Optional<RowImpl> r;
+			while ((r=bcm.getNext()).isPresent()) {
+				ret.add(r.get());
 			}
 		}
 		return ret;

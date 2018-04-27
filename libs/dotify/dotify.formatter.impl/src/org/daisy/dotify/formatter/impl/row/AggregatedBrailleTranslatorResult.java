@@ -3,11 +3,13 @@ package org.daisy.dotify.formatter.impl.row;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.dotify.api.translator.UnsupportedMetricException;
 import org.daisy.dotify.formatter.impl.segment.AnchorSegment;
+import org.daisy.dotify.formatter.impl.segment.IdentifierSegment;
 import org.daisy.dotify.formatter.impl.segment.MarkerSegment;
 
 /**
@@ -20,6 +22,7 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 	private int currentIndex;
 	private List<Marker> pendingMarkers;
 	private List<String> pendingAnchors;
+	private List<String> pendingIdentifiers;
 	
 	/**
 	 * Provides a builder for an aggregated braille translator result.
@@ -31,7 +34,7 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 		}
 		
 		Builder(Builder template) {
-			this.results = new ArrayList<>(template.results);
+			this.results = copyResults(template.results);
 		}
 		
 		/**
@@ -48,6 +51,14 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 		 */
 		void add(AnchorSegment as) {
 			results.add(as);
+		}
+		
+		/**
+		 * Adds an identifier segment to the aggregated result.
+		 * @param as the identifier segment to add
+		 */
+		void add(IdentifierSegment is) {
+			results.add(is);
 		}
 		
 		/**
@@ -74,10 +85,30 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 		this.currentIndex = 0;
 		this.pendingMarkers = new ArrayList<>();
 		this.pendingAnchors = new ArrayList<>();
+		this.pendingIdentifiers = new ArrayList<>();
+	}
+	
+	private AggregatedBrailleTranslatorResult(AggregatedBrailleTranslatorResult template) {
+		this.results = copyResults(template.results);
+		this.currentIndex = template.currentIndex;
+		this.pendingMarkers = new ArrayList<>(template.pendingMarkers);
+		this.pendingAnchors = new ArrayList<>(template.pendingAnchors);
+		this.pendingIdentifiers = new ArrayList<>(template.pendingIdentifiers);
+	}
+	
+	private static List<Object> copyResults(List<?> inputs) {
+		return inputs.stream().map(o->{
+			if (o instanceof BrailleTranslatorResult) {
+				BrailleTranslatorResult btr = ((BrailleTranslatorResult)o);
+				return btr.copy();
+			} else {
+				return o;
+			}
+		}).collect(Collectors.toList());
 	}
 
 	@Override
-	public String nextTranslatedRow(int limit, boolean force) {
+	public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly) {
 		String row = "";
 		BrailleTranslatorResult current = computeNext();
 		while (limit > row.length()) {
@@ -102,6 +133,8 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 				pendingMarkers.add((MarkerSegment)o);
 			} else if (o instanceof AnchorSegment) {
 				pendingAnchors.add(((AnchorSegment)o).getReferenceID());
+			} else if (o instanceof IdentifierSegment) {
+				pendingIdentifiers.add(((IdentifierSegment)o).getName());
 			} else {
 				throw new RuntimeException("coding error");
 			}
@@ -147,9 +180,14 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 		return Collections.unmodifiableList(pendingAnchors);
 	}
 	
+	List<String> getIdentifiers() {
+		return Collections.unmodifiableList(pendingIdentifiers);
+	}
+	
 	void clearPending() {
 		pendingMarkers.clear();
 		pendingAnchors.clear();
+		pendingIdentifiers.clear();
 	}
 
 	@Override
@@ -186,4 +224,10 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 			throw new UnsupportedMetricException("Metric not supported: " + metric);
 		}
 	}
+
+	@Override
+	public BrailleTranslatorResult copy() {
+		return new AggregatedBrailleTranslatorResult(this);
+	}
+
 }

@@ -347,6 +347,7 @@ class Table extends Block {
 		StringBuilder tableRow = new StringBuilder();
 		List<Marker> markers = new ArrayList<>();
 		List<String> anchors = new ArrayList<>();
+		List<String> identifiers = new ArrayList<>();
 		for (int j=0; j<td.getGridWidth(); j++) {
 			cr = td.cellForGrid(r, j).getRendered();
 			String data = "";
@@ -356,6 +357,7 @@ class Table extends Block {
 				data = BorderManager.padLeft(cr.getCellWidth(), row, context.getFcontext().getSpaceCharacter());
 				markers.addAll(row.getMarkers());
 				anchors.addAll(row.getAnchors());
+				identifiers.addAll(row.getIdentifiers());
 			} else {
 				StringBuilder d = new StringBuilder();
 				Border cx = null, cy = null;
@@ -412,6 +414,7 @@ class Table extends Block {
 				.allowsBreakAfter(allowsBreakAfter)
 				.addMarkers(markers)
 				.addAnchors(anchors)
+				.addIdentifiers(identifiers)
 				.build();
 		return row;
 	}

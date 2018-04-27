@@ -18,6 +18,7 @@ import org.daisy.dotify.api.formatter.Leader;
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.api.formatter.NumeralStyle;
 import org.daisy.dotify.api.formatter.RenderingScenario;
+import org.daisy.dotify.api.formatter.SpanProperties;
 import org.daisy.dotify.api.formatter.TableCellProperties;
 import org.daisy.dotify.api.formatter.TableProperties;
 import org.daisy.dotify.api.formatter.TextProperties;
@@ -39,6 +40,7 @@ import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.segment.AnchorSegment;
 import org.daisy.dotify.formatter.impl.segment.ConnectedTextSegment;
 import org.daisy.dotify.formatter.impl.segment.Evaluate;
+import org.daisy.dotify.formatter.impl.segment.IdentifierSegment;
 import org.daisy.dotify.formatter.impl.segment.LeaderSegment;
 import org.daisy.dotify.formatter.impl.segment.MarkerSegment;
 import org.daisy.dotify.formatter.impl.segment.NewLineSegment;
@@ -527,6 +529,19 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 	@Override
 	public void endStyle() {
 		styles.pop();
+	}
+
+	@Override
+	public void startSpan(SpanProperties props) {
+		if (table!=null) {
+			throw new IllegalStateException("A table is open.");
+		}
+		props.getIdentifier().ifPresent(id->getCurrentBlock().addSegment(new IdentifierSegment(id)));
+	}
+
+	@Override
+	public void endSpan() {
+		//NO OP
 	}
 
 }

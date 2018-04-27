@@ -1,7 +1,5 @@
 package org.daisy.dotify.formatter.impl.sheet;
 
-import org.daisy.dotify.common.split.SplitPointDataSource;
-
 /**
  * Provides a list of consecutive sheets without manual volume breaks
  * inside.
@@ -9,7 +7,7 @@ import org.daisy.dotify.common.split.SplitPointDataSource;
  *
  */
 public class SheetGroup {
-	private SplitPointDataSource<Sheet> units;
+	private SheetDataSource units;
 	private VolumeSplitter splitter;
 	private int overheadCount;
 	private int sheetCount;
@@ -65,7 +63,7 @@ public class SheetGroup {
 	 * Gets the remaining sheets in this group
 	 * @return the remaining sheets
 	 */
-	public SplitPointDataSource<Sheet> getUnits() {
+	public SheetDataSource getUnits() {
 		return units;
 	}
 
@@ -73,7 +71,7 @@ public class SheetGroup {
 	 * Sets the remaining sheets in this group
 	 * @param units a list of remaining sheets
 	 */
-	public void setUnits(SplitPointDataSource<Sheet> units) {
+	public void setUnits(SheetDataSource units) {
 		this.units = units;
 	}
 	

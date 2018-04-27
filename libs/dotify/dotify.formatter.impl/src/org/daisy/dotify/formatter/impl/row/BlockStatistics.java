@@ -5,6 +5,7 @@ public interface BlockStatistics {
 	/**
 	 * Gets the number of forced line breaks.
 	 * @return the number of forced line breaks
+	 * @throws IllegalStateException if the force break count cannot be returned 
 	 */
 	int getForceBreakCount();
 	
@@ -17,6 +18,7 @@ public interface BlockStatistics {
 	/**
 	 * Gets the number of rows produced.
 	 * @return the number of rows produced
+	 * @throws IllegalStateException if the row count cannot be returned
 	 */
 	int getRowCount();
 

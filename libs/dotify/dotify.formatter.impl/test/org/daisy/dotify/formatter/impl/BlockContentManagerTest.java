@@ -13,9 +13,9 @@ import org.daisy.dotify.api.formatter.Position;
 import org.daisy.dotify.api.formatter.TextProperties;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
-import org.daisy.dotify.consumer.translator.BrailleTranslatorFactoryMaker;
-import org.daisy.dotify.consumer.translator.MarkerProcessorFactoryMaker;
-import org.daisy.dotify.consumer.translator.TextBorderFactoryMaker;
+import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMaker;
+import org.daisy.dotify.api.translator.MarkerProcessorFactoryMaker;
+import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
 import org.daisy.dotify.formatter.impl.row.BlockContentManager;
@@ -43,12 +43,12 @@ public class BlockContentManagerTest {
 		RowDataProperties rdp = new RowDataProperties.Builder().firstLineIndent(1).textIndent(3).build();
 		CrossReferenceHandler refs = mock(CrossReferenceHandler.class);
 		Context context = createContext();
-		AbstractBlockContentManager m = new BlockContentManager(10, segments, rdp, refs, context, c);
+		AbstractBlockContentManager m = new BlockContentManager(null, 10, segments, rdp, refs, context, c);
 
 		//test
-		assertEquals("⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().getChars());
-		assertEquals("⠀⠀⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().getChars());
-		assertEquals("⠀⠀⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().getChars());
+		assertEquals("⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().get().getChars());
+		assertEquals("⠀⠀⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().get().getChars());
+		assertEquals("⠀⠀⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().get().getChars());
 		assertFalse(m.hasNext());
 	}
 	
@@ -65,10 +65,10 @@ public class BlockContentManagerTest {
 		RowDataProperties rdp = new RowDataProperties.Builder().firstLineIndent(1).textIndent(3).build();
 		CrossReferenceHandler refs = mock(CrossReferenceHandler.class);
 		Context context = createContext();
-		AbstractBlockContentManager m = new BlockContentManager(10, segments, rdp, refs, context, c);
+		AbstractBlockContentManager m = new BlockContentManager(null, 10, segments, rdp, refs, context, c);
 
 		//test
-		assertEquals("⠀⠀⠀⠀⠀⠀⠀⠄⠄⠄", m.getNext().getChars());
+		assertEquals("⠀⠀⠀⠀⠀⠀⠀⠄⠄⠄", m.getNext().get().getChars());
 		assertFalse(m.hasNext());
 	}
 	
@@ -86,15 +86,15 @@ public class BlockContentManagerTest {
 		RowDataProperties rdp = new RowDataProperties.Builder().firstLineIndent(1).textIndent(3).build();
 		CrossReferenceHandler refs = mock(CrossReferenceHandler.class);
 		Context context = createContext();
-		AbstractBlockContentManager m = new BlockContentManager(10, segments, rdp, refs, context, c);
+		AbstractBlockContentManager m = new BlockContentManager(null, 10, segments, rdp, refs, context, c);
 
 		//test
-		assertEquals("⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().getChars());
-		RowImpl r = m.getNext();
+		assertEquals("⠀⠄⠄⠄⠀⠄⠄⠄", m.getNext().get().getChars());
+		RowImpl r = m.getNext().get();
 		assertEquals("⠀⠀⠀⠄⠄⠄", r.getLeftMargin().getContent()+r.getChars());
-		r = m.getNext();
+		r = m.getNext().get();
 		assertEquals("⠀⠀⠀⠄⠄⠄", r.getLeftMargin().getContent()+r.getChars());
-		r = m.getNext();
+		r = m.getNext().get();
 		assertEquals("⠀⠀⠀⠄⠄⠄", r.getLeftMargin().getContent()+r.getChars());
 		assertFalse(m.hasNext());
 	}
