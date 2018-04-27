@@ -1,12 +1,6 @@
 package org.liblouis;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Collection;
-
-import static org.apache.commons.io.filefilter.FileFilterUtils.asFileFilter;
-import static org.apache.commons.io.filefilter.FileFilterUtils.trueFileFilter;
-import org.apache.commons.io.FileUtils;
 
 import org.junit.Test;
 
@@ -30,28 +24,34 @@ public class TableResolverTest {
 			translator.translate("foobar", null, null, null).getBraille());
 	}
 	
+	@Test
+	public void testDeepIncludes() throws Exception {
+		new Translator("tables/1");
+		new Translator("tables/2");
+		new Translator("tables/3");
+		new Translator("tables/4");
+		new Translator("tables/5");
+		new Translator("tables/6");
+	}
+	
+	final TableResolver resolver;
+	
 	@SuppressWarnings("unchecked")
 	public TableResolverTest() {
+		Helper.setLibraryPath();
 		final File testRootDir = new File(this.getClass().getResource("/").getPath());
-		Louis.setLibraryPath(((Collection<File>)FileUtils.listFiles(
-				new File(testRootDir, "../dependency"),
-				asFileFilter(new FilenameFilter() {
-					public boolean accept(File dir, String fileName) {
-						return dir.getName().equals("shared") && fileName.startsWith("liblouis"); }}),
-				trueFileFilter())).iterator().next());
-		Louis.getLibrary().lou_registerTableResolver(
-			new TableResolver() {
-				public File[] invoke(String table, File base) {
-					if (table == null)
-						return null;
-					File tableFile = new File(testRootDir, table);
-					if (tableFile.exists())
-						return new File[]{tableFile};
-					if (table.equals("<FOOBAR>"))
-						return invoke("tables/foobar.cti", null);
+		resolver = new TableResolver() {
+			public File[] invoke(String table, File base) {
+				if (table == null)
 					return null;
-				}
+				File tableFile = new File(base != null ? base.getParentFile() : testRootDir, table);
+				if (tableFile.exists())
+					return new File[]{tableFile};
+				if (table.equals("<FOOBAR>"))
+					return invoke("tables/foobar.cti", null);
+				return null;
 			}
-		);
+		};
+		Louis.getLibrary().lou_registerTableResolver(resolver);
 	}
 }
