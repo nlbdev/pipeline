@@ -1,9 +1,12 @@
 package org.daisy.dotify.formatter.impl.row;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.daisy.dotify.api.formatter.FormattingTypes;
+import org.daisy.dotify.api.formatter.Leader;
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslationException;
@@ -16,6 +19,8 @@ class CurrentResultImpl implements CurrentResult {
 	private final BrailleTranslatorResult btr;
 	private final String mode;
 	private boolean first;
+	
+	private static final Logger logger = Logger.getLogger(CurrentResultImpl.class.getCanonicalName());
 	
 	CurrentResultImpl(SegmentProcessorContext spc, BrailleTranslatorResult btr, String mode) {
 		this.spc = spc;
@@ -115,7 +120,9 @@ class CurrentResultImpl implements CurrentResult {
 		// [margin][preContent][preTabText][tab][postTabText] 
 		//      preContentPos ^
 		String tabSpace = "";
+		boolean rightAlign = false;
 		if (spi.getLeaderManager().hasLeader()) {
+			rightAlign = spi.getLeaderManager().getCurrentLeader().getAlignment() == Leader.Alignment.RIGHT;
 			int preTabPos = m1.getPreTabPosition(spi.getCurrentRow());
 			int leaderPos = spi.getLeaderManager().getLeaderPosition(spc.getAvailable());
 			int offset = leaderPos-preTabPos;
@@ -138,7 +145,28 @@ class CurrentResultImpl implements CurrentResult {
 				spi.getLeaderManager().removeLeader();
 			}
 		}
-		breakNextRow(m1, spi.getCurrentRow(), btr, tabSpace, wholeWordsOnly);
+		if (rightAlign) {
+			// text following the leader should be kept on the current line
+			// allow it to extend into the margin
+			int remainingLength = btr.countRemaining();
+			String next = btr.nextTranslatedRow(Integer.MAX_VALUE, false, false);
+			if (btr.hasNext())
+				throw new RuntimeException(); // should not happen
+			if (next.length() != remainingLength)
+				logger.log(Level.WARNING, "Leader alignment not done correctly");
+			RowImpl.Builder row = spi.getCurrentRow();
+			row.text(m1.getPreContent() + row.getText() + tabSpace + next);
+			row.leaderSpace(row.getLeaderSpace() + tabSpace.length());
+			if (btr instanceof AggregatedBrailleTranslatorResult) {
+				AggregatedBrailleTranslatorResult abtr = ((AggregatedBrailleTranslatorResult)btr);
+				row.addMarkers(abtr.getMarkers());
+				row.addAnchors(abtr.getAnchors());
+				row.addIdentifiers(abtr.getIdentifiers());
+				abtr.clearPending();
+			}
+		} else {
+			breakNextRow(m1, spi.getCurrentRow(), btr, tabSpace, wholeWordsOnly);
+		}
 		return Optional.ofNullable(ret);
 	}
 

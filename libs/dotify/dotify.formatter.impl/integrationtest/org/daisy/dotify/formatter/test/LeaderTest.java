@@ -22,5 +22,9 @@ public class LeaderTest extends AbstractFormatterEngineTest {
 	public void testLeaderMultipleRight() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/leader-right-multiple-input.obfl", "resource-files/leader-right-multiple-expected.pef", false);
 	}
-
+	
+	@Test
+	public void testLeaderExtendsRight() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/leader-right-extends-input.obfl", "resource-files/leader-right-extends-expected.pef", false);
+	}
 }
