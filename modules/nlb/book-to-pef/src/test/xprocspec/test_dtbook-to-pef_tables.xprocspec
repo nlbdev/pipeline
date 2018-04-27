@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
+    
+    <x:scenario label="table caption">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="123456"/>
+                            <meta name="dc:Title" content="Title"/>
+                            <meta name="dc:Identifier" content="123456"/>
+                            <meta name="dc:Language" content="no"/>
+                            <meta name="dc:Format" content="DTBook"/>
+                            <meta name="dc:Creator" content="Creator"/>
+                            <meta name="dc:Contributor.Translator" content="Contributor"/>
+                            <meta name="dc:Date" content="2017-06-30"/>
+                            <meta name="dc:Publisher" content="NLB"/>
+                            <meta name="dc:Source" content="urn:isbn:9781111111111"/>
+                            <meta name="dcterms:modified" content="2017-06-30T10:14:30+02:00"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <p>other content</p>
+                                    <table>
+                                        <!--Table with caption-->
+                                        <caption>caption</caption>
+                                        <tr>
+                                            <td>a</td>
+                                            <td>b</td>
+                                        </tr>
+                                        <tr>
+                                            <td>c</td>
+                                            <td>d</td>
+                                        </tr>
+                                    </table>
+                                    <p>other content</p>
+                                    <table>
+                                        <!--Table without caption-->
+                                        <tr>
+                                            <td>a</td>
+                                            <td>b</td>
+                                        </tr>
+                                        <tr>
+                                            <td>c</td>
+                                            <td>d</td>
+                                        </tr>
+                                    </table>
+                                    <p>other content</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠉⠁⠏⠞⠊⠕⠝</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠁⠀⠀⠃</row>
+                    <row>⠀⠀⠉⠀⠀⠙</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠁⠀⠀⠃</row>
+                    <row>⠀⠀⠉⠀⠀⠙</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="table as list">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="123456"/>
+                            <meta name="dc:Title" content="Title"/>
+                            <meta name="dc:Identifier" content="123456"/>
+                            <meta name="dc:Language" content="no"/>
+                            <meta name="dc:Format" content="DTBook"/>
+                            <meta name="dc:Creator" content="Creator"/>
+                            <meta name="dc:Contributor.Translator" content="Contributor"/>
+                            <meta name="dc:Date" content="2017-06-30"/>
+                            <meta name="dc:Publisher" content="NLB"/>
+                            <meta name="dc:Source" content="urn:isbn:9781111111111"/>
+                            <meta name="dcterms:modified" content="2017-06-30T10:14:30+02:00"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <table class="table-as-list">
+                                        <caption>caption</caption>
+                                        <tr>
+                                            <th/>
+                                            <th>A</th>
+                                            <th>B</th>
+                                        </tr>
+                                        <tbody>
+                                        <tr>
+                                            <th>I</th>
+                                            <td>a</td>
+                                            <td>b</td>
+                                        </tr>
+                                        <tr>
+                                            <th>II</th>
+                                            <td>c</td>
+                                            <td>d</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row>⠀⠀⠀⠀⠉⠁⠏⠞⠊⠕⠝</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                    <row/>
+                    <row>⠀⠀⠠⠊⠒⠀⠠⠁⠒⠀⠁</row>
+                    <row>⠀⠀⠀⠀⠠⠃⠒⠀⠃</row>
+                    <row>⠀⠀⠠⠠⠊⠊⠒⠀⠠⠁⠒⠀⠉</row>
+                    <row>⠀⠀⠀⠀⠠⠃⠒⠀⠙</row>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Regression test for #120: UnsupportedOperationException: error in table model that cannot be fixed automatically">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="123456"/>
+                            <meta name="dc:Title" content="Title"/>
+                            <meta name="dc:Identifier" content="123456"/>
+                            <meta name="track:Guidelines" content="2015-1"/>
+                            <meta name="track:Supplier" content="Supplier"/>
+                            <meta name="dc:Language" content="no"/>
+                            <meta name="dc:Format" content="DTBook"/>
+                            <meta name="dc:Creator" content="Lastname, Firstname"/>
+                            <meta name="dc:Date" content="2017-10-13"/>
+                            <meta name="dc:Publisher" content="NLB"/>
+                            <meta name="dc:Source" content="urn:isbn:123-45-67-89012-3"/>
+                            <meta name="dcterms:modified" content="2017-10-13T16:54:30+00:00"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <table>
+                                        <tr>
+                                            <th colspan="3"> </th>
+                                            <td> </td>
+                                            <td rowspan="2"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> </td>
+                                            <td> </td>
+                                        </tr>
+                                    </table>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="the output PEF">
+            <x:document type="directory" base-uri="temp-dir" href="3/pef-output-dir"/>
+        </x:context>
+        <x:expect label="There should be no output PEF" type="compare"/>
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="validation should fail" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
+        <x:context label="table-issues-report">
+            <x:document type="port" port="table-issues-report"/>
+        </x:context>
+        <x:expect label="there should be a single report document on the table-issues-report port" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <h1>Malformed tables</h1>
+                    <p>1 malformed table was found.</p>
+                    <ol>
+                        <li>
+                            <table style="border-collapse: collapse; background: red">
+                                <tr>
+                                    <th style="border: 1px solid black; background: white" colspan="3"> </th>
+                                    <td style="border: 1px solid black; background: white"> </td>
+                                    <td style="border: 1px solid black; background: white" rowspan="2"> </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; background: white"> </td>
+                                    <td style="border: 1px solid black; background: white"> </td>
+                                </tr>
+                            </table>
+                        </li>
+                    </ol>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Regression test for #129: dotify:obfl-to-pef failed: Failed to solve table"
+                pending="https://github.com/nlbdev/pipeline/issues/129">
+        <x:call step="nlb:dtbook-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xml">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                        <head>
+                            <meta name="dtb:uid" content="123456"/>
+                            <meta name="dc:Title" content="Title"/>
+                            <meta name="dc:Identifier" content="123456"/>
+                            <meta name="track:Guidelines" content="2015-1"/>
+                            <meta name="track:Supplier" content="Supplier"/>
+                            <meta name="dc:Language" content="no"/>
+                            <meta name="dc:Format" content="DTBook"/>
+                            <meta name="dc:Creator" content="Lastname, Firstname"/>
+                            <meta name="dc:Date" content="2017-10-13"/>
+                            <meta name="dc:Publisher" content="NLB"/>
+                            <meta name="dc:Source" content="urn:isbn:123-45-67-89012-3"/>
+                            <meta name="dcterms:modified" content="2017-10-13T16:54:30+00:00"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>doctitle</doctitle>
+                                <docauthor>docauthor</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <table>
+                                        <caption><p>Tabell 10.2 <strong>Norske velgeres gjennomsnittlige sympati for ulike politiske partier p&#xe5; en skala fra 0 til 10, etter stemmegivning i 2013.</strong></p></caption>
+                                        <tr>
+                                            <th colspan="2" rowspan="2"> </th>
+                                            <th colspan="7"><p>Sympati (gjennomsnitt p&#xe5; skala fra 0 til 10)</p></th>
+                                            <th rowspan="2"><p>N</p></th>
+                                        </tr>
+                                        <tr>
+                                            <th><p>SV</p></th>
+                                            <th><p>Ap</p></th>
+                                            <th><p>Sp</p></th>
+                                            <th><p>KrF</p></th>
+                                            <th><p>Venstre</p></th>
+                                            <th><p>H&#xf8;yre</p></th>
+                                            <th><p>Frp</p></th>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="7"><p>Stemmegivning</p></td>
+                                            <td><p>SV</p></td>
+                                            <td><p>8,2</p></td>
+                                            <td><p>7,3</p></td>
+                                            <td><p>5,2</p></td>
+                                            <td><p>4,0</p></td>
+                                            <td><p>5,2</p></td>
+                                            <td><p>3,6</p></td>
+                                            <td><p>0,8</p></td>
+                                            <td><p>67</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p>Ap</p></td>
+                                            <td><p>5,3</p></td>
+                                            <td><p>8,5</p></td>
+                                            <td><p>5,1</p></td>
+                                            <td><p>4,5</p></td>
+                                            <td><p>4,8</p></td>
+                                            <td><p>4,9</p></td>
+                                            <td><p>2,1</p></td>
+                                            <td><p>418</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p>Sp</p></td>
+                                            <td><p>4,1</p></td>
+                                            <td><p>6,8</p></td>
+                                            <td><p>8,2</p></td>
+                                            <td><p>5,5</p></td>
+                                            <td><p>5,1</p></td>
+                                            <td><p>4,4</p></td>
+                                            <td><p>2,4</p></td>
+                                            <td><p>76</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p>KrF</p></td>
+                                            <td><p>3,2</p></td>
+                                            <td><p>5,4</p></td>
+                                            <td><p>5,4</p></td>
+                                            <td><p>8,3</p></td>
+                                            <td><p>5,6</p></td>
+                                            <td><p>6,6</p></td>
+                                            <td><p>3,7</p></td>
+                                            <td><p>89</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p>Venstre</p></td>
+                                            <td><p>4,4</p></td>
+                                            <td><p>5,9</p></td>
+                                            <td><p>4,6</p></td>
+                                            <td><p>4,9</p></td>
+                                            <td><p>8,1</p></td>
+                                            <td><p>6,2</p></td>
+                                            <td><p>3,0</p></td>
+                                            <td><p>106</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p>H&#xf8;yre</p></td>
+                                            <td><p>2,8</p></td>
+                                            <td><p>5,1</p></td>
+                                            <td><p>3,8</p></td>
+                                            <td><p>5,0</p></td>
+                                            <td><p>5,2</p></td>
+                                            <td><p>8,3</p></td>
+                                            <td><p>5,5</p></td>
+                                            <td><p>387</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p>FrP</p></td>
+                                            <td><p>2,5</p></td>
+                                            <td><p>4,2</p></td>
+                                            <td><p>3,7</p></td>
+                                            <td><p>4,6</p></td>
+                                            <td><p>4,5</p></td>
+                                            <td><p>7,3</p></td>
+                                            <td><p>8,2</p></td>
+                                            <td><p>165</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td> </td>
+                                            <td><p>Totalt</p></td>
+                                            <td><p>4,1</p></td>
+                                            <td><p>6,2</p></td>
+                                            <td><p>4,6</p></td>
+                                            <td><p>4,8</p></td>
+                                            <td><p>5,1</p></td>
+                                            <td><p>6,2</p></td>
+                                            <td><p>4,1</p></td>
+                                            <td><p>1677</p></td>
+                                        </tr>
+                                    </table>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="the output PEF">
+            <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef"/>
+        </x:context>
+        <x:expect label="There should be an output PEF" type="count" min="1"/>
+    </x:scenario>
+        
+</x:description>
