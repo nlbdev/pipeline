@@ -2209,26 +2209,29 @@
               ⠤⠤
               <page-number ref-id="chapter_3" number-format="default"/>
             </block>
-            <block align="center" break-before="page" id="chapter_1">
+            <block align="center" break-before="page">
               <block>
                 <marker class="print-page" value="⠤"/>
               </block>
+              <span id="chapter_1"/>
               ⠿
             </block>
             <block>
               ⠤⠤⠤
             </block>
-            <block align="center" break-before="page" id="chapter_2">
+            <block align="center" break-before="page">
+              <span id="chapter_2"/>
               ⠿⠿
             </block>
             <block>
               ⠤⠤⠤
             </block>
-            <block align="center" break-before="page" id="chapter_3">
+            <block align="center" break-before="page">
               <block>
                 <marker class="print-page/prev" value="⠤"/>
                 <marker class="print-page" value="⠤⠤"/>
               </block>
+              <span id="chapter_3"/>
               ⠿⠿⠿
             </block>
             <block>
@@ -2394,19 +2397,24 @@
               <page-number ref-id="chapter_2" number-format="default"/>
             </block>
             <block break-before="page">
-              <block id="chapter_1">
+              <block>
+                <span id="chapter_1"/>
                 ⠿
               </block>
-              <block id="x">
+              <block>
+                <span id="x"/>
                 ⠤⠤⠤
               </block>
-              <block id="chapter_2">
+              <block>
+                <span id="chapter_2"/>
                 ⠿⠿
               </block>
-              <block id="y">
+              <block>
+                <span id="y"/>
                 ⠤⠤⠤
               </block>
-              <block id="z">
+              <block>
+                <span id="z"/>
                 ⠤⠤⠤
               </block>
             </block>
@@ -2481,24 +2489,20 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_22" pending="xfail doesn't work because of error">
+  <x:scenario label="test_22">
     <x:documentation>
       Tests target-counter() referencing inline element.
-      
-      Broken: "Failed to complete volume division": is this a Dotify bug?
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="{ text-transform:none } @page { size: 14 8 }">
             <p style="display:block">
-              <a href="foo" style="::after { content: target-counter(attr(href), page) }"/>
+              <a href="foo" style="::after { content: target-counter(attr(href), page); text-transform: auto }"/>
             </p>
             <p style="display:block">
               ⠤⠤⠤⠤
-              <a id="foo">
-                ⠿
-              </a>
+              <a id="foo">⠿</a>
             </p>
             <p style="display:block">
               ⠤⠤⠤⠤
@@ -2520,14 +2524,12 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block>
+            <block translate="">
               <page-number ref-id="foo" number-format="default"/>
             </block>
             <block>
               ⠤⠤⠤⠤
-              <span id="foo">
-                ⠿
-              </span>
+              <span id="foo"/>⠿
             </block>
             <block>
               ⠤⠤⠤⠤
@@ -3820,17 +3822,16 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_40" pending="xfail doesn't work because of error">
+  <x:scenario label="test_40">
     <x:documentation>
-      Tests target-counter() referencing empty inline element. Broken: "Failed to complete volume
-      division": is this a Dotify bug?
+      Tests target-counter() referencing empty inline element.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform:none">
             <p style="display:block">
-              <a href="foo" style="::after { content: target-counter(attr(href), page) }"/>
+              <a href="foo" style="::after { content: target-counter(attr(href), page); text-transform: auto }"/>
             </p>
             <p style="display:block">
               <a id="foo"/>
@@ -3855,7 +3856,7 @@
             </default-template>
           </layout-master>
           <sequence master="a">
-            <block>
+            <block translate="">
               <page-number ref-id="foo" number-format="default"/>
             </block>
             <block>
@@ -7597,24 +7598,24 @@
           <sequence master="main">
             <block translate=""/>
             <block>
-              <block id="ch_1" translate=""> 1 </block>
-              <block id="ch_1_1" translate=""> 1 </block>
+              <block translate=""><span id="ch_1"/> 1 </block>
+              <block translate=""><span id="ch_1_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_1_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_1_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2" translate=""> 2 </block>
-              <block id="ch_2_1" translate=""> 1 </block>
+              <block translate=""><span id="ch_2"/> 2 </block>
+              <block translate=""><span id="ch_2_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_2_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -7870,13 +7871,13 @@
           <sequence master="main">
             <block translate=""/>
             <block>
-              <block id="ch_1" translate=""> 1 </block>
-              <block id="ch_1_1" translate=""> 1 </block>
+              <block translate=""><span id="ch_1"/> 1 </block>
+              <block translate=""><span id="ch_1_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_1_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_1_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -8010,7 +8011,7 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
+            <block>
               <block>⠤⠤⠤</block>
             </block>
             <block break-before="page"/>
@@ -8114,8 +8115,8 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block translate="" id="x">
-              <block id="a">⠿⠿⠿ 1</block>
+            <block translate="">
+              <block><span id="a"/>⠿⠿⠿ 1</block>
               <block>⠤⠤⠤</block>
             </block>
           </sequence>
@@ -8858,7 +8859,7 @@
                   <page-number ref-id="a" number-format="default"/>
                 </style>
               </block>
-              <block break-before="page" id="a"> ⠤⠤⠤ </block>
+              <block break-before="page"><span id="a"/> ⠤⠤⠤ </block>
             </block>
           </sequence>
         </obfl>
@@ -9171,15 +9172,15 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
-              <block id="ch_1" translate=""> 1 </block>
+            <block>
+              <block translate=""><span id="ch_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -9339,15 +9340,15 @@
             </post-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
-              <block id="ch_1" translate=""> 1 </block>
+            <block>
+              <block translate=""><span id="ch_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -9507,7 +9508,7 @@
             </pre-content>
           </volume-template>
           <sequence master="body">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤
             </block>
           </sequence>
@@ -9666,7 +9667,7 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤
             </block>
           </sequence>
@@ -9759,7 +9760,7 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤
             </block>
           </sequence>
@@ -9901,7 +9902,7 @@
             </item>
           </collection>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤ ⠶
               <anchor item="a"/>
               ⠤⠤⠤ ⠶⠶
@@ -11363,7 +11364,7 @@
             </item>
           </collection>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠶
               <anchor item="a"/>
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
