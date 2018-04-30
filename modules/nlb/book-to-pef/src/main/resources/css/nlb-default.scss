@@ -10,6 +10,7 @@ $include-images: true !default;
 $include-captions: true !default;
 $notes-placement: end-of-volume !default;
 $default-table-class: table-matrix !default;
+$page-width: 40 !default;
 
 /* -------------------------------------------------------------------------- */
 /*                page                                                        */
@@ -318,11 +319,12 @@ h1, h2, h3, h4, h5, h6 {
         li {
                 display: block;
                 margin-left: 2;
+                margin-right: 4;
                 margin-top: 0;
                 text-indent: -2;
                 
                 & a::after {
-                        content: " " leader("⠄") " " target-counter(attr(href), page);
+                        content: " " leader("⠄", $page-width - if($show-print-page-numbers, 2, 1) - 1, right) " " target-counter(attr(href), page);
                         margin-left: 2;
                         margin-top: 0;
                         text-indent: -2;
