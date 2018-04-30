@@ -1779,7 +1779,17 @@
     -->
     <xsl:template mode="block td toc-entry"
                   match="css:leader">
-        <leader pattern="{@pattern}" position="100%" align="right"/>
+        <xsl:if test="@position[not(matches(.,re:exact($css:POSITIVE_NUMBER_RE)))]">
+            <!--
+                Percentages not supported because they are relative to the box width, but
+                css:adjust-boxes changes the box dimensions
+            -->
+            <xsl:message terminate="yes">
+                <xsl:apply-templates mode="css:serialize" select="."/>
+                <xsl:text>: percentage not supported</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <leader pattern="{@pattern}" position="{(@position,'100%')[1]}" align="{(@alignment,'right')[1]}"/>
     </xsl:template>
     
     <!--
