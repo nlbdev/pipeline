@@ -126,12 +126,15 @@
     <p:try name="try-convert-and-store">
         <p:group>
             <p:output port="status"/>
+            <p:variable name="insert-boilerplate" select="(//c:param[@name='insert-boilerplate']/@value,'true')[1]">
+                <p:pipe step="main" port="parameters"/>
+            </p:variable>
             <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
                                       name="convert">
                 <p:with-option name="stylesheet" select="string-join((
                                                            'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
                                                            'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
-                                                           'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl',
+                                                           if ($insert-boilerplate = 'true') then 'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl' else (),
                                                            if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                            if ($stylesheet) then $stylesheet else ()),' ')"/>
                 <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
