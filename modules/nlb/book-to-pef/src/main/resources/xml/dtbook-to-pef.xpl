@@ -74,6 +74,7 @@
     <p:option name="show-braille-page-numbers"/>
     <p:option name="show-print-page-numbers"/>
     <p:option name="toc-depth"/>
+    <p:option name="insert-boilerplate"/>
     <p:option name="pef-output-dir"/>
     <p:option name="preview-output-dir"/>
     <p:option name="obfl-output-dir"/>
@@ -126,9 +127,6 @@
     <p:try name="try-convert-and-store">
         <p:group>
             <p:output port="status"/>
-            <p:variable name="insert-boilerplate" select="(//c:param[@name='insert-boilerplate']/@value,'true')[1]">
-                <p:pipe step="main" port="parameters"/>
-            </p:variable>
             <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
                                       name="convert">
                 <p:with-option name="stylesheet" select="string-join((

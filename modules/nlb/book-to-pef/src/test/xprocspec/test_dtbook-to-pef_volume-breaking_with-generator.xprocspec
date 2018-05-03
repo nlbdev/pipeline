@@ -7,10 +7,10 @@
     
     <x:scenario label="_">
         <x:call step="nlb:dtbook-to-pef-test">
-            <x:param name="show-print-page-numbers" select="'false'"/>
-            <x:param name="show-braille-page-numbers" select="'false'"/>
-            <x:param name="toc-depth" select="0"/>
-            <x:param name="maximum-number-of-pages" select="10"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="maximum-number-of-pages" select="10"/>
         </x:call>
         
         <x:scenario label="Regression test for issue #118: Failed to complete volume division in dotify:obfl-to-pef">
@@ -115,9 +115,9 @@
                         </dtbook>
                     </x:document>
                 </x:input>
-                <x:param name="pef-output-dir" select="resolve-uri('_/1/pef-output-dir',$temp-dir)"/>
-                <x:param name="preview-output-dir" select="resolve-uri('_/1/preview-output-dir',$temp-dir)"/>
-                <x:param name="temp-dir" select="resolve-uri('_/1/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('_/1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('_/1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('_/1/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
                 <x:document type="file" base-uri="temp-dir" href="_/1/pef-output-dir/book.pef" />

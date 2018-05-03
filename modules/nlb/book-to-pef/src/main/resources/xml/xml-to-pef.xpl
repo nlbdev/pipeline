@@ -199,6 +199,11 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
             <h2 px:role="name">Generert innhold: Dybde på innholdsfortegnelse</h2>
         </p:documentation>
     </p:option>
+    <p:option name="insert-boilerplate" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Generert innhold: Lag ny tittelside og bokinformasjon/kolofon.</h2>
+        </p:documentation>
+    </p:option>
     
     <!-- ====== -->
     <!-- Utputt -->

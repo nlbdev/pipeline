@@ -67,6 +67,7 @@
     <p:option name="show-braille-page-numbers"/>
     <p:option name="show-print-page-numbers"/>
     <p:option name="toc-depth"/>
+    <p:option name="insert-boilerplate"/>
     <p:option name="pef-output-dir"/>
     <p:option name="preview-output-dir"/>
     <p:option name="obfl-output-dir"/>
@@ -124,7 +125,7 @@
         <p:with-option name="stylesheet" select="string-join((
                                                    'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
                                                    'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
-                                                   'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl',
+                                                   if ($insert-boilerplate = 'true') then 'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl' else (),
                                                    if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                    if ($stylesheet) then $stylesheet else ()),' ')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>

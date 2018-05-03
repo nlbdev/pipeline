@@ -13,8 +13,14 @@
     <p:input port="source" primary="true" px:name="source" px:media-type="application/x-dtbook+xml"/>
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml"/>
     
-    <!-- options to be forwarded -->
-    <p:input port="parameters" kind="parameter" primary="true"/>
+    <p:option name="temp-dir" required="true"/>
+    <p:option name="pef-output-dir" required="true"/>
+    <p:option name="preview-output-dir" required="true"/>
+    
+    <p:option name="show-print-page-numbers" required="true"/>
+    <p:option name="show-braille-page-numbers" required="true"/>
+    <p:option name="toc-depth" required="true"/>
+    <p:option name="maximum-number-of-pages" required="true"/>
     
     <p:import href="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
@@ -22,7 +28,7 @@
     <p:in-scope-names name="in-scope-names"/>
     <px:merge-parameters>
         <p:input port="source">
-            <p:pipe step="main" port="parameters"/>
+            <p:pipe step="in-scope-names" port="result"/>
         </p:input>
     </px:merge-parameters>
     <p:identity name="parameters"/>
@@ -32,25 +38,22 @@
         <p:input port="source">
             <p:pipe port="source" step="main"/>
         </p:input>
-        <p:input port="parameters"/>
+        <p:input port="parameters">
+            <p:pipe port="result" step="parameters"/>
+        </p:input>
         <p:input port="stylesheet">
             <p:document href="generate-content.xsl"/>
         </p:input>
     </p:xslt>
     
     <nlb:dtbook-to-pef>
-        <p:input port="parameters">
-            <p:pipe port="parameters" step="main"/>
-        </p:input>
-        <p:with-option name="temp-dir" select="/*/c:param[@name='temp-dir']/@value">
-            <p:pipe port="result" step="parameters"/>
-        </p:with-option>
-        <p:with-option name="pef-output-dir" select="/*/c:param[@name='pef-output-dir']/@value">
-            <p:pipe port="result" step="parameters"/>
-        </p:with-option>
-        <p:with-option name="preview-output-dir" select="/*/c:param[@name='preview-output-dir']/@value">
-            <p:pipe port="result" step="parameters"/>
-        </p:with-option>
+        <p:with-option name="temp-dir" select="$temp-dir"/>
+        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
+        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+        <p:with-option name="show-print-page-numbers" select="$show-print-page-numbers"/>
+        <p:with-option name="show-braille-page-numbers" select="$show-braille-page-numbers"/>
+        <p:with-option name="toc-depth" select="$toc-depth"/>
+        <p:with-option name="maximum-number-of-pages" select="$maximum-number-of-pages"/>
     </nlb:dtbook-to-pef>
 
 </p:declare-step>
