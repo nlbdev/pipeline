@@ -11,6 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh 'echo "Started job \"$JOB_NAME [$BUILD_NUMBER]\". Check console output at $RUN_DISPLAY_URL" | slack-cli -d braille-in-pipeline || true'
+                deleteDir()
                 checkout scm
             }
         }
@@ -51,6 +52,7 @@ pipeline {
             archiveArtifacts artifacts: "**/target/test.log"
             archiveArtifacts artifacts: "maven.log"
             archiveArtifacts artifacts: "descriptor-current.xml"
+            cleanWs()
         }
         
         failure {
