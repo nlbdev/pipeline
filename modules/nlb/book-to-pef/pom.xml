@@ -344,7 +344,9 @@
                     <mkdir dir="${project.basedir}/target/generated-resources/hyph" />
                     <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt"
                             encoding="ISO-8859-1">
-                      <fileset dir="${project.basedir}/src/main/resources/hyph/hyph_nb_NO_standard_dictionary" />
+                      <fileset dir="${project.basedir}/src/main/resources/hyph/hyph_nb_NO_standard_dictionary">
+                        <include name="**/standard_hyphen_extended.txt"/>
+                      </fileset>
                     </concat>
                     <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard_dictionary.txt"
                             encoding="ISO-8859-1">

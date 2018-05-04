@@ -14,6 +14,6 @@ while (<>) {
 		$rep =~ s/-/=/g;
 		printf(".%s./%s,%s,%s\n", $word, $rep, $pos, $cut);
 	} else {
-		die;
+		die "Wrong pattern: $_";
 	}
 }

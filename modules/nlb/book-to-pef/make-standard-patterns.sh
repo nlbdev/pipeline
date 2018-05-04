@@ -19,7 +19,7 @@ patgen() {
          1 \
          $HYPH_LEVEL \
          1 \
-         15 \
+         7 \
          1 \
          100 \
          1
@@ -33,7 +33,7 @@ PATTERNS_FILE=$CURDIR/src/main/resources/hyph/hyph_nb_NO_standard_base.pat
 rm -f $CURDIR/target/patgen.log
 touch $CURDIR/target/patgen.log
 
-for level in 1 2; do
+for level in 1 2 3; do
     PATOUT_FILE=$CURDIR/target/generated-resources/hyph/hyph_nb_NO_standard.pat.$level
     patgen $level \
            $DICTIONARY_FILE \
@@ -45,7 +45,7 @@ for level in 1 2; do
     PATTERNS_FILE=$PATOUT_FILE
 done
 
-# 1 bad and 117 missed
+# 688 bad and 346200 missed
 #cat $DICTIONARY_FILE | grep '\.[^0]\|-' >/dev/null && exit 1
 
 cat $PATTERNS_FILE
