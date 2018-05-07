@@ -1,6 +1,13 @@
 # iso-8859-1 does not support č
 han-fčrliga
 
+# ï, ó and î
+roïau-mes
+chaî-nes
+con-naître
+dî-ner
+maî-tresse
+
 # too long for patgen
 # perl -nle 'print if length$_>50' standard_hyphen_extended.txt
 abad-uer-bioutcraftinushef-t-ernusjhornoti-nusquoti-dianus
