@@ -285,139 +285,494 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="table as list vs. linearized">
+    <x:scenario label="automatic selection of table class">
         <x:call step="nlb:dtbook-to-pef">
-            <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
-                        <book>
-                            <bodymatter>
-                                <level1>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td><p>Er du gift?</p></td>
-                                                <td><p>Ja, jeg er gift.</p></td>
-                                                <td><p>Nei, jeg er ikke gift.</p><img src="..." alt=""/></td>
-                                            </tr>
-                                            <tr>
-                                                <td><p>Er du enslig?</p></td>
-                                                <td><p>Ja, jeg er enslig.</p></td>
-                                                <td><p>Nei, jeg er ikke enslig.</p><img src="..." alt=""/></td>
-                                            </tr>
-                                            <tr>
-                                                <td><p>Er du skilt?</p></td>
-                                                <td><p>Ja, jeg er skilt.</p></td>
-                                                <td><p>Nei, jeg er ikke skilt.</p><img src="..." alt=""/></td>
-                                            </tr>
-                                            <tr>
-                                                <td><p>Er du enke?</p></td>
-                                                <td><p>Ja, jeg er enke.</p></td>
-                                                <td><p>Nei, jeg er ikke enke.</p><img src="..." alt=""/></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
-                </x:document>
-            </x:input>
             <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="toc-depth" select="0"/>
+            <x:option name="insert-boilerplate" select="'false'"/>
         </x:call>
         
-        <x:scenario label="linearized (';' as cell separator)">
+        <x:scenario label="5 x 3 table should be transposed">
             <x:call>
-                <x:param port="parameters" name="default-table-class" select="'table-linearized'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('4.2/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('4.2/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('4.2/temp-dir',$temp-dir)"/>
-            </x:call>
-            <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="4.2/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
-            </x:context>
-            <x:expect label="result" type="compare">
-                <x:document type="inline">
-                    <page xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row/>
-                        <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
-                        <row/>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠛⠊⠋⠞⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
-                        <row>⠀⠀⠀⠀⠛⠊⠋⠞⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
-                        <row>⠀⠀⠀⠀⠛⠊⠋⠞⠄</row>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠎⠇⠊⠛⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
-                        <row>⠀⠀⠀⠀⠑⠝⠎⠇⠊⠛⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
-                        <row>⠀⠀⠀⠀⠑⠝⠎⠇⠊⠛⠄</row>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠎⠅⠊⠇⠞⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
-                        <row>⠀⠀⠀⠀⠎⠅⠊⠇⠞⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
-                        <row>⠀⠀⠀⠀⠎⠅⠊⠇⠞⠄</row>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠅⠑⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
-                        <row>⠀⠀⠀⠀⠑⠝⠅⠑⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
-                        <row>⠀⠀⠀⠀⠑⠝⠅⠑⠄</row>
-                        <row/>
-                        <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    </page>
-                </x:document>
-            </x:expect>
-        </x:scenario>
-        
-        <x:scenario label="as list">
-            <x:call>
-                <x:param port="parameters" name="default-table-class" select="'table-as-list'"/>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>b - p</th>
+                                                    <th>d - t</th>
+                                                    <th>g - k</th>
+                                                    <th>v - f</th>
+                                                    <th>v - b</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>ber - Per</td>
+                                                    <td>ditt - titt</td>
+                                                    <td>gutt - kutt</td>
+                                                    <td>vin - fin</td>
+                                                    <td>vi - bi</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>bar - par</td>
+                                                    <td>do - to</td>
+                                                    <td>gul - kul</td>
+                                                    <td>hvem - fem</td>
+                                                    <td>var - bar</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
                 <x:option name="pef-output-dir" select="resolve-uri('4.1/pef-output-dir',$temp-dir)"/>
                 <x:option name="preview-output-dir" select="resolve-uri('4.1/preview-output-dir',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('4.1/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="result">
-                <x:document type="file" base-uri="temp-dir" href="4.1/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+                <x:document type="file" base-uri="temp-dir" href="4.1/pef-output-dir/book.pef"/>
             </x:context>
-            <x:expect label="result" type="compare">
+            <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"
+                      step="x:pef-compare">
                 <x:document type="inline">
-                    <page xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row/>
-                        <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
-                        <row/>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠛⠊⠋⠞⠢</row>
-                        <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠛⠊⠋⠞⠄</row>
-                        <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠛⠊⠋⠞⠄</row>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠎⠇⠊⠛⠢</row>
-                        <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠑⠝⠎⠇⠊⠛⠄</row>
-                        <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠑⠝⠎⠇⠊⠛⠄</row>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠎⠅⠊⠇⠞⠢</row>
-                        <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠎⠅⠊⠇⠞⠄</row>
-                        <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠎⠅⠊⠇⠞⠄</row>
-                        <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠅⠑⠢</row>
-                        <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠑⠝⠅⠑⠄</row>
-                        <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠑⠝⠅⠑⠄</row>
-                        <row/>
-                        <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                    </page>
+                    <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                        <head>
+                            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                <dc:format>application/x-pef+xml</dc:format>
+                                <dc:identifier>identifier?</dc:identifier>
+                                <dc:date>2018-05-07</dc:date>
+                                <dc:language>no</dc:language>
+                            </meta>
+                        </head>
+                        <body>
+                            <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                        <row/>
+                                        <row>⠀⠀⠃⠀⠤⠀⠏⠀⠀⠃⠑⠗⠀⠤⠀⠠⠏⠑⠗⠀⠀⠀⠃⠁⠗⠀⠤⠀⠏⠁⠗</row>
+                                        <row>⠀⠀⠙⠀⠤⠀⠞⠀⠀⠙⠊⠞⠞⠀⠤⠀⠞⠊⠞⠞⠀⠀⠙⠕⠀⠤⠀⠞⠕</row>
+                                        <row>⠀⠀⠛⠀⠤⠀⠅⠀⠀⠛⠥⠞⠞⠀⠤⠀⠅⠥⠞⠞⠀⠀⠛⠥⠇⠀⠤⠀⠅⠥⠇</row>
+                                        <row>⠀⠀⠧⠀⠤⠀⠋⠀⠀⠧⠊⠝⠀⠤⠀⠋⠊⠝⠀⠀⠀⠀⠓⠧⠑⠍⠀⠤</row>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠋⠑⠍</row>
+                                        <row>⠀⠀⠧⠀⠤⠀⠃⠀⠀⠧⠊⠀⠤⠀⠃⠊⠀⠀⠀⠀⠀⠀⠧⠁⠗⠀⠤⠀⠃⠁⠗</row>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                    </page>
+                                </section>
+                            </volume>
+                        </body>
+                    </pef>
                 </x:document>
             </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="3 x 4 table">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td><p>Er du gift?</p></td>
+                                                    <td><p>Ja, jeg er gift.</p></td>
+                                                    <td><p>Nei, jeg er ikke gift.</p><img src="..." alt=""/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><p>Er du enslig?</p></td>
+                                                    <td><p>Ja, jeg er enslig.</p></td>
+                                                    <td><p>Nei, jeg er ikke enslig.</p><img src="..." alt=""/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><p>Er du skilt?</p></td>
+                                                    <td><p>Ja, jeg er skilt.</p></td>
+                                                    <td><p>Nei, jeg er ikke skilt.</p><img src="..." alt=""/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><p>Er du enke?</p></td>
+                                                    <td><p>Ja, jeg er enke.</p></td>
+                                                    <td><p>Nei, jeg er ikke enke.</p><img src="..." alt=""/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+            </x:call>
+            
+            <x:scenario label="by default rendered in matrix format">
+                <x:call>
+                    <x:option name="pef-output-dir" select="resolve-uri('4.2.1/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('4.2.1/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('4.2.1/temp-dir',$temp-dir)"/>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="file" base-uri="temp-dir" href="4.2.1/pef-output-dir/book.pef"/>
+                </x:context>
+                <x:expect label="result" type="custom"
+                          href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                    <x:document type="inline">
+                        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                            <head>
+                                <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                    <dc:format>application/x-pef+xml</dc:format>
+                                    <dc:identifier>identifier?</dc:identifier>
+                                    <dc:date>2018-05-07</dc:date>
+                                    <dc:language>no</dc:language>
+                                </meta>
+                            </head>
+                            <body>
+                                <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                    <section>
+                                        <page>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                            <row/>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠛⠊⠋⠞⠢⠀⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠊⠅⠅⠑⠀⠛⠊⠋⠞⠄</row>
+                                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠊⠋⠞⠄⠀⠀⠀⠀</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠑⠝⠎⠤⠀⠀⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠊⠅⠅⠑⠀⠑⠝⠎⠇⠊⠛⠄</row>
+                                            <row>⠀⠀⠇⠊⠛⠢⠀⠀⠀⠀⠑⠝⠎⠇⠊⠛⠄⠀⠀</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠎⠅⠊⠇⠞⠢⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠊⠅⠅⠑⠀⠎⠅⠊⠇⠞⠄</row>
+                                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠎⠅⠊⠇⠞⠄⠀⠀⠀</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠑⠝⠅⠑⠢⠀⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠊⠅⠅⠑⠀⠑⠝⠅⠑⠄</row>
+                                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠝⠅⠑⠄⠀⠀⠀⠀</row>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                        </page>
+                                    </section>
+                                </volume>
+                            </body>
+                        </pef>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            
+            <x:scenario label="force linearized (';' as cell separator)">
+                <x:call>
+                    <x:param port="parameters" name="default-table-class" select="'table-linearized'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('4.2.2/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('4.2.2/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('4.2.2/temp-dir',$temp-dir)"/>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="file" base-uri="temp-dir" href="4.2.2/pef-output-dir/book.pef"/>
+                </x:context>
+                <x:expect label="result" type="custom"
+                          href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                    <x:document type="inline">
+                        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                            <head>
+                                <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                    <dc:format>application/x-pef+xml</dc:format>
+                                    <dc:identifier>identifier?</dc:identifier>
+                                    <dc:date>2018-05-07</dc:date>
+                                    <dc:language>no</dc:language>
+                                </meta>
+                            </head>
+                            <body>
+                                <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                    <section>
+                                        <page>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                            <row/>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠛⠊⠋⠞⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠀⠀⠛⠊⠋⠞⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                            <row>⠀⠀⠀⠀⠛⠊⠋⠞⠄</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠎⠇⠊⠛⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠀⠀⠑⠝⠎⠇⠊⠛⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                            <row>⠀⠀⠀⠀⠑⠝⠎⠇⠊⠛⠄</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠎⠅⠊⠇⠞⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠀⠀⠎⠅⠊⠇⠞⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                            <row>⠀⠀⠀⠀⠎⠅⠊⠇⠞⠄</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠅⠑⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            <row>⠀⠀⠀⠀⠑⠝⠅⠑⠄⠀⠆⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                            <row>⠀⠀⠀⠀⠑⠝⠅⠑⠄</row>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                        </page>
+                                    </section>
+                                </volume>
+                            </body>
+                        </pef>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            
+            <x:scenario label="force as list">
+                <x:call>
+                    <x:param port="parameters" name="default-table-class" select="'table-as-list'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('4.2.3/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('4.2.3/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('4.2.3/temp-dir',$temp-dir)"/>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="file" base-uri="temp-dir" href="4.2.3/pef-output-dir/book.pef"/>
+                </x:context>
+                <x:expect label="result" type="custom"
+                          href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                    <x:document type="inline">
+                        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                            <head>
+                                <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                    <dc:format>application/x-pef+xml</dc:format>
+                                    <dc:identifier>identifier?</dc:identifier>
+                                    <dc:date>2018-05-07</dc:date>
+                                    <dc:language>no</dc:language>
+                                </meta>
+                            </head>
+                            <body>
+                                <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                    <section>
+                                        <page>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                            <row/>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠛⠊⠋⠞⠢</row>
+                                            <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠛⠊⠋⠞⠄</row>
+                                            <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠛⠊⠋⠞⠄</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠎⠇⠊⠛⠢</row>
+                                            <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠑⠝⠎⠇⠊⠛⠄</row>
+                                            <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠑⠝⠎⠇⠊⠛⠄</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠎⠅⠊⠇⠞⠢</row>
+                                            <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠎⠅⠊⠇⠞⠄</row>
+                                            <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠎⠅⠊⠇⠞⠄</row>
+                                            <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠅⠑⠢</row>
+                                            <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗⠀⠑⠝⠅⠑⠄</row>
+                                            <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗⠀⠊⠅⠅⠑⠀⠑⠝⠅⠑⠄</row>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                        </page>
+                                    </section>
+                                </volume>
+                            </body>
+                        </pef>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+        
+        <x:scenario label="2 x 7 table">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Fornavn</td>
+                                                    <td>Daniela Carla de Oliveira Pereira</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Etternavn</td>
+                                                    <td>Vik</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Adresse</td>
+                                                    <td>Ibsensgate 3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Postnummer</td>
+                                                    <td>4014</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Poststed</td>
+                                                    <td>Stavanger</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Telefonnummer</td>
+                                                    <td>912 34 567</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Fødselsdato</td>
+                                                    <td>03.01.1986</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+            </x:call>
+            
+            <x:scenario label="by default rendered in matrix format">
+                <x:call>
+                    <x:option name="pef-output-dir" select="resolve-uri('4.3.1/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('4.3.1/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('4.3.1/temp-dir',$temp-dir)"/>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="file" base-uri="temp-dir" href="4.3.1/pef-output-dir/book.pef"/>
+                </x:context>
+                <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"
+                          step="x:pef-compare">
+                    <x:document type="inline">
+                        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                            <head>
+                                <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                    <dc:format>application/x-pef+xml</dc:format>
+                                    <dc:identifier>identifier?</dc:identifier>
+                                    <dc:date>2018-05-07</dc:date>
+                                    <dc:language>no</dc:language>
+                                </meta>
+                            </head>
+                            <body>
+                                <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                    <section>
+                                        <page>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                            <row/>
+                                            <row>⠀⠀⠠⠋⠕⠗⠝⠁⠧⠝⠀⠀⠀⠀⠀⠀⠠⠙⠁⠝⠊⠑⠇⠁⠀⠠⠉⠁⠗⠇⠁</row>
+                                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠑⠀⠠⠕⠇⠊⠧⠑⠊⠗⠁</row>
+                                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠑⠗⠑⠊⠗⠁</row>
+                                            <row>⠀⠀⠠⠑⠞⠞⠑⠗⠝⠁⠧⠝⠀⠀⠀⠀⠠⠧⠊⠅</row>
+                                            <row>⠀⠀⠠⠁⠙⠗⠑⠎⠎⠑⠀⠀⠀⠀⠀⠀⠠⠊⠃⠎⠑⠝⠎⠛⠁⠞⠑⠀⠼⠉</row>
+                                            <row>⠀⠀⠠⠏⠕⠎⠞⠝⠥⠍⠍⠑⠗⠀⠀⠀⠼⠙⠚⠁⠙</row>
+                                            <row>⠀⠀⠠⠏⠕⠎⠞⠎⠞⠑⠙⠀⠀⠀⠀⠀⠠⠎⠞⠁⠧⠁⠝⠛⠑⠗</row>
+                                            <row>⠀⠀⠠⠞⠑⠇⠑⠋⠕⠝⠝⠥⠍⠤⠀⠀⠼⠊⠁⠃⠀⠼⠉⠙⠀⠼⠑⠋⠛</row>
+                                            <row>⠀⠀⠍⠑⠗⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                            <row>⠀⠀⠠⠋⠪⠙⠎⠑⠇⠎⠙⠁⠞⠕⠀⠀⠼⠚⠉⠄⠚⠁⠄⠁⠊⠓⠋</row>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                        </page>
+                                    </section>
+                                </volume>
+                            </body>
+                        </pef>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            
+            <x:scenario label="force linearized (';' as cell separator)">
+                <x:call>
+                    <x:param port="parameters" name="default-table-class" select="'table-linearized'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('4.3.2/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('4.3.2/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('4.3.2/temp-dir',$temp-dir)"/>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="file" base-uri="temp-dir" href="4.3.2/pef-output-dir/book.pef"/>
+                </x:context>
+                <x:expect label="result" type="custom"
+                          href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                    <x:document type="inline">
+                        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                            <head>
+                                <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                    <dc:format>application/x-pef+xml</dc:format>
+                                    <dc:identifier>identifier?</dc:identifier>
+                                    <dc:date>2018-05-07</dc:date>
+                                    <dc:language>no</dc:language>
+                                </meta>
+                            </head>
+                            <body>
+                                <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                    <section>
+                                        <page>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                            <row/>
+                                            <row>⠀⠀⠠⠋⠕⠗⠝⠁⠧⠝⠀⠆⠀⠠⠙⠁⠝⠊⠑⠇⠁⠀⠠⠉⠁⠗⠇⠁⠀⠙⠑</row>
+                                            <row>⠀⠀⠀⠀⠠⠕⠇⠊⠧⠑⠊⠗⠁⠀⠠⠏⠑⠗⠑⠊⠗⠁</row>
+                                            <row>⠀⠀⠠⠑⠞⠞⠑⠗⠝⠁⠧⠝⠀⠆⠀⠠⠧⠊⠅</row>
+                                            <row>⠀⠀⠠⠁⠙⠗⠑⠎⠎⠑⠀⠆⠀⠠⠊⠃⠎⠑⠝⠎⠛⠁⠞⠑⠀⠼⠉</row>
+                                            <row>⠀⠀⠠⠏⠕⠎⠞⠝⠥⠍⠍⠑⠗⠀⠆⠀⠼⠙⠚⠁⠙</row>
+                                            <row>⠀⠀⠠⠏⠕⠎⠞⠎⠞⠑⠙⠀⠆⠀⠠⠎⠞⠁⠧⠁⠝⠛⠑⠗</row>
+                                            <row>⠀⠀⠠⠞⠑⠇⠑⠋⠕⠝⠝⠥⠍⠍⠑⠗⠀⠆⠀⠼⠊⠁⠃⠀⠼⠉⠙</row>
+                                            <row>⠀⠀⠀⠀⠼⠑⠋⠛</row>
+                                            <row>⠀⠀⠠⠋⠪⠙⠎⠑⠇⠎⠙⠁⠞⠕⠀⠆⠀⠼⠚⠉⠄⠚⠁⠄⠁⠊⠓⠋</row>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                        </page>
+                                    </section>
+                                </volume>
+                            </body>
+                        </pef>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            
+            <x:scenario label="force as list">
+                <x:call>
+                    <x:param port="parameters" name="default-table-class" select="'table-as-list'"/>
+                    <x:option name="pef-output-dir" select="resolve-uri('4.3.3/pef-output-dir',$temp-dir)"/>
+                    <x:option name="preview-output-dir" select="resolve-uri('4.3.3/preview-output-dir',$temp-dir)"/>
+                    <x:option name="temp-dir" select="resolve-uri('4.3.3/temp-dir',$temp-dir)"/>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="file" base-uri="temp-dir" href="4.3.3/pef-output-dir/book.pef"/>
+                </x:context>
+                <x:expect label="result" type="custom"
+                          href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                    <x:document type="inline">
+                        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                            <head>
+                                <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                    <dc:format>application/x-pef+xml</dc:format>
+                                    <dc:identifier>identifier?</dc:identifier>
+                                    <dc:date>2018-05-07</dc:date>
+                                    <dc:language>no</dc:language>
+                                </meta>
+                            </head>
+                            <body>
+                                <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                    <section>
+                                        <page>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                            <row/>
+                                            <row>⠀⠀⠠⠋⠕⠗⠝⠁⠧⠝</row>
+                                            <row>⠀⠀⠀⠀⠠⠙⠁⠝⠊⠑⠇⠁⠀⠠⠉⠁⠗⠇⠁⠀⠙⠑</row>
+                                            <row>⠀⠀⠀⠀⠀⠀⠠⠕⠇⠊⠧⠑⠊⠗⠁⠀⠠⠏⠑⠗⠑⠊⠗⠁</row>
+                                            <row>⠀⠀⠠⠑⠞⠞⠑⠗⠝⠁⠧⠝</row>
+                                            <row>⠀⠀⠀⠀⠠⠧⠊⠅</row>
+                                            <row>⠀⠀⠠⠁⠙⠗⠑⠎⠎⠑</row>
+                                            <row>⠀⠀⠀⠀⠠⠊⠃⠎⠑⠝⠎⠛⠁⠞⠑⠀⠼⠉</row>
+                                            <row>⠀⠀⠠⠏⠕⠎⠞⠝⠥⠍⠍⠑⠗</row>
+                                            <row>⠀⠀⠀⠀⠼⠙⠚⠁⠙</row>
+                                            <row>⠀⠀⠠⠏⠕⠎⠞⠎⠞⠑⠙</row>
+                                            <row>⠀⠀⠀⠀⠠⠎⠞⠁⠧⠁⠝⠛⠑⠗</row>
+                                            <row>⠀⠀⠠⠞⠑⠇⠑⠋⠕⠝⠝⠥⠍⠍⠑⠗</row>
+                                            <row>⠀⠀⠀⠀⠼⠊⠁⠃⠀⠼⠉⠙⠀⠼⠑⠋⠛</row>
+                                            <row>⠀⠀⠠⠋⠪⠙⠎⠑⠇⠎⠙⠁⠞⠕</row>
+                                            <row>⠀⠀⠀⠀⠼⠚⠉⠄⠚⠁⠄⠁⠊⠓⠋</row>
+                                            <row/>
+                                            <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                        </page>
+                                    </section>
+                                </volume>
+                            </body>
+                        </pef>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
         </x:scenario>
     </x:scenario>
     
@@ -447,7 +802,7 @@
                             </frontmatter>
                             <bodymatter>
                                 <level1>
-                                    <table>
+                                    <table class="table-matrix">
                                         <tr>
                                             <th colspan="3"> </th>
                                             <td> </td>
@@ -657,5 +1012,5 @@
         </x:context>
         <x:expect label="There should be an output PEF" type="count" min="1"/>
     </x:scenario>
-        
+    
 </x:description>

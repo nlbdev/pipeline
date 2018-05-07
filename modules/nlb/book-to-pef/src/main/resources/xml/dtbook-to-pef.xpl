@@ -127,11 +127,15 @@
     <p:try name="try-convert-and-store">
         <p:group>
             <p:output port="status"/>
+            <p:variable name="default-table-class" select="//c:param[@name='default-table-class']/@value">
+                <p:pipe step="main" port="parameters"/>
+            </p:variable>
             <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
                                       name="convert">
                 <p:with-option name="stylesheet" select="string-join((
                                                            'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
                                                            'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
+                                                           if ($default-table-class = '') then resolve-uri('add-table-classes.xsl') else (),
                                                            if ($insert-boilerplate = 'true') then 'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl' else (),
                                                            if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
                                                            if ($stylesheet) then tokenize($stylesheet,',') else ()),' ')"/>

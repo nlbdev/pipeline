@@ -733,6 +733,17 @@ list[type=ol], ol {
 table {
     &%table-matrix {
         display: table;
+        -obfl-table-col-spacing: 2;
+        -obfl-preferred-empty-space: 0;
+        td > p,
+        th > p {
+            display: inline;
+        }
+    }
+    
+    &%table-matrix-transposed {
+        @extend %table-matrix;
+        render-table-by: column;
     }
     
     &%table-linearized {
@@ -789,6 +800,10 @@ table {
     
     &.table-matrix {
         @extend %table-matrix;
+    }
+    
+    &.table-matrix-transposed {
+        @extend %table-matrix-transposed;
     }
     
     &.table-linearized {
