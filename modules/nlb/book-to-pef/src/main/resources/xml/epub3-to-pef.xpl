@@ -127,7 +127,7 @@
                                                    'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
                                                    if ($insert-boilerplate = 'true') then 'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl' else (),
                                                    if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
-                                                   if ($stylesheet) then $stylesheet else ()),' ')"/>
+                                                   if ($stylesheet) then tokenize($stylesheet,',') else ()),' ')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
