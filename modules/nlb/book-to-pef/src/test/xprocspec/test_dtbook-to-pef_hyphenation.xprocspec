@@ -3,7 +3,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
-               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
+               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl" pending="https://github.com/nlbdev/pipeline/issues/104">
   
   <x:scenario label="non-standard hyphenation #1">
     <x:call step="nlb:dtbook-to-pef">
