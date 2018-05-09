@@ -845,7 +845,7 @@
                     <p>1 malformed table was found.</p>
                     <ol>
                         <li>
-                            <table style="border-collapse: collapse; background: red">
+                            <table style="border-collapse: collapse; background: red" class="table-matrix">
                                 <tr>
                                     <th style="border: 1px solid black; background: white" colspan="3"> </th>
                                     <td style="border: 1px solid black; background: white"> </td>

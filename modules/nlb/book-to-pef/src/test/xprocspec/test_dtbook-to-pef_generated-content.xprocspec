@@ -8,7 +8,9 @@
     script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
     
     <x:scenario label="titlepage">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="basic test of complete titlepage">
             <x:call step="nlb:dtbook-to-pef">
@@ -117,7 +119,9 @@
     </x:scenario>
     
     <x:scenario label="author">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="1 author">
             <x:call>
@@ -281,8 +285,8 @@
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row>⠀⠀⠀⠀⠠⠋⠕⠗⠋⠁⠞⠞⠑⠗⠑⠒⠀⠁⠥⠞⠓⠕⠗⠀⠼⠁⠂</row>
-                        <row>⠀⠀⠁⠥⠞⠓⠕⠗⠀⠼⠃⠂⠀⠁⠥⠞⠓⠕⠗⠀⠼⠉⠀⠕⠛⠀⠁⠥⠞⠤</row>
-                        <row>⠀⠀⠓⠕⠗⠀⠼⠙</row>
+                        <row>⠀⠀⠁⠥⠞⠓⠕⠗⠀⠼⠃⠂⠀⠁⠥⠞⠓⠕⠗⠀⠼⠉⠀⠕⠛</row>
+                        <row>⠀⠀⠁⠥⠞⠓⠕⠗⠀⠼⠙</row>
                     </page>
                 </x:document>
             </x:expect>
@@ -290,7 +294,9 @@
     </x:scenario>
     
     <x:scenario label="title">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="long title that fits">
             <x:call>
@@ -468,7 +474,9 @@
     </x:scenario>
     
     <x:scenario label="translator">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="1 translator">
             <x:call>
@@ -684,7 +692,9 @@
     </x:scenario>
     
     <x:scenario label="nlb / year / contraction grade">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="grade:0">
             <x:call>
@@ -832,7 +842,9 @@
     </x:scenario>
     
     <x:scenario label="volume">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="1 volume">
             <x:call>
@@ -923,7 +935,9 @@
     </x:scenario>
     
     <x:scenario label="about">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="about page content">
             <x:call>
@@ -991,6 +1005,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
+            <x:option name="hyphenation" select="'false'"/>
         </x:call>
         
         <x:scenario label="toc-depth=0">
@@ -1101,6 +1116,7 @@
                 </x:document>
             </x:input>
             <x:option name="toc-depth" select="1"/>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="pef-output-dir" select="resolve-uri('toc/6/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('toc/6/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('toc/6/temp-dir',$temp-dir)"/>
@@ -1141,6 +1157,7 @@
                 </x:document>
             </x:input>
             <x:option name="toc-depth" select="1"/>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:param port="parameters" name="insert-boilerplate" select="'false'"/>
             <x:option name="pef-output-dir" select="resolve-uri('toc/7/pef-output-dir',$temp-dir)"/>
@@ -1205,7 +1222,9 @@
     </x:scenario>
     
     <x:scenario label="pef-sections">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="duplex=true">
             <x:call step="nlb:dtbook-to-pef">
@@ -1466,6 +1485,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
@@ -1503,6 +1523,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
+            <x:option name="hyphenation" select="'false'"/>
         </x:call>
         
         <x:scenario label="single line spacing">
@@ -1582,6 +1603,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="page-width" select="32"/>
             <x:option name="pef-output-dir" select="resolve-uri('7/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('7/preview-output-dir',$temp-dir)"/>

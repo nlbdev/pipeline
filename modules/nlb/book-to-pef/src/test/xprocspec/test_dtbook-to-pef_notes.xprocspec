@@ -32,6 +32,7 @@
                 </x:document>
             </x:input>
             <x:option name="toc-depth" select="0"/>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="pef-output-dir" select="resolve-uri('notes-numbering/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('notes-numbering/temp-dir',$temp-dir)"/>
         </x:call>
@@ -136,6 +137,7 @@
                 </x:document>
             </x:input>
             <x:option name="toc-depth" select="0"/>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="pef-output-dir" select="resolve-uri('volume-notes/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('volume-notes/temp-dir',$temp-dir)"/>
         </x:call>
@@ -365,6 +367,7 @@
                 </x:document>
             </x:input>
             <x:option name="toc-depth" select="0"/>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="notes-placement" select="'bottom-of-page'"/>
             <x:option name="pef-output-dir" select="resolve-uri('footnotes/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('footnotes/temp-dir',$temp-dir)"/>
@@ -470,6 +473,7 @@
                 </x:document>
             </x:input>
             <x:option name="toc-depth" select="0"/>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="notes-placement" select="'end-of-book'"/>
             <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('end-of-book-notes/temp-dir',$temp-dir)"/>
@@ -633,6 +637,7 @@
                 </x:document>
             </x:input>
             <x:option name="toc-depth" select="0"/>
+            <x:option name="hyphenation" select="'false'"/>
             <x:option name="notes-placement" select="'bottom-of-page'"/>
             <x:option name="pef-output-dir" select="resolve-uri('notes-fallback/pef-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('notes-fallback/temp-dir',$temp-dir)"/>
@@ -714,7 +719,9 @@
      </x:scenario>
     
     <x:scenario label="test for text describing placement of notes in generated content ('om boka')">
-        <x:call step="nlb:dtbook-to-pef"/>
+        <x:call step="nlb:dtbook-to-pef">
+            <x:option name="hyphenation" select="'false'"/>
+        </x:call>
         
         <x:scenario label="small notes">
             <x:call>
