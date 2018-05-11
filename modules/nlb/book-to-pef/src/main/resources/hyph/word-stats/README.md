@@ -1,16 +1,19 @@
-# Word frequencies in the norwegian language
 
-**words.csv**
+Standard hyphen in Norwegian Language
 
-Words from all of NLBs books in norwegian that have been produced in full text have been counted.
+Words are collected from Norwegian national library https://www.nb.no/sprakbanken/show?serial=oai%3Anb.no%3Asbr-39&lang=en  and process it to get hyphenated words.
 
-This CSV-file lists all the words encountered, sorted by the number of occurrences of the word.
-The first column contains the word, the second column contains the number of occurences,
-and the third column contains a number from 0-9 representing the frequency of the word
-(the logarithm of the number of occurences scaled to fit in the 0-9 range).
+standard_hyphen.txt
+Words are hyphenated according to hyphen occurrence of same word at different positions. e.g. "foron-siede" and "foronsie-de" to "for-on-siede".
 
-**sources.csv**
+standard_hyphen_extended.txt 
+This is extension of standard_hyphen.txt.Hyphen are normalized by adding hyphenated words if the exist in long words. e.g. "sa-lig" and "saligaf-gang" to "sa-ligaf-gang".
 
-A list of all the source books that were used for counting words. The first column
-is the book number used by NLB, the second column is the book title, and the third
-column is the ISBN for the book.
+extended_plus.txt
+This is further extension of standard_hyphen_extended.txt in which hyphen are normalized by adding each hyphenation occurrences in all words. e.g.  "fe-pa-rate" and "fepa-ratcly" to "fe-pa-ratcly" 
+
+
+
+standard_hyphen_extended_extra.txt  
+
+words.txt 
