@@ -30,12 +30,12 @@
         </dl>
     </p:documentation>
     
-    <p:option name="html" required="true" px:type="anyFileURI" px:sequence="false" px:media-type="application/xhtml+xml text/html">
+    <p:input port="source" primary="true" px:name="source" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">HTML</h2>
-            <p px:role="desc">HTML-fila du vil konvertere til PEF.</p>
+            <p px:role="desc">XHTML5-fila du vil konvertere til PEF.</p>
         </p:documentation>
-    </p:option>
+    </p:input>
     
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -44,7 +44,15 @@
 
 [More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="validation-status" step="validate-pef"/>
+        <p:pipe step="try-convert-and-store" port="status"/>
+    </p:output>
+    
+    <p:output port="table-issues-report" px:media-type="application/vnd.pipeline.report+xml" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">Table issues</h1>
+            <p px:role="desc" xml:space="preserve">An HTML report listing problematic tables.</p>
+        </p:documentation>
+        <p:pipe step="validate-tables" port="report"/>
     </p:output>
     
     <p:option name="braille-standard"/>
@@ -70,7 +78,11 @@
     <p:option name="insert-boilerplate"/>
     <p:option name="pef-output-dir"/>
     <p:option name="preview-output-dir"/>
+    <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
+    
+    <!-- for testing purposes -->
+    <p:input port="parameters" kind="parameter" primary="false"/>
     
     <p:import href="http://www.nlb.no/pipeline/modules/braille/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
@@ -78,17 +90,17 @@
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl"/>
     
     <p:in-scope-names name="in-scope-names"/>
     <px:merge-parameters>
         <p:input port="source">
             <p:pipe step="in-scope-names" port="result"/>
+            <p:pipe step="main" port="parameters"/>
         </p:input>
     </px:merge-parameters>
     <px:add-parameters>
-        <p:with-param name="maximum-number-of-sheets" select="xs:integer(number($maximum-number-of-pages) div 2)"/>
+        <p:with-param name="maximum-number-of-sheets" select="xs:integer(number(//c:param[@name='maximum-number-of-pages']/@value) div 2)"/>
         <p:with-param name="main-document-language" select="'no'"/>
     </px:add-parameters>
     <px:delete-parameters parameter-names="stylesheet
@@ -96,6 +108,7 @@
                                            maximum-number-of-pages
                                            pef-output-dir
                                            preview-output-dir
+                                           obfl-output-dir
                                            temp-dir"/>
     <p:identity name="parameters"/>
     <p:sink/>
@@ -105,43 +118,83 @@
     </px:tempdir>
     <p:sink/>
     
-    <px:html-load name="html">
-        <p:with-option name="href" select="$html"/>
-    </px:html-load>
-    
-    <px:html-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
-                            name="convert">
-        <p:with-option name="stylesheet" select="string-join((
-                                                        'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
-                                                        'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
-                                                        if ($insert-boilerplate = 'true') then 'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl' else (),
-                                                        if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
-                                                        if ($stylesheet) then tokenize($stylesheet,',') else ()),' ')"/>
-        <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
-        <p:input port="parameters">
-            <p:pipe step="parameters" port="result"/>
+    <p:identity>
+        <p:input port="source">
+            <p:pipe port="source" step="main"/>
         </p:input>
-        <p:with-option name="temp-dir" select="concat(string(/c:result),'convert/')">
-            <p:pipe step="temp-dir" port="result"/>
-        </p:with-option>
-    </px:html-to-pef.convert>
+    </p:identity>
     
-    <pef:validate name="validate-pef" assert-valid="false">
-        <p:with-option name="temp-dir" select="string(/c:result)">
-            <p:pipe step="temp-dir" port="result"/>
-        </p:with-option>
-    </pef:validate>
+    <nlb:validate-tables name="validate-tables"/>
     
-    <px:xml-to-pef.store include-preview="true">
-        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
-            <p:pipe step="html" port="result"/>
-        </p:with-option>
-        <p:input port="obfl">
-            <p:pipe step="convert" port="obfl"/>
-        </p:input>
-        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-    </px:xml-to-pef.store>
+    <p:try name="try-convert-and-store">
+        <p:group>
+            <p:output port="status"/>
+            <p:variable name="default-table-class" select="//c:param[@name='default-table-class']/@value">
+                <p:pipe step="main" port="parameters"/>
+            </p:variable>
+            <px:html-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
+                                      name="convert">
+                <p:with-option name="stylesheet" select="string-join((
+                                                           'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
+                                                           'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
+                                                           if ($default-table-class = '') then resolve-uri('add-table-classes.xsl') else (),
+                                                           if ($insert-boilerplate = 'true') then 'http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl' else (),
+                                                           if ($apply-default-stylesheet = 'true') then 'http://www.nlb.no/pipeline/modules/braille/default.scss' else (),
+                                                           if ($stylesheet) then tokenize($stylesheet,',') else ()),' ')"/>
+                <p:with-option name="transform" select="concat('(formatter:dotify)(translator:nlb)',$braille-standard)"/>
+                <p:with-option name="include-obfl" select="$include-obfl"/>
+                <p:input port="parameters">
+                    <p:pipe port="result" step="parameters"/>
+                </p:input>
+                <p:with-option name="temp-dir" select="string(/c:result)">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </px:html-to-pef.convert>
+            <p:choose>
+                <p:xpath-context>
+                    <p:pipe step="convert" port="status"/>
+                </p:xpath-context>
+                <p:when test="/d:validation-status[@result='ok']">
+                    <p:output port="status">
+                        <p:pipe step="validate-pef" port="validation-status"/>
+                    </p:output>
+                    <pef:validate name="validate-pef" assert-valid="false">
+                        <p:with-option name="temp-dir" select="string(/c:result)">
+                            <p:pipe step="temp-dir" port="result"/>
+                        </p:with-option>
+                    </pef:validate>
+                    <px:html-to-pef.store include-preview="true">
+                        <p:input port="html">
+                            <p:pipe step="main" port="source"/>
+                        </p:input>
+                        <p:input port="obfl">
+                            <p:pipe step="convert" port="obfl"/>
+                        </p:input>
+                        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
+                        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+                        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
+                    </px:html-to-pef.store>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="status"/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe step="convert" port="status"/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+        </p:group>
+        <p:catch>
+            <p:output port="status"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:inline>
+                        <d:validation-status result="error"/>
+                    </p:inline>
+                </p:input>
+            </p:identity>
+        </p:catch>
+    </p:try>
     
 </p:declare-step>

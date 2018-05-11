@@ -16,7 +16,9 @@
     
     <x:scenario label="basic test">
         <x:call step="nlb:html-to-pef">
-            <x:option name="html" select="resolve-uri('../resources/HTML/book.xhtml')"/>
+            <x:input port="source">
+                <x:document type="file" href="../resources/HTML/book.xhtml"/>
+            </x:input>
             <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
@@ -30,7 +32,9 @@
         
         <x:scenario label="images, figures, figcaptions and alt-text">
             <x:call>
-                <x:option name="html" select="resolve-uri('../resources/html-to-pef/2/book.xhtml')"/>
+                <x:input port="source">
+                    <x:document type="file" href="../resources/html-to-pef/2/book.xhtml"/>
+                </x:input>
                 <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
                 <x:option name="show-braille-page-numbers" select="'false'"/>
                 <x:option name="show-print-page-numbers" select="'false'"/>
