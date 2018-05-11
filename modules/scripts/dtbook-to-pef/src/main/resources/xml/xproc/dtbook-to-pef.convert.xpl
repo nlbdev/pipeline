@@ -104,6 +104,10 @@
         <px:transform>
             <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
             <p:with-option name="temp-dir" select="$temp-dir"/>
+            <p:input port="parameters">
+                <!-- px:transform uses the 'duplex' parameter -->
+                <p:pipe port="result" step="parameters"/>
+            </p:input>
         </px:transform>
     </p:viewport>
     
