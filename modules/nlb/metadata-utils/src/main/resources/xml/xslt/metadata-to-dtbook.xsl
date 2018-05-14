@@ -52,6 +52,7 @@
                                          else $duration_string"/>
             <xsl:variable name="extent" select="(meta[@property='dc:format.extent'])[1]/text()"/>
             <xsl:variable name="narrators" select="if ($include-categorization-attributes) then for $narrator in (meta[@property='dc:contributor.narrator']) return string-join(($narrator/text(),$narrator[@id]/parent::*/*[@property='bibliofil-id' and @refines=concat('#',$narrator/@id)]),'|') else meta[@property='dc:contributor.narrator']/text()"/>
+            <xsl:variable name="translators" select="if ($include-categorization-attributes) then for $translator in (meta[@property='dc:contributor.translator']) return string-join(($translator/text(),$translator[@id]/parent::*/*[@property='bibliofil-id' and @refines=concat('#',$translator/@id)]),'|') else meta[@property='dc:contributor.translator']/text()"/>
             <xsl:variable name="description" select="meta[@property='dc:description.abstract']/text()"/>
             <xsl:variable name="originalTitle" select="meta[@property='dc:title.original']/text()"/>
             <xsl:variable name="publisherPlace" select="meta[@property='dc:publisher.location']/text()"/>
@@ -252,6 +253,17 @@
                             <xsl:with-param name="singular" select="'Lest av: '"/>
                             <xsl:with-param name="plural" select="'Lest av: '"/>
                             <xsl:with-param name="websok-type" select="'IN'"/>
+                        </xsl:call-template>
+                    </xsl:if>
+                    
+                    <xsl:if test="count($translators)">
+                        <xsl:call-template name="nameList">
+                            <xsl:with-param name="names" select="$translators"/>
+                            <xsl:with-param name="wrapper-class" select="'translators'"/>
+                            <xsl:with-param name="class" select="'translator'"/>
+                            <xsl:with-param name="singular" select="'Oversatt av: '"/>
+                            <xsl:with-param name="plural" select="'Oversatt av: '"/>
+                            <xsl:with-param name="websok-type" select="'OV'"/>
                         </xsl:call-template>
                     </xsl:if>
 
