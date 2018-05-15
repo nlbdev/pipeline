@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:daisy/jhyphen.git
+	branch = master
+	commit = a66a6ca29bf47aba9a07562c5dc90c3192bec0fc
+	parent = a5fba9bd9cd749564fe853d321449b29ddbfbd35
+	cmdver = 0.3.1
