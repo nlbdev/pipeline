@@ -94,7 +94,7 @@ cat releaseDescriptorRelative.xml | grep "<artifact[ >]" | while read artifactLi
     LOCAL_PATH="`find .maven-workspace ~/.m2 -type f | grep "$RELATIVE_PATH$" | head -n 1`"
     FILENAME="`echo $LOCAL_PATH | sed 's/^.*\///'`"
     STATUS_CODE="`curl -I --write-out %{http_code} --silent --output /dev/null "$REMOTE_PATH"`"
-    if [ "`echo $ARTIFACT_VERSION | grep SNAPSHOT | wc -l`" != "1" ] || [ "$STATUS_CODE" = "200" ] || [ "$STATUS_CODE" = "302" ]; then
+    if [ "`echo $ARTIFACT_VERSION | grep SNAPSHOT | wc -l`" != "1" ] || [ "$STATUS_CODE" = "200" ] || [ "$STATUS_CODE" = "302" ] || [ "$STATUS_CODE" = "000" ]; then
         echo "using $GROUP_ID:$ARTIFACT_ID:$ARTIFACT_VERSION from remote server"
         cat assembly/target/release-descriptor/releaseDescriptor.xml | grep " classifier=\\\"$ARTIFACT_CLASSIFIER\\\"" | grep " groupId=\\\"$GROUP_ID\\\"" | grep " artifactId=\\\"$ARTIFACT_ID\\\"" | grep " version=\\\"$ARTIFACT_VERSION\\\"" >> descriptor-full-sha.xml
     else
