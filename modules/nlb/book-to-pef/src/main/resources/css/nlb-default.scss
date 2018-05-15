@@ -612,10 +612,10 @@ epigraph, aside[epub|type~='epigraph'] {
 prodnote, aside[epub|type~='z3998:production'] {
        display: block;
        &::before {
-               content: "⠷";
+               content: "⠰⠄";
        }
        &::after {
-               content: "⠾";
+               content: "⠠⠆";
        }
 }
 

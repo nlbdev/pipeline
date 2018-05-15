@@ -1732,12 +1732,12 @@
             <x:expect label="The prodnote element should look as expected" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
-                        <row>⠀⠀⠷</row>
+                        <row>⠀⠀⠰⠄</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
-                        <row>⠀⠀⠾</row>
+                        <row>⠀⠀⠠⠆</row>
                     </page>
                 </x:document>
             </x:expect>
