@@ -981,7 +981,6 @@ fet-typen/tt-t,3,2
 fet-typene/tt-t,3,2
 fet-typens/tt-t,3,2
 fet-typer/tt-t,3,2
-f-f/ff-f,1,2
 fiberoptik-kabel/kk-k,10,2
 fiberoptik-kabelen/kk-k,10,2
 fiberoptik-kabelens/kk-k,10,2
@@ -3146,7 +3145,6 @@ pal-lasta/ll-l,3,2
 pal-lasten/ll-l,3,2
 pal-lastene/ll-l,3,2
 pal-laster/ll-l,3,2
-pampet-t/tt-t,6,2
 panik-kjensla/kk-k,5,2
 panik-kjensle/kk-k,5,2
 panik-kjenslene/kk-k,5,2
@@ -3388,7 +3386,6 @@ profit-tenkning/tt-t,6,2
 profit-tenkningen/tt-t,6,2
 profit-tenkningens/tt-t,6,2
 profit-tur/tt-t,6,2
-proses-s/ss-s,6,2
 proses-siden/ss-s,6,2
 proses-sikringsventil/ss-s,6,2
 proses-simulator/ss-s,6,2
@@ -3587,7 +3584,6 @@ rib-benstek/bb-b,3,2
 rib-bensteken/bb-b,3,2
 rib-benstekens/bb-b,3,2
 rib-bensxxxx/bb-b,3,2
-ribbet-t/tt-t,6,2
 rødrus-styre/ss-s,6,2
 rødrus-styret/ss-s,6,2
 rødrus-styrets/ss-s,6,2
@@ -3940,11 +3936,6 @@ sprengstof-forbruk/ff-f,10,2
 sprengstof-funn/ff-f,10,2
 sprengstof-funnet/ff-f,10,2
 sprengstof-funnets/ff-f,10,2
-s-siden/ss-s,1,2
-S-SR 12 B/SS-S,1,2
-s-stad/ss-s,1,2
-s-styrke/ss-s,1,2
-s-sygen/ss-s,1,2
 stabsmusik-korps/kk-k,10,2
 stabsmusik-korpsa/kk-k,10,2
 stabsmusik-korpsene/kk-k,10,2
