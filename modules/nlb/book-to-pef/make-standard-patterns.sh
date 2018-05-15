@@ -19,7 +19,7 @@ patgen() {
          1 \
          $HYPH_LEVEL \
          1 \
-         7 \
+         9 \
          1 \
          1000 \
          1
@@ -45,7 +45,7 @@ for level in 1 2; do
     PATTERNS_FILE=$PATOUT_FILE
 done
 
-# 35 bad and 287129 missed
+# 10 bad and 95727 missed
 #cat $DICTIONARY_FILE | grep '\.[^0]\|-' >/dev/null && exit 1
 
 cat $PATTERNS_FILE

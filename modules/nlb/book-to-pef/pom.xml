@@ -348,12 +348,19 @@
                         <include name="**/språkbanken-3.txt"/>
                       </fileset>
                     </concat>
+                    <javac srcdir="${project.basedir}" includes="add_frequencies.java" destdir="${project.basedir}/target"/>
+                    <java classname="add_frequencies" classpath="${project.basedir}/target" fork="yes" failonerror="yes"
+                          input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt"
+                          output="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary_freqs.txt"
+                          error="${project.basedir}/target/add_frequencies.log">
+                      <arg value="${project.basedir}/src/main/resources/hyph/word-stats/words.csv" />
+                    </java>
                     <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard_dictionary.txt"
                             encoding="ISO-8859-1">
                       <fileset dir="${project.basedir}/src/main/resources/hyph/hyph_nb_NO_nonstandard_dictionary" />
                     </concat>
                     <exec executable="bash" failonerror="yes"
-                          input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt"
+                          input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary_freqs.txt"
                           output="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard.pat"
                           error="${project.basedir}/target/make-standard-patterns.log">
                       <arg value="${project.basedir}/make-standard-patterns.sh" />
