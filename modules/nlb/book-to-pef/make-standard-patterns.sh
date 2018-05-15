@@ -45,7 +45,7 @@ for level in 1 2 3; do
     PATTERNS_FILE=$PATOUT_FILE
 done
 
-# 688 bad and 346200 missed
+# 1400 bad and 261221 missed
 #cat $DICTIONARY_FILE | grep '\.[^0]\|-' >/dev/null && exit 1
 
 cat $PATTERNS_FILE
