@@ -7,5 +7,5 @@
 	remote = git@github.com:liblouis/liblouis-nar.git
 	branch = include-source
 	commit = 8b0b1450ea35c9a5b27ff63c5e0293c5ac486731
-	parent = ebb9b8adefa59b89273fb30273de312e1e86e14a
+	parent = 97e60bcaabfa9837c0b7909da03f5817f4dd391c
 	cmdver = 0.3.1
