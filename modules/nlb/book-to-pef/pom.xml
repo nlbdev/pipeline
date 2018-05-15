@@ -241,6 +241,9 @@
           <excludes>
             <exclude>HyphenationTest.java</exclude>
           </excludes>
+          <!-- <includes> -->
+          <!--   <include>HyphenationTest.java</include> -->
+          <!-- </includes> -->
         </configuration>
       </plugin>
       <plugin>

@@ -60,7 +60,7 @@ public class HyphenationTest {
 		Hyphenator.LineBreaker nonStandardHyphenator = hyphenator.asLineBreaker();
 		int bad = 0;
 		int missed = 0;
-		File wordsFile = new File(baseDir, "src/main/resources/hyph/hyph_nb_NO_standard_dictionary/words.txt");
+		File wordsFile = new File(baseDir, "src/main/resources/hyph/hyph_nb_NO_standard_dictionary/språkbanken-3.txt");
 		System.err.println();
 		System.err.println("Checking " + wordsFile);
 		System.err.println();
@@ -75,11 +75,11 @@ public class HyphenationTest {
 				HyphenationTestResult r = testHyphens(standardHyphenator, nonStandardHyphenator, words.next(), line);
 				if (r.missed > 0) {
 					missed += r.missed;
-					System.err.println("On line " + line + ": missed hyphens: " + r.hyphens);
+					// System.err.println("On line " + line + ": missed hyphens: " + r.hyphens);
 				}
 				if (r.bad > 0) {
 					bad += r.bad;
-					System.err.println("On line " + line + ": bad hyphens: " + r.hyphens);
+					// System.err.println("On line " + line + ": bad hyphens: " + r.hyphens);
 				}
 			}
 		}
@@ -98,18 +98,20 @@ public class HyphenationTest {
 				HyphenationTestResult r = testHyphens(nonStandardHyphenator, patterns.next(), line);
 				if (r.missed > 0) {
 					missed += r.missed;
-					System.err.println("On line " + line + ": missed hyphens: " + r.hyphens);
+					// System.err.println("On line " + line + ": missed hyphens: " + r.hyphens);
 				}
 				if (r.bad > 0) {
 					bad += r.bad;
-					System.err.println("On line " + line + ": bad hyphens: " + r.hyphens);
+					// System.err.println("On line " + line + ": bad hyphens: " + r.hyphens);
 				}
 			}
 		}
 		if (missed > 0)
 			System.err.println("WARNING: " + missed + " missed hyphens");
-		if (bad > 0)
+		if (bad > 0) {
+			System.err.println("ERROR: " + bad + " bad hyphens");
 			throw new AssertionError(bad + " bad hyphens");
+		}
 	}
 	
 	private HyphenationTestResult testHyphens(Hyphenator.FullHyphenator fullHyphenator, Hyphenator.LineBreaker lineBreaker,
@@ -128,9 +130,9 @@ public class HyphenationTest {
 					if (aa == actual.length())
 						break;
 					else
-						throw new RuntimeException();
+						throw new RuntimeException("expected: "+expected+", actual: "+actual);
 				} else if (aa == actual.length())
-					throw new RuntimeException();
+					throw new RuntimeException("expected: "+expected+", actual: "+actual);
 				char e = expected.charAt(ee);
 				char a = actual.charAt(aa);
 				if (e == '-') {
@@ -148,7 +150,7 @@ public class HyphenationTest {
 						bad++;
 						actual = actual.substring(0, aa) + BAD_HYPHEN + actual.substring(aa + 1);
 					} else if (a != e)
-						throw new RuntimeException();
+						throw new RuntimeException("expected: "+expected+", actual: "+actual);
 					else {
 						ee++;
 					}
@@ -297,7 +299,7 @@ public class HyphenationTest {
 					String line = lines.nextLine(w, false);
 					if (!line.isEmpty()) {
 						if (lines.hasNext() && !lines.lineHasHyphen())
-							throw new RuntimeException();
+							throw new RuntimeException("expected: "+expected+", actual: "+actual);
 						if (aa > 0)
 							actual += "-";
 						actual += line;
@@ -310,9 +312,9 @@ public class HyphenationTest {
 				if (aa == actual.length()) {
 					break;
 				} else
-					throw new RuntimeException();
+					throw new RuntimeException("expected: "+expected+", actual: "+actual);
 			} else if (aa == actual.length())
-				throw new RuntimeException();
+				throw new RuntimeException("expected: "+expected+", actual: "+actual);
 			char e = expected.charAt(ee);
 			// System.err.println("e: " + e);
 			char a = actual.charAt(aa);
@@ -320,14 +322,14 @@ public class HyphenationTest {
 			if (e == '-') {
 				if (a == '-') {
 					good++;
+					aa++;
+					// System.err.println("aa: " + aa);
 					expected = expected.substring(0, ee) + GOOD_HYPHEN + expected.substring(ee + 1);
 				} else {
 					missed++;
 					expected = expected.substring(0, ee) + MISSED_HYPHEN + expected.substring(ee + 1);
 				}
 				// System.err.println("expected: " + expected);
-				aa++;
-				// System.err.println("aa: " + aa);
 				ee++;
 				// System.err.println("ee: " + ee);
 			} else {
@@ -340,16 +342,17 @@ public class HyphenationTest {
 					// also assume that the only cases of non-standard hyphenation are when letters are added
 					while (true) {
 						if (ee + 1 >= expected.length())
-							throw new RuntimeException();
+							throw new RuntimeException("expected: "+expected+", actual: "+actual);
 						ee++;
 						// System.err.println("ee: " + ee);
 						e = expected.charAt(ee);
 						if (e == '-')
-							throw new RuntimeException();
+							throw new RuntimeException("expected: "+expected+", actual: "+actual);
 						if (e == a)
 							break;
 					}
 					ee++;
+					// System.err.println("ee: " + ee);
 				} else {
 					ee++;
 					// System.err.println("ee: " + ee);
