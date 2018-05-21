@@ -231,7 +231,7 @@
             <dependency>
                 <groupId>org.daisy.bindings</groupId>
                 <artifactId>jhyphen</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
