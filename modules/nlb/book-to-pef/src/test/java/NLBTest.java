@@ -88,16 +88,26 @@ public class NLBTest extends AbstractXSpecAndXProcSpecTest {
 			                                "foobar",  "text-transform: uncontracted")));
 	}
 	
+	/*@Override @Test
+	public void runXSpec() throws Exception {
+		// skip
+	}
+	
+	@Override @Test
+	public void runXProcSpec() throws Exception {
+		// skip
+	}*/
+	
 	@Test
 	public void testNonStandardHyphenation() {
 		Hyphenator hyphenator = hyphenatorProvider().get(query("(libhyphen-table:'http://www.nlb.no/hyphen/hyph_nb_NO.dic')")).iterator().next();
 		assertEquals("buss-\n" +
 		             "stopp",
-		             fillLines(hyphenator.asLineBreaker().transform("busstopp"), 6, '-'));
+		             fillLines(hyphenator.asLineBreaker().transform("busstopp"), 5, '-'));
 		BrailleTranslator translator = translatorProvider().get(query("(translator:nlb)(grade:1)")).iterator().next();
 		assertEquals("⠃⠥⠎⠎⠤\n" +
 		             "⠎⠞⠕⠏⠏",
-		             fillLines(translator.lineBreakingFromStyledText().transform(styledText("busstopp","hyphens:auto")), 6));
+		             fillLines(translator.lineBreakingFromStyledText().transform(styledText("busstopp","hyphens:auto")), 5));
 	}
 	
 	@Inject
