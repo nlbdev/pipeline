@@ -482,6 +482,11 @@
             <x:expect label="result" type="compare">
                 <x:document type="inline">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
                         <row>⠀⠀⠀⠀⠁⠁⠁⠄</row>
                         <row/>
                         <row>⠀⠀⠤⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
@@ -499,11 +504,6 @@
                         <row>⠀⠀⠀⠀⠼⠃⠀⠗⠗⠗⠀⠗⠗⠗</row>
                         <row>⠀⠀⠀⠀⠼⠉⠀⠁⠁⠁⠀⠁⠁⠁</row>
                         <row>⠀⠀⠼⠉⠀⠉⠉⠉⠀⠉⠉⠉</row>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
-                        <row/>
                         <row/>
                         <row/>
                         <row/>
@@ -614,17 +614,17 @@
             <x:expect label="result" type="compare">
                 <x:document type="inline">
                                 <page xmlns="http://www.daisy.org/ns/2008/pef">
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
                                     <row>⠀⠀⠀⠀⠷⠀⠠⠱⠀⠱</row>
                                     <row>⠀⠀⠀⠀⠅⠕⠗⠞⠤⠀⠇⠁⠝⠛⠤⠤</row>
                                     <row>⠀⠀⠀⠀⠤⠅⠕⠗⠞⠀⠤⠤⠇⠁⠝⠛</row>
                                     <row>⠀⠀⠀⠀⠁⠁⠤⠃⠃⠀⠁⠁⠤⠤⠃⠃</row>
                                     <row>⠀⠀⠀⠀⠁⠁⠀⠤⠤⠀⠃⠃</row>
                                     <row>⠀⠀⠀⠀⠁⠁⠀⠤⠀⠃⠃</row>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
-                                    <row/>
                                     <row/>
                                     <row/>
                                     <row/>
@@ -937,6 +937,11 @@
         <x:expect label="result" type="compare">
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
                     <row>⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
                     <row>⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
                     <row>⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
@@ -1082,6 +1087,11 @@
             <x:expect label="result" type="compare">
                 <x:document type="inline">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
                         <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
@@ -2258,7 +2268,7 @@
                                         <h1>Part 1</h1>
                                         <level2>
                                             <pagenum id="page-1" page="normal">1</pagenum>
-                                            <h1>Chapter 1.1</h1>
+                                            <h2>Chapter 1.1</h2>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <pagenum id="page-2" page="normal">2</pagenum>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -2272,7 +2282,7 @@
                                         </level2>
                                         <level2>
                                             <pagenum id="page-6" page="normal">6</pagenum>
-                                            <h1>Chapter 1.2</h1>
+                                            <h2>Chapter 1.2</h2>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <pagenum id="page-7" page="normal">7</pagenum>
                                             <p>content</p>
@@ -2332,12 +2342,12 @@
                                         <h1>Part 2</h1>
                                         <level2>
                                             <pagenum id="page-18" page="normal">18</pagenum>
-                                            <h1>Chapter 2.1</h1>
+                                            <h2>Chapter 2.1</h2>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                         </level2>
                                         <level2 >
                                             <pagenum id="page-19" page="normal">19</pagenum>
-                                            <h1>Chapter 2.2</h1>
+                                            <h2>Chapter 2.2</h2>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
                                             <pagenum id="page-20" page="normal">20</pagenum>
                                             <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
@@ -2430,5 +2440,75 @@
             </x:expect>
         </x:scenario>
         
+        <x:scenario label="Chapter without h1 (issue #61)">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>Chapter</h1>
+                                        <p>after</p>
+                                    </level1>
+                                    <level1>
+                                        <!-- no heading -->
+                                        <p>after</p>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="insert-boilerplate" select="'false'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('27/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('27/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('27/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="27/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"
+                      step="x:pef-compare">
+                <x:document type="inline">
+                    <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                        <head>
+                            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                <dc:format>application/x-pef+xml</dc:format>
+                                <dc:identifier>identifier?</dc:identifier>
+                                <dc:date>2018-05-21</dc:date>
+                                <dc:language>no</dc:language>
+                            </meta>
+                        </head>
+                        <body>
+                            <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠁⠋⠞⠑⠗</row>
+                                    </page>
+                                </section>
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠁⠋⠞⠑⠗</row>
+                                    </page>
+                                </section>
+                            </volume>
+                        </body>
+                    </pef>
+                </x:document>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 </x:description>

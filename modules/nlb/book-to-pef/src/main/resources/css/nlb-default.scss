@@ -581,6 +581,12 @@ level1.part h1, *[epub|type~='part'] h1 {
         text-indent: 0;
 }
 
+/* level1 without headline */
+level1:not(.part, .pef-titlepage, .pef-about):not(:has(> h1, > hx, > .leaf-section > h1, > .leaf-section > hx)),
+level1.part > level2:not(:has(> h2, > hx, > .leaf-section > h2, > .leaf-section > hx)) {
+    padding-top: 5;
+}
+
 /* -------------------------------------------------------------------------- */
 /*                Other elements                                              */
 /* -------------------------------------------------------------------------- */
