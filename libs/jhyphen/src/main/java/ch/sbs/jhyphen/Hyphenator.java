@@ -296,9 +296,9 @@ public class Hyphenator {
 		}
 		
 		public int compareTo(Break that) {
-			if (this.getBreakPosition() < that.getBreakPosition())
+			if (this.getBreakPosition() > that.getBreakPosition())
 				return 1;
-			else if (this.getBreakPosition() > that.getBreakPosition())
+			else if (this.getBreakPosition() < that.getBreakPosition())
 				return -1;
 			else if (!this.hasHyphen() && that.hasHyphen())
 				return 1;
@@ -306,6 +306,14 @@ public class Hyphenator {
 				return -1;
 			else
 				return 0;
+		}
+		
+		@Override
+		public String toString() {
+			String s = getText().substring(0, getBreakPosition());
+			if (hasHyphen())
+				s += "-";
+			return s;
 		}
 	}
 	
