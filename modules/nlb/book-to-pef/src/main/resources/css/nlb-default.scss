@@ -760,10 +760,15 @@ table {
     &%table-linearized {
         display: block;
         render-table-by: row;
+        &:has(> thead          th):not(:has(> :not(thead         ) th)),
+        &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+            render-table-by: column;
+        }
         &::list-item {
             display: block;
         }
-        &::table-by(row) {
+        &::table-by(row),
+        &::table-by(column) {
             display: block;
             text-indent: -2;
             margin-left: 2;
@@ -789,13 +794,18 @@ table {
     &%table-as-list {
         display: block;
         render-table-by: row;
+        &:has(> thead          th):not(:has(> :not(thead         ) th)),
+        &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+            render-table-by: column;
+        }
         th::after {
             content: ': ';
         }
         &::list-item {
             display: block;
         }
-        &::table-by(row) {
+        &::table-by(row),
+        &::table-by(column) {
             display: block;
             margin-left: 2;
             &::list-item {
@@ -839,6 +849,10 @@ table {
         &:not([class]) {
             display: block;
             render-table-by: row;
+            &:has(> thead          th):not(:has(> :not(thead         ) th)),
+            &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+                render-table-by: column;
+            }
             th::after {
                 content: ': ';
             }
@@ -858,7 +872,8 @@ table {
             }
         }
         // FIXME: otherwise SASS moves the :not([class]) after the ::table-by(row)
-        &:not([class])::table-by(row) {
+        &:not([class])::table-by(row),
+        &:not([class])::table-by(column) {
             display: block;
             margin-left: 2;
             &::list-item {
@@ -874,6 +889,10 @@ table {
         &:not([class]) {
             display: block;
             render-table-by: row;
+            &:has(> thead          th):not(:has(> :not(thead         ) th)),
+            &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+                render-table-by: column;
+            }
             &::list-item {
                 display: block;
             }
@@ -883,7 +902,8 @@ table {
             }
         }
         // FIXME: otherwise SASS moves the :not([class]) after the ::table-by(row)
-        &:not([class])::table-by(row) {
+        &:not([class])::table-by(row),
+        &:not([class])::table-by(column) {
             display: block;
             text-indent: -2;
             margin-left: 2;
