@@ -11,6 +11,8 @@ $include-captions: true !default;
 $notes-placement: end-of-volume !default;
 $default-table-class: table-matrix !default;
 $page-width: 40 !default;
+$hyphenation: true !default;
+$force-norwegian: true !default;
 
 /* -------------------------------------------------------------------------- */
 /*                page                                                        */
@@ -426,6 +428,15 @@ sup {
         [xml|lang|="no"], [lang|="no"] {
                 text-transform: contracted;
         }
+}
+
+@if $hyphenation and $force-norwegian {
+    [xml|lang]:not([xml|lang|="no"]), [lang]:not([lang|="no"]) {
+        hyphens: manual;
+        [xml|lang|="no"], [lang|="no"] {
+            hyphens: auto;
+        }
+    }
 }
 
 /* -------------------------------------------------------------------------- */
