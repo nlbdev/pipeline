@@ -612,4 +612,45 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="combining characters">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <bodymatter xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level1>
+              <p style="display: block">
+                &#x0061;&#x0301;   á
+                &#x0061;&#x030a;   å
+                &#x0061;&#x0306;   ă
+                &#x0063;&#x030c;   č
+                &#x0065;&#x030a;
+              </p>
+            </level1>
+          </bodymatter>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="0"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_ xmlns="" style="text-transform: none">
+          <bodymatter xml:lang="no-Brai" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level1>
+              <p style="display: block">
+                ⠷   ⠷
+                ⠡   ⠡
+                ⠈⠁  ⠈⠁
+                ⠩   ⠩
+                ⠈⠑
+              </p>
+            </level1>
+          </bodymatter>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

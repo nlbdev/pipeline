@@ -31,6 +31,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
@@ -145,11 +149,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>calabash-adapter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
       <scope>test</scope>
@@ -221,7 +220,8 @@
           <instructions>
             <_dsannotations>
               no.nlb.pipeline.braille.impl.NLBTranslator$Provider,
-              no.nlb.pipeline.braille.impl.LibhyphenTablePath
+              no.nlb.pipeline.braille.impl.LibhyphenTablePath,
+              no.nlb.pipeline.braille.impl.NFCStep$Provider
             </_dsannotations>
           </instructions>
         </configuration>
