@@ -17,10 +17,11 @@ This is further extension of språkbanken-2.txt in which hyphen are normalized b
 **språkbanken-3_extra.txt**
 Words that were removed from språkbanken-3.txt because they can not be encoded in Latin 1 or are too long for patgen to handle.
 
+**språkbanken-4.txt**
+The is the same as språkbanken-3.txt with the difference that inferred hyphens are indicated with a different symbol, namely "+".
 
-språkbanken-3_with_different_hyphen.txt
-This is same as språkbanken-3.txt the difference is added hyphen are different from previous stage .Added hyphen on this stage is unicode U+2013
-
+**språkbanken-4_extra.txt**
+Words that were removed from språkbanken-4.txt because they can not be encoded in Latin 1 or are too long for patgen to handle.
 
 **words.txt**
 This list came from http://no.speling.org.
