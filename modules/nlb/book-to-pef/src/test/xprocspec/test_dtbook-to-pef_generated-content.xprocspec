@@ -1128,97 +1128,224 @@
         <x:expect label="there should not be a TOC" type="count" max="0"/>
     </x:scenario>
     
-    <x:scenario label="wrapping toc lines (regression test for #169)" xfail="true">
+    <x:scenario label="wrapping toc lines (regression test for #169)">
         <x:documentation>
             Tests that when long headings are wrapped, the text is not placed in the page number
             column.
             
-            Also demonstrates a new bug: if the heading is exactly long enough to fit on a single
-            line together with the page number and one leader dot but without a space in between the
-            heading and the leader, it will be rendered like that. If the space between the heading
-            and the leader is made into a no-break space, the leader is moved to the next line,
-            which is also undesired (see https://github.com/nlbdev/pipeline/issues/169).
+            Also shows that there can be lines with only leader dots and a page number, which is
+            undesired.
+            
+            Also demonstrates a new bug: if the heading fits exactly on a single line with a right
+            margin of 4, which is enough to contain the page number and one leader dot but not the
+            space between the heading and the leader, it will be rendered like that. Note that if
+            the space between the heading and the leader is made into a zero width space followed by
+            a no-break space, the space and leader are moved to the next line.
         </x:documentation>
         <x:call step="nlb:dtbook-to-pef">
-            <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
-                        <book>
-                            <bodymatter>
-                                <level1>
-                                    <h1>bla bla bla bla bla bla bla bla bla bla bla bla bla bla</h1>
-                                </level1>
-                                <level1>
-                                    <h1>bla bla bla bla bla bla b</h1>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
-                </x:document>
-            </x:input>
             <x:option name="toc-depth" select="1"/>
             <x:option name="hyphenation" select="'false'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
-            <x:param port="parameters" name="insert-boilerplate" select="'false'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('toc/7/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('toc/7/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('toc/7/temp-dir',$temp-dir)"/>
+            <x:option name="insert-boilerplate" select="'false'"/>
         </x:call>
-        <x:context label="result">
-            <x:document type="file" base-uri="temp-dir" href="toc/7/pef-output-dir/book.pef"/>
-        </x:context>
-        <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
-            <x:document type="inline">
-                <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
-                    <head>
-                        <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
-                            <dc:format>application/x-pef+xml</dc:format>
-                            <dc:identifier>identifier?</dc:identifier>
-                            <dc:date>2018-04-30</dc:date>
-                            <dc:language>no</dc:language>
-                        </meta>
-                    </head>
-                    <body>
-                        <volume cols="32" rows="28" rowgap="0" duplex="true">
-                            <section>
-                                <page>
-                                    <row/>
-                                    <row/>
-                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
-                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                    <row/>
-                                    <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
-                                    <row>⠀⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
-                                    <row>⠀⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠉</row>
-                                    <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
-                                    <row>⠀⠀⠀⠀⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠑</row>
-                                </page>
-                            </section>
-                            <section>
-                                <page>
-                                    <row/>
-                                    <row/>
-                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                    <row>⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
-                                    <row>⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
-                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                </page>
-                            </section>
-                            <section>
-                                <page>
-                                    <row/>
-                                    <row/>
-                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                    <row>⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃</row>
-                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                </page>
-                            </section>
-                        </volume>
-                    </body>
-                </pef>
-          </x:document>
-        </x:expect>
+        <x:scenario label="no headings in page number column">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>bla bla bla bla bla bla bla bla bla bla bla bla bla bla</h1>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/7.1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/7.1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/7.1/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="toc/7.1/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="result" type="custom"
+                      href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                <x:document type="inline">
+                    <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                        <head>
+                            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                <dc:format>application/x-pef+xml</dc:format>
+                                <dc:identifier>identifier?</dc:identifier>
+                                <dc:date>2018-04-30</dc:date>
+                                <dc:language>no</dc:language>
+                            </meta>
+                        </head>
+                        <body>
+                            <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row/>
+                                        <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                                        <row>⠀⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                                        <row>⠀⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠉</row>
+                                    </page>
+                                </section>
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                                        <row>⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                    </page>
+                                </section>
+                            </volume>
+                        </body>
+                    </pef>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="no lines with only leader dots and page number" xfail="true">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <book style="counter-set: page 11">
+                                <bodymatter>
+                                    <level1>
+                                        <h1>bla bla bla bla bla bla bl</h1>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/7.2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/7.2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/7.2/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="toc/7.2/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="result" type="custom"
+                      href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                <x:document type="inline">
+                    <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                        <head>
+                            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                <dc:format>application/x-pef+xml</dc:format>
+                                <dc:identifier>identifier?</dc:identifier>
+                                <dc:date>2018-05-22</dc:date>
+                                <dc:language>no</dc:language>
+                            </meta>
+                        </head>
+                        <body>
+                            <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row/>
+                                        <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                                        <row>⠀⠀⠀⠀⠃⠇⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁⠁</row>
+                                    </page>
+                                </section>
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                    </page>
+                                </section>
+                            </volume>
+                        </body>
+                    </pef>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="always a space between heading and leader" xfail="true">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no" version="2005-3">
+                            <head>
+                                <style type="text/css" media="embossed">
+                                    #generated-volume-toc li,
+                                    #generated-document-toc li {
+                                        margin-right: 4;
+                                    }
+                                </style>
+                            </head>
+                            <book>
+                                <bodymatter>
+                                    <level1>
+                                        <h1>bla bla bla bla bla bla b</h1>
+                                    </level1>
+                                </bodymatter>
+                            </book>
+                        </dtbook>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('toc/7.3/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('toc/7.3/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('toc/7.3/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="toc/7.3/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="result" type="custom"
+                      href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                <x:document type="inline">
+                    <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                        <head>
+                            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                <dc:format>application/x-pef+xml</dc:format>
+                                <dc:identifier>identifier?</dc:identifier>
+                                <dc:date>2018-05-22</dc:date>
+                                <dc:language>no</dc:language>
+                            </meta>
+                        </head>
+                        <body>
+                            <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠊⠝⠝⠓⠕⠇⠙</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row/>
+                                        <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠀⠀⠼⠉</row>
+                                    </page>
+                                </section>
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                    </page>
+                                </section>
+                            </volume>
+                        </body>
+                    </pef>
+                </x:document>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
     
     <x:scenario label="pef-sections">
