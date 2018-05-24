@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+    xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+    xmlns:pef="http://www.daisy.org/ns/2008/pef"
+    xmlns:epub="http://www.idpf.org/2007/ops"
+    script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
+    
+    <!--
+        Notes for writing tests:
+        - Don't use a too low `maximum-number-of-pages` (use at least 4); you may get an error if the script tries to insert a TOC and there's not enough room for it.
+        - Don't override the default `page-height` of 28, or at least don't set it too low; The NLB-stylesheet contains rules that depend on the page height (i.e. -obfl-vertical-position: 25;) which may give an error.
+        - All volumes will start with a titlepage. The first volume will also contain an about page.
+        - If the input contains headlines, then at least 1 toc page will be generated.
+        - Using the default `page-height` of 28, a `maximum-number-of-pages` of 10, and no toc (toc-depth=0), there will be 6 braille pages with 168 rows in the first volume, and 7 braille pages with 196 rows, available for content. 
+    -->
+    
+    <x:scenario label="_">
+        <x:call step="nlb:html-to-pef">
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="maximum-number-of-pages" select="10"/>
+            <x:option name="include-obfl" select="'true'"/>
+        </x:call>
+        
+        <x:scenario label="There should always be something other than generated content in the PEF, even though that means splitting a chapter that would've fit in a separate volume">
+            <x:call>
+                <x:option name="toc-depth" select="1"/>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter">
+                                    <h1>headline</h1>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('0/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('0/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('0/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('0/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="0/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="8 pages of content, including 1 headline, and with toc enabled, should become 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            <x:expect label="At least 20% of the content rows should be in the first volume" type="xpath" test="count(//pef:volume[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="At least 20% of the content rows should be in the second volume" type="xpath" test="count(//pef:volume[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+        </x:scenario>
+        
+        <x:scenario label="If a book consist of more than the set max page number, it must be split into volumes: seeking a balanced page number between these volumes">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter">
+                                    <!-- content page 1 -->
+                                    <h1>big</h1>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 2 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 3 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 4 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 5 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 6 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 7 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 8 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- content page 9 -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('1/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="9 pages of content, with 246 short paragraphs, should become 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            <x:expect label="At least 20% of the content rows should be in the first bodymatter volume" type="xpath" test="count(//pef:volume[1]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+            <x:expect label="At least 20% of the content rows should be in the second bodymatter volume" type="xpath" test="count(//pef:volume[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) div count(//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]) &gt; 0.2" equals="true()"/>
+        </x:scenario>
+        
+        <x:scenario label="with parts: parts will be top level splitting points" pending="https://github.com/nlbdev/pipeline/issues/174">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>content</p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>content</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('2/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="2 short paragraphs, but in different book 'parts', should be split across 2 volumes" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="2"/>
+        </x:scenario>
+        
+        <x:scenario label="with parts: don't force a volume break before the first part">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                    <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                                </section>
+                                
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>content</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('3/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="everything should fit in a single volume" type="xpath" test="count(//pef:volume)" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="with parts: fit small chapters in same volume, medium chapters in separate volumes, and big chapters in multiple volumes" pending="https://github.com/nlbdev/pipeline/issues/174">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                
+                                <section epub:type="bodymatter part" class="part">
+                                    <!-- small chapter -->
+                                    <section>
+                                        <!-- small content page 1 -->
+                                        <h2>small</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- small content page 2 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    
+                                    <!-- small chapter -->
+                                    <section>
+                                        <!-- small content page 1 -->
+                                        <h2>small</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- small content page 2 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <!-- medium chapter -->
+                                    <section>
+                                        <!-- medium content page 1 -->
+                                        <h2>medium</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 2 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 3 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 4 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 5 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 6 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    
+                                    <!-- medium chapter -->
+                                    <section>
+                                        <!-- medium content page 1 -->
+                                        <h2>medium</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 2 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 3 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 4 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 5 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- medium content page 6 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <!-- big chapter -->
+                                    <section>
+                                        <!-- big content page 1 -->
+                                        <h2>big</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 2 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 3 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 4 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 5 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 6 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 7 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 8 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 9 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 10 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 11 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 12 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    
+                                    <!-- big chapter -->
+                                    <section>
+                                        <!-- big content page 1 -->
+                                        <h2>big</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 2 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 3 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 4 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 5 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 6 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 7 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 8 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 9 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 10 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 11 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <!-- big content page 12 -->
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('4/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="4/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be 7 volumes" type="xpath" test="count(//pef:volume)" equals="7"/>
+            <x:expect label="volume 1 should have the headlines for 2 small chapters" type="xpath" test="count(//pef:volume[1]//pef:row[contains(text(),'⠎⠍⠁⠇⠇')])" equals="2"/>
+            <x:expect label="volume 2 should have the headline for 1 medium chapter" type="xpath" test="count(//pef:volume[2]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])" equals="1"/>
+            <x:expect label="volume 2 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[2]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 3 should have the headline for 1 medium chapter" type="xpath" test="count(//pef:volume[3]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])" equals="1"/>
+            <x:expect label="volume 3 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[3]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠍⠑⠙⠊⠥⠍')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 4 should have the headline for 1 big chapter" type="xpath" test="count(//pef:volume[4]//pef:row[contains(text(),'⠃⠊⠛')])" equals="1"/>
+            <x:expect label="volume 4 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[4]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠃⠊⠛')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 5 should have no content other than 'content' paragraphs" type="xpath" test="string-join((//pef:volume[5]/(.//pef:row except (.//pef:page)[1]//pef:row)/text()[not(contains(.,'⠉⠕⠝⠞⠑⠝⠞')) and matches(.,'[^⠀]')]/replace(.,'(^⠀+|⠀+$)$','')), ',')" equals="''"/>
+            <x:expect label="volume 6 should have the headline for 1 big chapter" type="xpath" test="count(//pef:volume[6]//pef:row[contains(text(),'⠃⠊⠛')])" equals="1"/>
+            <x:expect label="volume 6 should have no content before the first headline" type="xpath" test="string-join(((//pef:volume[6]//pef:row intersect (//pef:volume[2]//pef:row[contains(text(),'⠃⠊⠛')])[1]/preceding::pef:row)[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]/string(text())), ',')" equals="''"/>
+            <x:expect label="volume 7 should have no content other than 'content' paragraphs" type="xpath" test="string-join((//pef:volume[7]/(.//pef:row except (.//pef:page)[1]//pef:row)/text()[not(contains(.,'⠉⠕⠝⠞⠑⠝⠞')) and matches(.,'[^⠀]')]/replace(.,'(^⠀+|⠀+$)$','')), ',')" equals="''"/>
+        </x:scenario>
+        
+        <x:scenario label="regression test: volume division fails with maximum-number-of-pages = 8 and 81 headlines">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter">
+                                    <!-- 81 headlines -->
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1><h1>content</h1>
+                                    <h1>content</h1>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('5/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="5/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="The PEF should be generated" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="prefer splitting at lower level headings" pending="https://github.com/nlbdev/pipeline/issues/119">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>content h1</h1>
+                                    
+                                    <!-- 240 paragraphs -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <section>
+                                        <h2>content h2</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>content h1</h1>
+                                    
+                                    <!-- 240 paragraphs -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <section>
+                                        <h2>content h2</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <section>
+                                            <h3>content h3</h3>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </section>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>content h1</h1>
+                                    
+                                    <!-- 240 paragraphs -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <section>
+                                        <h2>content h2</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <section>
+                                            <h3>content h3</h3>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <section>
+                                                <h4>content h4</h4>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            </section>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </section>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>content h1</h1>
+                                    
+                                    <!-- 240 paragraphs -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <section>
+                                        <h2>content h2</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <section>
+                                            <h3>content h3</h3>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <section>
+                                                <h4>content h4</h4>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <section>
+                                                    <h5>content h5</h5>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                </section>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            </section>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </section>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>content h1</h1>
+                                    
+                                    <!-- 240 paragraphs -->
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <section>
+                                        <h2>content h2</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <section>
+                                            <h3>content h3</h3>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            <section>
+                                                <h4>content h4</h4>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                <section>
+                                                    <h5>content h5</h5>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    <section>
+                                                        <h6>content h6</h6>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                    </section>
+                                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                                </section>
+                                                <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                            </section>
+                                            <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        </section>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('6/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('6/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('6/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be 10 volumes with bodymatter content" type="xpath" test="count(//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])" equals="10"/>
+            <x:expect label="The first part should have a volume break right before h2" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃'" equals="true()"/>
+            <x:expect label="The second part should have a volume break right before h3" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠉'" equals="true()"/>
+            <x:expect label="The third part should have a volume break right before h4" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠙'" equals="true()"/>
+            <x:expect label="The fourth part should have a volume break right before h5" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠑'" equals="true()"/>
+            <x:expect label="The fifth part should have a volume break right before h6" type="xpath" test="((//pef:volume[.//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')]])[2]//pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])[1]/replace(text(),'(^⠀+|⠀+$)','') = '⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠋'" equals="true()"/>
+        </x:scenario>
+        
+        <x:scenario label="paragraph with inline elements: don't split volumes inside a paragraph; unless necessary" pending="https://github.com/nlbdev/pipeline/issues/86">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>Volume with frontmatter</p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <!-- 300 occurences of "content" -->
+                                    <p>
+                                        <span>1</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                    </p>
+                                    
+                                    <!-- 300 occurences of "content" -->
+                                    <p>
+                                        <span>2</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                    </p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <!-- 800 occurences of "content" -->
+                                    <p>
+                                        <span>3</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                        <span>content content content content content content content content content content content content content content content content content content content content</span>
+                                    </p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('7/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('7/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('7/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('7/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="7/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be 5 volumes" type="xpath" test="count(//pef:volume)" equals="5"/>
+            <x:expect label="The second volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[2]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The third volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[3]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The fourth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[4]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+            <x:expect label="The fifth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[5]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+        </x:scenario>
+        
+        <x:scenario label="paragraph without inline elements: don't split volumes inside a paragraph; unless necessary" pending="https://github.com/nlbdev/pipeline/issues/86">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>Volume with frontmatter</p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <!-- 300 occurences of "content" -->
+                                    <p>
+                                        1
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                    </p>
+                                    
+                                    <!-- 300 occurences of "content" -->
+                                    <p>
+                                        2
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                    </p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <!-- 800 occurences of "content" -->
+                                    <p>
+                                        3
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                        content content content content content content content content content content content content content content content content content content content content
+                                    </p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('8/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('8/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('8/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('8/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="8/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be 5 volumes" type="xpath" test="count(//pef:volume)" equals="5"/>
+            <x:expect label="The second volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[2]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The third volume should have 500 occurences of 'content'" type="xpath" test="count((//pef:volume)[3]/tokenize(string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')) - 1" equals="500"/>
+            <x:expect label="The fourth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[4]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+            <x:expect label="The fifth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[5]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
+        </x:scenario>
+        
+        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter) - short level1, long level2" pending="https://github.com/nlbdev/pipeline/issues/174">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>content h1</h1>
+                                    
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    
+                                    <!-- 190 paragraphs -->
+                                    <section>
+                                        <h2>content h2</h2>
+                                        
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('9.1/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('9.1/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('9.1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('9.1/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="9.1/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            <x:expect label="The part headline should be in the first volume" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠁')]/preceding::pef:volume)+1" equals="1"/>
+            <x:expect label="The chapter headline should be in the first volume as well" type="xpath" test="count(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/preceding::pef:volume)+1" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter) - long level1, short level2">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter">
+                                    <h1>content h1</h1>
+                                    
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    <p style="page-break-after: always;">content</p>
+                                    
+                                    <section>
+                                        <h2>content h2</h2>
+                                        
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                        <p style="page-break-after: always;">content</p>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('9.2/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('9.2/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('9.2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('9.2/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="9.2/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="The h2 should be in the same volume as the following page of content" type="xpath" test="exists(//pef:row[contains(.,'⠉⠕⠝⠞⠑⠝⠞⠀⠓⠼⠃')]/parent::pef:page/(following-sibling::pef:page | parent::pef:section/following-sibling::pef:section/pef:page)/pef:row[contains(text(),'⠉⠕⠝⠞⠑⠝⠞')])"/>
+        </x:scenario>
+        
+        <x:scenario label="Regression test for issue #121: Coding error: unexpected /css:_/book[1]/@css:volume-break-before (mode was table-attr)">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                <meta name="dtb:uid" content="123456"/>
+                                <meta name="dc:Title" content="Title"/>
+                                <meta name="dc:Identifier" content="123456"/>
+                                <meta name="track:Guidelines" content="2015-1"/>
+                                <meta name="track:Supplier" content="Supplier"/>
+                                <meta name="dc:Creator" content="Lastname, Firstname"/>
+                                <meta name="dc:Language" content="no"/>
+                                <meta name="dc:Source" content="urn:isbn:123-45-678-9012-3"/>
+                                <meta name="dc:Format" content="DTBook"/>
+                                <meta name="dc:Publisher" content="NLB"/>
+                                <meta name="dc:Date" content="2017-10-13"/>
+                                <meta name="dcterms:modified" content="2017-10-1314:32:16+00:00"/>
+                            </head>
+                            <body>
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                    <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                                </section>
+                                
+                                <section epub:type="bodymatter part" class="part"/><section epub:type="bodymatter part" class="part">
+                                    <table>
+                                        <tr>
+                                            <td>cell</td>
+                                        </tr>
+                                    </table>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('10/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('10/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('10/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('10/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="Regression test for issue #118 (using a real book: 561691): Failed to complete volume division in dotify:obfl-to-pef">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="file" href="../resources/DTBook/561691.xml"/>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('11/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('11/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/561691.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+    </x:scenario>
+</x:description>
