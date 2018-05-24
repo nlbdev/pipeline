@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:f="#"
@@ -41,7 +40,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template mode="find-problematic-tables" match="dtb:table" as="element()?">
+	<xsl:template mode="find-problematic-tables" match="*[local-name()='table']" as="element()?">
 		<xsl:if test="not(f:is-table-well-formed(.))">
 			<xsl:sequence select="."/>
 		</xsl:if>
@@ -52,7 +51,7 @@
 	</xsl:template>
 	
 	<xsl:function name="f:is-table-well-formed" as="xs:boolean">
-		<xsl:param name="table" as="element()"/> <!-- dtb:table -->
+		<xsl:param name="table" as="element()"/> <!-- table -->
 		<!--
 		    1. group table cells by css:table-header-group, css:table-row-group, and css:table-footer-group
 		    2. create implicit table cells "covered" by column- and row-span
@@ -100,21 +99,21 @@
 		<td css:table-cell="_" css:table-row="{$row}" css:table-column="{$column}"/>
 	</xsl:function>
 	
-	<xsl:template mode="to-html" match="dtb:table">
+	<xsl:template mode="to-html" match="*[local-name()='table']">
 		<xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
 			<xsl:attribute name="style" select="'border-collapse: collapse; background: red'"/>
 			<xsl:apply-templates mode="#current" select="@*|node()"/>
 		</xsl:element>
 	</xsl:template>
 	
-	<xsl:template mode="to-html" match="dtb:td|dtb:th">
+	<xsl:template mode="to-html" match="*[local-name()=('td','th')]">
 		<xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
 			<xsl:attribute name="style" select="'border: 1px solid black; background: white'"/>
 			<xsl:apply-templates mode="#current" select="@*|node()"/>
 		</xsl:element>
 	</xsl:template>
 	
-	<xsl:template mode="to-html" match="dtb:tr|dtb:thead|dtb:tbody|dtb:tfoot">
+	<xsl:template mode="to-html" match="*[local-name()=('tr','thead','tbody','tfoot')]">
 		<xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
 			<xsl:apply-templates mode="#current" select="@*|node()"/>
 		</xsl:element>
