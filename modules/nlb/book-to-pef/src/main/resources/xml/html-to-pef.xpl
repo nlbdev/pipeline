@@ -37,7 +37,7 @@
         </p:documentation>
     </p:input>
     
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
