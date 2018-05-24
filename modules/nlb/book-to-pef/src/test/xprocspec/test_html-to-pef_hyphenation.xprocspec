@@ -3,106 +3,103 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
-               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl" pending="https://github.com/nlbdev/pipeline/issues/104">
-  
-  <x:scenario label="non-standard hyphenation #1">
-    <x:call step="nlb:dtbook-to-pef">
-      <x:input port="source">
-        <x:document type="inline" xml:base="file:/tmp/book.xml">
-          <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="no">
-            <book>
-              <bodymatter>
-                <level1>
-                  <p>Busstopp busstopp busstopp busstopp busstopp busstopp busstopp busstopp</p>
-                </level1>
-              </bodymatter>
-            </book>
-          </dtbook>
-        </x:document>
-      </x:input>
-      <x:option name="page-width" select="28"/>
-      <x:option name="show-print-page-numbers" select="'false'"/>
-      <x:option name="show-braille-page-numbers" select="'false'"/>
-      <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
-      <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
-      <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
-    </x:call>
-    <x:context label="result">
-      <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
-    </x:context>
-    <x:expect label="result" type="compare">
-      <x:document type="inline">
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl" pending="https://github.com/nlbdev/pipeline/issues/104">
+    
+    <x:scenario label="non-standard hyphenation #1">
+        <x:call step="nlb:html-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                        <body>
+                            <section epub:type="bodymatter">
+                                <p>Busstopp busstopp busstopp busstopp busstopp busstopp busstopp busstopp</p>
+                            </section>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+            <x:option name="page-width" select="28"/>
+            <x:option name="show-print-page-numbers" select="'false'"/>
+            <x:option name="show-braille-page-numbers" select="'false'"/>
+            <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+            <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="file" base-uri="temp-dir" href="1/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
                     <row>⠀⠀⠀⠠⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠤</row>
                     <row>⠀⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
                     <row>⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏⠀⠃⠥⠎⠎⠞⠕⠏⠏</row>
                 </page>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-  
-  <x:scenario label="non-standard hyphenation #2">
-        <x:call step="nlb:dtbook-to-pef">
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="non-standard hyphenation #2">
+        <x:call step="nlb:html-to-pef">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/" style="margin-left: 0; padding-left: 0; text-indent: 0;">
+                <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no" style="margin-left: 0; padding-left: 0; text-indent: 0;">
                         <head>
                             <style media="embossed" type="text/css">
                                 @page {
-                                    size: 30 50;
-                                    margin-left: 0;
-                                    margin-right: 0;
+                                size: 30 50;
+                                margin-left: 0;
+                                margin-right: 0;
                                 }
                                 frontmatter, rearmatter, level1 {
-                                    display: none;
+                                display: none;
                                 }
                                 dtbook, book, bodymatter, level1, p {
-                                    margin-left: 0;
-                                    padding-left: 0;
-                                    margin-right: 0;
-                                    padding-right: 0;
-                                    text-indent: 0;
+                                margin-left: 0;
+                                padding-left: 0;
+                                margin-right: 0;
+                                padding-right: 0;
+                                text-indent: 0;
                                 }
                                 
                                 level1.hyphentest {
-                                    display: block;
+                                display: block;
                                 }
                                 .hyphentest p {
-                                    display: block;
+                                display: block;
                                 }
                             </style>
                         </head>
-                        <book>
-                            <bodymatter>
-                                <level1 class="hyphentest">
-                                    <!-- (to see the x position when writing the tests; words should go past the line width)
-                                       1        10        20        30
-                                       123456789012345678901234567890
-                                    -->
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx nattog</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx nattog</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx villaks</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx bassolo</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx blokkatt</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx brenneslebladenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx budsjettal</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx busseter</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx butikkjedenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx fjellandsbyenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx fotballandskampenes</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx gullameene</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx kontrollyst</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx bunnivå</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx gullotto</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx busstopp</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx fullastet</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx bussjåfør</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx skuddrama</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx butikkjede</p>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
+                        <body>
+                            <section epub:type="bodymatter" class="hyphentest">
+                                <!-- (to see the x position when writing the tests; words should go past the line width)
+                                    1        10        20        30
+                                    123456789012345678901234567890
+                                -->
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx nattog</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx nattog</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx villaks</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx bassolo</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx blokkatt</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxx brenneslebladenes</p>
+                                <p>xxxxxxxxxxxxxxxxxxxx budsjettal</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxx busseter</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxx butikkjedenes</p>
+                                <p>xxxxxxxxxxxxxxxxxxxx fjellandsbyenes</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxx fotballandskampenes</p>
+                                <p>xxxxxxxxxxxxxxxxxxxx gullameene</p>
+                                <p>xxxxxxxxxxxxxxxxxxxx kontrollyst</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx bunnivå</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx gullotto</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx busstopp</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxx fullastet</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx bussjåfør</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxx skuddrama</p>
+                                <p>xxxxxxxxxxxxxxxxxxxx butikkjede</p>
+                            </section>
+                        </body>
+                    </html>
                 </x:document>
             </x:input>
             <x:option name="show-print-page-numbers" select="'false'"/>
@@ -111,7 +108,7 @@
             <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="result">
-          <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
+            <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline" select="//pef:row">
@@ -161,64 +158,62 @@
     </x:scenario>
     
     <x:scenario label="standard hyphenation #1">
-        <x:call step="nlb:dtbook-to-pef">
+        <x:call step="nlb:html-to-pef">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
                         <head>
                             <style media="embossed" type="text/css">
                                 @page {
-                                    size: 30 50;
-                                    margin-left: 0;
-                                    margin-right: 0;
+                                size: 30 50;
+                                margin-left: 0;
+                                margin-right: 0;
                                 }
                                 frontmatter, rearmatter, level1 {
-                                    display: none;
+                                display: none;
                                 }
                                 dtbook, book, bodymatter, level1, p {
-                                    margin-left: 0;
-                                    padding-left: 0;
-                                    margin-right: 0;
-                                    padding-right: 0;
-                                    text-indent: 0;
+                                margin-left: 0;
+                                padding-left: 0;
+                                margin-right: 0;
+                                padding-right: 0;
+                                text-indent: 0;
                                 }
                                 
                                 level1.hyphentest {
-                                    display: block;
+                                display: block;
                                 }
                                 .hyphentest p {
-                                    display: block;
+                                display: block;
                                 }
                             </style>
                         </head>
-                        <book>
-                            <bodymatter>
-                                <level1 class="hyphentest">
-                                    <!-- (to see the x position when writing the tests; words should go past the line width)
-                                       1        10        20        30
-                                       123456789012345678901234567890
-                                    -->
-                                    <!-- some words that we've defined rules for explicitly -->
-                                    <p>xxxxxxxxxxxx hovedfagskandidat</p>
-                                    <p>xxxxxxxxxxxxxxxxxx hovedfagskandidat</p>
-                                    <p>xxxxxxxxxxxxxxxxxx inngangsport</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx selskapstøy</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxxx linkjole</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx orddeling</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx riksavis</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx skumdott</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx eksempel</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx bakbein</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx førkrigstida</p>
-                                    <p>xxxxxxxxxxxxxxxxxx førkrigstida</p>
-                                    
-                                    <!-- words not explicitly defined but should work since we extend the existing table -->
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx gulerot</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx gullpengene</p>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
+                        <body>
+                            <section epub:type="bodymatter" class="hyphentest">
+                                <!-- (to see the x position when writing the tests; words should go past the line width)
+                                    1        10        20        30
+                                    123456789012345678901234567890
+                                -->
+                                <!-- some words that we've defined rules for explicitly -->
+                                <p>xxxxxxxxxxxx hovedfagskandidat</p>
+                                <p>xxxxxxxxxxxxxxxxxx hovedfagskandidat</p>
+                                <p>xxxxxxxxxxxxxxxxxx inngangsport</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx selskapstøy</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxxx linkjole</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx orddeling</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx riksavis</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx skumdott</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx eksempel</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx bakbein</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxx førkrigstida</p>
+                                <p>xxxxxxxxxxxxxxxxxx førkrigstida</p>
+                                
+                                <!-- words not explicitly defined but should work since we extend the existing table -->
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx gulerot</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxx gullpengene</p>
+                            </section>
+                        </body>
+                    </html>
                 </x:document>
             </x:input>
             <x:option name="show-print-page-numbers" select="'false'"/>
@@ -227,7 +222,7 @@
             <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="result">
-          <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
+            <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" select="//pef:row[text() and following-sibling::*]"/>
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline" select="//pef:row">
@@ -265,43 +260,41 @@
     </x:scenario>
     
     <x:scenario label="regression test: first half of word should not be deleted when non-standard hyphenation break point is at page width (issue nlbdev/pipeline#14)">
-        <x:call step="nlb:dtbook-to-pef">
+        <x:call step="nlb:html-to-pef">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/" style="margin-left: 0; padding-left: 0; text-indent: 0;">
+                <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no" style="margin-left: 0; padding-left: 0; text-indent: 0;">
                         <head>
                             <style media="embossed" type="text/css">
                                 @page {
-                                    margin-left: 0;
-                                    margin-right: 0;
+                                margin-left: 0;
+                                margin-right: 0;
                                 }
                                 dtbook, book, bodymatter, level1, p {
-                                    margin-left: 0;
-                                    padding-left: 0;
-                                    margin-right: 0;
-                                    padding-right: 0;
-                                    text-indent: 0;
+                                margin-left: 0;
+                                padding-left: 0;
+                                margin-right: 0;
+                                padding-right: 0;
+                                text-indent: 0;
                                 }
                             </style>
                         </head>
-                        <book>
-                            <frontmatter>
-                                <doctitle>doctitle</doctitle>
-                                <docauthor>docauthor</docauthor>
-                            </frontmatter>
-                            <bodymatter>
-                                <level1>
-                                    <p>xxxxxxxxxxxxxxxxxx volleyballederen</p>
-                                    <p>xxxxxxxxxxxxxxxxxxx volleyballederen</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxx volleyballederen</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
-                                    <p>xxxxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
+                        <body>
+                            <section epub:type="frontmatter titlepage">
+                                <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                            </section>
+                            <section epub:type="bodymatter">
+                                <p>xxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                <p>xxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                <p>xxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                                <p>xxxxxxxxxxxxxxxxxxxxxxxx volleyballederen</p>
+                            </section>
+                        </body>
+                    </html>
                 </x:document>
             </x:input>
             <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
@@ -339,49 +332,47 @@
     </x:scenario>
     
     <x:scenario label="hyphenation and borders">
-        <x:call step="nlb:dtbook-to-pef">
+        <x:call step="nlb:html-to-pef">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
                         <head>
                             <style media="embossed" type="text/css">
                                 @page {
-                                    margin-left: 0;
-                                    margin-right: 0;
+                                margin-left: 0;
+                                margin-right: 0;
                                 }
                                 dtbook, book, bodymatter, level1, p {
-                                    margin-left: 0;
-                                    padding-left: 0;
-                                    margin-right: 0;
-                                    padding-right: 0;
-                                    text-indent: 0;
+                                margin-left: 0;
+                                padding-left: 0;
+                                margin-right: 0;
+                                padding-right: 0;
+                                text-indent: 0;
                                 }
                             </style>
                         </head>
-                        <book>
-                            <bodymatter>
-                                <level1 class="part">
-                                    <!-- standard hyphenation before border -->
-                                    <h1>xxxxxxxxxxxxx hovedfagskandidat</h1>
-                                    
-                                    <!-- standard hyphenation at border -->
-                                    <h1>xxxxxxxxxxxxxx hovedfagskandidat</h1>
-                                    
-                                    <!-- standard hyphenation after border -->
-                                    <h1>xxxxxxxxxxxxxxx hovedfagskandidat</h1>
-                                    
-                                    <!-- non-standard hyphenation before border-->
-                                    <h1>xxxxxxxxxxxxxxxxxx busstopp</h1>
-                                    
-                                    <!-- non-standard hyphenation at border -->
-                                    <h1>xxxxxxxxxxxxxxxxxxx busstopp</h1>
-                                    
-                                    <!-- non-standard hyphenation after border -->
-                                    <h1>xxxxxxxxxxxxxxxxxxxx busstopp</h1>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
+                        <body>
+                            <section epub:type="bodymatter part" class="part">
+                                <!-- standard hyphenation before border -->
+                                <h1>xxxxxxxxxxxxx hovedfagskandidat</h1>
+                                
+                                <!-- standard hyphenation at border -->
+                                <h1>xxxxxxxxxxxxxx hovedfagskandidat</h1>
+                                
+                                <!-- standard hyphenation after border -->
+                                <h1>xxxxxxxxxxxxxxx hovedfagskandidat</h1>
+                                
+                                <!-- non-standard hyphenation before border-->
+                                <h1>xxxxxxxxxxxxxxxxxx busstopp</h1>
+                                
+                                <!-- non-standard hyphenation at border -->
+                                <h1>xxxxxxxxxxxxxxxxxxx busstopp</h1>
+                                
+                                <!-- non-standard hyphenation after border -->
+                                <h1>xxxxxxxxxxxxxxxxxxxx busstopp</h1>
+                            </section>
+                        </body>
+                    </html>
                 </x:document>
             </x:input>
             <x:option name="page-width" select="32"/>
@@ -441,36 +432,35 @@
     </x:scenario>
     
     <x:scenario label="hyphenation of other languages when force-norwegian">
-        <x:call step="nlb:dtbook-to-pef">
+        <x:call step="nlb:html-to-pef">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp/book.xml">
-                    <dtbook version="2005-3" xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
                         <head>
                             <style media="embossed" type="text/css">
                                 @page {
-                                    margin-left: 0;
-                                    margin-right: 0;
+                                margin-left: 0;
+                                margin-right: 0;
                                 }
                                 dtbook, book, bodymatter, level1, level2, p {
-                                    margin-left: 0;
-                                    padding-left: 0;
-                                    margin-right: 0;
-                                    padding-right: 0;
-                                    text-indent: 0;
+                                margin-left: 0;
+                                padding-left: 0;
+                                margin-right: 0;
+                                padding-right: 0;
+                                text-indent: 0;
                                 }
                             </style>
                         </head>
-                        <book>
-                            <bodymatter>
-                                <level1>
+                        <body>
+                            <section epub:type="bodymatter">
+                                <p>xxxxxxxxxxxxxxxxxx hovedfagskandidat</p>
+                                
+                                <section xml:lang="en" lang="en">
                                     <p>xxxxxxxxxxxxxxxxxx hovedfagskandidat</p>
-                                    <level2 xml:lang="en">
-                                        <p>xxxxxxxxxxxxxxxxxx hovedfagskandidat</p>
-                                    </level2>
-                                </level1>
-                            </bodymatter>
-                        </book>
-                    </dtbook>
+                                </section>
+                            </section>
+                        </body>
+                    </html>
                 </x:document>
             </x:input>
             <x:option name="page-width" select="'29'"/>
@@ -484,10 +474,9 @@
             <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
         </x:call>
         <x:context label="result">
-          <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef"/>
+            <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef"/>
         </x:context>
-        <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"
-                  step="x:pef-compare">
+        <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
             <x:document type="inline">
                 <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
                     <head>
