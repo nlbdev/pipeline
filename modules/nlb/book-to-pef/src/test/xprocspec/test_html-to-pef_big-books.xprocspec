@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="../resources/html-to-pef-test.xpl">
+    
+    <x:scenario label="basic structure" pending="Takes ≈ 20 minutes to run. DTBook version succeeds as of 6738c7d96.">
+        <x:scenario label="≈ 10 kB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/1/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/1/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/1/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/1/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="≈ 100 kB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                <generate generate-name="level1" generate-count="10">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </generate>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/2/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/2/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/2/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/2/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="≈ 500 kB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                <generate generate-name="level1" generate-count="50">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </generate>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/3/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/3/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/3/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/3/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="≈ 1 MB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                <generate generate-name="level1" generate-count="100">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </generate>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/4/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/4/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/4/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/4/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="≈ 1.5 MB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                <generate generate-name="level1" generate-count="150">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </generate>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/5/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/5/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/5/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/5/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="≈ 2 MB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                <generate generate-name="level1" generate-count="200">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </generate>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/6/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/6/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/6/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/6/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="≈ 5 MB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                <generate generate-name="level1" generate-count="500">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </generate>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/7/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/7/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/7/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/7/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+        
+        <x:scenario label="≈ 10 MB">
+            <x:call step="nlb:html-to-pef-test">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                <generate generate-name="level1" generate-count="1000">
+                                    <generate generate-name="p" generate-text-length="147" generate-count="58"/>
+                                </generate>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:param name="pef-output-dir" select="resolve-uri('basic-structure/8/pef-output-dir',$temp-dir)"/>
+                <x:param name="preview-output-dir" select="resolve-uri('basic-structure/8/preview-output-dir',$temp-dir)"/>
+                <x:param name="temp-dir" select="resolve-uri('basic-structure/8/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="basic-structure/8/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="there should be a result PEF" type="count" min="1"/>
+        </x:scenario>
+    </x:scenario>
+    
+</x:description>
