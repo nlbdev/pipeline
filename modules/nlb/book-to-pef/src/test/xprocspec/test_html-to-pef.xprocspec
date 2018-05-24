@@ -1,34 +1,1036 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
-    xmlns:pef="http://www.daisy.org/ns/2008/pef"
-    script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
-    
-    <!-- Note: these tests can maybe be simplified in the future if xprocspec starts supporting inline documents for x:option. See: https://github.com/daisy/xprocspec/issues/57 -->
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl" pending="https://github.com/nlbdev/pipeline/issues/23">
     
     <x:scenario label="_">
         <x:call step="nlb:html-to-pef">
             <x:option name="toc-depth" select="0"/>
+            <x:option name="hyphenation" select="'false'"/>
         </x:call>
-    
-    <x:scenario label="basic test">
-        <x:call step="nlb:html-to-pef">
-            <x:input port="source">
-                <x:document type="file" href="../resources/HTML/book.xhtml"/>
-            </x:input>
-            <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
-            <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
-        </x:call>
-        <x:context label="the output directory contents">
-            <x:document type="directory" base-uri="temp-dir" href="1/pef-output-dir/"/>
-        </x:context>
-        <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath"
-            test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
-    </x:scenario>
+        
+        <x:scenario label="basic test 1">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="file" href="../resources/HTML/book.xhtml"/>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory contents">
+                <x:document type="directory" base-uri="temp-dir" href="1/pef-output-dir/"/>
+            </x:context>
+            <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath"
+                test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="basic test 2">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="file" href="../resources/DTBook/book.xml"/>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('1/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('1/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the conversion should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
+            <x:context label="the output directory contents">
+                <x:document type="directory" base-uri="temp-dir" href="1/pef-output-dir/"/>
+            </x:context>
+            <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="ability to override css rules - with a link element">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="file" href="../resources/DTBook-override-css/book-with-link.xml"/>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('2/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('2/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory contents">
+                <x:document type="file" base-uri="temp-dir" href="2/pef-output-dir/book-with-link.pef" select="(//pef:row[contains(text(),'⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄')])[1]"/>
+            </x:context>
+            <x:expect label="The paragraph should be indented by 6 (2 page margin-left, 4 p text-indent)" type="compare">
+                <x:document type="inline">
+                    <row xmlns="http://www.daisy.org/ns/2008/pef">⠀⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄</row>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="ability to override css rules - by passing a css file into the script">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="file" href="../resources/DTBook-override-css/book.xml"/>
+                </x:input>
+                <x:option name="stylesheet" select="resolve-uri('../resources/DTBook-override-css/indent-p.css')"/>
+                <x:option name="pef-output-dir" select="resolve-uri('3/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('3/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('3/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory contents">
+                <x:document type="file" base-uri="temp-dir" href="3/pef-output-dir/book.pef" select="(//pef:row[contains(text(),'⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄')])[1]"/>
+            </x:context>
+            <x:expect label="The paragraph should be indented by 6 (2 page margin-left, 4 p text-indent)" type="compare">
+                <x:document type="inline">
+                    <row xmlns="http://www.daisy.org/ns/2008/pef">⠀⠀⠀⠀⠀⠀⠠⠞⠑⠎⠞⠁⠧⠎⠝⠊⠞⠞⠄</row>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="ability to convert non-norwegian books">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+                            <head>
+                                
+                                <title>Testbok</title>
+                                <meta name="dc:creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+                                <meta name="dc:date" content="2016-03-01"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:language" content="en"/>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">Test book</h1>
+                                    <p epub:type="z3998:author" class="docauthor">Norwegian library for talking books and braille</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <h1>This is a test headline</h1>
+                                    <p>This is a test paragraph.</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('4/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('4/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('4/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory contents">
+                <x:document type="directory" base-uri="temp-dir" href="4/pef-output-dir/"/>
+            </x:context>
+            <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="test for other languages">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Testbok</title>
+                                <meta name="dc:creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+                                <meta name="dc:date" content="2016-03-01"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:language" content="no"/>
+                                <style media="embossed" type="text/css">
+                                    @page {
+                                    size: 35 28;
+                                    margin-top: 0;
+                                    margin-left: 0;
+                                    @left {
+                                    content: none;
+                                    }
+                                    }
+                                    h1, h2, h3, p {
+                                    text-indent: 0;
+                                    text-align: left;
+                                    margin-left: 0;
+                                    border: none;
+                                    text-transform: auto;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">Test</h1>
+                                    <p epub:type="z3998:author" class="docauthor">Test</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter" xml:lang="no" lang="no">
+                                    <h1>aa ll bb cc</h1>
+                                    <p xml:lang="no" lang="no">aaa bb cc</p>
+                                    <p xml:lang="en" lang="en">aaa bb cc</p>
+                                    <p xml:lang="no" lang="no">aaa bb cc</p>
+                                    <p xml:lang="fr" lang="fr">aaa bb cc</p>
+                                    
+                                    <section xml:lang="en" lang="en">
+                                        <h2>aa ll bb cc</h2>
+                                        <p xml:lang="no" lang="no">aaa bb cc</p>
+                                        <p xml:lang="en" lang="en">aaa bb cc</p>
+                                        <p xml:lang="no" lang="no">aaa bb cc</p>
+                                        <p xml:lang="fr" lang="fr">aaa bb cc</p>
+                                        
+                                        <section xml:lang="no" lang="no">
+                                            <h3>aa ll bb cc</h3>
+                                            <p xml:lang="no" lang="no">aaa bb cc</p>
+                                            <p xml:lang="en" lang="en">aaa bb cc</p>
+                                            <p xml:lang="no" lang="no">aaa bb cc</p>
+                                            <p xml:lang="fr" lang="fr">aaa bb cc</p>
+                                        </section>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('5/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('5/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('5/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="5/pef-output-dir/book.pef" select="//pef:page[pef:row[contains(text(),'⠁⠁⠀⠇⠇⠀⠃⠃⠀⠉⠉')]]/pef:row[text() and following-sibling::pef:row]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline" select="//pef:row">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠁⠁⠀⠇⠇⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠀⠇⠇⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠀⠇⠇⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                        <row>⠁⠁⠁⠀⠃⠃⠀⠉⠉</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="test for text-transform:uncontracted other languages">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Testbok</title>
+                                <meta name="dc:creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+                                <meta name="dc:date" content="2016-03-01"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:language" content="no"/>
+                                <style media="embossed" type="text/css">
+                                    @page {
+                                    size: 35 28;
+                                    margin-top: 0;
+                                    margin-left: 0;
+                                    @left {
+                                    content: none;
+                                    }
+                                    }
+                                    h1, h2, h3, p {
+                                    text-indent: 0;
+                                    text-align: left;
+                                    margin-left: 0;
+                                    border: none;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">l</h1>
+                                    <p epub:type="z3998:author" class="docauthor">a</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <p>a ble at ll</p>
+                                    <p xml:lang="en" lang="en">a ble at ll</p>
+                                    
+                                    <section xml:lang="en" lang="en">
+                                        <p>a ble at ll</p>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:1)'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('6/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('6/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('6/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="6/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[text() != '' and not(contains(text(),'⠼'))]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline" select="//pef:row">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇</row>
+                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
+                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="test for contracted norwegian inside other languages">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Testbok</title>
+                                <meta name="dc:creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+                                <meta name="dc:date" content="2016-03-01"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:language" content="no"/>
+                                <style media="embossed" type="text/css">
+                                    @page {
+                                    size: 35 28;
+                                    margin-top: 0;
+                                    margin-left: 0;
+                                    @left {
+                                    content: none;
+                                    }
+                                    }
+                                    p {
+                                    text-indent: 0;
+                                    margin-left: 0;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">l</h1>
+                                    <p epub:type="z3998:author" class="docauthor">a</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <p>a ble at ll %(/+</p>
+                                    
+                                    <section xml:lang="en" lang="en">
+                                        <p>a ble at ll %(/+</p>
+                                        <p xml:lang="no" lang="no">a ble at ll %(/+</p>
+                                        <div xml:lang="no" lang="no">
+                                            <p>a ble at ll %(/+</p>
+                                        </div>
+                                        <p>a ble at ll %(/+</p>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:1)'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('7/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('7/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('7/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="7/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[text() != '' and not(contains(text(),'⠼'))]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline" select="//pef:row">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇⠨⠴⠦⠌⠖</row>
+                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇⠨⠴⠦⠌⠖</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇⠨⠴⠦⠌⠖</row>
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠇⠇⠨⠴⠦⠌⠖</row>
+                        <row>⠁⠀⠃⠇⠑⠀⠁⠞⠀⠇⠇⠨⠴⠦⠌⠖</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="regression test for issue where dot 56 is sometimes missing in contraction (issue nlbdev/pipeline#70)">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <meta name="dc:creator" content="a ble at l"/>
+                                <title>Testbok</title>
+                                <meta name="dc:date" content="2016-03-01"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:language" content="no"/>
+                                <style media="embossed" type="text/css">
+                                    @page {
+                                    size: 35 28;
+                                    margin-top: 0;
+                                    margin-left: 0;
+                                    @left {
+                                    content: none;
+                                    }
+                                    }
+                                    h1, h2, h3, p {
+                                    text-indent: 0;
+                                    text-align: left;
+                                    margin-left: 0;
+                                    border: none;
+                                    }
+                                    .first-page p {
+                                    text-align: left;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">l</h1>
+                                    <p epub:type="z3998:author" class="docauthor">a</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <p>a ble at l</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:1)'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('8/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('8/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('8/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="8/pef-output-dir/book.pef" select="//pef:row[contains(text(),'⠃⠀⠁')]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline" select="//pef:row">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠰⠁⠀⠃⠀⠁⠀⠰⠇</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="List test">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>ULVEGUTTEN TAL - BOK 1</title>
+                                <meta name="dc:identifier" content="557901"/>
+                                <meta name="track:Guidelines" content="2015-1"/>
+                                <meta name="track:Supplier" content="AEL Data"/>
+                                <meta name="dc:language" content="no"/>
+                                <meta name="dc:format" content="DTBook"/>
+                                <meta name="dc:creator" content="aa ll"/>
+                                <meta name="dc:creator" content="bb"/>
+                                <meta name="dc:creator" content="ll"/>
+                                <meta name="dc:creator" content="rr"/>
+                                <meta name="dc:creator" content="zz"/>
+                                <meta name="dc:contributor.translator" content="ll"/>
+                                <meta name="dc:contributor.translator" content="cc"/>
+                                <meta name="dc:contributor.translator" content="gg"/>
+                                <meta name="dc:contributor.translator" content="xx"/>
+                                <meta name="dc:date" content="2015-11-07"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:source" content="urn:isbn:9788202459543"/>
+                                <meta name="dcterms:modified" content="2015-11-09T09:06:58+00:00"/>
+                            </head>
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <p>aaa.</p>
+                                    <ul>
+                                        <li>aaa aaa</li>
+                                        <li>bbb bbb
+                                            <ul>
+                                                <li>lll lll</li>
+                                                <li>rrr rrr</li>
+                                                <li>aaa aaa </li>
+                                            </ul>
+                                        </li>
+                                        <li>ccc ccc</li>
+                                    </ul>
+                                    <p>bbb</p>
+                                    <ol>
+                                        <li>aaa aaa</li>
+                                        <li>bbb bbb
+                                            <ol>
+                                                <li>lll lll</li>
+                                                <li>rrr rrr</li>
+                                                <li>aaa aaa </li>
+                                            </ol>
+                                        </li>
+                                        <li>ccc ccc</li>
+                                    </ol>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-print-page-numbers" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('9/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('9/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('9/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="9/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠁⠁⠁⠄</row>
+                        <row/>
+                        <row>⠀⠀⠤⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row>⠀⠀⠤⠤⠀⠃⠃⠃⠀⠃⠃⠃</row>
+                        <row>⠀⠀⠀⠀⠤⠤⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                        <row>⠀⠀⠀⠀⠤⠤⠀⠗⠗⠗⠀⠗⠗⠗</row>
+                        <row>⠀⠀⠀⠀⠤⠤⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠉⠉⠀⠉⠉⠉</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠃⠃⠃</row>
+                        <row/>
+                        <row>⠀⠀⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row>⠀⠀⠼⠃⠀⠃⠃⠃⠀⠃⠃⠃</row>
+                        <row>⠀⠀⠀⠀⠼⠁⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                        <row>⠀⠀⠀⠀⠼⠃⠀⠗⠗⠗⠀⠗⠗⠗</row>
+                        <row>⠀⠀⠀⠀⠼⠉⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                        <row>⠀⠀⠼⠉⠀⠉⠉⠉⠀⠉⠉⠉</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="Test for requirements/#4.7:102 volume x av y">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                <style type="text/css" media="embossed">
+                                    @volume {
+                                    max-length: 5;
+                                    }
+                                </style>
+                                
+                                <title>ULVEGUTTEN TAL - BOK 1</title>
+                                <meta name="dc:identifier" content="557901"/>
+                                <meta name="dc:creator" content="aa ll"/>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>volume 1</p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>volume 2</p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>volume 3</p>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <p>volume 4</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-print-page-numbers" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('10/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('10/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('10/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="10/pef-output-dir/book.pef" select="//pef:volume//pef:row[matches(text(),'.*⠠⠓⠑⠋⠞⠑⠀⠼.*⠀⠁⠧⠀⠼.*') or matches(text(),'.*⠧⠕⠇⠥⠍⠑⠀⠼*')]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠁⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠁</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠃⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠃</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠉⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠓⠑⠋⠞⠑⠀⠼⠙⠀⠁⠧⠀⠼⠙</row>
+                        <row>⠀⠀⠀⠀⠧⠕⠇⠥⠍⠑⠀⠼⠙</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="test dash characters">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                            </head>
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <p>á Š š </p>
+                                    <p>kort-  lang—</p>  <!-- short and long dash after word -->
+                                    <p>-kort  —lang</p>  <!-- short and long dash before word -->
+                                    <p>aa-bb  aa—bb</p>  <!-- short and long dash between word -->
+                                    <p>aa — bb</p>  <!--  long dash alone -->
+                                    <p>aa - bb</p>  <!--  short dash alone -->
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-print-page-numbers" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('11/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('11/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('11/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="11/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠷⠀⠠⠱⠀⠱</row>
+                        <row>⠀⠀⠀⠀⠅⠕⠗⠞⠤⠀⠇⠁⠝⠛⠤⠤</row>
+                        <row>⠀⠀⠀⠀⠤⠅⠕⠗⠞⠀⠤⠤⠇⠁⠝⠛</row>
+                        <row>⠀⠀⠀⠀⠁⠁⠤⠃⠃⠀⠁⠁⠤⠤⠃⠃</row>
+                        <row>⠀⠀⠀⠀⠁⠁⠀⠤⠤⠀⠃⠃</row>
+                        <row>⠀⠀⠀⠀⠁⠁⠀⠤⠀⠃⠃</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="print page numbers enabled (marks in left margin and page footer)" pending="https://github.com/nlbdev/pipeline/issues/165">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                    <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <p>På perrongen viste skiltet førti minutter til neste tog, det var toget
+                                        nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                                        nedover fortauet med den <span epub:type="pagebreak" class="page-normal" title="11"/>lille
+                                        hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                                        studerte håndflaten sin imens.</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('13/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('13/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('13/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="13/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                        <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                        <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                        <row>⠀⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                        <row>⠀⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄</row>
+                        <row>⠀⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗</row>
+                        <row>⠿⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
+                        <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝</row>
+                        <row>⠀⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝</row>
+                        <row>⠀⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑</row>
+                        <row>⠀⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠁</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="print page numbers enabled; some braille pages without marks" pending="https://github.com/nlbdev/pipeline/issues/165">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                    <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <p>På perrongen viste skiltet førti minutter til neste tog, det var toget
+                                        nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                                        nedover fortauet med den <span epub:type="pagebreak" class="page-normal" title="11"/>lille
+                                        hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                                        studerte håndflaten sin imens.</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <p>På perrongen viste skiltet førti minutter til neste tog, det var toget
+                                        nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                                        nedover fortauet med den lille
+                                        hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                                        studerte håndflaten sin imens.</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('14/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('14/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('14/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="14/pef-output-dir/book.pef" select="(//pef:page)[position() &gt;= last()-1]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                        <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                        <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                        <row>⠀⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                        <row>⠀⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄</row>
+                        <row>⠀⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗</row>
+                        <row>⠿⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
+                        <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝</row>
+                        <row>⠀⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝</row>
+                        <row>⠀⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑</row>
+                        <row>⠀⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠁</row>
+                    </page>
+                </x:document>
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                        <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                        <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                        <row>⠀⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                        <row>⠀⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄</row>
+                        <row>⠀⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗</row>
+                        <row>⠀⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀⠇⠊⠇⠇⠑</row>
+                        <row>⠀⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝</row>
+                        <row>⠀⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝</row>
+                        <row>⠀⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑</row>
+                        <row>⠀⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠁</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="print page numbers enabled, but no print page numbers in the book" pending="https://github.com/nlbdev/pipeline/issues/76">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                    <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <p>På perrongen viste skiltet førti minutter til neste tog, det var toget
+                                        nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                                        nedover fortauet med den lille
+                                        hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                                        studerte håndflaten sin imens.</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'true'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('15/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('15/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('15/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="15/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑</row>
+                        <row>⠎⠅⠊⠇⠞⠑⠞⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇</row>
+                        <row>⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞</row>
+                        <row>⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞</row>
+                        <row>⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝⠀⠧⠁⠗⠀⠎⠥⠗</row>
+                        <row>⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝⠀⠅⠕⠍</row>
+                        <row>⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝</row>
+                        <row>⠇⠊⠇⠇⠑⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞</row>
+                        <row>⠙⠑⠅⠅⠑⠝⠄⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑</row>
+                        <row>⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝</row>
+                        <row>⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝</row>
+                        <row>⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="print page numbers disabled (no marks in left margin or page footer)">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                    <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter">
+                                    <p>På perrongen viste skiltet førti minutter til neste tog, det var toget
+                                        nordover. Jeg gikk rundt bygningen, luften var sur og kald. Ekspeditøren kom
+                                        nedover fortauet med den <span epub:type="pagebreak" class="page-normal" title="11"/>lille
+                                        hunden, nå iført dekken. Hun lot den snuse på noe under en benk, hun sto og
+                                        studerte håndflaten sin imens.</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('16/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('16/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('16/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="16/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
+                        <row>⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
+                        <row>⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
+                        <row>⠀⠛⠊⠅⠅⠀⠗⠥⠝⠙⠞⠀⠃⠽⠛⠝⠊⠝⠛⠑⠝⠂⠀⠇⠥⠋⠞⠑⠝</row>
+                        <row>⠀⠧⠁⠗⠀⠎⠥⠗⠀⠕⠛⠀⠅⠁⠇⠙⠄⠀⠠⠑⠅⠎⠏⠑⠙⠊⠞⠪⠗⠑⠝</row>
+                        <row>⠀⠅⠕⠍⠀⠝⠑⠙⠕⠧⠑⠗⠀⠋⠕⠗⠞⠁⠥⠑⠞⠀⠍⠑⠙⠀⠙⠑⠝⠀</row>
+                        <row>⠀⠇⠊⠇⠇⠑⠀⠓⠥⠝⠙⠑⠝⠂⠀⠝⠡⠀⠊⠋⠪⠗⠞⠀⠙⠑⠅⠅⠑⠝⠄</row>
+                        <row>⠀⠠⠓⠥⠝⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑</row>
+                        <row>⠀⠥⠝⠙⠑⠗⠀⠑⠝⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛</row>
+                        <row>⠀⠎⠞⠥⠙⠑⠗⠞⠑⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="Normal text content (without page markers) should have as margins 1 cell on the left and 1 cell on the right">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <p>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="page-width" select="32"/>
+                <x:option name="pef-output-dir" select="resolve-uri('17/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('17/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('17/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory contents">
+                <x:document type="file" base-uri="temp-dir" href="17/pef-output-dir/book.pef" select="(//pef:page)[last()]//pef:row[contains(text(),'⠭')]"/>
+            </x:context>
+            <x:expect label="There should not be any text in column #1 or column #page-width" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                        <row>⠀⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭⠭</row>
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
         
         <x:scenario label="images, figures, figcaptions and alt-text">
             <x:call>
@@ -91,5 +1093,1579 @@
             </x:expect>
         </x:scenario>
         
+        <x:scenario label="images, image groups, captions and alt-text">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <p>content</p>
+                                    
+                                    <!-- img without alt-text -->
+                                    <img src="https://uu.difi.no/traller.jpg"/>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- img with empty alt-text -->
+                                    <img src="https://uu.difi.no/traller.jpg" alt=""/>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- img with non-empty alt-text -->
+                                    <img src="https://uu.difi.no/traller.jpg" alt="Tre gamle tretraller. Foto."/>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- imggroup without caption and without alt-text -->
+                                    <figure class="image-group">
+                                        <figure class="image">
+                                            <img src="https://uu.difi.no/traller.jpg"/>
+                                        </figure>
+                                    </figure>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- imggroup without caption and with empty alt-text -->
+                                    <figure class="image-group">
+                                        <figure class="image">
+                                            <img src="https://uu.difi.no/traller.jpg" alt=""/>
+                                        </figure>
+                                    </figure>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- imggroup without caption and with non-empty alt-text -->
+                                    <figure class="image-group">
+                                        <figure class="image">
+                                            <img src="https://uu.difi.no/traller.jpg" alt="Tre gamle tretraller. Foto."/>
+                                        </figure>
+                                    </figure>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- imggroup with caption and without alt-text -->
+                                    <figure class="image-group">
+                                        <figure class="image">
+                                            <img id="img1" src="https://uu.difi.no/traller.jpg"/>
+                                            <figcaption>Gamle tretraller regnes av mange som antikviteter.</figcaption>
+                                        </figure>
+                                    </figure>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- imggroup with caption and with empty alt-text -->
+                                    <figure class="image-group">
+                                        <figure class="image">
+                                            <img id="img2" src="https://uu.difi.no/traller.jpg" alt=""/>
+                                            <figcaption>Gamle tretraller regnes av mange som antikviteter.</figcaption>
+                                        </figure>
+                                    </figure>
+                                    
+                                    <p>content</p>
+                                    
+                                    <!-- imggroup with caption and with non-empty alt-text -->
+                                    <figure class="image-group">
+                                        <figure class="image">
+                                            <img id="img3" src="https://uu.difi.no/traller.jpg" alt="Tre gamle tretraller. Foto."/>
+                                            <figcaption>Gamle tretraller regnes av mange som antikviteter.</figcaption>
+                                        </figure>
+                                    </figure>
+                                    
+                                    <p>content</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="show-print-page-numbers" select="'false'"/>
+                <x:option name="page-height" select="150"/>
+                <x:option name="pef-output-dir" select="resolve-uri('18/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('18/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('18/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="18/pef-output-dir/book.pef" select="(//pef:page)[last()]"/>
+            </x:context>
+            <x:expect label="result" type="compare">
+                <x:document type="inline">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠄⠀⠠⠞⠗⠑⠀⠛⠁⠍⠇⠑</row>
+                        <row>⠀⠀⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠄⠀⠠⠞⠗⠑⠀⠛⠁⠍⠇⠑</row>
+                        <row>⠀⠀⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑</row>
+                        <row>⠀⠀⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑</row>
+                        <row>⠀⠀⠀⠎⠕⠍⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑</row>
+                        <row>⠀⠀⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑</row>
+                        <row>⠀⠀⠀⠎⠕⠍⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠄⠀⠠⠞⠗⠑⠀⠛⠁⠍⠇⠑</row>
+                        <row>⠀⠀⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠄⠀⠠⠋⠕⠞⠕⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠠⠃⠊⠇⠙⠑⠞⠑⠅⠎⠞⠒⠀⠠⠛⠁⠍⠇⠑</row>
+                        <row>⠀⠀⠀⠞⠗⠑⠞⠗⠁⠇⠇⠑⠗⠀⠗⠑⠛⠝⠑⠎⠀⠁⠧⠀⠍⠁⠝⠛⠑</row>
+                        <row>⠀⠀⠀⠎⠕⠍⠀⠁⠝⠞⠊⠅⠧⠊⠞⠑⠞⠑⠗⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="Include OBFL when include-obfl=true">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="file" href="../resources/DTBook/book.xml"/>
+                </x:input>
+                <x:option name="include-obfl" select="'true'"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('19/obfl-output-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('19/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('19/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('19/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the output directory contents">
+                <x:document type="directory" base-uri="temp-dir" href="19/pef-output-dir/"/>
+            </x:context>
+            <x:expect label="The PEF directory should not contain a OBFL file" type="xpath" test="count(/*/*[ends-with(@name,'.obfl')])" equals="0"/>
+            
+            <x:context label="the output directory contents">
+                <x:document type="directory" base-uri="temp-dir" href="19/obfl-output-dir/"/>
+            </x:context>
+            <x:expect label="The OBFL directory should contain a OBFL file" type="xpath" test="count(/*/*[ends-with(@name,'.obfl')])" equals="1"/>
+        </x:scenario>
+        
+        <x:scenario label="Use UEB-table when force-norwegian=false">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <p>abc æøå</p>
+                                    <p xml:lang="en" lang="en">abc æøå</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="force-norwegian" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('20/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('20/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('20/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="20/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="The two paragraphs should not be equal" type="xpath" test="(//pef:row[contains(.,'⠁⠃⠉')])[1]/replace(.,'⠀','')" equals="(//pef:row[contains(.,'⠁⠃⠉')])[2]/replace(.,'⠀','')" xfail=""/>
+        </x:scenario>
+        
+        <x:scenario label="Headlines">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Headlines</title>
+                                <meta content="123456" name="dc:identifier"/>
+                                <meta content="no" name="dc:language"/>
+                                <meta content="DTBook" name="dc:format"/>
+                                <meta content="NLB" name="dc:publisher"/>
+                                <meta content="2017-10-17" name="dc:date"/>
+                                <meta content="2017-10-17T13:34:16+00:00" name="dcterms:modified"/>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">Headlines</h1>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <h1>Chapter 1</h1>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    
+                                    <section style="page-break-before: always;">
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <h2>Chapter 2</h2>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                        
+                                        <section style="page-break-before: always;">
+                                            <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                            
+                                            <h3>Chapter 3</h3>
+                                            
+                                            <p style="margin-top: 0; padding-top: 0;">after</p>
+                                            
+                                            <section style="page-break-before: always;">
+                                                <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                
+                                                <h4>Chapter 4</h4>
+                                                
+                                                <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                
+                                                <section style="page-break-before: always;">
+                                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                    
+                                                    <h5>Chapter 5</h5>
+                                                    
+                                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                    
+                                                    <section style="page-break-before: always;">
+                                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                        
+                                                        <h6>Chapter 6</h6>
+                                                        
+                                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                    </section>
+                                                </section>
+                                            </section>
+                                        </section>
+                                    </section>
+                                </section>
+                                <section epub:type="bodymatter part" class="part" style="page-break-before: always;">
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <h1>Part</h1>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                    
+                                    <section style="page-break-before: always;">
+                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                        
+                                        <h2>Part chapter 1</h2>
+                                        
+                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                        
+                                        <section style="page-break-before: always;">
+                                            <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                            
+                                            <h3>Part chapter 2</h3>
+                                            
+                                            <p style="margin-top: 0; padding-top: 0;">after</p>
+                                            
+                                            <section style="page-break-before: always;">
+                                                <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                
+                                                <h4>Part chapter 3</h4>
+                                                
+                                                <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                
+                                                <section style="page-break-before: always;">
+                                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                    
+                                                    <h5>Part chapter 4</h5>
+                                                    
+                                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                    
+                                                    <section style="page-break-before: always;">
+                                                        <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                                        
+                                                        <h6>Part chapter 5</h6>
+                                                        
+                                                        <p style="margin-top: 0; padding-top: 0;">after</p>
+                                                    </section>
+                                                </section>
+                                            </section>
+                                        </section>
+                                    </section>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('22/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('22/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('22/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the h1 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
+                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h2 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h3 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h4 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h5 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the h6 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠋')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠋</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h1 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞') and not(contains(string-join(.//text(),''),'⠉⠓⠁⠏⠞⠑⠗'))]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                        <row>⠀⠀⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠀⠀⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀</row>
+                        <row>⠀⠀⠀⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h2 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
+                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h3 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠃</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h4 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠉</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h5 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠙</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the part h6 headline">
+                <x:document type="file" base-uri="temp-dir" href="22/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The headline should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠠⠏⠁⠗⠞⠀⠉⠓⠁⠏⠞⠑⠗⠀⠼⠑</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="Various element margins etc. (#102)">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="track:Guidelines" content="2015-1"/>
+                                <meta name="track:Supplier" content="Supplier"/>
+                                <meta name="dc:language" content="no"/>
+                                <meta name="dc:format" content="DTBook"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:date" content="2017-10-13"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:source" content="urn:isbn:123-45-67-89012-3"/>
+                                <meta name="dcterms:modified" content="2017-10-13T16:54:30+00:00"/>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">doctitle</h1>
+                                    <p epub:type="z3998:author" class="docauthor">docauthor</p>
+                                </section>
+                                
+                                
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-p]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <p>content content content content content content content content content content content</p>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-blockquote]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <blockquote>content content content content content content content content content content content</blockquote>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-sidebar]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <aside epub:type="sidebar">content content content content content content content content content content content</aside>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-epigraph]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <aside epub:type="epigraph">content content content content content content content content content content content</aside>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-Rammetekst]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <div class="Rammetekst">content content content content content content content content content content content</div>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-prodnote]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <aside epub:type="z3998:production" class="render-"><p>content content content content content content content content content content content</p></aside>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-list-ol]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <ol>
+                                        <li>content content content content content content content content</li>
+                                        <li>content content content content content content content content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content content content content content content content content</li>
+                                    </ol>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-list-ul]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <ul>
+                                        <li>content content content content content content content content</li>
+                                        <li>content content content content content content content content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content content content content content content content content</li>
+                                    </ul>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-list-pl]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <ol class="list-style-type-none">
+                                        <li>content content content content content content content content</li>
+                                        <li>content content content content content content content content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content</li>
+                                        <li>content content content content content content content content</li>
+                                    </ol>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-preceding-separator]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <p class="precedingseparator">content content content content content content content content content content content</p>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-preceding-emptyline]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <p class="precedingemptyline">content content content content content content content content content content content</p>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-hr]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <hr/>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-hr-emptyline]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <hr class="emptyline"/>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-em-strong]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <p>content</p>
+                                    <p><em>content</em></p>
+                                    <p><strong>content</strong></p>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-showin]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <p class="xxx showin-xxx">xxx</p>
+                                    <p class="xxp showin-xxp">xxp</p>
+                                    <p class="xlx showin-xlx">xlx</p>
+                                    <p class="xlp showin-xlp">xlp</p>
+                                    <p class="bxx showin-bxx">bxx</p>
+                                    <p class="bxp showin-bxp">bxp</p>
+                                    <p class="blx showin-blx">blx</p>
+                                    <p class="blp showin-blp">blp</p>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('24/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('24/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('24/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the p element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The p element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the blockquote element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠃⠇⠕⠉⠅⠟⠥⠕⠞⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The blockquote element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the sidebar element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠎⠊⠙⠑⠃⠁⠗⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The sidebar element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠠⠍⠁⠗⠛⠞⠑⠅⠎⠞⠒⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the epigraph element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠑⠏⠊⠛⠗⠁⠏⠓⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The epigraph element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the div with class='Rammetekst'">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠠⠗⠁⠍⠍⠑⠞⠑⠅⠎⠞⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The div with class='Rammetekst' should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠠⠗⠁⠍⠍⠑⠞⠑⠅⠎⠞⠒⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the prodnote element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠗⠕⠙⠝⠕⠞⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The prodnote element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠰⠄</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠠⠆</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the ordered list element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠕⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The ordered list element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠼⠁⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠃⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠉⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠙⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠑⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠋⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠛⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠓⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠊⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠼⠁⠚⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the unordered list element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠥⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The caption element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠤⠤⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the preformatted list element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠏⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The caption element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the p with the precedingseparator class">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠗⠑⠉⠑⠙⠊⠝⠛⠤⠎⠑⠏⠁⠗⠁⠞⠕⠗⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The p with the precedingseparator class should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠄⠄⠄⠄⠄⠄⠄</row>
+                        <row/>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the p with the precedingemptyline class">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠏⠗⠑⠉⠑⠙⠊⠝⠛⠤⠑⠍⠏⠞⠽⠇⠊⠝⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The p with the precedingseparator class should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the hr element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠓⠗⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The hr element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠄⠄⠄⠄⠄⠄⠄</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the hr element with an emptyline class">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠓⠗⠤⠑⠍⠏⠞⠽⠇⠊⠝⠑⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The hr element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the em and strong elements">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠑⠍⠤⠎⠞⠗⠕⠝⠛⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The em and strong elements should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row>⠀⠀⠀⠀⠆⠉⠕⠝⠞⠑⠝⠞⠰</row>
+                        <row>⠀⠀⠀⠀⠠⠄⠉⠕⠝⠞⠑⠝⠞⠠⠄</row>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the showin attribute">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠎⠓⠕⠺⠊⠝⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The showin attribute should behave as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row>⠀⠀⠀⠀⠃⠭⠭</row>
+                        <row>⠀⠀⠀⠀⠃⠭⠏</row>
+                        <row>⠀⠀⠀⠀⠃⠇⠭</row>
+                        <row>⠀⠀⠀⠀⠃⠇⠏</row>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="Regression test for 'xml:lang=&#34;en&#34; and &#34;not Norwegian&#34; makes 8-dots?' (issue #146)" pending="https://github.com/nlbdev/pipeline/issues/146">
+            <x:call>
+                <x:input port="source" xml:base="">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <p id="u0000"></p>
+                                    <p id="u0010"></p>
+                                    <p id="u0020">!"#$%&amp;'()*+,-./</p>
+                                    <p id="u0030">0123456789:;&lt;=&gt;?</p>
+                                    <p id="u0040">@ABCDEFGHIJKLMNO</p>
+                                    <p id="u0050">PQRSTUVWXYZ[\]^_</p>
+                                    <p id="u0060">`abcdefghijklmno</p>
+                                    <p id="u0070">pqrstuvwxyz{|}~␡</p>
+                                    <p id="u0080"></p>
+                                    <p id="u0090"></p>
+                                    <p id="u00A0"> ¡¢£¤¥¦§¨©ª«¬ ®¯</p>
+                                    <p id="u00B0">°±²³´µ¶·¸¹º»¼½¾¿</p>
+                                    <p id="u00C0">ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ</p>
+                                    <p id="u00D0">ÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</p>
+                                    <p id="u00E0">àáâãäåæçèéêëìíîï</p>
+                                    <p id="u00F0">ðñòóôõö÷øùúûüýþÿ</p>
+                                    <p id="u0100">ĀāĂăĄąĆćĈĉĊċČčĎď</p>
+                                    <p id="u0110">ĐđĒēĔĕĖėĘęĚěĜĝĞğ</p>
+                                    <p id="u0120">ĠġĢģĤĥĦħĨĩĪīĬĭĮį</p>
+                                    <p id="u0130">İıĲĳĴĵĶķĸĹĺĻļĽľĿ</p>
+                                    <p id="u0140">ŀŁłŃńŅņŇňŉŊŋŌōŎŏ</p>
+                                    <p id="u0150">ŐőŒœŔŕŖŗŘřŚśŜŝŞş</p>
+                                    <p id="u0160">ŠšŢţŤťŦŧŨũŪūŬŭŮů</p>
+                                    <p id="u0170">ŰűŲųŴŵŶŷŸŹźŻżŽžſ</p>
+                                    <p id="u0180">ƀƁƂƃƄƅƆƇƈƉƊƋƌƍƎƏ</p>
+                                    <p id="u0190">ƐƑƒƓƔƕƖƗƘƙƚƛƜƝƞƟ</p>
+                                    <p id="u01A0">ƠơƢƣƤƥƦƧƨƩƪƫƬƭƮƯ</p>
+                                    <p id="u01B0">ưƱƲƳƴƵƶƷƸƹƺƻƼƽƾƿ</p>
+                                    <p id="u01C0">ǀǁǂǃǄǅǆǇǈǉǊǋǌǍǎǏ</p>
+                                    <p id="u01D0">ǐǑǒǓǔǕǖǗǘǙǚǛǜǝǞǟ</p>
+                                    <p id="u01E0">ǠǡǢǣǤǥǦǧǨǩǪǫǬǭǮǯ</p>
+                                    <p id="u01F0">ǰǱǲǳǴǵǶǷǸǹǺǻǼǽǾǿ</p>
+                                    <p id="u0200">ȀȁȂȃȄȅȆȇȈȉȊȋȌȍȎȏ</p>
+                                    <p id="u0210">ȐȑȒȓȔȕȖȗȘșȚțȜȝȞȟ</p>
+                                    <p id="u0220">ȠȡȢȣȤȥȦȧȨȩȪȫȬȭȮȯ</p>
+                                    <p id="u0230">ȰȱȲȳȴȵȶȷȸȹȺȻȼȽȾȿ</p>
+                                    <p id="u0240">ɀɁɂɃɄɅɆɇɈɉɊɋɌɍɎɏ</p>
+                                    <p id="u0250">ɐɑɒɓɔɕɖɗɘəɚɛɜɝɞɟ</p>
+                                    <p id="u0260">ɠɡɢɣɤɥɦɧɨɩɪɫɬɭɮɯ</p>
+                                    <p id="u0270">ɰɱɲɳɴɵɶɷɸɹɺɻɼɽɾɿ</p>
+                                    <p id="u0280">ʀʁʂʃʄʅʆʇʈʉʊʋʌʍʎʏ</p>
+                                    <p id="u0290">ʐʑʒʓʔʕʖʗʘʙʚʛʜʝʞʟ</p>
+                                    <p id="u02A0">ʠʡʢʣʤʥʦʧʨʩʪʫʬʭʮʯ</p>
+                                    <p id="u02B0">ʰʱʲʳʴʵʶʷʸʹʺʻʼʽʾʿ</p>
+                                    <p id="u02C0">ˀˁ˂˃˄˅ˆˇˈˉˊˋˌˍˎˏ</p>
+                                    <p id="u02D0">ːˑ˒˓˔˕˖˗˘˙˚˛˜˝˞˟</p>
+                                    <p id="u02E0">ˠˡˢˣˤ˥˦˧˨˩˪˫ˬ˭ˮ˯</p>
+                                    <p id="u02F0">˰˱˲˳˴˵˶˷˸˹˺˻˼˽˾˿</p>
+                                    <p id="u0300">̀́̂̃̄̅̆̇̈̉̊̋̌̍̎̏</p>
+                                    <p id="u0310">̛̖̗̘̙̜̝̞̟̐̑̒̓̔̕̚</p>
+                                    <p id="u0320">̡̢̧̨̠̣̤̥̦̩̪̫̬̭̮̯</p>
+                                    <p id="u0330">̴̵̶̷̸̰̱̲̳̹̺̻̼̽̾̿</p>
+                                    <p id="u0340">͇͈͉͍͎̀́͂̓̈́͆͊͋͌ͅ͏</p>
+                                    <p id="u0350">͓͔͕͖͙͚͐͑͒͗͛͘͜͟͝͞</p>
+                                    <p id="u0360">ͣͤͥͦͧͨͩͪͫͬͭͮͯ͢͠͡</p>
+                                    <p id="u0370">ͰͱͲͳʹ͵Ͷͷ͸͹ͺͻͼͽ;Ϳ</p>
+                                    <p id="u0380">΀΁΂΃΄΅Ά·ΈΉΊ΋Ό΍ΎΏ</p>
+                                    <p id="u0390">ΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟ</p>
+                                    <p id="u03A0">ΠΡ΢ΣΤΥΦΧΨΩΪΫάέήί</p>
+                                    <p id="u03B0">ΰαβγδεζηθικλμνξο</p>
+                                    <p id="u03C0">πρςστυφχψωϊϋόύώϏ</p>
+                                    <p id="u03D0">ϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟ</p>
+                                    <p id="u03E0">ϠϡϢϣϤϥϦϧϨϩϪϫϬϭϮϯ</p>
+                                    <p id="u03F0">ϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿ</p>
+                                    <p id="u0400">ЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏ</p>
+                                    <p id="u0410">АБВГДЕЖЗИЙКЛМНОП</p>
+                                    <p id="u0420">РСТУФХЦЧШЩЪЫЬЭЮЯ</p>
+                                    <p id="u0430">абвгдежзийклмноп</p>
+                                    <p id="u0440">рстуфхцчшщъыьэюя</p>
+                                    <p id="u0450">ѐёђѓєѕіїјљњћќѝўџ</p>
+                                    <p id="u0460">ѠѡѢѣѤѥѦѧѨѩѪѫѬѭѮѯ</p>
+                                    <p id="u0470">ѰѱѲѳѴѵѶѷѸѹѺѻѼѽѾѿ</p>
+                                    <p id="u0480">Ҁҁ҂҃҄҅҆҇҈҉ҊҋҌҍҎҏ</p>
+                                    <p id="u0490">ҐґҒғҔҕҖҗҘҙҚқҜҝҞҟ</p>
+                                    <p id="u04A0">ҠҡҢңҤҥҦҧҨҩҪҫҬҭҮү</p>
+                                    <p id="u04B0">ҰұҲҳҴҵҶҷҸҹҺһҼҽҾҿ</p>
+                                    <p id="u04C0">ӀӁӂӃӄӅӆӇӈӉӊӋӌӍӎӏ</p>
+                                    <p id="u04D0">ӐӑӒӓӔӕӖӗӘәӚӛӜӝӞӟ</p>
+                                    <p id="u04E0">ӠӡӢӣӤӥӦӧӨөӪӫӬӭӮӯ</p>
+                                    <p id="u04F0">ӰӱӲӳӴӵӶӷӸӹӺӻӼӽӾӿ</p>
+                                    <p id="u0500">ԀԁԂԃԄԅԆԇԈԉԊԋԌԍԎԏ</p>
+                                    <p id="u0510">ԐԑԒԓԔԕԖԗԘԙԚԛԜԝԞԟ</p>
+                                    <p id="u0520">ԠԡԢԣԤԥԦԧԨԩԪԫԬԭԮԯ</p>
+                                    <p id="u0530">԰ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿ</p>
+                                    <p id="u0540">ՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏ</p>
+                                    <p id="u0550">ՐՑՒՓՔՕՖ՗՘ՙ՚՛՜՝՞՟</p>
+                                    <p id="u0560">ՠաբգդեզէըթժիլխծկ</p>
+                                    <p id="u0570">հձղճմյնշոչպջռսվտ</p>
+                                    <p id="u0580">րցւփքօֆև</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('25/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('25/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('25/temp-dir',$temp-dir)"/>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="force-norwegian" select="'false'"/>
+            </x:call>
+            <x:context label="the PEF">
+                <x:document type="file" base-uri="temp-dir" href="25/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="should not contain the braille character '⡀'" type="xpath" test="not(contains(string-join(//text(),''),'⡀'))"/>
+            <x:expect label="should not contain the braille character '⡁'" type="xpath" test="not(contains(string-join(//text(),''),'⡁'))"/>
+            <x:expect label="should not contain the braille character '⡂'" type="xpath" test="not(contains(string-join(//text(),''),'⡂'))"/>
+            <x:expect label="should not contain the braille character '⡃'" type="xpath" test="not(contains(string-join(//text(),''),'⡃'))"/>
+            <x:expect label="should not contain the braille character '⡄'" type="xpath" test="not(contains(string-join(//text(),''),'⡄'))"/>
+            <x:expect label="should not contain the braille character '⡅'" type="xpath" test="not(contains(string-join(//text(),''),'⡅'))"/>
+            <x:expect label="should not contain the braille character '⡆'" type="xpath" test="not(contains(string-join(//text(),''),'⡆'))"/>
+            <x:expect label="should not contain the braille character '⡇'" type="xpath" test="not(contains(string-join(//text(),''),'⡇'))"/>
+            <x:expect label="should not contain the braille character '⡈'" type="xpath" test="not(contains(string-join(//text(),''),'⡈'))"/>
+            <x:expect label="should not contain the braille character '⡉'" type="xpath" test="not(contains(string-join(//text(),''),'⡉'))"/>
+            <x:expect label="should not contain the braille character '⡊'" type="xpath" test="not(contains(string-join(//text(),''),'⡊'))"/>
+            <x:expect label="should not contain the braille character '⡋'" type="xpath" test="not(contains(string-join(//text(),''),'⡋'))"/>
+            <x:expect label="should not contain the braille character '⡌'" type="xpath" test="not(contains(string-join(//text(),''),'⡌'))"/>
+            <x:expect label="should not contain the braille character '⡍'" type="xpath" test="not(contains(string-join(//text(),''),'⡍'))"/>
+            <x:expect label="should not contain the braille character '⡎'" type="xpath" test="not(contains(string-join(//text(),''),'⡎'))"/>
+            <x:expect label="should not contain the braille character '⡏'" type="xpath" test="not(contains(string-join(//text(),''),'⡏'))"/>
+            <x:expect label="should not contain the braille character '⡐'" type="xpath" test="not(contains(string-join(//text(),''),'⡐'))"/>
+            <x:expect label="should not contain the braille character '⡑'" type="xpath" test="not(contains(string-join(//text(),''),'⡑'))"/>
+            <x:expect label="should not contain the braille character '⡒'" type="xpath" test="not(contains(string-join(//text(),''),'⡒'))"/>
+            <x:expect label="should not contain the braille character '⡓'" type="xpath" test="not(contains(string-join(//text(),''),'⡓'))"/>
+            <x:expect label="should not contain the braille character '⡔'" type="xpath" test="not(contains(string-join(//text(),''),'⡔'))"/>
+            <x:expect label="should not contain the braille character '⡕'" type="xpath" test="not(contains(string-join(//text(),''),'⡕'))"/>
+            <x:expect label="should not contain the braille character '⡖'" type="xpath" test="not(contains(string-join(//text(),''),'⡖'))"/>
+            <x:expect label="should not contain the braille character '⡗'" type="xpath" test="not(contains(string-join(//text(),''),'⡗'))"/>
+            <x:expect label="should not contain the braille character '⡘'" type="xpath" test="not(contains(string-join(//text(),''),'⡘'))"/>
+            <x:expect label="should not contain the braille character '⡙'" type="xpath" test="not(contains(string-join(//text(),''),'⡙'))"/>
+            <x:expect label="should not contain the braille character '⡚'" type="xpath" test="not(contains(string-join(//text(),''),'⡚'))"/>
+            <x:expect label="should not contain the braille character '⡛'" type="xpath" test="not(contains(string-join(//text(),''),'⡛'))"/>
+            <x:expect label="should not contain the braille character '⡜'" type="xpath" test="not(contains(string-join(//text(),''),'⡜'))"/>
+            <x:expect label="should not contain the braille character '⡝'" type="xpath" test="not(contains(string-join(//text(),''),'⡝'))"/>
+            <x:expect label="should not contain the braille character '⡞'" type="xpath" test="not(contains(string-join(//text(),''),'⡞'))"/>
+            <x:expect label="should not contain the braille character '⡟'" type="xpath" test="not(contains(string-join(//text(),''),'⡟'))"/>
+            <x:expect label="should not contain the braille character '⡠'" type="xpath" test="not(contains(string-join(//text(),''),'⡠'))"/>
+            <x:expect label="should not contain the braille character '⡡'" type="xpath" test="not(contains(string-join(//text(),''),'⡡'))"/>
+            <x:expect label="should not contain the braille character '⡢'" type="xpath" test="not(contains(string-join(//text(),''),'⡢'))"/>
+            <x:expect label="should not contain the braille character '⡣'" type="xpath" test="not(contains(string-join(//text(),''),'⡣'))"/>
+            <x:expect label="should not contain the braille character '⡤'" type="xpath" test="not(contains(string-join(//text(),''),'⡤'))"/>
+            <x:expect label="should not contain the braille character '⡥'" type="xpath" test="not(contains(string-join(//text(),''),'⡥'))"/>
+            <x:expect label="should not contain the braille character '⡦'" type="xpath" test="not(contains(string-join(//text(),''),'⡦'))"/>
+            <x:expect label="should not contain the braille character '⡧'" type="xpath" test="not(contains(string-join(//text(),''),'⡧'))"/>
+            <x:expect label="should not contain the braille character '⡨'" type="xpath" test="not(contains(string-join(//text(),''),'⡨'))"/>
+            <x:expect label="should not contain the braille character '⡩'" type="xpath" test="not(contains(string-join(//text(),''),'⡩'))"/>
+            <x:expect label="should not contain the braille character '⡪'" type="xpath" test="not(contains(string-join(//text(),''),'⡪'))"/>
+            <x:expect label="should not contain the braille character '⡫'" type="xpath" test="not(contains(string-join(//text(),''),'⡫'))"/>
+            <x:expect label="should not contain the braille character '⡬'" type="xpath" test="not(contains(string-join(//text(),''),'⡬'))"/>
+            <x:expect label="should not contain the braille character '⡭'" type="xpath" test="not(contains(string-join(//text(),''),'⡭'))"/>
+            <x:expect label="should not contain the braille character '⡮'" type="xpath" test="not(contains(string-join(//text(),''),'⡮'))"/>
+            <x:expect label="should not contain the braille character '⡯'" type="xpath" test="not(contains(string-join(//text(),''),'⡯'))"/>
+            <x:expect label="should not contain the braille character '⡰'" type="xpath" test="not(contains(string-join(//text(),''),'⡰'))"/>
+            <x:expect label="should not contain the braille character '⡱'" type="xpath" test="not(contains(string-join(//text(),''),'⡱'))"/>
+            <x:expect label="should not contain the braille character '⡲'" type="xpath" test="not(contains(string-join(//text(),''),'⡲'))"/>
+            <x:expect label="should not contain the braille character '⡳'" type="xpath" test="not(contains(string-join(//text(),''),'⡳'))"/>
+            <x:expect label="should not contain the braille character '⡴'" type="xpath" test="not(contains(string-join(//text(),''),'⡴'))"/>
+            <x:expect label="should not contain the braille character '⡵'" type="xpath" test="not(contains(string-join(//text(),''),'⡵'))"/>
+            <x:expect label="should not contain the braille character '⡶'" type="xpath" test="not(contains(string-join(//text(),''),'⡶'))"/>
+            <x:expect label="should not contain the braille character '⡷'" type="xpath" test="not(contains(string-join(//text(),''),'⡷'))"/>
+            <x:expect label="should not contain the braille character '⡸'" type="xpath" test="not(contains(string-join(//text(),''),'⡸'))"/>
+            <x:expect label="should not contain the braille character '⡹'" type="xpath" test="not(contains(string-join(//text(),''),'⡹'))"/>
+            <x:expect label="should not contain the braille character '⡺'" type="xpath" test="not(contains(string-join(//text(),''),'⡺'))"/>
+            <x:expect label="should not contain the braille character '⡻'" type="xpath" test="not(contains(string-join(//text(),''),'⡻'))"/>
+            <x:expect label="should not contain the braille character '⡼'" type="xpath" test="not(contains(string-join(//text(),''),'⡼'))"/>
+            <x:expect label="should not contain the braille character '⡽'" type="xpath" test="not(contains(string-join(//text(),''),'⡽'))"/>
+            <x:expect label="should not contain the braille character '⡾'" type="xpath" test="not(contains(string-join(//text(),''),'⡾'))"/>
+            <x:expect label="should not contain the braille character '⡿'" type="xpath" test="not(contains(string-join(//text(),''),'⡿'))"/>
+            <x:expect label="should not contain the braille character '⢀'" type="xpath" test="not(contains(string-join(//text(),''),'⢀'))"/>
+            <x:expect label="should not contain the braille character '⢁'" type="xpath" test="not(contains(string-join(//text(),''),'⢁'))"/>
+            <x:expect label="should not contain the braille character '⢂'" type="xpath" test="not(contains(string-join(//text(),''),'⢂'))"/>
+            <x:expect label="should not contain the braille character '⢃'" type="xpath" test="not(contains(string-join(//text(),''),'⢃'))"/>
+            <x:expect label="should not contain the braille character '⢄'" type="xpath" test="not(contains(string-join(//text(),''),'⢄'))"/>
+            <x:expect label="should not contain the braille character '⢅'" type="xpath" test="not(contains(string-join(//text(),''),'⢅'))"/>
+            <x:expect label="should not contain the braille character '⢆'" type="xpath" test="not(contains(string-join(//text(),''),'⢆'))"/>
+            <x:expect label="should not contain the braille character '⢇'" type="xpath" test="not(contains(string-join(//text(),''),'⢇'))"/>
+            <x:expect label="should not contain the braille character '⢈'" type="xpath" test="not(contains(string-join(//text(),''),'⢈'))"/>
+            <x:expect label="should not contain the braille character '⢉'" type="xpath" test="not(contains(string-join(//text(),''),'⢉'))"/>
+            <x:expect label="should not contain the braille character '⢊'" type="xpath" test="not(contains(string-join(//text(),''),'⢊'))"/>
+            <x:expect label="should not contain the braille character '⢋'" type="xpath" test="not(contains(string-join(//text(),''),'⢋'))"/>
+            <x:expect label="should not contain the braille character '⢌'" type="xpath" test="not(contains(string-join(//text(),''),'⢌'))"/>
+            <x:expect label="should not contain the braille character '⢍'" type="xpath" test="not(contains(string-join(//text(),''),'⢍'))"/>
+            <x:expect label="should not contain the braille character '⢎'" type="xpath" test="not(contains(string-join(//text(),''),'⢎'))"/>
+            <x:expect label="should not contain the braille character '⢏'" type="xpath" test="not(contains(string-join(//text(),''),'⢏'))"/>
+            <x:expect label="should not contain the braille character '⢐'" type="xpath" test="not(contains(string-join(//text(),''),'⢐'))"/>
+            <x:expect label="should not contain the braille character '⢑'" type="xpath" test="not(contains(string-join(//text(),''),'⢑'))"/>
+            <x:expect label="should not contain the braille character '⢒'" type="xpath" test="not(contains(string-join(//text(),''),'⢒'))"/>
+            <x:expect label="should not contain the braille character '⢓'" type="xpath" test="not(contains(string-join(//text(),''),'⢓'))"/>
+            <x:expect label="should not contain the braille character '⢔'" type="xpath" test="not(contains(string-join(//text(),''),'⢔'))"/>
+            <x:expect label="should not contain the braille character '⢕'" type="xpath" test="not(contains(string-join(//text(),''),'⢕'))"/>
+            <x:expect label="should not contain the braille character '⢖'" type="xpath" test="not(contains(string-join(//text(),''),'⢖'))"/>
+            <x:expect label="should not contain the braille character '⢗'" type="xpath" test="not(contains(string-join(//text(),''),'⢗'))"/>
+            <x:expect label="should not contain the braille character '⢘'" type="xpath" test="not(contains(string-join(//text(),''),'⢘'))"/>
+            <x:expect label="should not contain the braille character '⢙'" type="xpath" test="not(contains(string-join(//text(),''),'⢙'))"/>
+            <x:expect label="should not contain the braille character '⢚'" type="xpath" test="not(contains(string-join(//text(),''),'⢚'))"/>
+            <x:expect label="should not contain the braille character '⢛'" type="xpath" test="not(contains(string-join(//text(),''),'⢛'))"/>
+            <x:expect label="should not contain the braille character '⢜'" type="xpath" test="not(contains(string-join(//text(),''),'⢜'))"/>
+            <x:expect label="should not contain the braille character '⢝'" type="xpath" test="not(contains(string-join(//text(),''),'⢝'))"/>
+            <x:expect label="should not contain the braille character '⢞'" type="xpath" test="not(contains(string-join(//text(),''),'⢞'))"/>
+            <x:expect label="should not contain the braille character '⢟'" type="xpath" test="not(contains(string-join(//text(),''),'⢟'))"/>
+            <x:expect label="should not contain the braille character '⢠'" type="xpath" test="not(contains(string-join(//text(),''),'⢠'))"/>
+            <x:expect label="should not contain the braille character '⢡'" type="xpath" test="not(contains(string-join(//text(),''),'⢡'))"/>
+            <x:expect label="should not contain the braille character '⢢'" type="xpath" test="not(contains(string-join(//text(),''),'⢢'))"/>
+            <x:expect label="should not contain the braille character '⢣'" type="xpath" test="not(contains(string-join(//text(),''),'⢣'))"/>
+            <x:expect label="should not contain the braille character '⢤'" type="xpath" test="not(contains(string-join(//text(),''),'⢤'))"/>
+            <x:expect label="should not contain the braille character '⢥'" type="xpath" test="not(contains(string-join(//text(),''),'⢥'))"/>
+            <x:expect label="should not contain the braille character '⢦'" type="xpath" test="not(contains(string-join(//text(),''),'⢦'))"/>
+            <x:expect label="should not contain the braille character '⢧'" type="xpath" test="not(contains(string-join(//text(),''),'⢧'))"/>
+            <x:expect label="should not contain the braille character '⢨'" type="xpath" test="not(contains(string-join(//text(),''),'⢨'))"/>
+            <x:expect label="should not contain the braille character '⢩'" type="xpath" test="not(contains(string-join(//text(),''),'⢩'))"/>
+            <x:expect label="should not contain the braille character '⢪'" type="xpath" test="not(contains(string-join(//text(),''),'⢪'))"/>
+            <x:expect label="should not contain the braille character '⢫'" type="xpath" test="not(contains(string-join(//text(),''),'⢫'))"/>
+            <x:expect label="should not contain the braille character '⢬'" type="xpath" test="not(contains(string-join(//text(),''),'⢬'))"/>
+            <x:expect label="should not contain the braille character '⢭'" type="xpath" test="not(contains(string-join(//text(),''),'⢭'))"/>
+            <x:expect label="should not contain the braille character '⢮'" type="xpath" test="not(contains(string-join(//text(),''),'⢮'))"/>
+            <x:expect label="should not contain the braille character '⢯'" type="xpath" test="not(contains(string-join(//text(),''),'⢯'))"/>
+            <x:expect label="should not contain the braille character '⢰'" type="xpath" test="not(contains(string-join(//text(),''),'⢰'))"/>
+            <x:expect label="should not contain the braille character '⢱'" type="xpath" test="not(contains(string-join(//text(),''),'⢱'))"/>
+            <x:expect label="should not contain the braille character '⢲'" type="xpath" test="not(contains(string-join(//text(),''),'⢲'))"/>
+            <x:expect label="should not contain the braille character '⢳'" type="xpath" test="not(contains(string-join(//text(),''),'⢳'))"/>
+            <x:expect label="should not contain the braille character '⢴'" type="xpath" test="not(contains(string-join(//text(),''),'⢴'))"/>
+            <x:expect label="should not contain the braille character '⢵'" type="xpath" test="not(contains(string-join(//text(),''),'⢵'))"/>
+            <x:expect label="should not contain the braille character '⢶'" type="xpath" test="not(contains(string-join(//text(),''),'⢶'))"/>
+            <x:expect label="should not contain the braille character '⢷'" type="xpath" test="not(contains(string-join(//text(),''),'⢷'))"/>
+            <x:expect label="should not contain the braille character '⢸'" type="xpath" test="not(contains(string-join(//text(),''),'⢸'))"/>
+            <x:expect label="should not contain the braille character '⢹'" type="xpath" test="not(contains(string-join(//text(),''),'⢹'))"/>
+            <x:expect label="should not contain the braille character '⢺'" type="xpath" test="not(contains(string-join(//text(),''),'⢺'))"/>
+            <x:expect label="should not contain the braille character '⢻'" type="xpath" test="not(contains(string-join(//text(),''),'⢻'))"/>
+            <x:expect label="should not contain the braille character '⢼'" type="xpath" test="not(contains(string-join(//text(),''),'⢼'))"/>
+            <x:expect label="should not contain the braille character '⢽'" type="xpath" test="not(contains(string-join(//text(),''),'⢽'))"/>
+            <x:expect label="should not contain the braille character '⢾'" type="xpath" test="not(contains(string-join(//text(),''),'⢾'))"/>
+            <x:expect label="should not contain the braille character '⢿'" type="xpath" test="not(contains(string-join(//text(),''),'⢿'))"/>
+            <x:expect label="should not contain the braille character '⣀'" type="xpath" test="not(contains(string-join(//text(),''),'⣀'))"/>
+            <x:expect label="should not contain the braille character '⣁'" type="xpath" test="not(contains(string-join(//text(),''),'⣁'))"/>
+            <x:expect label="should not contain the braille character '⣂'" type="xpath" test="not(contains(string-join(//text(),''),'⣂'))"/>
+            <x:expect label="should not contain the braille character '⣃'" type="xpath" test="not(contains(string-join(//text(),''),'⣃'))"/>
+            <x:expect label="should not contain the braille character '⣄'" type="xpath" test="not(contains(string-join(//text(),''),'⣄'))"/>
+            <x:expect label="should not contain the braille character '⣅'" type="xpath" test="not(contains(string-join(//text(),''),'⣅'))"/>
+            <x:expect label="should not contain the braille character '⣆'" type="xpath" test="not(contains(string-join(//text(),''),'⣆'))"/>
+            <x:expect label="should not contain the braille character '⣇'" type="xpath" test="not(contains(string-join(//text(),''),'⣇'))"/>
+            <x:expect label="should not contain the braille character '⣈'" type="xpath" test="not(contains(string-join(//text(),''),'⣈'))"/>
+            <x:expect label="should not contain the braille character '⣉'" type="xpath" test="not(contains(string-join(//text(),''),'⣉'))"/>
+            <x:expect label="should not contain the braille character '⣊'" type="xpath" test="not(contains(string-join(//text(),''),'⣊'))"/>
+            <x:expect label="should not contain the braille character '⣋'" type="xpath" test="not(contains(string-join(//text(),''),'⣋'))"/>
+            <x:expect label="should not contain the braille character '⣌'" type="xpath" test="not(contains(string-join(//text(),''),'⣌'))"/>
+            <x:expect label="should not contain the braille character '⣍'" type="xpath" test="not(contains(string-join(//text(),''),'⣍'))"/>
+            <x:expect label="should not contain the braille character '⣎'" type="xpath" test="not(contains(string-join(//text(),''),'⣎'))"/>
+            <x:expect label="should not contain the braille character '⣏'" type="xpath" test="not(contains(string-join(//text(),''),'⣏'))"/>
+            <x:expect label="should not contain the braille character '⣐'" type="xpath" test="not(contains(string-join(//text(),''),'⣐'))"/>
+            <x:expect label="should not contain the braille character '⣑'" type="xpath" test="not(contains(string-join(//text(),''),'⣑'))"/>
+            <x:expect label="should not contain the braille character '⣒'" type="xpath" test="not(contains(string-join(//text(),''),'⣒'))"/>
+            <x:expect label="should not contain the braille character '⣓'" type="xpath" test="not(contains(string-join(//text(),''),'⣓'))"/>
+            <x:expect label="should not contain the braille character '⣔'" type="xpath" test="not(contains(string-join(//text(),''),'⣔'))"/>
+            <x:expect label="should not contain the braille character '⣕'" type="xpath" test="not(contains(string-join(//text(),''),'⣕'))"/>
+            <x:expect label="should not contain the braille character '⣖'" type="xpath" test="not(contains(string-join(//text(),''),'⣖'))"/>
+            <x:expect label="should not contain the braille character '⣗'" type="xpath" test="not(contains(string-join(//text(),''),'⣗'))"/>
+            <x:expect label="should not contain the braille character '⣘'" type="xpath" test="not(contains(string-join(//text(),''),'⣘'))"/>
+            <x:expect label="should not contain the braille character '⣙'" type="xpath" test="not(contains(string-join(//text(),''),'⣙'))"/>
+            <x:expect label="should not contain the braille character '⣚'" type="xpath" test="not(contains(string-join(//text(),''),'⣚'))"/>
+            <x:expect label="should not contain the braille character '⣛'" type="xpath" test="not(contains(string-join(//text(),''),'⣛'))"/>
+            <x:expect label="should not contain the braille character '⣜'" type="xpath" test="not(contains(string-join(//text(),''),'⣜'))"/>
+            <x:expect label="should not contain the braille character '⣝'" type="xpath" test="not(contains(string-join(//text(),''),'⣝'))"/>
+            <x:expect label="should not contain the braille character '⣞'" type="xpath" test="not(contains(string-join(//text(),''),'⣞'))"/>
+            <x:expect label="should not contain the braille character '⣟'" type="xpath" test="not(contains(string-join(//text(),''),'⣟'))"/>
+            <x:expect label="should not contain the braille character '⣠'" type="xpath" test="not(contains(string-join(//text(),''),'⣠'))"/>
+            <x:expect label="should not contain the braille character '⣡'" type="xpath" test="not(contains(string-join(//text(),''),'⣡'))"/>
+            <x:expect label="should not contain the braille character '⣢'" type="xpath" test="not(contains(string-join(//text(),''),'⣢'))"/>
+            <x:expect label="should not contain the braille character '⣣'" type="xpath" test="not(contains(string-join(//text(),''),'⣣'))"/>
+            <x:expect label="should not contain the braille character '⣤'" type="xpath" test="not(contains(string-join(//text(),''),'⣤'))"/>
+            <x:expect label="should not contain the braille character '⣥'" type="xpath" test="not(contains(string-join(//text(),''),'⣥'))"/>
+            <x:expect label="should not contain the braille character '⣦'" type="xpath" test="not(contains(string-join(//text(),''),'⣦'))"/>
+            <x:expect label="should not contain the braille character '⣧'" type="xpath" test="not(contains(string-join(//text(),''),'⣧'))"/>
+            <x:expect label="should not contain the braille character '⣨'" type="xpath" test="not(contains(string-join(//text(),''),'⣨'))"/>
+            <x:expect label="should not contain the braille character '⣩'" type="xpath" test="not(contains(string-join(//text(),''),'⣩'))"/>
+            <x:expect label="should not contain the braille character '⣪'" type="xpath" test="not(contains(string-join(//text(),''),'⣪'))"/>
+            <x:expect label="should not contain the braille character '⣫'" type="xpath" test="not(contains(string-join(//text(),''),'⣫'))"/>
+            <x:expect label="should not contain the braille character '⣬'" type="xpath" test="not(contains(string-join(//text(),''),'⣬'))"/>
+            <x:expect label="should not contain the braille character '⣭'" type="xpath" test="not(contains(string-join(//text(),''),'⣭'))"/>
+            <x:expect label="should not contain the braille character '⣮'" type="xpath" test="not(contains(string-join(//text(),''),'⣮'))"/>
+            <x:expect label="should not contain the braille character '⣯'" type="xpath" test="not(contains(string-join(//text(),''),'⣯'))"/>
+            <x:expect label="should not contain the braille character '⣰'" type="xpath" test="not(contains(string-join(//text(),''),'⣰'))"/>
+            <x:expect label="should not contain the braille character '⣱'" type="xpath" test="not(contains(string-join(//text(),''),'⣱'))"/>
+            <x:expect label="should not contain the braille character '⣲'" type="xpath" test="not(contains(string-join(//text(),''),'⣲'))"/>
+            <x:expect label="should not contain the braille character '⣳'" type="xpath" test="not(contains(string-join(//text(),''),'⣳'))"/>
+            <x:expect label="should not contain the braille character '⣴'" type="xpath" test="not(contains(string-join(//text(),''),'⣴'))"/>
+            <x:expect label="should not contain the braille character '⣵'" type="xpath" test="not(contains(string-join(//text(),''),'⣵'))"/>
+            <x:expect label="should not contain the braille character '⣶'" type="xpath" test="not(contains(string-join(//text(),''),'⣶'))"/>
+            <x:expect label="should not contain the braille character '⣷'" type="xpath" test="not(contains(string-join(//text(),''),'⣷'))"/>
+            <x:expect label="should not contain the braille character '⣸'" type="xpath" test="not(contains(string-join(//text(),''),'⣸'))"/>
+            <x:expect label="should not contain the braille character '⣹'" type="xpath" test="not(contains(string-join(//text(),''),'⣹'))"/>
+            <x:expect label="should not contain the braille character '⣺'" type="xpath" test="not(contains(string-join(//text(),''),'⣺'))"/>
+            <x:expect label="should not contain the braille character '⣻'" type="xpath" test="not(contains(string-join(//text(),''),'⣻'))"/>
+            <x:expect label="should not contain the braille character '⣼'" type="xpath" test="not(contains(string-join(//text(),''),'⣼'))"/>
+            <x:expect label="should not contain the braille character '⣽'" type="xpath" test="not(contains(string-join(//text(),''),'⣽'))"/>
+            <x:expect label="should not contain the braille character '⣾'" type="xpath" test="not(contains(string-join(//text(),''),'⣾'))"/>
+            <x:expect label="should not contain the braille character '⣿'" type="xpath" test="not(contains(string-join(//text(),''),'⣿'))"/>
+        </x:scenario>
+        
+        <x:scenario label="page numbers (issue #78)">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                
+                                <title>Test</title>
+                                <meta name="dc:creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+                                <meta name="dc:date" content="2017-11-24"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:language" content="no"/>
+                            </head>
+                            <body>
+                                
+                                
+                                <section epub:type="frontmatter titlepage">
+                                    <h1 epub:type="fulltitle" class="title">Test</h1>
+                                    <p epub:type="z3998:author" class="docauthor">Norsk lyd- og blindeskriftbibliotek</p>
+                                </section>
+                                
+                                <section epub:type="frontmatter">
+                                    <div epub:type="pagebreak" class="page-front" title="i"/>
+                                    <h1>Front 1</h1>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-front" title="ii"/>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-front" title="iii"/>
+                                </section>
+                                <section epub:type="frontmatter">
+                                    <div epub:type="pagebreak" class="page-front" title="iv"/>
+                                    <h1>Front 2</h1>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-front" title="v"/>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-front" title="vi"/>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                </section>
+                                
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>Part 1</h1>
+                                    
+                                    <section>
+                                        <div epub:type="pagebreak" class="page-normal" title="1"/>
+                                        <h2>Chapter 1.1</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="2"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="3"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="4"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="5"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    
+                                    <section>
+                                        <div epub:type="pagebreak" class="page-normal" title="6"/>
+                                        <h2>Chapter 1.2</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="7"/>
+                                        <p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="8"/>
+                                        <p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="9"/>
+                                        <p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="10"/>
+                                        <p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="11"/>
+                                        <p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="12"/>
+                                        <p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="13"/>
+                                        <p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="14"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="15"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="16"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="17"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                        
+                                        <section><h3>headline</h3><p>content</p></section>
+                                    </section>
+                                </section>
+                                <section epub:type="bodymatter part" class="part">
+                                    <h1>Part 2</h1>
+                                    
+                                    <section>
+                                        <div epub:type="pagebreak" class="page-normal" title="18"/>
+                                        <h2>Chapter 2.1</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                    
+                                    <section>
+                                        <div epub:type="pagebreak" class="page-normal" title="19"/>
+                                        <h2>Chapter 2.2</h2>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="20"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-special" title="1"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-special" title="2"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="21"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                        <div epub:type="pagebreak" class="page-normal" title="22"/>
+                                        <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    </section>
+                                </section>
+                                
+                                
+                                <section epub:type="backmatter">
+                                    <div epub:type="pagebreak" class="page-normal" title="23"/>
+                                    <h1>Rear 1</h1>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-normal" title="24"/>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-normal" title="25"/>
+                                </section>
+                                
+                                <section epub:type="backmatter">
+                                    <div epub:type="pagebreak" class="page-normal" title="26"/>
+                                    <h1>Rear 2</h1>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-normal" title="27"/>
+                                    <p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p><p>content</p>
+                                    <div epub:type="pagebreak" class="page-normal" title="28"/>
+                                    <p>Noteref: <a epub:type="noteref" class="noteref" id="noteref_1" href="#note001">*</a></p>
+                                </section>
+                                
+                                <section epub:type="backmatter" class="footnotes">
+                                    <aside epub:type="note" class="notebody" id="note001"><p>content</p></aside>
+                                </section>
+                                
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="duplex" select="'true'"/>
+                <x:option name="braille-standard" select="'(dots:6)(grade:0)'"/>
+                <x:option name="show-braille-page-numbers" select="'true'"/>
+                <x:option name="show-print-page-numbers" select="'true'"/>
+                <x:option name="toc-depth" select="3"/>
+                <x:option name="include-notes" select="'true'"/>
+                <x:option name="notes-placement" select="'end-of-book'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('26/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('26/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('26/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the PEF">
+                <x:document type="file" base-uri="temp-dir" href="26/pef-output-dir/book.pef" select="//pef:page/pef:row[28]"/>
+            </x:context>
+            <x:expect label="The pages should be numbered as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                        <!--<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>--> <!-- page (1): title page -->
+                        <!--<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>--> <!-- page (2): about page -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠓⠑⠁⠙⠇⠊⠝⠑⠀⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠃⠚</row>     <!-- page (3): document toc: toc entry on last line -->
+                        <!--<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>--> <!-- page (4): document toc -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠊⠊⠊</row>    <!-- page 5: frontmatter, print page front: i-iii -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠧⠊</row>    <!-- page 7: frontmatter, print page front: iv-vi -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 8: frontmatter, print page front: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 9: level1.part, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠉</row>    <!-- page 11: level2, print page normal: 1-3 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠑</row>    <!-- page 12: level2, print page normal: 4-5 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 13: level2, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠙</row>    <!-- page 15: level2, print page normal: 6-14 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠛</row>    <!-- page 16: level2, print page normal: 15-17 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 17: level3, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 18: level3, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 19: level3, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 20: level3, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 21: level3, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 22: level3, print page normal: (none) -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 23: level3, print page normal: (none) -->
+                        <!--<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>--> <!-- page (25): title page -->
+                        <!--<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>--> <!-- page (27): volume toc -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠛</row>    <!-- page 29: level1.part, print page normal: 17 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠓</row>    <!-- page 31: level2, print page normal: 18 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁</row>    <!-- page 33: level2, print page normal: 19-20, print page special: 1 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠙⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠁</row>    <!-- page 34: level2, print page special: 2, print page normal: 21 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠃</row>    <!-- page 35: level2, print page normal: 22 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠑</row>    <!-- page 37: rearmatter, print page normal: 23-25 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠓</row>    <!-- page 39: rearmatter, print page normal: 26-28 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 41: footnotes -->
+                    </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="Chapter without h1 (issue #61)">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                
+                                <section epub:type="bodymatter">
+                                    <h1>Chapter</h1>
+                                    <p>after</p>
+                                </section>
+                                <section epub:type="bodymatter">
+                                    <!-- no heading -->
+                                    <p>after</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="insert-boilerplate" select="'false'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('27/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('27/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('27/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="27/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                <x:document type="inline">
+                    <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                        <head>
+                            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                <dc:format>application/x-pef+xml</dc:format>
+                                <dc:identifier>identifier?</dc:identifier>
+                                <dc:date>2018-05-21</dc:date>
+                                <dc:language>no</dc:language>
+                            </meta>
+                        </head>
+                        <body>
+                            <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠁⠋⠞⠑⠗</row>
+                                    </page>
+                                </section>
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠁⠋⠞⠑⠗</row>
+                                    </page>
+                                </section>
+                            </volume>
+                        </body>
+                    </pef>
+                </x:document>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 </x:description>

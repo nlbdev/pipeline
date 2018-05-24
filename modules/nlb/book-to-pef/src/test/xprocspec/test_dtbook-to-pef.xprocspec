@@ -437,7 +437,7 @@
                                 <meta name="dcterms:modified" content="2015-11-09T09:06:58+00:00"/>
                             </head>
                             <book>
-                                <body>
+                                <bodymatter>
                                     <level1>
                                         <p>aaa.</p>
                                         <list type="ul">
@@ -464,7 +464,7 @@
                                             <li>ccc ccc</li>
                                         </list>
                                     </level1>
-                                </body>
+                                </bodymatter>
                             </book>
                         </dtbook>
                     </x:document>
@@ -588,7 +588,7 @@
                                 <meta name="dtb:uid" content="557901"/>
                             </head>
                             <book>
-                                <body>
+                                <bodymatter>
                                     <level1>
                                         <p>á Š š </p>
                                         <p>kort-  lang—</p>  <!-- short and long dash after word -->
@@ -597,7 +597,7 @@
                                         <p>aa — bb</p>  <!--  long dash alone -->
                                         <p>aa - bb</p>  <!--  short dash alone -->
                                     </level1>
-                                </body>
+                                </bodymatter>
                             </book>
                         </dtbook>
                     </x:document>
