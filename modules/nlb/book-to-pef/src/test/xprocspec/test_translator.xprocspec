@@ -34,7 +34,7 @@
       </x:input>
     </x:call>
 
-    <x:scenario label="grade 0">
+    <x:scenario label="grade 0" pending="https://github.com/nlbdev/pipeline/issues/104">
       <x:call>
         <x:option name="grade" select="'0'"/>
       </x:call>
@@ -52,7 +52,7 @@
       </x:expect>
     </x:scenario>
 
-    <x:scenario label="grade 1">
+    <x:scenario label="grade 1" pending="https://github.com/nlbdev/pipeline/issues/104">
       <x:call>
         <x:option name="grade" select="'1'"/>
       </x:call>
@@ -70,7 +70,7 @@
       </x:expect>
     </x:scenario>
 
-    <x:scenario label="grade 2">
+    <x:scenario label="grade 2" pending="https://github.com/nlbdev/pipeline/issues/104">
       <x:call>
         <x:option name="grade" select="'2'"/>
       </x:call>
@@ -88,7 +88,7 @@
       </x:expect>
     </x:scenario>
 
-    <x:scenario label="grade 3">
+    <x:scenario label="grade 3" pending="https://github.com/nlbdev/pipeline/issues/104">
       <x:call>
         <x:option name="grade" select="'3'"/>
       </x:call>
@@ -118,7 +118,7 @@
         </x:document>
       </x:input>
     </x:call>
-    <x:scenario label="grade 0">
+    <x:scenario label="grade 0" pending="https://github.com/nlbdev/pipeline/issues/104">
       <x:call>
         <x:option name="grade" select="'0'"/>
       </x:call>
@@ -356,7 +356,7 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="non-standard hyphenation">
+  <x:scenario label="non-standard hyphenation" pending="https://github.com/nlbdev/pipeline/issues/104">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
