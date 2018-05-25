@@ -3,7 +3,7 @@
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl" pending="regression at bc73ed2">
+               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
     
     <x:scenario label="table caption">
         <x:call step="nlb:dtbook-to-pef">
@@ -75,6 +75,11 @@
         <x:expect label="result" type="compare">
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
                     <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠉⠁⠏⠞⠊⠕⠝</row>
@@ -96,11 +101,6 @@
                     <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠕⠞⠓⠑⠗⠀⠉⠕⠝⠞⠑⠝⠞</row>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                 </page>
@@ -173,6 +173,11 @@
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
                     <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
                     <row>⠀⠀⠀⠀⠉⠁⠏⠞⠊⠕⠝</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
@@ -183,11 +188,6 @@
                     <row>⠀⠀⠀⠀⠠⠃⠒⠀⠙</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
                     <row/>
                     <row/>
                     <row/>
@@ -253,6 +253,11 @@
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
                     <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
                     <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                     <row/>
                     <row>⠀⠀⠠⠠⠍⠁⠞⠧⠁⠗⠑</row>
@@ -270,11 +275,6 @@
                     <row>⠀⠀⠀⠀⠼⠉⠚</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
                     <row/>
                     <row/>
                     <row/>
@@ -358,6 +358,11 @@
                             <volume cols="32" rows="28" rowgap="0" duplex="true">
                                 <section>
                                     <page>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
                                         <row/>
                                         <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                         <row/>
@@ -444,6 +449,11 @@
                                     <section>
                                         <page>
                                             <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
                                             <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
@@ -496,6 +506,11 @@
                                     <section>
                                         <page>
                                             <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
                                             <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠛⠊⠋⠞⠢⠀⠆⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
@@ -547,6 +562,11 @@
                                 <volume cols="32" rows="28" rowgap="0" duplex="true">
                                     <section>
                                         <page>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
@@ -648,6 +668,11 @@
                                     <section>
                                         <page>
                                             <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
                                             <row>⠀⠀⠠⠋⠕⠗⠝⠁⠧⠝⠀⠀⠀⠀⠠⠙⠁⠝⠊⠑⠇⠁⠀⠠⠉⠁⠗⠇⠁</row>
@@ -700,6 +725,11 @@
                                     <section>
                                         <page>
                                             <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
                                             <row>⠀⠀⠠⠋⠕⠗⠝⠁⠧⠝⠀⠆⠀⠠⠙⠁⠝⠊⠑⠇⠁⠀⠠⠉⠁⠗⠇⠁⠀⠙⠑</row>
@@ -748,6 +778,11 @@
                                 <volume cols="32" rows="28" rowgap="0" duplex="true">
                                     <section>
                                         <page>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
@@ -850,6 +885,11 @@
                                     <section>
                                         <page>
                                             <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
                                             <row>⠀⠀⠠⠇⠁⠝⠛⠀⠊⠀⠀⠠⠅⠕⠗⠞⠀⠊</row>
@@ -896,6 +936,11 @@
                                     <section>
                                         <page>
                                             <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
                                             <row>⠀⠀⠠⠇⠁⠝⠛⠀⠊⠞⠊⠀⠆⠀⠋⠊⠗⠑⠀⠆⠀⠎⠊⠑⠗⠀⠆</row>
@@ -940,6 +985,11 @@
                                 <volume cols="32" rows="28" rowgap="0" duplex="true">
                                     <section>
                                         <page>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
+                                            <row/>
                                             <row/>
                                             <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
                                             <row/>
