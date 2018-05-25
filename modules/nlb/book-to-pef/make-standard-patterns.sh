@@ -45,7 +45,27 @@ for level in 1 2; do
     PATTERNS_FILE=$PATOUT_FILE
 done
 
-# 10 bad and 95727 missed
 #cat $DICTIONARY_FILE | grep '\.[^0]\|-' >/dev/null && exit 1
+
+# 10 bad hyphens
+#cat $DICTIONARY_FILE | awk -F'.' '{print NF-1}' | paste -sd+ - | bc
+
+# 788383 missed hyphens
+#cat $DICTIONARY_FILE | awk -F'-' '{print NF-1}' | paste -sd+ - | bc
+
+# ...of which 771951 inferred
+#cat $DICTIONARY_FILE | awk -F'-0' '{print NF-1}' | paste -sd+ - | bc
+
+# ...and 16432 not inferred
+#cat $DICTIONARY_FILE | awk -F'-[^0]' '{print NF-1}' | paste -sd+ - | bc
+
+# 841112 good hyphens
+#cat $DICTIONARY_FILE | awk -F'*' '{print NF-1}' | paste -sd+ - | bc
+
+# ...of which 282436 inferred
+#cat $DICTIONARY_FILE | awk -F'*0' '{print NF-1}' | paste -sd+ - | bc
+
+# ...and 558676 not inferred
+#cat $DICTIONARY_FILE | awk -F'*[^0]' '{print NF-1}' | paste -sd+ - | bc
 
 cat $PATTERNS_FILE

@@ -8,7 +8,11 @@ import java.util.regex.Pattern;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class add_frequencies {
+/**
+ * Give more importance to words that occur more frequently, and give less importance to hyphens
+ * that were inferred.
+ */
+public class add_weights {
 	
 	public static void main(String args[]) throws Exception {
 		BufferedReader statsReader = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), Charset.forName("UTF-8")));
@@ -17,9 +21,10 @@ public class add_frequencies {
 		Map<String,Integer> stats = parseStats(statsReader);
 		String word;
 		while ((word = wordsReader.readLine()) != null) {
-			Integer weight = stats.get(word.replaceAll("-", ""));
-			if (weight != null) {
-				out.write(weight+word+"\n");
+			Integer wordWeight = stats.get(word.replaceAll("[-\\+]", ""));
+			if (wordWeight != null) {
+				String wordWithHyphenWeights = word.replaceAll("\\+", "-0");
+				out.write(wordWeight+wordWithHyphenWeights+"\n");
 			}
 		}
 		statsReader.close();
