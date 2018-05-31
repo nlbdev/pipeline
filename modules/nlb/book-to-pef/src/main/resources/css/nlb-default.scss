@@ -478,7 +478,7 @@ hr.emptyline::before {
         content: "Rammetekst: ";
 }
 
-*[showin^="x"], *.hidden-braille {
+[showin^="x"], [class*="showin-x"], .hidden-braille {
         display: none;
 }
 
