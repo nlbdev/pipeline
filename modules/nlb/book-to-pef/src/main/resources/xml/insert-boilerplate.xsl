@@ -31,7 +31,7 @@
     <xsl:template match="html:html">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates select="html:head"/>
+            <xsl:apply-templates select="* except html:body"/> <!-- also includes ol#generated-document-toc and ol#generated-volume-toc -->
             <xsl:choose>
                 <!-- single body element => insert section after header -->
                 <xsl:when test="count(html:body) = 1">

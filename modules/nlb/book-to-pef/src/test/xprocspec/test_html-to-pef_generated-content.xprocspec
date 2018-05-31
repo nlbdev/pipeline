@@ -948,7 +948,7 @@
         </x:scenario>
     </x:scenario>
     
-    <x:scenario label="toc" pending="https://github.com/nlbdev/pipeline/issues/175">
+    <x:scenario label="toc">
         <x:call step="nlb:html-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xhtml">
