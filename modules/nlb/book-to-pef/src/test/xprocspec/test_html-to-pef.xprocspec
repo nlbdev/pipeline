@@ -6,6 +6,7 @@
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
     
     <x:scenario label="_">
@@ -30,7 +31,7 @@
                 test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
         </x:scenario>
         
-        <x:scenario label="basic test 2" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="basic test 2">
             <x:call>
                 <x:input port="source">
                     <x:document type="file" href="../resources/DTBook/book.xml"/>
