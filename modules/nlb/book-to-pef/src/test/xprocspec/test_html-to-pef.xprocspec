@@ -439,7 +439,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="List test" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="List test">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -610,7 +610,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="test dash characters" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="test dash characters">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -935,7 +935,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="print page numbers disabled (no marks in left margin or page footer)" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="print page numbers disabled (no marks in left margin or page footer)">
             <x:call step="nlb:html-to-pef">
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -1094,7 +1094,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="images, image groups, captions and alt-text" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="images, image groups, captions and alt-text">
             <x:call step="nlb:html-to-pef">
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -2600,7 +2600,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="Chapter without h1 (issue #61)" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="Chapter without h1 (issue #61)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">

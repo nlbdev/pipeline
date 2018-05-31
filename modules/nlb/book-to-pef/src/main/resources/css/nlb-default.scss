@@ -583,8 +583,11 @@ level1.part h1, *[epub|type~='part'] h1 {
 
 /* level1 without headline */
 level1:not(.part, .pef-titlepage, .pef-about):not(:has(> h1, > hx, > .leaf-section > h1, > .leaf-section > hx)),
-level1.part > level2:not(:has(> h2, > hx, > .leaf-section > h2, > .leaf-section > hx)) {
-    padding-top: 5;
+level1.part > level2:not(:has(> h2, > hx, > .leaf-section > h2, > .leaf-section > hx)),
+body > section:not([epub|type~='part'], .pef-titlepage, .pef-about, [epub|type~='z3998:poem']):not(:has(> h1, > .leaf-section > h1)),
+[epub|type~='part']:not([epub|type~='z3998:poem']) > section:not(:has(> h2, > .leaf-section > h2)) {
+        display: block;
+        padding-top: 5;
 }
 
 /* -------------------------------------------------------------------------- */
