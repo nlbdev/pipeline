@@ -912,7 +912,7 @@
             <x:expect label="The fifth volume should have at least 1 occurence of 'content'" type="xpath" test="contains((//pef:volume)[5]/string-join(.//text(),' '),'⠉⠕⠝⠞⠑⠝⠞')" equals="true()"/>
         </x:scenario>
         
-        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter) - short level1, long level2" pending="https://github.com/nlbdev/pipeline/issues/174">
+        <x:scenario label="Content at start of part (or chapter) should be in same volume as first descendant chapter (or subchapter) - short level1, long level2">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">

@@ -218,7 +218,7 @@ html:not(:has(body ~ body)) > body > section {
 }
 body[epub|type~='part'] ~ body[epub|type~='part'] > section,
 body > section[epub|type~='part'] ~ section[epub|type~='part'] > section { volume-break-inside: -obfl-keep(8); }
-body > section ~ section                                                 { volume-break-inside: -obfl-keep(7); }
+body > section:not(.pef-titlepage, .pef-about) ~ section                 { volume-break-inside: -obfl-keep(7); }
 body > section > section ~ section                                       { volume-break-inside: -obfl-keep(6); }
 body > section > section > section ~ section                             { volume-break-inside: -obfl-keep(5); }
 body > section > section > section > section ~ section                   { volume-break-inside: -obfl-keep(4); }
