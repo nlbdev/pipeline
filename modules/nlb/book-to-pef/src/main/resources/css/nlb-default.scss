@@ -53,29 +53,38 @@ pagenum, *[epub|type~='pagebreak'] {
 
 /* Show page numbers in bodymatter and backmatter. */
 @if $show-print-page-numbers {
+        /* defined in dtbook-to-pef:
+        pagenum {
+                string-set: print-page content();
+        }*/
         bodymatter pagenum,
         rearmatter pagenum {
                 string-set: print-page "⠿" content();
         }
-        
-        /*body[epub|type~='bodymatter'], section[epub|type~='bodymatter'], body[epub|type~='backmatter'], section[epub|type~='backmatter'] {*/
-        body:not([epub|type~='frontmatter']) *[epub|type~='pagebreak'] {
-                /* *[epub|type~='pagebreak'] {*/
-                        &[title] {
-                                string-set: print-page "⠿" attr(title);
-                        }
-                        &:not([title]) {
-                                string-set: print-page "⠿" content();
-                        }
-                /*}*/
+        [epub|type~='pagebreak'] {
+                &[title] {
+                        string-set: print-page "⠿" attr(title);
+                }
+                &:not([title]) {
+                        string-set: print-page "⠿" content();
+                }
+        }
+        [epub|type~='frontmatter'] [epub|type~='pagebreak'] {
+                &[title] {
+                        string-set: print-page attr(title);
+                }
+                &:not([title]) {
+                        string-set: print-page content();
+                }
         }
         
         /* clear print page number after frontmatter (so that 'last' page does not point from bodymatter to frontmatter) */
         bodymatter {
             string-set: print-page "";
         }
-        body[epub|type~='frontmatter']:not(+ body[epub|type~='frontmatter'])::after,
-        section[epub|type~='frontmatter']:not(+ section[epub|type~='frontmatter'])::after {
+        /* bodymatter sections are not quaranteed to have a epub:type (top-level sections without are implicitly bodymatter) */
+        body[epub|type~='frontmatter']:not(:has(+ body[epub|type~='frontmatter']))::after,
+        section[epub|type~='frontmatter']:not(:has(+ section[epub|type~='frontmatter']))::after {
             string-set: print-page "";
         }
 }
