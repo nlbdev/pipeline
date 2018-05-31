@@ -109,20 +109,14 @@ pagenum, *[epub|type~='pagebreak'] {
         }
 
         frontmatter level1:not(.pef-titlepage,
-                               .pef-about,
-                               :has(> #generated-volume-toc,
-                                    > #generated-document-toc)),
+                               .pef-about),
         bodymatter,
         body:not([epub|type~='backmatter'],
                  .pef-titlepage,
-                 .pef-about,
-                 :has(> #generated-volume-toc,
-                      > #generated-document-toc)),
+                 .pef-about),
         section:not([epub|type~='backmatter'],
                     .pef-titlepage,
-                    .pef-about,
-                    :has(> #generated-volume-toc,
-                         > #generated-document-toc)) {
+                    .pef-about) {
                 line-height: 2;
         }
 
@@ -154,9 +148,7 @@ level1.part, *[epub|type~='part'] {
 /* Always start top-level chapters on right-hand page: DTBook */
 level1:not(.part,
            .pef-titlepage,
-           .pef-about,
-           :has(> #generated-volume-toc,
-                > #generated-document-toc)),
+           .pef-about),
 level1.part > level2 {
         page-break-before: right;
 }
@@ -165,9 +157,7 @@ level1.part > level2 {
 html:has(body ~ body) > body,
 html:not(:has(body ~ body)) > body > section {
         &:not(.pef-titlepage,
-              .pef-about,
-              :has(> #generated-volume-toc,
-                   > #generated-document-toc)) {
+              .pef-about) {
                 &:not([epub|type~='part']),
                 &[epub|type~='part'] > section {
                         display: block;
@@ -179,14 +169,10 @@ html:not(:has(body ~ body)) > body > section {
 /* Volume breaking rules based on level depth: DTBook */
 frontmatter > level1:not(.part,
                          .pef-titlepage,
-                         .pef-about,
-                         :has(> #generated-volume-toc,
-                              > #generated-document-toc)) ~ level1,
+                         .pef-about) ~ level1,
 frontmatter:has(level1:not(.part,
                            .pef-titlepage,
-                           .pef-about,
-                           :has(> #generated-volume-toc,
-                                > #generated-document-toc))) ~ bodymatter > level1,
+                           .pef-about)) ~ bodymatter > level1,
 bodymatter > level1:not(.part) ~ level1:not(.part),
 rearmatter > level1:not(.part) {
         /* level1 except first non-generated level1 */
@@ -212,9 +198,7 @@ level6 ~ level6                  { volume-break-inside: -obfl-keep(3); }
 html:has(body ~ body) > body,
 html:not(:has(body ~ body)) > body > section {
         &:not(.pef-titlepage,
-              .pef-about,
-              :has(> #generated-volume-toc,
-                   > #generated-document-toc)) {
+              .pef-about) {
                 & ~ body, & ~ section {
                         /* level1 except first non-generated level1 */
                         volume-break-inside: -obfl-keep(8);
