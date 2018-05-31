@@ -6,7 +6,7 @@
                xmlns:epub="http://www.idpf.org/2007/ops"
                script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
     
-    <x:scenario label="Automatic numbering of notes" pending="https://github.com/nlbdev/pipeline/issues/77">
+    <x:scenario label="Automatic numbering of notes">
         <x:call step="nlb:html-to-pef">
             <x:input port="source">
                 <x:document type="inline">
@@ -106,7 +106,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="Volume notes" pending="https://github.com/nlbdev/pipeline/issues/77">
+    <x:scenario label="Volume notes">
         <x:call step="nlb:html-to-pef">
             <x:input port="source">
                 <x:document type="inline">
@@ -332,7 +332,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="Footnotes" pending="https://github.com/nlbdev/pipeline/issues/77">
+    <x:scenario label="Footnotes">
         <x:call step="nlb:html-to-pef">
             <x:input port="source">
                 <x:document type="inline">
@@ -435,7 +435,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="Notes at end of book" pending="https://github.com/nlbdev/pipeline/issues/77">
+    <x:scenario label="Notes at end of book">
         <x:call step="nlb:html-to-pef">
             <x:input port="source">
                 <x:document type="inline">
@@ -588,7 +588,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="Notes fallback mechanism" pending="https://github.com/nlbdev/pipeline/issues/77">
+    <x:scenario label="Notes fallback mechanism">
         <x:call step="nlb:html-to-pef">
             <x:input port="source">
                 <x:document type="inline">

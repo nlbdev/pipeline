@@ -1292,7 +1292,7 @@
             <x:expect label="The two paragraphs should not be equal" type="xpath" test="(//pef:row[contains(.,'⠁⠃⠉')])[1]/replace(.,'⠀','')" equals="(//pef:row[contains(.,'⠁⠃⠉')])[2]/replace(.,'⠀','')" xfail=""/>
         </x:scenario>
         
-        <x:scenario label="Headlines" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="Headlines">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -1579,7 +1579,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="Various element margins etc. (#102)" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="Various element margins etc. (#102)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -2347,7 +2347,7 @@
             <x:expect label="should not contain the braille character '⣿'" type="xpath" test="not(contains(string-join(//text(),''),'⣿'))"/>
         </x:scenario>
         
-        <x:scenario label="page numbers (issue #78)" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="page numbers (issue #78)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">

@@ -138,9 +138,12 @@ pagenum, *[epub|type~='pagebreak'] {
 /* Book structure, including headlines, volume breaking, toc, titlepage, etc. */
 /* -------------------------------------------------------------------------- */
 
+section {
+    display: block;
+}
+
 /* Parts */
 level1.part, *[epub|type~='part'] {
-    display: block;
     page-break-before: right;
     
     & ~ level1.part,
@@ -169,7 +172,6 @@ html:not(:has(body ~ body)) > body > section {
               .pef-about) {
                 &:not([epub|type~='part']),
                 &[epub|type~='part'] > section {
-                        display: block;
                         page-break-before: right;
                 }
         }
@@ -582,7 +584,6 @@ level1:not(.part, .pef-titlepage, .pef-about):not(:has(> h1, > hx, > .leaf-secti
 level1.part > level2:not(:has(> h2, > hx, > .leaf-section > h2, > .leaf-section > hx)),
 body > section:not([epub|type~='part'], .pef-titlepage, .pef-about, [epub|type~='z3998:poem']):not(:has(> h1, > .leaf-section > h1)),
 [epub|type~='part']:not([epub|type~='z3998:poem']) > section:not(:has(> h2, > .leaf-section > h2)) {
-        display: block;
         padding-top: 5;
 }
 
@@ -968,7 +969,10 @@ table {
 noteref, a[epub|type~='noteref'],
 note, aside[epub|type~='note'],
 level1.footnotes,
-rearmatter:not(:has(> *:not(level1.footnotes))) {
+rearmatter:not(:has(> *:not(level1.footnotes))),
+section[epub|type~='backmatter'].footnotes,
+body[epub|type~='backmatter'] > section.footnotes,
+body[epub|type~='backmatter']:not(:has(> *:not(section.footnotes))) {
         display: none;
 }
 
