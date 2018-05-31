@@ -137,6 +137,7 @@ pagenum, *[epub|type~='pagebreak'] {
 
 /* Parts */
 level1.part, *[epub|type~='part'] {
+    display: block;
     page-break-before: right;
     
     & ~ level1.part,
@@ -167,7 +168,9 @@ html:not(:has(body ~ body)) > body > section {
               .pef-about,
               :has(> #generated-volume-toc,
                    > #generated-document-toc)) {
-                &:not([epub|type~='part']), &[epub|type~='part'] > section {
+                &:not([epub|type~='part']),
+                &[epub|type~='part'] > section {
+                        display: block;
                         page-break-before: right;
                 }
         }

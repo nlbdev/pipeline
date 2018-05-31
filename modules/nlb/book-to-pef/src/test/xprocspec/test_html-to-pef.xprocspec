@@ -544,7 +544,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="Test for requirements/#4.7:102 volume x av y" pending="https://github.com/nlbdev/pipeline/issues/23">
+        <x:scenario label="Test for requirements/#4.7:102 volume x av y">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">

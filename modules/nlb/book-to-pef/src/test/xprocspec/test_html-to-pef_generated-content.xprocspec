@@ -858,7 +858,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="2 volumes" pending="https://github.com/nlbdev/pipeline/issues/174">
+        <x:scenario label="2 volumes">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -1405,7 +1405,7 @@
             <x:expect label="the non-generated content should start in the second section" type="xpath" test="count(//pef:section[contains(string-join(.//pef:row/text(),''),'⠋⠗⠕⠝⠞⠍⠁⠞⠞⠑⠗')]/preceding::pef:section) + 1" equals="2" pending="https://github.com/nlbdev/pipeline/issues/126"/>
         </x:scenario>
         
-        <x:scenario label="multiple volumes" pending="https://github.com/nlbdev/pipeline/issues/174">
+        <x:scenario label="multiple volumes">
             <x:call step="nlb:html-to-pef">
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
