@@ -6,7 +6,7 @@
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                xmlns:epub="http://www.idpf.org/2007/ops"
-               script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl" pending="https://github.com/nlbdev/pipeline/issues/23">
+               script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
     
     <x:scenario label="_">
         <x:call step="nlb:html-to-pef">
@@ -30,7 +30,7 @@
                 test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
         </x:scenario>
         
-        <x:scenario label="basic test 2">
+        <x:scenario label="basic test 2" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="file" href="../resources/DTBook/book.xml"/>
@@ -438,7 +438,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="List test">
+        <x:scenario label="List test" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -543,7 +543,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="Test for requirements/#4.7:102 volume x av y">
+        <x:scenario label="Test for requirements/#4.7:102 volume x av y" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -609,7 +609,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="test dash characters">
+        <x:scenario label="test dash characters" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -934,7 +934,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="print page numbers disabled (no marks in left margin or page footer)">
+        <x:scenario label="print page numbers disabled (no marks in left margin or page footer)" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call step="nlb:html-to-pef">
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -1032,7 +1032,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="images, figures, figcaptions and alt-text">
+        <x:scenario label="images, figures, figcaptions and alt-text" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="file" href="../resources/html-to-pef/2/book.xhtml"/>
@@ -1093,7 +1093,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="images, image groups, captions and alt-text">
+        <x:scenario label="images, image groups, captions and alt-text" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call step="nlb:html-to-pef">
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -1291,7 +1291,7 @@
             <x:expect label="The two paragraphs should not be equal" type="xpath" test="(//pef:row[contains(.,'⠁⠃⠉')])[1]/replace(.,'⠀','')" equals="(//pef:row[contains(.,'⠁⠃⠉')])[2]/replace(.,'⠀','')" xfail=""/>
         </x:scenario>
         
-        <x:scenario label="Headlines">
+        <x:scenario label="Headlines" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -1578,7 +1578,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="Various element margins etc. (#102)">
+        <x:scenario label="Various element margins etc. (#102)" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -2346,7 +2346,7 @@
             <x:expect label="should not contain the braille character '⣿'" type="xpath" test="not(contains(string-join(//text(),''),'⣿'))"/>
         </x:scenario>
         
-        <x:scenario label="page numbers (issue #78)">
+        <x:scenario label="page numbers (issue #78)" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -2599,7 +2599,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="Chapter without h1 (issue #61)">
+        <x:scenario label="Chapter without h1 (issue #61)" pending="https://github.com/nlbdev/pipeline/issues/23">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
