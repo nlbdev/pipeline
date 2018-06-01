@@ -647,7 +647,7 @@
             </x:expect>
         </x:scenario>
     
-    <x:scenario label="print page numbers enabled (marks in left margin and page footer)" pending="https://github.com/nlbdev/pipeline/issues/165">
+    <x:scenario label="print page numbers enabled (marks in left margin and page footer)">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -685,6 +685,11 @@
         <x:expect label="result" type="compare">
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
                     <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
                     <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
                     <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
@@ -707,18 +712,13 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠁</row>
                 </page>
             </x:document>
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="print page numbers enabled; some braille pages without marks" pending="https://github.com/nlbdev/pipeline/issues/165">
+    <x:scenario label="print page numbers enabled; some braille pages without marks">
         <x:call step="nlb:dtbook-to-pef">
             <x:input port="source">
                 <x:document type="inline" xml:base="file:/tmp/book.xml">
@@ -763,6 +763,11 @@
         <x:expect label="result" type="compare">
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
                     <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
                     <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
                     <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
@@ -785,16 +790,16 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠁</row>
                 </page>
             </x:document>
             <x:document type="inline">
                 <page xmlns="http://www.daisy.org/ns/2008/pef">
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
                     <row>⠀⠀⠀⠀⠠⠏⠡⠀⠏⠑⠗⠗⠕⠝⠛⠑⠝⠀⠧⠊⠎⠞⠑⠀⠎⠅⠊⠇⠞⠑⠞</row>
                     <row>⠀⠀⠋⠪⠗⠞⠊⠀⠍⠊⠝⠥⠞⠞⠑⠗⠀⠞⠊⠇⠀⠝⠑⠎⠞⠑⠀⠞⠕⠛⠂</row>
                     <row>⠀⠀⠙⠑⠞⠀⠧⠁⠗⠀⠞⠕⠛⠑⠞⠀⠝⠕⠗⠙⠕⠧⠑⠗⠄⠀⠠⠚⠑⠛</row>
@@ -806,11 +811,6 @@
                     <row>⠀⠀⠇⠕⠞⠀⠙⠑⠝⠀⠎⠝⠥⠎⠑⠀⠏⠡⠀⠝⠕⠑⠀⠥⠝⠙⠑⠗⠀⠑⠝</row>
                     <row>⠀⠀⠃⠑⠝⠅⠂⠀⠓⠥⠝⠀⠎⠞⠕⠀⠕⠛⠀⠎⠞⠥⠙⠑⠗⠞⠑</row>
                     <row>⠀⠀⠓⠡⠝⠙⠋⠇⠁⠞⠑⠝⠀⠎⠊⠝⠀⠊⠍⠑⠝⠎⠄</row>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
-                    <row/>
                     <row/>
                     <row/>
                     <row/>
