@@ -912,37 +912,56 @@
         </x:scenario>
     </x:scenario>
     
-    <x:scenario label="about">
+    <x:scenario label="about page content">
         <x:call step="nlb:html-to-pef">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                        <head>
+                            <meta name="dc:creator" content="author"/>
+                            <title>title</title>
+                        </head>
+                        <body>
+                            
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
             <x:option name="hyphenation" select="'false'"/>
         </x:call>
         
-        <x:scenario label="about page content">
+        <x:scenario label="duplex">
             <x:call>
-                <x:input port="source">
-                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
-                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
-                            <head>
-                                
-                                <meta name="dc:creator" content="author"/>
-                                <title>title</title>
-                            </head>
-                            <body>
-                                
-                            </body>
-                        </html>
-                    </x:document>
-                </x:input>
-                <x:option name="pef-output-dir" select="resolve-uri('about/1/pef-output-dir',$temp-dir)"/>
-                <x:option name="preview-output-dir" select="resolve-uri('about/1/preview-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('about/1/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('about/1/duplex/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('about/1/duplex/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('about/1/duplex/temp-dir',$temp-dir)"/>
             </x:call>
             
             <x:context label="page 2">
-                <x:document type="file" base-uri="temp-dir" href="about/1/pef-output-dir/book.pef" select="(//pef:page)[2]"/>
+                <x:document type="file" base-uri="temp-dir" href="about/1/duplex/pef-output-dir/book.pef" select="(//pef:page)[2]"/>
             </x:context>
             <x:expect label="should contain 'Om boka'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠕⠍⠀⠃⠕⠅⠁')"/>
             <x:expect label="should contain 'Antall sider'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠁⠝⠞⠁⠇⠇⠀⠎⠊⠙⠑⠗⠒⠀⠼')"/>
+            <x:expect label="page count should be 4" type="xpath"
+                      test="replace(.//pef:row[contains(.,'⠠⠁⠝⠞⠁⠇⠇⠀⠎⠊⠙⠑⠗⠒⠀⠼')],'.*(⠼[^⠀]+)','$1')" equals="'⠼⠙'"/>
+            <x:expect label="should contain 'Boka skal ikke returneres.'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠃⠕⠅⠁⠀⠎⠅⠁⠇⠀⠊⠅⠅⠑⠀⠗⠑⠞⠥⠗⠝⠑⠗⠑⠎⠄')"/>
+            <x:expect label="should contain 'Feil eller mangler kan meldes til punkt@nlb.no.'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠋⠑⠊⠇⠀⠑⠇⠇⠑⠗⠀⠍⠁⠝⠛⠇⠑⠗⠀⠅⠁⠝⠀⠍⠑⠇⠙⠑⠎⠀⠞⠊⠇⠀⠣⠏⠥⠝⠅⠞⠈⠝⠇⠃⠄⠝⠕⠄⠜')"/>
+        </x:scenario>
+        
+        <x:scenario label="simplex">
+            <x:call>
+                <x:option name="pef-output-dir" select="resolve-uri('about/1/simplex/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('about/1/simplex/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('about/1/simplex/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="page 2">
+                <x:document type="file" base-uri="temp-dir" href="about/1/simplex/pef-output-dir/book.pef" select="(//pef:page)[2]"/>
+            </x:context>
+            <x:expect label="should contain 'Om boka'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠕⠍⠀⠃⠕⠅⠁')"/>
+            <x:expect label="should contain 'Antall sider'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠁⠝⠞⠁⠇⠇⠀⠎⠊⠙⠑⠗⠒⠀⠼')"/>
+            <x:expect label="page count should be 4" type="xpath"
+                      test="replace(.//pef:row[contains(.,'⠠⠁⠝⠞⠁⠇⠇⠀⠎⠊⠙⠑⠗⠒⠀⠼')],'.*(⠼[^⠀]+)','$1')" equals="'⠼⠙'"/>
             <x:expect label="should contain 'Boka skal ikke returneres.'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠃⠕⠅⠁⠀⠎⠅⠁⠇⠀⠊⠅⠅⠑⠀⠗⠑⠞⠥⠗⠝⠑⠗⠑⠎⠄')"/>
             <x:expect label="should contain 'Feil eller mangler kan meldes til punkt@nlb.no.'" type="xpath" test="contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'), '⠠⠋⠑⠊⠇⠀⠑⠇⠇⠑⠗⠀⠍⠁⠝⠛⠇⠑⠗⠀⠅⠁⠝⠀⠍⠑⠇⠙⠑⠎⠀⠞⠊⠇⠀⠣⠏⠥⠝⠅⠞⠈⠝⠇⠃⠄⠝⠕⠄⠜')"/>
         </x:scenario>

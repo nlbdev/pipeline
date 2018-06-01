@@ -13,6 +13,7 @@ $default-table-class: table-matrix !default;
 $page-width: 40 !default;
 $hyphenation: true !default;
 $force-norwegian: true !default;
+$duplex: true !default;
 
 /* -------------------------------------------------------------------------- */
 /*                page                                                        */
@@ -355,7 +356,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .pef-pages::after {
         display: inline;
-        content: -obfl-evaluate("(round (/ $sheets-in-document 2))");
+        @if $duplex {
+                content: -obfl-evaluate("(round (* $sheets-in-document 2))");
+        } @else {
+                content: -obfl-evaluate("(round $sheets-in-document)");
+        }
 }
 
 /* -------------------------------------------------------------------------- */
