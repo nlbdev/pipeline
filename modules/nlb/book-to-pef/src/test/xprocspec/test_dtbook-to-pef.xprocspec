@@ -12,6 +12,7 @@
         <x:call step="nlb:dtbook-to-pef">
             <x:option name="toc-depth" select="0"/>
             <x:option name="hyphenation" select="'false'"/>
+            <x:param port="parameters" name="skip-post-processing" select="'true'"/>
         </x:call>
         
         <x:scenario label="basic test">

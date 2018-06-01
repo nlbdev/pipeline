@@ -77,6 +77,7 @@
     <p:input port="parameters" kind="parameter" primary="false"/>
     
     <p:import href="http://www.nlb.no/pipeline/modules/braille/library.xpl"/>
+    <p:import href="pef-post-processing.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
@@ -147,6 +148,18 @@
         </p:input>
     </p:identity>
     <p:delete match="/*/@xml:base"/>
+    <p:choose>
+        <p:documentation>Add metadata</p:documentation>
+        <p:xpath-context>
+            <p:pipe step="main" port="parameters"/>
+        </p:xpath-context>
+        <p:when test="//c:param[@name='skip-post-processing']/@value[.='true']">
+            <p:identity/>
+        </p:when>
+        <p:otherwise>
+            <nlb:pef-post-processing/>
+        </p:otherwise>
+    </p:choose>
     <pef:validate name="validate-pef" assert-valid="false">
         <p:with-option name="temp-dir" select="string(/c:result)">
             <p:pipe step="temp-dir" port="result"/>

@@ -468,6 +468,7 @@
             <x:option name="show-print-page-numbers" select="'false'"/>
             <x:option name="toc-depth" select="0"/>
             <x:option name="insert-boilerplate" select="'false'"/>
+            <x:param port="parameters" name="skip-post-processing" select="'true'"/>
             <x:option name="force-norwegian" select="'true'"/>
             <x:option name="pef-output-dir" select="resolve-uri('6/pef-output-dir',$temp-dir)"/>
             <x:option name="preview-output-dir" select="resolve-uri('6/preview-output-dir',$temp-dir)"/>

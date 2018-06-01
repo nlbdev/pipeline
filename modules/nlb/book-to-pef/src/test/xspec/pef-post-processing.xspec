@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns="http://www.daisy.org/ns/2008/pef"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               stylesheet="../../main/resources/xml/pef-post-processing.xsl">
+    
+    <x:scenario label="sheet count">
+        <x:context>
+            <pef version="2008-1">
+                <head>
+                    <meta>
+                        <dc:format>application/x-pef+xml</dc:format>
+                        <dc:identifier>identifier?</dc:identifier>
+                        <dc:date>2018-06-01</dc:date>
+                        <dc:language>no</dc:language>
+                    </meta>
+                </head>
+                <body>
+                    <volume cols="32" rows="28" rowgap="0" duplex="true">
+                        <section>
+                            <page/>
+                            <page/>
+                            <page/>
+                            <page/>
+                        </section>
+                        <section>
+                            <page/>
+                        </section>
+                        <section duplex="false">
+                            <page/>
+                            <page/>
+                            <page/>
+                        </section>
+                    </volume>
+                </body>
+            </pef>
+        </x:context>
+        <x:expect label="sheet count" test="//pef:meta/nlb:sheet-count">
+            <nlb:sheet-count value="6"/>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
