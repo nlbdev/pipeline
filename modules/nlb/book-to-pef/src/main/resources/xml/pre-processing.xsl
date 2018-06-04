@@ -12,7 +12,10 @@
         <xsl:variable name="clean" as="element()">
             <xsl:apply-templates mode="clean" select="."/>
         </xsl:variable>
-        <xsl:apply-templates select="$clean" mode="leaf-sections"/>
+        <xsl:variable name="leaf-sections" as="element()">
+            <xsl:apply-templates select="$clean" mode="leaf-sections"/>
+        </xsl:variable>
+        <xsl:apply-templates select="$leaf-sections" mode="keep-with-next-section"/>
     </xsl:template>
     
     <xsl:template match="@* | node()" mode="#all" priority="-5">
@@ -123,6 +126,10 @@
     <xsl:template match="html:body | html:section | dtbook:level1 | dtbook:level2 | dtbook:level3 | dtbook:level4 | dtbook:level5 | dtbook:level6" mode="leaf-sections">
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="#current"/>
+            <xsl:variable name="pages-estimate" select="string-length(normalize-space(string-join(.//text(),' '))) div 650" as="xs:double"/>
+            <xsl:if test="$pages-estimate le 3">
+                <xsl:attribute name="class" select="string-join((f:classes(.), 'keep-with-next-section'),' ')"/>
+            </xsl:if>
             <xsl:choose>
                 <xsl:when test="html:section | dtbook:level2 | dtbook:level3 | dtbook:level4 | dtbook:level5 | dtbook:level6">
                     <xsl:for-each-group select="*" group-adjacent="local-name() = ('section','level2','level3','level4','level5','level6')">
@@ -132,7 +139,15 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:element name="div" namespace="{current-group()[1]/namespace-uri()}">
-                                    <xsl:attribute name="class" select="'leaf-section'"/>
+                                    <xsl:variable name="pages-estimate" select="string-length(normalize-space(string-join(current-group()//text(),' '))) div 650" as="xs:double"/>
+                                    <xsl:choose>
+                                        <xsl:when test="$pages-estimate le 3">
+                                            <xsl:attribute name="class" select="'leaf-section keep-with-next-section'"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="class" select="'leaf-section'"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                     <xsl:apply-templates select="current-group()" mode="#current"/>
                                 </xsl:element>
                             </xsl:otherwise>
@@ -144,6 +159,37 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:body | html:section | dtbook:level1 | dtbook:level2 | dtbook:level3 | dtbook:level4 | dtbook:level5 | dtbook:level6 | *[local-name() = 'div' and f:classes(.) = 'leaf-section']" mode="keep-with-next-section">
+        <xsl:choose>
+            <xsl:when test="not(f:classes(.) = 'keep-with-next-section')">
+                <xsl:next-match/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy exclude-result-prefixes="#all">
+                    <xsl:variable name="result-classes" select="if (local-name() = ('body','section','level1','level2','level3','level4','level5','level6')) then f:classes(.)[not(. = 'leaf-section')] else f:classes(.)"/>
+                    <xsl:choose>
+                        <xsl:when test="exists((* | ancestor-or-self::*/following-sibling::*)[(local-name() = ('body','section','level1','level2','level3','level4','level5','level6')
+                                                                                                                            or local-name() = 'div' and f:classes(.) = 'leaf-section')
+                                                                                              and not(f:classes(.) = 'keep-with-next-section')])">
+                            <xsl:apply-templates select="@* except @class" mode="#current"/>
+                            <xsl:if test="count($result-classes)">
+                                <xsl:attribute name="class" select="string-join($result-classes, ' ')"/>
+                            </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="@* except @class" mode="#current"/>
+                            <xsl:variable name="result-classes" select="$result-classes[not(. = 'keep-with-next-section')]"/>
+                            <xsl:if test="count($result-classes)">
+                                <xsl:attribute name="class" select="string-join($result-classes, ' ')"/>
+                            </xsl:if>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:apply-templates select="node()" mode="#current"/>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:function name="f:types" as="xs:string*">
