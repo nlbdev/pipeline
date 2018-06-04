@@ -3,7 +3,8 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
     xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
     xmlns:pef="http://www.daisy.org/ns/2008/pef"
-    script="../resources/dtbook-to-pef-test.xpl">
+    script="../resources/dtbook-to-pef-test.xpl"
+    pending="Disabled to speed up tests. Focus is on HTML as input format.">
     
     <x:scenario label="basic structure" pending="Takes ≈ 20 minutes to run. Succeeds as of 6738c7d96.">
         <x:scenario label="≈ 10 kB">

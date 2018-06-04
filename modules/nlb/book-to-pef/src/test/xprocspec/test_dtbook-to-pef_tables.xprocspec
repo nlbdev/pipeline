@@ -3,7 +3,8 @@
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl">
+               script="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl"
+               pending="Disabled to speed up tests. Focus is on HTML as input format.">
     
     <x:scenario label="table caption">
         <x:call step="nlb:dtbook-to-pef">
