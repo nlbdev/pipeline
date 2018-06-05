@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.Iterables.size;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Term;
@@ -34,7 +36,6 @@ import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Function;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.concat;
-import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.transform;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
@@ -46,10 +47,13 @@ import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
+import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.common.TransformationException;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
+import static org.daisy.pipeline.braille.common.TransformProvider.util.partial;
+import static org.daisy.pipeline.braille.common.util.Iterables.combinations;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import static org.daisy.pipeline.braille.common.util.URIs.asURI;
@@ -79,25 +83,19 @@ public interface NLBTranslator {
 		@Activate
 		private void activate(ComponentContext context, final Map<?,?> properties) {
 			href = asURI(context.getBundleContext().getBundle().getEntry("xml/block-translate.xpl"));
-			otherLanguagesProvider
-			= memoize(new LiblouisTranslatorWithUndefinedDotsProvider(liblouisTranslatorProvider, "26", context));
+			otherLanguagesProvider = memoize(
+				TransformProvider.util.cast(
+					new LiblouisTranslatorWithUndefinedDotsProvider(liblouisTranslatorProvider, "26", context)));
 		}
-		
-		private final static Query grade0Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g0.utb");
-		private final static Query grade1Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g1.ctb");
-		private final static Query grade2Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g2.ctb");
-		private final static Query grade3Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g3.ctb");
-		private final static Query grade0Table8dot = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g0.utb");
-		private final static Query hyphenationTable = mutableQuery().add("libhyphen-table", "http://www.nlb.no/hyphen/hyph_nb_NO.dic");
-		private final static Query fallbackHyphenationTable1 = mutableQuery().add("libhyphen-table",
-		                                                                          "http://www.libreoffice.org/dictionaries/hyphen/hyph_nb_NO.dic");
-		private final static Query fallbackHyphenationTable2 = mutableQuery().add("hyphenator", "tex").add("locale", "nb");
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
 		
 		private final static List<String> supportedInput = ImmutableList.of("css","text-css");
 		private final static List<String> supportedOutput = ImmutableList.of("css","braille");
 		private final static List<String> supportedInputOutput = ImmutableList.of("dtbook","html");
+		
+		private final static Query uncontracted = query("(contraction:no)");
+		private final static Query contracted = query("(contraction:full)");
 		
 		/**
 		 * Recognized features:
@@ -134,95 +132,36 @@ public interface NLBTranslator {
 				// The default CSS disables contraction for other languages.
 			}
 			if (q.containsKey("translator"))
-				if ("nlb".equals(q.removeOnly("translator").getValue().get()))
-					if (q.containsKey("grade")) {
-						String v = q.removeOnly("grade").getValue().get();
-						final int grade;
-						if (v.equals("0"))
-							grade = 0;
-						else if (v.equals("1"))
-							grade = 1;
-						else if (v.equals("2"))
-							grade = 2;
-						else if (v.equals("3"))
-							grade = 3;
-						else
-							return empty;
-						final int dots;
-						if (q.containsKey("dots") && q.removeOnly("dots").getValue().get().equals("8"))
-							dots = 8;
-						else
-							dots = 6;
-						if (q.isEmpty()) {
-							Iterable<Hyphenator> hyphenators = concat(
-								logSelect(hyphenationTable, hyphenatorProvider),
-								concat(
-									logSelect(fallbackHyphenationTable1, hyphenatorProvider),
-									logSelect(fallbackHyphenationTable2, hyphenatorProvider)));
-							final Query liblouisTable;
-							if (dots == 8)
-								liblouisTable = grade0Table8dot;
-							else
-								liblouisTable = grade == 3 ? grade3Table : grade == 2 ? grade2Table : grade == 1 ? grade1Table : grade0Table;
-							return concat(
-								Iterables.transform(
-									concat(
-										concat(
-											Iterables.transform(
-												hyphenators,
-												new Function<Hyphenator,String>() {
-													public String _apply(Hyphenator h) {
-														return h.getIdentifier(); }}),
-											"liblouis"),
-										"none"),
-									new Function<String,Iterable<BrailleTranslator>>() {
-										public Iterable<BrailleTranslator> _apply(final String hyphenator) {
-											return concat(
-												transform(
-													logSelect(mutableQuery(liblouisTable)
-													              .add("hyphenator", hyphenator)
-													              .add("handle-non-standard-hyphenation", "defer"),
-													          liblouisTranslatorProvider),
-													new Function<LiblouisTranslator,Iterable<BrailleTranslator>>() {
-														public Iterable<BrailleTranslator> _apply(final LiblouisTranslator translator) {
-															return Iterables.transform(
-																logSelect(mutableQuery(grade0Table)
-																              .add("hyphenator", hyphenator)
-																              .add("handle-non-standard-hyphenation", "defer"),
-																          liblouisTranslatorProvider),
-																new Function<LiblouisTranslator,BrailleTranslator>() {
-																	public BrailleTranslator _apply(LiblouisTranslator grade0Translator) {
-																		return __apply(
-																			logCreate(
-																				new TransformImpl(grade, dots, translator, grade0Translator,
-																				                  otherLanguagesProvider,
-																				                  htmlOrDtbookOut))); }} ); }} )); }} )); }}
+				if ("nlb".equals(q.removeOnly("translator").getValue().get())) {
+					TransformProvider<BrailleTranslator> norwegianProvider = partial(q.asImmutable(), this.norwegianProvider);
+					try {
+						// check that main translators exist
+						norwegianProvider.get(uncontracted).iterator().next();
+						norwegianProvider.get(contracted).iterator().next();
+					} catch (NoSuchElementException e) {
+						return empty;
+					}
+					q.removeAll("grade");
+					q.removeAll("dots");
+					TransformProvider<BrailleTranslator> otherLanguagesProvider = partial(q, this.otherLanguagesProvider);
+					return Iterables.of(
+						logCreate(
+							new TransformImpl(norwegianProvider,
+							                  otherLanguagesProvider,
+							                  htmlOrDtbookOut)));
+				}
 			return empty;
 		}
-		
-		// mimicking liblouis behavior
-		private final static Pattern COMPUTER = Pattern.compile(
-			"(?<=^|[\\x20\t\\n\\r\\u2800\\xA0])[^\\x20\t\\n\\r\\u2800\\xA0]*"
-			+ "(?://|www\\.|\\.com|\\.edu|\\.gov|\\.mil|\\.net|\\.org|\\.no|\\.nu|\\.se|\\.dk|\\.fi|\\.ini|\\.doc|\\.docx"
-			+ "|\\.xml|\\.xsl|\\.htm|\\.html|\\.tex|\\.txt|\\.gif|\\.jpg|\\.png|\\.wav|\\.mp3|\\.m3u|\\.tar|\\.gz|\\.bz2|\\.zip)"
-			+ "[^\\x20\t\\n\\r\\u2800\\xA0]*"
-			+ "(?=[\\x20\t\\n\\r\\u2800\\xA0]|$)"
-		);
-		private final static String OPEN_COMPUTER = "\u2823"; // dots 126 (<)
-		private final static String CLOSE_COMPUTER = "\u281C"; // dots 345 (>)
 		
 		private class TransformImpl extends AbstractBrailleTranslator {
 			
 			private final XProc xproc;
-			private final LiblouisTranslator translator;
-			private final LiblouisTranslator grade0Translator;
-			private final TransformProvider<? extends BrailleTranslator> otherLanguageTranslators;
-			private final int grade;
-			private final int dots;
+			private final TransformProvider<BrailleTranslator> norwegianTranslator;
+			private final TransformProvider<BrailleTranslator> otherLanguageTranslators;
 			
-			private TransformImpl(int grade, int dots, LiblouisTranslator translator, LiblouisTranslator grade0Translator,
-			                      TransformProvider<? extends BrailleTranslator> otherLanguageTranslators,
-								  boolean htmlOrDtbookOut) {
+			private TransformImpl(TransformProvider<BrailleTranslator> norwegianTranslator,
+			                      TransformProvider<BrailleTranslator> otherLanguageTranslators,
+			                      boolean htmlOrDtbookOut) {
 				Map<String,String> options = ImmutableMap.<String,String>of(
 					"text-transform", mutableQuery().add("id", this.getIdentifier()).toString(),
 					// This will omit the <_ style="text-transform:none">
@@ -232,11 +171,8 @@ public interface NLBTranslator {
 					// set).
 					"no-wrap", String.valueOf(htmlOrDtbookOut));
 				xproc = new XProc(href, null, options);
-				this.translator = translator;
-				this.grade0Translator = grade0Translator;
-				this.otherLanguageTranslators = otherLanguageTranslators;
-				this.grade = grade;
-				this.dots = dots;
+				this.norwegianTranslator = memoize(new HandleComputerAndUncontractedProvider(norwegianTranslator));
+				this.otherLanguageTranslators = memoize(new HandleComputerAndUncontractedProvider(otherLanguageTranslators));
 			}
 			
 			@Override
@@ -274,13 +210,102 @@ public interface NLBTranslator {
 				}
 				
 				private java.lang.Iterable<String> transform(List<CSSStyledText> styledText, String lang) {
-					if (lang == null)
-						return transformNorwegian(styledText);
-					else
-						return transform(styledText, lang, null);
+					return handleComputerAndUncontracted(lang).fromStyledTextToBraille().transform(styledText);
+				}
+			};
+			
+			@Override
+			public LineBreakingFromStyledText lineBreakingFromStyledText() {
+				return lineBreakingFromStyledText;
+			}
+			
+			private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
+				
+				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText) {
+					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
+					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
+					String curLang = null;
+					for (CSSStyledText st : styledText) {
+						Map<String,String> attrs = st.getTextAttributes();
+						String lang = null;
+						if (attrs != null)
+							lang = attrs.remove("lang");
+						if (!(lang == null && curLang == null || lang == curLang)) {
+							if (!buffer.isEmpty()) {
+								lineIterators.add(transform(buffer, curLang));
+								buffer.clear(); }}
+						curLang = lang;
+						buffer.add(st); }
+					if (!buffer.isEmpty()) {
+						lineIterators.add(transform(buffer, curLang)); }
+					return concatLineIterators(lineIterators);
 				}
 				
-				private java.lang.Iterable<String> transformNorwegian(List<CSSStyledText> styledText) {
+				private LineIterator transform(List<CSSStyledText> styledText, String lang) {
+					return handleComputerAndUncontracted(lang).lineBreakingFromStyledText().transform(styledText);
+				}
+			};
+			
+			private BrailleTranslator handleComputerAndUncontracted(String lang) {
+				TransformProvider<BrailleTranslator> p;
+				MutableQuery q = mutableQuery();
+				if (lang == null) {
+					p = norwegianTranslator;
+				} else {
+					q.add("locale", lang);
+					// FIXME: for foreign languages, handle text-transform:(un)contracted, but don't detect computer braille?
+					p = otherLanguageTranslators;
+				}
+				try {
+					return p.get(q).iterator().next();
+				} catch (NoSuchElementException e) {
+					throw new TransformationException("Could not find a sub-translator for language " + lang);
+				}
+			}
+			
+			@Override
+			public String toString() {
+				return Objects.toStringHelper(NLBTranslator.class.getSimpleName())
+					// .add("grade", grade)
+					// .add("dots", dots)
+					.toString();
+			}
+		}
+		
+		// mimicking liblouis behavior
+		private final static Pattern COMPUTER = Pattern.compile(
+			"(?<=^|[\\x20\t\\n\\r\\u2800\\xA0])[^\\x20\t\\n\\r\\u2800\\xA0]*"
+			+ "(?://|www\\.|\\.com|\\.edu|\\.gov|\\.mil|\\.net|\\.org|\\.no|\\.nu|\\.se|\\.dk|\\.fi|\\.ini|\\.doc|\\.docx"
+			+ "|\\.xml|\\.xsl|\\.htm|\\.html|\\.tex|\\.txt|\\.gif|\\.jpg|\\.png|\\.wav|\\.mp3|\\.m3u|\\.tar|\\.gz|\\.bz2|\\.zip)"
+			+ "[^\\x20\t\\n\\r\\u2800\\xA0]*"
+			+ "(?=[\\x20\t\\n\\r\\u2800\\xA0]|$)"
+		);
+		private final static String OPEN_COMPUTER = "\u2823"; // dots 126 (<)
+		private final static String CLOSE_COMPUTER = "\u281C"; // dots 345 (>)
+		
+		/**
+		 * A braille translator that detects urls and e-mail addresses, and handles the CSS
+		 * text-transform values "uncontracted" and "contracted".
+		 */
+		private static class HandleComputerAndUncontracted extends AbstractBrailleTranslator {
+			
+			private final BrailleTranslator contractingTranslator;
+			private final BrailleTranslator nonContractingTranslator;
+			
+			private HandleComputerAndUncontracted(BrailleTranslator contractingTranslator,
+			                                      BrailleTranslator nonContractingTranslator) {
+				this.contractingTranslator = contractingTranslator;
+				this.nonContractingTranslator = nonContractingTranslator;
+			}
+			
+			@Override
+			public FromStyledTextToBraille fromStyledTextToBraille() {
+				return fromStyledTextToBraille;
+			}
+			
+			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
+				
+				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText) {
 					List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 					// which segments are an url or e-mail address
 					List<Boolean> computer = new ArrayList<Boolean>();
@@ -316,7 +341,7 @@ public interface NLBTranslator {
 						braille[i] = "";
 					int i = 0;
 					boolean curComputer = false;
-					for (String b : transform(segments, null, computer)) {
+					for (String b : transform(segments, computer)) {
 						if (!computer.get(i) && curComputer)
 							braille[mapping.get(i)] += CLOSE_COMPUTER;
 						else if (computer.get(i) && !curComputer)
@@ -329,7 +354,7 @@ public interface NLBTranslator {
 					return Arrays.asList(braille);
 				}
 				
-				private java.lang.Iterable<String> transform(List<CSSStyledText> styledText, String lang, List<Boolean> computer) {
+				private java.lang.Iterable<String> transform(List<CSSStyledText> styledText, List<Boolean> computer) {
 					List<String> transformed = new ArrayList<String>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					boolean curUncontracted = false;
@@ -350,6 +375,7 @@ public interface NLBTranslator {
 										// is the most logical situation in most cases. However the order in which
 										// "uncontracted" and "contracted" should overwrite each other is exactly the
 										// opposite. Therefore invert the list.
+										// FIXME: why is this not done in LineBreakingFromStyledText interface?
 										Iterator<Term<?>> it = Lists.reverse(values).iterator();
 										while (it.hasNext()) {
 											String tt = ((TermIdent)it.next()).getValue();
@@ -365,35 +391,20 @@ public interface NLBTranslator {
 								uncontracted = uncontracted || computer.get(i);
 						}
 						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
-							for (String s : transformWithContractionGrade(buffer, lang, curUncontracted))
+							for (String s : (curUncontracted ? nonContractingTranslator : contractingTranslator)
+							                .fromStyledTextToBraille().transform(buffer))
 								transformed.add(s);
 							buffer = new ArrayList<CSSStyledText>(); }
 						curUncontracted = uncontracted;
 						buffer.add(st);
 						i++; }
 					if (!buffer.isEmpty())
-						for (String s : transformWithContractionGrade(buffer, lang, curUncontracted))
+						for (String s : (curUncontracted ? nonContractingTranslator : contractingTranslator)
+						                .fromStyledTextToBraille().transform(buffer))
 							transformed.add(s);
 					return transformed;
 				}
 			};
-			
-			private java.lang.Iterable<String> transformWithContractionGrade(List<CSSStyledText> styledText, String lang, boolean uncontracted) {
-				FromStyledTextToBraille t; {
-					if (lang == null) {
-						if (!uncontracted)
-							t = translator.fromStyledTextToBraille();
-						else
-							t = grade0Translator.fromStyledTextToBraille(); }
-					else {
-						MutableQuery q = mutableQuery().add("locale", lang).add("contraction", uncontracted ? "no" : "full");
-						try {
-							t = otherLanguageTranslators.get(q).iterator().next().fromStyledTextToBraille(); }
-						catch (NoSuchElementException e) {
-							throw new TransformationException("Could not find a sub-translator for language " + lang
-							                                  + " (" + (uncontracted ? "un" : "") + "contracted)"); }}}
-				return t.transform(styledText);
-			}
 			
 			@Override
 			public LineBreakingFromStyledText lineBreakingFromStyledText() {
@@ -403,33 +414,6 @@ public interface NLBTranslator {
 			private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
 				
 				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText) {
-					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
-					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
-					String curLang = null;
-					for (CSSStyledText st : styledText) {
-						Map<String,String> attrs = st.getTextAttributes();
-						String lang = null;
-						if (attrs != null)
-							lang = attrs.remove("lang");
-						if (!(lang == null && curLang == null || lang == curLang)) {
-							if (!buffer.isEmpty()) {
-								lineIterators.add(transform(buffer, curLang));
-								buffer.clear(); }}
-						curLang = lang;
-						buffer.add(st); }
-					if (!buffer.isEmpty()) {
-						lineIterators.add(transform(buffer, curLang)); }
-					return concatLineIterators(lineIterators);
-				}
-				
-				private LineIterator transform(List<CSSStyledText> styledText, String lang) {
-					if (lang == null)
-						return transformNorwegian(styledText);
-					else
-						return transform(styledText, lang, false);
-				}
-				
-				private LineIterator transformNorwegian(List<CSSStyledText> styledText) {
 					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					boolean curComputer = false;
@@ -443,7 +427,7 @@ public interface NLBTranslator {
 									if (computer != curComputer && !buffer.isEmpty()) {
 										if (curComputer)
 											lineIterators.add(new NonBreakingBrailleString(OPEN_COMPUTER));
-										lineIterators.add(transform(buffer, null, curComputer));
+										lineIterators.add(transform(buffer, curComputer));
 										if (curComputer)
 											lineIterators.add(new NonBreakingBrailleString(CLOSE_COMPUTER));
 										buffer = new ArrayList<CSSStyledText>();
@@ -461,13 +445,13 @@ public interface NLBTranslator {
 					if (!buffer.isEmpty()) {
 						if (curComputer)
 							lineIterators.add(new NonBreakingBrailleString(OPEN_COMPUTER));
-						lineIterators.add(transform(buffer, null, curComputer));
+						lineIterators.add(transform(buffer, curComputer));
 						if (curComputer)
 							lineIterators.add(new NonBreakingBrailleString(CLOSE_COMPUTER)); }
 					return concatLineIterators(lineIterators);
 				}
 				
-				private LineIterator transform(List<CSSStyledText> styledText, String lang, boolean computer) {
+				private LineIterator transform(List<CSSStyledText> styledText, boolean computer) {
 					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					boolean curUncontracted = false;
@@ -490,40 +474,17 @@ public interface NLBTranslator {
 										if (values.isEmpty())
 											style.removeProperty("text-transform"); }}}}
 						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
-							lineIterators.add(transformWithContractionGrade(buffer, lang, curUncontracted));
+							lineIterators.add((curUncontracted ? nonContractingTranslator : contractingTranslator)
+							                  .lineBreakingFromStyledText().transform(buffer));
 							buffer = new ArrayList<CSSStyledText>(); }
 						curUncontracted = uncontracted;
 						buffer.add(st); }
 					if (!buffer.isEmpty())
-						lineIterators.add(transformWithContractionGrade(buffer, lang, curUncontracted));
+						lineIterators.add((curUncontracted ? nonContractingTranslator : contractingTranslator)
+						                  .lineBreakingFromStyledText().transform(buffer));
 					return concatLineIterators(lineIterators);
 				}
-				
-				private LineIterator transformWithContractionGrade(List<CSSStyledText> styledText, String lang, boolean uncontracted) {
-					LineBreakingFromStyledText t; {
-						if (lang == null) {
-							if (!uncontracted)
-								t = translator.lineBreakingFromStyledText();
-							else
-								t = grade0Translator.lineBreakingFromStyledText(); }
-						else {
-							MutableQuery q = mutableQuery().add("locale", lang).add("contraction", uncontracted ? "no" : "full");
-							try {
-								t = otherLanguageTranslators.get(q).iterator().next().lineBreakingFromStyledText(); }
-							catch (NoSuchElementException e) {
-								throw new TransformationException("Could not find a sub-translator for language " + lang
-								                                  + " (" + (uncontracted ? "un" : "") + "contracted)"); }}}
-					return t.transform(styledText);
-				}
 			};
-			
-			@Override
-			public String toString() {
-				return Objects.toStringHelper(NLBTranslator.class.getSimpleName())
-					.add("grade", grade)
-					.add("dots", dots)
-					.toString();
-			}
 		}
 		
 		private static class NonBreakingBrailleString implements BrailleTranslator.LineIterator {
@@ -625,8 +586,131 @@ public interface NLBTranslator {
 		= new ArrayList<TransformProvider<Hyphenator>>();
 		private TransformProvider.util.MemoizingProvider<Hyphenator> hyphenatorProvider
 		= memoize(dispatch(hyphenatorProviders));
+		private TransformProvider<BrailleTranslator> norwegianProvider
+		= memoize(
+			TransformProvider.util.cast(
+				new NorwegianLiblouisTranslatorProvider(liblouisTranslatorProvider, hyphenatorProvider)));
 		// created in activate method
-		private TransformProvider.util.MemoizingProvider<LiblouisTranslator> otherLanguagesProvider;
+		private TransformProvider<BrailleTranslator> otherLanguagesProvider;
+		
+		private final static Query grade0Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g0.utb");
+		private final static Query grade1Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g1.ctb");
+		private final static Query grade2Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g2.ctb");
+		private final static Query grade3Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g3.ctb");
+		private final static Query grade0Table8dot = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/no-no-g0.utb");
+		private final static Query hyphenationTable = mutableQuery().add("libhyphen-table", "http://www.nlb.no/hyphen/hyph_nb_NO.dic");
+		private final static Query fallbackHyphenationTable1 = mutableQuery().add("libhyphen-table",
+		                                                                          "http://www.libreoffice.org/dictionaries/hyphen/hyph_nb_NO.dic");
+		private final static Query fallbackHyphenationTable2 = mutableQuery().add("hyphenator", "tex").add("locale", "nb");
+		
+		/*
+		 * Provides translators based on the Norwegian Liblouis table and the Norwegian hyphenation
+		 * table. "contraction" determines whether contraction is applied or not. When the value is
+		 * "full", contraction is applied with the contraction grade determined by "grade". "dots"
+		 * can be "6" or "8".
+		 */
+		private static class NorwegianLiblouisTranslatorProvider
+				extends AbstractTransformProvider<LiblouisTranslator> implements BrailleTranslatorProvider<LiblouisTranslator> {
+			
+			final TransformProvider<LiblouisTranslator> liblouisTranslatorProvider;
+			final TransformProvider<Hyphenator> hyphenatorProvider;
+			
+			NorwegianLiblouisTranslatorProvider(TransformProvider<LiblouisTranslator> liblouisTranslatorProvider,
+			                                    TransformProvider<Hyphenator> hyphenatorProvider) {
+				this.liblouisTranslatorProvider = liblouisTranslatorProvider;
+				this.hyphenatorProvider = hyphenatorProvider;
+			}
+			
+			protected Iterable<LiblouisTranslator> _get(final Query query) {
+				MutableQuery q = mutableQuery(query);
+				final int grade;
+				if (q.containsKey("contraction") && q.removeOnly("contraction").getValue().get().equals("full")) {
+					if (q.containsKey("grade")) {
+						String v = q.removeOnly("grade").getValue().get();
+						if (v.equals("0"))
+							grade = 0;
+						else if (v.equals("1"))
+							grade = 1;
+						else if (v.equals("2"))
+							grade = 2;
+						else if (v.equals("3"))
+							grade = 3;
+						else
+							return empty;
+					} else
+						return empty;
+				} else {
+					q.removeAll("grade");
+					grade = 0;
+				}
+				final int dots;
+				if (q.containsKey("dots") && q.removeOnly("dots").getValue().get().equals("8"))
+					dots = 8;
+				else
+					dots = 6;
+				final Locale locale;
+				if (q.containsKey("locale")) {
+					locale = parseLocale(q.removeOnly("locale").getValue().get());
+				} else
+					locale = null;
+				if (q.isEmpty()) {
+					final Query liblouisTable;
+					if (dots == 8)
+						liblouisTable = grade0Table8dot;
+					else
+						liblouisTable = grade == 3 ? grade3Table : grade == 2 ? grade2Table : grade == 1 ? grade1Table : grade0Table;
+					Iterable<Hyphenator> hyphenators = concat(
+						logSelect(hyphenationTable, hyphenatorProvider),
+						concat(
+							logSelect(fallbackHyphenationTable1, hyphenatorProvider),
+							logSelect(fallbackHyphenationTable2, hyphenatorProvider)));
+					return concat(
+						Iterables.transform(
+							concat(
+								concat(
+									Iterables.transform(
+										hyphenators,
+										new Function<Hyphenator,String>() {
+											public String _apply(Hyphenator h) {
+												return h.getIdentifier(); }}),
+									"liblouis"),
+								"none"),
+							new Function<String,Iterable<LiblouisTranslator>>() {
+								public Iterable<LiblouisTranslator> _apply(final String hyphenator) {
+									return logSelect(mutableQuery(liblouisTable)
+									                    .add("hyphenator", hyphenator)
+									                    .add("handle-non-standard-hyphenation", "defer"),
+									                 liblouisTranslatorProvider); }} ));
+				} else
+					return empty;
+			}
+			
+			private final static Iterable<LiblouisTranslator> empty = Iterables.<LiblouisTranslator>empty();
+			
+		}
+		
+		private static class HandleComputerAndUncontractedProvider extends AbstractTransformProvider<BrailleTranslator>
+				implements BrailleTranslatorProvider<BrailleTranslator> {
+			
+			private final TransformProvider<BrailleTranslator> backingProvider;
+			
+			HandleComputerAndUncontractedProvider(TransformProvider<BrailleTranslator> backingProvider) {
+				this.backingProvider = backingProvider;
+			}
+			
+			protected Iterable<BrailleTranslator> _get(final Query query) {
+				TransformProvider<BrailleTranslator> partial = partial(query, backingProvider);
+				return Iterables.transform(
+					combinations(
+						Maps.toMap(
+							ImmutableList.of(contracted, uncontracted),
+							contraction -> partial.get(contraction))),
+					new Function<Map<Query,BrailleTranslator>,BrailleTranslator>() {
+						public BrailleTranslator _apply(Map<Query,BrailleTranslator> subTranslators) {
+							return new HandleComputerAndUncontracted(subTranslators.get(contracted),
+							                                         subTranslators.get(uncontracted)); }});
+			}
+		}
 		
 		/*
 		 * Provides Liblouis translators that return a fixed dot pattern for unknown
@@ -634,11 +718,12 @@ public interface NLBTranslator {
 		 * represented correctly by their table URL only. That means that the queries may
 		 * not contain "hyphenator" or "handle-non-standard-hyphenation".
 		 */
-		private static class LiblouisTranslatorWithUndefinedDotsProvider extends AbstractTransformProvider<LiblouisTranslator> {
+		private static class LiblouisTranslatorWithUndefinedDotsProvider
+				extends AbstractTransformProvider<LiblouisTranslator> implements BrailleTranslatorProvider<LiblouisTranslator> {
 			
 			final TransformProvider<LiblouisTranslator> backingProvider;
 			final File undefinedTable;
-				
+			
 			LiblouisTranslatorWithUndefinedDotsProvider(TransformProvider<LiblouisTranslator> backingProvider,
 			                                            String dots,
 			                                            ComponentContext componentContext) {
