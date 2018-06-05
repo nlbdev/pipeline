@@ -133,6 +133,11 @@ public interface NLBTranslator {
 			}
 			if (q.containsKey("translator"))
 				if ("nlb".equals(q.removeOnly("translator").getValue().get())) {
+					final boolean forceNorwegian;
+					if (q.containsKey("force-norwegian") && q.removeOnly("force-norwegian").getValue().get().equals("true"))
+						forceNorwegian = true;
+					else
+						forceNorwegian = false;
 					TransformProvider<BrailleTranslator> norwegianProvider = partial(q.asImmutable(), this.norwegianProvider);
 					try {
 						// check that main translators exist
@@ -147,7 +152,7 @@ public interface NLBTranslator {
 					return Iterables.of(
 						logCreate(
 							new TransformImpl(norwegianProvider,
-							                  otherLanguagesProvider,
+							                  forceNorwegian ? norwegianProvider : otherLanguagesProvider,
 							                  htmlOrDtbookOut)));
 				}
 			return empty;
@@ -604,10 +609,11 @@ public interface NLBTranslator {
 		private final static Query fallbackHyphenationTable2 = mutableQuery().add("hyphenator", "tex").add("locale", "nb");
 		
 		/*
-		 * Provides translators based on the Norwegian Liblouis table and the Norwegian hyphenation
-		 * table. "contraction" determines whether contraction is applied or not. When the value is
-		 * "full", contraction is applied with the contraction grade determined by "grade". "dots"
-		 * can be "6" or "8".
+		 * Provides translators based on the Norwegian Liblouis table. "contraction" determines
+		 * whether contraction is applied or not. When the value is "full", contraction is applied
+		 * with the contraction grade determined by "grade". "dots" can be "6" or "8". "locale"
+		 * determines the hyphenation table. When "locale" is absent, Norwegian hyphenation rules
+		 * are applied.
 		 */
 		private static class NorwegianLiblouisTranslatorProvider
 				extends AbstractTransformProvider<LiblouisTranslator> implements BrailleTranslatorProvider<LiblouisTranslator> {
@@ -659,11 +665,15 @@ public interface NLBTranslator {
 						liblouisTable = grade0Table8dot;
 					else
 						liblouisTable = grade == 3 ? grade3Table : grade == 2 ? grade2Table : grade == 1 ? grade1Table : grade0Table;
-					Iterable<Hyphenator> hyphenators = concat(
-						logSelect(hyphenationTable, hyphenatorProvider),
-						concat(
-							logSelect(fallbackHyphenationTable1, hyphenatorProvider),
-							logSelect(fallbackHyphenationTable2, hyphenatorProvider)));
+					Iterable<Hyphenator> hyphenators;
+					if (locale != null)
+						hyphenators = logSelect(mutableQuery().add("locale", locale.getLanguage()), hyphenatorProvider);
+					else
+						hyphenators = concat(
+							logSelect(hyphenationTable, hyphenatorProvider),
+							concat(
+								logSelect(fallbackHyphenationTable1, hyphenatorProvider),
+								logSelect(fallbackHyphenationTable2, hyphenatorProvider)));
 					return concat(
 						Iterables.transform(
 							concat(

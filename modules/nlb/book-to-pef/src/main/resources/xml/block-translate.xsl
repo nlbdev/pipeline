@@ -14,7 +14,6 @@
 	<xsl:variable name="main-locale" select="'no'"/>
 	
 	<xsl:param name="text-transform" required="yes"/>
-	<xsl:param name="force-norwegian" select="'true'"/>
 	
 	<xsl:template mode="#default before after" match="css:block">
 		<xsl:param name="context" as="element()"/>
@@ -26,7 +25,7 @@
 		<xsl:variable name="lang" select="string(ancestor-or-self::*[@xml:lang][1]/string(@xml:lang))"/>
 		<xsl:variable name="new-text-nodes" as="xs:string*">
 			<xsl:apply-templates select="node()[1]" mode="emphasis">
-				<xsl:with-param name="segments" select="if ($lang=$main-locale or $force-norwegian='true')
+				<xsl:with-param name="segments" select="if ($lang=$main-locale)
 				                                        then pf:text-transform($text-transform, $text, $style)
 				                                        else pf:text-transform($text-transform, $text, $style,
 				                                                               for $_ in 1 to count($text) return $lang)"/>
