@@ -45,7 +45,7 @@
                 <choice>
                     <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0" xml:lang="no">
                         <value>Enkel</value>
-                        <value>Dobbel</value>
+                        <value>Åpen</value>
                     </documentation>
                     <value>single</value>
                     <value>double</value>
