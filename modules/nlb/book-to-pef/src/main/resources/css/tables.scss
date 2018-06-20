@@ -1,0 +1,214 @@
+/* -------------------------------------------------------------------------- */
+/*                Tables                                                      */
+/* -------------------------------------------------------------------------- */
+
+table {
+    &%table-matrix {
+        display: table;
+        -obfl-table-col-spacing: 2;
+        -obfl-preferred-empty-space: 0;
+        td > p,
+        th > p {
+            display: inline;
+        }
+    }
+    
+    &%table-matrix-transposed {
+        @extend %table-matrix;
+        render-table-by: column;
+    }
+    
+    &%table-linearized {
+        display: block;
+        render-table-by: row;
+        &:has(> thead          th):not(:has(> :not(thead         ) th)),
+        &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+            render-table-by: column;
+        }
+        &::list-item {
+            display: block;
+        }
+        &::table-by(row),
+        &::table-by(column) {
+            display: block;
+            text-indent: -2;
+            margin-left: 2;
+            &::list-item {
+                &::before {
+                    content: ' ⠆ ';
+                    text-transform: none;
+                    hyphens: initial;
+                }
+                &:first-child {
+                    &::before {
+                        content: none;
+                    }
+                }
+            }
+        }
+        td > p,
+        th > p {
+            display: inline;
+        }
+    }
+    
+    &%table-as-list {
+        display: block;
+        render-table-by: row;
+        &:has(> thead          th):not(:has(> :not(thead         ) th)),
+        &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+            render-table-by: column;
+        }
+        th::after {
+            content: ': ';
+        }
+        &::list-item {
+            display: block;
+        }
+        &::table-by(row),
+        &::table-by(column) {
+            display: block;
+            margin-left: 2;
+            &::list-item {
+                display: block;
+                margin-left: 2;
+                text-indent: -2;
+                &:first-child {
+                    text-indent: -4;
+                    // does not work:
+                    // > p { ... }
+                }
+            }
+        }
+        td > p,
+        th > p {
+            // "text-indent: inherit" does not work so we just drop p's altogether
+            display: inline;
+        }
+        td:blank::after {
+            content: "(tom)";
+        }
+    }
+    
+    &.table-matrix {
+        @extend %table-matrix;
+    }
+    
+    &.table-matrix-transposed {
+        @extend %table-matrix-transposed;
+    }
+    
+    &.table-linearized {
+        @extend %table-linearized;
+    }
+    
+    &.table-as-list {
+        @extend %table-as-list;
+    }
+    
+    @if ($default-table-class == 'table-as-list') {
+        &:not([class]) {
+            display: block;
+            render-table-by: row;
+            &:has(> thead          th):not(:has(> :not(thead         ) th)),
+            &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+                render-table-by: column;
+            }
+            th::after {
+                content: ': ';
+            }
+            &::list-item {
+                display: block;
+            }
+            td {
+                margin-left: 2;
+                text-indent: -2;
+            }
+            td > p,
+            th > p {
+                display: inline;
+            }
+            td:empty::after {
+                content: "(tom)";
+            }
+        }
+        // FIXME: otherwise SASS moves the :not([class]) after the ::table-by(row)
+        &:not([class])::table-by(row),
+        &:not([class])::table-by(column) {
+            display: block;
+            margin-left: 2;
+            &::list-item {
+                display: block;
+                margin-left: 2;
+                text-indent: -2;
+                &:first-child {
+                    text-indent: -4;
+                }
+            }
+        }
+    } @else if ($default-table-class == 'table-linearized') {
+        &:not([class]) {
+            display: block;
+            render-table-by: row;
+            &:has(> thead          th):not(:has(> :not(thead         ) th)),
+            &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
+                render-table-by: column;
+            }
+            &::list-item {
+                display: block;
+            }
+            td > p,
+            th > p {
+                display: inline;
+            }
+        }
+        // FIXME: otherwise SASS moves the :not([class]) after the ::table-by(row)
+        &:not([class])::table-by(row),
+        &:not([class])::table-by(column) {
+            display: block;
+            text-indent: -2;
+            margin-left: 2;
+            &::list-item {
+                &::before {
+                    content:" ⠆ ";
+                    text-transform: none;
+                    hyphens: initial;
+                }
+                &:first-child {
+                    &::before {
+                        content: none;
+                    }
+                }
+            }
+        }
+    } @else {
+        &:not([class]) {
+            @extend %#{$default-table-class};
+        }
+    }
+    
+    caption {
+        display: block;
+        text-indent: 2;
+        margin-top: 1;
+        margin-bottom: 1;
+        text-align: left;
+    }
+
+    caption::after,
+    &:not(:has(caption))::before {
+        display: block;
+        text-indent: 2;
+        margin-top: 1;
+        margin-bottom: 1;
+        content: 'Tabell starter';
+    }
+    
+    &::after {
+        display: block;
+        text-indent: 2;
+        margin-top: 1;
+        margin-bottom: 1;
+        content: 'Tabell slutter';
+    }
+}

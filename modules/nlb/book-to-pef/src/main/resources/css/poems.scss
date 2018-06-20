@@ -1,0 +1,18 @@
+/* -------------------------------------------------------------------------- */
+/*                Poems                                                       */
+/* -------------------------------------------------------------------------- */
+
+poem, section[epub|type~='z3998:poem'], div[epub|type~='z3998:poem'] {
+        text-indent: 2;
+        text-align: left;
+}
+
+linegroup, section.linegroup, div.linegroup {
+        margin-bottom: 1;
+        text-indent: -2;
+}
+
+line, p.line {
+        margin-left: 2;
+        text-indent: -2;
+}

@@ -1,0 +1,109 @@
+/* -------------------------------------------------------------------------- */
+/*                Headlines                                                     */
+/* -------------------------------------------------------------------------- */
+
+/* depth 6 */
+h6 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
+        margin-left: 1;
+        margin-right: 5;
+        margin-top: 1;
+        text-align: left;
+        text-indent: 0;
+}
+ 
+/* depth 5 */
+h5, level1.part h6, *[epub|type~='part'] h6 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
+        margin-left: 1;
+        margin-right: 5;
+        margin-top: 1;
+        text-align: left;
+        text-indent: 0;
+}
+ 
+/* depth 4 */
+h4, level1.part h5, *[epub|type~='part'] h5 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
+        margin-left: 1;
+        margin-right: 5;
+        margin-top: 1;
+        text-align: left;
+        text-indent: 0;
+}
+
+/* depth 3 */
+h3, level1.part h4, *[epub|type~='part'] h4 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 0;
+        margin-left: 2;
+        margin-right: 2;
+        margin-top: 1;
+        text-align: center;
+        text-indent: 0;
+}
+ 
+/* depth 2 */
+h2, level1.part h3, *[epub|type~='part'] h3 {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-bottom: 1;
+        margin-left: 2;
+        margin-right: 2;
+        margin-top: 2;
+        text-align: center;
+        text-indent: 0;
+}
+
+/* depth 1 */
+h1, level1.part h2, *[epub|type~='part'] h2 {
+        border-bottom: ⠉;
+        border-left: none;
+        border-right: none;
+        border-top: ⠉;
+        margin-bottom: 1;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 2;
+        text-align: center;
+        text-indent: 0;
+}
+
+/* part */
+level1.part h1, *[epub|type~='part'] h1 {
+        border-bottom: ⠤;
+        border-left: ⠇;
+        border-right: ⠸;
+        border-top: ⠉;
+        margin-bottom: 1;
+        margin-left: 1;
+        margin-right: 5;
+        margin-top: 2;
+        text-align: center;
+        text-indent: 0;
+}
+
+/* level1 without headline */
+level1:not(.part, .pef-titlepage, .pef-about):not(:has(> h1, > hx, > .leaf-section > h1, > .leaf-section > hx)),
+level1.part > level2:not(:has(> h2, > hx, > .leaf-section > h2, > .leaf-section > hx)),
+body > section:not([epub|type~='part'], .pef-titlepage, .pef-about, [epub|type~='z3998:poem']):not(:has(> h1, > .leaf-section > h1)),
+[epub|type~='part']:not([epub|type~='z3998:poem']) > section:not(:has(> h2, > .leaf-section > h2)) {
+        padding-top: 5;
+}

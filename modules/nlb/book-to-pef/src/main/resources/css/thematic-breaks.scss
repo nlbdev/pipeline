@@ -1,0 +1,19 @@
+/* -------------------------------------------------------------------------- */
+/*                Thematic breaks                                             */
+/* -------------------------------------------------------------------------- */
+
+/* Note: The DTBook classes precedingseparator and precedingemptyline */
+/*       are replaced with hr elements during preprocessing.          */
+
+hr::before {
+        display: block;
+        text-align: center;
+        content: "⠄⠄⠄⠄⠄⠄⠄⠄";
+        margin-bottom: 1;
+        margin-top: 1;
+}
+
+hr.emptyline::before {
+        content: "";
+        margin-bottom: 0;
+}

@@ -1,0 +1,54 @@
+/* -------------------------------------------------------------------------- */
+/*                Images                                                      */
+/* -------------------------------------------------------------------------- */
+
+/* Show image captions */
+@if $include-captions {
+        imggroup, figure:has(img) {
+                display: block;
+                
+                caption, figcaption {
+                        display: block;
+                        margin-top: 1;
+                        margin-bottom: 1;
+                        margin-left: 2;
+                        text-indent: 2;
+                        text-align: left;
+                        
+                        &::before {
+                                content: "Bildetekst: ";
+                        }
+                }
+        }
+} @else {
+        imggroup, figure:has(img) {
+            caption, figcaption {
+                display: none;
+            }
+        }
+}
+
+/* Show alt text for images with alt text */
+@if $include-images {
+        img[alt]:not([alt='']):not([alt='image'])::after {
+                display: block;
+                content: "Bilde. " attr(alt);
+                margin-top: 1;
+                margin-bottom: 1;
+                margin-left: 2;
+                text-indent: 2;
+                text-align: left;
+        }
+        
+        /* Don't render decorative images */
+        img:not([alt])::after, img[alt='']::after, img[alt='image']::after {
+                content: none;
+        }
+} @else {
+        img {
+                display: none;
+                &::after {
+                        content: none;
+                }
+        }
+}

@@ -1,0 +1,13 @@
+/* -------------------------------------------------------------------------- */
+/*                Text formatting                                             */
+/* -------------------------------------------------------------------------- */
+
+sub {
+    // FIXME: use "-louis-sub" when supported
+    text-transform: -louis-emph-4;
+}
+
+sup {
+    // FIXME: use "-louis-super" when supported
+    text-transform: -louis-emph-5;
+}

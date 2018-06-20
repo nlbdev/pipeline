@@ -1,0 +1,19 @@
+/* -------------------------------------------------------------------------- */
+/*                Special classes                                             */
+/* -------------------------------------------------------------------------- */
+
+.Rammetekst {
+        margin-top: 1;
+        margin-bottom: 1;
+        text-indent: 2;
+        text-align: left;
+        margin-left: 2;
+}
+
+.Rammetekst::before {
+        content: "Rammetekst: ";
+}
+
+[showin^="x"], [class*="showin-x"], .hidden-braille {
+        display: none;
+}

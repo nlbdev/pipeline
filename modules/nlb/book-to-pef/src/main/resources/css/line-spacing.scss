@@ -1,0 +1,27 @@
+/* -------------------------------------------------------------------------- */
+/*               line spacing                                                 */
+/* -------------------------------------------------------------------------- */
+
+@if $line-spacing == double {
+        :root {
+                line-height: 1;
+
+                /* to cancel out generic rule */
+        }
+
+        frontmatter level1:not(.pef-titlepage,
+                               .pef-about),
+        bodymatter,
+        body:not([epub|type~='backmatter'],
+                 .pef-titlepage,
+                 .pef-about),
+        section:not([epub|type~='backmatter'],
+                    .pef-titlepage,
+                    .pef-about) {
+                line-height: 2;
+        }
+
+        @page body:left {
+                margin-top: 1;
+        }
+}

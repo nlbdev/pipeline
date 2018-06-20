@@ -1,0 +1,91 @@
+/* -------------------------------------------------------------------------- */
+/*                page                                                        */
+/* -------------------------------------------------------------------------- */
+
+/* Count pages continuously but hide them in generated pages */
+@page {
+        // set counter-increment explicitly because otherwise it will
+        // be implicitly set to "pre-page" or "post-page" when in a
+        // volume area context.
+        counter-increment: page;
+        margin-right: 1;
+        @if $show-print-page-numbers {
+            margin-left: 2;
+        } @else {
+            margin-left: 1;
+        }
+}
+
+book, body {
+        page: body;
+}
+
+.pef-titlepage, .pef-about,
+#generated-volume-toc, #generated-document-toc {
+        page: auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                braille and print page numbers                              */
+/* -------------------------------------------------------------------------- */
+
+/* Don't show pagenumber inline. Store reference in case we want to show marker in margin. */
+pagenum, *[epub|type~='pagebreak'] {
+        display: none;
+        -obfl-marker: pagenum;
+}
+
+/* Show page numbers in bodymatter and backmatter. */
+@if $show-print-page-numbers {
+        /* defined in dtbook-to-pef:
+        pagenum {
+                string-set: print-page content();
+        }*/
+        bodymatter pagenum,
+        rearmatter pagenum {
+                string-set: print-page "⠿" content();
+        }
+        [epub|type~='pagebreak'] {
+                &[title] {
+                        string-set: print-page "⠿" attr(title);
+                }
+                &:not([title]) {
+                        string-set: print-page "⠿" content();
+                }
+        }
+        [epub|type~='frontmatter'] [epub|type~='pagebreak'] {
+                &[title] {
+                        string-set: print-page attr(title);
+                }
+                &:not([title]) {
+                        string-set: print-page content();
+                }
+        }
+        
+        /* clear print page number after frontmatter (so that 'last' page does not point from bodymatter to frontmatter) */
+        bodymatter {
+            string-set: print-page "";
+        }
+        /* bodymatter sections are not quaranteed to have a epub:type (top-level sections without are implicitly bodymatter) */
+        body[epub|type~='frontmatter']:not(:has(+ body[epub|type~='frontmatter']))::after,
+        section[epub|type~='frontmatter']:not(:has(+ section[epub|type~='frontmatter']))::after {
+            string-set: print-page "";
+        }
+}
+
+@page body {
+        @if $show-print-page-numbers {
+                @bottom-right {
+                        content: string(print-page, last);
+                }
+                @left {
+                    content: -obfl-marker-indicator(pagenum, '⠿');
+                }
+        }
+
+        @if $show-braille-page-numbers {
+                @bottom-center {
+                        content: counter(page);
+                }
+        }
+}

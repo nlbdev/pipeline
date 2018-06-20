@@ -1,0 +1,38 @@
+/* -------------------------------------------------------------------------- */
+/*                                  general                                   */
+/* -------------------------------------------------------------------------- */
+head {
+        display: none;
+}
+
+body[epub|type~='cover'], section[epub|type~='cover'], level1.jacketcopy {
+    display: none;
+}
+
+level1,
+bodymatter, rearmatter, body:not([epub|type~='frontmatter']) {
+        display: block;
+}
+
+frontmatter, *[epub|type~='frontmatter'] {
+        display: none;
+        &:has(> *:not(doctitle,
+                      h1[epub|type~='fulltitle'],
+                      h1[epub|type~='z3998:covertitle'],
+                      docauthor,
+                      h1[epub|type~='z3998:author'],
+                      .pef-titlepage,
+                      .pef-about
+                      )) {
+                display: block;
+        }
+}
+
+blockquote, sidebar, aside[epub|type~='sidebar'], epigraph, aside[epub|type~='epigraph'],
+.Rammetekst, poem, section[epub|type~='z3998:poem'], div[epub|type~='z3998:poem'], linegroup, section.linegroup, div.linegroup, line, p.line {
+        display: block;
+}
+
+doctitle, h1[epub|type~='fulltitle'], h1[epub|type~='z3998:covertitle'], docauthor, h1[epub|type~='z3998:author'] {
+        display: none;
+}
