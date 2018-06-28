@@ -54,8 +54,8 @@ class ScenarioData extends BlockProcessor {
 		return !isDataEmpty();
 	}
 	
-    protected void newRowGroupSequence(VerticalSpacing vs) {
-        RowGroupSequence rgs = new RowGroupSequence(vs);
+	protected void newRowGroupSequence(RowGroupSequenceStartPosition pos) {
+		RowGroupSequence rgs = new RowGroupSequence(pos);
 		dataGroups.add(rgs);
 	}
 	

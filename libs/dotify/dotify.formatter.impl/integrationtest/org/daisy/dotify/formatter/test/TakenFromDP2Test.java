@@ -404,4 +404,9 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 			null
 		);
 	}
+	@Test
+	public void testBreakBeforeSheet() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/dp2/break-before-sheet-input.obfl",
+		        "resource-files/dp2/break-before-sheet-expected.pef", false);
+	}
 }

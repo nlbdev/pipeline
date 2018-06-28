@@ -61,6 +61,7 @@ public class PageSequenceBuilder2 {
 	private int keepNextSheets;
 	private int pageCount = 0;
 	private int dataGroupsIndex;
+	private boolean nextEmpty = false;
 
 	//From view, temporary
 	private final int fromIndex;
@@ -115,6 +116,7 @@ public class PageSequenceBuilder2 {
 		this.data = RowGroupDataSource.copyUnlessNull(template.data);
 		this.keepNextSheets = template.keepNextSheets;
 		this.pageCount = template.pageCount;
+		this.nextEmpty = template.nextEmpty;
 		this.fromIndex = template.fromIndex;
 		this.toIndex = template.toIndex;
 	}
@@ -179,6 +181,10 @@ public class PageSequenceBuilder2 {
 	private PageImpl nextPageInner(int pageNumberOffset, boolean hyphenateLastLine, Optional<TransitionContent> transitionContent) throws PaginatorException, RestartPaginationException // pagination must be restarted in PageStructBuilder.paginateInner
 	{
 		PageImpl current = newPage(pageNumberOffset);
+		if (nextEmpty) {
+			nextEmpty = false;
+			return current;
+		}
 		while (dataGroupsIndex<dataGroups.size() || (data!=null && !data.isEmpty())) {
 			if ((data==null || data.isEmpty()) && dataGroupsIndex<dataGroups.size()) {
 				//pick up next group
@@ -187,10 +193,10 @@ public class PageSequenceBuilder2 {
 				BlockContext bc = BlockContext.from(blockContext)
 						.flowWidth(master.getFlowWidth() - master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth())
 						.build();
-				data = new RowGroupDataSource(master, bc, rgs.getBlocks(), rgs.getVerticalSpacing(), cd);
+				data = new RowGroupDataSource(master, bc, rgs.getBlocks(), rgs.getStartPosition(), cd);
 				dataGroupsIndex++;
-				if (((RowGroupDataSource)data).getVerticalSpacing()!=null) {
-					VerticalSpacing vSpacing = ((RowGroupDataSource)data).getVerticalSpacing();
+				if (((RowGroupDataSource)data).getStartPosition() instanceof VerticalSpacing) {
+					VerticalSpacing vSpacing = (VerticalSpacing)((RowGroupDataSource)data).getStartPosition();
 					float size = 0;
 					for (RowGroup g : data.getRemaining()) {
 						size += g.getUnitSize();
@@ -222,7 +228,7 @@ public class PageSequenceBuilder2 {
 				// And on copy...
 				copy = SplitPointHandler.skipLeading(copy, index).getTail();
 				List<RowGroup> seqTransitionText = transitionContent.isPresent()
-						?new RowGroupDataSource(master, bc, transitionContent.get().getInSequence(), null, cd).getRemaining()
+						?new RowGroupDataSource(master, bc, transitionContent.get().getInSequence(), StartOnNewPage.INSTANCE, cd).getRemaining()
 						:Collections.emptyList();
 				SplitPointSpecification spec;
 				boolean addTransition = true;
@@ -309,8 +315,17 @@ public class PageSequenceBuilder2 {
 				if (hasPageAreaCollection() && current.pageAreaSpaceNeeded() > master.getPageArea().getMaxHeight()) {
 					reassignCollection();
 				}
-				if (!data.isEmpty() || (current!=null && dataGroupsIndex<dataGroups.size() && dataGroups.get(dataGroupsIndex).getVerticalSpacing()==null)) {
+				if (!data.isEmpty()) {
 					return current;
+				}
+				if (current!=null && dataGroupsIndex<dataGroups.size()) {
+					RowGroupSequenceStartPosition nextStart = dataGroups.get(dataGroupsIndex).getStartPosition();
+					if (nextStart instanceof StartOnNewPage || nextStart instanceof StartOnNewSheet) {
+						if (nextStart instanceof StartOnNewSheet && master.duplex() && pageCount%2==1) {
+							nextEmpty = true;
+						}
+						return current;
+					}
 				}
 			}
 		}

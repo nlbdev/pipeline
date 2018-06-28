@@ -8,12 +8,12 @@ import org.daisy.dotify.formatter.impl.core.Block;
 class RowGroupSequence {
 	private final List<Block> blocks;
 	private final List<RowGroup> group;
-	private final VerticalSpacing vSpacing;
+	private final RowGroupSequenceStartPosition startPosition;
 
-	public RowGroupSequence(VerticalSpacing vSpacing) {
+	public RowGroupSequence(RowGroupSequenceStartPosition startPosition) {
 		this.blocks = new ArrayList<>();
 		this.group = new ArrayList<RowGroup>();
-		this.vSpacing = vSpacing;
+		this.startPosition = startPosition;
 	}
 	
 	/**
@@ -26,7 +26,7 @@ class RowGroupSequence {
 		for (RowGroup rg : template.group) {
 			group.add(new RowGroup(rg));
 		}
-		this.vSpacing = template.vSpacing;
+		this.startPosition = template.startPosition;
 	}
 
 	@Deprecated
@@ -46,8 +46,7 @@ class RowGroupSequence {
 		}
 	}
 	
-    VerticalSpacing getVerticalSpacing() {
-        return vSpacing;
-    }
-
+	RowGroupSequenceStartPosition getStartPosition() {
+		return startPosition;
+	}
 }

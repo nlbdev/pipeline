@@ -7,5 +7,5 @@
 	remote = https://github.com/brailleapps/dotify.formatter.impl
 	branch = master
 	commit = 9f4d3d9796b8ce374c47a24c771305831577e211
-	parent = 615489cbd256924b0b6af48dde356609da71c024
+	parent = 4638d02d1360cc66065e61c596ac6dd1a88a14e9
 	cmdver = 0.3.1
