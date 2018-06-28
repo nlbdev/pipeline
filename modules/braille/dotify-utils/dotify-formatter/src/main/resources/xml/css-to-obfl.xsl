@@ -250,8 +250,6 @@
                                                             <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
                                                         </xsl:if>
                                                     </xsl:variable>
-                                                    <xsl:for-each-group select="current-group()" group-ending-with="css:_[*/@css:page-break-after='right']">
-                                                        <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:page-break-before='right']">
                                                             <xsl:variable name="counter-set" as="element()*"
                                                                           select="current-group()[1]/@css:counter-set/css:parse-counter-set(.,0)"/>
                                                             <xsl:if test="$counter-set[not(@name=$counter-increment/@name)]">
@@ -400,8 +398,6 @@
                                                             </xsl:choose>
                                                         </xsl:for-each-group>
                                                     </xsl:for-each-group>
-                                                </xsl:for-each-group>
-                                            </xsl:for-each-group>
                                         </xsl:element>
                                     </xsl:if>
                                 </xsl:for-each>
@@ -477,7 +473,9 @@
                                            [@name='counter-increment']
                                            [css:parse-counter-set(@value,1)[@name='page']]"/>
             <xsl:for-each-group select="$sections/css:_[not(@css:flow)]" group-starting-with="*[@css:counter-set]">
+                <xsl:variable name="first-sequence" as="xs:boolean" select="position()=1"/>
                 <xsl:for-each-group select="current-group()" group-adjacent="string(@css:page)">
+                    <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
                     <xsl:variable name="page-style" select="current-grouping-key()"/>
                     <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@style=$page-style][1]"/>
                     <xsl:variable name="page-properties" as="element()*"
@@ -494,9 +492,8 @@
                             <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
                         </xsl:if>
                     </xsl:variable>
-                    <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:page-break-before='right']">
-                        <xsl:for-each-group select="current-group()" group-ending-with="css:_[*/@css:page-break-after='right']">
                             <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:volume-break-before='always']">
+                                <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
                                 <sequence css:page="{$page-style/@style}">
                                     <xsl:variable name="counter-set" as="element()*"
                                                   select="current-group()[1]/@css:counter-set/css:parse-counter-set(.,0)"/>
@@ -523,7 +520,7 @@
                                                          select="current-group()[1]/(@* except (@css:page|@css:volume|@css:string-entry|@css:counter-set))"/>
                                     <xsl:apply-templates mode="sequence-attr"
                                                          select="current-group()[1]/*/@css:volume-break-before[.='always']">
-                                        <xsl:with-param name="first-sequence" tunnel="yes" select="position()=1"/>
+                                        <xsl:with-param name="first-sequence" tunnel="yes" select="$first-sequence"/>
                                     </xsl:apply-templates>
                                     <xsl:apply-templates mode="sequence"
                                                          select="current-group()[1]/(@css:string-entry|*)"/>
@@ -533,8 +530,6 @@
                                                          select="current-group()[position()&gt;1]/*"/>
                                 </sequence>
                             </xsl:for-each-group>
-                        </xsl:for-each-group>
-                    </xsl:for-each-group>
                 </xsl:for-each-group>
             </xsl:for-each-group>
     </xsl:template>
@@ -1392,12 +1387,17 @@
         <xsl:attribute name="break-before" select="'page'"/>
     </xsl:template>
     
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:page-break-before[.='right']">
+        <xsl:attribute name="break-before" select="'sheet'"/>
+    </xsl:template>
+    
     <!--
         ignore page-break-before on first box of sequence
     -->
     <xsl:template mode="block-attr
                         table-attr"
-                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.='always']">
+                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.=('always','right')]">
         <xsl:param name="first-in-sequence" as="xs:boolean" tunnel="yes" select="true()"/>
         <xsl:if test="not($first-in-sequence)">
             <xsl:next-match/>
@@ -1426,7 +1426,7 @@
     </xsl:template>
     
     <!--
-        page-break-after:always becomes break-before="page" on next block unless there is no next block
+        page-break-after:always|right becomes break-before="page|sheet" on next block unless there is no next block
     -->
     <xsl:template priority="1"
                   mode="block"
@@ -1436,20 +1436,20 @@
     </xsl:template>
     <xsl:template mode="block-attr"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='always']"/>
-    
-    <!--
-        'right' is handled by starting new sequences
-    -->
+    <xsl:template priority="1"
+                  mode="block"
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)][@css:page-break-after[.='right']]">
+        <xsl:next-match/>
+        <block break-before="sheet"/>
+    </xsl:template>
     <xsl:template mode="block-attr"
-                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.='right']|
-                         css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='right']"/>
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='right']"/>
     
     <!--
         FIXME: 'left' not supported
     -->
     <xsl:template mode="block-attr"
-                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.='left']|
-                         css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='left']"/>
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='left']"/>
     
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:page-break-inside[.='avoid']">

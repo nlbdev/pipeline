@@ -461,37 +461,34 @@
         <p:for-each>
             <pxi:propagate-page-break>
                 <p:documentation>
-                    Propagate css:page-break-before, css:page-break-after, css:volume-break-before
-                    and css:volume-break-after attributes, so that splitting can be performed
-                    without creating empty boxes, and also insert forced page breaks to satisfy the
-                    'page' and 'volume' properties. <!-- depends on make-anonymous-block-boxes -->
+                    Insert forced page breaks to satisfy the 'page' and 'volume' properties. <!--
+                    depends on make-anonymous-block-boxes -->
                 </p:documentation>
             </pxi:propagate-page-break>
             <p:group>
                 <p:documentation>
-                    Convert css:page-break-after="right" to a css:page-break-before on the following
-                    sibling, and css:volume-break-after="always" to a css:volume-break-before on the
-                    following sibling.
+                    Convert css:page-break-after="auto-right" to a css:page-break-before on the
+                    following sibling, and css:volume-break-after="always" to a
+                    css:volume-break-before on the following sibling.
                 </p:documentation>
-                <p:add-attribute match="css:box[@type='block'][preceding-sibling::*[1]/@css:page-break-after='right']"
+                <p:add-attribute match="css:box[@type='block'][preceding-sibling::*[1]/@css:page-break-after='auto-right']"
                                  attribute-name="css:page-break-before"
-                                 attribute-value="right"/>
+                                 attribute-value="auto-right"/>
                 <p:add-attribute match="css:box[@type='block'][preceding-sibling::*[1]/@css:volume-break-after='always']"
                                  attribute-name="css:volume-break-before"
                                  attribute-value="always"/>
-                <p:delete match="css:box[@type='block'][following-sibling::*]/@css:page-break-after[.='right']"/>
+                <p:delete match="css:box[@type='block'][following-sibling::*]/@css:page-break-after[.='auto-right']"/>
                 <p:delete match="css:box[@type='block'][following-sibling::*]/@css:volume-break-after[.='always']"/>
             </p:group>
             <css:split split-before="css:box[preceding::css:box]
                                             [@css:counter-set or
-                                             @css:page-break-before='right' or
+                                             @css:page-break-before='auto-right' or
                                              @css:volume-break-before='always' or
                                              @type='table']"
                        split-after="css:box[following::css:box]
                                            [@type='table']">
                 <p:documentation>
-                    Split before and after tables, before css:counter-set attributes, before
-                    css:page-break-before attributes with value 'right', and before
+                    Split before and after tables, before css:counter-set attributes, and before
                     css:volume-break-before attributes with value 'always'. <!-- depends on
                     make-boxes and propagate-page-break -->
                 </p:documentation>
@@ -540,6 +537,18 @@
                         all the wait to the root box.)
                     </p:documentation>
                 </pxi:propagate-page-break>
+                <p:group>
+                    <p:documentation>
+                        Rename 'auto-right' (the special forced page break value to satisfy the
+                        'page' property) to 'right'.
+                    </p:documentation>
+                    <p:add-attribute match="css:box[@css:page-break-after='auto-right']"
+                                     attribute-name="css:page-break-after"
+                                     attribute-value='right'/>
+                    <p:add-attribute match="css:box[@css:page-break-before='auto-right']"
+                                     attribute-name="css:page-break-before"
+                                     attribute-value='right'/>
+                </p:group>
                 <p:group>
                     <p:documentation>
                         Convert css:page-break-before="avoid" to a css:page-break-after on the
