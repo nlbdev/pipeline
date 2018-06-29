@@ -12,8 +12,6 @@ level1.part, *[epub|type~='part'] {
         
         /* Always start a new volume before a new part */
         volume-break-before: always;
-        page-break-before: auto; // FIXME: page-break-before: right can not be used in combination with volume-break-before: always
-                                 // see https://github.com/daisy/pipeline-mod-braille/issues/173
     }
 }
 
