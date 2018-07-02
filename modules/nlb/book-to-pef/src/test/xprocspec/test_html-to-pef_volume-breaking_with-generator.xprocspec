@@ -4,7 +4,7 @@
                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                xmlns:epub="http://www.idpf.org/2007/ops"
-               script="../resources/html-to-pef-test.xpl">
+               script="../resources/html-to-pef-test.xpl" focus="">
     
     <x:scenario label="_">
         <x:call step="nlb:dtbook-to-pef-test">
