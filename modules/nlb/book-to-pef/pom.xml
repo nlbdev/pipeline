@@ -356,7 +356,7 @@
                     <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt"
                             encoding="ISO-8859-1">
                       <fileset dir="${project.basedir}/src/main/resources/hyph/hyph_nb_NO_standard_dictionary">
-                        <include name="**/språkbanken-4.txt"/>
+                        <include name="**/språkbanken-1.txt"/>
                       </fileset>
                     </concat>
                     <javac srcdir="${project.basedir}/src/main/patgen" includes="add_weights.java" destdir="${project.basedir}/target"/>

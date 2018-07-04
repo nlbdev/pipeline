@@ -47,25 +47,27 @@ done
 
 #cat $DICTIONARY_FILE | grep '\.[^0]\|-' >/dev/null && exit 1
 
-# 10 bad hyphens
-#cat $DICTIONARY_FILE | awk -F'.' '{print NF-1}' | paste -sd+ - | bc
+set +x
 
-# 788383 missed hyphens
-#cat $DICTIONARY_FILE | awk -F'-' '{print NF-1}' | paste -sd+ - | bc
+echo -n "bad hyphens:          " >&2
+cat $DICTIONARY_FILE | awk -F'.' '{print NF-1}' | paste -sd+ - | bc >&2
 
-# ...of which 771951 inferred
-#cat $DICTIONARY_FILE | awk -F'-0' '{print NF-1}' | paste -sd+ - | bc
+echo -n "missed hyphens:       " >&2
+cat $DICTIONARY_FILE | awk -F'-' '{print NF-1}' | paste -sd+ - | bc >&2
 
-# ...and 16432 not inferred
-#cat $DICTIONARY_FILE | awk -F'-[^0]' '{print NF-1}' | paste -sd+ - | bc
+# echo -n "...of which inferred: " >&2
+# cat $DICTIONARY_FILE | awk -F'-0' '{print NF-1}' | paste -sd+ - | bc >&2
 
-# 841112 good hyphens
-#cat $DICTIONARY_FILE | awk -F'*' '{print NF-1}' | paste -sd+ - | bc
+# echo -n "...and not inferred:  " >&2
+# cat $DICTIONARY_FILE | awk -F'-[^0]' '{print NF-1}' | paste -sd+ - | bc >&2
 
-# ...of which 282436 inferred
-#cat $DICTIONARY_FILE | awk -F'*0' '{print NF-1}' | paste -sd+ - | bc
+echo -n "good hyphens:         " >&2
+cat $DICTIONARY_FILE | awk -F'*' '{print NF-1}' | paste -sd+ - | bc >&2
 
-# ...and 558676 not inferred
-#cat $DICTIONARY_FILE | awk -F'*[^0]' '{print NF-1}' | paste -sd+ - | bc
+# echo -n "...of which inferred: " >&2
+# cat $DICTIONARY_FILE | awk -F'*0' '{print NF-1}' | paste -sd+ - | bc >&2
+
+# echo -n "...and not inferred:  " >&2
+# cat $DICTIONARY_FILE | awk -F'*[^0]' '{print NF-1}' | paste -sd+ - | bc >&2
 
 cat $PATTERNS_FILE
