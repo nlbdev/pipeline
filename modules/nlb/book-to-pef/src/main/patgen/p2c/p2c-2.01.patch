@@ -1,0 +1,137 @@
+--- a/p2c-2.01/src/Makefile
++++ b/p2c-2.01/src/Makefile
+@@ -38,6 +38,8 @@ MANFILE = p2c.cat          # human-readable manual (for cat.1)
+ 
+ # Compiler options
+ CC = cc                    # you may wish to use gcc here instead
++RANLIB = ranlib
++AR = ar
+ OPT = # -O		   # uncomment this for optimization
+ DEB = # -g		   # uncomment this for debugging
+ DEFS =	-DTEST_MALLOC      # place other -D types of things here # TDS 2015nov18
+@@ -102,7 +104,7 @@ makeproto: makeproto.c
+ 
+ # Making the p2c runtime library
+ libp2c.a: $(LIBOBJS)
+-	ar r libp2c.a $(LIBOBJS) $(OTHERLIBOBJS)
++	$(AR) r libp2c.a $(LIBOBJS) $(OTHERLIBOBJS)
+ 
+ p2clib.o: p2clib.c
+ 	$(CC) -c $(CFLAGS) p2clib.c
+@@ -175,7 +177,7 @@ $(BINDIR)/p2cc: p2cc
+ 
+ $(LIBDIR)/libp2c.a: libp2c.a
+ 	$(COPY)  libp2c.a     $(LIBDIR)/libp2c.a
+-	if [ -f /usr/bin/ranlib -o -f /bin/ranlib ]; then ranlib $(LIBDIR)/libp2c.a; fi
++	$(RANLIB) $(LIBDIR)/libp2c.a
+ 
+ $(MANDIR)/p2c.1: $(MANFILE)
+ 	$(COPY)  $(MANFILE)   $(MANDIR)/p2c.1
+diff --git a/p2c-2.01/src/p2c.h b/p2c-2.01/src/p2c.h
+--- a/p2c-2.01/src/p2c.h
++++ b/p2c-2.01/src/p2c.h
+@@ -270,7 +270,7 @@ typedef struct {
+ #endif
+ 
+ 
+-extern Void    PASCAL_MAIN  PP( (int, Char **) );
++extern Void    __stdcall PASCAL_MAIN  PP( (int, Char **) );
+ extern Char    **P_argv;
+ extern int     P_argc;
+ extern short   P_escapecode;
+@@ -315,8 +315,8 @@ extern int      _OutMem     PV();
+ extern int      _CaseCheck  PV();
+ extern int      _NilCheck   PV();
+ extern int	_Escape     PP( (int) );
+-extern int	_EscIO      PP( (int) );
+-extern int	_EscIO2     PP( (int, Char *) );
++extern int	__stdcall _EscIO      PP( (int) );
++extern int	__stdcall _EscIO2     PP( (int, Char *) );
+ 
+ extern long     ipow        PP( (long, long) );
+ extern long     P_imax      PP( (long, long) );
+@@ -331,8 +331,8 @@ extern Char    *strpad      PP( (Char *, Char *, int, int) );
+ extern int      strpos2     PP( (Char *, Char *, int) );
+ extern long     memavail    PV();
+ extern int      P_peek      PP( (FILE *) );
+-extern int      P_eof       PP( (FILE *) );
+-extern int      P_eoln      PP( (FILE *) );
++extern int      __stdcall P_eof       PP( (FILE *) );
++extern int      __stdcall P_eoln      PP( (FILE *) );
+ extern Void     P_readpaoc  PP( (FILE *, Char *, int) );
+ extern Void     P_readlnpaoc PP( (FILE *, Char *, int) );
+ extern long     P_maxpos    PP( (FILE *) );
+diff --git a/p2c-2.01/src/p2clib.c b/p2c-2.01/src/p2clib.c
+--- a/p2c-2.01/src/p2clib.c
++++ b/p2c-2.01/src/p2clib.c
+@@ -37,7 +37,7 @@ __p2c_jmp_buf *__top_jb;
+ 
+ 
+ 
+-void PASCAL_MAIN(argc, argv)
++void __stdcall PASCAL_MAIN(argc, argv)
+ int argc;
+ char **argv;
+ {
+@@ -466,7 +466,7 @@ FILE *f;
+    stdin is broken; remove the special case for it to be broken in a
+    different way. */
+ 
+-int P_eof(f)
++int __stdcall P_eof(f)
+ FILE *f;
+ {
+     register int ch;
+@@ -489,7 +489,7 @@ FILE *f;
+ 
+ /* Check if at end of line (or end of entire file). */
+ 
+-int P_eoln(f)
++int __stdcall P_eoln(f)
+ FILE *f;
+ {
+     register int ch;
+@@ -1088,14 +1088,14 @@ int code;
+     exit(EXIT_FAILURE);
+ }
+ 
+-int _EscIO(code)
++int __stdcall _EscIO(code)
+ int code;
+ {
+     P_ioresult = code;
+     return _Escape(-10);
+ }
+ 
+-int _EscIO2(code, name)
++int __stdcall _EscIO2(code, name)
+ int code;
+ char *name;
+ {
+diff --git a/p2c-2.01/src/trans.c b/p2c-2.01/src/trans.c
+--- a/p2c-2.01/src/trans.c
++++ b/p2c-2.01/src/trans.c
+@@ -559,9 +559,9 @@ void saveoldfile(fname)
+ char *fname;
+ {
+ #if defined(unix) || defined(__unix) || defined(CAN_LINK)
+-    (void) unlink(format_s("%s~", fname));
++    (void) P_unlink(format_s("%s~", fname));
+     if (link(fname, format_s("%s~", fname)) == 0)
+-        (void) unlink(fname);
++        (void) P_unlink(fname);
+ #endif
+ }
+ 
+diff --git a/p2c-2.01/src/trans.h b/p2c-2.01/src/trans.h
+--- a/p2c-2.01/src/trans.h
++++ b/p2c-2.01/src/trans.h
+@@ -1864,7 +1864,7 @@ extern Expr *new_array_size;
+ /* Our library omits declarations for these functions! */
+ 
+ int link           PP( (char *, char *) );
+-int unlink         PP( (char *) );
++int P_unlink         PP( (char *) );
+ 
+ 
+ 

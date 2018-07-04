@@ -14,7 +14,7 @@ patgen() {
          $DICTIONARY_FILE \
          $PATTERN_FILE \
          $PATOUT_FILE \
-         $CURDIR/src/main/resources/hyph/alphabet \
+         src/main/resources/hyph/alphabet \
          1 \
          1 \
          $HYPH_LEVEL \
@@ -25,23 +25,23 @@ patgen() {
          1
 }
 
-DICTIONARY_FILE=$CURDIR/target/pattmp.0
+DICTIONARY_FILE=target/pattmp.0
 cat > $DICTIONARY_FILE
 
-PATTERNS_FILE=$CURDIR/src/main/resources/hyph/hyph_nb_NO_standard_base.pat
+PATTERNS_FILE=src/main/resources/hyph/hyph_nb_NO_standard_base.pat
 
-rm -f $CURDIR/target/patgen.log
-touch $CURDIR/target/patgen.log
+rm -f target/patgen.log
+touch target/patgen.log
 
 for level in 1 2; do
-    PATOUT_FILE=$CURDIR/target/generated-resources/hyph/hyph_nb_NO_standard.pat.$level
+    PATOUT_FILE=target/generated-resources/hyph/hyph_nb_NO_standard.pat.$level
     patgen $level \
            $DICTIONARY_FILE \
            $PATTERNS_FILE \
            $PATOUT_FILE \
-           >> $CURDIR/target/patgen.log
-    mv pattmp.$level $CURDIR/target/
-    DICTIONARY_FILE=$CURDIR/target/pattmp.$level
+           >> target/patgen.log
+    mv pattmp.$level target/
+    DICTIONARY_FILE=target/pattmp.$level
     PATTERNS_FILE=$PATOUT_FILE
 done
 

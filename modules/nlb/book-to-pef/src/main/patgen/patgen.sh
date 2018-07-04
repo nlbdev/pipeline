@@ -1,10 +1,9 @@
 ﻿#!/usr/bin/env bash
 
 set -e
-if ! which patgen >/dev/null; then
-    echo "patgen is required but not installed"
-    exit 1
-fi
+
+CURDIR=$(cd $(dirname "$0") && pwd)
+
 DICTIONARY_FILE=${1}
 PATTERN_FILE=${2}
 PATOUT_FILE=${3}
@@ -17,11 +16,10 @@ PAT_FINISH=${9}
 GOOD_WEIGHT=${10}
 BAD_WEIGHT=${11}
 THRESHOLD=${12}
-cd $(dirname "$0")
 FIFO=tmp
 rm -f $FIFO
 mkfifo $FIFO
-patgen $DICTIONARY_FILE $PATTERN_FILE $PATOUT_FILE $TRANSLATE_FILE <$FIFO &
+$CURDIR/patgen $DICTIONARY_FILE $PATTERN_FILE $PATOUT_FILE $TRANSLATE_FILE <$FIFO &
 echo $LEFT_HYPHEN_MIN $RIGHT_HYPHEN_MIN >$FIFO
 echo $HYPH_LEVEL $HYPH_LEVEL >$FIFO
 echo $PAT_START $PAT_FINISH >$FIFO
@@ -36,4 +34,3 @@ else
     rm -f $PATOUT_FILE pattmp.$HYPH_LEVEL $FIFO
     exit 1
 fi
-

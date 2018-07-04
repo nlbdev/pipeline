@@ -1,0 +1,72 @@
+--- a/patgen.c
++++ b/patgen.c
+@@ -20,9 +20,9 @@
+ 
+ /*27:*/
+ 
+-#define triesize        55000L
++#define triesize        4000000
+ 
+-#define triecsize       26000
++#define triecsize       4000000
+ #define maxops          4080
+ #define maxval          10
+ #define maxdot          15
+@@ -33,7 +33,7 @@
+ /*:27*/
+ 
+ /*12:*/
+-typedef Char textchar;
++typedef uchar textchar;
+ 
+ typedef uchar ASCIIcode;
+ 
+@@ -67,9 +67,9 @@ typedef short optype;
+ 
+ typedef char wordindex;
+ 
+-typedef unsigned short triepointer;
++typedef unsigned int triepointer;
+ 
+-typedef short triecpointer;
++typedef unsigned int triecpointer;
+ 
+ typedef struct opword {
+   unsigned dot : 4, val : 4, op : 12;
+@@ -1713,15 +1713,26 @@ Char *argv[];
+ {
+   valtype FORLIM;
+   dottype FORLIM1;
++  int exit_value = EXIT_SUCCESS;
+ 
+   PASCAL_MAIN(argc, argv);
+-  if (setjmp(_JL9999))
++  if (setjmp(_JL9999)) {
++    exit_value = EXIT_FAILURE;
+     goto _L9999;
++  }
+   pattmp = NULL;
+   patout = NULL;
+   translate = NULL;
+   patterns = NULL;
+   dictionary = NULL;
++  if (argc != 5) {
++    fprintf(stdout, "Need exactly four arguments.\n");
++    exit(EXIT_FAILURE);
++  }
++  dictionary = fopen(argv[1], "r");
++  patterns = fopen(argv[2], "r");
++  patout = fopen(argv[3], "w");
++  translate = fopen(argv[4], "r");
+   initialize();
+   initpatterntrie();
+   readtranslate();
+@@ -1833,7 +1844,7 @@ _L9999:
+     fclose(patout);
+   if (pattmp != NULL)
+     fclose(pattmp);
+-  exit(EXIT_SUCCESS);
++  exit(exit_value);
+ }  /*:94*/
+ 
+ 

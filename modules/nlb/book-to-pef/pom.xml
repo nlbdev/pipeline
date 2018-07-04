@@ -359,7 +359,7 @@
                         <include name="**/språkbanken-4.txt"/>
                       </fileset>
                     </concat>
-                    <javac srcdir="${project.basedir}" includes="add_weights.java" destdir="${project.basedir}/target"/>
+                    <javac srcdir="${project.basedir}/src/main/patgen" includes="add_weights.java" destdir="${project.basedir}/target"/>
                     <java classname="add_weights" classpath="${project.basedir}/target" fork="yes" failonerror="yes"
                           input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary.txt"
                           output="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary_weighted.txt"
@@ -370,17 +370,18 @@
                             encoding="ISO-8859-1">
                       <fileset dir="${project.basedir}/src/main/resources/hyph/hyph_nb_NO_nonstandard_dictionary" />
                     </concat>
+                    <exec executable="make" dir="${project.basedir}/src/main/patgen" failonerror="yes"/>
                     <exec executable="bash" failonerror="yes"
                           input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard_dictionary_weighted.txt"
                           output="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_standard.pat"
                           error="${project.basedir}/target/make-standard-patterns.log">
-                      <arg value="${project.basedir}/make-standard-patterns.sh" />
+                      <arg value="${project.basedir}/src/main/patgen/make-standard-patterns.sh" />
                     </exec>
                     <exec executable="perl" failonerror="yes"
                           input="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard_dictionary.txt"
                           output="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO_nonstandard.pat"
                           error="${project.basedir}/target/make-nonstandard-patterns.log">
-                      <arg value="${project.basedir}/make-nonstandard-patterns.pl" />
+                      <arg value="${project.basedir}/src/main/patgen/make-nonstandard-patterns.pl" />
                     </exec>
                     <concat destfile="${project.basedir}/target/generated-resources/hyph/hyph_nb_NO.pat" encoding="ISO-8859-1">
                       <filelist>
