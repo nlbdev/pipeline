@@ -7,10 +7,10 @@
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 exclude-inline-prefixes="#all"
                 name="main"
-                type="nlb:dtbook-to-pef-test"
+                type="nlb:html-to-pef-test"
                 version="1.0">
     
-    <p:input port="source" primary="true" px:name="source" px:media-type="application/x-dtbook+xml"/>
+    <p:input port="source" primary="true" px:name="source" px:media-type="application/xhtml+xml"/>
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml"/>
     
     <p:option name="temp-dir" required="true"/>

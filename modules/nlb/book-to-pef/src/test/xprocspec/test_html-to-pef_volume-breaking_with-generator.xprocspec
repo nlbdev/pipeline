@@ -7,47 +7,48 @@
                script="../resources/html-to-pef-test.xpl">
     
     <x:scenario label="_">
-        <x:call step="nlb:dtbook-to-pef-test">
+        <x:call step="nlb:html-to-pef-test">
             <x:option name="show-print-page-numbers" select="'false'"/>
             <x:option name="show-braille-page-numbers" select="'false'"/>
             <x:option name="toc-depth" select="0"/>
             <x:option name="maximum-number-of-pages" select="10"/>
         </x:call>
         
-        <x:scenario label="Regression test for issue #118: Failed to complete volume division in dotify:obfl-to-pef">
+        <x:scenario label="Regression test for issue #118: Failed to complete volume division in dotify:obfl-to-pef" pending="https://github.com/nlbdev/pipeline/issues/118">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
                         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
                             <head>
-                                <meta name="dtb:uid" content="123456"/>
-                                <meta name="dc:Title" content="Title"/>
-                                <meta name="dc:Identifier" content="123456"/>
-                                <meta name="track:Guidelines" content="2015-1"/>
-                                <meta name="track:Supplier" content="Supplier"/>
-                                <meta name="dc:Creator" content="Lastname, Firstname"/>
-                                <meta name="dc:Language" content="no"/>
-                                <meta name="dc:Source" content="urn:isbn:123-45-678-9012-3"/>
-                                <meta name="dc:Format" content="DTBook"/>
-                                <meta name="dc:Publisher" content="NLB"/>
-                                <meta name="dc:Date" content="2017-10-13"/>
+                                <meta charset="UTF-8"/>
+                                <title>Title</title>
+                                <meta name="dc:identifier" content="123456"/>
+                                <meta name="nordic:guidelines" content="2015-1"/>
+                                <meta name="nordic:supplier" content="Supplier"/>
+                                <meta name="dc:creator" content="Lastname, Firstname"/>
+                                <meta name="dc:language" content="no"/>
+                                <meta name="dc:source" content="urn:isbn:123-45-678-9012-3"/>
+                                <meta name="dc:format" content="EPUB3"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:date" content="2017-10-13"/>
                                 <meta name="dcterms:modified" content="2017-10-13T11:27:16+00:00"/>
                             </head>
                             <body>
-                                
                                 <section epub:type="frontmatter titlepage">
                                     <h1 epub:type="fulltitle" class="title">doctitle</h1>
                                     <p epub:type="z3998:author" class="docauthor">docauthor</p>
                                 </section>
-                                <section epub:type="frontmatter" id="ded" class="dedication">
-                                    <generate xmlns="http://www.daisy.org/z3986/2005/dtbook/" generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
-                                    <blockquote xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                                
+                                <section epub:type="frontmatter dedication" id="ded" class="dedication">
+                                    <generate generate-name="div" generate-id="page_" generate-counter="page" epub:type="pagebreak" class="page-normal"/>
+                                    <blockquote>
                                         <generate generate-name="p" generate-text-length="100"/>
                                     </blockquote>
-                                    <generate xmlns="http://www.daisy.org/z3986/2005/dtbook/" generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                    <generate generate-name="div" generate-id="page_" generate-counter="page" epub:type="pagebreak" class="page-normal"/>
                                 </section>
-                                <generate xmlns="http://www.daisy.org/z3986/2005/dtbook/" generate-name="level1" generate-id="chapter_" generate-count="45" class="chapter">
-                                    <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                
+                                <generate generate-name="section" generate-id="chapter_" generate-count="45" class="chapter" epub:type="bodymatter chapter">
+                                    <generate generate-name="div" generate-id="page_" generate-counter="page" epub:type="pagebreak" class="page-normal"/>
                                     <h1>Chapter headline</h1>
                                     <blockquote>
                                         <p>
@@ -69,25 +70,27 @@
                                             <generate generate-name="p" generate-text-length="329"/>
                                             <generate generate-name="p" generate-text-length="80"/>
                                         </generate>
-                                        <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                        <generate generate-name="div" generate-id="page_" generate-counter="page" epub:type="pagebreak" class="page-normal"/>
                                     </generate>
                                     <generate generate-count="4">
-                                        <poem>
-                                            <linegroup>
-                                                <generate generate-name="line" generate-text-length="38"/>
-                                            </linegroup>
-                                        </poem>
+                                        <section epub:type="z3998:poem">
+                                            <div epub:type="z3998:verse" class="linegroup">
+                                                <generate generate-name="p" class="line" generate-text-length="38"/>
+                                            </div>
+                                        </section>
                                         <generate generate-count="5" generate-name="p" generate-text-length="100"/>
                                     </generate>
-                                </generate><generate xmlns="http://www.daisy.org/z3986/2005/dtbook/" generate-name="level1" generate-id="g_" class="glossary">
-                                    <generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/>
+                                </generate>
+                                
+                                <generate generate-name="section" generate-id="g_" epub:type="backmatter glossary" class="glossary">
+                                    <generate generate-name="div" generate-id="page_" generate-counter="page" epub:type="pagebreak" class="page-normal"/>
                                     <h1>Glossary</h1>
-                                    <list type="pl">
+                                    <ol>
                                         <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="56"/></generate>
                                         <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="260"/></generate>
                                         <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="350"/></generate>
                                         <generate generate-count="10">
-                                            <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="123"/><generate generate-name="pagenum" generate-id="page_" generate-counter="page" page="normal"/></generate>
+                                            <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="123"/><generate generate-name="span" generate-id="page_" generate-counter="page" epub:type="pagebreak" class="page-normal"/></generate>
                                             <generate generate-count="5">
                                                 <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="110"/></generate>
                                                 <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="84"/></generate>
@@ -96,20 +99,19 @@
                                                 <generate generate-name="li"><generate generate-text-length="10"/>: <generate generate-text-length="33"/></generate>
                                             </generate>
                                         </generate>
-                                    </list>
+                                    </ol>
                                 </generate>
                                 
-                                <section epub:type="backmatter" class="colophon">
-                                    <p xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                                <section epub:type="backmatter colophon" class="colophon">
+                                    <p>
                                         <generate generate-text-length="20"/>
                                         <generate generate-name="em" generate-text-length="60"/>
                                     </p>
-                                    <generate xmlns="http://www.daisy.org/z3986/2005/dtbook/" generate-name="p" generate-count="20" generate-text-length="100"/>
-                                    <p xmlns="http://www.daisy.org/z3986/2005/dtbook/"><span>post@nlb.no</span></p>
-                                    <p xmlns="http://www.daisy.org/z3986/2005/dtbook/"><span>www.nlb.no</span></p>
-                                    <generate xmlns="http://www.daisy.org/z3986/2005/dtbook/" generate-name="p" generate-text-length="100"/>
+                                    <generate generate-name="p" generate-count="20" generate-text-length="100"/>
+                                    <p><span>post@nlb.no</span></p>
+                                    <p><span>www.nlb.no</span></p>
+                                    <generate generate-name="p" generate-text-length="100"/>
                                 </section>
-                                
                             </body>
                         </html>
                     </x:document>
