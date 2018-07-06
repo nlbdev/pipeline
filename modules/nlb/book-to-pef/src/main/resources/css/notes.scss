@@ -2,14 +2,39 @@
 /*                Note and endnote                                            */
 /* -------------------------------------------------------------------------- */
 
-noteref, a[epub|type~='noteref'],
-note, aside[epub|type~='note'],
-level1.footnotes,
-rearmatter:not(:has(> *:not(level1.footnotes))),
-section[epub|type~='backmatter'].footnotes,
-body[epub|type~='backmatter'] > section.footnotes,
-body[epub|type~='backmatter']:not(:has(> *:not(section.footnotes))) {
-        display: none;
+/* Remove note references by default */
+noteref,
+a[epub|type~='noteref'] {
+    display: none;
+}
+
+note,
+*[epub|type~='note'], *[epub|type~='footnote'], *[epub|type~='endnote'], *[epub|type~='rearnote'] {
+    text-align: left;
+    
+    /* Note: inline content in notes are wrapped into <p> elements in pre-processing.xsl */
+    
+    *:first-child {
+        text-indent: -2;
+        
+        &::before {
+            content: '⠠';
+        }
+    }
+    
+    /* Remove notes by default */
+    display: none;
+}
+
+/* Remove groups of notes by default */
+*.notes, *.footnotes, *.endnotes,
+*[epub|type~='notes'], *[epub|type~='footnotes'], *[epub|type~='endnotes'], *[epub|type~='rearnotes'] {
+    display: none;
+}
+
+/* Remove rearmatter that only contains notes by default */
+rearmatter:not(:has(> level1:not(.notes):not(.footnotes):not(.endnotes))) {
+    display: none;
 }
 
 /* An extend-only selector (%endnotes-title) would be more appropriate
@@ -39,9 +64,12 @@ body[epub|type~='backmatter']:not(:has(> *:not(section.footnotes))) {
         &::alternate {
                 display: block;
                 content: target-content(attr($refattr));
+                
                 @if ($notes-placement == 'bottom-of-page') {
+                        margin-left: 4;
                         flow: footnotes;
                 } @else {
+                        margin-left: 2;
                         flow: endnotes;
                 }
         }
@@ -55,6 +83,13 @@ body[epub|type~='backmatter']:not(:has(> *:not(section.footnotes))) {
                                 content: counter(page);
                         }
                 }
+        }
+        
+        noteref {
+            @include noteref(idref);
+        }
+        a[epub|type~='noteref'] {
+            @include noteref(href);
         }
 
         @if ($notes-placement == 'bottom-of-page') {
@@ -75,7 +110,8 @@ body[epub|type~='backmatter']:not(:has(> *:not(section.footnotes))) {
                 
         } @else if ($notes-placement == 'end-of-book') {
                 book, html {
-                        &:has(noteref, a[epub|type~='noteref'])::after {
+                        &:has(noteref)::after,
+                        &:has(a[epub|type~='noteref'])::after {
                                 &::before {
                                         @include endnotes-title;
                                         page-break-before: right;
@@ -98,23 +134,5 @@ body[epub|type~='backmatter']:not(:has(> *:not(section.footnotes))) {
                                 page: notes;
                         }
                 }
-        }
-
-        
-        noteref {
-                @include noteref(idref);
-        }
-        
-        a[epub|type~='noteref'] {
-                @include noteref(href);
-        }
-
-        note, aside[epub|type~='note'] { p {
-                margin-left: 4;
-                text-indent: -2;
-                &::before {
-                        content: '⠠';
-                }
-        }
         }
 }

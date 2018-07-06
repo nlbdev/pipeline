@@ -17,10 +17,15 @@ blockquote {
         text-align: left;
 }
 
-sidebar, aside[epub|type~='sidebar'] {
+sidebar,
+epigraph,
+aside {
         margin-top: 1;
         margin-bottom: 1;
         margin-left: 2;
+}
+
+sidebar, aside[epub|type~='sidebar'] {
         text-indent: 2;
         text-align: left;
 }
@@ -30,15 +35,15 @@ sidebar::before, aside[epub|type~='sidebar']::before {
 }
 
 epigraph, aside[epub|type~='epigraph'] {
-        margin-top: 1;
-        margin-bottom: 1;
-        margin-left: 2;
         text-indent: 2;
         text-align: left;
 }
 
 prodnote, aside[epub|type~='z3998:production'] {
        display: block;
+       margin-top: 0;
+       margin-bottom: 0;
+       margin-left: 0;
        &::before {
                content: "⠰⠄";
        }

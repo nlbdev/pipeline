@@ -79,9 +79,9 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
                                 <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
-                                <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                                <row>⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                                <row>⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
+                                <row>⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -230,8 +230,8 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
                                 <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
+                                <row>⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                                <row>⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -304,7 +304,7 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
                                 <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                                <row>⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -436,92 +436,258 @@
     </x:scenario>
     
     <x:scenario label="Notes at end of book">
-        <x:call step="nlb:html-to-pef">
-            <x:input port="source">
+        <x:scenario label="aside notes">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="inline">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter chapter">
+                                    <h1>Chapter 1</h1>
+                                    <p>First <a epub:type="noteref" class="noteref" id="noteref_1" href="#note001">*</a> paragraph.</p>
+                                    <p>Second <a epub:type="noteref" class="noteref" id="noteref_2" href="#note002">*</a> paragraph.</p>
+                                    <span style="display:block; volume-break-before:always"/>
+                                    <p>Third <a epub:type="noteref" class="noteref" id="noteref_3" href="#note003">*</a> paragraph.</p>
+                                </section>
+                                
+                                <section epub:type="backmatter endnotes">
+                                    <h1>Endnotes</h1>
+                                    <aside epub:type="endnote" id="note001">
+                                        <p>* xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx</p>
+                                    </aside>
+                                    <aside epub:type="endnote" id="note002">* yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy</aside>
+                                    <aside epub:type="endnote" id="note003">
+                                        <p>* zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz</p>
+                                        <p>zzz zzz zzz</p>
+                                        <p>zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz</p>
+                                    </aside>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="toc-depth" select="0"/>
+                <x:option name="hyphenation" select="'false'"/>
+                <x:option name="notes-placement" select="'end-of-book'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes/pef-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('end-of-book-notes/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="pef">
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef"/>
+            </x:context>
+            <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            
+            <x:context label="First volume">
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[1]//pef:section[last()]"/>
+            </x:context>
+            <x:expect label="result - first volume" type="compare">
                 <x:document type="inline">
-                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
-                        <body>
-                            <section epub:type="bodymatter">
-                                <h1>abc</h1>
-                                <p>aa <a epub:type="noteref" class="noteref" id="noteref_1" href="#note001">*</a> ll</p>
-                                <p>bb <a epub:type="noteref" class="noteref" id="noteref_2" href="#note002">*</a> ll</p>
-                                <span style="display:block; volume-break-before:always"/>
-                                <p>cc <a epub:type="noteref" class="noteref" id="noteref_3" href="#note003">*</a> ll</p>
+                            <section xmlns="http://www.daisy.org/ns/2008/pef">
+                                <page>
+                                    <row/>
+                                    <row/>
+                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
+                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                    <row/>
+                                    <row>⠀⠀⠀⠀⠠⠋⠊⠗⠎⠞⠀⠠⠼⠁⠀⠏⠁⠗⠁⠛⠗⠁⠏⠓⠄</row>
+                                    <row>⠀⠀⠀⠀⠠⠎⠑⠉⠕⠝⠙⠀⠠⠼⠃⠀⠏⠁⠗⠁⠛⠗⠁⠏⠓⠄</row>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
                             </section>
-                            
-                            <section epub:type="backmatter" class="footnotes">
-                                <h1>notes</h1>
-                                <aside epub:type="note" class="notebody" id="note001"> <p>* aaa aaa</p> </aside>
-                                <aside epub:type="note" class="notebody" id="note002"> <p>* rrr bbb</p> </aside>
-                                <aside epub:type="note" class="notebody" id="note003"> <p>* lll lll</p> </aside>
-                            </section>
-                            
-                        </body>
-                    </html>
                 </x:document>
-            </x:input>
-            <x:option name="toc-depth" select="0"/>
-            <x:option name="hyphenation" select="'false'"/>
-            <x:option name="notes-placement" select="'end-of-book'"/>
-            <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes/pef-output-dir',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('end-of-book-notes/temp-dir',$temp-dir)"/>
-        </x:call>
+            </x:expect>
+            
+            <x:context label="Second volume">
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
+            </x:context>
+                
+                <x:expect label="result - second volume" type="compare">
+                    <x:document type="inline" select="/*/*">
+                        <_ xmlns="http://www.daisy.org/ns/2008/pef">
+                            <section>
+                                <page>
+                                    <row>⠀⠀⠀⠀⠠⠞⠓⠊⠗⠙⠀⠠⠼⠉⠀⠏⠁⠗⠁⠛⠗⠁⠏⠓⠄</row>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
+                            </section>
+                            <section>
+                                <page>
+                                    <row/>
+                                    <row/>
+                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
+                                    <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                    <row/>
+                                    <row>⠀⠀⠠⠼⠁⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                    <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                    <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                    <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                    <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭</row>
+                                    <row>⠀⠀⠠⠼⠃⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
+                                    <row>⠀⠀⠀⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
+                                    <row>⠀⠀⠀⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
+                                    <row>⠀⠀⠠⠼⠉⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row/>
+                                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                </page>
+                            </section>
+                        </_>
+                </x:document>
+            </x:expect>
+        </x:scenario>
         
-        <x:context label="pef">
-            <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef"/>
-        </x:context>
-        <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
-        
-        <x:context label="First volume">
-            <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[1]//pef:section[last()]"/>
-        </x:context>
-        <x:expect label="result - first volume" type="compare">
-            <x:document type="inline">
-                        <section xmlns="http://www.daisy.org/ns/2008/pef">
-                            <page>
-                                <row/>
-                                <row/>
-                                <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠃⠉</row>
-                                <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
-                                <row/>
-                                <row>⠀⠀⠀⠀⠁⠁⠀⠠⠼⠁⠀⠇⠇</row>
-                                <row>⠀⠀⠀⠀⠃⠃⠀⠠⠼⠃⠀⠇⠇</row>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                            </page>
-                        </section>
-            </x:document>
-        </x:expect>
-        
-        <x:context label="Second volume">
-            <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
-        </x:context>
+        <x:scenario label="list notes">
+            <x:call step="nlb:html-to-pef">
+                <x:input port="source">
+                    <x:document type="inline">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter chapter">
+                                    <h1>Chapter 1</h1>
+                                    <p>First <a epub:type="noteref" class="noteref" id="noteref_1" href="#note001">*</a> paragraph.</p>
+                                    <p>Second <a epub:type="noteref" class="noteref" id="noteref_2" href="#note002">*</a> paragraph.</p>
+                                    <span style="display:block; volume-break-before:always"/>
+                                    <p>Third <a epub:type="noteref" class="noteref" id="noteref_3" href="#note003">*</a> paragraph.</p>
+                                </section>
+                                
+                                <section epub:type="backmatter endnotes">
+                                    <h1>Endnotes</h1>
+                                    <ol>
+                                       <li epub:type="endnote" id="note001">
+                                           <p>* xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx</p>
+                                       </li>
+                                       <li epub:type="endnote" id="note002">* yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy</li>
+                                       <li epub:type="endnote" id="note003">
+                                           <p>* zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz</p>
+                                           <p>zzz zzz zzz</p>
+                                           <p>zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz</p>
+                                       </li>
+                                    </ol>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="toc-depth" select="0"/>
+                <x:option name="hyphenation" select="'false'"/>
+                <x:option name="notes-placement" select="'end-of-book'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes/pef-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('end-of-book-notes/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="pef">
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef"/>
+            </x:context>
+            <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
+            
+            <x:context label="First volume">
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[1]//pef:section[last()]"/>
+            </x:context>
+            <x:expect label="result - first volume" type="compare">
+                <x:document type="inline">
+                    <section xmlns="http://www.daisy.org/ns/2008/pef">
+                        <page>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</row>
+                            <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠠⠋⠊⠗⠎⠞⠀⠠⠼⠁⠀⠏⠁⠗⠁⠛⠗⠁⠏⠓⠄</row>
+                            <row>⠀⠀⠀⠀⠠⠎⠑⠉⠕⠝⠙⠀⠠⠼⠃⠀⠏⠁⠗⠁⠛⠗⠁⠏⠓⠄</row>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row/>
+                            <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                        </page>
+                    </section>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="Second volume">
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
+            </x:context>
             
             <x:expect label="result - second volume" type="compare">
                 <x:document type="inline" select="/*/*">
                     <_ xmlns="http://www.daisy.org/ns/2008/pef">
                         <section>
                             <page>
-                                <row>⠀⠀⠀⠀⠉⠉⠀⠠⠼⠉⠀⠇⠇</row>
+                                <row>⠀⠀⠀⠀⠠⠞⠓⠊⠗⠙⠀⠠⠼⠉⠀⠏⠁⠗⠁⠛⠗⠁⠏⠓⠄</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -559,23 +725,23 @@
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
                                 <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                 <row/>
-                                <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
-                                <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
-                                <row/>
+                                <row>⠀⠀⠠⠼⠁⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠠⠼⠃⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
+                                <row>⠀⠀⠀⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
+                                <row>⠀⠀⠀⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
+                                <row>⠀⠀⠠⠼⠉⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
                                 <row/>
                                 <row/>
                                 <row/>
@@ -584,8 +750,9 @@
                             </page>
                         </section>
                     </_>
-            </x:document>
-        </x:expect>
+                </x:document>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
     
     <x:scenario label="Notes fallback mechanism">
@@ -672,23 +839,23 @@
                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠋⠕⠞⠝⠕⠞⠑⠗</row>
                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                        <row/>
-                       <row>⠀⠀⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                       <row>⠀⠀⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
-                       <row>⠀⠀⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
-                       <row>⠀⠀⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
+                       <row>⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
+                       <row>⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row>⠀⠀⠀⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                       <row/>
+                       <row/>
                        <row/>
                        <row/>
                        <row/>
