@@ -14,7 +14,7 @@
             <x:option name="maximum-number-of-pages" select="10"/>
         </x:call>
         
-        <x:scenario label="Regression test for issue #118: Failed to complete volume division in dotify:obfl-to-pef" pending="https://github.com/nlbdev/pipeline/issues/118">
+        <x:scenario label="Regression test for issue #118: Failed to complete volume division in dotify:obfl-to-pef">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xml">
