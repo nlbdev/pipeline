@@ -55,11 +55,21 @@ level5:not(:has(> level6, div.leaf-section)),
 level6:not(:has(div.leaf-section)),
 div.leaf-section {
     volume-break-inside: -obfl-keep(5);
-}
-
-/* Class is inserted by pre-processing.xsl on small divs and sections */
-.keep-with-next-section {
-    -obfl-keep-with-next-sheets: 1;
+    
+    &:has(~ *) {
+    
+        /* Keep the first child element of a leaf section together with the next sheet.
+           This should prevent orphaned content if the leaf section is very small. */
+        :first-child {
+            -obfl-keep-with-next-sheets: 1;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            /* Keep headlines together with the next sheet.
+               This should prevent orphaned headlines when the headline is near the end of the leaf section. */
+            -obfl-keep-with-next-sheets: 1;
+        }
+    }
 }
 
 /* Avoid page breaks after a headline (orphaned headline) */

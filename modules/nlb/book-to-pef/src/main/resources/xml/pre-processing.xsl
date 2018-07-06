@@ -14,10 +14,7 @@
         <xsl:variable name="clean" as="element()">
             <xsl:apply-templates mode="clean" select="."/>
         </xsl:variable>
-        <xsl:variable name="leaf-sections" as="element()">
-            <xsl:apply-templates select="$clean" mode="leaf-sections"/>
-        </xsl:variable>
-        <xsl:apply-templates select="$leaf-sections" mode="keep-with-next-section"/>
+        <xsl:apply-templates select="$clean" mode="leaf-sections"/>
     </xsl:template>
     
     <xsl:template match="@* | node()" mode="#all" priority="-5">
@@ -134,7 +131,7 @@
             <xsl:variable name="pages-estimate" select="f:pages-estimate(.)" as="xs:double"/>
             <xsl:choose>
                 <xsl:when test="exists(html:section | dtbook:level2 | dtbook:level3 | dtbook:level4 | dtbook:level5 | dtbook:level6) or $pages-estimate gt $maximum-number-of-leaf-section-pages">
-                    <xsl:for-each-group select="*" group-adjacent="local-name() = ('section','level2','level3','level4','level5','level6')">
+                    <xsl:for-each-group select="node()" group-adjacent="local-name() = ('section','level2','level3','level4','level5','level6') or self::text() and not(normalize-space())">
                         <xsl:choose>
                             <xsl:when test="current-grouping-key()">
                                 <xsl:apply-templates select="current-group()" mode="#current"/>
@@ -159,14 +156,17 @@
         <xsl:param name="content" as="node()*" required="yes"/>
         <xsl:param name="maximum-number-of-leaf-section-pages" as="xs:integer" required="yes"/>
         
-        <xsl:message select="$maximum-number-of-leaf-section-pages"/>
-        
-        <xsl:call-template name="create-div-leaf-section">
-            <xsl:with-param name="content" select="$content" as="node()*"/>
-            <xsl:with-param name="pages-estimates" select="for $n in $content return f:pages-estimate($n)" as="xs:double*"/>
-            <xsl:with-param name="maximum-number-of-leaf-section-pages" select="$maximum-number-of-leaf-section-pages" as="xs:integer"/>
-            <xsl:with-param name="namespace" select="$content[self::*][1]/namespace-uri()" as="xs:string"/>
-        </xsl:call-template>
+        <xsl:choose>
+            <xsl:when test="count($content) = 0"/>
+            <xsl:otherwise>
+                <xsl:call-template name="create-div-leaf-section">
+                    <xsl:with-param name="content" select="$content" as="node()*"/>
+                    <xsl:with-param name="pages-estimates" select="for $n in $content return f:pages-estimate($n)" as="xs:double*"/>
+                    <xsl:with-param name="maximum-number-of-leaf-section-pages" select="$maximum-number-of-leaf-section-pages" as="xs:integer"/>
+                    <xsl:with-param name="namespace" select="($content[self::*], $content[1]/ancestor::*)[1]/namespace-uri()" as="xs:string"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template name="create-div-leaf-section">
@@ -185,14 +185,7 @@
                 </xsl:if>
                 
                 <xsl:element name="div" namespace="{$namespace}">
-                    <xsl:choose>
-                        <xsl:when test="sum($pages-estimates) le 3">
-                            <xsl:attribute name="class" select="'leaf-section keep-with-next-section'"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="class" select="'leaf-section'"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:attribute name="class" select="'leaf-section'"/>
                     <xsl:apply-templates select="$content" mode="#current"/>
                 </xsl:element>
             </xsl:when>
@@ -225,37 +218,6 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="html:body | html:section | dtbook:level1 | dtbook:level2 | dtbook:level3 | dtbook:level4 | dtbook:level5 | dtbook:level6 | *[local-name() = 'div' and f:classes(.) = 'leaf-section']" mode="keep-with-next-section">
-        <xsl:choose>
-            <xsl:when test="not(f:classes(.) = 'keep-with-next-section')">
-                <xsl:next-match/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy exclude-result-prefixes="#all">
-                    <xsl:variable name="result-classes" select="if (local-name() = 'div') then f:classes(.) else f:classes(.)[not(. = 'leaf-section')]"/>
-                    <xsl:choose>
-                        <xsl:when test="exists(following-sibling::*[local-name() = ('body','section','level1','level2','level3','level4','level5','level6') or local-name() = 'div' and f:classes(.) = 'leaf-section'])">
-                            <!-- leaf node has another sectioning element or leaf node as following sibling => keep the "keep-with-next-section" class -->
-                            <xsl:apply-templates select="@* except @class" mode="#current"/>
-                            <xsl:if test="count($result-classes)">
-                                <xsl:attribute name="class" select="string-join($result-classes, ' ')"/>
-                            </xsl:if>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <!-- leaf node has no following sibling sectioning element or leaf node => remove the "keep-with-next-section" class -->
-                            <xsl:apply-templates select="@* except @class" mode="#current"/>
-                            <xsl:variable name="result-classes" select="$result-classes[not(. = 'keep-with-next-section')]"/>
-                            <xsl:if test="count($result-classes)">
-                                <xsl:attribute name="class" select="string-join($result-classes, ' ')"/>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:apply-templates select="node()" mode="#current"/>
-                </xsl:copy>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    
     <xsl:function name="f:types" as="xs:string*">
         <xsl:param name="element" as="element()"/>
         <xsl:sequence select="tokenize($element/@epub:type,'\s+')"/>
@@ -267,8 +229,8 @@
     </xsl:function>
     
     <xsl:function name="f:pages-estimate" as="xs:double">
-        <xsl:param name="element" as="node()*"/>
-        <xsl:value-of select="string-length(normalize-space(string-join($element//text(),' '))) div 650"/>
+        <xsl:param name="node" as="node()*"/>
+        <xsl:value-of select="string-length(normalize-space(string-join($node//text(),' '))) div 650"/>
     </xsl:function>
     
 </xsl:stylesheet>
