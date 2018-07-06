@@ -83,6 +83,38 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="Make sure that notes only contain block content">
+        <x:context>
+            <div>
+                <aside epub:type="note">* lorem ipsum</aside>
+                <aside epub:type="footnote">* lorem ipsum
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="endnote">
+                    <p>* lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+            </div>
+        </x:context>
+        
+        <x:expect label="result">
+            <div>
+                <aside epub:type="note">
+                    <p>1 lorem ipsum</p>
+                </aside>
+                <aside epub:type="footnote">
+                    <p>2 lorem ipsum
+                    </p>
+                    <p>* lorem ipsum</p>
+                </aside>
+                <aside epub:type="endnote">
+                    <p>3 lorem ipsum</p>
+                    <p>* lorem ipsum</p>
+                </aside>
+            </div>
+        </x:expect>
+    </x:scenario>
+    
     <x:scenario label="rename sectioning elements to 'section'">
         <x:context>
             <div>

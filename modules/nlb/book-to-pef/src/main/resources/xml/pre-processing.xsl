@@ -18,7 +18,7 @@
     </xsl:template>
     
     <xsl:template match="@* | node()" mode="#all" priority="-5">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:call-template name="attributes"/>
             <xsl:apply-templates mode="#current"/>
         </xsl:copy>
@@ -45,15 +45,43 @@
     </xsl:template>
     
     <xsl:template match="dtbook:noteref[normalize-space(.) eq '*'] | html:*[f:types(.)='noteref'][normalize-space(.) eq '*']" mode="clean">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:call-template name="attributes"/>
             <xsl:value-of select="1 + count(preceding::dtbook:noteref | preceding::html:*[f:types(.)='noteref'])"/>
         </xsl:copy>
     </xsl:template>
+    
+    <xsl:template match="dtbook:note | html:*[f:types(.)=('note','footnote','endnote','rearnote')]" mode="clean">
+        <xsl:variable name="namespace-uri" select="string(namespace-uri())" as="xs:string"/>
+        <xsl:copy exclude-result-prefixes="#all">
+            <xsl:apply-templates select="@*"/>
+            <xsl:for-each-group select="node()" group-adjacent="f:is-inline(.) or self::text()/normalize-space() = ''">
+                <xsl:choose>
+                    <xsl:when test="current-grouping-key() and count(current-group()[not(self::text()/normalize-space() = '')]) gt 0">
+                        <xsl:apply-templates select="current-group()[1][self::text()/normalize-space() = '']"/>
+                        <xsl:element name="p" namespace="{$namespace-uri}">
+                            <xsl:apply-templates select="current-group()[not(self::text()/normalize-space() = '') or not(position() = (1, last()))]"/>
+                        </xsl:element>
+                        <xsl:apply-templates select="current-group()[last()][self::text()/normalize-space() = '']"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="current-group()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each-group>
+        </xsl:copy>
+    </xsl:template>
 
-    <xsl:template match="dtbook:note/dtbook:p[1]/text()[1][starts-with(normalize-space(.), '*')] | html:*[f:types(.)=('note','footnote','endnote','rearnote')]/html:p[1]/text()[1][starts-with(normalize-space(.), '*')]" mode="clean">
-        <xsl:value-of select="1 + count(preceding::dtbook:note | preceding::html:*[f:types(.)=('note','footnote','endnote','rearnote')])"/>
-        <xsl:value-of select="substring-after(., '*')"/>
+    <xsl:template match="dtbook:note/dtbook:p[1]/text()[1] | dtbook:note/text()[1] | html:*[f:types(.)=('note','footnote','endnote','rearnote')]/html:p[1]/text()[1] | html:*[f:types(.)=('note','footnote','endnote','rearnote')]/text()[1]">
+        <xsl:choose>
+            <xsl:when test="starts-with(normalize-space(.), '*') and not(parent::*:p/preceding-sibling::text()[starts-with(normalize-space(.), '*')])">
+                <xsl:value-of select="1 + count(preceding::dtbook:note | preceding::html:*[f:types(.)=('note','footnote','endnote','rearnote')])"/>
+                <xsl:value-of select="substring-after(., '*')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:next-match/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- Rename article and main elements to section, to simplify CSS styling -->
@@ -79,10 +107,10 @@
     <!-- move colophon to the end of the book -->
     <xsl:template match="html:*[f:types(.) = 'colophon'] | dtbook:level1[f:classes(.) = 'colophon']" mode="clean" priority="2"/>
     <xsl:template match="html:body[count(../html:body) = 1]" mode="clean">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@* | node()" mode="#current"/>
             <xsl:for-each select="*[f:types(.) = 'colophon']">
-                <xsl:copy>
+                <xsl:copy exclude-result-prefixes="#all">
                     <xsl:apply-templates select="@*" mode="#current"/>
                     <xsl:attribute name="epub:type" select="string-join(distinct-values((f:types(.)[not(.=('cover','frontmatter','bodymatter'))], 'backmatter')),' ')"/>
                     <xsl:apply-templates select="node()" mode="#current"/>
@@ -94,7 +122,7 @@
                            and not(following-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'toc', 'print_toc', 'toc-brief', 'colophon'))])]" mode="clean">
         <xsl:next-match/>
         <xsl:for-each select="preceding-sibling::html:body[f:types(.) = 'colophon']">
-            <xsl:copy>
+            <xsl:copy exclude-result-prefixes="#all">
                 <xsl:apply-templates select="@*" mode="#current"/>
                 <xsl:attribute name="epub:type" select="string-join(distinct-values((f:types(.)[not(.=('cover','frontmatter','bodymatter'))], 'backmatter')),' ')"/>
                 <xsl:apply-templates select="node()" mode="#current"/>
@@ -102,15 +130,15 @@
         </xsl:for-each>
     </xsl:template>
     <xsl:template match="dtbook:rearmatter" mode="clean">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@* | node()" mode="#current"/>
-            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = 'colophon']"/>
+            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = 'colophon']" exclude-result-prefixes="#all"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="dtbook:bodymatter[not(../dtbook:rearmatter)]" mode="clean">
         <xsl:next-match/>
         <rearmatter xmlns="http://www.daisy.org/z3986/2005/dtbook/">
-            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = 'colophon']"/>
+            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = 'colophon']" exclude-result-prefixes="#all"/>
         </rearmatter>
     </xsl:template>
     
@@ -126,7 +154,7 @@
     <xsl:template match="html:body | html:section | dtbook:level1 | dtbook:level2 | dtbook:level3 | dtbook:level4 | dtbook:level5 | dtbook:level6" mode="leaf-sections">
         <xsl:variable name="maximum-number-of-leaf-section-pages" select="xs:integer(round($maximum-number-of-pages div 3 + 0.5))" as="xs:integer"/>
         
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*" mode="#current"/>
             <xsl:variable name="pages-estimate" select="f:pages-estimate(.)" as="xs:double"/>
             <xsl:choose>
@@ -231,6 +259,24 @@
     <xsl:function name="f:pages-estimate" as="xs:double">
         <xsl:param name="node" as="node()*"/>
         <xsl:value-of select="string-length(normalize-space(string-join($node//text(),' '))) div 650"/>
+    </xsl:function>
+        
+    <xsl:function name="f:is-inline" as="xs:boolean">
+        <xsl:param name="element" as="node()"/>
+        <xsl:choose>
+            <xsl:when test="$element[self::text() and normalize-space()]">
+                <xsl:value-of select="true()"/>
+            </xsl:when>
+            <xsl:when test="$element[self::html:*]">
+                <xsl:value-of select="$element/local-name() = ('a','abbr','bdo','br','code','dfn','em','img','kbd','q','samp','span','strong','sub','sup')"/>
+            </xsl:when>
+            <xsl:when test="$element[self::dtbook:*]">
+                <xsl:value-of select="$element/local-name() = ('em','strong','dfn','code','samp','kbd','cite','abbr','acronym','a','img','br','q','sub','sup','span','bdo','sent','w','annoref','noteref','lic')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
     
 </xsl:stylesheet>
