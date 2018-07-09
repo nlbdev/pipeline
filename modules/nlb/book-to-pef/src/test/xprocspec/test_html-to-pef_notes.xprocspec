@@ -474,17 +474,17 @@
                 <x:option name="toc-depth" select="0"/>
                 <x:option name="hyphenation" select="'false'"/>
                 <x:option name="notes-placement" select="'end-of-book'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes/pef-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('end-of-book-notes/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes_aside/pef-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('end-of-book-notes_aside/temp-dir',$temp-dir)"/>
             </x:call>
             
             <x:context label="pef">
-                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef"/>
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes_aside/pef-output-dir/test_html-to-pef_notes.pef"/>
             </x:context>
             <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
             
             <x:context label="First volume">
-                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[1]//pef:section[last()]"/>
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes_aside/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[1]//pef:section[last()]"/>
             </x:context>
             <x:expect label="result - first volume" type="compare">
                 <x:document type="inline">
@@ -524,7 +524,7 @@
             </x:expect>
             
             <x:context label="Second volume">
-                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes_aside/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
             </x:context>
                 
                 <x:expect label="result - second volume" type="compare">
@@ -634,17 +634,17 @@
                 <x:option name="toc-depth" select="0"/>
                 <x:option name="hyphenation" select="'false'"/>
                 <x:option name="notes-placement" select="'end-of-book'"/>
-                <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes/pef-output-dir',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('end-of-book-notes/temp-dir',$temp-dir)"/>
+                <x:option name="pef-output-dir" select="resolve-uri('end-of-book-notes_list/pef-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('end-of-book-notes_list/temp-dir',$temp-dir)"/>
             </x:call>
             
             <x:context label="pef">
-                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef"/>
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes_list/pef-output-dir/test_html-to-pef_notes.pef"/>
             </x:context>
             <x:expect label="There should be 2 volumes" type="xpath" test="count(//pef:volume)" equals="2"/>
             
             <x:context label="First volume">
-                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[1]//pef:section[last()]"/>
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes_list/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[1]//pef:section[last()]"/>
             </x:context>
             <x:expect label="result - first volume" type="compare">
                 <x:document type="inline">
@@ -684,7 +684,7 @@
             </x:expect>
             
             <x:context label="Second volume">
-                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
+                <x:document type="file" base-uri="temp-dir" href="end-of-book-notes_list/pef-output-dir/test_html-to-pef_notes.pef" select="(//pef:volume)[2]//pef:section[position() &gt; 1]"/>
             </x:context>
             
             <x:expect label="result - second volume" type="compare">
