@@ -688,4 +688,63 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="Definition lists needs to be restructured for CSS styling">
+        <x:context>
+            <dl>
+                <dt>Term 1</dt>
+                <dd>Details 1</dd>
+                <dt>Term 2.1</dt>
+                <dt>Term 2.2</dt>
+                <dd>Details 2</dd>
+                <dt>Term 3</dt>
+                <dd>Details 3.1</dd>
+                <dd>Details 3.2</dd>
+                <dt>Term 4.1</dt>
+                <dt>Term 4.2</dt>
+                <dt>Term 4.3</dt>
+                <dd>Details 4.1</dd>
+                <dd>Details 4.2</dd>
+                <dd>Details 4.3</dd>
+                <dt>Term 5:</dt>
+                <dd>Details 5</dd>
+                <dt><span><em>Term 6:</em> </span></dt>
+                <dd>Details 6</dd>
+            </dl>
+        </x:context>
+        <x:expect>
+            <dl>
+                <li>
+                    <dt>Term 1: </dt>
+                    <dd>Details 1</dd>
+                </li>
+                <li>
+                    <dt>Term 2.1 </dt>
+                    <dt>Term 2.2: </dt>
+                    <dd>Details 2</dd>
+                </li>
+                <li>
+                    <dt>Term 3: </dt>
+                    <dd>Details 3.1</dd>
+                    <dd>Details 3.2</dd>
+                </li>
+                <li>
+                    <dt>Term 4.1 </dt>
+                    <dt>Term 4.2 </dt>
+                    <dt>Term 4.3: </dt>
+                    <dd>Details 4.1</dd>
+                    <dd>Details 4.2</dd>
+                    <dd>Details 4.3</dd>
+                </li>
+                <li>
+                    <dt>Term 5: </dt>
+                    <dd>Details 5</dd>
+                </li>
+                <li>
+                    <dt><span><em>Term 6:</em> </span> </dt>
+                    <dd>Details 6</dd>
+                </li>
+            </dl>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

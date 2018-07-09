@@ -1753,6 +1753,33 @@
                                     <p style="margin-top: 0; padding-top: 0;">after</p>
                                 </section>
                                 <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <h1>[test-list-dl]</h1>
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <dl>
+                                        <dt>tttt 1</dt>
+                                        <dd>dddd 1</dd>
+                                        <dt>tttt 2.1</dt>
+                                        <dt>tttt 2.2</dt>
+                                        <dd>dddd 2</dd>
+                                        <dt>tttt 3</dt>
+                                        <dd>dddd 3.1</dd>
+                                        <dd>dddd 3.2</dd>
+                                        <dt>tttt 4.1</dt>
+                                        <dt>tttt 4.2</dt>
+                                        <dt>tttt 4.3</dt>
+                                        <dd>dddd 4.1</dd>
+                                        <dd>dddd 4.2</dd>
+                                        <dd>dddd 4.3</dd>
+                                        <dt>tttt tttt tttt tttt tttt tttt tttt tttt tttt tttt</dt>
+                                        <dd>dddd dddd dddd dddd dddd dddd dddd dddd dddd dddd</dd>
+                                        <dt>tttt:</dt>
+                                        <dd>dddd</dd>
+                                    </dl>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
                                     <h1>[test-preceding-separator]</h1>
                                     <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
                                     
@@ -1945,7 +1972,7 @@
             <x:context label="the unordered list element">
                 <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠥⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
             </x:context>
-            <x:expect label="The caption element should look as expected" type="compare">
+            <x:expect label="The unordered list element should look as expected" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
@@ -1973,7 +2000,7 @@
             <x:context label="the preformatted list element">
                 <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠏⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
             </x:context>
-            <x:expect label="The caption element should look as expected" type="compare">
+            <x:expect label="The preformatted list element should look as expected" type="compare">
                 <x:document type="inline" select="/*/*">
                     <page xmlns="http://www.daisy.org/ns/2008/pef">
                         <row/>
@@ -1993,6 +2020,29 @@
                         <row>⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
                         <row>⠀⠀⠀⠀⠉⠕⠝⠞⠑⠝⠞⠀⠉⠕⠝⠞⠑⠝⠞</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+            
+            <x:context label="the definition list element">
+                <x:document type="file" base-uri="temp-dir" href="24/pef-output-dir/book.pef" select="//pef:page[contains(replace(string-join(.//pef:row/text(),''),'⠀+',''),'⠷⠞⠑⠎⠞⠤⠇⠊⠎⠞⠤⠙⠇⠾')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The definition list element should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠞⠞⠞⠞⠀⠼⠁⠒⠀⠙⠙⠙⠙⠀⠼⠁</row>
+                        <row>⠀⠀⠞⠞⠞⠞⠀⠼⠃⠄⠁⠀⠞⠞⠞⠞⠀⠼⠃⠄⠃⠒⠀⠙⠙⠙⠙⠀⠼⠃</row>
+                        <row>⠀⠀⠞⠞⠞⠞⠀⠼⠉⠒⠀⠙⠙⠙⠙⠀⠼⠉⠄⠁⠀⠙⠙⠙⠙⠀⠼⠉⠄⠃</row>
+                        <row>⠀⠀⠞⠞⠞⠞⠀⠼⠙⠄⠁⠀⠞⠞⠞⠞⠀⠼⠙⠄⠃⠀⠞⠞⠞⠞</row>
+                        <row>⠀⠀⠀⠀⠼⠙⠄⠉⠒⠀⠙⠙⠙⠙⠀⠼⠙⠄⠁⠀⠙⠙⠙⠙⠀⠼⠙⠄⠃</row>
+                        <row>⠀⠀⠀⠀⠙⠙⠙⠙⠀⠼⠙⠄⠉</row>
+                        <row>⠀⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞</row>
+                        <row>⠀⠀⠀⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞⠀⠞⠞⠞⠞⠒⠀⠙⠙⠙⠙</row>
+                        <row>⠀⠀⠀⠀⠙⠙⠙⠙⠀⠙⠙⠙⠙⠀⠙⠙⠙⠙⠀⠙⠙⠙⠙⠀⠙⠙⠙⠙</row>
+                        <row>⠀⠀⠀⠀⠙⠙⠙⠙⠀⠙⠙⠙⠙⠀⠙⠙⠙⠙⠀⠙⠙⠙⠙</row>
+                        <row>⠀⠀⠞⠞⠞⠞⠒⠀⠙⠙⠙⠙</row>
                         <row/>
                     </page>
                 </x:document>

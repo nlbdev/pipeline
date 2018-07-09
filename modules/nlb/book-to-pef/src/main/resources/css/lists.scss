@@ -2,7 +2,7 @@
 /*                Lists                                                       */
 /* -------------------------------------------------------------------------- */
 
-list, ul, ol {
+list, ul, ol, dl {
         margin-top: 1;
         margin-left: 2;
         margin-bottom: 1;
@@ -19,7 +19,7 @@ li {
         }
 }
 
-list, ul, ol {
+list, ul, ol, dl {
         counter-reset: list-item;
 }
 
@@ -31,6 +31,10 @@ list[type=ol], ol {
         list-style-type: decimal;
 }
 
-list[type=pl], .list-style-type-none {
+dl, list[type=pl], .list-style-type-none {
         list-style-type: none;
 }
+
+dt, dd {
+    display: inline;
+} 

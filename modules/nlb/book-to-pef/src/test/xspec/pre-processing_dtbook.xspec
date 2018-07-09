@@ -16,7 +16,7 @@
             </div>
         </x:context>
         
-        <x:expect>
+        <x:expect label="result">
             <div>
                 <noteref>1</noteref>
                 <noteref>2</noteref>
@@ -49,7 +49,7 @@
             </div>
         </x:context>
         
-        <x:expect>
+        <x:expect label="result">
             <div>
                 <note>
                     <p>1 lorem ipsum</p>
@@ -77,7 +77,7 @@
             </div>
         </x:context>
         
-        <x:expect>
+        <x:expect label="result">
             <div>
                 <hr/>
                 <p class="other-class"/>
@@ -92,7 +92,7 @@
             </div>
         </x:context>
         
-        <x:expect>
+        <x:expect label="result">
             <div>
                 <hr class="emptyline"/>
                 <p class="other-class"/>
@@ -116,7 +116,7 @@
                 </rearmatter>
             </book>
         </x:context>
-        <x:expect>
+        <x:expect label="result">
             <book>
                 <frontmatter>
                     <level1 class="cover"/>
@@ -146,7 +146,7 @@
                 </bodymatter>
             </book>
         </x:context>
-        <x:expect>
+        <x:expect label="result">
             <book>
                 <frontmatter>
                     <level1 class="cover"/>
@@ -171,7 +171,7 @@
                 <level1 class="print_toc"/>
             </frontmatter>
         </x:context>
-        <x:expect>
+        <x:expect label="result">
             <frontmatter>
                 <level1 class="cover"/>
             </frontmatter>
@@ -220,7 +220,7 @@
                 <p>Paragraph 19.</p>
             </level1>
         </x:context>
-        <x:expect>
+        <x:expect label="result">
             <level1>
                 <div class="leaf-section">
                     <h1>Headline 1</h1>
@@ -268,6 +268,65 @@
                     <p>Paragraph 19.</p>
                 </div>
             </level1>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Definition lists needs to be restructured for CSS styling">
+        <x:context>
+            <dl>
+                <pagenum page="normal">1</pagenum>
+                <dt>Term 1</dt>
+                <dd>Details 1</dd>
+                <dt>Term 2.1</dt>
+                <dt>Term 2.2</dt>
+                <pagenum page="normal">2</pagenum>
+                <dd>Details 2</dd>
+                <dt>Term 3</dt>
+                <dd>Details 3.1</dd>
+                <pagenum page="normal">3</pagenum>
+                <pagenum page="normal">4</pagenum>
+                <dd>Details 3.2</dd>
+                <pagenum page="normal">5</pagenum>
+                <dt>Term 4.1</dt>
+                <dt>Term 4.2</dt>
+                <dt>Term 4.3</dt>
+                <dd>Details 4.1</dd>
+                <dd>Details 4.2</dd>
+                <dd>Details 4.3</dd>
+                <pagenum page="normal">6</pagenum>
+            </dl>
+        </x:context>
+        <x:expect label="result">
+            <dl>
+                <li>
+                    <pagenum page="normal">1</pagenum>
+                    <dt>Term 1: </dt>
+                    <dd>Details 1</dd>
+                </li>
+                <li>
+                    <dt>Term 2.1 </dt>
+                    <dt>Term 2.2: </dt>
+                    <pagenum page="normal">2</pagenum>
+                    <dd>Details 2</dd>
+                </li>
+                <li>
+                    <dt>Term 3: </dt>
+                    <dd>Details 3.1</dd>
+                    <pagenum page="normal">3</pagenum>
+                    <pagenum page="normal">4</pagenum>
+                    <dd>Details 3.2</dd>
+                    <pagenum page="normal">5</pagenum>
+                </li>
+                <li>
+                    <dt>Term 4.1 </dt>
+                    <dt>Term 4.2 </dt>
+                    <dt>Term 4.3: </dt>
+                    <dd>Details 4.1</dd>
+                    <dd>Details 4.2</dd>
+                    <dd>Details 4.3</dd>
+                    <pagenum page="normal">6</pagenum>
+                </li>
+            </dl>
         </x:expect>
     </x:scenario>
     

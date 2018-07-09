@@ -246,6 +246,31 @@
         </xsl:choose>
     </xsl:template>
     
+    <xsl:template match="html:dl | dtbook:dl" mode="clean">
+        <xsl:variable name="namespace" select="namespace-uri()"/>
+        <xsl:copy exclude-result-prefixes="#all">
+            <xsl:apply-templates select="@*"/>
+            <xsl:for-each-group select="node()" group-starting-with="html:dt[preceding-sibling::*[1]/local-name() = 'dd'] | dtbook:dt[preceding-sibling::*[not(self::dtbook:pagenum)][1]/local-name() = 'dd']">
+                <xsl:element name="li" namespace="{$namespace}">
+                    <xsl:apply-templates select="current-group()" mode="#current"/>
+                </xsl:element>
+            </xsl:for-each-group>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:dt | dtbook:dt" mode="clean">
+        <xsl:copy exclude-result-prefixes="#all">
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates select="node()"/>
+            <xsl:if test="following-sibling::*[not(self::dtbook:pagenum)][1]/local-name() != 'dt' and not(ends-with(normalize-space(string-join(.//text(), ' ')), ':'))">
+                <xsl:text>:</xsl:text>
+            </xsl:if>
+            <xsl:if test="not(ends-with(string(.//text()[normalize-space()][last()]), ' '))">
+                <xsl:text> </xsl:text>
+            </xsl:if>
+        </xsl:copy>
+    </xsl:template>
+    
     <xsl:function name="f:types" as="xs:string*">
         <xsl:param name="element" as="element()"/>
         <xsl:sequence select="tokenize($element/@epub:type,'\s+')"/>
