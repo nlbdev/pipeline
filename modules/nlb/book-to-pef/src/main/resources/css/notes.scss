@@ -42,7 +42,7 @@ rearmatter:not(:has(> level1:not(.notes):not(.footnotes):not(.endnotes))) {
 @mixin endnotes-title {
         display: block;
         margin-top: 2;
-        margin-left: 0;
+        margin-left: 2;
         margin-right: 0;
         margin-bottom: 1;
         text-align: center;
@@ -65,11 +65,10 @@ rearmatter:not(:has(> level1:not(.notes):not(.footnotes):not(.endnotes))) {
                 display: block;
                 content: target-content(attr($refattr));
                 
+                margin-left: 4;
                 @if ($notes-placement == 'bottom-of-page') {
-                        margin-left: 4;
                         flow: footnotes;
                 } @else {
-                        margin-left: 2;
                         flow: endnotes;
                 }
         }
@@ -78,6 +77,7 @@ rearmatter:not(:has(> level1:not(.notes):not(.footnotes):not(.endnotes))) {
 @if ($include-notes) {
         
         @page notes {
+                margin-left: 0;
                 @if $show-braille-page-numbers {
                         @bottom-center {
                                 content: counter(page);
@@ -98,6 +98,7 @@ rearmatter:not(:has(> level1:not(.notes):not(.footnotes):not(.endnotes))) {
                                 content: flow(footnotes);
                                 max-height: 15;
                                 border-top: ⠤;
+                                margin-left: 0;
                                 -obfl-fallback-collection: endnotes;
                         }
                 }

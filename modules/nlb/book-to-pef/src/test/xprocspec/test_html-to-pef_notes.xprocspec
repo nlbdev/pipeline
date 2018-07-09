@@ -340,17 +340,22 @@
                         <body>
                             <section epub:type="bodymatter">
                                 <h1>abc</h1>
-                                <p>aa <a epub:type="noteref" class="noteref" id="noteref_1" href="#note001">*</a> ll</p>
-                                <p>bb <a epub:type="noteref" class="noteref" id="noteref_2" href="#note002">*</a> ll</p>
+                                <p>aa <a epub:type="noteref" id="noteref_1" href="#note001">*</a> ll</p>
+                                <p>bb <a epub:type="noteref" id="noteref_2" href="#note002">*</a> ll</p>
                                 <span style="display:block; page-break-before:always"/>
-                                <p>cc <a epub:type="noteref" class="noteref" id="noteref_3" href="#note003">*</a> ll</p>
+                                <p>cc <a epub:type="noteref" id="noteref_3" href="#note003">*</a> ll</p>
                             </section>
                             
-                            <section epub:type="backmatter" class="footnotes">
-                                <h1>notes</h1>
-                                <aside epub:type="note" class="notebody" id="note001"> <p>* aaa aaa</p> </aside>
-                                <aside epub:type="note" class="notebody" id="note002"> <p>* rrr bbb</p> </aside>
-                                <aside epub:type="note" class="notebody" id="note003"> <p>* lll lll</p> </aside>
+                            <section epub:type="backmatter footnotes">
+                                <h1>Footnotes</h1>
+                                <aside epub:type="footnote" id="note001">
+                                    <p>* xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx</p>
+                                </aside>
+                                <aside epub:type="footnote" id="note002">* yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy yyy</aside>
+                                <aside epub:type="footnote" id="note003">
+                                    <p>* zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz zzz</p>
+                                    <p>zzz zzz zzz</p>
+                                </aside>
                             </section>
                             
                         </body>
@@ -392,12 +397,12 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row/>
-                                <row/>
-                                <row/>
                                 <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                                <row>⠀⠀⠠⠼⠁⠀⠁⠁⠁⠀⠁⠁⠁</row>
-                                <row>⠀⠀⠠⠼⠃⠀⠗⠗⠗⠀⠃⠃⠃</row>
+                                <row>⠀⠀⠠⠼⠁⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠀⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭⠀⠭⠭⠭⠭⠭⠭</row>
+                                <row>⠀⠀⠠⠼⠃⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
+                                <row>⠀⠀⠀⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽⠀⠽⠽⠽</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                             <page>
@@ -423,11 +428,11 @@
                                 <row/>
                                 <row/>
                                 <row/>
-                                <row/>
-                                <row/>
-                                <row/>
                                 <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
-                                <row>⠀⠀⠠⠼⠉⠀⠇⠇⠇⠀⠇⠇⠇</row>
+                                <row>⠀⠀⠠⠼⠉⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
+                                <row>⠀⠀⠀⠀⠀⠀⠵⠵⠵⠀⠵⠵⠵⠀⠵⠵⠵</row>
                                 <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠙⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                             </page>
                         </section>
