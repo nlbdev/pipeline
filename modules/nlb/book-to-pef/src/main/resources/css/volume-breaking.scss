@@ -76,3 +76,8 @@ div.leaf-section {
 h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
 }
+
+/* Class that can be used to insert manual volume breaks */
+*.braille-volume-break-before {
+    volume-break-before: always;
+}

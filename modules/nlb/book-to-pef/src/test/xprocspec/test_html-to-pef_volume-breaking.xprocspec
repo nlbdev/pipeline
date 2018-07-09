@@ -1096,5 +1096,42 @@
             <x:expect label="there should be a result PEF" type="count" min="1"/>
         </x:scenario>
         
+        <x:scenario label="Use custom class for manual volume breaking">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <body>
+                                <section epub:type="bodymatter">
+                                    <!-- volume 1 -->
+                                    <h1>headline</h1>
+                                    <p>content</p>
+                                    
+                                    <!-- volume 2 -->
+                                    <p class="braille-volume-break-before">content</p>
+                                    <p>content</p>
+                                    
+                                    <!-- volume 3 -->
+                                    <p class="braille-volume-break-before">content</p>
+                                    <p>content</p>
+                                    
+                                    <!-- volume 4 -->
+                                    <p class="braille-volume-break-before">content</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('12/pef-output-dir',$temp-dir)"/>
+                <x:option name="obfl-output-dir" select="resolve-uri('12/obfl-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('12/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('12/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="12/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="There should be 4 volumes" type="xpath" test="count(//pef:volume)" equals="4"/>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
