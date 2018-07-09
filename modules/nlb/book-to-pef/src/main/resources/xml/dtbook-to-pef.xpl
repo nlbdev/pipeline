@@ -2,6 +2,7 @@
 <p:declare-step type="nlb:dtbook-to-pef" version="1.0"
     xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
     xmlns:p="http://www.w3.org/ns/xproc"
+    xmlns:cx="http://xmlcalabash.com/ns/extensions"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:d="http://www.daisy.org/ns/pipeline/data"
     xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -171,12 +172,17 @@
                     <p:output port="status">
                         <p:pipe step="validate-pef" port="validation-status"/>
                     </p:output>
+                    
+                    <p:variable name="preview-href" select="resolve-uri(concat(replace(base-uri(/*),'.*/([^\./]*)[^/]*$','$1'), '.pef.html'), concat($preview-output-dir,'/'))">
+                        <p:pipe step="main" port="source"/>
+                    </p:variable>
+                    
                     <pef:validate name="validate-pef" assert-valid="false">
                         <p:with-option name="temp-dir" select="string(/c:result)">
                             <p:pipe step="temp-dir" port="result"/>
                         </p:with-option>
                     </pef:validate>
-                    <px:dtbook-to-pef.store include-preview="true">
+                    <px:dtbook-to-pef.store include-preview="true" name="dtbook-to-pef.store">
                         <p:input port="dtbook">
                             <p:pipe step="main" port="source"/>
                         </p:input>
@@ -187,6 +193,21 @@
                         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
                         <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
                     </px:dtbook-to-pef.store>
+                    
+                    <p:load cx:depends-on="dtbook-to-pef.store" px:message="Post-processing HTML preview">
+                        <p:with-option name="href" select="$preview-href"/>
+                    </p:load>
+                    <p:xslt>
+                        <p:input port="parameters">
+                            <p:pipe port="result" step="parameters"/>
+                        </p:input>
+                        <p:input port="stylesheet">
+                            <p:document href="post-process-preview.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                    <p:store>
+                        <p:with-option name="href" select="$preview-href"/>
+                    </p:store>
                 </p:when>
                 <p:otherwise>
                     <p:output port="status"/>

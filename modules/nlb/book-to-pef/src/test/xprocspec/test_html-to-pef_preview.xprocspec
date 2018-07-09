@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl">
+    
+    <x:scenario label="_">
+        <x:call step="nlb:html-to-pef">
+            <x:option name="toc-depth" select="0"/>
+            <x:option name="hyphenation" select="'false'"/>
+            <x:option name="insert-boilerplate" select="'false'"/>
+            <x:param port="parameters" name="skip-post-processing" select="'false'"/>
+        </x:call>
+        
+        <x:scenario label="The HTML report should properly render the norwegian alphabet (i.e. ÆØÅæøå) as well as numbers">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head>
+                                <title>Testbok</title>
+                                <meta name="dc:identifier" content="book"/>
+                                <meta name="dc:creator" content="Norsk lyd- og blindeskriftbibliotek"/>
+                                <meta name="dc:date" content="2016-03-01"/>
+                                <meta name="dc:publisher" content="NLB"/>
+                                <meta name="dc:language" content="en"/>
+                            </head>
+                            <body>
+                                <section epub:type="bodymatter">
+                                    <p>A B C D E F G H</p>
+                                    <p>I J K L M N O P</p>
+                                    <p>Q R S T U V W X</p>
+                                    <p>Y Z Æ Ø Å</p>
+                                    <hr/>
+                                    <p>a b c d e f g h i j</p>
+                                    <p>k l m n o p q r s t</p>
+                                    <p>u v w x y z æ ø å</p>
+                                    <hr/>
+                                    <p>0 1 2 3 4</p>
+                                    <p>5 6 7 8 9</p>
+                                    <p>10 100 10,0 10.000</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="pef-output-dir" select="resolve-uri('alphabet-and-numbers/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('alphabet-and-numbers/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('alphabet-and-numbers/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory contents">
+                <x:document type="file" base-uri="temp-dir" href="alphabet-and-numbers/preview-output-dir/book.pef.html" select="(//*[@class='text-page'])"/>
+            </x:context>
+            <x:expect label="There should be a preview" type="count" min="1"/>
+            <x:expect label="The preview should render as expected" type="compare">
+                <x:document type="inline">
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="text-page">
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0">    ,A ,B ,C ,D ,E ,F ,G ,H     </div>
+                        <div class="row" rowgap="0">    ,I ,J ,K ,L ,M ,N ,O ,P     </div>
+                        <div class="row" rowgap="0">    ,Q ,R ,S ,T ,U ,V ,W ,X     </div>
+                        <div class="row" rowgap="0">    ,Y ,Z ,Æ ,Ø ,Å              </div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0">            ''''''''            </div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0">    a b c d e f g h i j         </div>
+                        <div class="row" rowgap="0">    k l m n o p q r s t         </div>
+                        <div class="row" rowgap="0">    u v w x y z æ ø å           </div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0">            ''''''''            </div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0">    #0 #1 #2 #3 #4              </div>
+                        <div class="row" rowgap="0">    #5 #6 #7 #8 #9              </div>
+                        <div class="row" rowgap="0">    #10 #100 #10,0 #10.000      </div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0"></div>
+                        <div class="row" rowgap="0">               #1               </div>
+                    </div>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
+    </x:scenario>
+</x:description>

@@ -2,10 +2,13 @@
 <p:declare-step type="nlb:epub3-to-pef" version="1.0"
     xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
     xmlns:p="http://www.w3.org/ns/xproc"
+    xmlns:cx="http://xmlcalabash.com/ns/extensions"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:d="http://www.daisy.org/ns/pipeline/data"
     xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:pef="http://www.daisy.org/ns/2008/pef"
+    xmlns:opf="http://www.idpf.org/2007/opf"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     exclude-inline-prefixes="#all"
     name="main">
     
@@ -166,7 +169,7 @@
         </p:with-option>
     </pef:validate>
     
-    <px:epub3-to-pef.store include-preview="true">
+    <px:epub3-to-pef.store include-preview="true" name="epub3-to-pef.store">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="opf">
             <p:pipe step="load" port="opf"/>
@@ -178,5 +181,29 @@
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
         <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:epub3-to-pef.store>
+    
+    <p:group>
+        <p:variable name="name" select="if (ends-with(lower-case($epub),'.epub'))
+                                            then replace($epub,'^.*/([^/]*)\.[^/\.]*$','$1')
+                                            else (/opf:package/opf:metadata/dc:identifier[not(@refines)], 'unknown-identifier')[1]">
+            <p:pipe step="load" port="opf"/>
+        </p:variable>
+        <p:variable name="preview-href" select="resolve-uri(concat($name, '.pef.html'), concat($preview-output-dir,'/'))"/>
+        
+        <p:load cx:depends-on="epub3-to-pef.store" px:message="Post-processing HTML preview">
+            <p:with-option name="href" select="$preview-href"/>
+        </p:load>
+        <p:xslt>
+            <p:input port="parameters">
+                <p:pipe port="result" step="parameters"/>
+            </p:input>
+            <p:input port="stylesheet">
+                <p:document href="post-process-preview.xsl"/>
+            </p:input>
+        </p:xslt>
+        <p:store>
+            <p:with-option name="href" select="$preview-href"/>
+        </p:store>
+    </p:group>
     
 </p:declare-step>
