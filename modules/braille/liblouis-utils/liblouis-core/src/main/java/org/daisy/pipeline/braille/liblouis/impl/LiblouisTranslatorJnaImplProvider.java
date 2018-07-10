@@ -619,7 +619,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							if (hyphenate[textWithWsMapping[curSegment]] || segmentInBraille.length() > available)
 								logger.warn("hyphens:auto not supported");
 							
-							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[curSegment]);
+							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 							next += segmentInBraille;
 							available -= segmentInBraille.length();
 							curPos = curSegmentEnd;
@@ -630,7 +630,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						if (fullHyphenator != null) {
 							try {
 								
-								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, letterSpacing[curSegment]);
+								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 								next += segmentInBraille;
 								available -= segmentInBraille.length();
 								curPos = curSegmentEnd;
@@ -661,7 +661,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										// try standard hyphenation of the whole word
 										try {
 											
-											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, letterSpacing[curSegment]);
+											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 											next += wordInBraille;
 											available -= wordInBraille.length();
 											curPos = wordEnd;
@@ -695,7 +695,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 												int lineEnd = curPos + line.length();
 												int lineEndInBraille = positionInBraille(lineEnd);
 												String lineInBraille = joinedBraille.substring(curPosInBraille, lineEndInBraille);
-												lineInBraille = addLetterSpacing(line, lineInBraille, letterSpacing[curSegment]);
+												lineInBraille = addLetterSpacing(line, lineInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 												int lineInBrailleLength = lineInBraille.length();
 												if (lines.lineHasHyphen()) {
 													lineInBraille += "\u00ad";
