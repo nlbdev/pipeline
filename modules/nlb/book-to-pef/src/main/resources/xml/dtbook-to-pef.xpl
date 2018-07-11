@@ -219,9 +219,17 @@
                 </p:otherwise>
             </p:choose>
         </p:group>
-        <p:catch>
+        <p:catch name="try-convert-and-store.catch">
             <p:output port="status"/>
-            <p:identity>
+            <p:viewport match="//c:error" name="try-convert-and-store.catch.viewport">
+                <p:viewport-source>
+                    <p:pipe port="error" step="try-convert-and-store.catch"/>
+                </p:viewport-source>
+                <px:message>
+                    <p:with-option name="message" select="concat('ERROR ', string(/*/@href), ':', string(/*/@line), ':', string(/*/@column), ': ', string(/*/text()))"/>
+                </px:message>
+            </p:viewport>
+            <p:identity cx:depends-on="try-convert-and-store.catch.viewport">
                 <p:input port="source">
                     <p:inline>
                         <d:validation-status result="error"/>
