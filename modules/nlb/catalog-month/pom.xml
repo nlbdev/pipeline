@@ -1,20 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-  <modelVersion>4.0.0</modelVersion>
-
-  <parent>
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>no.nlb.pipeline.modules</groupId>
+        <artifactId>modules-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../maven/parent/</relativePath>
+    </parent>
+    
     <groupId>no.nlb.pipeline.modules</groupId>
-    <artifactId>modules-parent</artifactId>
+    <artifactId>catalog-month</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../maven/parent/</relativePath>
-  </parent>
-
-  <groupId>no.nlb.pipeline.modules</groupId>
-  <artifactId>catalog-month</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>bundle</packaging>
-
-  <name>NLB Pipeline 2 module :: Nyhetsbrev</name>
-
+    <packaging>bundle</packaging>
+    
+    <name>NLB Pipeline 2 module :: Nyhetsbrev</name>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>fileset-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>file-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nlb.pipeline.modules</groupId>
+            <artifactId>html-to-dtbook</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nlb.pipeline.modules</groupId>
+            <artifactId>mailchimp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nlb.pipeline.modules</groupId>
+            <artifactId>metadata-utils</artifactId>
+        </dependency>
+        
+        <!--
+            test dependencies
+        -->
+        <dependency>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-test-helper</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
 </project>

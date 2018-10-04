@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:nlb="http://metadata.nlb.no/vocabulary/#"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+               script="http://www.nlb.no/pipeline/modules/nlb-catalog-month/month.xpl">
+    
+    <x:scenario label="_">
+        <x:call step="nlb:catalog-month">
+            <x:option name="month" select="'2018-10'"/>
+            <x:option name="make-email" select="'false'"/>
+            <x:option name="metadata-endpoint" select="resolve-uri('../resources/2018-10/', base-uri(.))"/>
+            <x:option name="news-href" select="resolve-uri('../resources/2018-10/news.xhtml', base-uri(.))"/>
+            <x:option name="output-dir" select="resolve-uri('1/output-dir', $temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the output directory contents">
+            <x:document type="directory" base-uri="temp-dir" href="1/output-dir/"/>
+        </x:context>
+        <x:expect label="Exactly one XML file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.xml')])" equals="1"/>
+        <x:expect label="Exactly one XHTML file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.xhtml')])" equals="1"/>
+        
+        <x:context label="the DTBook head">
+            <x:document type="file" base-uri="temp-dir" href="1/output-dir/Nyhetsbrev oktober 2018.xml" select="/*/dtbook:head/*[not(@name='dc:Date')]"/>
+        </x:context>
+        <x:expect label="head should be as expected" type="compare">
+            <x:document type="file" href="../resources/2018-10/expected-dtbook.xml" select="/*/dtbook:head/*[not(@name='dc:Date')]"/>
+        </x:expect>
+        
+        <x:context label="the DTBook book">
+            <x:document type="file" base-uri="temp-dir" href="1/output-dir/Nyhetsbrev oktober 2018.xml" select="/*/dtbook:book"/>
+        </x:context>
+        <x:expect label="head should be as expected" type="compare">
+            <x:document type="file" href="../resources/2018-10/expected-dtbook.xml" select="/*/dtbook:book"/>
+        </x:expect>
+        
+        <x:context label="the HTML head">
+            <x:document type="file" base-uri="temp-dir" href="1/output-dir/Nyhetsbrev oktober 2018.xhtml" select="/*/html:head/*[not(@name='dc:date')]"/>
+        </x:context>
+        <x:expect label="head should be as expected" type="compare">
+            <x:document type="file" href="../resources/2018-10/expected-xhtml.xhtml" select="/*/html:head/*[not(@name='dc:date')]"/>
+        </x:expect>
+        
+        <x:context label="the HTML book">
+            <x:document type="file" base-uri="temp-dir" href="1/output-dir/Nyhetsbrev oktober 2018.xhtml" select="/*/html:body"/>
+        </x:context>
+        <x:expect label="head should be as expected" type="compare">
+            <x:document type="file" href="../resources/2018-10/expected-xhtml.xhtml" select="/*/html:body"/>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

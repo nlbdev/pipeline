@@ -110,16 +110,16 @@
         <p:with-option name="endpoint" select="$endpoint"/>
     </pxi:metadata-load.month>
     <p:for-each>
-    <p:choose>
-        <p:when test="$libraries != ''">
-            <p:split-sequence>
-                <p:with-option name="test" select="concat('//marcxchange:datafield[@tag=''850'']/marcxchange:subfield[@code=''a'']/(for $library in tokenize(''',$libraries,''','' '') return starts-with(text(), $library)) = true()')"/>
-            </p:split-sequence>
-        </p:when>
-        <p:otherwise>
-            <p:identity/>
-        </p:otherwise>
-    </p:choose>
+        <p:choose>
+            <p:when test="$libraries != ''">
+                <p:split-sequence>
+                    <p:with-option name="test" select="concat('//marcxchange:datafield[@tag=''850'']/marcxchange:subfield[@code=''a'']/(for $library in tokenize(''',$libraries,''','' '') return starts-with(text(), $library)) = true()')"/>
+                </p:split-sequence>
+            </p:when>
+            <p:otherwise>
+                <p:identity/>
+            </p:otherwise>
+        </p:choose>
     </p:for-each>
 
     <px:message severity="DEBUG">

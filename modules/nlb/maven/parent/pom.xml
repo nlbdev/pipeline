@@ -6,8 +6,8 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.5</version>
-    <relativePath />
+    <version>1.6</version>
+    <relativePath/>
   </parent>
 
   <groupId>no.nlb.pipeline.modules</groupId>
@@ -16,7 +16,7 @@
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: NLB Modules Parent POM</name>
-
+  
   <scm>
     <connection>scm:git:git@github.com:nlbdev/pipeline.git</connection>
     <url>scm:git:git@github.com:nlbdev/pipeline.git</url>
@@ -36,22 +36,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <!--
-          Framework BoM
-      -->
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>framework-bom</artifactId>
-        <version>1.11.0</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+      
       <!--
           Other Modules BoM
       -->
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>common-utils-bom</artifactId>
+        <artifactId>scripts-bom</artifactId>
         <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
@@ -65,12 +56,139 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>scripts-bom</artifactId>
+        <artifactId>common-utils-bom</artifactId>
         <version>1.11.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      
+      <!--
+          Framework BoM
+      -->
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-bom</artifactId>
+        <version>1.11.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      
+      <!--
+          test dependencies
+      -->
+      <dependency>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-test-helper</artifactId>
+        <version>1.0.1</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>maven-paxexam-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-depends-file</id>
+            <goals>
+              <goal>generate-depends-file</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>bundle-before-test</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.ops4j.pax.exam</groupId>
+          <artifactId>maven-paxexam-plugin</artifactId>
+          <version>1.2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.ops4j.pax.exam</groupId>
+                    <artifactId>maven-paxexam-plugin</artifactId>
+                    <versionRange>[1.2.4,)</versionRange>
+                    <goals>
+                      <goal>generate-depends-file</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <runOnIncremental>false</runOnIncremental>
+                    </execute>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.daisy.pipeline.build</groupId>
+                    <artifactId>modules-build-helper</artifactId>
+                    <versionRange>[2.0.0,)</versionRange>
+                    <goals>
+                      <goal>process-catalog</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <runOnIncremental>false</runOnIncremental>
+                    </execute>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.servicemix.tooling</groupId>
+                    <artifactId>depends-maven-plugin</artifactId>
+                    <versionRange>[1.2,)</versionRange>
+                    <goals>
+                      <goal>generate-depends-file</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <runOnIncremental>false</runOnIncremental>
+                    </execute>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>shell-maven-plugin</artifactId>
+                    <versionRange>[1.0-beta-1,)</versionRange>
+                    <goals>
+                      <goal>shell</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

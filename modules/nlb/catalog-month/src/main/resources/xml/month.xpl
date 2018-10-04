@@ -22,7 +22,19 @@
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Utputt-mappe</h2>
-            <p px:role="desc">Mappe der nyhetsbrevet i DTBook-format skal lagres.</p>
+            <p px:role="desc">Mappe der nyhetsbrevet i DTBook- og HTML-format skal lagres.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="metadata-endpoint" required="false" select="''" px:type="string">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Tjener for metadata</h2>
+            <p px:role="desc">Dette er mest for testing. Normalt bør denne være tom.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="news-href" required="false" select="''" px:type="anyFileURI">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Fil som inneholder nyheter</h2>
+            <p px:role="desc">Brukes mest for testing. Normalt bør denne stå tom.</p>
         </p:documentation>
     </p:option>
 
@@ -31,6 +43,7 @@
     <p:import href="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/library.xpl"/>
     <p:import href="make-email.xpl"/>
     <p:import href="make-dtbook.xpl"/>
+    <p:import href="make-html.xpl"/>
     
     <p:variable name="outputDir" select="if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/')"/>
 
@@ -69,16 +82,27 @@
         <p:with-option name="month" select="/*/@previous-month">
             <p:pipe port="result" step="php-time"/>
         </p:with-option>
+        <p:with-option name="href" select="$news-href"/>
     </nlb:news>
 
     <!-- Hent bøker -->
     <p:load href="template-dtbook.xml"/>
     <cx:message message="Henter bøker"/>
-    <nlb:metadata-as-dtbook name="metadata-as-dtbook" include-language="true">
+    <nlb:metadata-as-dtbook name="metadata-as-dtbook.step" include-language="true">
+        <p:with-option name="metadata-endpoint" select="$metadata-endpoint"/>
         <p:input port="php-time">
             <p:pipe port="result" step="php-time"/>
         </p:input>
     </nlb:metadata-as-dtbook>
+    <p:add-attribute match="/*/dtbook:head/dtbook:meta[@name=('dtb:uid','dc:Identifier')]" attribute-name="content">
+        <p:input port="source">
+            <p:pipe port="result" step="metadata-as-dtbook.step"/>
+        </p:input>
+        <p:with-option name="attribute-value" select="concat('NLB-NEWSLETTER-', /*/@Y, /*/@m)">
+            <p:pipe port="result" step="php-time"/>
+        </p:with-option>
+    </p:add-attribute>
+    <p:identity name="metadata-as-dtbook"/>
 
     <!-- Lag nyhetsbrev som DTBook -->
     <cx:message message="Lager nyhetsbrev som DTBook" name="message.dtbook">
@@ -86,7 +110,7 @@
             <p:empty/>
         </p:input>
     </cx:message>
-    <nlb:make-dtbook cx:depends-on="message.dtbook">
+    <nlb:make-dtbook cx:depends-on="message.dtbook" name="make-dtbook">
         <p:with-option name="output-dir" select="$outputDir"/>
         <p:input port="news-as-html">
             <p:pipe port="result" step="news-as-html"/>
@@ -98,6 +122,25 @@
             <p:pipe port="result" step="php-time"/>
         </p:input>
     </nlb:make-dtbook>
+    
+    <!-- Lag nyhetsbrev som HTML -->
+    <cx:message message="Lager nyhetsbrev som HTML" name="message.html" cx:depends-on="make-dtbook">
+        <p:input port="source">
+            <p:empty/>
+        </p:input>
+    </cx:message>
+    <nlb:make-html cx:depends-on="message.html">
+        <p:with-option name="output-dir" select="$outputDir"/>
+        <p:input port="news-as-html">
+            <p:pipe port="result" step="news-as-html"/>
+        </p:input>
+        <p:input port="metadata-as-dtbook">
+            <p:pipe port="result" step="metadata-as-dtbook"/>
+        </p:input>
+        <p:input port="php-time">
+            <p:pipe port="result" step="php-time"/>
+        </p:input>
+    </nlb:make-html>
 
     <!-- Lag nyhetsbrev som e-post -->
     <p:choose>

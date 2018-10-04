@@ -26,6 +26,12 @@
             <p px:role="desc">År og måned det skal lages årskatalog for (ÅÅÅÅ-MM).</p>
         </p:documentation>
     </p:option>
+    <p:option name="href" required="false" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Fil som inneholder nyheter</h2>
+            <p px:role="desc">Brukes mest for testing. Normalt bør denne stå tom.</p>
+        </p:documentation>
+    </p:option>
     
     <p:variable name="lastMonthDay" select="if (ends-with($month,'-01')) then '31'
                                         else if (ends-with($month,'-02') and number(tokenize($month,'-')[1]) mod 4 = 0.0) then '29'
@@ -43,6 +49,11 @@
     
     <!-- Først; hent nyhetene -->
     <p:choose>
+        <p:when test="$href != ''">
+            <p:load>
+                <p:with-option name="href" select="$href"/>
+            </p:load>
+        </p:when>
         <p:when test="number(tokenize($month,'-')[1]) &lt;= 2016 and number(replace(tokenize($month,'-')[2],'^0','')) &lt;= 5">
             <p:identity>
                 <p:input port="source">
@@ -194,6 +205,10 @@
             </p:for-each>
         </p:otherwise>
     </p:choose>
+    
+    <p:identity>
+        <p:log port="result" href="file:/tmp/news.xhtml"/>
+    </p:identity>
 
     <!-- Deretter; gjør små tilpasninger i HTMLen -->
     <p:for-each>
