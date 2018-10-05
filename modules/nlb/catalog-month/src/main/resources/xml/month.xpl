@@ -46,6 +46,7 @@
     <p:import href="make-html.xpl"/>
     
     <p:variable name="outputDir" select="if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/')"/>
+    <p:variable name="metadataEndpoint" select="replace($metadata-endpoint, '(^\s+|\s+$)', '')"/>
 
     <p:choose>
         <p:when test="not(matches($month,'^\d\d\d\d-\d\d$'))">
@@ -89,7 +90,7 @@
     <p:load href="template-dtbook.xml"/>
     <cx:message message="Henter bøker"/>
     <nlb:metadata-as-dtbook name="metadata-as-dtbook.step" include-language="true">
-        <p:with-option name="metadata-endpoint" select="$metadata-endpoint"/>
+        <p:with-option name="metadata-endpoint" select="$metadataEndpoint"/>
         <p:input port="php-time">
             <p:pipe port="result" step="php-time"/>
         </p:input>
