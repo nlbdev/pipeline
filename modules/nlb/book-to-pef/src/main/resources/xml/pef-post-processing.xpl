@@ -13,6 +13,10 @@
 	<p:output port="result"/>
 	
 	<p:xslt name="report">
+		<p:input port="source">
+			<p:pipe step="main" port="source"/>
+			<p:document href="../META-INF/maven/version.xml"/>
+		</p:input>
 		<p:input port="stylesheet">
 			<p:document href="pef-post-processing.xsl"/>
 		</p:input>

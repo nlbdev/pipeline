@@ -1,0 +1,4 @@
+<meta xmlns:nlbprod="http://www.nlb.no/production/">
+	<nlbprod:daisy-pipeline-build-date>${project.detailedVersion.timestamp}</nlbprod:daisy-pipeline-build-date>
+	<nlbprod:daisy-pipeline-source-commit>${project.detailedVersion.commit}</nlbprod:daisy-pipeline-source-commit>
+</meta>

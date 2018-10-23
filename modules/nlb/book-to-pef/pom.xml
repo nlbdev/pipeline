@@ -169,6 +169,7 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
+        <filtering>false</filtering>
         <excludes>
           <!--
           <exclude>hyph/**/*</exclude>
@@ -181,7 +182,15 @@
               braille-modules-parent
           -->
           <exclude>META-INF/catalog.xml</exclude>
+          <exclude>META-INF/maven/version.xml</exclude>
         </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>META-INF/maven/version.xml</include>
+        </includes>
       </resource>
       <resource>
         <directory>${project.build.directory}/generated-resources</directory>
@@ -208,6 +217,18 @@
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>ch.sbs</groupId>
+        <artifactId>project-version-maven-plugin</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>set-detailed-project-version</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.ops4j.pax.exam</groupId>

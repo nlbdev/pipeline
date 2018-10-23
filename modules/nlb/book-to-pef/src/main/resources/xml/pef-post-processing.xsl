@@ -7,6 +7,15 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
     
+    <!--
+        skipped in xspec tests
+    -->
+    <xsl:template match="/">
+        <xsl:apply-templates select="/*">
+            <xsl:with-param name="meta" tunnel="yes" select="collection()[2]//nlbprod:*"/>
+        </xsl:apply-templates>
+    </xsl:template>
+    
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
@@ -14,6 +23,7 @@
     </xsl:template>
     
     <xsl:template match="pef:meta">
+        <xsl:param name="meta" tunnel="yes" as="element()*" select="()"/>
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
             <nlbprod:sheet-count value="{
@@ -26,6 +36,7 @@
                     else count($section/pef:page)
                 )
             }"/>
+            <xsl:sequence select="$meta"/>
         </xsl:copy>
     </xsl:template>
     
