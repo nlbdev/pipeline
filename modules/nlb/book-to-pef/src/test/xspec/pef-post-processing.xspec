@@ -3,7 +3,7 @@
                xmlns="http://www.daisy.org/ns/2008/pef"
                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                xmlns:dc="http://purl.org/dc/elements/1.1/"
-               xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+               xmlns:nlbprod="http://www.nlb.no/production/"
                stylesheet="../../main/resources/xml/pef-post-processing.xsl">
     
     <x:scenario label="sheet count">
@@ -37,8 +37,8 @@
                 </body>
             </pef>
         </x:context>
-        <x:expect label="sheet count" test="//pef:meta/nlb:sheet-count">
-            <nlb:sheet-count value="6"/>
+        <x:expect label="sheet count" test="//pef:meta/nlbprod:*">
+            <nlbprod:sheet-count value="6"/>
         </x:expect>
     </x:scenario>
     

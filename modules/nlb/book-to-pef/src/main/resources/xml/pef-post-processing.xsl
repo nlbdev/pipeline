@@ -3,7 +3,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:nlb="http://www.nlb.no/ns/pipeline/xproc"
+                xmlns:nlbprod="http://www.nlb.no/production/"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -16,7 +16,7 @@
     <xsl:template match="pef:meta">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
-            <nlb:sheet-count value="{
+            <nlbprod:sheet-count value="{
                 sum(
                     for $volume in //pef:volume return
                     for $section in $volume/pef:section return
