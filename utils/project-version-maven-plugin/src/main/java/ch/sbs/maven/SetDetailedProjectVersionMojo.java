@@ -33,28 +33,37 @@ public class SetDetailedProjectVersionMojo extends AbstractMojo {
 	private String projectVersion;
 	
 	public void execute() throws MojoFailureException {
-		String detailedVersion; {
+		String detailedVersion;
+		String timeStamp;
+		String gitCommit; {
 			try {
 				if (projectVersion.endsWith("-SNAPSHOT")) {
-					String timeStamp = new SimpleDateFormat("yyyyMMdd.HHmmss").format(new Date());
-					String gitDescription; {
-						Process p = Runtime.getRuntime().exec("git describe --tags --always --dirty");
-						p.waitFor();
-						BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-						gitDescription = reader.readLine();
-						if (gitDescription == null || reader.readLine() != null)
-							throw new RuntimeException();
-					}
+					timeStamp = new SimpleDateFormat("yyyyMMdd.HHmmss").format(new Date());
+					Process p = Runtime.getRuntime().exec("git describe --tags --always --dirty");
+					p.waitFor();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					gitCommit = reader.readLine();
+					if (gitCommit == null || reader.readLine() != null)
+						throw new RuntimeException();
 					detailedVersion = projectVersion.substring(0, projectVersion.length() - 9)
 						+ "~" + timeStamp
-						+ "-" + gitDescription
+						+ "-" + gitCommit
 					;
-				} else
+				} else {
+					timeStamp = null;
+					gitCommit = null;
 					detailedVersion = projectVersion;
+				}
 			} catch (Exception e) {
 				throw new MojoFailureException("Error computing detailed version", e);
 			}
 		}
 		project.getProperties().put("project.detailedVersion", detailedVersion);
+		if (timeStamp != null) {
+			project.getProperties().put("project.detailedVersion.timestamp", timeStamp);
+		}
+		if (gitCommit != null) {
+			project.getProperties().put("project.detailedVersion.commit", gitCommit);
+		}
 	}
 }
