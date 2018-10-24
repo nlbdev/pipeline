@@ -122,10 +122,24 @@ public class CssSplitStep extends DefaultStep {
 	private static List<SplitPoint> getSplitPoints(Configuration configuration, XdmNode source,
 	                                               RuntimeValue splitBefore, RuntimeValue splitAfter) throws XPathException {
 		XPathEvaluator xpathEvaluator = new XPathEvaluator(configuration);
-		xpathEvaluator.getStaticContext().setNamespaceResolver(new MatchingNamespaceResolver(splitBefore.getNamespaceBindings()));
-		final XPathExpression splitBeforeMatcher = xpathEvaluator.createPattern(splitBefore.getString());
-		xpathEvaluator.getStaticContext().setNamespaceResolver(new MatchingNamespaceResolver(splitAfter.getNamespaceBindings()));
-		final XPathExpression splitAfterMatcher = xpathEvaluator.createPattern(splitAfter.getString());
+		final XPathExpression splitBeforeMatcher; {
+			String expression = splitBefore.getString();
+			if (expression.isEmpty())
+				splitBeforeMatcher = null;
+			else {
+				xpathEvaluator.getStaticContext().setNamespaceResolver(new MatchingNamespaceResolver(splitBefore.getNamespaceBindings()));
+				splitBeforeMatcher = xpathEvaluator.createPattern(expression);
+			}
+		}
+		final XPathExpression splitAfterMatcher; {
+			String expression = splitAfter.getString();
+			if (expression.isEmpty())
+				splitAfterMatcher = null;
+			else {
+				xpathEvaluator.getStaticContext().setNamespaceResolver(new MatchingNamespaceResolver(splitAfter.getNamespaceBindings()));
+				splitAfterMatcher = xpathEvaluator.createPattern(expression);
+			}
+		}
 		final List<SplitPoint> result = new ArrayList<SplitPoint>();
 		new Traversal() {
 			List<Integer> currentPath = new ArrayList<Integer>();
@@ -160,6 +174,8 @@ public class CssSplitStep extends DefaultStep {
 	}
 	
 	private static boolean matches(XPathExpression matcher, XdmNode node) {
+		if (matcher == null)
+			return false;
 		try {
 			XPathDynamicContext context = matcher.createDynamicContext(node.getUnderlyingNode());
 			return matcher.effectiveBooleanValue(context);

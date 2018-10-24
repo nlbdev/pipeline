@@ -483,14 +483,11 @@
             <css:split split-before="css:box[preceding::css:box]
                                             [@css:counter-set or
                                              @css:page-break-before='auto-right' or
-                                             @css:volume-break-before='always' or
-                                             @type='table']"
-                       split-after="css:box[following::css:box]
-                                           [@type='table']">
+                                             @css:volume-break-before='always']">
                 <p:documentation>
-                    Split before and after tables, before css:counter-set attributes, and before
-                    css:volume-break-before attributes with value 'always'. <!-- depends on
-                    make-boxes and propagate-page-break -->
+                    Split before css:counter-set attributes, and before css:volume-break-before
+                    attributes with value 'always'. <!-- depends on make-boxes and
+                    propagate-page-break -->
                 </p:documentation>
             </css:split>
         </p:for-each>

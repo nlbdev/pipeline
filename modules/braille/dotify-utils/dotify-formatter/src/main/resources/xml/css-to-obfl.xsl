@@ -948,28 +948,15 @@
     <!-- Tables -->
     <!-- ====== -->
     
-    <xsl:template priority="0.8"
-                  mode="sequence"
-                  match="css:box[@type='table']|
-                         css:box[@type='block'][descendant::css:box[@type='table']]">
+    <xsl:template priority="0.6"
+                  mode="sequence block"
+                  match="css:box[@type='table']">
         <table>
-            <xsl:apply-templates mode="table" select="."/>
+            <xsl:call-template name="insert-text-attributes-and-next-match"/>
         </table>
     </xsl:template>
     
-    <xsl:template priority="0.6"
-                  mode="table"
-                  match="css:box[@type=('block','table')]">
-        <xsl:call-template name="insert-text-attributes-and-next-match"/>
-    </xsl:template>
-    
-    <xsl:template mode="table"
-                  match="css:box[@type='block']">
-        <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:text-transform|@css:hyphens)"/>
-        <xsl:apply-templates mode="#current"/>
-    </xsl:template>
-    
-    <xsl:template mode="table"
+    <xsl:template mode="sequence block"
                   match="css:box[@type='table']">
         <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:render-table-by|
                                                                   @css:text-transform|@css:hyphens)"/>
