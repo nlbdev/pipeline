@@ -9995,7 +9995,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_92">
+  <x:scenario label="test_92" pending="volume-transition temporarily disabled">
     <x:documentation>
       Tests combination of manual and automatic volume breaking.
     </x:documentation>
@@ -10373,7 +10373,7 @@
             </default-template>
           </layout-master>
           <volume-template sheets-in-volume-max="3"/>
-          <volume-transition range="sheet"/>
+          <!-- <volume-transition range="sheet"/> -->
           <sequence master="main">
             <block volume-keep-priority="1">
               ⠿⠿⠿⠿⠿ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -12151,7 +12151,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_107">
+  <x:scenario label="test_107" pending="volume-transition temporarily disabled">
     <x:documentation>
       Tests keeping blocks in the same volume.
     </x:documentation>
@@ -12821,7 +12821,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_112" focus="">
+  <x:scenario label="test_112">
     <x:documentation>
       Tests combination of volume-break-before:always and @page.
       
