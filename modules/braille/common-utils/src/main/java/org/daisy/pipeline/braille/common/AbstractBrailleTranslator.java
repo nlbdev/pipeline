@@ -205,6 +205,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				private final static char LS = '\u2028';
 				
 				private boolean lastCharIsSpace = false;
+				private int forcedBreakCount = 0;
 				
 				/**
 				 * Fill the character (charBuffer) and soft wrap opportunity (wrapInfo) buffers while normalising and collapsing spaces
@@ -221,8 +222,10 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							else if (bufSize < limit) {
 								String next = inputStream.next(limit - bufSize, force && (bufSize == 0), allowHyphens);
 								if (next.isEmpty()) {} // row full according to input feed
-								else
-									inputBuffer = peekingIterator(charactersOf(next).iterator()); }
+								else {
+									if (force && (bufSize == 0))
+										forcedBreakCount++;
+									inputBuffer = peekingIterator(charactersOf(next).iterator()); }}
 							if (inputBuffer == null) {
 								if (!inputStream.hasNext()) { // end of stream
 									if (bufSize > 0)
@@ -479,6 +482,8 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					wrapInfo = new ArrayList<Byte>(wrapInfo);
 					boolean save_lastCharIsSpace = lastCharIsSpace;
 					lastCharIsSpace = false;
+					int save_forcedBreakCount = forcedBreakCount;
+					forcedBreakCount = 0;
 					fillRow(Integer.MAX_VALUE, true, false);
 					String remainder = charBuffer.toString();
 					inputStream = save_inputStream;
@@ -486,6 +491,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					charBuffer = save_charBuffer;
 					wrapInfo = save_wrapInfo;
 					lastCharIsSpace = save_lastCharIsSpace;
+					forcedBreakCount = save_forcedBreakCount;
 					return remainder;
 				}
 				
@@ -524,12 +530,16 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					return clone;
 				}
 				
+				// FIXME: support METRIC_HYPHEN_COUNT
 				public boolean supportsMetric(String metric) {
-					return false;
+					return METRIC_FORCED_BREAK.equals(metric);
 				}
 				
 				public double getMetric(String metric) {
-					throw new UnsupportedMetricException("Metric not supported: " + metric);
+					if (METRIC_FORCED_BREAK.equals(metric))
+						return forcedBreakCount;
+					else
+						throw new UnsupportedMetricException("Metric not supported: " + metric);
 				}
 				
 				private static final BrailleStream emptyBrailleStream = new BrailleStream() {
