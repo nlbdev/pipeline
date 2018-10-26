@@ -110,9 +110,10 @@ pseudo returns [Selector.PseudoPage pseudoPage]
           try {
               $pseudoPage = gCSSTreeParser.rf.createPseudoClass(name);
           } catch (Exception e1) {
-              // maybe a single colon was used for a pseudo element
+              // maybe a single colon was used for a pseudo element, or it'a custom pseudo class,
+              // which we implement via a pseudo element
               try {
-                  $pseudoPage = gCSSTreeParser.rf.createPseudoElement(name);
+                  $pseudoPage = new SelectorImpl.PseudoElementImpl(":" + name);
                   gCSSTreeParser.warn(i, "Use a double colon for pseudo element ::" + name); }
               catch (Exception e2) {
                   gCSSTreeParser.error(i, "invalid pseudo declaration :" + name);

@@ -401,6 +401,52 @@
   </x:scenario>
   
   <!--
+      Bringing pseudo-classes in the mix
+  -->
+  <x:scenario label="test_10b">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                table {
+                  display: table;
+                  -obfl-table-col-spacing: 1;
+                  -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); }
+                table:-obfl-alternate-scenario {
+                  -obfl-scenario-cost: 3;
+                  display: block;
+                  render-table-by:row; }
+                table:-obfl-alternate-scenario::table-by(row) {
+                  display:block;
+                  margin-left:2; }
+                table:-obfl-alternate-scenario::table-by(row)::list-item {
+                  display:block; }
+                table:-obfl-alternate-scenario::table-by(row)::list-item:first-child {
+                  text-indent:-2;
+              </style>
+            </head>
+            <body>
+              <table/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <table style="{ -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); -obfl-table-col-spacing: 1; display: table; } :-obfl-alternate-scenario { -obfl-scenario-cost: 3; display: block; render-table-by: row; } :-obfl-alternate-scenario::table-by(row) { display: block; margin-left: 2; } :-obfl-alternate-scenario::table-by(row)::list-item { display: block; }"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
       Root selector
   -->
   <x:scenario label="test_11">

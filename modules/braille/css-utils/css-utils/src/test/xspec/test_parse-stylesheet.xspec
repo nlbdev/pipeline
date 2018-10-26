@@ -81,4 +81,13 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_07">
+    <x:context>
+      <table style=":-obfl-alternate-scenario {{ x:y }} :-obfl-alternate-scenario::table-by(row) {{ x:y }} :-obfl-alternate-scenario::table-by(row)::list-item {{ x:y }}"/>
+    </x:context>
+    <x:expect label="result">
+      <table css:_obfl-alternate-scenario="{{ x:y }} ::table-by(row) {{ x:y }} ::table-by(row)::list-item {{ x:y }}" />
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

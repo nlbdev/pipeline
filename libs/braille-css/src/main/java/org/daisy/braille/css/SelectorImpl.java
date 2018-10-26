@@ -284,14 +284,23 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		private final List<String> args;
 		private final List<PseudoClass> pseudoClasses = new ArrayList<PseudoClass>();
 		private PseudoElementImpl stackedPseudoElement = null;
+		private boolean specifiedAsClass = false;
 		
 		public PseudoElementImpl(String name, String... args) {
+			if (name.startsWith(":")) {
+				name = name.substring(1);
+				if (name.startsWith(":"))
+					name = name.substring(1);
+				else
+					specifiedAsClass = true;
+			}
 			this.name = name = name.toLowerCase(); // Pseudo-element names are case-insensitive
 			this.args = new ArrayList<String>();
 			if (name.startsWith("-"))
 				for (String a : args)
 					this.args.add(a);
 			else {
+				specifiedAsClass = false; // mistake
 				PseudoElementDef def;
 				if (PSEUDO_ELEMENT_DEFS.containsKey(name))
 					def = PSEUDO_ELEMENT_DEFS.get(name);
@@ -359,10 +368,10 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			sb
-				.append(OutputUtil.PAGE_OPENING)
-				.append(OutputUtil.PAGE_OPENING)
-				.append(name);
+			sb.append(OutputUtil.PAGE_OPENING);
+			if (!specifiedAsClass)
+				sb.append(OutputUtil.PAGE_OPENING);
+			sb.append(name);
 			if (args.size() > 0) {
 				sb.append(OutputUtil.FUNCTION_OPENING);
 				OutputUtil.appendList(sb, args, ", ");

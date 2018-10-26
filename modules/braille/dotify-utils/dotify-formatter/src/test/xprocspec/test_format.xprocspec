@@ -12950,7 +12950,7 @@
   
   <x:scenario label="test_113">
     <x:documentation>
-      Tests ::-obfl-alternate-scenario pseudo-element.
+      Tests :-obfl-alternate-scenario pseudo-class.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -12961,16 +12961,16 @@
                    style="{ display: table;
                             -obfl-table-col-spacing: 1;
                             -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); }
-                          ::-obfl-alternate-scenario {
+                          :-obfl-alternate-scenario {
                             -obfl-scenario-cost: 3;
                             display: block;
                             render-table-by:row; }
-                          ::-obfl-alternate-scenario::table-by(row) {
+                          :-obfl-alternate-scenario::table-by(row) {
                             display:block;
                             margin-left:2; }
-                          ::-obfl-alternate-scenario::table-by(row)::list-item {
+                          :-obfl-alternate-scenario::table-by(row)::list-item {
                             display:block; }
-                          ::-obfl-alternate-scenario::table-by(row)::list-item:first-child {
+                          :-obfl-alternate-scenario::table-by(row)::list-item:first-child {
                             text-indent:-2; }">
               <thead>
                 <tr>
