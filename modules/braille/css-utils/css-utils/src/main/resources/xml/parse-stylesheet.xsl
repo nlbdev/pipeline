@@ -13,11 +13,13 @@
     </xsl:template>
     
     <xsl:template match="@style">
-        <xsl:apply-templates select="css:parse-stylesheet(.)"/>
-    </xsl:template>
-    
-    <xsl:template match="css:rule[not(@selector)]">
-        <xsl:sequence select="css:style-attribute(@style)"/>
+        <xsl:variable name="style" as="element()*" select="css:parse-stylesheet(.)"/> <!-- css:rule*-->
+        <xsl:if test="exists($style/self::css:rule[not(@selector[not(contains(.,'('))])])">
+            <xsl:sequence select="css:style-attribute(
+                                    css:serialize-stylesheet(
+                                      $style/self::css:rule[not(@selector[not(contains(.,'('))])]))"/>
+        </xsl:if>
+        <xsl:apply-templates select="$style/self::css:rule[@selector[not(contains(.,'('))]]"/>
     </xsl:template>
     
     <xsl:template match="css:rule">

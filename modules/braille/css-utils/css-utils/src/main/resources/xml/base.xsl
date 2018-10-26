@@ -979,7 +979,7 @@
     </xsl:template>
     
     <xsl:function name="css:serialize-stylesheet" as="xs:string">
-        <xsl:param name="rules" as="element()*"/>
+        <xsl:param name="rules" as="element()*"/> <!-- css:rule*|css:property* -->
         <xsl:sequence select="css:serialize-stylesheet($rules,())"/>
     </xsl:function>
     

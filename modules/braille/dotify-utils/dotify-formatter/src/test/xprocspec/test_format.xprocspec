@@ -12948,4 +12948,163 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_113">
+    <x:documentation>
+      Tests ::-obfl-alternate-scenario pseudo-element.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <body style="{ text-transform: none }
+                       @page { size: 10 10 }">
+            <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+                   style="{ display: table;
+                            -obfl-table-col-spacing: 1;
+                            -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); }
+                          ::-obfl-alternate-scenario {
+                            -obfl-scenario-cost: 3;
+                            display: block;
+                            render-table-by:row; }
+                          ::-obfl-alternate-scenario::table-by(row) {
+                            display:block;
+                            margin-left:2; }
+                          ::-obfl-alternate-scenario::table-by(row)::list-item {
+                            display:block; }
+                          ::-obfl-alternate-scenario::table-by(row)::list-item:first-child {
+                            text-indent:-2; }">
+              <thead>
+                <tr>
+                  <th>⠿⠿⠿</th>
+                  <th>⠿⠿⠿</th>
+                  <th>⠿⠿⠿</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+              </tbody>
+            </table>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="main" duplex="true" page-number-variable="page" page-width="10" page-height="10">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <xml-processor name="take-nth">
+            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                            xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                            d:bogus="" xs:bogus="">
+              <xsl:param name="n" as="xs:integer"/>
+              <xsl:template match="/">
+                <xsl:sequence select="/*/d:scenario[position()=$n]"/>
+              </xsl:template>
+            </xsl:stylesheet>
+          </xml-processor>
+          <renderer name="renderer_1">
+            <rendering-scenario processor="take-nth" cost="3">
+              <parameter name="n" value="2"/>
+            </rendering-scenario>
+            <rendering-scenario processor="take-nth" cost="$forced-break-count">
+              <parameter name="n" value="1"/>
+            </rendering-scenario>
+          </renderer>
+          <sequence master="main">
+            <block>
+            <xml-data renderer="renderer_1">
+                <d:scenarios xmlns:d="http://www.daisy.org/ns/pipeline/data">
+                    <d:scenario>
+                        <block xmlns="http://www.daisy.org/ns/2011/obfl">
+                            <table table-col-spacing="1">
+                                <thead>
+                                    <tr>
+                                        <td>⠿⠿⠿</td>
+                                        <td>⠿⠿⠿</td>
+                                        <td>⠿⠿⠿</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>⠤⠤⠤</td>
+                                        <td>⠤⠤⠤</td>
+                                        <td>⠤⠤⠤</td>
+                                    </tr>
+                                    <tr>
+                                        <td>⠤⠤⠤</td>
+                                        <td>⠤⠤⠤</td>
+                                        <td>⠤⠤⠤</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </block>
+                    </d:scenario>
+                    <d:scenario>
+                        <block>
+                            <block>
+                                <block first-line-indent="0" text-indent="2">⠿⠿⠿⠤⠤⠤</block>
+                                <block padding-left="2">⠿⠿⠿⠤⠤⠤</block>
+                                <block padding-left="2">⠿⠿⠿⠤⠤⠤</block>
+                            </block>
+                            <block>
+                                <block first-line-indent="0" text-indent="2">⠿⠿⠿⠤⠤⠤</block>
+                                <block padding-left="2">⠿⠿⠿⠤⠤⠤</block>
+                                <block padding-left="2">⠿⠿⠿⠤⠤⠤</block>
+                            </block>
+                        </block>
+                    </d:scenario>
+                </d:scenarios>
+            </xml-data>
+        </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="10" rowgap="0" duplex="true">
+            <section>
+                <page>
+                  <row>⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿</row>
+                  <row>⠿</row>
+                  <row>⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠤</row>
+                  <row>⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠤</row>
+                </page>
+            </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

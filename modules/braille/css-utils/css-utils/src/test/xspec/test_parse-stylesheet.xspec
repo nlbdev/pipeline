@@ -70,4 +70,15 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_06">
+    <x:context>
+      <doc style="::list-item {{ x:y }} ::table-by(row) {{ x:y }} ::table-by(row)::list-item {{ x:y }} ::after::table-by(row) {{ x:y }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc style="::table-by(row) {{ x:y }} ::table-by(row)::list-item {{ x:y }}"
+           css:list-item="x:y"
+           css:after="::table-by(row) {{ x:y }}"/>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

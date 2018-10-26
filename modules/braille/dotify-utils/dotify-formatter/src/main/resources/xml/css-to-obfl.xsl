@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns="http://www.daisy.org/ns/2011/obfl"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:_xsl="http://www.w3.org/1999/XSL/TransformAlias"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0" >
+    
+    <xsl:namespace-alias stylesheet-prefix="_xsl" result-prefix="xsl"/>
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     
@@ -135,6 +139,93 @@
         </xsl:for-each>
     </xsl:variable>
     
+    <!-- ================== -->
+    <!-- xml-data renderers -->
+    <!-- ================== -->
+    
+    <xsl:function name="pxi:renderer-to-string" as="xs:string">
+        <xsl:param name="elem" as="element()"/>
+        <xsl:sequence select="string-join($elem/child::*/(@css:_obfl-scenario-cost,'none')[1],' ')"/>
+    </xsl:function>
+    
+    <xsl:variable name="renderers" as="xs:string*"
+                  select="distinct-values(collection()//css:box[@type='block'][@css:_obfl-scenarios]/pxi:renderer-to-string(.))"/>
+    
+    <xsl:function name="pxi:renderer-name" as="xs:string">
+        <xsl:param name="renderer"/> <!-- element()|xs:string -->
+        <xsl:choose>
+            <xsl:when test="$renderer instance of xs:string">
+                <xsl:sequence select="concat('renderer_',index-of($renderers,$renderer))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="pxi:renderer-name(pxi:renderer-to-string($renderer))"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:variable name="_OBFL_SCENARIO_COST_RE" select="concat('none|(',$css:INTEGER_RE,')|-obfl-evaluate\((',$css:STRING_RE,')\)')"/>
+    <xsl:variable name="_OBFL_SCENARIO_COST_RE_integer" select="1"/>
+    <xsl:variable name="_OBFL_SCENARIO_COST_RE_eval" select="$_OBFL_SCENARIO_COST_RE_integer + $css:INTEGER_RE_groups + 1"/>
+    
+    <xsl:function name="pxi:parse-scenario-cost" as="xs:string">
+        <xsl:param name="cost-attr" as="attribute()?"/>
+        <xsl:analyze-string select="($cost-attr/string(),'none')[1]" regex="^{$_OBFL_SCENARIO_COST_RE}$">
+            <xsl:matching-substring>
+                <xsl:choose>
+                    <xsl:when test=".='none'">
+                        <xsl:sequence select="'0'"/>
+                    </xsl:when>
+                    <xsl:when test="regex-group($_OBFL_SCENARIO_COST_RE_integer)!=''">
+                        <xsl:sequence select="regex-group($_OBFL_SCENARIO_COST_RE_integer)"/>
+                    </xsl:when>
+                    <xsl:when test="regex-group($_OBFL_SCENARIO_COST_RE_eval)!=''">
+                        <xsl:sequence select="substring(regex-group($_OBFL_SCENARIO_COST_RE_eval),
+                                                        2, string-length(regex-group($_OBFL_SCENARIO_COST_RE_eval))-2)"/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring>
+                <xsl:call-template name="coding-error">
+                    <xsl:with-param name="context" select="$cost-attr"/>
+                </xsl:call-template>
+            </xsl:non-matching-substring>
+        </xsl:analyze-string>
+    </xsl:function>
+    
+    <xsl:key name="renderer" match="css:box[@type='block'][@css:_obfl-scenarios]" use="pxi:renderer-to-string(.)"/>
+    
+    <xsl:template name="renderers">
+        <xml-processor name="take-nth">
+            <!--
+                FIXME: without the "bogus" attributes, Dotify currently does not preserve the in
+                scope namespace declarations
+            -->
+            <_xsl:stylesheet version="2.0"
+                             d:bogus=""
+                             xs:bogus="">
+                <_xsl:param name="n" as="xs:integer"/>
+                <_xsl:template match="/">
+                    <_xsl:sequence select="/*/d:scenario[position()=$n]"/>
+                </_xsl:template>
+            </_xsl:stylesheet>
+        </xml-processor>
+        <xsl:for-each select="$renderers">
+            <xsl:variable name="renderer" as="xs:string" select="."/>
+            <renderer name="{pxi:renderer-name($renderer)}">
+                <xsl:for-each select="(collection()/key('renderer',$renderer))[1]/child::*">
+                    <!--
+                        revert order because in case of equal costs Dotify selects the last scenario
+                        while CSS expects the first to be selected
+                    -->
+                    <xsl:sort order="ascending"/>
+                    <rendering-scenario processor="take-nth" cost="{pxi:parse-scenario-cost(@css:_obfl-scenario-cost)}">
+                        <parameter name="n" value="{last()-position()+1}"/>
+                    </rendering-scenario>
+                </xsl:for-each>
+            </renderer>
+        </xsl:for-each>
+    </xsl:template>
+    
     <!-- ===== -->
     <!-- Start -->
     <!-- ===== -->
@@ -166,6 +257,9 @@
             </xsl:if>
             <xsl:if test="not(exists($volume-stylesheets))">
                 <xsl:message>Document does not have an associated volume style.</xsl:message>
+            </xsl:if>
+            <xsl:if test="collection()//*/@css:_obfl-scenarios">
+                <xsl:call-template name="renderers"/>
             </xsl:if>
             <xsl:if test="$volume-stylesheets[1]/*">
                 <xsl:variable name="volume-stylesheets" as="element()*"
@@ -884,7 +978,7 @@
                                           @css:border-top-pattern or @css:border-bottom-pattern))]">
         <xsl:apply-templates mode="block-attr"
                              select="@css:line-height|@css:text-align|@css:text-indent|@page-break-inside"/>
-        <xsl:apply-templates mode="#current"/>
+        <xsl:next-match/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
     </xsl:template>
     <xsl:template priority="0.6"
@@ -899,8 +993,46 @@
             repeat orphans/widows (why?)
         -->
         <xsl:apply-templates mode="block-attr" select="@css:orphans|@css:widows"/>
-        <xsl:apply-templates mode="#current"/>
+        <xsl:next-match/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
+    </xsl:template>
+    
+    <xsl:template priority="0.59"
+                  mode="block toc-entry"
+                  match="css:box[@type='block']">
+        <xsl:apply-templates mode="#current"/>
+    </xsl:template>
+    
+    <!--
+        Rendering scenarios
+    -->
+    <xsl:template priority="0.591"
+                  mode="block"
+                  match="css:box[@type='block'][@css:_obfl-scenarios]">
+        <xml-data renderer="{pxi:renderer-name(.)}">
+            <d:scenarios>
+                <xsl:apply-templates mode="xml-data"/>
+            </d:scenarios>
+        </xml-data>
+    </xsl:template>
+    
+    <xsl:template mode="xml-data"
+                  match="css:box[@type=('block','table')][@css:_obfl-scenario]">
+        <d:scenario>
+            <xsl:apply-templates mode="block" select="."/>
+        </d:scenario>
+    </xsl:template>
+    
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:_obfl-scenarios|
+                         css:box[@type='block'][@css:_obfl-scenarios]/css:box[@type=('block','table')]/@css:_obfl-scenario|
+                         css:box[@type='block'][@css:_obfl-scenarios]/css:box[@type=('block','table')]/@css:_obfl-scenario-cost"/>
+    
+    <xsl:template priority="0.7"
+                  mode="toc-entry"
+                  match="css:box[@type='block']">
+        <xsl:apply-templates mode="assert-nil-attr" select="@css:_obfl-scenarios"/>
+        <xsl:next-match/>
     </xsl:template>
     
     <!--
@@ -2175,6 +2307,7 @@
     <xsl:template match="pxi:print-mode" mode="toc-entry-attr">toc-entry-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="assert-nil-attr">assert-nil-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="marker">marker</xsl:template>
+    <xsl:template match="pxi:print-mode" mode="xml-data">xml-data</xsl:template>
     <xsl:template match="pxi:print-mode" mode="#all" priority="-1">?</xsl:template>
     
     <!-- =========== -->

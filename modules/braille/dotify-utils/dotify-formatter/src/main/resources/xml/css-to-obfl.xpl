@@ -34,8 +34,9 @@
         <css:parse-stylesheet>
             <p:documentation>
                 Make css:page, css:volume, css:after, css:before, css:footnote-call, css:duplicate,
-                css:alternate, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-                css:_obfl-on-volume-end and css:_obfl-on-toc-end attributes.
+                css:alternate, css:_obfl-alternate-scenario, css:_obfl-on-toc-start,
+                css:_obfl-on-volume-start, css:_obfl-on-volume-end and css:_obfl-on-toc-end
+                attributes.
             </p:documentation>
         </css:parse-stylesheet>
         <p:delete match="@css:*[matches(local-name(),'^text-transform-')]">
@@ -48,6 +49,11 @@
                 Make css:flow attributes.
             </p:documentation>
         </css:parse-properties>
+        <p:delete match="css:_obfl-alternate-scenario/@css:flow">
+            <p:documentation>
+                ::-obfl-alternate-scenario pseudo-elements must participate in the normal flow.
+            </p:documentation>
+        </p:delete>
         <p:choose>
             <p:when test="//*/@css:before|
                           //*/@css:after|
@@ -57,7 +63,9 @@
                           //*/@css:_obfl-on-toc-start|
                           //*/@css:_obfl-on-volume-start|
                           //*/@css:_obfl-on-volume-end|
-                          //*/@css:_obfl-on-toc-end">
+                          //*/@css:_obfl-on-toc-end|
+                          //*/@css:_obfl-alternate-scenario
+                          ">
                 <css:make-pseudo-elements>
                     <p:documentation>
                         Make css:before, css:after, css:duplicate, css:alternate and
@@ -68,7 +76,8 @@
                 <pxi:make-obfl-pseudo-elements>
                     <p:documentation>
                         Make css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-                        css:_obfl-on-volume-end and css:_obfl-on-toc-end pseudo-elements.
+                        css:_obfl-on-volume-end, css:_obfl-on-toc-end and
+                        css:_obfl-alternate-scenario pseudo-elements.
                     </p:documentation>
                 </pxi:make-obfl-pseudo-elements>
                 <pxi:recursive-parse-stylesheet-and-make-pseudo-elements/>
@@ -99,19 +108,7 @@
         </p:input>
     </p:xslt>
     
-    <css:parse-properties properties="display render-table-by table-header-policy">
-        <p:documentation>
-            Make css:display, css:render-table-by and css:table-header-policy attributes.
-        </p:documentation>
-    </css:parse-properties>
-    
-    <css:render-table-by>
-        <p:documentation>
-            Layout tables as lists.
-        </p:documentation>
-    </css:render-table-by>
-    
-    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements name="parse-stylesheet">
+    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
         <p:documentation>
             Make css:page and css:volume attributes, css:after, css:before, css:duplicate,
             css:alternate, css:footnote-call, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
@@ -119,11 +116,23 @@
         </p:documentation>
     </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
     
+    <css:parse-properties properties="display render-table-by table-header-policy">
+        <p:documentation>
+            Make css:display, css:render-table-by and css:table-header-policy attributes.
+        </p:documentation>
+    </css:parse-properties>
+    
+    <css:render-table-by name="render-table-by">
+        <p:documentation>
+            Layout tables as lists.
+        </p:documentation>
+    </css:render-table-by>
+    
     <pxi:deep-parse-page-and-volume-stylesheets name="page-and-volume-styles"/>
     <p:sink/>
     <p:identity>
         <p:input port="source">
-            <p:pipe step="parse-stylesheet" port="result"/>
+            <p:pipe step="render-table-by" port="result"/>
         </p:input>
     </p:identity>
     
@@ -211,6 +220,13 @@
                 Make css:white-space elements from css:white-space attributes.
             </p:documentation>
         </css:preserve-white-space>
+        <p:add-attribute match="css:_[@css:_obfl-scenario and not(css:inline[not(.=('block','table'))])]"
+                         attribute-name="css:display"
+                         attribute-value="block">
+            <p:documentation>
+                Force "obfl-scenario" elements to be blocks.
+            </p:documentation>
+        </p:add-attribute>
         <p:add-attribute match="*[@css:display=('-obfl-toc','-obfl-table-of-contents')]"
                          attribute-name="css:_obfl-toc" attribute-value="_">
             <p:documentation>
@@ -483,7 +499,8 @@
             <css:split split-before="css:box[preceding::css:box]
                                             [@css:counter-set or
                                              @css:page-break-before='auto-right' or
-                                             @css:volume-break-before='always']">
+                                             @css:volume-break-before='always']
+                                            [not(ancestor::*[@css:_obfl-scenarios])]">
                 <p:documentation>
                     Split before css:counter-set attributes, and before css:volume-break-before
                     attributes with value 'always'. <!-- depends on make-boxes and
