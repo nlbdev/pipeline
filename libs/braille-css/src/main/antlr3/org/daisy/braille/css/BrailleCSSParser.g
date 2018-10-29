@@ -25,7 +25,7 @@ unknown_atrule
     ;
 
 volume
-    : VOLUME S* volume_pseudo? S* LCURLY S* declarations volume_area* RCURLY
+    : VOLUME S* (volume_pseudo S*)? LCURLY S* declarations volume_area* RCURLY
       -> ^(VOLUME volume_pseudo? declarations ^(SET volume_area*))
     ;
 
@@ -91,25 +91,29 @@ inlineset
  * possible pseudo class selector of inlineset. jStyleParser favors
  * the hack recovery over the support for pseudo elements in inline
  * stylesheets.
+ *
+ * Also disable all the other characters that are a valid beginning of
+ * a relative selector (see relative_or_chained_selector).
  */
 noprop
     :
-    ( CLASSKEYWORD -> CLASSKEYWORD
-    | NUMBER -> NUMBER
+    (
+ //   CLASSKEYWORD -> CLASSKEYWORD |
+      NUMBER -> NUMBER
     | COMMA -> COMMA
-    | GREATER -> GREATER
+ // | GREATER -> GREATER
     | LESS -> LESS
     | QUESTION -> QUESTION
     | PERCENT -> PERCENT
     | EQUALS -> EQUALS
     | SLASH -> SLASH
     | EXCLAMATION -> EXCLAMATION
-    | PLUS -> PLUS
-    | ASTERISK -> ASTERISK
+ // | PLUS -> PLUS
+ // | ASTERISK -> ASTERISK
     | DASHMATCH -> DASHMATCH
     | INCLUDES -> INCLUDES
  // | COLON -> COLON
-    | STRING_CHAR -> STRING_CHAR
+ // | STRING_CHAR -> STRING_CHAR
     | CTRL -> CTRL
     | INVALID_TOKEN -> INVALID_TOKEN
     ) !S*
@@ -131,13 +135,15 @@ simple_inlinestyle
  * attributes of an input document.
  */
 inlinedstyle
-    : simple_inlinestyle
-    | S* (inlineblock S*) + -> ^(INLINESTYLE inlineblock+)
+    : S* (
+        declarations -> ^(INLINESTYLE declarations) // simple declaration list
+        | (inlineblock S*)+ -> ^(INLINESTYLE inlineblock+) // blocks
+      )
     ;
 
 inlineblock
-    : LCURLY S* declarations RCURLY -> ^(RULE declarations) // simple declaration list within braces
-    | pseudo+ S* LCURLY S* declarations RCURLY -> ^(RULE pseudo+ declarations) // pseudo-element or pseudo-class
+    : LCURLY S* declarations RCURLY -> ^(RULE declarations) // simple declaration list in anonymous block
+    | relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(RULE relative_or_chained_selector declarations)
     | text_transform_def // text-transform at-rule
 
 // TODO: allowed as well but skip for now:
@@ -145,6 +151,13 @@ inlineblock
 
 // TODO: need a slightly different format that allows @page inside @begin and @end:
 //  | volume // volume at-rule
+    ;
+
+// The second AMPERSAND is needed to allow rules like "& foo:first-child {...}". Even thought the
+// "&" is not strictly needed for these cases, the parser currently doesn't support this because of
+// the confusion with declarations, which can start in the same manner, e.g. "foo:bar;"
+relative_or_chained_selector
+    : ( AMPERSAND selector | AMPERSAND! S!* combinator selector | combinator_selector ) (combinator selector)*
     ;
 
 anonymous_page

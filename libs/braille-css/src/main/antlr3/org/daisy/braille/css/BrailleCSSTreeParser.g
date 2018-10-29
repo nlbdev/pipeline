@@ -9,6 +9,7 @@ import CSSTreeParser;
 
 @header {
 package org.daisy.braille.css;
+import java.util.Arrays;
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.MediaQuery;
@@ -18,7 +19,9 @@ import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.css.Selector.ElementName;
 import cz.vutbr.web.csskit.RuleArrayList;
+import cz.vutbr.web.csskit.antlr.SimplePreparator;
 }
 
 @members {
@@ -215,6 +218,54 @@ relative_selector returns [CombinedSelector combinedSelector]
     ;
 
 /*
+ * Rule with selector relative to a certain element. An ampersand indicates that the relative
+ * selector should be "chained" onto the element selector (cfr. the "parent reference" in SASS).
+ *
+ * Not part of inlineset because in general we don't allow these rules inside style elements. For
+ * now they are only allowed in the special case when an individual style element is parsed.
+ */
+relative_rule returns [RuleSet rs]
+@init {
+    boolean attach = false;
+    List<Selector> sel = new ArrayList<Selector>();
+    boolean invalid = false;
+}
+    : ^(RULE
+        ((AMPERSAND s=selector) {
+            attach = true;
+            // may not start with a type selector
+            if (s.size() > 0 && s.get(0) instanceof ElementName) {
+                invalid = true;
+            }
+            sel.add(s);
+         }
+         | (c=combinator s=selector) {
+            sel.add(s.setCombinator(c));
+         }
+        )
+        (c=combinator s=selector {
+            sel.add(s.setCombinator(c));
+        })*
+        decl=declarations
+      ) {
+          if (!invalid) {
+              CombinedSelector cs = (CombinedSelector)gCSSTreeParser.rf.createCombinedSelector().unlock();
+              Selector first = (Selector)gCSSTreeParser.rf.createSelector().unlock();
+              first.add(gCSSTreeParser.rf.createElementDOM(((SimplePreparator)preparator).elem, false)); // inlinePriority does not matter
+              if (attach) {
+                  first.addAll(sel.get(0));
+                  sel.remove(0);
+              }
+              cs.add(first);
+              cs.addAll(sel);
+              $rs = gCSSTreeParser.rf.createSet();
+              $rs.replaceAll(decl);
+              $rs.setSelectors(Arrays.asList(cs));
+          }
+      }
+    ;
+
+/*
  * Simple list of declarations.
  */
 simple_inlinestyle returns [List<Declaration> style]
@@ -243,12 +294,17 @@ inlinedstyle returns [RuleList rules]
           // TODO: check that there is at most one block of simple
           // declarations, that all page at-rules have a different
           // pseudo-class, etc.
-          $rules.add(ib);
+          if (ib != null) {
+              $rules.add(ib);
+          }
       })+ )
     ;
 
 inlineblock returns [RuleBlock<?> b]
-    : irs=inlineset { $b = irs; }
+    : ^(RULE decl=declarations) {
+          $b = preparator.prepareInlineRuleSet(decl, null);
+      }
+    | rr=relative_rule { $b = rr; }
     | tt=text_transform_def { $b = tt; }
 
 // TODO: allowed as well but skip for now:

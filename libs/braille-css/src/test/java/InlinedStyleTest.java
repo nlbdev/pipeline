@@ -2,11 +2,15 @@ import java.util.Iterator;
 
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.RuleBlock;
+import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.css.Selector.Combinator;
+import cz.vutbr.web.css.Selector.ElementName;
+import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Term;
 
 import org.daisy.braille.css.InlinedStyle;
 import org.daisy.braille.css.InlinedStyle.RuleMainBlock;
-import org.daisy.braille.css.InlinedStyle.RulePseudoElementBlock;
+import org.daisy.braille.css.InlinedStyle.RuleRelativeBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
 import org.junit.Assert;
@@ -18,13 +22,19 @@ public class InlinedStyleTest {
 	public void testInlinedStyle() {
 		InlinedStyle style = new InlinedStyle(
 			// FIXME: @page { size: 25 10; } not supported
-			"{ text-transform: none } ::table-by(row)::list-item { margin-left:2; }" );
+			"{ text-transform: none } " +
+			"&::table-by(row)::list-item { margin-left:2; } " +
+			"> span { display: block } " +
+			"span:first-child { display: inline }"
+		);
 		Iterator<RuleBlock<?>> blocks;
 		RuleBlock<?> block;
 		Iterator<Declaration> declarations;
 		Declaration declaration;
+		Selector selector;
 		Iterator<Term<?>> terms;
 		PseudoElementImpl pseudo;
+		RuleRelativeBlock relativeRule;
 		blocks = style.iterator();
 		Assert.assertTrue(blocks.hasNext());
 		block = blocks.next();
@@ -41,8 +51,14 @@ public class InlinedStyleTest {
 		Assert.assertFalse(declarations.hasNext());
 		Assert.assertTrue(blocks.hasNext());
 		block = blocks.next();
-		Assert.assertTrue(block instanceof RulePseudoElementBlock);
-		pseudo = ((RulePseudoElementBlock)block).getPseudoElement();
+		Assert.assertTrue(block instanceof RuleRelativeBlock);
+		relativeRule = (RuleRelativeBlock)block;
+		Assert.assertEquals(1, relativeRule.getSelector().size());
+		selector = relativeRule.getSelector().get(0);
+		Assert.assertEquals(null, selector.getCombinator());
+		Assert.assertEquals(1, selector.size());
+		Assert.assertTrue(selector.get(0) instanceof PseudoElementImpl);
+		pseudo = (PseudoElementImpl)selector.get(0);
 		Assert.assertEquals("table-by", pseudo.getName());
 		Assert.assertEquals(1, pseudo.getArguments().length);
 		Assert.assertEquals("row", pseudo.getArguments()[0]);
@@ -52,7 +68,7 @@ public class InlinedStyleTest {
 		Assert.assertEquals("list-item", pseudo.getName());
 		Assert.assertTrue(pseudo.getPseudoClasses().isEmpty());
 		Assert.assertFalse(pseudo.hasStackedPseudoElement());
-		declarations = ((RulePseudoElementBlock)block).iterator();
+		declarations = relativeRule.iterator();
 		Assert.assertTrue(declarations.hasNext());
 		declaration = declarations.next();
 		Assert.assertEquals("margin-left", declaration.getProperty());
@@ -61,6 +77,47 @@ public class InlinedStyleTest {
 		Assert.assertEquals("2", terms.next().toString());
 		Assert.assertFalse(terms.hasNext());
 		Assert.assertFalse(declarations.hasNext());
+		Assert.assertTrue(blocks.hasNext());
+		block = blocks.next();
+		Assert.assertTrue(block instanceof RuleRelativeBlock);
+		relativeRule = (RuleRelativeBlock)block;
+		Assert.assertEquals(1, relativeRule.getSelector().size());
+		selector = relativeRule.getSelector().get(0);
+		Assert.assertEquals(Combinator.CHILD, selector.getCombinator());
+		Assert.assertEquals(1, selector.size());
+		Assert.assertTrue(selector.get(0) instanceof ElementName);
+		Assert.assertTrue(blocks.hasNext());
+		block = blocks.next();
+		Assert.assertTrue(block instanceof RuleRelativeBlock);
+		relativeRule = (RuleRelativeBlock)block;
+		Assert.assertEquals(1, relativeRule.getSelector().size());
+		selector = relativeRule.getSelector().get(0);
+		Assert.assertEquals(Combinator.DESCENDANT, selector.getCombinator());
+		Assert.assertEquals(2, selector.size());
+		Assert.assertTrue(selector.get(0) instanceof ElementName);
+		Assert.assertTrue(selector.get(1) instanceof PseudoClass);
+		Assert.assertFalse(blocks.hasNext());
+		
+		style = new InlinedStyle(
+			"span:first-child { display: inline }"
+		);
+		blocks = style.iterator();
+		Assert.assertFalse(blocks.hasNext());
+		
+		style = new InlinedStyle(
+			"& span:first-child { display: inline }"
+		);
+		blocks = style.iterator();
+		Assert.assertTrue(blocks.hasNext());
+		block = blocks.next();
+		Assert.assertTrue(block instanceof RuleRelativeBlock);
+		relativeRule = (RuleRelativeBlock)block;
+		Assert.assertEquals(1, relativeRule.getSelector().size());
+		selector = relativeRule.getSelector().get(0);
+		Assert.assertEquals(Combinator.DESCENDANT, selector.getCombinator());
+		Assert.assertEquals(2, selector.size());
+		Assert.assertTrue(selector.get(0) instanceof ElementName);
+		Assert.assertTrue(selector.get(1) instanceof PseudoClass);
 		Assert.assertFalse(blocks.hasNext());
 	}
 }
