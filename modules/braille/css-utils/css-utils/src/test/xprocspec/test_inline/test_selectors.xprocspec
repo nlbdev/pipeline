@@ -485,4 +485,42 @@
     </x:expect>
   </x:scenario>
   
+  <!--
+      Descendant selector inside pseudo class
+  -->
+  <x:scenario label="test_12">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                table:-obfl-alternate-scenario tr:blank::after {
+                  content: "(empty)"
+                }
+              </style>
+            </head>
+            <body>
+              <table>
+                <tr/>
+              </table>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <table style=":-obfl-alternate-scenario tr:blank::after { content: &quot;(empty)&quot;; }">
+            <tr/>
+          </table>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

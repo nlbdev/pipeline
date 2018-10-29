@@ -22,6 +22,22 @@ import org.w3c.dom.NodeList;
 
 public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 	
+	public boolean add(Selector selector) throws UnsupportedOperationException {
+		if (size() > 0) {
+			SelectorPart lastPart = get(size() - 1);
+			if (lastPart instanceof PseudoElement) {
+				if (!(lastPart instanceof PseudoElementImpl))
+					throw new RuntimeException(); // should not happen
+				// if this selector contains a custom pseudo class, we append any following selectors to the stack
+				if (((PseudoElementImpl)lastPart).containsCustomPseudoClass()) {
+					((PseudoElementImpl)lastPart).add(selector);
+					return true;
+				}
+			}
+		}
+		throw new UnsupportedOperationException("Selectors should be combined with CombinedSelector");
+	}
+	
 	@Override
 	public boolean add(SelectorPart part) {
 		if (part instanceof PseudoElement) {
@@ -31,7 +47,7 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				SelectorPart lastPart = get(size() - 1);
 				if (lastPart instanceof PseudoElement) {
 					if (!(lastPart instanceof PseudoElementImpl))
-						throw new RuntimeException();
+						throw new RuntimeException(); // should not happen
 					return ((PseudoElementImpl)lastPart).add((PseudoElementImpl)part);
 				}
 			}
@@ -40,7 +56,7 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				SelectorPart lastPart = get(size() - 1);
 				if (lastPart instanceof PseudoElement) {
 					if (!(lastPart instanceof PseudoElementImpl))
-						throw new RuntimeException();
+						throw new RuntimeException(); // should not happen
 					return ((PseudoElementImpl)lastPart).add((PseudoClass)part);
 				}
 			}
@@ -283,6 +299,7 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		private final String name;
 		private final List<String> args;
 		private final List<PseudoClass> pseudoClasses = new ArrayList<PseudoClass>();
+		private final List<Selector> combinedSelectors = new ArrayList<Selector>();
 		private PseudoElementImpl stackedPseudoElement = null;
 		private boolean specifiedAsClass = false;
 		
@@ -338,6 +355,8 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		}
 		
 		private boolean add(PseudoClass pseudoClass) {
+			if (!combinedSelectors.isEmpty())
+				throw new RuntimeException(); // should not happen
 			if (stackedPseudoElement != null)
 				return stackedPseudoElement.add(pseudoClass);
 			else
@@ -345,6 +364,8 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		}
 		
 		private boolean add(PseudoElementImpl pseudoElement) {
+			if (!combinedSelectors.isEmpty())
+				throw new RuntimeException(); // should not happen
 			if (stackedPseudoElement != null)
 				return stackedPseudoElement.add(pseudoElement);
 			else {
@@ -353,8 +374,22 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			 }
 		}
 		
+		private boolean add(Selector selector) {
+			if (stackedPseudoElement != null)
+				return stackedPseudoElement.add(selector);
+			else {
+				if (selector.getCombinator() == null)
+					throw new RuntimeException(); // should not happen
+				return combinedSelectors.add(selector);
+			}
+		}
+		
 		public List<PseudoClass> getPseudoClasses() {
 			return pseudoClasses;
+		}
+		
+		public List<Selector> getCombinedSelectors() {
+			return combinedSelectors;
 		}
 		
 		public boolean hasStackedPseudoElement() {
@@ -363,6 +398,15 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		
 		public PseudoElementImpl getStackedPseudoElement() {
 			return stackedPseudoElement;
+		}
+		
+		private boolean containsCustomPseudoClass() {
+			if (specifiedAsClass)
+				return true;
+			else if (stackedPseudoElement != null)
+				return stackedPseudoElement.containsCustomPseudoClass();
+			else
+				return false;
 		}
 		
 		@Override
@@ -377,11 +421,15 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				OutputUtil.appendList(sb, args, ", ");
 				sb.append(OutputUtil.FUNCTION_CLOSING);
 			}
-			if (!pseudoClasses.isEmpty())
-				for (PseudoClass p : pseudoClasses)
-					sb.append(p);
-			if (stackedPseudoElement != null)
-				sb.append(stackedPseudoElement);
+			if (!combinedSelectors.isEmpty())
+				sb = OutputUtil.appendList(sb, combinedSelectors, OutputUtil.EMPTY_DELIM);
+			else {
+				if (!pseudoClasses.isEmpty())
+					for (PseudoClass p : pseudoClasses)
+						sb.append(p);
+				if (stackedPseudoElement != null)
+					sb.append(stackedPseudoElement);
+			}
 			return sb.toString();
 		}
 		
