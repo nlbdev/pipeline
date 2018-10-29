@@ -694,10 +694,10 @@ public class CssInlineStep extends DefaultStep {
 	
 	private static void pseudoElementToString(StringBuilder builder, PseudoElement elem) {
 		if (elem instanceof PseudoElementImpl) {
-			builder.append(elem);
+			builder.append("&").append(elem);
 			return; }
 		else {
-			builder.append("::").append(elem.getName());
+			builder.append("&::").append(elem.getName());
 			String[] args = elem.getArguments();
 			if (args.length > 0)
 				builder.append("(").append(join(args, ", ")).append(")"); }

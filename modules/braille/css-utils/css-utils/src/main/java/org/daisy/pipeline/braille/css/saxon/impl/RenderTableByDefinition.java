@@ -26,12 +26,15 @@ import com.google.common.collect.ImmutableList;
 
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.RuleBlock;
+import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPair;
+import cz.vutbr.web.csskit.OutputUtil;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.expr.XPathContext;
@@ -47,7 +50,7 @@ import net.sf.saxon.value.SequenceType;
 
 import org.daisy.braille.css.InlinedStyle;
 import org.daisy.braille.css.InlinedStyle.RuleMainBlock;
-import org.daisy.braille.css.InlinedStyle.RulePseudoElementBlock;
+import org.daisy.braille.css.InlinedStyle.RuleRelativeBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
@@ -284,37 +287,50 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 								String newStyle = null;
 								for (RuleBlock<?> block : style) {
 									if (block instanceof RuleMainBlock)
-										newStyle = joinRuleSets(newStyle, serializeRuleSet(style.getMainStyle(), null));
-									else if (block instanceof RulePseudoElementBlock) {
-										List<Declaration> ruleset = (RulePseudoElementBlock)block;
-										PseudoElementImpl pseudo = ((RulePseudoElementBlock)block).getPseudoElement();
-										if ("list-item".equals(pseudo.getName()))
-											addListItemStyle(
-												pseudo.getPseudoClasses(),
-												new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset));
-										else if ("list-header".equals(pseudo.getName())) {
-											if (pseudo.getPseudoClasses().isEmpty())
-												addListHeaderStyle(
-													new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset)); }
-										else if ("table-by".equals(pseudo.getName())) {
-											String axis = pseudo.getArguments()[0];
-											if (pseudo.getPseudoClasses().isEmpty()) {
-												if (pseudo.hasStackedPseudoElement()) {
-													pseudo = pseudo.getStackedPseudoElement();
+										newStyle = joinRuleSets(newStyle, serializeRuleSet(style.getMainStyle()));
+									else if (block instanceof RuleRelativeBlock) {
+										RuleRelativeBlock ruleset = (RuleRelativeBlock)block;
+										List<Selector> selector = ruleset.getSelector();
+										if (selector.size() > 0) { // should always be true
+											// note that in the cases "&::list-item", "&::list-header" and "&::table-by(...)" we
+											// are ignoring any following selector parts except those that are "stacked" onto the
+											// pseudo element
+											if (selector.get(0).size() > 0) { // should always be true
+												if (selector.get(0).get(0) instanceof PseudoElementImpl) {
+													// selector.get(0).size() should always be 1
+													PseudoElementImpl pseudo = (PseudoElementImpl)selector.get(0).get(0);
+													// selector size should be 1
 													if ("list-item".equals(pseudo.getName()))
-														getTableByStyle(axis).addListItemStyle(
+														addListItemStyle(
 															pseudo.getPseudoClasses(),
 															new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset));
 													else if ("list-header".equals(pseudo.getName())) {
 														if (pseudo.getPseudoClasses().isEmpty())
-															getTableByStyle(axis).addListHeaderStyle(
+															addListHeaderStyle(
 																new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset)); }
+													else if ("table-by".equals(pseudo.getName())) {
+														String axis = pseudo.getArguments()[0];
+														if (pseudo.getPseudoClasses().isEmpty()) {
+															if (pseudo.hasStackedPseudoElement()) {
+																pseudo = pseudo.getStackedPseudoElement();
+																if ("list-item".equals(pseudo.getName()))
+																	getTableByStyle(axis).addListItemStyle(
+																		pseudo.getPseudoClasses(),
+																		new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset));
+																else if ("list-header".equals(pseudo.getName())) {
+																	if (pseudo.getPseudoClasses().isEmpty())
+																		getTableByStyle(axis).addListHeaderStyle(
+																			new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset)); }
+																else
+																	getTableByStyle(axis).addRuleSet(pseudo, ruleset); }
+															else
+																getTableByStyle(axis).addRuleSet(ruleset); }}
 													else
-														getTableByStyle(axis).addRuleSet(pseudo, ruleset); }
+														newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset)); }
 												else
-													getTableByStyle(axis).addRuleSet(ruleset); }}
-										else
-											newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset, pseudo)); }
+													newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset)); }
+											else
+												newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset)); }}
 									else
 										throw new RuntimeException("Unexpected style " + block); }
 								if (newStyle != null)
@@ -1276,10 +1292,35 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	private static String serializeRuleSet(List<Declaration> declarations, PseudoElementImpl pseudo) {
 		StringBuilder b = new StringBuilder();
 		if (pseudo != null)
-			b.append(pseudo.toString()).append(" { ");
+			b.append("&").append(pseudo.toString()).append(" { ");
 		b.append(serializeDeclarations(declarations));
 		if (pseudo != null)
 			b.append(" }");
+		return b.toString();
+	}
+
+	private static String serializeRuleSet(RuleMainBlock rule) {
+		return serializeDeclarations(rule);
+	}
+	
+	private static String serializeRuleSet(RuleRelativeBlock rule) {
+		StringBuilder b = new StringBuilder();
+		boolean first = true;
+		for (Selector s : rule.getSelector()) {
+			Combinator c = s.getCombinator();
+			if (first) {
+				if (c == null)
+					b.append("&");
+				else if (c != Combinator.CHILD)
+					b.append(c.value());
+				first = false;
+			} else if (c != null) // should always be true
+				b.append(c.value());
+			b = OutputUtil.appendList(b, s, OutputUtil.EMPTY_DELIM);
+		}
+		b.append(" { ");
+		b.append(serializeDeclarations(rule));
+		b.append(" }");
 		return b.toString();
 	}
 	

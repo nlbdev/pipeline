@@ -394,7 +394,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="{ display: block; } ::after { display: block; } ::after::before { display: block; } ::before { display: block; } ::table-by(foo) { display: block; }">foobar</p>
+          <p style="{ display: block; } &amp;::after { display: block; } &amp;::after::before { display: block; } &amp;::before { display: block; } &amp;::table-by(foo) { display: block; }">foobar</p>
         </body>
       </x:document>
     </x:expect>
@@ -440,7 +440,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <table style="{ -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); -obfl-table-col-spacing: 1; display: table; } :-obfl-alternate-scenario { -obfl-scenario-cost: 3; display: block; render-table-by: row; } :-obfl-alternate-scenario::table-by(row) { display: block; margin-left: 2; } :-obfl-alternate-scenario::table-by(row)::list-item { display: block; }"/>
+          <table style="{ -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); -obfl-table-col-spacing: 1; display: table; } &amp;:-obfl-alternate-scenario { -obfl-scenario-cost: 3; display: block; render-table-by: row; } &amp;:-obfl-alternate-scenario::table-by(row) { display: block; margin-left: 2; } &amp;:-obfl-alternate-scenario::table-by(row)::list-item { display: block; }"/>
         </body>
       </x:document>
     </x:expect>
@@ -515,7 +515,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <table style=":-obfl-alternate-scenario tr:blank::after { content: &quot;(empty)&quot;; }">
+          <table style="&amp;:-obfl-alternate-scenario tr:blank::after { content: &apos;(empty)&apos;; }">
             <tr/>
           </table>
         </body>

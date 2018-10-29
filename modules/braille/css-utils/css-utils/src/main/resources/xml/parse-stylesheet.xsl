@@ -23,9 +23,9 @@
     </xsl:template>
     
     <xsl:template match="css:rule">
-        <xsl:attribute name="css:{replace(replace(replace(@selector, '^(@|::|:)' , ''  ),
-                                                                     '^-'        , '_' ),
-                                                                     ' +'        , '-' )}"
+        <xsl:attribute name="css:{replace(replace(replace(@selector, '^(@|&amp;::|&amp;:)' , ''  ),
+                                                                     '^-'                  , '_' ),
+                                                                     ' +'                  , '-' )}"
                        select="@style"/>
     </xsl:template>
     

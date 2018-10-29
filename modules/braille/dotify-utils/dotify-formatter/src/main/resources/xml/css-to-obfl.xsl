@@ -60,7 +60,7 @@
         <css:rule selector="@page" style=""/>
         <xsl:sequence select="$page-and-volume-styles[@selector='@page']"/>
         <xsl:for-each select="$volume-stylesheets">
-            <xsl:sequence select="(if (*[matches(@selector,'^:')])
+            <xsl:sequence select="(if (*[matches(@selector,'^&amp;:')])
                                    then */*
                                    else *)
                                   [@selector=('@begin','@end')]
@@ -81,19 +81,19 @@
                 <xsl:when test="not(@selector)">
                     <xsl:sequence select="obfl:not(obfl:or($stylesheets[position()&lt;$i or @selector]/obfl:volume-stylesheets-use-when(.)))"/>
                 </xsl:when>
-                <xsl:when test="@selector=':first'">
+                <xsl:when test="@selector='&amp;:first'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume 1)',
                                             obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
-                <xsl:when test="@selector=':last'">
+                <xsl:when test="@selector='&amp;:last'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume $volumes)',
                                             obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
-                <xsl:when test="matches(@selector,'^:nth\([1-9][0-9]*\)$')">
+                <xsl:when test="matches(@selector,'^&amp;:nth\([1-9][0-9]*\)$')">
                     <xsl:sequence select="obfl:and((
-                                            concat('(= $volume ',substring(@selector,6)),
+                                            concat('(= $volume ',substring(@selector,7)),
                                             obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -113,13 +113,13 @@
     <xsl:variable name="collection-flows" as="xs:string*">
         <xsl:for-each select="$page-stylesheets">
             <xsl:sequence select="css:parse-content-list(
-                                    (if (*[matches(@selector,'^:')]) then css:rule[not(@selector)] else .)
+                                    (if (*[matches(@selector,'^&amp;:')]) then css:rule[not(@selector)] else .)
                                     /css:rule[@selector='@footnotes'][1]
                                     /css:property[@name='content'][1]/@value,())
                                   /self::css:flow[@from and (not(@scope) or @scope='page')]/@from"/>
         </xsl:for-each>
         <xsl:for-each select="$volume-stylesheets">
-            <xsl:for-each select="(if (*[matches(@selector,'^:')])
+            <xsl:for-each select="(if (*[matches(@selector,'^&amp;:')])
                                    then */*
                                    else *)
                                   [@selector=('@begin','@end')]">
@@ -263,7 +263,7 @@
             </xsl:if>
             <xsl:if test="$volume-stylesheets[1]/*">
                 <xsl:variable name="volume-stylesheets" as="element()*"
-                              select="if ($volume-stylesheets[1]/*[matches(@selector,'^:')])
+                              select="if ($volume-stylesheets[1]/*[matches(@selector,'^&amp;:')])
                                       then $volume-stylesheets/*
                                       else $volume-stylesheets"/>
                 <xsl:variable name="volume-stylesheets-use-when" as="xs:string*"
@@ -552,7 +552,7 @@
                                     [css:parse-counter-set(@value,1)[@name='page']]"/>
             <xsl:variable name="some-volume-areas-use-counter-page" as="xs:boolean"
                           select="some $a in (for $v in $volume-stylesheets
-                                              return (if ($v/*[matches(@selector,'^:')])
+                                              return (if ($v/*[matches(@selector,'^&amp;:')])
                                                       then $v/*
                                                       else $v)
                                                      /*[@selector=('@begin','@end')])

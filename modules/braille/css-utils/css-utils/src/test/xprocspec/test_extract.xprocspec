@@ -39,7 +39,7 @@
 								                      border-bottom-width: 1;"/>
 								<p xml:id="d" style="display: block"/>
 								<p xml:id="e" style="display: block"/>
-								<p xml:id="f" style="{ display: block } ::before { content: 'foo' }"/>
+								<p xml:id="f" style="{ display: block } &amp;::before { content: 'foo' }"/>
 							</section>
 						</body>
 					</html>
