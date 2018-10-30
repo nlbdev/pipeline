@@ -50,13 +50,13 @@
         <x:document type="inline">
           <doc style="text-transform:none">
             <body style="@page { size: 15 5 }">
-              <frontmatter style="{ display: block } @page { size: 30 5 }">
+              <frontmatter style="display: block; @page { size: 30 5 }">
                 ⠤⠤⠤
               </frontmatter>
               <bodymatter style="display: block">
                 ⠤⠤⠤
               </bodymatter>
-              <rearmatter style="{ display: block } @page { size: 30 5 }">
+              <rearmatter style="display: block; @page { size: 30 5 }">
                 ⠤⠤⠤
               </rearmatter>
             </body>
@@ -322,11 +322,11 @@
                               string-set: print-page '⠤', running-footer '⠤⠤'">
                 ⠤⠤⠤
               </section>
-              <section style="{ display: block }
+              <section style="display: block;
                               @page {
-                              size: 20 5;
-                              @bottom-center { content: string(running-footer) }
-                              @bottom-right { content: string(print-page) }}">
+                                size: 20 5;
+                                @bottom-center { content: string(running-footer) }
+                                @bottom-right { content: string(print-page) }}">
                 ⠤⠤⠤
               </section>
             </body>
@@ -436,7 +436,7 @@
               <section style="display: block;">
                 ⠤⠤⠤
               </section>
-              <section style="{ display: block } @page { size: 15 5 }">
+              <section style="display: block; @page { size: 15 5 }">
                 ⠤⠤⠤
               </section>
               <section style="display: block;
@@ -452,7 +452,7 @@
                               page-break-before: always">
                 ⠤⠤⠤
               </section>
-              <section style="{ display: block }
+              <section style="display: block;
                               @page {
                               size: 15 5;
                               @top-right { content: counter(page) }}">
@@ -615,7 +615,7 @@
                            size: 15 5;
                            margin-bottom: 1;
                            @bottom-right { content: counter(page) }}">
-              <frontmatter style="{ display: block }
+              <frontmatter style="display: block;
                                   @page {
                                     size: 15 5;
                                     margin-bottom: 1;
@@ -625,7 +625,8 @@
               <bodymatter style="display: block">
                 ⠤⠤⠤
               </bodymatter>
-              <rearmatter style="{ display: block; counter-set: page 1 }
+              <rearmatter style="display: block;
+                                 counter-set: page 1;
                                  @page {
                                    size: 15 5;
                                    margin-bottom: 1;
@@ -1250,7 +1251,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 10 6 }">
+          <doc style="text-transform: none; @page { size: 10 6 }">
             <level1 style="display:block; page-break-after: always">
               ⠤⠤⠤
             </level1>
@@ -1317,7 +1318,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none; display:block">
+          <doc style="text-transform: none; display:block">
             <body style="@page { size: 20 15 }">
               ⠿⠿⠿⠿
               <div style="display: block;
@@ -1807,7 +1808,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 15 5 }">
+          <doc style="text-transform: none; @page { size: 15 5 }">
             <body>
               <p style="display: block; text-indent: 2"> ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ </p>
             </body>
@@ -1868,7 +1869,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 15 5 }">
+          <doc style="text-transform: none; @page { size: 15 5 }">
             <body style="display: block; margin-left: 4">
               <p style="display: block; text-indent: -2"> ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ </p>
             </body>
@@ -1932,10 +1933,10 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 15 5 }">
+          <doc style="text-transform: none; @page { size: 15 5 }">
             <p style="display: block; text-indent: 2">
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <pagenum style="{display:block;text-indent:0} &amp;::before{content: leader('⠐') ' '}">⠿</pagenum>
+              <pagenum style="display: block; text-indent: 0; &amp;::before{content: leader('⠐') ' '}">⠿</pagenum>
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
             </p>
           </doc>
@@ -2458,7 +2459,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 14 8 }">
+          <doc style="text-transform: none; @page { size: 14 8 }">
             <p style="display:block">
               <a href="foo" style="&amp;::after { content: target-counter(attr(href), page) }"/>
             </p>
@@ -2538,7 +2539,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none; display:block">
+          <doc style="text-transform: none; display:block">
             ⠤⠤⠤<br style="&amp;::before { content: '&#xA;'; white-space: pre-line; }"/>⠤⠤⠤
             <br style="&amp;::before { content: '&#xA;'; white-space: pre-line; }"/>
             <br style="&amp;::before { content: '&#xA;'; white-space: pre-line; }"/>⠤⠤⠤
@@ -2667,7 +2668,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none; display:block } @page { size: 12 5; }">
+          <doc style="text-transform: none; display:block; @page { size: 12 5; }">
             ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿­⠿⠿⠿ ⠿⠿⠿⠿⠿⠿
           </doc>
         </x:document>
@@ -2868,7 +2869,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 40 25 }">
+          <doc style="text-transform: none; @page { size: 40 25 }">
             <body>
               <p style="display: block; line-height: 2">
                 ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
@@ -2943,7 +2944,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none; line-height:2">
+          <doc style="text-transform: none; line-height:2">
             <body>
               <p style="display:block">
                 ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
@@ -3096,7 +3097,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none; display:block">
+          <doc style="text-transform: none; display:block">
             <p style="display:block; line-height:2; border-bottom-pattern:⠒">
               ⠿⠿⠿⠿⠿⠿⠿⠿
             </p>
@@ -3163,7 +3164,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none; display:block">
+          <doc style="text-transform: none; display:block">
             <p style="display:block; line-height:2; margin-bottom:1; text-align:center">
               ⠿⠿⠿⠿⠿⠿⠿⠿
             </p>
@@ -3229,7 +3230,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { margin-top: 1; }">
+          <doc style="text-transform: none; @page { margin-top: 1; }">
             <body>
               <p style="display:block">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
             </body>
@@ -3300,7 +3301,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { margin-top: 2; }">
+          <doc style="text-transform: none; @page { margin-top: 2; }">
             <body>
               <p style="display:block">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
             </body>
@@ -3383,7 +3384,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { @top-left { content: '⠆' } margin-top: 1; }">
+          <doc style="text-transform: none; @page { @top-left { content: '⠆' } margin-top: 1; }">
             <body>
               <p style="display:block">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
             </body>
@@ -3454,7 +3455,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { @top-left { content: '⠆' } margin-top: 2; }">
+          <doc style="text-transform: none; @page { @top-left { content: '⠆' } margin-top: 2; }">
             <body>
               <p style="display:block">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
             </body>
@@ -3537,7 +3538,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page:right{margin-top:1} @page:left{margin-top:2}">
+          <doc style="text-transform: none; @page:right{margin-top:1} @page:left{margin-top:2}">
             <body>
               <p style="display:block;">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
               <p style="display:block; page-break-before:always;">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
@@ -3647,7 +3648,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none; display:block">
+          <doc style="text-transform: none; display:block">
             <p style="display:block"/>
             ⠿
             <p style="display:block">
@@ -3870,7 +3871,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 12 8 }">
+          <doc style="text-transform: none; @page { size: 12 8 }">
             <p style="display:block">
               ⠿⠿⠿­⠿⠿⠿ ⠿⠿⠿­⠿⠿⠿
             </p>
@@ -3954,7 +3955,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 15 5; margin-bottom: 1; }">
+          <doc style="text-transform: none; @page { size: 15 5; margin-bottom: 1; }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4041,7 +4042,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 15 5; margin-bottom: 2; }">
+          <doc style="text-transform: none; @page { size: 15 5; margin-bottom: 2; }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4139,7 +4140,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page { @bottom-left { content: '⠆' } size: 15 5; margin-bottom: 1; }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4227,7 +4228,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page { @bottom-left { content: '⠆' } size: 15 5; margin-bottom: 2;}">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4327,7 +4328,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page { @bottom-left { content: '⠆&#x0a;⠆⠆'; white-space: pre-wrap; } size: 15 5; margin-bottom: 2; }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4427,7 +4428,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page { @bottom-left { content: '⠆&#x0a;⠆⠆'; white-space: pre-wrap; } size: 15 5; margin-bottom: 1; }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4532,7 +4533,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page {
                         size: 20 7;
                       }
@@ -4883,7 +4884,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page {
                         size: 20 6;
                         @bottom-left {
@@ -5017,7 +5018,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page {
                         size: 10 6;
                         margin-bottom: 1;
@@ -5198,7 +5199,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 15 5 } @volume { @begin { content: flow(titlepage) }} { text-transform: none }">
+          <doc style="text-transform: none; @page { size: 15 5 } @volume { @begin { content: flow(titlepage) }}">
             <front>
               <titlepage style="display: block; flow: titlepage">
                 ⠿⠿⠿
@@ -5278,7 +5279,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 10 5 } @volume { max-length: 3 } { text-transform: none }">
+          <doc style="text-transform: none; @page { size: 10 5 } @volume { max-length: 3 }">
             <body style="display:block">
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -5470,7 +5471,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 10 5 } @volume { max-length: 3 } @volume:first { max-length: 1 } { text-transform: none }">
+          <doc style="text-transform: none; @page { size: 10 5 } @volume { max-length: 3 } @volume:first { max-length: 1 }">
             <body style="display: block">
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -5647,7 +5648,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
+          <doc style="text-transform: none;
                       @page {
                         size: 10 5;
                         @bottom-left { content: string(foo, first) }
@@ -5785,7 +5786,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
+          <doc style="text-transform: none;
                       @page { size: 15 5; margin-left: 2 }">
             <body style="display: block">
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -5869,7 +5870,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
+          <doc style="text-transform: none;
                       @page { size: 15 5; margin-left: 2; @left { content: -obfl-marker-indicator(pagenum, '⠿') }}">
             <body style="display: block">
               <pagenum style="display: none; -obfl-marker: pagenum">1</pagenum>
@@ -5953,7 +5954,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
+          <doc style="text-transform: none;
                       @page { size: 15 5; @left { content: -obfl-marker-indicator(pagenum, '⠿') }}">
             <body style="display: block">
               <pagenum style="display: none; -obfl-marker: pagenum">1</pagenum>
@@ -6037,8 +6038,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 10 10; }">
-            <body style="{ display: block }
+          <doc style="text-transform: none; @page { size: 10 10; }">
+            <body style="display: block;
                          &amp;::after { display:block; margin-left:1; content:'⠤⠤⠤' }
                          &amp;::after::before { display:block; margin-left:1; content:'⠸⠸⠸' }
                          &amp;::after::after { display:block; margin-left:1; content:'⠛⠛⠛' }">
@@ -6109,11 +6110,11 @@
       <x:input port="source">
         <x:document type="inline">
           <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-                 style="{ display:table;
-                          padding-left:1;
-                          padding-right:1;
-                          -obfl-table-col-spacing:1;
-                          text-transform:none }
+                 style="display: table;
+                        padding-left: 1;
+                        padding-right: 1;
+                        -obfl-table-col-spacing: 1;
+                        text-transform: none;
                         @page { size: 20 12; }">
             <caption>
               <p style="display:block; text-align:center">
@@ -6275,12 +6276,12 @@
       <x:input port="source">
         <x:document type="inline">
           <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-                 style="@page { size: 25 10; }
-                        { display:table;
-                          -obfl-table-col-spacing:1;
-                          -obfl-preferred-empty-space:0;
-                          render-table-by:column;
-                          text-transform:none; }">
+                 style="display:table;
+                        -obfl-table-col-spacing:1;
+                        -obfl-preferred-empty-space:0;
+                        render-table-by:column;
+                        text-transform: none;
+                        @page { size: 25 10; }">
             <thead>
               <tr>
                 <th colspan="2">⠤⠤⠤</th>
@@ -6398,19 +6399,22 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none }
+          <body style="text-transform: none;
                        @page { size: 10 6; @footnotes { content: flow(footnotes) }}">
-            <p style="display:block">
+            <p style="display: block">
               ⠤⠤⠤
-              <note style="{flow:footnotes; display:block}
+              <note style="flow: footnotes;
+                           display: block;
                            &amp;::footnote-call { content:'⠶' }">⠿⠿⠿</note>
               ⠤⠤⠤
-              <note style="{flow:footnotes; display:block}
+              <note style="flow: footnotes;
+                           display: block;
                            &amp;::footnote-call { content:'⠶⠶' }">⠿⠿⠿⠿⠿⠿</note>
             </p>
-            <p style="display:block;page-break-before:always">
+            <p style="display: block; page-break-before: always">
               ⠤⠤⠤
-              <note style="{flow:footnotes; display:block}
+              <note style="flow: footnotes;
+                           display: block;
                            &amp;::footnote-call { content:'⠶' }">⠿⠿⠿⠿⠿⠿⠿⠿⠿</note>
             </p>
           </body>
@@ -6501,7 +6505,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none }
+          <body style="text-transform: none;
                        @page { size: 10 6; @footnotes { content: flow(footnotes) }}">
             <p style="display:block">
               ⠤⠤⠤
@@ -6581,12 +6585,12 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 10 6 }
+          <doc style="text-transform: none;
+                      @page { size: 10 6 }
                       @volume {
                         max-length: 3;
                         @end {
-                          content: flow(endnotes, volume) }}
-                      { text-transform: none }">
+                          content: flow(endnotes, volume) }}">
             <body>
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -6756,12 +6760,12 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none }
+          <body style="text-transform: none;
                        @page { size: 20 6; @footnotes { content: flow(footnotes) }}">
             <p style="display:block">
               ⠤⠤⠤
               <noteref ref="note_1"
-                       style="{ counter-increment: footnote; }
+                       style="counter-increment: footnote;
                               &amp;::after { content: '⠦' counter(footnote) '⠴'; }
                               &amp;::alternate {
                                 flow: footnotes;
@@ -6769,7 +6773,7 @@
                                 content: counter(footnote) ' ' target-content(attr(ref)); }"/>
               ⠤⠤⠤
               <noteref ref="note_2"
-                       style="{ counter-increment: footnote; }
+                       style="counter-increment: footnote;
                               &amp;::after { content: '⠦' counter(footnote) '⠴'; }
                               &amp;::alternate {
                                 flow: footnotes;
@@ -6856,14 +6860,15 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="@page { size: 20 6 } { text-transform:none }">
-            <section style="{ display: block }
+          <body style="text-transform: none; @page { size: 20 6 }">
+            <section style="display: block;
                             &amp;::after { display:block; content: flow(chapter-notes)}">
               <h1 style="display:block; page-break-before:always">
                 ⠤⠤⠤
               </h1>
               ⠤⠤⠤
-              <note style="{flow:chapter-notes; display:block}
+              <note style="flow: chapter-notes;
+                           display: block;
                            &amp;::alternate { content:'⠶' }">⠿⠿⠿</note>
               ⠤⠤⠤
               <noteref ref="note_2"
@@ -6875,13 +6880,14 @@
               </noteref>
               ⠤⠤⠤
             </section>
-            <section style="{ display: block }
+            <section style="display: block;
                             &amp;::after { display:block; content: flow(chapter-notes)}">
               <h1 style="display:block; page-break-before:always">
                 ⠤⠤⠤
               </h1>
               ⠤⠤⠤
-              <note style="{flow:chapter-notes; display:block}
+              <note style="flow: chapter-notes;
+                           display: block;
                            &amp;::alternate { content:'⠶⠶⠶' }">⠿⠿⠿</note>
               ⠤⠤⠤
             </section>
@@ -6972,12 +6978,14 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="@page { size: 20 6 } { text-transform:none; counter-reset:note; }">
-            <section style="{ display: block }
+          <body style="text-transform: none;
+                       counter-reset: note;
+                       @page { size: 20 6 }">
+            <section style="display: block;
                             &amp;::after { display:block; content: flow(chapter-notes)}">
               ⠤⠤⠤
               <noteref ref="note_1"
-                       style="{ counter-increment: note; }
+                       style="counter-increment: note;
                               &amp;::after { content: '⠦' counter(note) '⠴'; }
                               &amp;::alternate {
                                 flow: chapter-notes;
@@ -6985,7 +6993,7 @@
                                 content: counter(note) ' ' target-content(attr(ref)); }"/>
               ⠤⠤⠤
               <noteref ref="note_2"
-                       style="{ counter-increment: note; }
+                       style="counter-increment: note;
                               &amp;::after { content: '⠦' counter(note) '⠴'; }
                               &amp;::alternate {
                                 flow: chapter-notes;
@@ -7155,7 +7163,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none }
+          <body style="text-transform: none;
                        @page {
                          size: 20 10;
                          @footnotes {
@@ -7271,7 +7279,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none }
+          <body style="text-transform: none;
                        @page {
                          size: 20 10;
                          @footnotes {
@@ -7397,36 +7405,39 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 15 7; @bottom-right {content: counter(page) }}
+          <doc style="text-transform: none;
+                      @page { size: 15 7; @bottom-right { content: counter(page) }}
                       @volume:first { max-length: 3; @begin { content: flow(first-front) }}
-                      @volume { max-length: 3; @begin { content: flow(next-front) }}
-                      { text-transform: none }">
+                      @volume { max-length: 3; @begin { content: flow(next-front) }}">
             <front>
-              <h1 style="display:block; flow:first-front">
+              <h1 style="display: block; flow: first-front">
                 ⠿ ⠿ ⠿ ⠿
               </h1>
-              <h1 style="{ display:block; flow:first-front }
+              <h1 style="display: block;
+                         flow: first-front;
                          &amp;::duplicate { display:block; flow:next-front }">
                 ⠿⠿⠿⠿
               </h1>
-              <toc style="{ display:-obfl-toc; flow:first-front; text-transform:auto }
+              <toc style="display: -obfl-toc;
+                          flow: first-front;
+                          text-transform: auto;
                           &amp;::-obfl-on-volume-start { content:-obfl-evaluate('(round $started-volume-number)') }
                           &amp;::duplicate { display:-obfl-toc; -obfl-toc-range:volume; flow:next-front; text-transform:auto }
                           &amp;::duplicate::-obfl-on-toc-start { content:'⠿⠿⠿' }">
-                <entry ref="ch_1" style="{display:block}
+                <entry ref="ch_1" style="display: block;
                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                <entry style="display:block; margin-left:1">
-                  <entry ref="ch_1_1" style="{display:block}
+                <entry style="display: block; margin-left: 1">
+                  <entry ref="ch_1_1" style="display: block;
                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                  <entry ref="ch_1_2" style="{display:block}
+                  <entry ref="ch_1_2" style="display: block;
                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
                 </entry>
-                <entry ref="ch_2" style="{display:block}
+                <entry ref="ch_2" style="display: block;
                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
-                <entry style="display:block; margin-left:1">
-                  <entry ref="ch_2_1" style="{display:block}
+                <entry style="display: block; margin-left: 1">
+                  <entry ref="ch_2_1" style="display: block;
                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                  <entry ref="ch_2_2" style="{display:block}
+                  <entry ref="ch_2_2" style="display: block;
                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
                 </entry>
               </toc>
@@ -7757,20 +7768,20 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 15 7; @bottom-right {content: counter(page) }}
-                      @volume { @begin { content: flow(front) }}
-                      { text-transform: none }">
+          <doc style="text-transform: none;
+                      @page { size: 15 7; @bottom-right {content: counter(page) }}
+                      @volume { @begin { content: flow(front) }}">
             <front>
               <h1 id="ch_0" style="display:block; margin-bottom:1; flow:front; text-transform:auto"> 0 </h1>
-              <toc style="{ display:-obfl-toc; flow:front; text-transform:auto }">
-                <entry ref="ch_0" style="{display:block}
+              <toc style="display: -obfl-toc; flow: front; text-transform: auto">
+                <entry ref="ch_0" style="display: block;
                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 0 </entry>
-                <entry ref="ch_1" style="{display:block}
+                <entry ref="ch_1" style="display: block;
                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                <entry style="display:block; margin-left:1">
-                  <entry ref="ch_1_1" style="{display:block}
+                <entry style="display: block; margin-left: 1">
+                  <entry ref="ch_1_1" style="display: block;
                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                  <entry ref="ch_1_2" style="{display:block}
+                  <entry ref="ch_1_2" style="display: block;
                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
                 </entry>
               </toc>
@@ -7932,7 +7943,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none } @volume { @begin { content: flow(foo) flow(bar); }}">
+          <body style="text-transform: none; @volume { @begin { content: flow(foo) flow(bar); }}">
             <level1 style="display: block; page-break-after: always; flow: foo;">
               <p style="display: block">⠤⠤⠤</p>
             </level1>
@@ -8140,7 +8151,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page {
                         size: 15 5;
                         @top-right {
@@ -8241,7 +8252,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none }
+          <body style="text-transform: none;
                        @page {
                          size: 10 6;
                          @footnotes {
@@ -8250,9 +8261,9 @@
                            border-top-pattern: ⠒; }}">
             <p style="display:block">
               ⠤⠤⠤
-              <note style="{flow:footnotes; display:block} &amp;::footnote-call { content:'⠶' }">⠿⠿⠿</note>
+              <note style="flow:footnotes; display:block; &amp;::footnote-call { content:'⠶' }">⠿⠿⠿</note>
               ⠤⠤⠤
-              <note style="{flow:footnotes; display:block} &amp;::footnote-call { content:'⠶' }">⠿⠿⠿</note>
+              <note style="flow:footnotes; display:block; &amp;::footnote-call { content:'⠶' }">⠿⠿⠿</note>
               ⠤⠤⠤
             </p>
             <p style="display:block; page-break-before:always">
@@ -8478,7 +8489,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none } @page { size: 15 5; }">
+          <body style="text-transform: none; @page { size: 15 5; }">
             <p style="display:block; word-spacing:2">
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -8540,7 +8551,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none } @page { size: 15 7; }">
+          <body style="text-transform: none; @page { size: 15 7; }">
             <div style="display: block">
               <p style="display: block; margin-top: 2; margin-bottom: 1">
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -8673,7 +8684,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none } @page { size: 15 7; }">
+          <body style="text-transform: none; @page { size: 15 7; }">
             <p style="display: block; border-top-pattern: ⠒; margin-left: 2; text-indent: 2">
               ⠤⠤⠤
             </p>
@@ -8735,7 +8746,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none; display:block }
+          <body style="text-transform: none;
+                       display:block;
                        @page {
                          size: 15 5;
                          @bottom-right { content: counter(page, symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔')) }}">
@@ -8809,7 +8821,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="text-transform:none; display:block">
+          <body style="text-transform: none; display:block">
             <a href="#a" style="&amp;::after { content: target-counter(attr(href url), page, symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔')) }"/>
             <div id="a" style="display: block; page-break-before: always">⠤⠤⠤</div>
           </body>
@@ -8876,7 +8888,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform: none; display: block; }
+          <body style="text-transform: none;
+                       display: block;
                        @page { size: 15 5; }
                        @volume { max-length: 3; @begin { content: flow(pre) }}">
             <p style="display: block; text-transform: auto; flow: pre">
@@ -9011,7 +9024,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none } @page { size: 10 6; @footnotes { content: flow(footnotes) }}">
+          <body style="text-transform: none; @page { size: 10 6; @footnotes { content: flow(footnotes) }}">
             <p style="display:block">
               ⠤⠤⠤
               <note style="flow:footnotes; display:block">⠿</note>
@@ -9093,15 +9106,15 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 15 7 }
+          <doc style="text-transform: none;
+                      @page { size: 15 7 }
                       @volume { max-length: 2 }
-                      @volume:last { max-length: 2; @begin { content: flow(toc) }}
-                      { text-transform: none }">
+                      @volume:last { max-length: 2; @begin { content: flow(toc) }}">
             <toc style="display:-obfl-toc; flow:toc; text-transform:auto">
               <entry ref="ch_1"
-                     style="{display:block} &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
+                     style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
               <entry ref="ch_2"
-                     style="{display:block} &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
+                     style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
             </toc>
             <body style="display:block">
               <h1 id="ch_1" style="display:block; text-transform:auto"> 1 </h1>
@@ -9261,15 +9274,15 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 15 7 }
+          <doc style="text-transform: none;
+                      @page { size: 15 7 }
                       @volume { max-length: 2 }
-                      @volume:last { max-length: 2; @end { content: flow(toc) }}
-                      { text-transform: none }">
+                      @volume:last { max-length: 2; @end { content: flow(toc) }}">
             <toc style="display:-obfl-toc; flow:toc; text-transform:auto">
               <entry ref="ch_1"
-                     style="{display:block} &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
+                     style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
               <entry ref="ch_2"
-                     style="{display:block} &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
+                     style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
             </toc>
             <body style="display:block">
               <h1 id="ch_1" style="display:block; text-transform:auto"> 1 </h1>
@@ -9429,12 +9442,12 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
-                       @page { size: 20 10 }
-                       @volume:first { @begin { content: flow(front); @page { size: 10 5 }}}">
+          <doc style="text-transform: none;
+                      @page { size: 20 10 }
+                      @volume:first { @begin { content: flow(front); @page { size: 10 5 }}}">
             <front style="display: block; flow: front">
               ⠤⠤⠤⠤⠤
-              <toc style="{ display: block } @page { size: 10 10 }">
+              <toc style="display: block; @page { size: 10 10 }">
                 ⠤⠤⠤⠤⠤
               </toc>
             </front>
@@ -9469,6 +9482,7 @@
               <footer/>
             </default-template>
           </layout-master>
+          <volume-template use-when="(! (= $volume 1))" sheets-in-volume-max="1000"/>
           <volume-template use-when="(= $volume 1)" sheets-in-volume-max="1000">
             <pre-content>
               <sequence master="front">
@@ -9533,7 +9547,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none; display:block">
+          <doc style="text-transform: none; display:block">
             <span style="text-transform:auto">
               1 2 3
               <span style="text-transform:none">⠿⠿⠿</span>
@@ -9600,7 +9614,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none } @volume { @begin { content: flow(titlepage) }}">
+          <doc style="text-transform: none; @volume { @begin { content: flow(titlepage) }}">
             <titlepage style="display: block; flow: titlepage">
               ⠤⠤⠤⠤⠤
               <span style="&amp;::before {
@@ -9687,7 +9701,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none } @volume { @begin { content: flow(titlepage) }}">
+          <doc style="text-transform: none; @volume { @begin { content: flow(titlepage) }}">
             <titlepage style="display: block; flow: titlepage; text-transform: auto">
               1<span style="&amp;::after {
                               text-transform: downshift;
@@ -9781,7 +9795,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none }
+          <body style="text-transform: none;
                        @page {
                          size: 20 10;
                          @footnotes {
@@ -9938,7 +9952,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform:none } @page { size: 10 10 }">
+          <body style="text-transform: none; @page { size: 10 10 }">
             <h1 style="display: block; -obfl-underline:⠒">
               ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿
             </h1>
@@ -10004,7 +10018,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ display: block; text-transform: none }
+          <body style="display: block;
+                       text-transform: none;
                        @page { size: 10 5 }
                        @volume { max-length: 3 }">
             ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -10343,7 +10358,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform: none }
+          <body style="text-transform: none;
                        @page { size: 10 5 }
                        @volume { max-length: 3 }">
             <section style="display: block; page-break-before: right; volume-break-inside: -obfl-keep(1)">
@@ -10502,7 +10517,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform: none }
+          <body style="text-transform: none;
                        @page { size: 10 5 }
                        @volume { max-length: 3 }">
             <section style="display: block">
@@ -10640,7 +10655,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform: none }
+          <body style="text-transform: none;
                        @page {
                          size: 20 5
                          @bottom-center {
@@ -10737,14 +10752,14 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page {
+          <doc style="text-transform: none;
+                      @page {
                         size: 15 5
                         @bottom-right {
                           content: counter(page) }}
                       @volume {
                         @begin {
-                          content: flow(titlepage) }}
-                      { text-transform: none }">
+                          content: flow(titlepage) }}">
             <front>
               <titlepage style="display: block; flow: titlepage; counter-set: pre-page 11">
                 ⠿⠿⠿
@@ -10946,7 +10961,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page {
                         size: 20 7;
                         margin-top: 1;
@@ -11091,7 +11106,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
+          <doc style="text-transform: none;
                       @page { size: 10 6 }
                       @volume {
                         max-length: 3; }
@@ -11257,7 +11272,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
+          <doc style="text-transform: none;
                       @page { size: 10 6 }
                       @volume {
                         max-length: 2; }
@@ -11447,9 +11462,9 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 15 5 }
-                      @volume { @begin { content: flow(titlepage1) flow(titlepage2) }}
-                      { text-transform: none }">
+          <doc style="text-transform: none;
+                      @page { size: 15 5 }
+                      @volume { @begin { content: flow(titlepage1) flow(titlepage2) }}">
             <front>
               <titlepage style="display: block; flow: titlepage1">
                 ⠿⠿⠿
@@ -11541,7 +11556,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ display: block; text-transform: none }
+          <body style="display: block;
+                       text-transform: none;
                        @page { size: 10 5 }">
             <br style="display: block; volume-break-before: always"/>
             ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -11641,9 +11657,9 @@
         <x:document type="inline">
           <body style="@page { size: 10 20 }">
             <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-                   style="{ display:block;
-                            render-table-by:row;
-                            text-transform:none; }
+                   style="display: block;
+                          render-table-by: row;
+                          text-transform: none;
                           &amp;::table-by(row) {
                             display:block;
                             margin-left:2; }
@@ -11782,7 +11798,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 40 25 }">
+          <doc style="text-transform: none; @page { size: 40 25 }">
             <body>
               <p style="display: block; line-height: 1.3">
                 ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
@@ -11869,7 +11885,7 @@
               <section style="display: block; page-break-before: always">
                 ⠤⠤⠤
               </section>
-              <section style="{ display: block }
+              <section style="display: block;
                               @page {
                                 counter-increment: page2;
                                 size: 15 5;
@@ -12014,7 +12030,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform: none }
+          <doc style="text-transform: none;
                       @page {
                         counter-increment: page;
                         size: 10 5;
@@ -12160,7 +12176,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ display: block; text-transform: none }
+          <body style="display: block;
+                       text-transform: none;
                        @page { size: 10 5 }
                        @volume { max-length: 6 }">
             <p style="display: block; volume-break-inside: -obfl-keep(1)">
@@ -12447,7 +12464,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ display: block; text-transform: none }
+          <body style="display: block;
+                       text-transform: none;
                        @page { size: 10 5 }
                        @volume { max-length: 3 }">
             <p style="display: block; volume-break-inside: -obfl-keep(1)">
@@ -12567,7 +12585,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none }
+          <doc style="text-transform: none;
                       @page {
                         size: 10 6;
                         margin-bottom: 1;
@@ -12576,7 +12594,8 @@
                         @bottom-right {
                           content: string(print-page, page-last); }}">
             <p style="display: block">
-              <pagenum style="{ display: none; string-set: print-page content() }
+              <pagenum style="display: none;
+                              string-set: print-page content();
                               &amp;::after { string-set: print-page '⠿⠿⠿' }">1</pagenum>
               ⠁⠁⠁⠁⠁
               ⠁⠁⠁⠁⠁
@@ -12663,7 +12682,7 @@
       <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="{ text-transform:none } @page { size: 20 5 }">
+          <doc style="text-transform: none; @page { size: 20 5 }">
             <p style="display: block;
                       margin-left: 4;
                       margin-right: 4;
@@ -12735,7 +12754,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 20 15 } { text-transform:none }">
+          <doc style="text-transform: none; @page { size: 20 15 }">
             <div style="display: block; padding-top: 2">
               ⠛⠛⠛
               <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
@@ -12833,7 +12852,8 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ display: block; text-transform: none }
+          <body style="display: block;
+                       text-transform: none;
                        @page { size: 10 5 }">
             <p style="display: block">
               ⠿⠿⠿⠿⠿
@@ -12955,12 +12975,12 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="{ text-transform: none }
+          <body style="text-transform: none;
                        @page { size: 10 10 }">
             <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-                   style="{ display: table;
-                            -obfl-table-col-spacing: 1;
-                            -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); }
+                   style="display: table;
+                          -obfl-table-col-spacing: 1;
+                          -obfl-scenario-cost: -obfl-evaluate('$forced-break-count');
                           &amp;:-obfl-alternate-scenario {
                             -obfl-scenario-cost: 3;
                             display: block;

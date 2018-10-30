@@ -267,8 +267,8 @@
     <xsl:variable name="css:PSEUDOELEMENT_RE" select="concat('::(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\(',$css:IDENT_RE,'\))?')"/>
     <xsl:variable name="css:PSEUDOELEMENT_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1 + $css:IDENT_RE_groups"/>
     
-    <xsl:variable name="css:RULE_RE" select="concat('(((@',$css:IDENT_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?|&amp;(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*)?\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
-    <xsl:variable name="css:RULE_RE_selector" select="2"/>
+    <xsl:variable name="css:RULE_RE" select="concat('((@',$css:IDENT_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?|&amp;(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:RULE_RE_selector" select="1"/>
     <xsl:variable name="css:RULE_RE_selector_atrule" select="$css:RULE_RE_selector + 1"/>
     <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 2"/>
     <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule_name + $css:IDENT_RE_groups + 1"/>
@@ -308,22 +308,19 @@
                 <xsl:analyze-string select="$stylesheet" regex="{$css:RULE_RE}">
                     <xsl:matching-substring>
                         <xsl:element name="css:rule">
-                            <xsl:if test="regex-group($css:RULE_RE_selector)!=''">
-                                <xsl:choose>
-                                    <xsl:when test="regex-group($css:RULE_RE_selector_atrule)!=''">
-                                        <xsl:attribute name="selector"
-                                                       select="normalize-space(
-                                                                 concat(regex-group($css:RULE_RE_selector_atrule),
-                                                                        ' ',
-                                                                        regex-group($css:RULE_RE_selector_atrule_name)))"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:attribute name="selector"
-                                                       select="concat('&amp;',regex-group($css:RULE_RE_selector_pseudo))"/>
-                                        
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="regex-group($css:RULE_RE_selector_atrule)!=''">
+                                    <xsl:attribute name="selector"
+                                                   select="normalize-space(
+                                                           concat(regex-group($css:RULE_RE_selector_atrule),
+                                                           ' ',
+                                                           regex-group($css:RULE_RE_selector_atrule_name)))"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:attribute name="selector"
+                                                   select="concat('&amp;',regex-group($css:RULE_RE_selector_pseudo))"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                             <xsl:variable name="style" as="xs:string"
                                           select="replace(regex-group($css:RULE_RE_value), '(^\s+|\s+$)', '')"/>
                             <xsl:choose>
@@ -345,6 +342,10 @@
                         </xsl:element>
                     </xsl:matching-substring>
                     <xsl:non-matching-substring>
+                        <!--
+                            assuming this is a declaration list
+                            FIXME: include in regex
+                        -->
                         <xsl:if test="not(normalize-space(.)='')">
                             <css:rule style="{replace(., '(^\s+|\s+$)', '')}"/>
                         </xsl:if>
@@ -360,7 +361,7 @@
                     <xsl:otherwise>
                         <xsl:variable name="nested-rules" as="xs:string*">
                             <xsl:if test="current-group()/@style">
-                                <xsl:sequence select="concat('{ ',(current-group()/@style)[last()],' }')"/>
+                                <xsl:sequence select="(current-group()/@style)[last()]"/>
                             </xsl:if>
                             <xsl:for-each-group select="current-group()/*" group-by="@selector">
                                 <xsl:sequence select="concat(current-grouping-key(),' { ',current-group()[last()]/@style,' }')"/>
@@ -1051,12 +1052,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:if test="exists($serialized-declarations)">
-                        <xsl:sequence select="if (exists(($serialized-at-rules,$serialized-pseudo-rules)) and $level=1)
-                                              then string-join((
-                                                     '{',$newline,$indent,
-                                                     string-join($serialized-declarations,string-join((';',$newline,$indent),'')),
-                                                     $newline,'}'),'')
-                                              else string-join($serialized-declarations,string-join((';',$newline),''))"/>
+                        <xsl:sequence select="string-join($serialized-declarations,string-join((';',$newline),''))"/>
                     </xsl:if>
                     <xsl:sequence select="$serialized-at-rules"/>
                 </xsl:otherwise>

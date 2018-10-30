@@ -10,7 +10,11 @@
   <x:scenario label="test_01">
     <x:call function="obfl:volume-stylesheets-use-when">
       <x:param>
-        <css:rule/>
+        <css:rule selector="@volume">
+          <css:rule selector="&amp;:first"/>
+          <css:rule selector="&amp;:nth(1)"/>
+          <css:rule selector="&amp;:nth(2)"/>
+        </css:rule>
         <css:rule selector="&amp;:first"/>
         <css:rule selector="&amp;:nth(1)"/>
         <css:rule selector="&amp;:nth(2)"/>

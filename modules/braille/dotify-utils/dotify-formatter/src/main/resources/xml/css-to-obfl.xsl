@@ -60,10 +60,8 @@
         <css:rule selector="@page" style=""/>
         <xsl:sequence select="$page-and-volume-styles[@selector='@page']"/>
         <xsl:for-each select="$volume-stylesheets">
-            <xsl:sequence select="(if (*[matches(@selector,'^&amp;:')])
-                                   then */*
-                                   else *)
-                                  [@selector=('@begin','@end')]
+            <xsl:sequence select="(.|*[matches(@selector,'^&amp;:')])
+                                  /*[@selector=('@begin','@end')]
                                   /css:rule[@selector='@page']"/>
         </xsl:for-each>
     </xsl:variable>
@@ -78,23 +76,27 @@
         <xsl:for-each select="$stylesheets">
             <xsl:variable name="i" select="position()"/>
             <xsl:choose>
-                <xsl:when test="not(@selector)">
-                    <xsl:sequence select="obfl:not(obfl:or($stylesheets[position()&lt;$i or @selector]/obfl:volume-stylesheets-use-when(.)))"/>
+                <xsl:when test="@selector='@volume'">
+                    <xsl:sequence select="obfl:not(obfl:or($stylesheets[position()&lt;$i or @selector[not(.='@volume')]]
+                                                                       /obfl:volume-stylesheets-use-when(.)))"/>
                 </xsl:when>
                 <xsl:when test="@selector='&amp;:first'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume 1)',
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
+                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                                                         /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:when test="@selector='&amp;:last'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume $volumes)',
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
+                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                                                         /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:when test="matches(@selector,'^&amp;:nth\([1-9][0-9]*\)$')">
                     <xsl:sequence select="obfl:and((
                                             concat('(= $volume ',substring(@selector,7)),
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
+                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                                                         /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="'nil'"/>
@@ -119,10 +121,8 @@
                                   /self::css:flow[@from and (not(@scope) or @scope='page')]/@from"/>
         </xsl:for-each>
         <xsl:for-each select="$volume-stylesheets">
-            <xsl:for-each select="(if (*[matches(@selector,'^&amp;:')])
-                                   then */*
-                                   else *)
-                                  [@selector=('@begin','@end')]">
+            <xsl:for-each select="(.|*[matches(@selector,'^&amp;:')])
+                                  /*[@selector=('@begin','@end')]">
                 <xsl:variable name="volume-area-content" as="element()*"
                               select="css:parse-content-list(
                                         (if (css:property) then . else *[not(@selector)])
@@ -263,11 +263,9 @@
             </xsl:if>
             <xsl:if test="$volume-stylesheets[1]/*">
                 <xsl:variable name="volume-stylesheets" as="element()*"
-                              select="if ($volume-stylesheets[1]/*[matches(@selector,'^&amp;:')])
-                                      then $volume-stylesheets/*
-                                      else $volume-stylesheets"/>
+                              select="$volume-stylesheets[1]/(.|*[matches(@selector,'^&amp;:')])"/>
                 <xsl:variable name="volume-stylesheets-use-when" as="xs:string*"
-                              select="if ($volume-stylesheets[@selector='@volume'])
+                              select="if (count($volume-stylesheets)=1)
                                       then ('t')
                                       else obfl:volume-stylesheets-use-when($volume-stylesheets)"/>
                 <xsl:if test="not(obfl:or($volume-stylesheets-use-when)='nil')">
@@ -552,9 +550,7 @@
                                     [css:parse-counter-set(@value,1)[@name='page']]"/>
             <xsl:variable name="some-volume-areas-use-counter-page" as="xs:boolean"
                           select="some $a in (for $v in $volume-stylesheets
-                                              return (if ($v/*[matches(@selector,'^&amp;:')])
-                                                      then $v/*
-                                                      else $v)
+                                              return $v/(.|*[matches(@selector,'^&amp;:')])
                                                      /*[@selector=('@begin','@end')])
                                   satisfies
                                     if (not($a/*[@selector='@page']))

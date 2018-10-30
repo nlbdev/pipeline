@@ -1227,7 +1227,7 @@
       <x:param select="'row'"/>
       <x:param>
         <table xmlns="http://www.w3.org/1999/xhtml"
-               style="{{ display: a }}
+               style="display: a;
                       &amp;::list-item {{ display: b }}
                       &amp;::table-by(row) {{ display: c }}
                       &amp;::table-by(row)::list-item {{ display: d }}

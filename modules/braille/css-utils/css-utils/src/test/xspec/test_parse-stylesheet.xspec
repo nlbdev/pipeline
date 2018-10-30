@@ -6,14 +6,14 @@
   <x:scenario label="test_01">
     <x:context>
       <doc>
-        <body style="{{ display: block }} @page {{ size: 30 30; @top-center {{ content: string(running-header) }} }}">
+        <body style="display: block; @page {{ size: 30 30; @top-center {{ content: string(running-header) }} }}">
           <p> foo </p>
         </body>
       </doc>
     </x:context>
     <x:expect label="result">
       <doc>
-        <body style="display: block" css:page="size: 30 30; @top-center {{ content: string(running-header) }}">
+        <body style="display: block;" css:page="size: 30 30; @top-center {{ content: string(running-header) }}">
           <p> foo </p>
         </body>
       </doc>
@@ -24,7 +24,7 @@
     <x:context>
       <doc>
         <body>
-          <p style="{{ display: block }}
+          <p style="display: block;
                     &amp;::before {{ display: block; margin-left: 2; content: 'bar' }}">
             foo
           </p>
@@ -34,7 +34,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p style="display: block" css:before="display: block; margin-left: 2; content: 'bar'">
+          <p style="display: block;" css:before="display: block; margin-left: 2; content: 'bar'">
             foo
           </p>
         </body>
@@ -47,7 +47,7 @@
       <doc style="@page {{ margin-top: 1 }} @page:left {{ margin-top: 2 }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:page="{{ margin-top: 1 }} &amp;:left {{ margin-top: 2 }}"/>
+      <doc css:page="margin-top: 1 &amp;:left {{ margin-top: 2 }}"/>
     </x:expect>
   </x:scenario>
   
@@ -86,7 +86,7 @@
       <table style="&amp;:-obfl-alternate-scenario {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row) {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row)::list-item {{ x:y }}"/>
     </x:context>
     <x:expect label="result">
-      <table css:_obfl-alternate-scenario="{{ x:y }} &amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }}" />
+      <table css:_obfl-alternate-scenario="x:y &amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }}" />
     </x:expect>
   </x:scenario>
   
@@ -95,7 +95,7 @@
       <doc style="@volume {{ max-length: 3; @begin {{ content: flow(next-front) }} }} @volume:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:volume="{{ max-length: 3; @begin {{ content: flow(next-front) }} }} &amp;:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}" />
+      <doc css:volume="max-length: 3; @begin {{ content: flow(next-front) }} &amp;:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}" />
     </x:expect>
   </x:scenario>
   
