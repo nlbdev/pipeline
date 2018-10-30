@@ -90,4 +90,13 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_08">
+    <x:context>
+      <doc style="@volume {{ max-length: 3; @begin {{ content: flow(next-front) }} }} @volume:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:volume="{{ max-length: 3; @begin {{ content: flow(next-front) }} }} &amp;:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}" />
+    </x:expect>
+  </x:scenario>
+  
 </x:description>
