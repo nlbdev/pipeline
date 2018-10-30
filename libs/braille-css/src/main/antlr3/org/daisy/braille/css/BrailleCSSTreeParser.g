@@ -286,11 +286,7 @@ inlinedstyle returns [RuleList rules]
 @init {
     $rules = gCSSTreeParser.rules = new RuleArrayList();
 }
-    : ^(INLINESTYLE decl=declarations) {
-          RuleBlock<?> b = preparator.prepareInlineRuleSet(decl, null);
-          $rules.add(b);
-      }
-    | ^(INLINESTYLE (ib=inlineblock {
+    : ^(INLINESTYLE (ib=inlineblock {
           // TODO: check that there is at most one block of simple
           // declarations, that all page at-rules have a different
           // pseudo-class, etc.

@@ -22,7 +22,7 @@ public class InlinedStyleTest {
 	public void testInlinedStyle() {
 		InlinedStyle style = new InlinedStyle(
 			// FIXME: @page { size: 25 10; } not supported
-			"{ text-transform: none } " +
+			"text-transform: none; " +
 			"&::table-by(row)::list-item { margin-left:2; } " +
 			"> span { display: block } " +
 			"span:first-child { display: inline }"

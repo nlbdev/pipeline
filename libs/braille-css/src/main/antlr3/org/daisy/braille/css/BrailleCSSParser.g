@@ -135,16 +135,17 @@ simple_inlinestyle
  * attributes of an input document.
  */
 inlinedstyle
-    : S* (
-        declarations -> ^(INLINESTYLE declarations) // simple declaration list
-        | (inlineblock S*)+ -> ^(INLINESTYLE inlineblock+) // blocks
-      )
+    : S* declarationblock? (inlineblock S*)* -> ^(INLINESTYLE declarationblock? inlineblock*)
+    ;
+
+// Require a semicolon at the end in order to avoid confusion between a term and the start of a selector.
+declarationblock
+    : (SEMICOLON S*)* ( declaration (SEMICOLON S*)+ )+ -> ^(RULE ^(SET declaration+))
     ;
 
 inlineblock
-    : LCURLY S* declarations RCURLY -> ^(RULE declarations) // simple declaration list in anonymous block
-    | relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(RULE relative_or_chained_selector declarations)
-    | text_transform_def // text-transform at-rule
+    : relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(RULE relative_or_chained_selector declarations)
+    | text_transform_def
 
 // TODO: allowed as well but skip for now:
 //  | anonymous_page // page at-rule
