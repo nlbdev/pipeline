@@ -254,8 +254,16 @@
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_ident" select="1"/>
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_value" select="$css:COUNTER_SET_PAIR_RE_ident + $css:IDENT_RE_groups + 2"/>
     
-    <xsl:variable name="css:DECLARATION_LIST_RE">([^'"\{\}]+|'[^']*'|"[^"]*")*</xsl:variable>
-    <xsl:variable name="css:DECLARATION_LIST_RE_groups" select="1"/>
+    <xsl:variable name="css:PROPERTY_VALUE_RE">([^'"\{\}@&amp;;:]+|'[^']*'|"[^"]*")*</xsl:variable>
+    <xsl:variable name="css:PROPERTY_VALUE_RE_groups" select="1"/>
+    
+    <xsl:variable name="css:DECLARATION_RE" select="concat('(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')\s*:(',$css:PROPERTY_VALUE_RE,')')"/>
+    <xsl:variable name="css:DECLARATION_RE_property" select="1"/>
+    <xsl:variable name="css:DECLARATION_RE_value" select="$css:DECLARATION_RE_property + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
+    <xsl:variable name="css:DECLARATION_RE_groups" select="$css:DECLARATION_RE_value + $css:PROPERTY_VALUE_RE_groups"/>
+    
+    <xsl:variable name="css:DECLARATION_LIST_RE" select="concat('\s*(', $css:DECLARATION_RE ,')?(;\s*(', $css:DECLARATION_RE ,')?)*')"/>
+    <xsl:variable name="css:DECLARATION_LIST_RE_groups" select="1 + $css:DECLARATION_RE_groups + 2 + $css:DECLARATION_RE_groups"/>
     
     <xsl:variable name="css:NESTED_NESTED_NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{',$css:DECLARATION_LIST_RE,'\}')"/>
     <xsl:variable name="css:NESTED_NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_NESTED_RULE_RE,')*)\}')"/>
@@ -342,12 +350,10 @@
                         </xsl:element>
                     </xsl:matching-substring>
                     <xsl:non-matching-substring>
-                        <!--
-                            assuming this is a declaration list
-                            FIXME: include in regex
-                        -->
                         <xsl:if test="not(normalize-space(.)='')">
-                            <css:rule style="{replace(., '(^\s+|\s+$)', '')}"/>
+                            <xsl:if test="matches(.,$css:DECLARATION_LIST_RE)">
+                                <css:rule style="{replace(., '(^\s+|\s+$)', '')}"/> <!-- trim -->
+                            </xsl:if>
                         </xsl:if>
                     </xsl:non-matching-substring>
                 </xsl:analyze-string>
@@ -355,20 +361,25 @@
             <xsl:for-each-group select="$rules" group-by="string(@selector)">
                 <xsl:variable name="selector" as="xs:string" select="current-grouping-key()"/>
                 <xsl:choose>
-                    <xsl:when test="not(current-group()/*)">
-                        <xsl:sequence select="current-group()[last()]"/>
+                    <xsl:when test="not(current-group()/*) and count(current-group())=1">
+                        <xsl:sequence select="current-group()"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="nested-rules" as="xs:string*">
                             <xsl:if test="current-group()/@style">
-                                <xsl:sequence select="(current-group()/@style)[last()]"/>
+                                <xsl:sequence select="string-join(current-group()/@style,'; ')"/>
                             </xsl:if>
                             <xsl:for-each-group select="current-group()/*" group-by="@selector">
-                                <xsl:sequence select="concat(current-grouping-key(),' { ',current-group()[last()]/@style,' }')"/>
+                                <xsl:sequence select="concat(current-grouping-key(),
+                                                             ' { ',
+                                                             string-join(current-group()/@style,'; '),
+                                                             ' }')"/>
                             </xsl:for-each-group>
                         </xsl:variable>
                         <xsl:element name="css:rule">
-                            <xsl:attribute name="selector" select="current-grouping-key()"/>
+                            <xsl:if test="not(current-grouping-key()='')">
+                                <xsl:attribute name="selector" select="current-grouping-key()"/>
+                            </xsl:if>
                             <xsl:attribute name="style" select="string-join($nested-rules,' ')"/>
                         </xsl:element>
                     </xsl:otherwise>
@@ -380,11 +391,14 @@
     <xsl:function name="css:parse-declaration-list" as="element()*"> <!-- css:property* -->
         <xsl:param name="declaration-list" as="xs:string?"/>
         <xsl:if test="$declaration-list">
-            <xsl:for-each select="tokenize($declaration-list, ';')[not(normalize-space(.)='')]">
-                <xsl:sequence select="css:property(
-                                        normalize-space(substring-before(.,':')),
-                                        replace(substring-after(.,':'), '(^\s+|\s+$)', ''))"/>
-            </xsl:for-each>
+            <xsl:analyze-string select="$declaration-list" regex="{$css:DECLARATION_RE}">
+                <xsl:matching-substring>
+                    <xsl:sequence select="css:property(
+                                            regex-group($css:DECLARATION_RE_property),
+                                            replace(regex-group($css:DECLARATION_RE_value), '(^\s+|\s+$)', '')
+                                            )"/>
+                </xsl:matching-substring>
+            </xsl:analyze-string>
         </xsl:if>
     </xsl:function>
     

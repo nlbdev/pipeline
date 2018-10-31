@@ -55,7 +55,7 @@
 			<x:param select="'orphans: 3; @page { size: 40 25;}   display:block'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule style="display:block"/>
+			<css:rule style="orphans: 3;; display:block"/>
 			<css:rule selector="@page" style="size: 40 25;"/>
 		</x:expect>
 	</x:scenario>
@@ -451,10 +451,7 @@
 		</x:expect>
 	</x:scenario>
 	
-	<!--
-	    do semi-colons between @-rules need to be supported?
-	-->
-	<x:scenario label="test_33" pending="not supported yet">
+	<x:scenario label="test_33">
 		<x:call function="css:deep-parse-stylesheet">
 			<x:param select="'@page { size: 32 27; @bottom-center { content: none }; @bottom-left { content: none } }'"/>
 		</x:call>
