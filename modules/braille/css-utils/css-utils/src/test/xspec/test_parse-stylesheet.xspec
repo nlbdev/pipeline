@@ -99,4 +99,17 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_09">
+    <x:context>
+      <table style="&amp;:-obfl-alternate-scenario tr:blank::after {{ content: &quot;(empty)&quot; }}">
+        <tr/>
+      </table>
+    </x:context>
+    <x:expect label="result">
+      <table css:_obfl-alternate-scenario="tr:blank::after {{ content: &quot;(empty)&quot; }}">
+        <tr/>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

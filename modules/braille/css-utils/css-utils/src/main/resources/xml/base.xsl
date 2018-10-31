@@ -275,14 +275,13 @@
     <xsl:variable name="css:PSEUDOELEMENT_RE" select="concat('::(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\(',$css:IDENT_RE,'\))?')"/>
     <xsl:variable name="css:PSEUDOELEMENT_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1 + $css:IDENT_RE_groups"/>
     
-    <xsl:variable name="css:RULE_RE" select="concat('((@',$css:IDENT_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?|&amp;(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:RULE_RE" select="concat('((@',$css:IDENT_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?\s*|([^\s\{;@][^\{;@&amp;]*))\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
     <xsl:variable name="css:RULE_RE_selector" select="1"/>
     <xsl:variable name="css:RULE_RE_selector_atrule" select="$css:RULE_RE_selector + 1"/>
     <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 2"/>
     <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule_name + $css:IDENT_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_pseudo" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_pseudo_stack" select="$css:RULE_RE_selector_pseudo + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_pseudo_stack + 1 + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
+    <xsl:variable name="css:RULE_RE_selector_relative" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
+    <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_relative + 1"/>
     
     <!-- ======= -->
     <!-- Parsing -->
@@ -316,6 +315,8 @@
                 <xsl:analyze-string select="$stylesheet" regex="{$css:RULE_RE}">
                     <xsl:matching-substring>
                         <xsl:element name="css:rule">
+                            <xsl:variable name="style" as="xs:string"
+                                          select="replace(regex-group($css:RULE_RE_value), '(^\s+|\s+$)', '')"/>
                             <xsl:choose>
                                 <xsl:when test="regex-group($css:RULE_RE_selector_atrule)!=''">
                                     <xsl:attribute name="selector"
@@ -323,37 +324,62 @@
                                                            concat(regex-group($css:RULE_RE_selector_atrule),
                                                            ' ',
                                                            regex-group($css:RULE_RE_selector_atrule_name)))"/>
+                                    <xsl:choose>
+                                        <xsl:when test="regex-group($css:RULE_RE_selector_atrule_pseudoclass)!=''">
+                                            <xsl:element name="css:rule">
+                                                <xsl:attribute name="selector"
+                                                               select="concat('&amp;',regex-group($css:RULE_RE_selector_atrule_pseudoclass))"/>
+                                                <xsl:attribute name="style" select="$style"/>
+                                            </xsl:element>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="style" select="$style"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:attribute name="selector"
-                                                   select="concat('&amp;',regex-group($css:RULE_RE_selector_pseudo))"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                            <xsl:variable name="style" as="xs:string"
-                                          select="replace(regex-group($css:RULE_RE_value), '(^\s+|\s+$)', '')"/>
-                            <xsl:choose>
-                                <xsl:when test="regex-group($css:RULE_RE_selector_atrule_pseudoclass)!='' or
-                                                regex-group($css:RULE_RE_selector_pseudo_stack)!=''">
-                                    <xsl:element name="css:rule">
-                                        <xsl:attribute name="selector"
-                                                       select="concat(
-                                                                 '&amp;',
-                                                                 regex-group($css:RULE_RE_selector_atrule_pseudoclass),
-                                                                 regex-group($css:RULE_RE_selector_pseudo_stack)[1])"/>
-                                        <xsl:attribute name="style" select="$style"/>
-                                    </xsl:element>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:attribute name="style" select="$style"/>
+                                    <xsl:variable name="relative_selector" as="xs:string"
+                                                  select="regex-group($css:RULE_RE_selector_relative)"/>
+                                    <xsl:variable name="relative_selector" as="xs:string"
+                                                  select="replace($relative_selector,'^&amp;\s+','')"/>
+                                    <xsl:variable name="pos" select="position()"/>
+                                    <xsl:analyze-string select="$relative_selector" regex="^(&amp;?(::?|.)[^\s>\+~:\[\.#]+)(.*)$">
+                                        <xsl:matching-substring>
+                                            <xsl:variable name="head" as="xs:string" select="regex-group(1)"/>
+                                            <xsl:variable name="tail" as="xs:string" select="regex-group(3)"/>
+                                            <xsl:attribute name="selector" select="$head"/>
+                                            <xsl:choose>
+                                                <xsl:when test="normalize-space($tail)!=''">
+                                                    <xsl:variable name="tail" as="xs:string" select="replace($tail,'^([^\s])','&amp;$1')"/>
+                                                    <xsl:variable name="tail" as="xs:string" select="replace($tail,'(^\s+|\s+$)','')"/>
+                                                    <xsl:element name="css:rule">
+                                                        <xsl:attribute name="selector" select="$tail"/>
+                                                        <xsl:attribute name="style" select="$style"/>
+                                                    </xsl:element>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:attribute name="style" select="$style"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:matching-substring>
+                                        <xsl:non-matching-substring>
+                                            <xsl:message select="concat('Invalid CSS at position ',$pos,': ',$stylesheet)"/>
+                                        </xsl:non-matching-substring>
+                                    </xsl:analyze-string>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:element>
                     </xsl:matching-substring>
                     <xsl:non-matching-substring>
                         <xsl:if test="not(normalize-space(.)='')">
-                            <xsl:if test="matches(.,$css:DECLARATION_LIST_RE)">
-                                <css:rule style="{replace(., '(^\s+|\s+$)', '')}"/> <!-- trim -->
-                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="matches(.,$css:DECLARATION_LIST_RE)">
+                                    <css:rule style="{replace(., '(^\s+|\s+$)', '')}"/> <!-- trim -->
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:message select="concat('Invalid CSS at position ',position(),': ',$stylesheet)"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:if>
                     </xsl:non-matching-substring>
                 </xsl:analyze-string>
