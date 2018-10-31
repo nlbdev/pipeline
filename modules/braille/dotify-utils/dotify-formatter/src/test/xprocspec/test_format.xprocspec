@@ -12971,6 +12971,8 @@
   <x:scenario label="test_113">
     <x:documentation>
       Tests :-obfl-alternate-scenario pseudo-class.
+      
+      Also tests a rule relative to :-obfl-alternate-scenario.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -12982,9 +12984,11 @@
                           -obfl-table-col-spacing: 1;
                           -obfl-scenario-cost: -obfl-evaluate('$forced-break-count');
                           &amp;:-obfl-alternate-scenario {
-                            -obfl-scenario-cost: 3;
+                            -obfl-scenario-cost: 2;
                             display: block;
                             render-table-by:row; }
+                          &amp;:-obfl-alternate-scenario td:blank::after {
+                            content: '⠪⠕'; }
                           &amp;:-obfl-alternate-scenario::table-by(row) {
                             display:block;
                             margin-left:2; }
@@ -13002,7 +13006,7 @@
               <tbody>
                 <tr>
                   <td>⠤⠤⠤</td>
-                  <td>⠤⠤⠤</td>
+                  <td/>
                   <td>⠤⠤⠤</td>
                 </tr>
                 <tr>
@@ -13040,7 +13044,7 @@
             </xsl:stylesheet>
           </xml-processor>
           <renderer name="renderer_1">
-            <rendering-scenario processor="take-nth" cost="3">
+            <rendering-scenario processor="take-nth" cost="2">
               <parameter name="n" value="2"/>
             </rendering-scenario>
             <rendering-scenario processor="take-nth" cost="$forced-break-count">
@@ -13064,7 +13068,7 @@
                                 <tbody>
                                     <tr>
                                         <td>⠤⠤⠤</td>
-                                        <td>⠤⠤⠤</td>
+                                        <td/>
                                         <td>⠤⠤⠤</td>
                                     </tr>
                                     <tr>
@@ -13080,7 +13084,7 @@
                         <block>
                             <block>
                                 <block first-line-indent="0" text-indent="2">⠿⠿⠿⠤⠤⠤</block>
-                                <block padding-left="2">⠿⠿⠿⠤⠤⠤</block>
+                                <block padding-left="2">⠿⠿⠿⠪⠕</block>
                                 <block padding-left="2">⠿⠿⠿⠤⠤⠤</block>
                             </block>
                             <block>
@@ -13112,12 +13116,11 @@
             <volume cols="10" rows="10" rowgap="0" duplex="true">
             <section>
                 <page>
-                  <row>⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿</row>
-                  <row>⠿</row>
-                  <row>⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
-                  <row>⠤</row>
-                  <row>⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
-                  <row>⠤</row>
+                  <row>⠿⠿⠿⠀⠿⠿⠀⠿⠿⠿</row>
+                  <row>⠀⠀⠀⠀⠿</row>
+                  <row>⠤⠤⠤⠀⠀⠀⠀⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠀⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠤</row>
                 </page>
             </section>
             </volume>
