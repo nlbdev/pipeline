@@ -352,6 +352,10 @@
                                                 <xsl:when test="normalize-space($tail)!=''">
                                                     <xsl:variable name="tail" as="xs:string" select="replace($tail,'^([^\s])','&amp;$1')"/>
                                                     <xsl:variable name="tail" as="xs:string" select="replace($tail,'(^\s+|\s+$)','')"/>
+                                                    <!--
+                                                        css:inline currently requires an ampersand
+                                                    -->
+                                                    <xsl:variable name="tail" as="xs:string" select="replace($tail,'^([^&amp;])','&amp; $1')"/>
                                                     <xsl:element name="css:rule">
                                                         <xsl:attribute name="selector" select="$tail"/>
                                                         <xsl:attribute name="style" select="$style"/>

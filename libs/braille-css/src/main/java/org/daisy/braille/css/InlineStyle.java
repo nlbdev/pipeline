@@ -23,7 +23,7 @@ import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
  * processors internally, and as such the resulting style attributes are not
  * valid in an input document.
  */
-public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
+public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	
 	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	private static final SelectorPart dummyElementSelectorPart;
@@ -38,11 +38,11 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	private List<RuleRelativeBlock> relativeRules;
 	private List<RuleTextTransform> textTransformDefs;
 	
-	public InlinedStyle(String style) {
+	public InlineStyle(String style) {
 		relativeRules = new ArrayList<RuleRelativeBlock>();
 		textTransformDefs = new ArrayList<RuleTextTransform>();
 		List<Declaration> mainDeclarations = new ArrayList<Declaration>();
-		for (RuleBlock<?> block : parserFactory.parseInlinedStyle(style)) {
+		for (RuleBlock<?> block : parserFactory.parseInlineStyle(style)) {
 			if (block == null) {}
 			else if (block instanceof RuleSet) {
 				RuleSet set = (RuleSet)block;
@@ -51,7 +51,7 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 				CombinedSelector combinedSelector = selectors.get(0);
 				Selector selector = combinedSelector.get(0);
 				assertThat(selector.size() >= 1); // because first part of selector is always the style attribute's parent element
-				assertThat(dummyElementSelectorPart.equals(selector.get(0))); // see BrailleCSSParserFactory.parseInlinedStyle()
+				assertThat(dummyElementSelectorPart.equals(selector.get(0))); // see BrailleCSSParserFactory.parseInlineStyle()
 				if (selector.size() == 1 && combinedSelector.size() == 1) {
 					mainDeclarations.addAll(set);
 				} else {
@@ -134,9 +134,9 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	
 	@Override
 	public Object clone() {
-		InlinedStyle clone; {
+		InlineStyle clone; {
 			try {
-				clone = (InlinedStyle)super.clone(); }
+				clone = (InlineStyle)super.clone(); }
 			catch (CloneNotSupportedException e) {
 				throw new InternalError("coding error"); }}
 		if (mainStyle.isPresent())

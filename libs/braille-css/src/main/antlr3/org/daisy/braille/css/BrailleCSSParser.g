@@ -75,16 +75,6 @@ combinator_selector
     ;
 
 // @Override
-// Allow only single pseudo instead of comma-separated
-inlineset
-    : (pseudo+ S*)?
-      LCURLY S*
-        declarations
-      RCURLY S*
-      -> ^(RULE pseudo* declarations)
-    ;
-
-// @Override
 /*
  * The COLON recognized as the start of an invalid property (which is
  * used in some nasty CSS hacks) conflicts with the COLON in the
@@ -127,23 +117,15 @@ simple_inlinestyle
     ;
 
 /*
- * Format allowed in style attributes that are the result of
- * "inlining" a style sheet attached to a document. Inlining is an
- * operation intended to be done by CSS processors internally, and as
- * such the resulting style attributes are not valid in an input
- * document. See the "inlinestyle" rule for what is allowed in style
- * attributes of an input document.
+ * Syntax of style attributes according to http://braillespecs.github.io/braille-css/#style-attribute.
  */
-inlinedstyle
-    : S* declarationblock? (inlineblock S*)* -> ^(INLINESTYLE declarationblock? inlineblock*)
+// @Override
+inlinestyle
+    : S* declarations (inlineset S*)* -> ^(INLINESTYLE ^(RULE declarations) inlineset*)
     ;
 
-// Require a semicolon at the end in order to avoid confusion between a term and the start of a selector.
-declarationblock
-    : (SEMICOLON S*)* ( declaration (SEMICOLON S*)+ )+ -> ^(RULE ^(SET declaration+))
-    ;
-
-inlineblock
+// @Override
+inlineset
     : relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(RULE relative_or_chained_selector declarations)
     | text_transform_def
 
@@ -154,11 +136,12 @@ inlineblock
 //  | volume // volume at-rule
     ;
 
-// The second AMPERSAND is needed to allow rules like "& foo:first-child {...}". Even thought the
-// "&" is not strictly needed for these cases, the parser currently doesn't support this because of
-// the confusion with declarations, which can start in the same manner, e.g. "foo:bar;"
+// FIXME: Note that in the braille CSS specification the second AMPERSAND is optional. This
+// implementation requires it however. In theory, a semicolon could be used to avoid confusion
+// between a term and the start of a selector, however I can't find a way to implement this in
+// ANTLR, while keeping the semicolon optional.
 relative_or_chained_selector
-    : ( AMPERSAND selector | AMPERSAND! S!* combinator selector | combinator_selector ) (combinator selector)*
+    : ( AMPERSAND selector | AMPERSAND! S!* combinator selector ) (combinator selector)*
     ;
 
 anonymous_page

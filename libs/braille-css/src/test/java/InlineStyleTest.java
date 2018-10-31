@@ -8,25 +8,19 @@ import cz.vutbr.web.css.Selector.ElementName;
 import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Term;
 
-import org.daisy.braille.css.InlinedStyle;
-import org.daisy.braille.css.InlinedStyle.RuleMainBlock;
-import org.daisy.braille.css.InlinedStyle.RuleRelativeBlock;
+import org.daisy.braille.css.InlineStyle;
+import org.daisy.braille.css.InlineStyle.RuleMainBlock;
+import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class InlinedStyleTest {
+public class InlineStyleTest {
 	
 	@Test
-	public void testInlinedStyle() {
-		InlinedStyle style = new InlinedStyle(
-			// FIXME: @page { size: 25 10; } not supported
-			"text-transform: none; " +
-			"&::table-by(row)::list-item { margin-left:2; } " +
-			"> span { display: block } " +
-			"span:first-child { display: inline }"
-		);
+	public void testInlineStyle() {
+		InlineStyle style;
 		Iterator<RuleBlock<?>> blocks;
 		RuleBlock<?> block;
 		Iterator<Declaration> declarations;
@@ -35,6 +29,9 @@ public class InlinedStyleTest {
 		Iterator<Term<?>> terms;
 		PseudoElementImpl pseudo;
 		RuleRelativeBlock relativeRule;
+		style = new InlineStyle(
+			"text-transform: none"
+		);
 		blocks = style.iterator();
 		Assert.assertTrue(blocks.hasNext());
 		block = blocks.next();
@@ -49,6 +46,24 @@ public class InlinedStyleTest {
 		Assert.assertEquals("none", terms.next().toString());
 		Assert.assertFalse(terms.hasNext());
 		Assert.assertFalse(declarations.hasNext());
+		Assert.assertFalse(blocks.hasNext());
+		
+		style = new InlineStyle(
+			// FIXME: @page { size: 25 10; } not supported
+			"text-transform: none; " +
+			"&::table-by(row)::list-item { margin-left:2; } " +
+			"& > span { display: block } " +
+			"& span:first-child { display: inline }"
+		);
+		blocks = style.iterator();
+		Assert.assertTrue(blocks.hasNext());
+		block = blocks.next();
+		Assert.assertTrue(block instanceof RuleMainBlock);
+		Assert.assertTrue(block == style.getMainStyle());
+		declarations = ((RuleMainBlock)block).iterator();
+		Assert.assertTrue(declarations.hasNext());
+		declaration = declarations.next();
+		Assert.assertEquals("text-transform", declaration.getProperty());
 		Assert.assertTrue(blocks.hasNext());
 		block = blocks.next();
 		Assert.assertTrue(block instanceof RuleRelativeBlock);
@@ -98,13 +113,13 @@ public class InlinedStyleTest {
 		Assert.assertTrue(selector.get(1) instanceof PseudoClass);
 		Assert.assertFalse(blocks.hasNext());
 		
-		style = new InlinedStyle(
+		style = new InlineStyle(
 			"span:first-child { display: inline }"
 		);
 		blocks = style.iterator();
 		Assert.assertFalse(blocks.hasNext());
 		
-		style = new InlinedStyle(
+		style = new InlineStyle(
 			"& span:first-child { display: inline }"
 		);
 		blocks = style.iterator();

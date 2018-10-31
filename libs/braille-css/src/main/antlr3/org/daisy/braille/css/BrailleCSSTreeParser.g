@@ -220,9 +220,6 @@ relative_selector returns [CombinedSelector combinedSelector]
 /*
  * Rule with selector relative to a certain element. An ampersand indicates that the relative
  * selector should be "chained" onto the element selector (cfr. the "parent reference" in SASS).
- *
- * Not part of inlineset because in general we don't allow these rules inside style elements. For
- * now they are only allowed in the special case when an individual style element is parsed.
  */
 relative_rule returns [RuleSet rs]
 @init {
@@ -275,14 +272,10 @@ simple_inlinestyle returns [List<Declaration> style]
     ;
 
 /*
- * Format allowed in style attributes that are the result of
- * "inlining" a style sheet attached to a document. Inlining is an
- * operation intended to be done by CSS processors internally, and as
- * such the resulting style attributes are not valid in an input
- * document. See the "inlinestyle" rule for what is allowed in style
- * attributes of an input document.
+ * Syntax of style attributes according to http://braillespecs.github.io/braille-css/#style-attribute.
  */
-inlinedstyle returns [RuleList rules]
+// @Override
+inlinestyle returns [RuleList rules]
 @init {
     $rules = gCSSTreeParser.rules = new RuleArrayList();
 }

@@ -82,7 +82,7 @@
 			<css:rule style="display:block"/>
 			<css:rule selector="@page" style="size: 40 25 @top-right-corner {{ content: &quot; }} &quot; }}"/>
 			<css:rule selector="@volume" style="@begin {{ content: flow(titlepage); @page {{ size: 15 5; }} @page:left {{ size: 15 5; @top-right {{ content: none; }}}}}}"/>
-			<css:rule selector="&amp;:-obfl-alternate-scenario" style="tr:blank::after {{ content: &quot;(empty)&quot; }}"/>
+			<css:rule selector="&amp;:-obfl-alternate-scenario" style="&amp; tr:blank::after {{ content: &quot;(empty)&quot; }}"/>
 		</x:expect>
 	</x:scenario>
 	

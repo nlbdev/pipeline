@@ -48,9 +48,9 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
 
-import org.daisy.braille.css.InlinedStyle;
-import org.daisy.braille.css.InlinedStyle.RuleMainBlock;
-import org.daisy.braille.css.InlinedStyle.RuleRelativeBlock;
+import org.daisy.braille.css.InlineStyle;
+import org.daisy.braille.css.InlineStyle.RuleMainBlock;
+import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
@@ -283,7 +283,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							else if (isCell && _ID.equals(attrName))
 								withinCell.id = attrValue;
 							else if (depth == 1 && _STYLE.equals(attrName)) {
-								InlinedStyle style = new InlinedStyle(attrValue);
+								InlineStyle style = new InlineStyle(attrValue);
 								String newStyle = null;
 								for (RuleBlock<?> block : style) {
 									if (block instanceof RuleMainBlock)
