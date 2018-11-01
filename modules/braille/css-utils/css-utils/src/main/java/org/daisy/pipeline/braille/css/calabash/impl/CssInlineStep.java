@@ -705,9 +705,6 @@ public class CssInlineStep extends DefaultStep {
 	
 	private static void insertPseudoStyle(StringBuilder builder, NodeData nodeData, PseudoElement elem,
 	                                      Map<String,Map<String,RulePage>> pageRules) {
-		if (builder.length() > 0 && !builder.toString().endsWith("} ")) {
-			builder.insert(0, "{ ");
-			builder.append("} "); }
 		pseudoElementToString(builder, elem);
 		builder.append(" { ");
 		insertStyle(builder, nodeData);
@@ -723,9 +720,6 @@ public class CssInlineStep extends DefaultStep {
 	}
 	
 	private static void insertPageStyle(StringBuilder builder, RulePage pageRule, boolean topLevel) {
-		if (topLevel && builder.length() > 0 && !builder.toString().endsWith("} ")) {
-			builder.insert(0, "{ ");
-			builder.append("} "); }
 		builder.append("@page");
 		String pseudo = pageRule.getPseudo();
 		if (pseudo != null && !"".equals(pseudo))
@@ -847,9 +841,6 @@ public class CssInlineStep extends DefaultStep {
 	}
 	
 	private static void insertVolumeStyle(StringBuilder builder, RuleVolume volumeRule, Map<String,Map<String,RulePage>> pageRules) {
-		if (builder.length() > 0 && !builder.toString().endsWith("} ")) {
-			builder.insert(0, "{ ");
-			builder.append("} "); }
 		builder.append("@volume");
 		String pseudo = volumeRule.getPseudo();
 		if (pseudo != null && !"".equals(pseudo))
@@ -877,9 +868,6 @@ public class CssInlineStep extends DefaultStep {
 	}
 	
 	private static void insertTextTransformDefinition(StringBuilder builder, RuleTextTransform rule) {
-		if (builder.length() > 0 && !builder.toString().endsWith("} ")) {
-			builder.insert(0, "{ ");
-			builder.append("} "); }
 		builder.append("@text-transform ").append(rule.getName()).append(" { ");
 		for (Declaration decl : rule)
 			insertDeclaration(builder, decl);
