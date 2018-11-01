@@ -14,12 +14,14 @@
     
     <xsl:template match="@style">
         <xsl:variable name="style" as="element()*" select="css:parse-stylesheet(.)"/> <!-- css:rule*-->
-        <xsl:if test="exists($style/self::css:rule[not(@selector[not(contains(.,'('))])])">
-            <xsl:sequence select="css:style-attribute(
-                                    css:serialize-stylesheet(
-                                      $style/self::css:rule[not(@selector[not(contains(.,'('))])]))"/>
+        <xsl:variable name="extract-styles" as="element()*"
+                      select="$style/self::css:rule[@selector[not(contains(.,'(')
+                                                                  or .='&amp;::list-item'
+                                                                  or .='&amp;::list-header')]]"/> <!-- css:rule*-->
+        <xsl:if test="exists($style except $extract-styles)">
+            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($style except $extract-styles))"/>
         </xsl:if>
-        <xsl:apply-templates select="$style/self::css:rule[@selector[not(contains(.,'('))]]"/>
+        <xsl:apply-templates select="$extract-styles"/>
     </xsl:template>
     
     <xsl:template match="css:rule">

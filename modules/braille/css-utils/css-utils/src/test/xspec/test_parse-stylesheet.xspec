@@ -75,8 +75,7 @@
       <doc style="&amp;::list-item {{ x:y }} &amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }} &amp;::after::table-by(row) {{ x:y }}"/>
     </x:context>
     <x:expect label="result">
-      <doc style="&amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }}"
-           css:list-item="x:y"
+      <doc style="&amp;::list-item {{ x:y }} &amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }}"
            css:after="&amp;::table-by(row) {{ x:y }}"/>
     </x:expect>
   </x:scenario>
