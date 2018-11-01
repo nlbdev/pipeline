@@ -143,7 +143,6 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	private static final QName _ROWSPAN = new QName("rowspan");
 	private static final QName _COLSPAN = new QName("colspan");
 	
-	private static final QName CSS_RENDER_TABLE_BY = new QName(XMLNS_CSS, "render-table-by");
 	private static final QName CSS_TABLE_HEADER_POLICY = new QName(XMLNS_CSS, "table-header-policy");
 	
 	private static final QName HTML_ = new QName(XMLNS_HTML, "_");
@@ -235,8 +234,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 						for (int i = 0; i < reader.getAttributeCount(); i++) {
 							QName attrName = reader.getAttributeName(i);
 							String attrValue = reader.getAttributeValue(i);
-							if (CSS_RENDER_TABLE_BY.equals(attrName));
-							else if (CSS_TABLE_HEADER_POLICY.equals(attrName)) {
+							if (CSS_TABLE_HEADER_POLICY.equals(attrName)) {
 								if (isCell)
 									if ("once".equals(attrValue))
 										withinCell.headerPolicy = TableCell.HeaderPolicy.ONCE;

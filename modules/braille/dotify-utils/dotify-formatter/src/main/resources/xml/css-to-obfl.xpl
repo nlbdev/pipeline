@@ -128,19 +128,31 @@
         </p:documentation>
     </css:parse-properties>
     
-    <css:render-table-by name="render-table-by">
+    <css:render-table-by>
         <p:documentation>
             Layout tables as lists.
         </p:documentation>
     </css:render-table-by>
     
-    <pxi:deep-parse-page-and-volume-stylesheets name="page-and-volume-styles"/>
-    <p:sink/>
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="render-table-by" port="result"/>
-        </p:input>
-    </p:identity>
+    <p:viewport match="*[@css:render-table-by and not(@css:display='table')]">
+        <pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+            <p:documentation>
+                Need another pass because css:render-table-by inserts new styles.
+            </p:documentation>
+        </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+    </p:viewport>
+    
+    <p:group name="extract-page-and-volume-styles">
+        <p:output port="result" primary="true">
+            <p:pipe step="_1" port="result"/>
+        </p:output>
+        <p:output port="styles" sequence="true">
+            <p:pipe step="page-and-volume-styles" port="result"/>
+        </p:output>
+        <p:identity name="_1"/>
+        <pxi:deep-parse-page-and-volume-stylesheets name="page-and-volume-styles"/>
+        <p:sink/>
+    </p:group>
     
     <p:for-each>
         <pxi:extract-obfl-pseudo-elements>
@@ -281,7 +293,12 @@
             <p:label-elements match="*[@css:_obfl-preferred-empty-space]/css:box[@type='table']"
                               attribute="css:_obfl-preferred-empty-space"
                               label="parent::*/@css:_obfl-preferred-empty-space"/>
-            <p:delete match="*[not(self::css:box[@type='table'])]/@css:render-table-by"/>
+            <p:delete match="*[not(self::css:box[@type='table'])]/@css:render-table-by">
+                <!--
+                    This also deletes the css:render-table-by attributes that where already
+                    processed with the css:render-table-by step above.
+                -->
+            </p:delete>
             <p:delete match="*[not(self::css:box[@type='table'])]/@css:_obfl-table-col-spacing"/>
             <p:delete match="*[not(self::css:box[@type='table'])]/@css:_obfl-table-row-spacing"/>
             <p:delete match="*[not(self::css:box[@type='table'])]/@css:_obfl-preferred-empty-space"/>
@@ -321,7 +338,7 @@
                                    else $rr/*[not(@selector)]/css:property)
                                   [@name='counter-increment']/@value,'post-page')[1]
                           )),' ')">
-        <p:pipe step="page-and-volume-styles" port="result"/>
+        <p:pipe step="extract-page-and-volume-styles" port="styles"/>
     </p:variable>
     
     <css:eval-counter>
@@ -659,7 +676,7 @@
     <p:xslt template-name="start">
         <p:input port="source">
             <p:pipe step="sections" port="result"/>
-            <p:pipe step="page-and-volume-styles" port="result"/>
+            <p:pipe step="extract-page-and-volume-styles" port="styles"/>
         </p:input>
         <p:input port="stylesheet">
             <p:document href="css-to-obfl.xsl"/>
