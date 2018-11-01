@@ -343,10 +343,10 @@
                                     <xsl:variable name="relative_selector" as="xs:string"
                                                   select="replace($relative_selector,'^&amp;\s+','')"/>
                                     <xsl:variable name="pos" select="position()"/>
-                                    <xsl:analyze-string select="$relative_selector" regex="^(&amp;?(::?|.)[^\s>\+~:\[\.#]+)(.*)$">
+                                    <xsl:analyze-string select="$relative_selector" regex="^(&amp;?(::?|.)(\([^\)]+\)|[^\s>\+~:\[\.#])+)(.*)$">
                                         <xsl:matching-substring>
                                             <xsl:variable name="head" as="xs:string" select="regex-group(1)"/>
-                                            <xsl:variable name="tail" as="xs:string" select="regex-group(3)"/>
+                                            <xsl:variable name="tail" as="xs:string" select="regex-group(4)"/>
                                             <xsl:attribute name="selector" select="$head"/>
                                             <xsl:choose>
                                                 <xsl:when test="normalize-space($tail)!=''">
