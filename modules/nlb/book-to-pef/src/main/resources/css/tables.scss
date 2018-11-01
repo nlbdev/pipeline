@@ -106,85 +106,8 @@ table {
         @extend %table-as-list;
     }
     
-    @if ($default-table-class == 'table-as-list') {
-        &:not([class]) {
-            display: block;
-            render-table-by: row;
-            &:has(> thead          th):not(:has(> :not(thead         ) th)),
-            &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
-                render-table-by: column;
-            }
-            th::after {
-                content: ': ';
-            }
-            &::list-item {
-                display: block;
-            }
-            td {
-                margin-left: 2;
-                text-indent: -2;
-            }
-            td > p,
-            th > p {
-                display: inline;
-            }
-            td:empty::after {
-                content: "(tom)";
-            }
-        }
-        // FIXME: otherwise SASS moves the :not([class]) after the ::table-by(row)
-        &:not([class])::table-by(row),
-        &:not([class])::table-by(column) {
-            display: block;
-            margin-left: 2;
-            &::list-item {
-                display: block;
-                margin-left: 2;
-                text-indent: -2;
-                &:first-child {
-                    text-indent: -4;
-                }
-            }
-        }
-    } @else if ($default-table-class == 'table-linearized') {
-        &:not([class]) {
-            display: block;
-            render-table-by: row;
-            &:has(> thead          th):not(:has(> :not(thead         ) th)),
-            &:has(> tr:first-child th):not(:has(> :not(tr:first-child) th)) {
-                render-table-by: column;
-            }
-            &::list-item {
-                display: block;
-            }
-            td > p,
-            th > p {
-                display: inline;
-            }
-        }
-        // FIXME: otherwise SASS moves the :not([class]) after the ::table-by(row)
-        &:not([class])::table-by(row),
-        &:not([class])::table-by(column) {
-            display: block;
-            text-indent: -2;
-            margin-left: 2;
-            &::list-item {
-                &::before {
-                    content:" ⠆ ";
-                    text-transform: none;
-                    hyphens: initial;
-                }
-                &:first-child {
-                    &::before {
-                        content: none;
-                    }
-                }
-            }
-        }
-    } @else {
-        &:not([class]) {
-            @extend %#{$default-table-class};
-        }
+    &:not([class]) {
+        @extend %#{$default-table-class};
     }
     
     caption {
