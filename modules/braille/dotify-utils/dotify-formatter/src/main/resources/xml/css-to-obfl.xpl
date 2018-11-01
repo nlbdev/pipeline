@@ -80,18 +80,12 @@
                         css:_obfl-alternate-scenario pseudo-elements.
                     </p:documentation>
                 </pxi:make-obfl-pseudo-elements>
-                
-                <p:for-each><p:identity/></p:for-each>
-                
                 <p:viewport match="//*[@css:_obfl-scenario and @style]">
                     <p:documentation>
                         Apply possible relative rules.
                     </p:documentation>
                     <css:inline/>
                 </p:viewport>
-                
-                <p:for-each><p:identity/></p:for-each>
-                
                 <pxi:recursive-parse-stylesheet-and-make-pseudo-elements/>
             </p:when>
             <p:otherwise>
