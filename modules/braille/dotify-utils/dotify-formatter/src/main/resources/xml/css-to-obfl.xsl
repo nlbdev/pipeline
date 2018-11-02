@@ -217,7 +217,7 @@
                         revert order because in case of equal costs Dotify selects the last scenario
                         while CSS expects the first to be selected
                     -->
-                    <xsl:sort order="ascending"/>
+                    <xsl:sort select="position()" data-type="number" order="descending"/>
                     <rendering-scenario processor="take-nth" cost="{pxi:parse-scenario-cost(@css:_obfl-scenario-cost)}">
                         <parameter name="n" value="{last()-position()+1}"/>
                     </rendering-scenario>
