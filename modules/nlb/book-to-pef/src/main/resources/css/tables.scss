@@ -90,6 +90,18 @@ table {
         }
     }
     
+    &%table-fallback {
+        @extend %table-matrix;
+        
+        // format table as list when matrix format results in at least 1 forced line break,
+        // or the total height in matrix format is more than 33% larger
+        -obfl-scenario-cost: -obfl-evaluate('(+ (* 10 $forced-break-count) (* .75 $total-height))');
+        &:-obfl-alternate-scenario {
+            @extend %table-as-list;
+            -obfl-scenario-cost: -obfl-evaluate('$total-height');
+        }
+    }
+    
     &.table-matrix {
         @extend %table-matrix;
     }
@@ -104,6 +116,10 @@ table {
     
     &.table-as-list {
         @extend %table-as-list;
+    }
+    
+    &.table-fallback {
+        @extend %table-fallback;
     }
     
     &:not([class]) {

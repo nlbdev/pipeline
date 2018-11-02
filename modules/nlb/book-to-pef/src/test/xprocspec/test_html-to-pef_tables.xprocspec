@@ -587,6 +587,133 @@
                     </x:document>
                 </x:expect>
             </x:scenario>
+            
+            <x:scenario label="fallback to list if matrix format results in at least 1 forced line break">
+                <x:call>
+                    <x:param port="parameters" name="default-table-class" select="'table-fallback'"/>
+                </x:call>
+                
+                <x:scenario label="no fallback with default page width">
+                    <x:call>
+                        <x:option name="pef-output-dir" select="resolve-uri('4.2.4.1/pef-output-dir',$temp-dir)"/>
+                        <x:option name="preview-output-dir" select="resolve-uri('4.2.4.1/preview-output-dir',$temp-dir)"/>
+                        <x:option name="temp-dir" select="resolve-uri('4.2.4.1/temp-dir',$temp-dir)"/>
+                    </x:call>
+                    <x:context label="result">
+                        <x:document type="file" base-uri="temp-dir" href="4.2.4.1/pef-output-dir/book.pef"/>
+                    </x:context>
+                    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                        <x:document type="inline">
+                            <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                                <head>
+                                    <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                        <dc:format>application/x-pef+xml</dc:format>
+                                        <dc:identifier>identifier?</dc:identifier>
+                                        <dc:date>2018-05-07</dc:date>
+                                        <dc:language>no</dc:language>
+                                    </meta>
+                                </head>
+                                <body>
+                                    <volume cols="32" rows="28" rowgap="0" duplex="true">
+                                        <section>
+                                            <page>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                                <row/>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛</row>
+                                                <row>⠀⠀⠛⠊⠋⠞⠢⠀⠀⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠊⠋⠞⠄⠀⠀⠀⠀⠛⠊⠋⠞⠄</row>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛</row>
+                                                <row>⠀⠀⠑⠝⠎⠇⠊⠛⠢⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠝⠎⠇⠊⠛⠄⠀⠀⠑⠝⠎⠇⠊⠛⠄</row>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛</row>
+                                                <row>⠀⠀⠎⠅⠊⠇⠞⠢⠀⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠎⠅⠊⠇⠞⠄⠀⠀⠀⠎⠅⠊⠇⠞⠄</row>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠀⠀⠠⠚⠁⠂⠀⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛</row>
+                                                <row>⠀⠀⠑⠝⠅⠑⠢⠀⠀⠀⠀⠚⠑⠛⠀⠑⠗⠀⠀⠀⠑⠗⠀⠊⠅⠅⠑</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠝⠅⠑⠄⠀⠀⠀⠀⠑⠝⠅⠑⠄</row>
+                                                <row/>
+                                                <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                            </page>
+                                        </section>
+                                    </volume>
+                                </body>
+                            </pef>
+                        </x:document>
+                    </x:expect>
+                </x:scenario>
+                
+                <x:scenario label="fallback activated when page width reduced">
+                    <x:call>
+                        <x:option name="page-width" select="20"/>
+                        <x:option name="pef-output-dir" select="resolve-uri('4.2.4.2/pef-output-dir',$temp-dir)"/>
+                        <x:option name="preview-output-dir" select="resolve-uri('4.2.4.2/preview-output-dir',$temp-dir)"/>
+                        <x:option name="temp-dir" select="resolve-uri('4.2.4.2/temp-dir',$temp-dir)"/>
+                    </x:call>
+                    <x:context label="result">
+                        <x:document type="file" base-uri="temp-dir" href="4.2.4.2/pef-output-dir/book.pef"/>
+                    </x:context>
+                    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                        <x:document type="inline">
+                            <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                                <head>
+                                    <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                        <dc:format>application/x-pef+xml</dc:format>
+                                        <dc:identifier>identifier?</dc:identifier>
+                                        <dc:date>2018-05-07</dc:date>
+                                        <dc:language>no</dc:language>
+                                    </meta>
+                                </head>
+                                <body>
+                                    <volume cols="20" rows="28" rowgap="0" duplex="true">
+                                        <section>
+                                            <page>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row/>
+                                                <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠞⠁⠗⠞⠑⠗</row>
+                                                <row/>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠛⠊⠋⠞⠢</row>
+                                                <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠛⠊⠋⠞⠄</row>
+                                                <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠊⠅⠅⠑⠀⠛⠊⠋⠞⠄</row>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠎⠇⠊⠛⠢</row>
+                                                <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠑⠝⠎⠇⠊⠛⠄</row>
+                                                <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠊⠅⠅⠑⠀⠑⠝⠎⠇⠊⠛⠄</row>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠎⠅⠊⠇⠞⠢</row>
+                                                <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠎⠅⠊⠇⠞⠄</row>
+                                                <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠊⠅⠅⠑⠀⠎⠅⠊⠇⠞⠄</row>
+                                                <row>⠀⠀⠠⠑⠗⠀⠙⠥⠀⠑⠝⠅⠑⠢</row>
+                                                <row>⠀⠀⠀⠀⠠⠚⠁⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                                <row>⠀⠀⠀⠀⠀⠀⠑⠝⠅⠑⠄</row>
+                                                <row>⠀⠀⠀⠀⠠⠝⠑⠊⠂⠀⠚⠑⠛⠀⠑⠗</row>
+                                            </page>
+                                            <page>
+                                                <row>⠀⠀⠀⠀⠀⠀⠊⠅⠅⠑⠀⠑⠝⠅⠑⠄</row>
+                                                <row/>
+                                                <row>⠀⠀⠀⠀⠠⠞⠁⠃⠑⠇⠇⠀⠎⠇⠥⠞⠞⠑⠗</row>
+                                            </page>
+                                        </section>
+                                    </volume>
+                                </body>
+                            </pef>
+                        </x:document>
+                    </x:expect>
+                </x:scenario>
+            </x:scenario>
         </x:scenario>
         
         <x:scenario label="2 x 7 table">
