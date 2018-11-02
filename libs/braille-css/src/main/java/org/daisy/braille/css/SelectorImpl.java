@@ -48,6 +48,17 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				if (lastPart instanceof PseudoElement) {
 					if (!(lastPart instanceof PseudoElementImpl))
 						throw new RuntimeException(); // should not happen
+					
+					// FIXME: hack!
+					// SASS may reverse the order of pseudo-elements and pseudo-classes (see
+					// https://github.com/sass/libsass/issues/1539). We recover from this bug by
+					// reversing the order again here. We can do this because it does not make sense
+					// for pseudo-elements to have a custom pseudo-class.
+					if (((PseudoElementImpl)part).specifiedAsClass && !((PseudoElementImpl)lastPart).specifiedAsClass) {
+						set(size() - 1, part);
+						part = lastPart;
+						lastPart = get(size() - 1);
+					}
 					return ((PseudoElementImpl)lastPart).add((PseudoElementImpl)part);
 				}
 			}
