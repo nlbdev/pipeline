@@ -222,10 +222,8 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							else if (bufSize < limit) {
 								String next = inputStream.next(limit - bufSize, force && (bufSize == 0), allowHyphens);
 								if (next.isEmpty()) {} // row full according to input feed
-								else {
-									if (force && (bufSize == 0))
-										forcedBreakCount++;
-									inputBuffer = peekingIterator(charactersOf(next).iterator()); }}
+								else
+									inputBuffer = peekingIterator(charactersOf(next).iterator()); }
 							if (inputBuffer == null) {
 								if (!inputStream.hasNext()) { // end of stream
 									if (bufSize > 0)
@@ -439,6 +437,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					
 					// force hard break
 					if (force) {
+						forcedBreakCount++;
 						String rv = charBuffer.substring(0, limit);
 						flushBuffers(limit);
 						return rv; }
