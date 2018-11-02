@@ -472,6 +472,14 @@ public class CssInlineStep extends DefaultStep {
 				// unzipped files have an empty base URI, but an xml:base
 				// attribute may have been added to their document element
 				URI baseURI = new URI(document.getDocumentElement().getBaseURI());
+				URL baseURL; {
+					if (baseURI == null || baseURI.toString().equals(""))
+						// handling the case where base URI is empty, although this should in theory never happen
+						// FIXME: find out why it happens
+						baseURL = null;
+					else
+						baseURL = asURL(baseURI);
+				}
 				
 				CascadedStyle style = new CascadedStyle();
 				styles.add(style);
@@ -483,7 +491,7 @@ public class CssInlineStep extends DefaultStep {
 							stylesheet = brailleParserFactory.append(sheet, network, null, SourceType.URL, stylesheet, sheet);
 					// CSSParserFactory injected via CSSFactory in CSSAssignTraversal.<init>
 					CSSFactory.registerCSSParserFactory(brailleParserFactory);
-					stylesheet = CSSFactory.getUsedStyles(document, null, asURL(baseURI), new MediaSpec(medium), network, stylesheet);
+					stylesheet = CSSFactory.getUsedStyles(document, null, baseURL, new MediaSpec(medium), network, stylesheet);
 					// DeclarationTransformer injected via CSSFactory in SingleMapNodeData.<init>
 					// SupportedCSS injected via CSSFactory in SingleMapNodeData.<init>, Repeater.assignDefaults, Variator.assignDefaults
 					CSSFactory.registerDeclarationTransformer(brailleDeclarationTransformer);
@@ -531,7 +539,7 @@ public class CssInlineStep extends DefaultStep {
 					// RuleFactory injected via CSSFactory in SimplePreparator.<init>, CSSTreeParser.<init>
 					CSSFactory.registerCSSParserFactory(printParserFactory);
 					CSSFactory.registerRuleFactory(printRuleFactory);
-					stylesheet = CSSFactory.getUsedStyles(document, null, asURL(baseURI), new MediaSpec(medium), network, stylesheet);
+					stylesheet = CSSFactory.getUsedStyles(document, null, baseURL, new MediaSpec(medium), network, stylesheet);
 					// DeclarationTransformer injected via CSSFactory in SingleMapNodeData.<init>
 					// SupportedCSS injected via CSSFactory in SingleMapNodeData.<init>, Repeater.assignDefaults, Variator.assignDefaults
 					CSSFactory.registerDeclarationTransformer(printDeclarationTransformer);
