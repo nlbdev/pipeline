@@ -193,6 +193,7 @@ public interface NLBTranslator {
 			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
 				
 				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText) {
+					styledText = PreProcessing.dontBreakBeforeEllipsis(styledText);
 					List<String> transformed = new ArrayList<String>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					String curLang = null;
@@ -227,6 +228,7 @@ public interface NLBTranslator {
 			private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
 				
 				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText) {
+					styledText = PreProcessing.dontBreakBeforeEllipsis(styledText);
 					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					String curLang = null;

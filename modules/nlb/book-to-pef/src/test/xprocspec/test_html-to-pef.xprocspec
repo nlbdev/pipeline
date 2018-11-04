@@ -2954,5 +2954,60 @@
             </x:expect>
         </x:scenario>
         
+        <x:scenario label="Don't break lines before ellipsis">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                <section epub:type="bodymatter">
+                                    <p>Dette tror faktisk jeg også …</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="page-width" select="35"/>
+                <x:option name="insert-boilerplate" select="'false'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('29/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('29/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('29/temp-dir',$temp-dir)"/>
+            </x:call>
+            <x:context label="result">
+                <x:document type="file" base-uri="temp-dir" href="29/pef-output-dir/book.pef"/>
+            </x:context>
+            <x:expect label="result"
+                      type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+                <x:document type="inline">
+                    <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                        <head>
+                            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                <dc:format>application/x-pef+xml</dc:format>
+                                <dc:identifier>identifier?</dc:identifier>
+                                <dc:language>no</dc:language>
+                            </meta>
+                        </head>
+                        <body>
+                            <volume cols="35" rows="28" rowgap="0" duplex="true">
+                                <section>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠠⠙⠑⠞⠞⠑⠀⠞⠗⠕⠗⠀⠋⠁⠅⠞⠊⠎⠅⠀⠚⠑⠛</row>
+                                        <row>⠀⠀⠕⠛⠎⠡⠀⠄⠄⠄</row>
+                                    </page>
+                                </section>
+                            </volume>
+                        </body>
+                    </pef>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
