@@ -1,6 +1,5 @@
 package org.daisy.dotify.formatter.test;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.daisy.dotify.api.engine.LayoutEngineException;

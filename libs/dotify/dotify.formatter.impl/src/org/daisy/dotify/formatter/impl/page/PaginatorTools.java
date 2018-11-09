@@ -123,13 +123,13 @@ class PaginatorTools {
 	}
 	
 	/**
-	 * Distribute <tt>units</tt> of text over <tt>width</tt> chars, separated by <tt>padding</tt> pattern
-	 * using distribution mode <tt>mode</tt>.
+	 * Distribute <code>units</code> of text over <code>width</code> chars, separated by <code>padding</code> pattern
+	 * using distribution mode <code>mode</code>.
 	 * @param units the units of text to distribute
 	 * @param width the width of the resulting string
 	 * @param padding the padding pattern to use as separator
 	 * @param mode the distribution mode to use
-	 * @return returns a string of <tt>width</tt> chars 
+	 * @return returns a string of <code>width</code> chars 
 	 * @throws PaginatorToolsException if distribution fails
 	 */
 	static String distribute(List<String> units, int width, String padding, DistributeMode mode) throws PaginatorToolsException {
@@ -146,10 +146,10 @@ class PaginatorTools {
 
 	/**
 	 * @param units
-	 * @return a list of size 2*N-1, where N is the size of <tt>units</tt>. Element i of
-	 *         <tt>unit</tt> corresponds with element 2*i in the returned list. Elements i*2+1 for
+	 * @return a list of size 2*N-1, where N is the size of <code>units</code>. Element i of
+	 *         <code>unit</code> corresponds with element 2*i in the returned list. Elements i*2+1 for
 	 *         i=(0..N-1) is padding between units. The sum of the lengths of all strings equals
-	 *         <tt>width</tt>.
+	 *         <code>width</code>.
 	 * @throws PaginatorToolsException if distribution fails
 	 */
 	static List<String> distributeRetain(List<String> units, int width, String padding, DistributeMode mode) throws PaginatorToolsException {

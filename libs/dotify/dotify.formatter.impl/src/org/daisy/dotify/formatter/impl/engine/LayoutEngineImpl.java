@@ -1,13 +1,12 @@
 package org.daisy.dotify.formatter.impl.engine;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
@@ -24,7 +23,6 @@ import org.daisy.dotify.api.writer.MetaDataItem;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.PagedMediaWriterException;
 import org.daisy.dotify.formatter.impl.FactoryManager;
-import org.daisy.dotify.formatter.impl.obfl.OBFLWsNormalizer;
 
 /**
  * <p>
@@ -46,7 +44,6 @@ class LayoutEngineImpl implements FormatterEngine {
 	private final PagedMediaWriter writer;
 	private final ObflParserFactoryService obflFactory;
 	private final Logger logger;
-	private boolean normalize;
 	private final FactoryManager fm;
 	
 	/**
@@ -73,39 +70,13 @@ class LayoutEngineImpl implements FormatterEngine {
 		this.writer = writer;
 		this.obflFactory = obflFactory;
 		this.logger = Logger.getLogger(LayoutEngineImpl.class.getCanonicalName());
-		this.normalize = true;
 		this.fm = fm;
-	}
-
-	public boolean isNormalizing() {
-		return normalize;
-	}
-
-	public void setNormalizing(boolean normalize) {
-		this.normalize = normalize;
 	}
 
 	@Override
 	public void convert(InputStream input, OutputStream output) throws LayoutEngineException {
 		File f = null;
 		try {
-			if (normalize) {
-				logger.info("Normalizing obfl...");
-				try {
-					f = File.createTempFile("temp", ".tmp");
-					f.deleteOnExit();
-					OBFLWsNormalizer normalizer = new OBFLWsNormalizer(fm.getXmlInputFactory().createXMLEventReader(input), fm.getXmlEventFactory(), new FileOutputStream(f));
-					normalizer.parse(fm.getXmlOutputFactory());
-					try {
-						input.close();
-					} catch (Exception e) {
-						logger.log(Level.FINE, "Failed to close stream.", e);
-					}
-					input = new FileInputStream(f);
-				} catch (Exception e) {
-					throw new LayoutEngineException(e);
-				}
-			}
 			try {
 				logger.info("Parsing input...");
 
@@ -121,14 +92,11 @@ class LayoutEngineImpl implements FormatterEngine {
 				}
 
 				logger.info("Rendering output...");
-				ArrayList<MetaDataItem> meta = new ArrayList<>();
-				for (MetaDataItem item : obflParser.getMetaData()) {
+				List<MetaDataItem> meta = obflParser.getMetaData().stream()
 					// Filter out identifier, date and format from the OBFL meta data
 					// because the meta data in the OBFL file is about itself, and these properties are not transferable
-					if (!(item.getKey().equals(DC_IDENTIFIER) || item.getKey().equals(DC_DATE) || item.getKey().equals(DC_FORMAT))) {
-						meta.add(item);
-					}
-				}
+					.filter(item->!(item.getKey().equals(DC_IDENTIFIER) || item.getKey().equals(DC_DATE) || item.getKey().equals(DC_FORMAT)))
+					.collect(Collectors.toList());
 				writer.prepare(meta);
 				writer.open(output);
 				formatter.write(writer);

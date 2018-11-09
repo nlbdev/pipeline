@@ -142,12 +142,28 @@ public class PageImpl implements Page {
 		return c.getCurrentHeight();
 	}
 
-	private float spaceNeeded() {
-		return 	pageAreaSpaceNeeded() +
-				finalRows.getOffsetHeight();
+	// vertical position of the next body row, measured from the top edge of the page body area
+	float currentPosition() {
+		float pos = finalRows.getOffsetHeight();
+		float headerHeight = template.getHeaderHeight();
+		if (pos < headerHeight) {
+			if (hasTopPageArea()) {
+				return pageAreaSpaceNeeded();
+			} else {
+				return 0;
+			}
+		} else {
+			return pos - headerHeight;
+		}
 	}
 	
-	float staticAreaSpaceNeeded() {
+	// space available for body rows
+	// - this excludes space used for page-area
+	float spaceAvailableInFlow() {
+		return getFlowHeight() + template.getHeaderHeight() - pageAreaSpaceNeeded() - finalRows.getOffsetHeight();
+	}
+	
+	private float staticAreaSpaceNeeded() {
 		return rowsNeeded(pageAreaTemplate.getBefore(), master.getRowSpacing()) + rowsNeeded(pageAreaTemplate.getAfter(), master.getRowSpacing());
 	}
 	
@@ -155,12 +171,14 @@ public class PageImpl implements Page {
 		return (!pageArea.isEmpty() ? staticAreaSpaceNeeded() + rowsNeeded(pageArea, master.getRowSpacing()) : 0);
 	}
 	
-	int spaceUsedOnPage(int offs) {
-		return (int)Math.ceil(spaceNeeded()) + offs;
+	private boolean hasTopPageArea() {
+		return master.getPageArea() != null
+			&& master.getPageArea().getAlignment() == PageAreaProperties.Alignment.TOP
+			&& !pageArea.isEmpty();
 	}
 	
 	private void addTopPageArea() {
-        if (master.getPageArea()!=null && master.getPageArea().getAlignment()==PageAreaProperties.Alignment.TOP && !pageArea.isEmpty()) {
+		if (hasTopPageArea()) {
 			finalRows.addAll(pageAreaTemplate.getBefore());
 			finalRows.addAll(pageArea);
 			finalRows.addAll(pageAreaTemplate.getAfter());

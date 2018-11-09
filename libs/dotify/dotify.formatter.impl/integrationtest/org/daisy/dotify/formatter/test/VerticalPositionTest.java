@@ -28,4 +28,8 @@ public class VerticalPositionTest extends AbstractFormatterEngineTest {
 		testPEF("resource-files/vertical-position-dls-input.obfl", "resource-files/vertical-position-dls-expected.pef", false);
 	}
 
+	@Test
+	public void testVerticalPositionWithHeader() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/vertical-position-header-input.obfl", "resource-files/vertical-position-header-expected.pef", false);
+	}
 }

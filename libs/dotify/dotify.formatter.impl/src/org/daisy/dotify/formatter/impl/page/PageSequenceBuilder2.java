@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.daisy.dotify.api.formatter.BlockPosition;
 import org.daisy.dotify.api.formatter.FallbackRule;
+import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.api.formatter.MarginRegion;
 import org.daisy.dotify.api.formatter.MarkerIndicatorRegion;
 import org.daisy.dotify.api.formatter.PageAreaProperties;
@@ -150,7 +151,7 @@ public class PageSequenceBuilder2 {
 	}
 
 	private void newRow(PageImpl p, RowImpl row) {
-		if (p.spaceUsedOnPage(1) > p.getFlowHeight()) {
+		if (p.spaceAvailableInFlow() < 1) {
 			throw new RuntimeException("Error in code.");
 			//newPage();
 		}
@@ -193,10 +194,10 @@ public class PageSequenceBuilder2 {
 				BlockContext bc = BlockContext.from(blockContext)
 						.flowWidth(master.getFlowWidth() - master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth())
 						.build();
-				data = new RowGroupDataSource(master, bc, rgs.getBlocks(), rgs.getStartPosition(), cd);
+				data = new RowGroupDataSource(master, bc, rgs.getBlocks(), rgs.getBreakBefore(), rgs.getVerticalSpacing(), cd);
 				dataGroupsIndex++;
-				if (((RowGroupDataSource)data).getStartPosition() instanceof VerticalSpacing) {
-					VerticalSpacing vSpacing = (VerticalSpacing)((RowGroupDataSource)data).getStartPosition();
+				if (((RowGroupDataSource)data).getVerticalSpacing()!=null) {
+					VerticalSpacing vSpacing = ((RowGroupDataSource)data).getVerticalSpacing();
 					float size = 0;
 					for (RowGroup g : data.getRemaining()) {
 						size += g.getUnitSize();
@@ -228,7 +229,7 @@ public class PageSequenceBuilder2 {
 				// And on copy...
 				copy = SplitPointHandler.skipLeading(copy, index).getTail();
 				List<RowGroup> seqTransitionText = transitionContent.isPresent()
-						?new RowGroupDataSource(master, bc, transitionContent.get().getInSequence(), StartOnNewPage.INSTANCE, cd).getRemaining()
+						?new RowGroupDataSource(master, bc, transitionContent.get().getInSequence(), BreakBefore.AUTO, null, cd).getRemaining()
 						:Collections.emptyList();
 				SplitPointSpecification spec;
 				boolean addTransition = true;
@@ -273,9 +274,9 @@ public class PageSequenceBuilder2 {
 					spec = sph.find(flowHeight, copy, force?StandardSplitOption.ALLOW_FORCE:null);
 				}
 				// Now apply the information to the live data
-				data.setHyphenateLastLine(hyphenateLastLine);
+				data.setAllowHyphenateLastLine(hyphenateLastLine);
 				SplitPoint<RowGroup, RowGroupDataSource> res = sph.split(spec, data);
-				data.setHyphenateLastLine(true);
+				data.setAllowHyphenateLastLine(true);
 				if (res.getHead().size()==0 && force) {
 					if (firstUnitHasSupplements(data) && hasPageAreaCollection()) {
 						reassignCollection();
@@ -317,11 +318,10 @@ public class PageSequenceBuilder2 {
 				}
 				if (!data.isEmpty()) {
 					return current;
-				}
-				if (current!=null && dataGroupsIndex<dataGroups.size()) {
-					RowGroupSequenceStartPosition nextStart = dataGroups.get(dataGroupsIndex).getStartPosition();
-					if (nextStart instanceof StartOnNewPage || nextStart instanceof StartOnNewSheet) {
-						if (nextStart instanceof StartOnNewSheet && master.duplex() && pageCount%2==1) {
+				} else if (current!=null && dataGroupsIndex<dataGroups.size()) {
+					BreakBefore nextStart = dataGroups.get(dataGroupsIndex).getBreakBefore();
+					if (nextStart!=BreakBefore.AUTO) {
+						if (nextStart == BreakBefore.SHEET && master.duplex() && pageCount%2==1) {
 							nextEmpty = true;
 						}
 						return current;
@@ -554,7 +554,7 @@ public class PageSequenceBuilder2 {
 	private int calculateVerticalSpace(PageImpl pa, BlockPosition p, int blockSpace) {
 		if (p != null) {
 			int pos = p.getPosition().makeAbsolute(pa.getFlowHeight());
-			int t = pos - pa.spaceUsedOnPage(0);
+			int t = pos - (int)Math.ceil(pa.currentPosition());
 			if (t > 0) {
 				int advance = 0;
 				switch (p.getAlignment()) {

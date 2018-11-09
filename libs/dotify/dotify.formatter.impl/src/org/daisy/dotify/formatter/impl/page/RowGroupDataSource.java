@@ -4,14 +4,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.common.splitter.DefaultSplitResult;
 import org.daisy.dotify.common.splitter.SplitPointDataSource;
+import org.daisy.dotify.common.splitter.SplitPointHandler;
+import org.daisy.dotify.common.splitter.SplitPointSpecification;
 import org.daisy.dotify.common.splitter.SplitResult;
 import org.daisy.dotify.common.splitter.Supplements;
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 
+/**
+ * <p>Provides a data source for row groups.</p>
+ * 
+ * <p>Note that the implementation requires that break point searching is performed on a copy,
+ * so that the items are created when a split is performed. If this assumption is not met,
+ * things will break.</p>
+ * @author Joel Håkansson
+ */
 class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<RowGroup, RowGroupDataSource> {
 	private static final Supplements<RowGroup> EMPTY_SUPPLEMENTS = new Supplements<RowGroup>() {
 		@Override
@@ -21,23 +32,25 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	};
 	private final LayoutMaster master;
 	private final Supplements<RowGroup> supplements;
-	private final RowGroupSequenceStartPosition startPos;
+	private final BreakBefore breakBefore;
+	private final VerticalSpacing vs;
 	private final List<Block> blocks;
 	private List<RowGroup> groups;
 	private BlockContext bc;
 	private int blockIndex;
-	private boolean hyphenateLastLine;
+	private boolean allowHyphenateLastLine;
 
-	RowGroupDataSource(LayoutMaster master, BlockContext bc, List<Block> blocks, RowGroupSequenceStartPosition startPos, Supplements<RowGroup> supplements) {
+	RowGroupDataSource(LayoutMaster master, BlockContext bc, List<Block> blocks, BreakBefore breakBefore, VerticalSpacing vs, Supplements<RowGroup> supplements) {
 		super();
 		this.master = master;
 		this.bc = bc;
 		this.groups = null;
 		this.blocks = blocks;
 		this.supplements = supplements;
-		this.startPos = startPos;
+		this.breakBefore = breakBefore;
+		this.vs = vs;
 		this.blockIndex = 0;
-		this.hyphenateLastLine = true;
+		this.allowHyphenateLastLine = true;
 	}
 
 	RowGroupDataSource(RowGroupDataSource template) {
@@ -58,9 +71,10 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		}
 		this.blocks = template.blocks;
 		this.supplements = template.supplements;
-		this.startPos = template.startPos;
+		this.breakBefore = template.breakBefore;
+		this.vs = template.vs;
 		this.blockIndex = template.blockIndex;
-		this.hyphenateLastLine = template.hyphenateLastLine;
+		this.allowHyphenateLastLine = template.allowHyphenateLastLine;
 	}
 	
 	static RowGroupDataSource copyUnlessNull(RowGroupDataSource template) {
@@ -79,7 +93,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 
 	@Override
 	public boolean isEmpty() {
-		return this.groupSize()==0 && blockIndex>=blocks.size() && !hasNextInBlock();
+		return this.currentRowCount()==0 && blockIndex>=blocks.size() && !hasNextInBlock();
 	}
 
 	@Override
@@ -96,7 +110,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		if (this.groups==null) {
 			return Collections.emptyList();
 		} else {
-			return this.groups.subList(0, groupSize());
+			return this.groups.subList(0, currentRowCount());
 		}
 	}
 
@@ -104,14 +118,18 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	public int getSize(int limit) {
 		if (!ensureBuffer(limit))  {
 			//we have buffered all elements
-			return this.groupSize();
+			return this.currentRowCount();
 		} else {
 			return limit;
 		}
 	}
 
-	RowGroupSequenceStartPosition getStartPosition() {
-		return startPos;
+	VerticalSpacing getVerticalSpacing() {
+		return vs;
+	}
+	
+	BreakBefore getBreakBefore() {
+		return breakBefore;
 	}
 	
 	BlockContext getContext() {
@@ -122,8 +140,16 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		this.bc = c;
 	}
 	
-	void setHyphenateLastLine(boolean value) {
-		this.hyphenateLastLine = value;
+	/**
+	 * <p>Sets the hyphenate last line property.</p>
+	 * 
+	 * <p>Note that the implementation assumes that this is only used immediately before
+	 * calling split on a {@link SplitPointHandler} with a {@link SplitPointSpecification}.
+	 * Calling this method after a call to split is not necessary.</p>
+	 * @param value the value
+	 */
+	void setAllowHyphenateLastLine(boolean value) {
+		this.allowHyphenateLastLine = value;
 	}
 	
 	/**
@@ -133,7 +159,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	 * @return returns true if the index element was available, false otherwise
 	 */
 	private boolean ensureBuffer(int index) {
-		while (index<0 || this.groupSize()<index) {
+		while (index<0 || this.currentRowCount()<index) {
 			if (blockIndex>=blocks.size() && !hasNextInBlock()) {
 				return false;
 			}
@@ -143,7 +169,11 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 				blockIndex++;
 				loadBlock(master, b, bc);
 			}
-			processNextRowGroup(bc, !hyphenateLastLine && groupSize()>=index-1);
+			// Requesting all items implies that no special last line hyphenation processing is needed.
+			// This is reasonable: The very last line in a result would never be hyphenated, so suppressing
+			// hyphenation is unnecessary. Also, actively doing this would be difficult, because we do not know
+			// if the line produced below is the last line or not, until after the call has already been made.
+			processNextRowGroup(bc, !allowHyphenateLastLine && index>-1 && currentRowCount()>=index-1);
 		}
 		return true;
 	}
@@ -155,7 +185,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 			throw new IndexOutOfBoundsException("" + atIndex);
 		}
 		RowGroupDataSource tail = new RowGroupDataSource(this, atIndex);
-		tail.hyphenateLastLine = true;
+		tail.allowHyphenateLastLine = true;
 		if (atIndex==0) {
 			return new DefaultSplitResult<RowGroup, RowGroupDataSource>(Collections.emptyList(), tail);
 		} else {
@@ -165,7 +195,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 
 	@Override
 	public RowGroupDataSource createEmpty() {
-		return new RowGroupDataSource(master, bc, Collections.emptyList(), startPos, EMPTY_SUPPLEMENTS);
+		return new RowGroupDataSource(master, bc, Collections.emptyList(), breakBefore, vs, EMPTY_SUPPLEMENTS);
 	}
 
 	@Override
@@ -174,7 +204,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	}
 
 	@Override
-	protected void newRowGroupSequence(RowGroupSequenceStartPosition startPos) {
+	protected void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
 		if (groups!=null) {
 			throw new IllegalStateException();
 		} else {
@@ -197,7 +227,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		groups.add(rg);
 	}
 	
-	int groupSize() {
+	int currentRowCount() {
 		return groups==null?0:groups.size();
 	}
 }

@@ -170,7 +170,7 @@ public final class RowImpl implements Row {
 		 * @param index the position in the marker list to insert the markers
 		 * @param list the list of markers
 	     * @throws IndexOutOfBoundsException if the index is out of range
-	     *         (<tt>index &lt; 0 || index &gt; getMarkers().size()</tt>)
+	     *         (<code>index &lt; 0 || index &gt; getMarkers().size()</code>)
 		 */
 		public void addMarkers(int index, List<Marker> list) {
 			assertNotBuilt();
@@ -204,7 +204,7 @@ public final class RowImpl implements Row {
 		 * @param index the position in the identifier list to insert the identifiers
 		 * @param list the list of identifiers
 	     * @throws IndexOutOfBoundsException if the index is out of range
-	     *         (<tt>index &lt; 0 || index &gt; getIdentifiers().size()</tt>)
+	     *         (<code>index &lt; 0 || index &gt; getIdentifiers().size()</code>)
 		 */
 		public void addIdentifiers(int index, List<String> list) {
 			assertNotBuilt();

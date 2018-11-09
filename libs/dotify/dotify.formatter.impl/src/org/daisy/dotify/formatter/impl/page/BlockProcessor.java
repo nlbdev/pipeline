@@ -17,7 +17,7 @@ import org.daisy.dotify.formatter.impl.search.DefaultContext;
 abstract class BlockProcessor {
 	private RowGroupProvider rowGroupProvider;
 	
-	protected abstract void newRowGroupSequence(RowGroupSequenceStartPosition pos);
+	protected abstract void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs);
 	protected abstract boolean hasSequence();
 	protected abstract boolean hasResult();
 	protected abstract void addRowGroup(RowGroup rg);
@@ -31,17 +31,12 @@ abstract class BlockProcessor {
 	protected void loadBlock(LayoutMaster master, Block g, BlockContext bc) {
 		AbstractBlockContentManager bcm = g.getBlockContentManager(bc);
 		int keepWithNext = 0;
-		if (!hasSequence()
-		    || ((g.getBreakBeforeType()==BreakBefore.PAGE || g.getBreakBeforeType()==BreakBefore.SHEET
-		         || g.getVerticalPosition()!=null)
-		        && hasResult())) {
-			newRowGroupSequence(
-				g.getVerticalPosition()!=null
-					? new VerticalSpacing(g.getVerticalPosition(), new RowImpl("", bcm.getLeftMarginParent(), bcm.getRightMarginParent()))
-					: g.getBreakBeforeType()==BreakBefore.PAGE
-						? StartOnNewPage.INSTANCE
-						: StartOnNewSheet.INSTANCE
-			);
+		if (!hasSequence() || ((g.getBreakBeforeType()!=BreakBefore.AUTO || g.getVerticalPosition()!=null) && hasResult())) {
+            newRowGroupSequence(g.getBreakBeforeType(), 
+                    g.getVerticalPosition()!=null?
+                            new VerticalSpacing(g.getVerticalPosition(), new RowImpl("", bcm.getLeftMarginParent(), bcm.getRightMarginParent()))
+                                    :null
+            );
 			keepWithNext = -1;
 		} else if (rowGroupProvider!=null) {
 			keepWithNext = rowGroupProvider.getKeepWithNext();

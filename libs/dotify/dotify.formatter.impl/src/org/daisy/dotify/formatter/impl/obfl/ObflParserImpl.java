@@ -110,6 +110,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 	private boolean hyphGlobal;
 	private final Logger logger;
 	private final FactoryManager fm;
+	private boolean normalizeSpace = true;
 
 	Map<String, Node> xslts = new HashMap<>();
 	Map<String, Node> fileRefs = new HashMap<>();
@@ -123,9 +124,17 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		this.fm = fm;
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
 	}
+
+	public void setNormalizeSpace(boolean value) {
+		this.normalizeSpace = value;
+	}
+	
+	public boolean isNormalizingSpace() {
+		return normalizeSpace;
+	}
 	
 	@Override
-	public void parse(XMLEventReader input, Formatter formatter) throws ObflParserException {
+	public void parse(XMLEventReader inputER, Formatter formatter) throws ObflParserException {
 		this.formatter = formatter;
 		FormatterConfiguration config = formatter.getConfiguration();
 		this.locale = FilterLocale.parse(config.getLocale());
@@ -134,7 +143,12 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		this.meta = new ArrayList<>();
 		XMLEvent event;
 		TextProperties tp = new TextProperties.Builder(this.locale.toString()).translationMode(mode).hyphenate(hyphGlobal).build();
-		
+		XMLEventIterator input;
+		if (normalizeSpace) {
+			input = new OBFLWsNormalizer(inputER, fm.getXmlEventFactory()); 
+		} else {
+			input = new XMLEventReaderAdapter(inputER);
+		}
 		try {
 			while (input.hasNext()) {
 				event = input.nextEvent();
@@ -175,7 +189,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseMeta(XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private void parseMeta(XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		int level = 0;
 		while (input.hasNext()) {
 			event = input.nextEvent();
@@ -232,7 +246,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		Logger.getLogger(this.getClass().getCanonicalName()).warning(msg + buildLocationMsg(event.getLocation()));
 	}
 
-	public static String buildLocationMsg(Location location) {
+	private static String buildLocationMsg(Location location) {
 		int line = -1;
 		int col = -1;
 		if (location != null) {
@@ -243,7 +257,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 	}
 
 	//TODO: parse page-number-variable
-	private void parseLayoutMaster(XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private void parseLayoutMaster(XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		@SuppressWarnings("unchecked")
 		Iterator<Attribute> i = event.asStartElement().getAttributes();
 		int width = Integer.parseInt(getAttr(event, ObflQName.ATTR_PAGE_WIDTH));
@@ -292,7 +306,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		//masters.put(masterName, masterConfig.build());
 	}
 	
-	private void parsePageArea(LayoutMasterBuilder master, XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private void parsePageArea(LayoutMasterBuilder master, XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		String collection = getAttr(event, ObflQName.ATTR_COLLECTION);
 		int maxHeight = Integer.parseInt(getAttr(event, ObflQName.ATTR_MAX_HEIGHT));
 		PageAreaProperties.Builder config = new PageAreaProperties.Builder(collection, maxHeight);
@@ -328,7 +342,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseFallback(XMLEvent event, XMLEventReader input, PageAreaProperties.Builder pap) throws XMLStreamException {
+	private void parseFallback(XMLEvent event, XMLEventIterator input, PageAreaProperties.Builder pap) throws XMLStreamException {
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (equalsStart(event, ObflQName.RENAME)) {
@@ -342,14 +356,14 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseRename(XMLEvent event, XMLEventReader input, PageAreaProperties.Builder pap) throws XMLStreamException {
+	private void parseRename(XMLEvent event, XMLEventIterator input, PageAreaProperties.Builder pap) throws XMLStreamException {
 		String from = getAttr(event, "collection");
 		String to = getAttr(event, "to");
 		pap.addFallback(new RenameFallbackRule(from, to));
 		scanEmptyElement(input, ObflQName.RENAME);
 	}
 
-	private void parseBeforeAfter(XMLEvent event, XMLEventReader input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
+	private void parseBeforeAfter(XMLEvent event, XMLEventIterator input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
 		fc.startBlock(blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
@@ -370,7 +384,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseTemplate(LayoutMasterBuilder master, XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private void parseTemplate(LayoutMasterBuilder master, XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		PageTemplateBuilder template;
 		if (equalsStart(event, ObflQName.TEMPLATE)) {
 			template = master.newTemplate(new OBFLCondition(getAttr(event, ObflQName.ATTR_USE_WHEN), fm.getExpressionFactory(), false));
@@ -406,7 +420,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private FieldList parseHeaderFooter(XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private FieldList parseHeaderFooter(XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		@SuppressWarnings("unchecked")
 		Iterator<Attribute> i = event.asStartElement().getAttributes();
 		Float rowSpacing = null;
@@ -452,7 +466,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private ArrayList<Field> parseField(XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private ArrayList<Field> parseField(XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		ArrayList<Field> compound = new ArrayList<>();
 		while (input.hasNext()) {
 			event=input.nextEvent();
@@ -482,7 +496,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		return compound;
 	}
 	
-	private MarginRegion parseMarginRegion(XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private MarginRegion parseMarginRegion(XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		int width = 1;
 		String value = getAttr(event, ObflQName.ATTR_WIDTH);
 		try {
@@ -510,7 +524,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		return ret;
 	}
 	
-	private MarginRegion parseIndicatorRegion(XMLEvent event, XMLEventReader input, int width) throws XMLStreamException {
+	private MarginRegion parseIndicatorRegion(XMLEvent event, XMLEventIterator input, int width) throws XMLStreamException {
 		MarkerIndicatorRegion.Builder builder = MarkerIndicatorRegion.ofWidth(width);
 		while (input.hasNext()) {
 			event=input.nextEvent();
@@ -551,7 +565,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 	
 	
 
-	private void parseSequence(XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	private void parseSequence(XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		String masterName = getAttr(event, "master");
 		tp = getTextProperties(event, tp);
 		SequenceProperties.Builder builder = new SequenceProperties.Builder(masterName);
@@ -588,7 +602,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 			}
 		}
 	}
-	private void parseXMLData(FormatterCore fc, XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	private void parseXMLData(FormatterCore fc, XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		String renderer = getAttr(event, "renderer");
 		DOMResult dr;
 		try {
@@ -608,8 +622,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 			XMLDataRenderer qtd = filterRenderers(renderers.get(renderer), d, tp);
 			fc.insertDynamicLayout(qtd);
 		} catch (ParserConfigurationException | TransformerFactoryConfigurationError | FactoryConfigurationError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.WARNING, "Failed to parse xml-data element.", e);
 		}
 	}
 	
@@ -633,7 +646,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 							qtd.add(new XSLTRenderingScenario(this, configureTransformer(td), node, tp, fm.getExpressionFactory().newExpression(), td.getCost()));
 						}
 					} catch (XPathExpressionException e) {
-						e.printStackTrace();
+						logger.log(Level.WARNING, "Failed to evaluate xpath expression.", e);
 					}
 				} else {
 					qtd.add(new XSLTRenderingScenario(this, configureTransformer(td), node, tp, fm.getExpressionFactory().newExpression(), td.getCost()));
@@ -669,7 +682,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseFileReference(XMLEvent event, XMLEventReader input, Map<String, Node> refs) {
+	private void parseFileReference(XMLEvent event, XMLEventIterator input, Map<String, Node> refs) {
 		String uri = getAttr(event, ObflQName.ATTR_URI);
 		DOMResult dr;
 		try {
@@ -692,7 +705,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseProcessor(XMLEvent event, XMLEventReader input, Map<String, Node> xslts) {
+	private void parseProcessor(XMLEvent event, XMLEventIterator input, Map<String, Node> xslts) {
 		String name = getAttr(event, ObflQName.ATTR_NAME);
 		DOMResult dr;
 		try {
@@ -716,7 +729,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseRenderer(XMLEvent event, XMLEventReader input, Map<String, List<RendererInfo>> renderers) throws XMLStreamException {
+	private void parseRenderer(XMLEvent event, XMLEventIterator input, Map<String, List<RendererInfo>> renderers) throws XMLStreamException {
 		String name = getAttr(event, ObflQName.ATTR_NAME);
 		List<RendererInfo> opts = new ArrayList<>();
 		while (input.hasNext()) {
@@ -732,7 +745,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		renderers.put(name, opts);
 	}
 	
-	private RendererInfo parseRenderingScenario(XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private RendererInfo parseRenderingScenario(XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		NamespaceContext nc = event.asStartElement().getNamespaceContext();
 		//System.out.println(nc.getNamespaceURI(XMLConstants.DEFAULT_NS_PREFIX));
 		String processor = getAttr(event, ObflQName.ATTR_PROCESSOR);
@@ -755,7 +768,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		return builder.build();
 	}
 
-	void parseBlock(XMLEvent event, XMLEventReader input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
+	void parseBlock(XMLEvent event, XMLEventIterator input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
 		fc.startBlock(blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
@@ -780,7 +793,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	void parseBlock(XMLEvent event, XMLEventReader input, BlockBuilder fc, TextProperties tp) throws XMLStreamException {
+	void parseBlock(XMLEvent event, XMLEventIterator input, BlockBuilder fc, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
 		fc.startBlock(blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
@@ -801,7 +814,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseSpan(XMLEvent event, XMLEventReader input, BlockContentBuilder fc, TextProperties tp) throws XMLStreamException {
+	private void parseSpan(XMLEvent event, XMLEventIterator input, BlockContentBuilder fc, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
 		String id = getAttr(event, ObflQName.ATTR_ID);
 		SpanProperties.Builder propsBuilder = new SpanProperties.Builder();
@@ -834,7 +847,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseStyle(XMLEvent event, XMLEventReader input, BlockContentBuilder fc, TextProperties tp) throws XMLStreamException {
+	private void parseStyle(XMLEvent event, XMLEventIterator input, BlockContentBuilder fc, TextProperties tp) throws XMLStreamException {
 		String name = getAttr(event, "name");
 		boolean ignore = formatter.getConfiguration().getIgnoredStyles().contains(name);
 		if (!ignore) {
@@ -1007,7 +1020,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 	}
 	
 	
-	private void parseLeader(BlockContentBuilder fc, XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private void parseLeader(BlockContentBuilder fc, XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		Leader.Builder builder = new Leader.Builder();
 		@SuppressWarnings("unchecked")
 		Iterator<Attribute> atts = event.asStartElement().getAttributes();
@@ -1038,7 +1051,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		return getAttr(event, "item");
 	}
 	
-	void parseTable(XMLEvent event, XMLEventReader input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
+	void parseTable(XMLEvent event, XMLEventIterator input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
 		int tableColSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_COL_SPACING), 0);
 		int tableRowSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_ROW_SPACING), 0);
 		int preferredEmptySpace = toInt(getAttr(event, ObflQName.ATTR_TABLE_PREFERRED_EMPTY_SPACE), 2);
@@ -1076,7 +1089,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseTHeadTBody(XMLEvent event, XMLEventReader input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
+	private void parseTHeadTBody(XMLEvent event, XMLEventIterator input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
 		if (equalsStart(event, ObflQName.THEAD)) {
 			fc.beginsTableHeader();
 		} else {
@@ -1094,7 +1107,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseTR(XMLEvent event, XMLEventReader input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
+	private void parseTR(XMLEvent event, XMLEventIterator input, FormatterCore fc, TextProperties tp) throws XMLStreamException {
 		fc.beginsTableRow();
 		while (input.hasNext()) {
 			event=input.nextEvent();
@@ -1109,7 +1122,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseTD(XMLEvent event, XMLEventReader input, FormatterCore fs, TextProperties tp) throws XMLStreamException {
+	private void parseTD(XMLEvent event, XMLEventIterator input, FormatterCore fs, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
 		int colSpan = toInt(getAttr(event, ObflQName.ATTR_COL_SPAN), 1);
 		int rowSpan = toInt(getAttr(event, ObflQName.ATTR_ROW_SPAN), 1);
@@ -1140,7 +1153,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseTableOfContents(XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	private void parseTableOfContents(XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		String tocName = getAttr(event, ObflQName.ATTR_NAME);
 		tp = getTextProperties(event, tp);
 		TableOfContents toc = formatter.newToc(tocName);
@@ -1156,7 +1169,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseCollection(XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	private void parseCollection(XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		String id = getAttr(event, ObflQName.ATTR_NAME);
 		ContentCollection coll = formatter.newCollection(id); 
 		while (input.hasNext()) {
@@ -1171,7 +1184,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseTocEntry(XMLEvent event, XMLEventReader input, TableOfContents toc, TextProperties tp) throws XMLStreamException {
+	private void parseTocEntry(XMLEvent event, XMLEventIterator input, TableOfContents toc, TextProperties tp) throws XMLStreamException {
 		String refId = getAttr(event, "ref-id");
 		tp = getTextProperties(event, tp);
 		toc.startEntry(refId, blockBuilder(event.asStartElement()));
@@ -1193,7 +1206,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseCollectionItem(XMLEvent event, XMLEventReader input, ContentCollection coll, TextProperties tp) throws XMLStreamException {
+	private void parseCollectionItem(XMLEvent event, XMLEventIterator input, ContentCollection coll, TextProperties tp) throws XMLStreamException {
 		tp = getTextProperties(event, tp);
 		coll.startItem(blockBuilder(event.asStartElement()));
 		while (input.hasNext()) {
@@ -1217,7 +1230,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	boolean processAsBlockContents(BlockContentBuilder fc, XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	boolean processAsBlockContents(BlockContentBuilder fc, XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		if (equalsStart(event, ObflQName.LEADER)) {
 			parseLeader(fc, event, input);
 			return true;
@@ -1339,21 +1352,21 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		return (sb.length()>0?" (at "+sb.toString()+")":"");
 	}
 	
-	private void parsePageNumber(BlockContentBuilder fc, XMLEvent event, XMLEventReader input) throws XMLStreamException {
+	private void parsePageNumber(BlockContentBuilder fc, XMLEvent event, XMLEventIterator input) throws XMLStreamException {
 		String refId = getAttr(event, "ref-id");
 		NumeralStyle style = getNumeralStyle(event);
 		scanEmptyElement(input, ObflQName.PAGE_NUMBER);
 		fc.insertReference(refId, style);
 	}
 	
-	private void parseEvaluate(BlockContentBuilder fc, XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	private void parseEvaluate(BlockContentBuilder fc, XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		String expr = getAttr(event, "expression");
 		scanEmptyElement(input, ObflQName.EVALUATE);
 		OBFLDynamicContent dynamic = new OBFLDynamicContent(expr, fm.getExpressionFactory(), true);
 		fc.insertEvaluate(dynamic, tp);
 	}
 	
-	private void parseVolumeTemplate(XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	private void parseVolumeTemplate(XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		String useWhen = getAttr(event, ObflQName.ATTR_USE_WHEN);
 		String splitterMax = getAttr(event, "sheets-in-volume-max");
 		OBFLCondition condition = new OBFLCondition(useWhen, fm.getExpressionFactory(), false);
@@ -1377,7 +1390,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parsePreVolumeContent(XMLEvent event, XMLEventReader input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
+	private void parsePreVolumeContent(XMLEvent event, XMLEventIterator input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (equalsStart(event, ObflQName.SEQUENCE)) {
@@ -1394,7 +1407,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseVolumeTransition(XMLEvent event, XMLEventReader input, TextProperties tp) throws XMLStreamException {
+	private void parseVolumeTransition(XMLEvent event, XMLEventIterator input, TextProperties tp) throws XMLStreamException {
 		TransitionBuilder template = formatter.getTransitionBuilder();
 		TransitionBuilderProperties.Builder propsBuilder = new TransitionBuilderProperties.Builder();
 		String rangeStr = getAttr(event, "range");
@@ -1438,7 +1451,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}*/
 
-	private void parseTransitionSequence(XMLEvent event, XMLEventReader input, BlockBuilder builder, TextProperties tp) throws XMLStreamException {
+	private void parseTransitionSequence(XMLEvent event, XMLEventIterator input, BlockBuilder builder, TextProperties tp) throws XMLStreamException {
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (equalsStart(event, ObflQName.BLOCK)) {
@@ -1451,7 +1464,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parsePostVolumeContent(XMLEvent event, XMLEventReader input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
+	private void parsePostVolumeContent(XMLEvent event, XMLEventIterator input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (equalsStart(event, ObflQName.SEQUENCE)) {
@@ -1468,7 +1481,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseVolumeSequence(XMLEvent event, XMLEventReader input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
+	private void parseVolumeSequence(XMLEvent event, XMLEventIterator input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
 		String masterName = getAttr(event, "master");
 		tp = getTextProperties(event, tp);
 		SequenceProperties.Builder builder = new SequenceProperties.Builder(masterName);
@@ -1497,7 +1510,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseTocSequence(XMLEvent event, XMLEventReader input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
+	private void parseTocSequence(XMLEvent event, XMLEventIterator input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
 		String masterName = getAttr(event, "master");
 		String tocName = getAttr(event, "toc");
 		tp = getTextProperties(event, tp);
@@ -1535,7 +1548,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseItemSequence(XMLEvent event, XMLEventReader input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
+	private void parseItemSequence(XMLEvent event, XMLEventIterator input, VolumeContentBuilder template, TextProperties tp) throws XMLStreamException {
 		String masterName = getAttr(event, "master");
 		tp = getTextProperties(event, tp);
 		SequenceProperties.Builder builder = new SequenceProperties.Builder(masterName);
@@ -1568,7 +1581,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 	
-	private void parseRefsList(XMLEvent event, XMLEventReader input, DynamicSequenceBuilder dsb, TextProperties tp) throws XMLStreamException {
+	private void parseRefsList(XMLEvent event, XMLEventIterator input, DynamicSequenceBuilder dsb, TextProperties tp) throws XMLStreamException {
 		String collection = getAttr(event, "collection");
 		tp = getTextProperties(event, tp);
 		ItemSequenceProperties.Range range = ItemSequenceProperties.Range.valueOf(getAttr(event, "range").toUpperCase());
@@ -1599,7 +1612,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void parseOnEvent(XMLEvent event, XMLEventReader input, FormatterCore fc, QName end, TextProperties tp) throws XMLStreamException {
+	private void parseOnEvent(XMLEvent event, XMLEventIterator input, FormatterCore fc, QName end, TextProperties tp) throws XMLStreamException {
 		while (input.hasNext()) {
 			event=input.nextEvent();
 			if (equalsStart(event, ObflQName.BLOCK)) {
@@ -1612,7 +1625,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 		}
 	}
 
-	private void scanEmptyElement(XMLEventReader input, QName element) throws XMLStreamException {
+	private void scanEmptyElement(XMLEventIterator input, QName element) throws XMLStreamException {
 		XMLEvent event;
 		while (input.hasNext()) {
 			event=input.nextEvent();

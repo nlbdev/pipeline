@@ -1,8 +1,12 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.formatter.impl.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.formatter.impl)
 [![Type](https://img.shields.io/badge/type-provider_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
+[![License: LGPL v2.1](https://img.shields.io/badge/License-LGPL%20v2%2E1%20%28or%20later%29-blue.svg)](https://www.gnu.org/licenses/lgpl-2.1)
 
 # dotify.formatter.impl #
 dotify.formatter.impl contains an implementation of the formatter interfaces of [dotify.api](https://github.com/brailleapps/dotify.api).
+
+Many of the OBFL tests are also used as OBFL examples. The examples can be useful to study when learning about OBFL or creating OBFL-files.
+The examples are published [here](https://brailleapps.github.io/dotify.formatter.impl/tests/org.daisy.dotify.formatter.test.resource-files.tests-overview.html).
 
 ## Techniques ##
 Java, StAX, OBFL, Java SPI, OSGi
@@ -34,7 +38,7 @@ Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 
 ## Testing ##
 
-Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
 
 ### Adding tests ###
 
@@ -49,7 +53,7 @@ in a class that extends `AbstractFormatterEngineTest`.
 
 If you want the tests to be included in the overview page (linked to above)
 the OBFL and PEF files need to be placed in
-`test/org/daisy/dotify/engine/impl/resource-files` and named according
+`integrationtest/org/daisy/dotify/formatter/test/resource-files` and named according
 to the pattern `foo-input.obfl`/`foo-expected.pef`.
 
 ## Requirements & Compatibility ##

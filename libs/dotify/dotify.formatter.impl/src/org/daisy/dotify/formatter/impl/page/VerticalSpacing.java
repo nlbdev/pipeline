@@ -5,7 +5,7 @@ import java.util.Objects;
 import org.daisy.dotify.api.formatter.BlockPosition;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 
-class VerticalSpacing implements RowGroupSequenceStartPosition {
+class VerticalSpacing {
 	private final BlockPosition pos;
 	private final RowImpl emptyRow;
 	

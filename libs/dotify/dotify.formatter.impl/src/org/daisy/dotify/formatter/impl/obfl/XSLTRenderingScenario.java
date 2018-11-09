@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.Transformer;
@@ -54,7 +53,7 @@ public class XSLTRenderingScenario implements RenderingScenario {
 
 			//render
 			XMLInputFactory factory =  parser.getFactoryManager().getXmlInputFactory();
-			XMLEventReader input = factory.createXMLEventReader(new ByteArrayInputStream(os.toByteArray()));
+			XMLEventIterator input = new XMLEventReaderAdapter(factory.createXMLEventReader(new ByteArrayInputStream(os.toByteArray())));
 			XMLEvent event;
 			while (input.hasNext()) {
 				event = input.nextEvent();

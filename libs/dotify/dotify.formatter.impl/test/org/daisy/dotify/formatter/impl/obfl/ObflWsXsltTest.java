@@ -134,8 +134,8 @@ public class ObflWsXsltTest {
 		inFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
 		FileInputStream instream = new FileInputStream(in);
 		FileOutputStream outstream = new FileOutputStream(normalizedFile);
-		OBFLWsNormalizer t = new OBFLWsNormalizer(inFactory.createXMLEventReader(instream), XMLEventFactory.newInstance(), outstream);
-		t.parse(XMLOutputFactory.newInstance());
+		OBFLWsNormalizer t = new OBFLWsNormalizer(inFactory.createXMLEventReader(instream), XMLEventFactory.newInstance());
+		t.parse(XMLOutputFactory.newInstance(), outstream);
 		int ret = compareBinary(new FileInputStream(normalizedFile), this.getClass().getResourceAsStream(expected));
 		
 		try {

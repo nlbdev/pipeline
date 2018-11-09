@@ -3,17 +3,20 @@ package org.daisy.dotify.formatter.impl.page;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.formatter.impl.core.Block;
 
 class RowGroupSequence {
 	private final List<Block> blocks;
 	private final List<RowGroup> group;
-	private final RowGroupSequenceStartPosition startPosition;
+	private final VerticalSpacing vSpacing;
+	private final BreakBefore breakBefore;
 
-	public RowGroupSequence(RowGroupSequenceStartPosition startPosition) {
+	public RowGroupSequence(BreakBefore breakBefore, VerticalSpacing vSpacing) {
 		this.blocks = new ArrayList<>();
 		this.group = new ArrayList<RowGroup>();
-		this.startPosition = startPosition;
+		this.vSpacing = vSpacing;
+		this.breakBefore = breakBefore;
 	}
 	
 	/**
@@ -26,7 +29,8 @@ class RowGroupSequence {
 		for (RowGroup rg : template.group) {
 			group.add(new RowGroup(rg));
 		}
-		this.startPosition = template.startPosition;
+		this.vSpacing = template.vSpacing;
+		this.breakBefore = template.breakBefore;
 	}
 
 	@Deprecated
@@ -46,7 +50,11 @@ class RowGroupSequence {
 		}
 	}
 	
-	RowGroupSequenceStartPosition getStartPosition() {
-		return startPosition;
+    VerticalSpacing getVerticalSpacing() {
+        return vSpacing;
+    }
+
+	BreakBefore getBreakBefore() {
+		return breakBefore;
 	}
 }

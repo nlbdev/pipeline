@@ -274,7 +274,7 @@ class ExpressionImpl implements Expression {
 	
 	private static boolean and(Object[] input) {
 		for (int i=1; i<input.length; i++) { 
-			if (!((Boolean)(input[i-1]) & (Boolean)(input[i]))) {
+			if (!((Boolean)(input[i-1]) && (Boolean)(input[i]))) {
 				return false;
 			}
 		}

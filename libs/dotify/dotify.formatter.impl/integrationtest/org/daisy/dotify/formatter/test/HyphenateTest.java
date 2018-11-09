@@ -32,5 +32,10 @@ public class HyphenateTest extends AbstractFormatterEngineTest {
 	public void testHyphenateLastLine_02() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF(configureEngine(), "resource-files/hyphenate-last-line2-input.obfl", "resource-files/hyphenate-last-line2-expected.pef", null);
 	}
+	
+	@Test
+	public void testHyphenateLastLine_03() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF(configureEngine(), "resource-files/hyphenate-last-line3-input.obfl", "resource-files/hyphenate-last-line3-expected.pef", null);
+	}
 
 }

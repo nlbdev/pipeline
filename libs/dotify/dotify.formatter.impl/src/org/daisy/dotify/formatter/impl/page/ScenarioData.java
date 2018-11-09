@@ -3,6 +3,7 @@ package org.daisy.dotify.formatter.impl.page;
 import java.util.List;
 import java.util.Stack;
 
+import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
@@ -54,8 +55,8 @@ class ScenarioData extends BlockProcessor {
 		return !isDataEmpty();
 	}
 	
-	protected void newRowGroupSequence(RowGroupSequenceStartPosition pos) {
-		RowGroupSequence rgs = new RowGroupSequence(pos);
+	protected void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
+		RowGroupSequence rgs = new RowGroupSequence(breakBefore, vs);
 		dataGroups.add(rgs);
 	}
 	
