@@ -8,7 +8,6 @@ ehthumbs.db
 Thumbs.db
 
 # "super project"-files
-.deps.mk
 .last-tested
 /*.deb
 /*.rpm

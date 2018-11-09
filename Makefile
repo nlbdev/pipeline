@@ -31,58 +31,44 @@ ifneq ($(MAKECMDGOALS), dump-maven-cmd)
 ifneq ($(MAKECMDGOALS), dump-gradle-cmd)
 ifneq ($(MAKECMDGOALS), clean-website)
 include .make/main.mk
+assembly/BASEDIR := assembly
+include assembly/deps.mk
 endif
 endif
 endif
 # -----------------------------------
 
 .PHONY : dist
-dist: dist-dmg dist-exe dist-zip-linux dist-zip-minimal dist-deb dist-rpm dist-webui-deb dist-webui-rpm
+dist: dist-dmg dist-exe dist-zip-linux dist-zip-minimal dist-zip-win dist-zip-mac dist-deb dist-rpm dist-webui-deb dist-webui-rpm
 
 .PHONY : dist-dmg
-dist-dmg : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pmac | $(MVN_LOG)
-	mv assembly/target/*.dmg .
+dist-dmg : pipeline2-$(assembly/VERSION)_mac.dmg
 
 .PHONY : dist-exe
-dist-exe : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pwin | $(MVN_LOG)
-	mv assembly/target/*.exe .
+dist-exe : pipeline2-$(assembly/VERSION)_windows.exe
 
 .PHONY : dist-zip-linux
-dist-zip-linux : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Plinux | $(MVN_LOG)
-	mv assembly/target/*.zip .
+dist-zip-linux : pipeline2-$(assembly/VERSION)_linux.zip
+
+.PHONY : dist-zip-mac
+dist-zip-mac : pipeline2-$(assembly/VERSION)_mac.zip
+
+.PHONY : dist-zip-win
+dist-zip-win : pipeline2-$(assembly/VERSION)_windows.zip
 
 .PHONY : dist-zip-minimal
-dist-zip-minimal : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pminimal | $(MVN_LOG)
-	mv assembly/target/*.zip .
+dist-zip-minimal : pipeline2-$(assembly/VERSION)_minimal.zip
 
 .PHONY : dist-deb
-dist-deb : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pdeb | $(MVN_LOG)
-	mv assembly/target/*.deb .
+dist-deb : pipeline2-$(assembly/VERSION)_debian.deb
 
 .PHONY : dist-rpm
-dist-rpm : assembly/.dependencies | .maven-init
-	if [ -f /etc/redhat-release ]; then \
-		cd assembly && \
-		$(MVN) clean package -Prpm | $(MVN_LOG) && \
-		mv assembly/target/rpm/pipeline2/RPMS/*/*.rpm .; \
-	else \
-		echo "Skipping RPM because not running RedHat/CentOS"; \
-	fi
+dist-rpm : pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
-dist-docker-image : dist-zip-linux
-	cd assembly && \
-	$(MAKE) docker
+dist-docker-image : assembly/.dependencies
+	unset MAKECMDGOALS && \
+	$(MAKE) -C assembly docker
 
 .PHONY : dist-webui-deb
 dist-webui-deb : assembly/.dependencies
@@ -98,12 +84,18 @@ dist-webui-rpm : assembly/.dependencies
 	./activator clean rpm:packageBin
 	mv webui/target/rpm/RPMS/noarch/*.rpm .
 
+ifeq ($(shell uname), Darwin)
+dev_launcher := assembly/target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
+else
+dev_launcher := assembly/target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+endif
+
 .PHONY : run
-run : assembly/target/dev-launcher/bin/pipeline2
-	$<
+run : $(dev_launcher)
+	$< shell
 
 .PHONY : run-gui
-run-gui : assembly/target/dev-launcher/bin/pipeline2
+run-gui : $(dev_launcher)
 	$< gui
 
 .PHONY : run-webui
@@ -124,25 +116,96 @@ run-docker : dist-docker-image
 .PHONY : release
 release : assembly/.release
 
-.PHONY : $(addprefix check-,$(MODULES))
-$(addprefix check-,$(MODULES)) : check-% : %/.last-tested
+.PHONY : $(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS))
+$(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS)) : check-% : %/.last-tested
 
-assembly/target/dev-launcher/bin/pipeline2 : assembly/pom.xml assembly/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pdev-launcher | $(MVN_LOG)
-	rm assembly/target/dev-launcher/etc/*windows*
-	if [ "$$(uname)" == Darwin ]; then \
-		rm assembly/target/dev-launcher/etc/*linux*; \
-	else \
-		rm assembly/target/dev-launcher/etc/*mac*; \
-	fi
+pipeline2-$(assembly/VERSION)_mac.dmg \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+pipeline2-$(assembly/VERSION)_windows.exe \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+pipeline2-$(assembly/VERSION)_linux.zip \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+pipeline2-$(assembly/VERSION)_mac.zip \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.zip \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+pipeline2-$(assembly/VERSION)_windows.zip \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+pipeline2-$(assembly/VERSION)_minimal.zip \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+pipeline2-$(assembly/VERSION)_debian.deb \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+pipeline2-$(assembly/VERSION)_redhat.rpm \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).rpm \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
+$(dev_launcher) : assembly/.dependencies | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher)
+
+.SECONDARY : assembly/.install.deb
+assembly/.install.deb : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,deb)
+
+.SECONDARY : assembly/.install.rpm
+assembly/.install.rpm : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,rpm)
+
+.SECONDARY : assembly/.install-linux.zip
+assembly/.install-linux.zip : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,zip-linux)
+
+.SECONDARY : assembly/.install-minimal.zip
+assembly/.install-minimal.zip : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,zip-minimal)
+
+.SECONDARY : assembly/.install-mac.zip
+assembly/.install-mac.zip : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,zip-mac)
+
+.SECONDARY : assembly/.install-win.zip
+assembly/.install-win.zip : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,zip-win)
+
+.SECONDARY : assembly/.install.dmg
+assembly/.install.dmg : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,dmg)
+
+.SECONDARY : assembly/.install.exe
+assembly/.install.exe : | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,exe)
 
 .SECONDARY : cli/.install.zip
 cli/.install.zip : cli/.install
 
 cli/.install : cli/cli/*.go
 
+.SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip
+cli/.install-darwin_386.zip cli/.install-linux_386.zip : cli/.install
+
 updater/cli/.install : updater/cli/*.go
+
+.SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip
+updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip : updater/cli/.install
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
@@ -169,13 +232,47 @@ modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
 modules/braille/liblouis-utils/liblouis-native/.install-windows.jar: \
 	modules/braille/liblouis-utils/liblouis-native/.install
 
-.SECONDARY : .dependencies-init
-.dependencies-init :
-	echo "Recomputing dependencies between modules..." >&2
+# dotify dependencies
 
-$(addsuffix /.deps.mk,$(MODULES)) .maven-deps.mk \
-$(SUPER_BUILD_SCRIPT_TARGET_DIR)/effective-pom.xml \
-$(SUPER_BUILD_SCRIPT_TARGET_DIR)/maven-modules : | .dependencies-init
+gradle-get-dependency-version = $(shell cat $(1)/build.gradle | perl -ne 'print "$$1\n" if /["'"'"']$(subst .,\.,$(2)):(.+)["'"'"']/')
+
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.api), $(libs/dotify/dotify.api/VERSION))
+libs/dotify/dotify.formatter.impl/.dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/dotify/dotify.api/$(libs/dotify/dotify.api/VERSION)/dotify.api-$(libs/dotify/dotify.api/VERSION).jar
+endif
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.common), $(libs/dotify/dotify.common/VERSION))
+libs/dotify/dotify.formatter.impl/.dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar
+endif
+
+DOTIFY_MODULES := $(addprefix libs/dotify/dotify.,api common formatter.impl)
+
+eclipse-libs/dotify : $(addsuffix /.project,$(DOTIFY_MODULES)) \
+	.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
+
+# FIXME: every below is needed because `gradle eclipse` does not take into account localRepository from .gradle-settings/conf/settings.xml
+
+$(addsuffix /.project,$(DOTIFY_MODULES)) : %/.project : %/.eclipse-dependencies
+
+.PHONY : $(addsuffix /.eclipse-dependencies,$(DOTIFY_MODULES))
+$(addsuffix /.eclipse-dependencies,$(DOTIFY_MODULES)) :
+
+USER_HOME := $(shell echo ~)
+
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.api), $(libs/dotify/dotify.api/VERSION))
+$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.api/$(libs/dotify/dotify.api/VERSION)/dotify.api-$(libs/dotify/dotify.api/VERSION).jar : \
+	libs/dotify/dotify.api/build.gradle libs/dotify/dotify.api/gradle.properties $(call rwildcard,libs/dotify/dotify.api/src/,*)
+	+$(EVAL) 'bash -c "cd $(dir $<) && ./gradlew install"'
+libs/dotify/dotify.formatter.impl/.eclipse-dependencies : \
+	$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.api/$(libs/dotify/dotify.api/VERSION)/dotify.api-$(libs/dotify/dotify.api/VERSION).jar
+endif
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.common), $(libs/dotify/dotify.common/VERSION))
+$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar : \
+	libs/dotify/dotify.common/build.gradle libs/dotify/dotify.common/gradle.properties $(call rwildcard,libs/dotify/dotify.common/src/,*)
+	+$(EVAL) 'bash -c "cd $(dir $<) && ./gradlew install"'
+libs/dotify/dotify.formatter.impl/.eclipse-dependencies : \
+	$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar
+endif
 
 .maven-init : | $(MVN_WORKSPACE)
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
@@ -192,7 +289,7 @@ cache :
 		rsync -mr --exclude "*-SNAPSHOT" --exclude "maven-metadata-*.xml" $(MVN_WORKSPACE)/ $(MVN_CACHE); \
 	fi
 
-clean : cache clean-workspace clean-old clean-website
+clean : cache clean-workspace clean-old clean-website clean-dist clean-webui
 
 .PHONY : clean-workspace
 clean-workspace :
@@ -202,6 +299,16 @@ clean-workspace :
 clean-cache :
 	rm -rf $(MVN_CACHE)
 
+.PHONY : clean-dist
+clean-dist :
+	rm -f *.zip *.deb *.rpm
+	rm -rf webui/dp2webui
+
+.PHONY : clean-webui
+clean-webui :
+	rm -f *.zip *.deb *.rpm
+	rm -rf webui/dp2webui
+
 # clean files generated by previous versions of this Makefile
 .PHONY : clean-old
 clean-old :
@@ -209,6 +316,7 @@ clean-old :
 	rm -f .effective-pom.xml
 	rm -f .gradle-pom.xml
 	rm -f .maven-build.mk
+	find . -name .deps.mk -exec rm -r "{}" \;
 	find . -name .build.mk -exec rm -r "{}" \;
 	find * -name .maven-to-install -exec rm -r "{}" \;
 	find * -name .maven-to-test -exec rm -r "{}" \;
@@ -227,14 +335,6 @@ clean-old :
 gradle-clean :
 	$(GRADLE) clean
 
-PHONY : $(addprefix eclipse-,$(MODULES))
-$(addprefix eclipse-,$(MODULES)) : eclipse-% : %/.project
-
-# override
-# FIXME:how to suppress warnings?
-libs/osgi-libs/jing/.project libs/osgi-libs/saxon/.project :
-	+:
-
 TEMP_REPOS := modules/scripts/dtbook-to-daisy3/target/test/local-repo
 
 .PHONY : go-offline
@@ -252,36 +352,24 @@ checked :
 	touch $(addsuffix /.last-tested,$(MODULES))
 
 website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
-	cd website && \
-	$(MAKE) target/maven/pom.xml
-
-export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)' -Pstaged-releases
-
-$(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.deps.mk website/target/maven/.dependencies
-	rm -rf $@
-	cd website && \
-	target=$@ && \
-	$(MAKE) $${target#website/}
+	$(MAKE) -C website target/maven/pom.xml
 
 .PHONY : website
-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
-	cd website && \
-	make
+website :
+	$(MAKE) -C website
 
-.PHONY : serve-website
-serve-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
-	cd website && \
-	$(MAKE) serve
+.PHONY : serve-website publish-website clean-website
+serve-website publish-website clean-website :
+	target=$@ && \
+	$(MAKE) -C website $${target%-website}
 
-.PHONY : publish-website
-publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
-	cd website && \
-	$(MAKE) publish
+# this dependency is also defined in website/Makefile, but we need to repeat it here to enable the transitive dependency below
+website serve-website publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 
-.PHONY : clean-website
-clean-website :
-	cd website && \
-	$(MAKE) clean
+$(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.dependencies
+	rm -rf $@
+	target=$@ && \
+	$(MAKE) -C website $${target#website/}
 
 .PHONY : dump-maven-cmd
 dump-maven-cmd :
@@ -305,22 +393,30 @@ help :
 	echo "	Incrementally compile code and package into a DMG"                                                      >&2
 	echo "make dist-exe:"                                                                                           >&2
 	echo "	Incrementally compile code and package into a EXE"                                                      >&2
-	echo "make dist-zip-linux:"                                                                                     >&2
-	echo "	Incrementally compile code and package into a ZIP (for Linux)"                                          >&2
 	echo "make dist-deb:"                                                                                           >&2
 	echo "	Incrementally compile code and package into a DEB"                                                      >&2
 	echo "make dist-rpm:"                                                                                           >&2
 	echo "	Incrementally compile code and package into a RPM"                                                      >&2
+	echo "make dist-zip-linux:"                                                                                     >&2
+	echo "	Incrementally compile code and package into a ZIP for Linux"                                            >&2
+	echo "make dist-zip-mac:"                                                                                       >&2
+	echo "	Incrementally compile code and package into a ZIP for MacOS"                                            >&2
+	echo "make dist-zip-win:"                                                                                       >&2
+	echo "	Incrementally compile code and package into a ZIP for Windows"                                          >&2
+	echo "make dist-docker-image:"                                                                                  >&2
+	echo "	Incrementally compile code and package into a Docker image"                                             >&2
 	echo "make dist-webui-deb:"                                                                                     >&2
 	echo "	Compile Web UI and package into a DEB"                                                                  >&2
 	echo "make dist-webui-rpm:"                                                                                     >&2
 	echo "	Compile Web UI and package into a RPM"                                                                  >&2
 	echo "make run:"                                                                                                >&2
-	echo "	Incrementally compile code and run locally"                                                             >&2
+	echo "	Incrementally compile code and run a server locally"                                                    >&2
 	echo "make run-gui:"                                                                                            >&2
-	echo "	Incrementally compile code and run GUI locally"                                                         >&2
+	echo "	Incrementally compile code and run the GUI locally"                                                     >&2
 	echo "make run-webui:"                                                                                          >&2
 	echo "	Compile and run web UI locally"                                                                         >&2
+	echo "make run-docker:"                                                                                         >&2
+	echo "	Incrementally compile code and run a server inside a Docker container"                                  >&2
 	echo "make website:"                                                                                            >&2
 	echo "	Build the website"                                                                                      >&2
 	echo "make dump-maven-cmd:"                                                                                     >&2
