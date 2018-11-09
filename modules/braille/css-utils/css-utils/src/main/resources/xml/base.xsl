@@ -73,7 +73,7 @@
     <xsl:variable name="css:POSITIVE_PERCENTAGE_RE" select="concat('(',$css:POSITIVE_NUMBER_RE,')%')"/>
     <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_number" select="1"/>
     <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_groups" select="1 + $css:POSITIVE_NUMBER_RE_groups"/>
-    
+
     <!--
         <string>
     -->

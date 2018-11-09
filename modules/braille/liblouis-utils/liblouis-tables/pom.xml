@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
@@ -158,12 +158,6 @@
                     <resource>
                       <directory>target/dependency/share/liblouis/tables</directory>
                       <targetPath>tables</targetPath>
-                      <excludes>
-                        <exclude>lang2table</exclude>
-                        <exclude>Makefile.am</exclude>
-                        <exclude>maketablelist.sh</exclude>
-                        <exclude>README</exclude>
-                      </excludes>
                     </resource>
                   </resources>
                 </configuration>
