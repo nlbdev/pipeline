@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/brailleapps/dotify.hyphenator.impl
 	branch = master
-	commit = f79de5061704745aabf6fe762ecb27ab33ef58fd
-	parent = d3726eb2fe9bfce90d6b8e8ccc9cd65a6fb3fbc3
-	cmdver = 0.3.0
+	commit = b7b906c535739a39aa9131639bd3b2ec9796aa0d
+	parent = b6da69f076c56c59a96615457ddf1cc1ee4c27cc
+	cmdver = 0.3.1
