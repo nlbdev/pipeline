@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Provides methods that supply content to a block.
+ * 
+ * @author Joel Håkansson
+ */
 public interface BlockContentBuilder {
 
 	/**

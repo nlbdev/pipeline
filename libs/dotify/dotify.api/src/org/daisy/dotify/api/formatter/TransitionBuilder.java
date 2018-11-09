@@ -67,5 +67,21 @@ public interface TransitionBuilder {
 	 * @return returns a builder for content.
 	 */
 	public BlockBuilder getSequenceInterruptedBuilder();
-	
+
+	/**
+	 * Gets the builder for contents to add whenever a volume is resumed
+	 * after a volume break. This is added before any other transition
+	 * (if applicable). 
+	 * @return returns a builder for content.
+	 */
+	public BlockBuilder getAnyResumedBuilder();
+
+	/**
+	 * Gets the builder for contents to add whenever a volume is
+	 * interrupted before a volume break. This is added after any other
+	 * transition (if applicable).
+	 * @return returns a builder for content.
+	 */
+	public BlockBuilder getAnyInterruptedBuilder();
+
 }

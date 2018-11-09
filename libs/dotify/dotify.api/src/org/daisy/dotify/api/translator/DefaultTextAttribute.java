@@ -94,7 +94,7 @@ public class DefaultTextAttribute implements TextAttribute {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (TextAttribute t : attributes) {
-			sb.append("\n" + t.toString());
+			sb.append('\n').append(t.toString());
 		}
 		return this.getClass().getSimpleName() + " [length=" + length + (identifier != null ? ", identifier=" + identifier : "") + ", attributes=" + sb.toString() + "]";
 	}

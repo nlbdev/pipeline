@@ -32,11 +32,11 @@ public class ObflParserException extends Exception {
 
     /**
      * Constructs a new exception with the specified cause and a detail
-     * message of <tt>(cause==null ? null : cause.toString())</tt> (which
-     * typically contains the class and detail message of <tt>cause</tt>).
+     * message of <code>(cause==null ? null : cause.toString())</code> (which
+     * typically contains the class and detail message of <code>cause</code>).
      *
      * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A <tt>null</tt> value is
+     *         {@link #getCause()} method).  (A <code>null</code> value is
      *         permitted, and indicates that the cause is nonexistent or
      *         unknown.)
      */
@@ -53,7 +53,7 @@ public class ObflParserException extends Exception {
      * @param  message the detail message (which is saved for later retrieval
      *         by the {@link #getMessage()} method).
      * @param  cause the cause (which is saved for later retrieval by the
-     *         {@link #getCause()} method).  (A <tt>null</tt> value is
+     *         {@link #getCause()} method).  (A <code>null</code> value is
      *         permitted, and indicates that the cause is nonexistent or
      *         unknown.)
      */

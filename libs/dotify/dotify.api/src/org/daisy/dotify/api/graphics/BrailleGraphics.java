@@ -159,7 +159,7 @@ public class BrailleGraphics {
 					} else if (j<b.length()) {
 						sb.append(b.charAt(j));
 					} else {
-						throw new RuntimeException("Error in code.");
+						throw new AssertionError("Error in code.");
 					}
 				}
 				ret.add(sb.toString());
@@ -171,11 +171,11 @@ public class BrailleGraphics {
 				}
 				sb.append(a);
 				ret.add(sb.toString());*/
-				throw new RuntimeException("Error in code.");
+				throw new AssertionError("Error in code.");
 			} else if (a==null && b!=null) {
 				ret.add(b);
 			} else {
-				throw new RuntimeException("Error in code.");
+				throw new AssertionError("Error in code.");
 			}
 		}
 		return ret;

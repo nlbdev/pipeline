@@ -119,7 +119,7 @@ public class MarkerProcessorFactoryMaker implements
 			// while iterating
 			synchronized (map) {
 				for (MarkerProcessorFactoryService h : factories) {
-					if (h.supportsSpecification(locale.toString(), grade)) {
+					if (h.supportsSpecification(locale, grade)) {
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Found a factory for " + locale + " (" + h.getClass() + ")");
 						}
