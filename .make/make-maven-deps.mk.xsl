@@ -18,6 +18,7 @@
 	    directories from which multiple modules are released at once
 	-->
 	<xsl:param name="RELEASE_DIRS"/>
+	<xsl:param name="OUTPUT_BASEDIR"/>
 	<xsl:param name="OUTPUT_FILENAME"/>
 	
 	<xsl:output method="xml" indent="yes"/>
@@ -220,7 +221,12 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:result-document href="{concat($module,'/',$OUTPUT_FILENAME)}" method="text">
+		<xsl:result-document href="{concat($OUTPUT_BASEDIR,'/',$module,'/',$OUTPUT_FILENAME)}" method="text">
+			<xsl:value-of select="concat($dirname,'VERSION')"/>
+			<xsl:text> := </xsl:text>
+			<xsl:value-of select="$version"/>
+			<xsl:text>&#x0A;</xsl:text>
+			<xsl:text>&#x0A;</xsl:text>
 			<xsl:choose>
 				<xsl:when test="$is-aggregator">
 					<xsl:text>.SECONDARY : </xsl:text>
@@ -252,6 +258,19 @@
 						<xsl:value-of select="concat($dirname,.,'/.last-tested')"/>
 					</xsl:for-each>
 					<xsl:text>&#x0A;</xsl:text>
+					<xsl:if test="not($module='.')">
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>.PHONY : </xsl:text>
+						<xsl:value-of select="concat('eclipse-',$module)"/>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:value-of select="concat('eclipse-',$module)"/>
+						<xsl:text> :</xsl:text>
+						<xsl:for-each select="$module-pom/pom:project/pom:modules/pom:module">
+							<xsl:text> \&#x0A;&#x09;</xsl:text>
+							<xsl:value-of select="concat('eclipse-',$dirname,.)"/>
+						</xsl:for-each>
+						<xsl:text>&#x0A;</xsl:text>
+					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="concat($dirname,'.last-tested : %/.last-tested : %/.test | .group-eval')"/>
@@ -292,6 +311,9 @@
 						<xsl:value-of select="concat($dirname,'.install.pom | .group-eval')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
+						<xsl:text>+$(call eval-if-unix,'test -e' $@)</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(call eval-if-unix,touch $@)</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
@@ -306,6 +328,9 @@
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(call eval-if-unix,'test -e' $@)</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x09;</xsl:text>
+						<xsl:text>+$(call eval-if-unix,'touch' $@)</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>.SECONDARY : </xsl:text>
