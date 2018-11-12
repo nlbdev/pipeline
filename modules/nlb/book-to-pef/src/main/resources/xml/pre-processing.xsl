@@ -271,6 +271,18 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="dtbook:h5[not(ancestor::*/tokenize(@class,'\s+') = 'part')] |
+                         dtbook:h6[ancestor::*/tokenize(@class,'\s+') = 'part'] |
+                         html:h5[not(ancestor::*/tokenize(@epub:type,'\s+') = 'part')] |
+                         html:h6[ancestor::*/tokenize(@epub:type,'\s+') = 'part']" mode="clean">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <xsl:if test="not(ends-with(normalize-space(string-join(.//text(),'')),':'))">
+                <xsl:text>:</xsl:text>
+            </xsl:if>
+        </xsl:copy>
+    </xsl:template>
+    
     <xsl:function name="f:types" as="xs:string*">
         <xsl:param name="element" as="element()"/>
         <xsl:sequence select="tokenize($element/@epub:type,'\s+')"/>

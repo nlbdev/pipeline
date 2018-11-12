@@ -330,4 +330,51 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="Insert colon after h5">
+        <x:context>
+            <body>
+                <level1>
+                    <h1>Chapter 1</h1>
+                    <h2>Chapter 2</h2>
+                    <h3>Chapter 3</h3>
+                    <h4>Chapter 4</h4>
+                    <h5>Chapter 5</h5>
+                    <h5>Chapter 5:</h5>
+                    <h6>Chapter 6</h6>
+                </level1>
+                <level1 class="part">
+                    <h1>Part</h1>
+                    <h2>Part chapter 1</h2>
+                    <h3>Part chapter 2</h3>
+                    <h4>Part chapter 3</h4>
+                    <h5>Part chapter 4</h5>
+                    <h6>Part chapter 5</h6>
+                    <h6>Part chapter 5:</h6>
+                </level1>
+            </body>
+        </x:context>
+        <x:expect>
+            <body>
+                <level1>
+                    <h1>Chapter 1</h1>
+                    <h2>Chapter 2</h2>
+                    <h3>Chapter 3</h3>
+                    <h4>Chapter 4</h4>
+                    <h5>Chapter 5:</h5>
+                    <h5>Chapter 5:</h5>
+                    <h6>Chapter 6</h6>
+                </level1>
+                <level1 class="part">
+                    <h1>Part</h1>
+                    <h2>Part chapter 1</h2>
+                    <h3>Part chapter 2</h3>
+                    <h4>Part chapter 3</h4>
+                    <h5>Part chapter 4</h5>
+                    <h6>Part chapter 5:</h6>
+                    <h6>Part chapter 5:</h6>
+                </level1>
+            </body>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>
