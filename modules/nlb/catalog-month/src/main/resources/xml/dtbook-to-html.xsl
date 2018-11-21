@@ -52,7 +52,7 @@
                     <xsl:if test="@name">
                         <xsl:attribute name="name" select="if (starts-with(@name,'dc:')) then string-join((lower-case(tokenize(@name,'\.')[1]), if (contains(@name,'.')) then substring-after(@name,'.') else ()), '.') else @name"/>
                     </xsl:if>
-                    <xsl:attribute name="value" select="@content"/>
+                    <xsl:attribute name="content" select="@content"/>
                     <xsl:apply-templates/>
                 </meta>
             </xsl:otherwise>
