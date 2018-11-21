@@ -1,2 +1,10 @@
 **/target
 /.git
+/.maven-workspace
+/.make-target
+
+# If you have locally cached dependencies, it will be faster
+# to leave .maven-cache commented out. If you uncomment it,
+# the build will re-download all dependencies, and the
+# size of the docker build image will be smaller.
+#/.maven-cache

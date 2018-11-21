@@ -28,11 +28,11 @@ ADD . /opt/pipeline
 WORKDIR /opt/pipeline
 
 # build until first error in case of build errors (easier to debug)
-RUN make dist-zip-linux || true
+#RUN make RUBY=ruby dist-zip-linux || true
 
 # build for linux and minimal
-RUN make dist-zip-linux
-RUN make dist-zip-minimal
+RUN make RUBY=ruby dist-zip-linux
+RUN make RUBY=ruby dist-zip-minimal
 
 # test NLB and Nordic modules
 RUN make RUBY=ruby check-modules/nlb
