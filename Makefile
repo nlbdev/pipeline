@@ -163,35 +163,35 @@ $(dev_launcher) : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher)
 
 .SECONDARY : assembly/.install.deb
-assembly/.install.deb : | .maven-init .group-eval
+assembly/.install.deb : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,deb)
 
 .SECONDARY : assembly/.install.rpm
-assembly/.install.rpm : | .maven-init .group-eval
+assembly/.install.rpm : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,rpm)
 
 .SECONDARY : assembly/.install-linux.zip
-assembly/.install-linux.zip : | .maven-init .group-eval
+assembly/.install-linux.zip : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-linux)
 
 .SECONDARY : assembly/.install-minimal.zip
-assembly/.install-minimal.zip : | .maven-init .group-eval
+assembly/.install-minimal.zip : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-minimal)
 
 .SECONDARY : assembly/.install-mac.zip
-assembly/.install-mac.zip : | .maven-init .group-eval
+assembly/.install-mac.zip : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-mac)
 
 .SECONDARY : assembly/.install-win.zip
-assembly/.install-win.zip : | .maven-init .group-eval
+assembly/.install-win.zip : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-win)
 
 .SECONDARY : assembly/.install.dmg
-assembly/.install.dmg : | .maven-init .group-eval
+assembly/.install.dmg : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,dmg)
 
 .SECONDARY : assembly/.install.exe
-assembly/.install.exe : | .maven-init .group-eval
+assembly/.install.exe : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,exe)
 
 .SECONDARY : cli/.install.zip
