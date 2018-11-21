@@ -33,7 +33,7 @@
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <p:variable name="endpoint" select="concat('http://websok.nlb.no/cgi-bin/sru?version=1.2&amp;operation=searchRetrieve&amp;recordSchema=bibliofilmarcnoholdings&amp;query=',$identifier)"/>
+    <p:variable name="endpoint" select="concat('http://websok.nlb.no/cgi-bin/sru?version=1.2&amp;operation=searchRetrieve&amp;recordSchema=bibliofilmarcnoholdings&amp;query=rec.identifier=',$identifier)"/>
 
     <p:add-attribute match="/*" attribute-name="href">
         <p:input port="source">
