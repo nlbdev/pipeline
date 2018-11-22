@@ -3010,5 +3010,66 @@
             </x:expect>
         </x:scenario>
         
+        <x:scenario label="Empty line before and after poem">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline" xml:base="file:/tmp/book.xhtml">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="no" lang="no">
+                            <head/>
+                            <body>
+                                <section epub:type="bodymatter" style="page-break-before: always;">
+                                    <p style="margin-bottom: 0; padding-bottom: 0;">before</p>
+                                    
+                                    <section epub:type="z3998:poem">
+                                        <div epub:type="z3998:verse" class="linegroup">
+                                            <p class="line">poem</p>
+                                            <p class="line">poem</p>
+                                            <p class="line">poem</p>
+                                            <p class="line">poem</p>
+                                        </div>
+                                        <div epub:type="z3998:verse" class="linegroup">
+                                            <p class="line">poem</p>
+                                            <p class="line">poem</p>
+                                            <p class="line">poem</p>
+                                            <p class="line">poem</p>
+                                        </div>
+                                    </section>
+                                    
+                                    <p style="margin-top: 0; padding-top: 0;">after</p>
+                                </section>
+                            </body>
+                        </html>
+                    </x:document>
+                </x:input>
+                <x:option name="page-width" select="35"/>
+                <x:option name="insert-boilerplate" select="'false'"/>
+                <x:option name="show-braille-page-numbers" select="'false'"/>
+                <x:option name="pef-output-dir" select="resolve-uri('30/pef-output-dir',$temp-dir)"/>
+                <x:option name="preview-output-dir" select="resolve-uri('30/preview-output-dir',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('30/temp-dir',$temp-dir)"/>
+            </x:call>
+            
+            <x:context label="the poem">
+                <x:document type="file" base-uri="temp-dir" href="30/pef-output-dir/book.pef" select="//pef:page[contains(string-join(.//text(),''),'⠏⠕⠑⠍')]/(pef:row[contains(.,'⠃⠑⠋⠕⠗⠑')]/following-sibling::* intersect pef:row[contains(.,'⠁⠋⠞⠑⠗')]/preceding-sibling::*)"/>
+            </x:context>
+            <x:expect label="The poem should look as expected" type="compare">
+                <x:document type="inline" select="/*/*">
+                    <page xmlns="http://www.daisy.org/ns/2008/pef">
+                        <row/>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row/>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row>⠀⠀⠏⠕⠑⠍</row>
+                        <row/>
+                    </page>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        
     </x:scenario>
 </x:description>
