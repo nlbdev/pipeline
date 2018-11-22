@@ -18,22 +18,22 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'make clean'
-                sh 'make dist-zip-minimal'
-                sh 'make dist-zip-linux'
+                sh 'make RUBY=ruby clean'
+                sh 'make RUBY=ruby dist-zip-minimal'
+                sh 'make RUBY=ruby dist-zip-linux'
             }
         }
         
         stage('Test') {
             steps {
-                sh 'make check-modules/nlb/book-to-pef'
-                sh 'make check-modules/nlb/html-to-dtbook'
-                sh 'make check-modules/nlb/mailchimp'
-                sh 'make check-modules/nlb/catalog-month'
-                sh 'make check-modules/nlb/catalog-year'
-                sh 'make check-modules/nlb/metadata-utils'
-                sh 'make check-modules/nlb/tts-adapter-filibuster'
-                sh 'make check-modules/nordic/epub3-dtbook-migrator'
+                sh 'make RUBY=ruby check-modules/nlb/book-to-pef'
+                sh 'make RUBY=ruby check-modules/nlb/html-to-dtbook'
+                sh 'make RUBY=ruby check-modules/nlb/mailchimp'
+                sh 'make RUBY=ruby check-modules/nlb/catalog-month'
+                sh 'make RUBY=ruby check-modules/nlb/catalog-year'
+                sh 'make RUBY=ruby check-modules/nlb/metadata-utils'
+                sh 'make RUBY=ruby check-modules/nlb/tts-adapter-filibuster'
+                sh 'make RUBY=ruby check-modules/nordic/epub3-dtbook-migrator'
             }
         }
         
