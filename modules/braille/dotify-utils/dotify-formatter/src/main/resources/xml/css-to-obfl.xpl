@@ -131,6 +131,9 @@
     <css:render-table-by>
         <p:documentation>
             Layout tables as lists.
+            
+            Note that this step may duplicate elements with a css:id attribute. Later, if these
+            elements end up in a flow, we remove the duplicates again (see css:flow-into).
         </p:documentation>
     </css:render-table-by>
     

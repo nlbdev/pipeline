@@ -683,4 +683,130 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="repeated notes">
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data">
+            <layout-master name="main" duplex="false" page-width="20" page-height="10">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+              <page-area align="bottom" max-height="5" collection="footnotes">
+                <before><leader position="100%" pattern="⠒"/></before>
+              </page-area>
+            </layout-master>
+            <volume-template sheets-in-volume-max="1000">
+              <post-content>
+                <dynamic-sequence master="main">
+                  <list-of-references collection="endnotes" range="volume"/>
+                </dynamic-sequence>
+              </post-content>
+            </volume-template>
+            <collection name="footnotes">
+              <item id="a">
+                <block>⠶</block>
+              </item>
+              <item id="b">
+                <block>⠶⠶</block>
+              </item>
+            </collection>
+            <collection name="endnotes">
+              <item id="c">
+                <block>⠶⠶⠶</block>
+              </item>
+              <item id="d">
+                <block>⠶⠶⠶⠶</block>
+              </item>
+            </collection>
+            <sequence master="main">
+              <block>
+                ⠿⠿⠿
+                <anchor item="a"/>
+                <anchor item="b"/>
+                <anchor item="c"/>
+                <anchor item="d"/>
+              </block>
+              <block>
+                ⠿⠿⠿
+                <anchor item="a"/>
+                <anchor item="b"/>
+                <anchor item="c"/>
+                <anchor item="d"/>
+              </block>
+              <block break-before="page">
+                ⠿⠿⠿
+              </block>
+              <block break-before="page">
+                ⠿⠿⠿
+                <anchor item="a"/>
+                <anchor item="b"/>
+                <anchor item="c"/>
+                <anchor item="d"/>
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="the third scenario wins"
+              type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="20" rows="10" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠿⠿⠿</row>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
+                  <row>⠶</row>
+                  <row>⠶⠶</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
+                  <row>⠶</row>
+                  <row>⠶⠶</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠶⠶⠶</row>
+                  <row>⠶⠶⠶⠶</row>
+                  <row>⠶⠶⠶</row>
+                  <row>⠶⠶⠶⠶</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

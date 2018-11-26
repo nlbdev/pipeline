@@ -20,7 +20,13 @@
                 </xsl:when>
                 <xsl:when test="self::css:alternate">
                     <xsl:variable name="anchor" select="@css:anchor"/>
-                    <xsl:sequence select="//*[@css:id=$anchor]"/>
+                    <!--
+                        Note that it can happen that there are two elements with the same css:id,
+                        for example when a th element contains a pseudo-element and is repeated by
+                        css:render-table-by. We just ignore this fact and take the first element
+                        with a matching id. The content will be the same anyway.
+                    -->
+                    <xsl:sequence select="(//*[@css:id=$anchor])[1]"/>
                 </xsl:when>
                 <xsl:when test="self::css:footnote-call">
                     <xsl:sequence select="."/>

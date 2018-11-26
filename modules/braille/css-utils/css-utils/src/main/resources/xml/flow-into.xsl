@@ -18,21 +18,29 @@
             <xsl:variable name="flow" as="xs:string" select="."/>
             <xsl:result-document href="{$flow}">
                 <css:_ css:flow="{$flow}">
-                    <xsl:for-each select="$root//*[@css:flow=$flow]">
-                        <xsl:copy>
-                            <xsl:sequence select="@* except (@style|@css:flow|@css:id|@css:counter-increment)"/>
-                            <xsl:if test="not(@xml:base)">
-                                <xsl:attribute name="xml:base" select="base-uri(.)"/>
-                            </xsl:if>
-                            <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
-                                                  css:specified-properties(($css:properties,'#all'), true(), false(), false(), .)
-                                                  [not(@value='initial')]))"/>
-                            <xsl:if test="not(@css:anchor)">
-                                <xsl:attribute name="css:anchor" select="if (@css:id) then string(@css:id) else generate-id(.)"/>
-                            </xsl:if>
-                            <xsl:apply-templates/>
-                        </xsl:copy>
-                    </xsl:for-each>
+                    <xsl:for-each-group select="$root//*[@css:flow=$flow]" group-by="string(@css:anchor)">
+                        <!--
+                            Note that it can happen that there are two elements with the same
+                            css:id, for example when a th element contains a pseudo-element and is
+                            repeated by css:render-table-by. In this case we only include the first
+                            element with that id in the named flow.
+                        -->
+                        <xsl:for-each select="if (@css:anchor) then current-group()[1] else current-group()">
+                            <xsl:copy>
+                                <xsl:sequence select="@* except (@style|@css:flow|@css:id|@css:counter-increment)"/>
+                                <xsl:if test="not(@xml:base)">
+                                    <xsl:attribute name="xml:base" select="base-uri(.)"/>
+                                </xsl:if>
+                                <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
+                                                      css:specified-properties(($css:properties,'#all'), true(), false(), false(), .)
+                                                      [not(@value='initial')]))"/>
+                                <xsl:if test="not(@css:anchor)">
+                                    <xsl:attribute name="css:anchor" select="if (@css:id) then string(@css:id) else generate-id(.)"/>
+                                </xsl:if>
+                                <xsl:apply-templates/>
+                            </xsl:copy>
+                        </xsl:for-each>
+                    </xsl:for-each-group>
                 </css:_>
             </xsl:result-document>
         </xsl:for-each>
