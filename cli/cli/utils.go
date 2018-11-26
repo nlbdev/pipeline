@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -234,14 +235,22 @@ var javaVersionService = func() (string, error) {
 //parses the vesion from
 func parseVersion(javaOut string) (ver float64, err error) {
 	strVer := ""
-	// under Ubuntu 15.4 openjdk `java -version` prints "openjdk version "1.8.0_45-internal""
-	reg := re.MustCompile(`(?:java|openjdk) version "(\d\.\d)?.*"`)
+	// under Ubuntu 15.04 openjdk `java -version` prints "openjdk version "1.8.0_45-internal""
+	// under Ubuntu 18.04 openjdk `java -version` prints "openjdk version "10.0.2" 2018-07-17""
+	reg := re.MustCompile(`(?:java|openjdk) version "(\d+\.\d+)?.*`)
 	res := reg.FindStringSubmatch(javaOut)
 	if len(res) > 0 {
 		strVer = res[len(res)-1]
 	} else {
 		return ver, fmt.Errorf("Couldn't find version in %s", javaOut)
 	}
-	return strconv.ParseFloat(strVer, 64)
+	developerVersion, err := strconv.ParseFloat(strVer, 64)
+	if err != nil && developerVersion >= 2 {
+		developerVersion = math.Floor(developerVersion)
+		for developerVersion >= 2 {
+			developerVersion /= 10
+		}
+	}
+	return developerVersion, err
 
 }
