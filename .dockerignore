@@ -1,5 +1,5 @@
 **/target
-/.git
+# /.git # needed for ch.sbs:project-version-maven-plugin
 /.maven-workspace
 /.make-target
 
