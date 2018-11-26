@@ -1849,8 +1849,7 @@
                     <filter>src/main/assembly/dist.properties</filter>
                     <filter>src/main/assembly/dist-nix.properties</filter>
                   </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>assemble-${project.version}-minimal</finalName>
+                  <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
               </execution>
             </executions>
