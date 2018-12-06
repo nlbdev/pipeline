@@ -86,7 +86,7 @@
     <p:delete match="html:img"/>
     
     <!-- sørg for riktig språk -->
-    <p:add-attribute match="/*/html:head/html:meta[@name='dc:language']" attribute-name="value" attribute-value="no"/>
+    <p:add-attribute match="/*/html:head/html:meta[@name='dc:language']" attribute-name="content" attribute-value="no"/>
     
     <p:store indent="true">
         <p:with-option name="href" select="concat($output-dir,'Nyhetsbrev%20',lower-case(/*/@F),'%20',/*/@Y,'.xhtml')">
