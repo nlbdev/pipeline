@@ -129,10 +129,10 @@
                         <xsl:template match="level1[@id='student-audio']">
                             <xsl:copy>
                                 <xsl:copy-of select="@*"/>
-                                <xsl:copy-of select="*[position()&lt;=2]"/>
+                                <xsl:copy-of select="*[1]"/>
                                 <level2>
                                     <h2/>
-                                    <xsl:apply-templates select="*[position()&gt;2]"/>
+                                    <xsl:apply-templates select="* except *[1]"/>
                                 </level2>
                             </xsl:copy>
                         </xsl:template>
