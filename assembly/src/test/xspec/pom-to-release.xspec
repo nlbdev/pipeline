@@ -3,9 +3,14 @@
     
     <x:param name="time" select="'2018-01-01T00:00:00Z'"/>
     
-    <x:scenario label="Scenario for testing a function">
+    <x:scenario label="Effective POM #1">
         <x:context href="../resources/effective-pom.xml"/>
         <x:expect label="result" href="../resources/descriptor.xml" select="/*" test="/*"/>
+    </x:scenario>
+    
+    <x:scenario label="Effective POM #2">
+        <x:context href="../resources/effective-pom.2.xml"/>
+        <x:expect label="result" href="../resources/descriptor.2.xml" select="/*" test="/*"/>
     </x:scenario>
 
 </x:description>

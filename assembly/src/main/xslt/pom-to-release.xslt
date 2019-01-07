@@ -72,19 +72,20 @@
                                         <xsl:with-param name="deployPath" select="$deployPath"/>
                                 </xsl:apply-templates>
                         </xsl:for-each>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='linux']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-linux']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles//pom:execution[./pom:id/text()='unpack-cli-linux']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">linux_386</xsl:with-param>
                         </xsl:apply-templates>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='mac']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-mac']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles//pom:execution[./pom:id/text()='unpack-cli-mac']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">darwin_386</xsl:with-param>
                         </xsl:apply-templates>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='win']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-win']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles//pom:execution[./pom:id/text()='unpack-cli-win']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">windows_386</xsl:with-param>
                         </xsl:apply-templates>
                 </xsl:variable>
+                <xsl:variable name="artifacts" select="for $id in (distinct-values($artifacts/@id)) return ($artifacts[@id=$id])[1]" as="element()*"/>
                 
                 <xsl:text>
 </xsl:text>
