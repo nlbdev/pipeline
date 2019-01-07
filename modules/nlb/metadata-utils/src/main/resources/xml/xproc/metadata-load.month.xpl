@@ -61,7 +61,7 @@
         <p:identity name="part-result-document"/>
 
         <p:choose>
-            <p:when test="/*/SRU:records/SRU:record/SRU:recordPosition/text() = /*/SRU:nextRecordPosition/text() or not(/*/SRU:records/SRU:record/SRU:recordPosition)">
+            <p:when test="not(/*/SRU:nextRecordPosition) or /*/SRU:records/SRU:record/SRU:recordPosition/text() = /*/SRU:nextRecordPosition/text() or not(/*/SRU:records/SRU:record/SRU:recordPosition)">
                 <!-- no more results -->
                 <p:identity>
                     <p:input port="source">
