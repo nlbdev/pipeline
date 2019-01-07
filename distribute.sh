@@ -63,7 +63,7 @@ function ssh_symlink {
 
 java -cp "`find .maven-workspace/net/sf/saxon/Saxon-HE/9* -type f | grep jar$ | tail -n 1`" \
     net.sf.saxon.Transform \
-    -s:assembly/target/tmp/effective-pom.xml \
+    -s:assembly/target/effective-pom.xml \
     -xsl:assembly/src/main/xslt/pom-to-release.xslt \
     -o:releaseDescriptorRelative.xml \
     relativeHrefs=true
