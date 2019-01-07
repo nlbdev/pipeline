@@ -2806,9 +2806,9 @@
                                 <dc:format>application/x-pef+xml</dc:format>
                                 <dc:identifier>identifier?</dc:identifier>
                                 <dc:date>2018-06-01</dc:date>
-                                <dc:language>no</dc:language>
                                 <dc:title>title</dc:title>
                                 <dc:creator>author</dc:creator>
+                                <dc:language>no</dc:language>
                             </meta>
                         </head>
                         <body>
