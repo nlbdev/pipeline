@@ -40,3 +40,5 @@ target/
 
 # NLB-specific
 /releaseDescriptor*xml
+/descriptor-*.xml
+/index.html
