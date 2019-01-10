@@ -43,7 +43,7 @@ RUN unzip pipeline2-*_minimal.zip -d /opt/pipeline2-minimal
 
 # ----------------------------------------
 
-FROM openjdk:8-jre
+FROM openjdk:10-jre
 LABEL MAINTAINER Jostein Austvik Jacobsen <jostein@nlb.no> <http://www.nlb.no/>
 
 COPY --from=builder /opt/pipeline2-linux/daisy-pipeline/ /opt/daisy-pipeline2/
