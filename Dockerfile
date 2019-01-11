@@ -30,16 +30,14 @@ WORKDIR /opt/pipeline
 # build until first error in case of build errors (easier to debug)
 #RUN make RUBY=ruby dist-zip-linux || true
 
-# build for linux and minimal
+# build for Linux
 RUN make RUBY=ruby dist-zip-linux
-RUN make RUBY=ruby dist-zip-minimal
 
 # test NLB and Nordic modules (causes timeout on Docker Hub)
 #RUN make RUBY=ruby check-modules/nlb
 #RUN make RUBY=ruby check-modules/nordic
 
 RUN unzip pipeline2-*_linux.zip -d /opt/pipeline2-linux
-RUN unzip pipeline2-*_minimal.zip -d /opt/pipeline2-minimal
 
 # ----------------------------------------
 
@@ -47,5 +45,20 @@ FROM openjdk:10-jre
 LABEL MAINTAINER Jostein Austvik Jacobsen <jostein@nlb.no> <http://www.nlb.no/>
 
 COPY --from=builder /opt/pipeline2-linux/daisy-pipeline/ /opt/daisy-pipeline2/
+
+# Enable calabash debugging
+RUN sed -i 's/\(com.xmlcalabash.*\)INFO/\1DEBUG/' /opt/daisy-pipeline2/etc/config-logback.xml
+
+ENV PIPELINE2_WS_LOCALFS=false \
+    PIPELINE2_WS_AUTHENTICATION=false \
+    PIPELINE2_WS_AUTHENTICATION_KEY=clientid \
+    PIPELINE2_WS_AUTHENTICATION_SECRET=secret \
+    PIPELINE2_WS_HOST=0.0.0.0
+
 EXPOSE 8181
+
+# For the healthcheck use PIPELINE2_WS_HOST if defined. Otherwise use 0.0.0.0
+# TODO: Fix healthcheck. Currently gives "Connection to 0.0.0.0 failed." when curling inside container.
+#HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD curl --fail http://${PIPELINE2_WS_HOST:-0.0.0.0}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
+
 ENTRYPOINT ["/opt/daisy-pipeline2/bin/pipeline2"]

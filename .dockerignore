@@ -8,3 +8,5 @@
 # the build will re-download all dependencies, and the
 # size of the docker build image will be smaller.
 #/.maven-cache
+
+/Dockerfile
