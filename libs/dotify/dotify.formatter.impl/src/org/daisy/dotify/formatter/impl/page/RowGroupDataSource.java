@@ -206,6 +206,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	@Override
 	protected void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
 		if (groups!=null) {
+			// this means ScenarioData.maybeNewRowGroupSequence() did not return true for this block
 			throw new IllegalStateException();
 		} else {
 			groups = new ArrayList<>();
