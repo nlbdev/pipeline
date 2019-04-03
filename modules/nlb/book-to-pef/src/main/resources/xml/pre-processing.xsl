@@ -275,12 +275,55 @@
                          dtbook:h6[ancestor::*/tokenize(@class,'\s+') = 'part'] |
                          html:h5[not(ancestor::*/tokenize(@epub:type,'\s+') = 'part')] |
                          html:h6[ancestor::*/tokenize(@epub:type,'\s+') = 'part']" mode="clean">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-            <xsl:if test="not(ends-with(normalize-space(string-join(.//text(),'')),':'))">
-                <xsl:text>:</xsl:text>
-            </xsl:if>
-        </xsl:copy>
+        <!-- no xsl:copy: see "rename-headings" below -->
+        <xsl:next-match/>
+        <xsl:if test="not(ends-with(normalize-space(string-join(.//text(),'')),':'))">
+            <xsl:text>:</xsl:text>
+        </xsl:if>
+    </xsl:template>
+    
+    <!--
+        Rename headings inside note sections so that they are not included in the TOC
+    -->
+    <xsl:template mode="clean"
+                  match="*[f:classes(.)=('notes','footnotes','endnotes')]|
+                         *[f:types(.)=('notes','footnotes','endnotes','rearnotes')]">
+        <xsl:next-match>
+            <xsl:with-param name="rename-headings" tunnel="yes" select="true()"/>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <xsl:template mode="clean"
+                  priority="1"
+                  match="dtbook:h1 | html:h1 |
+                         dtbook:h2 | html:h2 |
+                         dtbook:h3 | html:h3 |
+                         dtbook:h4 | html:h4 |
+                         dtbook:h5 | html:h5 |
+                         dtbook:h6 | html:h6">
+        <xsl:param name="rename-headings" as="xs:boolean" tunnel="yes" required="no" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$rename-headings">
+                <xsl:element name="h" namespace="{namespace-uri()}">
+                    <xsl:next-match/>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:next-match/>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template mode="clean"
+                  match="dtbook:h1 | html:h1 |
+                         dtbook:h2 | html:h2 |
+                         dtbook:h3 | html:h3 |
+                         dtbook:h4 | html:h4 |
+                         dtbook:h5 | html:h5 |
+                         dtbook:h6 | html:h6">
+        <xsl:apply-templates select="@*|node()"/>
     </xsl:template>
     
     <xsl:function name="f:types" as="xs:string*">
