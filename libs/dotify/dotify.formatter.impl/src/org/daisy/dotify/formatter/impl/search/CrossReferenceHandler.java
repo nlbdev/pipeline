@@ -264,14 +264,13 @@ public class CrossReferenceHandler {
 	
 	/**
 	 * Sets the sequence scope for the purpose of finding markers in a specific sequence.
-	 * @param space the document space
-	 * @param sequenceNumber the sequence number
+	 * @param sequenceId the sequence id
 	 * @param fromIndex the start index
 	 * @param toIndex the end index
 	 */
-	public void setSequenceScope(DocumentSpace space, int sequenceNumber, int fromIndex, int toIndex) {
+	public void setSequenceScope(SequenceId sequenceId, int fromIndex, int toIndex) {
 		if (readOnly) { return; }
-		searchInfo.setSequenceScope(space, sequenceNumber, fromIndex, toIndex);
+		searchInfo.setSequenceScope(sequenceId, fromIndex, toIndex);
 	}
 	
 	/**
@@ -291,7 +290,7 @@ public class CrossReferenceHandler {
 	 * data needed by this method:</p>
 	 * <ul><li>{@link #keepPageDetails(PageDetails)}</li>
 	 * <li>{@link #commitPageDetails()}</li>
-	 * <li>{@link #setSequenceScope(DocumentSpace, int, int, int)}</li>
+	 * <li>{@link #setSequenceScope(SequenceId, int, int)}</li>
 	 * <li>{@link #setVolumeScope(int, int, int)}</li></ul>
 	 * @param id the page id of the page where the search originates.
 	 * 			Note that this page is not necessarily the first page

@@ -22,6 +22,7 @@ import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.DocumentSpace;
 import org.daisy.dotify.formatter.impl.search.PageDetails;
 import org.daisy.dotify.formatter.impl.search.PageId;
+import org.daisy.dotify.formatter.impl.search.SequenceId;
 import org.daisy.dotify.formatter.impl.search.SheetIdentity;
 import org.daisy.dotify.formatter.impl.search.TransitionProperties;
 
@@ -42,6 +43,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 	private final int sheetOffset;
 	//Local state
 	private int seqsIndex;
+	private SequenceId seqId;
 	private PageSequenceBuilder2 psb;
 	private SectionProperties sectionProperties;
 	private int sheetIndex;
@@ -66,6 +68,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		this.volBreakAllowed = true;
 		this.sheetOffset = 0;
 		this.seqsIndex = 0;
+		this.seqId = null;
 		this.psb = null;
 		this.sectionProperties = null;
 		this.sheetIndex = 0;
@@ -98,6 +101,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		this.volumeGroup = template.volumeGroup;
 		this.seqsIterator = template.seqsIterator;
 		this.seqsIndex = template.seqsIndex;
+		this.seqId = template.seqId;
 		this.psb = tail?template.psb:PageSequenceBuilder2.copyUnlessNull(template.psb);
 		this.sectionProperties = template.sectionProperties;
 		this.sheetOffset = template.sheetOffset+offset;
@@ -196,7 +200,8 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 				} else {
 					 initialPageOffset = pageCounter.getDefaultPageOffset();
 				}
-				psb = new PageSequenceBuilder2(pageCounter.getPageCount(), bs.getLayoutMaster(), initialPageOffset, bs, context, rcontext, seqsIndex);
+				seqId = new SequenceId(seqsIndex, new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), volumeGroup);
+				psb = new PageSequenceBuilder2(pageCounter.getPageCount(), bs.getLayoutMaster(), initialPageOffset, bs, context, rcontext, seqId);
 				sectionProperties = bs.getLayoutMaster().newSectionProperties();
 				s = null;
 				si = null;
@@ -291,7 +296,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 			}
 			if (!psb.hasNext()||volumeEnded) {
 				if (!psb.hasNext()) {
-					rcontext.getRefs().setSequenceScope(new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), seqsIndex, psb.getGlobalStartIndex(), psb.getToIndex());
+					rcontext.getRefs().setSequenceScope(seqId, psb.getGlobalStartIndex(), psb.getToIndex());
 				}
 				if (counter!=null) {
 					rcontext.getRefs().setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());

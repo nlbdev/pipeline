@@ -68,7 +68,7 @@ public class PageSequenceBuilder2 {
 	private final int fromIndex;
 	private int toIndex;
 	
-	public PageSequenceBuilder2(int fromIndex, LayoutMaster master, int pageOffset, BlockSequence seq, FormatterContext context, DefaultContext rcontext, int sequenceId) {
+	public PageSequenceBuilder2(int fromIndex, LayoutMaster master, int pageOffset, BlockSequence seq, FormatterContext context, DefaultContext rcontext, SequenceId seqId) {
 		this.fromIndex = fromIndex;
 		this.toIndex = fromIndex;
 		this.master = master;
@@ -95,7 +95,7 @@ public class PageSequenceBuilder2 {
 		this.dataGroups = seq.selectScenario(master, bc, true);
 		this.cd = new CollectionData(staticAreaContent, blockContext, master, collection);
 		this.dataGroupsIndex = 0;
-		this.seqId = new SequenceId(sequenceId, new DocumentSpace(blockContext.getSpace(), blockContext.getCurrentVolume()));
+		this.seqId = seqId;
 		PageDetails details = new PageDetails(master.duplex(), new PageId(pageCount, getGlobalStartIndex(), seqId), pageOffset);
 		this.fieldResolver = new FieldResolver(master, context, rcontext.getRefs(), details);
 	}

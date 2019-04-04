@@ -59,12 +59,12 @@ class SearchInfo {
 	}
 	
 	View<PageDetails> getContentsInSequence(SequenceId seqId) {
-		return getViewForSpace(seqId.getSpace()).sequenceViews.get(seqId.getOrdinal());
+		return getViewForSpace(seqId.getSpace()).sequenceViews.get(seqId);
 	}
 	
-	void setSequenceScope(DocumentSpace space, int sequenceNumber, int fromIndex, int toIndex) {
-		View<PageDetails> pw = new View<PageDetails>(getViewForSpace(space).pageDetails, fromIndex, toIndex);
-		getViewForSpace(space).sequenceViews.put(sequenceNumber, pw);
+	void setSequenceScope(SequenceId sequenceId, int fromIndex, int toIndex) {
+		View<PageDetails> pw = new View<PageDetails>(getViewForSpace(sequenceId.getSpace()).pageDetails, fromIndex, toIndex);
+		getViewForSpace(sequenceId.getSpace()).sequenceViews.put(sequenceId, pw);
 	}
 	
 	void setVolumeScope(int volumeNumber, int fromIndex, int toIndex) {

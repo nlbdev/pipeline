@@ -69,5 +69,10 @@ public class MarkerReferenceTest extends AbstractFormatterEngineTest {
 	public void testMarkerMultiple() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/marker-ref-multiple-input.obfl", "resource-files/marker-ref-multiple-expected.pef", false);
 	}
+	@Test
+	public void testMarkerReferenceIssue39() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/marker-ref/marker-reference-issue-39-input.obfl",
+		        "resource-files/marker-ref/marker-reference-issue-39-expected.pef", false);
+	}
 
 }

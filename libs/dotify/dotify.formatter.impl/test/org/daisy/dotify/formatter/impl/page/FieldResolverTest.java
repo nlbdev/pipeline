@@ -54,7 +54,8 @@ public class FieldResolverTest {
 				new PageId(0, 0, 
 					new SequenceId(
 						0,
-						new DocumentSpace(Space.BODY, null)
+						new DocumentSpace(Space.BODY, null),
+						0
 					)
 				), 
 				0);
