@@ -468,6 +468,17 @@
         </xsl:call-template>
     </xsl:function>
     
+    <xsl:function name="css:parse-string" as="element()?">
+        <xsl:param name="string" as="xs:string"/>
+        <xsl:if test="matches($string,re:exact($css:STRING_RE))">
+            <css:string value="{replace(replace(replace(
+                                  substring($string, 2, string-length($string)-2),
+                                  '\\A','&#xA;'),
+                                  '\\27',''''),
+                                  '\\22','&quot;')}"/>
+        </xsl:if>
+    </xsl:function>
+     
     <xsl:template name="css:parse-content-list" as="element()*">
         <xsl:param name="content-list" as="xs:string?"/>
         <xsl:param name="context" as="element()?" select="."/>
