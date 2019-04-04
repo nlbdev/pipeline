@@ -76,8 +76,8 @@ pagenum, *[epub|type~='pagebreak'] {
             string-set: print-page "";
         }
         /* bodymatter sections are not quaranteed to have a epub:type (top-level sections without are implicitly bodymatter) */
-        body[epub|type~='frontmatter']:not(:has(+ body[epub|type~='frontmatter']))::after,
-        section[epub|type~='frontmatter']:not(:has(+ section[epub|type~='frontmatter']))::after {
+        body[epub|type~='frontmatter'] + body:not([epub|type~='frontmatter']),
+        section[epub|type~='frontmatter'] + section:not([epub|type~='frontmatter']) {
             string-set: print-page "";
         }
 }
