@@ -2438,7 +2438,7 @@
             <x:expect label="should not contain the braille character '⣿'" type="xpath" test="not(contains(string-join(//text(),''),'⣿'))"/>
         </x:scenario>
         
-        <x:scenario label="braille and print page numbers (issue #78)" pending="broken">
+        <x:scenario label="braille and print page numbers (issue #78)">
             <x:call>
                 <x:input port="source">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
@@ -2661,7 +2661,7 @@
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠓⠑⠁⠙⠇⠊⠝⠑⠀⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠃⠚</row>     <!-- page (3): document toc: toc entry on last line -->
                     <!--<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>--> <!-- page (4): document toc -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠊⠊⠊</row>    <!-- page 5: frontmatter: print page front: i-iii -->
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠊⠊⠊</row>    <!-- page 6: frontmatter (empty back of page): print page front: iii -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠊⠊⠊</row>    <!-- page 6: frontmatter (empty back of page): print page front: iii -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠧⠊</row>    <!-- page 7: frontmatter: print page front: iv-vi -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠧⠊</row>    <!-- page 8: frontmatter: print page continuation: vi -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 9: level1.part: print page reset after frontmatter -->
@@ -2684,15 +2684,14 @@
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠛</row>    <!-- page 29: level1.part: print page continuation: 17 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠛</row>    <!-- page 30: level1.part, empty back of page: print page continuation: 17 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠓</row>    <!-- page 31: level2: print page normal: 18 -->
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁⠓</row>    <!-- page 32: level2, empty back of page: print page continuation: 18 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠓</row>    <!-- page 32: level2, empty back of page: print page continuation: 18 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠁</row>    <!-- page 33: level2: print page normal: 19-20, print page special: 1 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠙⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠁</row>    <!-- page 34: level2: print page special: 2, print page normal: 21 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠃</row>    <!-- page 35: level2: print page normal: 22 -->
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠃</row>    <!-- page 36: level2, empty back of page: print page continuation: 22 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠃</row>    <!-- page 36: level2, empty back of page: print page continuation: 22 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠑</row>    <!-- page 37: rearmatter: print page normal: 23-25 -->
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠑</row>    <!-- page 38: rearmatter, empty back of page: print page continuation: 25 -->
+                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠑</row>    <!-- page 38: rearmatter, empty back of page: print page continuation: 25 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠓</row>    <!-- page 39: rearmatter: print page normal: 26-28 -->
-                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠙⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠼⠃⠓</row>    <!-- page 40: rearmatter, empty back of page: print page continuation: 28 -->
                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>    <!-- page 41: footnotes -->
                     </_>
                 </x:document>
