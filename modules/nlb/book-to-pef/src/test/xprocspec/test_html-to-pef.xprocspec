@@ -2133,7 +2133,7 @@
             </x:expect>
         </x:scenario>
         
-        <x:scenario label="Regression test for 'xml:lang=&#34;en&#34; and &#34;not Norwegian&#34; makes 8-dots?' (issue #146)" pending="https://github.com/nlbdev/pipeline/issues/146">
+        <x:scenario label="Regression test for 'xml:lang=&#34;en&#34; and &#34;not Norwegian&#34; makes 8-dots?' (issue #146)">
             <x:call>
                 <x:input port="source" xml:base="">
                     <x:document type="inline" xml:base="file:/tmp/book.xhtml">
