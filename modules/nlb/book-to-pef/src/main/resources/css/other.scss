@@ -30,8 +30,9 @@ sidebar, aside[epub|type~='sidebar'] {
         text-align: left;
 }
 
-sidebar::before, aside[epub|type~='sidebar']::before {
-        content: "Margtekst: ";
+sidebar::before, aside[epub|type~='sidebar'] {
+        border-top: ⠤;
+        border-bottom: ⠉;
 }
 
 epigraph, aside[epub|type~='epigraph'] {
