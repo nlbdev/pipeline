@@ -2,6 +2,49 @@
 /*                Text formatting                                             */
 /* -------------------------------------------------------------------------- */
 
+@text-transform strong {
+    system: -nlb-indicators;
+    open: "⠠⠄";
+    close: "⠠⠄";
+}
+
+@text-transform em {
+    system: -nlb-indicators;
+    open: "⠆";
+    close: "⠰";
+}
+
+@text-transform u {
+    system: -nlb-indicators;
+    open: "⠸";
+    close: "⠸";
+}
+
+@text-transform strike {
+    system: -nlb-indicators;
+    open: "⠐⠂";
+    close: "⠐⠂";
+}
+
+strong, b {
+    text-transform: strong;
+    :root:not(:has(em, i)) & {
+        text-transform: em;
+    }
+}
+
+em, i {
+    text-transform: em;
+}
+
+u {
+    text-transform: u;
+}
+
+strike, s {
+    text-transform: strike;
+}
+
 sub {
     // FIXME: use "-louis-sub" when supported
     text-transform: -louis-emph-4;

@@ -141,38 +141,50 @@
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="no">
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="no"
+               style="@text-transform strong {
+                        system: -nlb-indicators;
+                        open: &quot;⠠⠄&quot;;
+                        close: &quot;⠠⠄&quot;; }
+                      @text-transform em {
+                        system: -nlb-indicators;
+                        open: &quot;⠆&quot;;
+                        close: &quot;⠰&quot;; }
+                      @text-transform u {
+                        system: -nlb-indicators;
+                        open: &quot;⠸&quot;;
+                        close: &quot;⠸&quot;; }">
             <!--
                 Always use dots 23 (⠆) in front of bold and dots 56 (⠰) after bold.
             -->
-            <p> hund hund<strong>en</strong> hund<strong>er</strong> hund<strong>ene</strong>
+            <p> hund hund<strong style="text-transform: strong">en</strong> hund<strong style="text-transform: strong">er</strong> hund<strong style="text-transform: strong">ene</strong>
             </p>
             <!--
                 Opening/closing marks are never placed immediately before/after a white space character.
             -->
-            <p> hund hund<strong>en </strong>hund<strong>er </strong>hund<strong>ene</strong>
+            <p> hund hund<strong style="text-transform: strong">en </strong>hund<strong style="text-transform: strong">er </strong>hund<strong style="text-transform: strong">ene</strong>
             </p>
-            <p> Det var bare det at hun også <strong>mis</strong>unte ham det </p>
-            <p> Jeg verken <strong>vil </strong>eller <strong>kan </strong>gjøre dette for deg! </p>
-            <p> Karin Fossum slo gjennom som krimforfatter med romanen <strong>Evas øye</strong>,
+            <p> Det var bare det at hun også <strong style="text-transform: strong">mis</strong>unte ham det </p>
+            <p> Jeg verken <strong style="text-transform: strong">vil </strong>eller <strong style="text-transform: strong">kan </strong>gjøre dette for deg! </p>
+            <p> Karin Fossum slo gjennom som krimforfatter med romanen <strong style="text-transform: strong">Evas øye</strong>,
               som kom ut i 1995. </p>
             <!--
                 Always use dots 456 (⠸) in front of and after underline.
             -->
-            <p> "Hør her: <strong>du <u>må </u>gjøre det</strong>!" </p>
+            <p> "Hør her: <strong style="text-transform: strong">du <u style="text-transform: u">må </u>gjøre det</strong>!" </p>
             <!--
                 Always use dots 6-3 (⠆⠠) in front of and after italics.
             -->
-            <p> Romanen <strong>Tusen strålende soler </strong>av den afghansk-amerikanske
+            <p> Romanen <strong style="text-transform: strong">Tusen strålende soler </strong>av den afghansk-amerikanske
               forfatteren Khaled Hosseini tyder på å bli en like stor suksess som den forrige
-              romanen, <strong>Drageløperen</strong>. I bokanmeldelsen fra <strong>Dagbladet
-              </strong>06.06.07 forklares dette med: <em>Ikke fordi Hosseini er en spesielt god
+              romanen, <strong style="text-transform: strong">Drageløperen</strong>. I bokanmeldelsen fra <strong style="text-transform: strong">Dagbladet
+              </strong>06.06.07 forklares dette med: <em style="text-transform: em">Ikke fordi Hosseini er en spesielt god
                 forfatter. Men fordi tematikken til den USA-bosatte Hosseini, har en spesiell
                 dragning på et vestlig publikum.</em>
             </p>
-            <p> Vinje, Finn-Erik. 2004. <em>Skriveregler</em>. 8. utg. Oslo </p>
-            <p> Hellevik, Alf. 1970. <em>God nynorsk</em>. Oslo </p>
-            <p> Ny afghansk bestselger. Bokanmeldelse <em>Dagbladet </em>06.06.07 </p>
+            <p> Vinje, Finn-Erik. 2004. <em style="text-transform: em">Skriveregler</em>. 8. utg. Oslo </p>
+            <p> Hellevik, Alf. 1970. <em style="text-transform: em">God nynorsk</em>. Oslo </p>
+            <p> Ny afghansk bestselger. Bokanmeldelse <em style="text-transform: em">Dagbladet </em>06.06.07 </p>
           </div>
         </x:document>
       </x:input>
@@ -270,16 +282,32 @@
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml">
+          <div xml:lang="no" xmlns="http://www.w3.org/1999/xhtml"
+               style="@text-transform strong {
+                        system: -nlb-indicators;
+                        open: &quot;⠠⠄&quot;;
+                        close: &quot;⠠⠄&quot;; }
+                      @text-transform em {
+                        system: -nlb-indicators;
+                        open: &quot;⠆&quot;;
+                        close: &quot;⠰&quot;; }
+                      @text-transform u {
+                        system: -nlb-indicators;
+                        open: &quot;⠸&quot;;
+                        close: &quot;⠸&quot;; }
+                      @text-transform strike {
+                        system: -nlb-indicators;
+                        open: &quot;⠐⠂&quot;;
+                        close: &quot;⠐⠂&quot;; }">
             <level1>
               <h1>aa ll bb cc</h1>
-              <p>aa <em>bb</em> cc </p>
-              <p>aa <i>bb</i> cc </p>
-              <p>aa <u>bb</u> cc </p>
-              <p>aa <strike>bb</strike> cc </p>
-              <p>aa <s>bb</s> cc </p>
-              <p>aa <strong>bb</strong> cc </p>
-              <p>aa <b>bb</b> cc </p>
+              <p>aa <em style="text-transform: em">bb</em> cc </p>
+              <p>aa <i style="text-transform: em">bb</i> cc </p>
+              <p>aa <u style="text-transform: u">bb</u> cc </p>
+              <p>aa <strike style="text-transform: strike">bb</strike> cc </p>
+              <p>aa <s style="text-transform: strike">bb</s> cc </p>
+              <p>aa <strong style="text-transform: strong">bb</strong> cc </p>
+              <p>aa <b style="text-transform: strong">bb</b> cc </p>
             </level1>
           </div>
         </x:document>
@@ -317,16 +345,32 @@
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <div xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <div xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+               style="@text-transform strong {
+                        system: -nlb-indicators;
+                        open: &quot;⠠⠄&quot;;
+                        close: &quot;⠠⠄&quot;; }
+                      @text-transform em {
+                        system: -nlb-indicators;
+                        open: &quot;⠆&quot;;
+                        close: &quot;⠰&quot;; }
+                      @text-transform u {
+                        system: -nlb-indicators;
+                        open: &quot;⠸&quot;;
+                        close: &quot;⠸&quot;; }
+                      @text-transform strike {
+                        system: -nlb-indicators;
+                        open: &quot;⠐⠂&quot;;
+                        close: &quot;⠐⠂&quot;; }">
             <level1>
               <h1>aa ll bb cc</h1>
-              <p>aa <em>bb</em> cc </p>
-              <p>aa <i>bb</i> cc </p>
-              <p>aa <u>bb</u> cc </p>
-              <p>aa <strike>bb</strike> cc </p>
-              <p>aa <s>bb</s> cc </p>
-              <p>aa <strong>bb</strong> cc </p>
-              <p>aa <b>bb</b> cc </p>
+              <p>aa <em style="text-transform: em">bb</em> cc </p>
+              <p>aa <i style="text-transform: em">bb</i> cc </p>
+              <p>aa <u style="text-transform: u">bb</u> cc </p>
+              <p>aa <strike style="text-transform: strike">bb</strike> cc </p>
+              <p>aa <s style="text-transform: strike">bb</s> cc </p>
+              <p>aa <strong style="text-transform: strong">bb</strong> cc </p>
+              <p>aa <b style="text-transform: strong">bb</b> cc </p>
             </level1>
           </div>
         </x:document>
