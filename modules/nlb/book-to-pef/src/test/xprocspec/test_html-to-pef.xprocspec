@@ -2777,11 +2777,17 @@
                                 <title>title</title>
                             </head>
                             <body>
+                                <section epub:type="frontmatter halftitlepage">
+                                    <h1>existing halftitlepage</h1>
+                                </section>
                                 <section epub:type="frontmatter titlepage">
                                     <h1>existing titlepage</h1>
                                 </section>
                                 <section epub:type="frontmatter colophon">
                                     <h1>colophon</h1>
+                                </section>
+                                <section epub:type="frontmatter copyright-page">
+                                    <h1>copyright page</h1>
                                 </section>
                                 <section epub:type="bodymatter">
                                     <h1>bodymatter</h1>
@@ -2850,7 +2856,7 @@
                                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠕⠍⠀⠃⠕⠅⠁</row>
                                         <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
                                         <row/>
-                                        <row>⠀⠀⠀⠀⠠⠁⠝⠞⠁⠇⠇⠀⠎⠊⠙⠑⠗⠒⠀⠼⠋</row>
+                                        <row>⠀⠀⠀⠀⠠⠁⠝⠞⠁⠇⠇⠀⠎⠊⠙⠑⠗⠒⠀⠼⠓</row>
                                         <row>⠀⠀⠀⠀⠠⠃⠕⠅⠁⠀⠎⠅⠁⠇⠀⠊⠅⠅⠑⠀⠗⠑⠞⠥⠗⠝⠑⠗⠑⠎⠄</row>
                                         <row>⠀⠀⠀⠀⠠⠋⠑⠊⠇⠀⠑⠇⠇⠑⠗⠀⠍⠁⠝⠛⠇⠑⠗⠀⠅⠁⠝</row>
                                         <row>⠀⠀⠍⠑⠇⠙⠑⠎⠀⠞⠊⠇⠀⠣⠏⠥⠝⠅⠞⠈⠝⠇⠃⠄⠝⠕⠄⠜</row>
@@ -2946,6 +2952,66 @@
                                         <row/>
                                         <row/>
                                         <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                    </page>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                                    </page>
+                                    <page>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠕⠏⠽⠗⠊⠛⠓⠞⠀⠏⠁⠛⠑</row>
+                                        <row>⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row/>
+                                        <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                                     </page>
                                 </section>
                             </volume>

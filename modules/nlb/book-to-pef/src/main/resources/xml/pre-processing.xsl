@@ -104,12 +104,13 @@
     <xsl:template match="html:body[f:types(.) = ('toc','toc-brief')]" mode="clean" priority="2"/>
     <xsl:template match="html:body/html:section[f:types(.) = ('toc','toc-brief')]" mode="clean" priority="2"/>
     
-    <!-- move colophon to the end of the book -->
+    <!-- move colophon and copyright-page to the end of the book -->
     <xsl:template match="html:*[f:types(.) = 'colophon'] | dtbook:level1[f:classes(.) = 'colophon']" mode="clean" priority="2"/>
+    <xsl:template match="html:*[f:types(.) = 'copyright-page'] | dtbook:level1[f:classes(.) = 'copyright-page']" mode="clean" priority="2"/>
     <xsl:template match="html:body[count(../html:body) = 1]" mode="clean">
         <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@* | node()" mode="#current"/>
-            <xsl:for-each select="*[f:types(.) = 'colophon']">
+            <xsl:for-each select="*[f:types(.) = ('colophon', 'copyright-page')]">
                 <xsl:copy exclude-result-prefixes="#all">
                     <xsl:apply-templates select="@*" mode="#current"/>
                     <xsl:attribute name="epub:type" select="string-join(distinct-values((f:types(.)[not(.=('cover','frontmatter','bodymatter'))], 'backmatter')),' ')"/>
@@ -118,10 +119,10 @@
             </xsl:for-each>
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="html:body[preceding-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'halftitlepage', 'toc', 'print_toc', 'toc-brief', 'colophon'))]
-                           and not(following-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'halftitlepage', 'toc', 'print_toc', 'toc-brief', 'colophon'))])]" mode="clean">
+    <xsl:template match="html:body[preceding-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'halftitlepage', 'toc', 'print_toc', 'toc-brief', 'colophon', 'copyright-page'))]
+                           and not(following-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'halftitlepage', 'toc', 'print_toc', 'toc-brief', 'colophon', 'copyright-page'))])]" mode="clean">
         <xsl:next-match/>
-        <xsl:for-each select="preceding-sibling::html:body[f:types(.) = 'colophon']">
+        <xsl:for-each select="preceding-sibling::html:body[f:types(.) = ('colophon', 'copyright-page')]">
             <xsl:copy exclude-result-prefixes="#all">
                 <xsl:apply-templates select="@*" mode="#current"/>
                 <xsl:attribute name="epub:type" select="string-join(distinct-values((f:types(.)[not(.=('cover','frontmatter','bodymatter'))], 'backmatter')),' ')"/>
@@ -132,13 +133,13 @@
     <xsl:template match="dtbook:rearmatter" mode="clean">
         <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@* | node()" mode="#current"/>
-            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = 'colophon']" exclude-result-prefixes="#all"/>
+            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = ('colophon', 'copyright-page')]" exclude-result-prefixes="#all"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="dtbook:bodymatter[not(../dtbook:rearmatter)]" mode="clean">
         <xsl:next-match/>
         <rearmatter xmlns="http://www.daisy.org/z3986/2005/dtbook/">
-            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = 'colophon']" exclude-result-prefixes="#all"/>
+            <xsl:copy-of select="../*/dtbook:level1[f:classes(.) = ('colophon', 'copyright-page')]" exclude-result-prefixes="#all"/>
         </rearmatter>
     </xsl:template>
     
