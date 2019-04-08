@@ -95,6 +95,9 @@
                             <body>
                                 
                                 
+                                <section epub:type="frontmatter halftitlepage">
+                                    <p>existing halftitlepage</p>
+                                </section>
                                 <section epub:type="frontmatter titlepage">
                                     <h1>existing titlepage</h1>
                                 </section>
@@ -115,6 +118,7 @@
                 <x:document type="file" base-uri="temp-dir" href="titlepage/2/pef-output-dir/book.pef"/>
             </x:context>
             <x:expect label="the existing titlepage should be deleted" type="xpath" test="not(contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'),'⠑⠭⠊⠎⠞⠊⠝⠛⠀⠞⠊⠞⠇⠑⠏⠁⠛⠑'))"/>
+            <x:expect label="the existing halftitlepage should be deleted" type="xpath" test="not(contains(replace(string-join(.//pef:row/text(),'⠀'),'⠀+','⠀'),'⠑⠭⠊⠎⠞⠊⠝⠛⠀⠓⠁⠇⠋⠞⠊⠞⠇⠑⠏⠁⠛⠑'))"/>
         </x:scenario>
     </x:scenario>
     

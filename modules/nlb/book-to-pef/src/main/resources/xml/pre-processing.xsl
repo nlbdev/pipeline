@@ -95,9 +95,9 @@
     </xsl:template>
     
     <!-- remove existing titlepage if present -->
-    <xsl:template match="dtbook:level1[f:classes(.) = 'titlepage']" mode="clean" priority="2"/>
-    <xsl:template match="html:body[f:types(.) = 'titlepage']" mode="clean" priority="2"/>
-    <xsl:template match="html:body/html:section[f:types(.) = 'titlepage']" mode="clean" priority="2"/>
+    <xsl:template match="dtbook:level1[f:classes(.) = ('titlepage', 'halftitlepage')]" mode="clean" priority="2"/>
+    <xsl:template match="html:body[f:types(.) = ('titlepage', 'halftitlepage')]" mode="clean" priority="2"/>
+    <xsl:template match="html:body/html:section[f:types(.) = ('titlepage', 'halftitlepage')]" mode="clean" priority="2"/>
     
     <!-- remove print toc if present -->
     <xsl:template match="dtbook:level1[f:classes(.) = ('toc','print_toc')]" mode="clean" priority="2"/>
@@ -118,8 +118,8 @@
             </xsl:for-each>
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="html:body[preceding-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'toc', 'print_toc', 'toc-brief', 'colophon'))]
-                           and not(following-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'toc', 'print_toc', 'toc-brief', 'colophon'))])]" mode="clean">
+    <xsl:template match="html:body[preceding-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'halftitlepage', 'toc', 'print_toc', 'toc-brief', 'colophon'))]
+                           and not(following-sibling::html:body[not((f:classes(.), f:types(.)) = ('titlepage', 'halftitlepage', 'toc', 'print_toc', 'toc-brief', 'colophon'))])]" mode="clean">
         <xsl:next-match/>
         <xsl:for-each select="preceding-sibling::html:body[f:types(.) = 'colophon']">
             <xsl:copy exclude-result-prefixes="#all">
