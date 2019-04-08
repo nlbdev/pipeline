@@ -69,6 +69,8 @@
     <p:option name="include-obfl"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
+    <p:option name="include-strong"/>
+    <p:option name="include-em"/>
     <p:option name="include-notes"/>
     <p:option name="notes-placement"/>
     <p:option name="include-production-notes"/>

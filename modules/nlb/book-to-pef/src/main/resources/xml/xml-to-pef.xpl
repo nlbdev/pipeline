@@ -149,6 +149,18 @@ Dette kan være nyttig for å løse problemer med formatering av PEF'en.</p>
     <!-- =============== -->
     <!-- Tekst-elementer -->
     <!-- =============== -->
+    <p:option name="include-strong" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Tekstelementer: Inkluder em</h2>
+            <h2 px:role="desc">Når boksen er tom, blir em utelatt fra produksjonen.</h2>
+        </p:documentation>
+    </p:option>
+    <p:option name="include-em" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Tekstelementer: Inkluder strong</h2>
+            <h2 px:role="desc">Når boksen er tom, vil strong bli utelatt fra produksjonen.</h2>
+        </p:documentation>
+    </p:option>
     <p:option name="include-notes" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Tekstelementer: Inkluder noter</h2>

@@ -26,15 +26,23 @@
     close: "⠐⠂";
 }
 
-strong, b {
-    text-transform: strong;
-    :root:not(:has(em, i)) & {
-        text-transform: em;
+@if ($include-strong) {
+    strong, b {
+        @if ($include-em) {
+            text-transform: strong;
+            :root:not(:has(em, i)) & {
+                text-transform: em;
+            }
+        } @else {
+            text-transform: em;
+        }
     }
 }
 
-em, i {
-    text-transform: em;
+@if ($include-em) {
+    em, i {
+        text-transform: em;
+    }
 }
 
 u {

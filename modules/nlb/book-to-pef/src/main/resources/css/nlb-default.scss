@@ -14,6 +14,8 @@ $page-width: 40 !default;
 $hyphenation: true !default;
 $force-norwegian: true !default;
 $duplex: true !default;
+$include-strong: true !default;
+$include-em: true !default;
 
 @import "page-numbers";
 @import "line-spacing";
