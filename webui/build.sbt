@@ -6,7 +6,7 @@ import com.typesafe.sbt.packager.windows.WixHelper
 
 organization := "org.daisy.pipeline"
 name := "webui"
-version := "2.6.1"
+version := "2.6.3-SNAPSHOT"
 
 organizationName := "The DAISY Consortium"
 organizationHomepage := Some(url("http://daisy.org"))
@@ -135,10 +135,10 @@ wixConfig := {
 }
 
 // Repositories for maven artifacts
-resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases/"
+//resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases/"
 //resolvers += "Sonatype OSS Staging" at "https://oss.sonatype.org/content/repositories/staging/"
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL+".m2/repository/"
+//resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+resolvers += "Local Maven Repository" at System.getProperty("mvn.settings.localRepository", Path.userHome.asFile.toURI.toURL+".m2/repository/")
 resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)
 
 publishTo := {
@@ -189,8 +189,9 @@ libraryDependencies ++= Seq(
   "org.hibernate" % "hibernate-entitymanager" % "4.3.10.Final",
   "org.avaje.ebeanorm" % "avaje-ebeanorm-api" % "3.1.1",
   "org.apache.derby" % "derby" % "10.11.1.1",
-  "org.daisy.pipeline" % "clientlib-java" % "4.8.1",
-  "org.daisy.pipeline" % "clientlib-java-httpclient" % "2.0.2",
+  "mysql" % "mysql-connector-java" % "8.0.15",
+  "org.daisy.pipeline" % "clientlib-java" % "5.0.0-SNAPSHOT",
+  "org.daisy.pipeline" % "clientlib-java-httpclient" % "2.1.0-SNAPSHOT",
   "org.apache.commons" % "commons-compress" % "1.9",
   "org.apache.commons" % "commons-email" % "1.4",
   "log4j" % "log4j" % "1.2.17",
