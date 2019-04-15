@@ -6,15 +6,27 @@
   <p:input port="source" primary="true" sequence="true"/>
   <p:input port="config"/>
   <p:output port="result" primary="true" sequence="false"/>
+  <p:output port="status">
+    <p:pipe step="synthesize" port="status"/>
+  </p:output>
   <p:option name="output-dir" select="''"/>
+  <p:option name="temp-dir" select="''">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>If not empty, this directory will be used to store audio files. The directory must not
+      exist yet. Overrides the global <code>org.daisy.pipeline.tts.audio.tmpdir</code> setting.</p>
+    </p:documentation>
+  </p:option>
 
   <p:import href="synthesize.xpl" />
 
-  <px:synthesize>
+  <px:synthesize name="synthesize">
     <p:input port="config">
       <p:pipe port="config" step="main"/>
     </p:input>
     <p:with-option name="output-dir" select="$output-dir">
+      <p:empty/>
+    </p:with-option>
+    <p:with-option name="temp-dir" select="$temp-dir">
       <p:empty/>
     </p:with-option>
   </px:synthesize>

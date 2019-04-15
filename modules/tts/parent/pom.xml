@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.6</version>
+    <version>1.9</version>
     <relativePath/>
   </parent>
 
   <artifactId>tts-modules-parent</artifactId>
-  <version>1.11.1-SNAPSHOT</version>
+  <version>1.12.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: TTS Modules Parent POM</name>
@@ -23,7 +23,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.11.1-SNAPSHOT</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -33,7 +33,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -43,39 +43,76 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-modules-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!--
+          test dependencies
+      -->
+      <dependency>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-test-helper</artifactId>
+        <version>1.0.3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
+  <properties>
+   <!-- must match version from framework-bom -->
+    <saxon.versionRange>[9.8.0,9.8.1)</saxon.versionRange>
+    <java.version>1.8</java.version>
+  </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>2.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.ops4j.pax.exam</groupId>
+          <artifactId>maven-paxexam-plugin</artifactId>
+          <version>1.2.4</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  
   <repositories>
     <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

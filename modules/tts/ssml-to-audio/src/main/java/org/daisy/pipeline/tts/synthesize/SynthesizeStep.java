@@ -23,9 +23,11 @@ import org.daisy.pipeline.tts.AudioBufferTracker;
 import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.config.ConfigReader;
+import org.daisy.pipeline.tts.synthesize.EncodingThread.EncodingException;
 import org.daisy.pipeline.tts.synthesize.TTSLog.ErrorCode;
 
 import com.google.common.collect.Iterables;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -37,9 +39,12 @@ import com.xmlcalabash.util.TreeWriter;
 public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
         IPipelineLogger {
 
+	private static QName ENCODING_ERROR = new QName("TTS01");
+	
 	private ReadablePipe source = null;
 	private ReadablePipe config = null;
 	private WritablePipe result = null;
+	private WritablePipe status = null;
 	private XProcRuntime mRuntime;
 	private TTSRegistry mTTSRegistry;
 	private Random mRandGenerator;
@@ -48,7 +53,9 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	private AudioBufferTracker mAudioBufferTracker;
 	private URIResolver mURIresolver;
 	private String mOutputDirOpt;
+	private String mTempDirOpt;
 	private int mSentenceCounter = 0;
+	private int mErrorCounter = 0;
 
 	private static String convertSecondToString(double seconds) {
 		int iseconds = (int) (Math.floor(seconds));
@@ -100,13 +107,19 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	}
 
 	public void setOutput(String port, WritablePipe pipe) {
-		result = pipe;
+		if ("result".equals(port)) {
+			result = pipe;
+		} else if ("status".equals(port)) {
+			status = pipe;
+		}
 	}
 
 	@Override
 	public void setOption(QName name, RuntimeValue value) {
 		if ("output-dir".equals(name.getLocalName())) {
 			mOutputDirOpt = value.getString();
+		} else if ("temp-dir".equals(name.getLocalName())) {
+			mTempDirOpt = value.getString();
 		} else
 			super.setOption(name, value);
 	}
@@ -115,15 +128,15 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		source.resetReader();
 		config.resetReader();
 		result.resetWriter();
+		status.resetWriter();
 	}
 
 	public void traverse(XdmNode node, SSMLtoAudio pool) throws SynthesisException {
 		if (SentenceTag.equals(node.getNodeName())) {
-			pool.dispatchSSML(node);
-			if (++mSentenceCounter % 10 == 0){
+			if (!pool.dispatchSSML(node))
+				mErrorCounter++;
+			if (++mSentenceCounter % 10 == 0)
 				pool.endSection();
-				mSentenceCounter = 0;
-			}
 		} else {
 			XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
 			while (iter.hasNext()) {
@@ -155,34 +168,49 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			log = new TTSLogImpl();
 		} else
 			log = new TTSLogEmpty();
-
-		String tmpDir = cr.getAllProperties().get("org.daisy.pipeline.tts.audio.tmpdir");
-		if (tmpDir == null)
-			tmpDir = System.getProperty("java.io.tmpdir");
-		File audioOutputDir = null;
-		do {
-			String audioDir = tmpDir + "/";
-			for (int k = 0; k < 2; ++k)
-				audioDir += Long.toString(mRandGenerator.nextLong(), 32);
-			audioOutputDir = new File(audioDir);
-		} while (audioOutputDir.exists());
-		audioOutputDir.mkdir();
+		File audioOutputDir; {
+			if (mTempDirOpt != null && !mTempDirOpt.isEmpty()) {
+				try {
+					audioOutputDir = new File(new URI(mTempDirOpt));
+				} catch (URISyntaxException e) {
+					throw new RuntimeException("temp-dir option invalid: " + mTempDirOpt);
+				}
+				if (audioOutputDir.exists())
+					throw new RuntimeException("temp-dir option must be a non-existing directory: "+mTempDirOpt);
+			} else {
+				String tmpDir = cr.getAllProperties().get("org.daisy.pipeline.tts.audio.tmpdir");
+				if (tmpDir == null)
+					tmpDir = System.getProperty("java.io.tmpdir");
+				do {
+					String audioDir = tmpDir + "/";
+					for (int k = 0; k < 2; ++k)
+						audioDir += Long.toString(mRandGenerator.nextLong(), 32);
+					audioOutputDir = new File(audioDir);
+				} while (audioOutputDir.exists());
+			}
+		}
+		audioOutputDir.mkdirs();
 		audioOutputDir.deleteOnExit();
 
 		SSMLtoAudio ssmltoaudio = new SSMLtoAudio(audioOutputDir, mTTSRegistry, this,
 		        mAudioBufferTracker, mRuntime.getProcessor(), mURIresolver, configExt, log);
 
 		Iterable<SoundFileLink> soundFragments = Collections.EMPTY_LIST;
+		mErrorCounter = 0;
+		mSentenceCounter = 0;
 		try {
 			while (source.moreDocuments()) {
 				traverse(getFirstChild(source.read()), ssmltoaudio);
 				ssmltoaudio.endSection();
 			}
 			Iterable<SoundFileLink> newfrags = ssmltoaudio.blockingRun(mAudioServices);
+			mErrorCounter += ssmltoaudio.getErrorCount();
 			soundFragments = Iterables.concat(soundFragments, newfrags);
 		} catch (SynthesisException e) {
 			mRuntime.error(e);
 			return;
+		} catch (EncodingException e) {
+			throw new XProcException(ENCODING_ERROR, step.getNode(), e, e.getMessage());
 		} catch (InterruptedException e) {
 			mRuntime.error(e);
 			return;
@@ -226,6 +254,24 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		printInfo("audio encoding unreleased bytes : "
 		        + mAudioBufferTracker.getUnreleasedEncondingMem());
 		printInfo("TTS unreleased bytes: " + mAudioBufferTracker.getUnreleasedTTSMem());
+
+		/*
+		 * Write status document
+		 */
+
+		tw = new TreeWriter(runtime);
+		tw.startDocument(runtime.getStaticBaseURI());
+		tw.addStartElement(StatusRootTag);
+		if (mErrorCounter == 0)
+			tw.addAttribute(Status_attr_result, "ok");
+		else {
+			tw.addAttribute(Status_attr_result, "error");
+			tw.addAttribute(Status_attr_success_rate,
+			                (int)Math.floor(100 * (1 - (double)mErrorCounter/mSentenceCounter)) + "%");
+		}
+		tw.addEndElement();
+		tw.endDocument();
+		status.write(tw.getResult());
 
 		/*
 		 * Write the log file

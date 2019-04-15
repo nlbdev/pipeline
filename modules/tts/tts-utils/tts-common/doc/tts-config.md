@@ -22,6 +22,9 @@ The following two properties must be set through
 
 `org.daisy.pipeline.tts.config`
 : File to load TTS configuration properties from at start-up
+: Defaults to the file "tts-default-config.xml" located in the "etc/"
+  directory in the base directory of the Pipeline installation, or
+  "/etc/opt/daisy-pipeline2/tts-default-config.xml" on Debian/Ubuntu.
 
 `org.daisy.pipeline.tts.host.protection`
 : Allow dynamic setting of properties
@@ -244,6 +247,22 @@ tts-adapter-attbin:
 : This engine is chosen over another engine that serves the same voice
   if this one has a higher priority.
 : Defaults to "7"
+
+### Qfrency
+
+`org.daisy.pipeline.tts.qfrency.path`
+: Path to "synth" executable
+: If not specified, will automatically look for "synth" in the
+  directories specified by the environment variable "PATH".
+
+`org.daisy.pipeline.tts.qfrency.address`
+: Address of the Qfrency server
+: Defaults to "localhost"
+
+`org.daisy.pipeline.tts.qfrency.priority`
+: This engine is chosen over another engine that serves the same voice
+  if this one has a higher priority.
+: Defaults to "2"
 
 ### LAME encoder
 

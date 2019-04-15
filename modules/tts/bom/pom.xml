@@ -10,7 +10,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>tts-modules-bom</artifactId>
-  <version>1.11.1-SNAPSHOT</version>
+  <version>1.12.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: TTS Modules BoM</name>
@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>css-speech</artifactId>
-        <version>2.1.2</version>
+        <version>2.1.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -31,12 +31,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-tts</artifactId>
-        <version>2.0.2</version>
+        <version>2.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-tts</artifactId>
-        <version>1.0.2</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -46,7 +46,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>ssml-to-audio</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -56,14 +56,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-acapela</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3</version>
       </dependency>
+      <!--
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-attbin</artifactId>
         <version>1.0.0</version>
       </dependency>
-      <!--
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-attnative</artifactId>
@@ -73,27 +73,27 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-espeak</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-osx</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-sapinative</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-qfrency</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-common</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -103,7 +103,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-helpers</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>

@@ -1,20 +1,19 @@
 package org.daisy.pipeline.tts.qfrency;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.TTSEngine;
-
-import com.google.common.base.Optional;
 
 public class QfrencyService extends AbstractTTSService {
 
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
 		// settings
-		String prop = "qfrency.path";
-		String qfrencyPath = System.getProperty(prop);
+		String prop = "org.daisy.pipeline.tts.qfrency.path";
+		String qfrencyPath = params.get(prop);
 		if (qfrencyPath == null) {
 			Optional<String> epath = BinaryFinder.find("synth");
 			if (!epath.isPresent()) {
@@ -24,10 +23,10 @@ public class QfrencyService extends AbstractTTSService {
 			}
 			qfrencyPath = epath.get();
 		}
-		String address = System.getProperty("qfrency.address");
+		String address = params.get("org.daisy.pipeline.tts.qfrency.address");
 		if (address==null)
 			address="localhost";
-		String priority = params.get("qfrency.priority");
+		String priority = params.get("org.daisy.pipeline.tts.qfrency.priority");
 		int intPriority = 2;
 		if (priority != null) {
 			try {

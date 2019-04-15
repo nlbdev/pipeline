@@ -44,6 +44,7 @@ import org.daisy.pipeline.tts.TTSTimeout.ThreadFreeInterrupter;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.Voice.MarkSupport;
 import org.daisy.pipeline.tts.VoiceManager;
+import org.daisy.pipeline.tts.synthesize.EncodingThread.EncodingException;
 import org.daisy.pipeline.tts.synthesize.TTSLog.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +101,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 	private Map<TTSService, CompiledStylesheet> mSSMLtransformers;
 	private Map<String, String> mProperties;
 	private TTSLog mTTSlog;
+	private int mErrorCounter;
 
 	public SSMLtoAudio(File audioDir, TTSRegistry ttsregistry, IPipelineLogger logger,
 	        AudioBufferTracker audioBufferTracker, Processor proc, URIResolver uriResolver,
@@ -218,12 +220,14 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 		//get a voice supporting SSML marks (so far as they are supported by the engine)
 		Voice firstVoice = null;
+		int timeoutSecs = 5;
 		try {
-			timeout.enableForCurrentThread(2);
+			timeout.enableForCurrentThread(timeoutSecs);
 			for (Voice v : engine.getAvailableVoices()) {
 				if (engine.endingMark() == null
 				        || v.getMarkSupport() != MarkSupport.MARK_NOT_SUPPORTED) {
 					firstVoice = v;
+					break;
 				}
 			}
 			if (firstVoice == null) {
@@ -233,6 +237,13 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				ServerLogger.error(err);
 				return null;
 			}
+		} catch (InterruptedException e) {
+			String err = "Timeout while retrieving the voices of "
+			        + TTSServiceUtil.displayName(service) + " (exceeded " + timeoutSecs
+			        + " seconds)\n" + getStack(e);
+			mTTSlog.addGeneralError(ErrorCode.WARNING, err);
+			ServerLogger.error(err);
+			return null;
 		} catch (Exception e) {
 			String err = TTSServiceUtil.displayName(service)
 			        + " failed to return voices, cause: " + e.getMessage() + ": "
@@ -348,8 +359,11 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 	/**
 	 * The SSML is assumed to be pushed in document order.
+	 *
+	 * @param ssml The input SSML
+	 * @return true when the SSML was successfully converted to speech, false when there was an error
 	 **/
-	public void dispatchSSML(XdmNode ssml) throws SynthesisException {
+	public boolean dispatchSSML(XdmNode ssml) throws SynthesisException {
 		String voiceEngine = ssml.getAttributeValue(Sentence_attr_select1);
 		String voiceName = ssml.getAttributeValue(Sentence_attr_select2);
 		String gender = ssml.getAttributeValue(Sentence_attr_gender);
@@ -383,7 +397,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			                + new Voice(voiceEngine, voiceName)
 			                + " or providing the language '" + lang + "'"));
 			endSection();
-			return;
+			return false;
 		}
 
 		TTSEngine newSynth = mVoiceManager.getTTS(voice);
@@ -396,7 +410,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			        "could not find any TTS engine for the voice "
 			                + new Voice(voiceEngine, voiceName)));
 			endSection();
-			return;
+			return false;
 		}
 
 		if (!exactMatch[0]) {
@@ -437,6 +451,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			listOfSections.add(mCurrentSection);
 		}
 		mCurrentSection.sentences.add(new Sentence(newSynth, voice, ssml));
+		return true;
 	}
 
 	public void endSection() {
@@ -444,7 +459,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 	}
 
 	public Iterable<SoundFileLink> blockingRun(AudioServices audioServices)
-	        throws SynthesisException, InterruptedException {
+	        throws SynthesisException, InterruptedException, EncodingException {
 
 		//SSML mark splitter shared by the threads:
 		SSMLMarkSplitter ssmlSplitter = new StructuredSSMLSplitter(mProc);
@@ -521,18 +536,34 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		for (int j = 0; j < tpt.length; ++j) {
 			fragments[j] = tpt[j].getSoundFragments();
 		}
+		for (int j = 0; j < tpt.length; ++j) {
+			mErrorCounter += tpt[j].getErrorCount();
+		}
 
 		//send END notifications and wait for the encoding threads to finish
 		mLogger.printInfo("Text-to-speech finished. Waiting for audio encoding to finish...");
 		for (int k = 0; k < encodingTh.length; ++k) {
 			pcmQueue.add(ContiguousPCM.EndOfQueue);
 		}
-		for (int j = 0; j < encodingTh.length; ++j)
-			encodingTh[j].waitToFinish();
+		for (int j = 0; j < encodingTh.length; ++j) {
+			try {
+				encodingTh[j].waitToFinish();
+			} catch (EncodingException e) {
+				while (++j < encodingTh.length)
+					// FIXME: interrupt instead of waiting
+					try { encodingTh[j].waitToFinish(); }
+					catch (EncodingException _e) {}
+				throw e;
+			}
+		}
 
 		mLogger.printInfo("Audio encoding finished.");
 
 		return Iterables.concat(fragments);
+	}
+
+	int getErrorCount() {
+		return mErrorCounter;
 	}
 
 	@Override
