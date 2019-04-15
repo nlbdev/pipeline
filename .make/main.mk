@@ -53,10 +53,14 @@ $(TARGET_DIR)/maven.mk : $(TARGET_DIR)/maven-modules $(TARGET_DIR)/maven-aggrega
 	echo "MAVEN_MODULES := \$$(shell cat $< 2>/dev/null)" >>$@
 	echo "export MVN_LOCAL_REPOSITORY" >>$@
 	cat $(word 2,$^) | while read -r module; do \
-		echo "aggregators : $$module/pom.xml"; \
+		echo "ifeq (\$$(shell test -e $$module/pom.xml && echo yes), yes)" && \
+		echo "aggregators : $$module/pom.xml" && \
+		echo "endif"; \
 	done >>$@
 	cat $< | while read -r module; do \
-		echo "poms : $$module/pom.xml"; \
+		echo "ifeq (\$$(shell test -e $$module/pom.xml && echo yes), yes)" && \
+		echo "poms : $$module/pom.xml" && \
+		echo "endif"; \
 	done >>$@
 	cat $< | while read -r module; do \
 		pom=$$module/pom.xml; \
@@ -186,6 +190,7 @@ $(TARGET_DIR)/.gradle-settings/conf/settings.xml : $(MVN_SETTINGS)
 	          RELEASE_DIRS="$$(for x in $(GITREPOS); do [ -e $$x/bom/pom.xml ] || [ -e $$x/maven/bom/pom.xml ] && echo $$x; done )" \
 	          OUTPUT_BASEDIR="$(TARGET_DIR)/mk" \
 	          OUTPUT_FILENAME=".deps.mk" \
+	          VERBOSE="$$([[ -n $${VERBOSE+x} ]] && echo true || echo false)" \
 	          >/dev/null \
 	; then \
 		rm -f $$(for m in $$MAVEN_MODULES; do echo "$(TARGET_DIR)/mk/$$m/.deps.mk"; done) && \
@@ -232,7 +237,7 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 	# assuming that command grouping is not needed in this case, so we just print the commands
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) -ns EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
@@ -253,7 +258,7 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 else
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) -ns EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
@@ -286,12 +291,22 @@ clean-eclipse :
 	rm -rf .metadata
 
 ifeq ($(MAKECMDGOALS), clean)
-include $(shell test -d $(TARGET_DIR)/mk && find $(TARGET_DIR)/mk -name .deps.mk)
+include $(shell for f in $(addsuffix /.deps.mk,$(addprefix $(TARGET_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS))); do \
+                test -e $$f && echo $$f; done)
 else
 ifeq ($(MAKECMDGOALS), clean-eclipse)
-include $(shell test -d $(TARGET_DIR)/mk && find $(TARGET_DIR)/mk -name .deps.mk)
+include $(shell for f in $(addsuffix /.deps.mk,$(addprefix $(TARGET_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS))); do \
+                test -e $$f && echo $$f; done)
 else
 -include $(addsuffix /.deps.mk,$(addprefix $(TARGET_DIR)/mk/,$(MODULES) $(MAVEN_AGGREGATORS)))
+endif
+endif
+
+ifdef SKIP_GROUP_EVAL_TARGET
+.SILENT:
+else
+ifndef VERBOSE
+.SILENT:
 endif
 endif
 
