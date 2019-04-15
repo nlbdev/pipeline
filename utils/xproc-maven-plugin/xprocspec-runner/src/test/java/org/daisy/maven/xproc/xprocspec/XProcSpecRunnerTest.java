@@ -9,8 +9,6 @@ import java.util.ServiceLoader;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 
-import org.daisy.maven.xproc.api.XProcEngine;
-import org.daisy.maven.xproc.calabash.Calabash;
 import org.daisy.maven.xproc.xprocspec.XProcSpecRunner.Reporter;
 
 import org.hamcrest.BaseMatcher;
@@ -52,7 +50,7 @@ public class XProcSpecRunnerTest {
 	
 	@Before
 	public void setup() {
-		xprocspecRunner = new XProcSpecRunner();
+		xprocspecRunner = ServiceLoader.load(XProcSpecRunner.class).iterator().next();
 		reportsDir = Files.createTempDir();
 		surefireReportsDir = Files.createTempDir();
 		tempDir = Files.createTempDir();
@@ -99,6 +97,8 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Failed tests:"                                                                          + "\n" +
 "  test_identity_broken"                                                                 + "\n" +
+"    Identity "                                                                          + "\n" +
+"     - theOptionOptionRequiredShouldHaveTheValueOptionRequiredvalue "                   + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 3, Failures: 1, Errors: 0, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_identity_broken.html").exists());
@@ -129,7 +129,9 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_non_existing"                                                                    + "\n" +
-"  non_existing_test: Calabash failed to execute XProc"                                  + "\n" +
+"     "                                                                                  + "\n" +
+"  non_existing_test"                                                                    + "\n" +
+"    Calabash failed to execute XProc "                                                  + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 2, Failures: 0, Errors: 2, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_non_existing.html").exists());
@@ -175,6 +177,7 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_foo_catalog"                                                                     + "\n" +
+"     "                                                                                  + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0"                                       + "\n"));
 		File catalog = new File(testsDir, "foo_catalog.xml");
@@ -211,14 +214,13 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_foo_java"                                                                        + "\n" +
+"     "                                                                                  + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0"                                       + "\n"));
 		stream.reset();
 		setup();
-		Calabash engine = (Calabash)ServiceLoader.load(XProcEngine.class).iterator().next();
-		engine.setConfiguration(new File(testsDir, "foo_implementation_java.xml"));
-		xprocspecRunner.setXProcEngine(engine);
 		xprocspecRunner.run(tests, reportsDir, surefireReportsDir, tempDir, null,
+		                    new File(testsDir, "foo_implementation_java.xml"),
 		                    new Reporter.DefaultReporter(new PrintStream(stream, true)));
 		assertThat(stream.toString(), matchesPattern(
 "-------------------------------------------------------"                                + "\n" +

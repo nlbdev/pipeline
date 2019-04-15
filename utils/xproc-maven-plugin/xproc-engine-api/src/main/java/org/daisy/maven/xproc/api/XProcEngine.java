@@ -8,10 +8,18 @@ import java.util.Map;
 public interface XProcEngine {
 	public void setCatalog(URL catalog);
 	public void setCatalog(File catalog);
+	public void setConfiguration(File config);
 	public void run(String pipeline,
 	                Map<String,List<String>> inputs,
 	                Map<String,String> outputs,
 	                Map<String,String> options,
 	                Map<String,Map<String,String>> parameters)
+			throws XProcExecutionException;
+	public void run(String pipeline,
+	                Map<String,List<String>> inputs,
+	                Map<String,String> outputs,
+	                Map<String,String> options,
+	                Map<String,Map<String,String>> parameters,
+	                Map<String,?> context)
 			throws XProcExecutionException;
 }

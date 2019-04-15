@@ -1,11 +1,5 @@
 package org.daisy.maven.xproc.xprocspec;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableMap;
-import static com.google.common.io.Files.asByteSink;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -26,6 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -34,12 +30,17 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
+import static com.google.common.io.Files.asByteSink;
+
 import net.sf.saxon.xpath.XPathFactoryImpl;
 
 import org.daisy.maven.xproc.api.XProcExecutionException;
 import org.daisy.maven.xproc.api.XProcEngine;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -64,20 +65,6 @@ public class XProcSpecRunner {
 	)
 	public void setXProcEngine(XProcEngine engine) {
 		this.engine = engine;
-	}
-	
-	@Activate
-	protected void activate() {
-		if (engine == null) {
-			
-			// We are not in an OSGi environment, try with ServiceLoader
-			ServiceLoader<XProcEngine> xprocEngines = ServiceLoader.load(XProcEngine.class);
-			try {
-				engine = xprocEngines.iterator().next();
-			} catch (NoSuchElementException e) {
-				throw new RuntimeException("Could not find any XProc engines on the classpath.");
-			}
-		}
 	}
 	
 	private static final Map<String,String> XPROCSPEC_NS = new HashMap<String,String>(); {
@@ -113,17 +100,16 @@ public class XProcSpecRunner {
 	                   File surefireReportsDir,
 	                   File tempDir,
 	                   File catalogFile,
+	                   File configFile,
 	                   Reporter reporter) {
 		
-		if (engine == null)
-			activate();
 		URL catalog = null;
 		if (catalogFile != null)
 			try {
 				catalog = catalogFile.toURL(); }
 			catch (MalformedURLException e) {
 				throw new RuntimeException(e); }
-			
+		
 		// register catalog file that contains http://www.daisy.org/xprocspec/custom-assertion-steps.xpl
 		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
 			
@@ -142,6 +128,8 @@ public class XProcSpecRunner {
 		if (catalog != null)
 			engine.setCatalog(catalog);
 		
+		engine.setConfiguration(configFile);
+		
 		// register Java implementation of px:message
 		// FIXME: make a generic step that can be used by all XProc engines
 		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
@@ -159,8 +147,8 @@ public class XProcSpecRunner {
 			}
 		} else if (engine.getClass().getName().equals("org.daisy.maven.xproc.pipeline.DaisyPipeline2")) {
 			
-			// assumes we are running inside OSGi
-			// org.daisy.maven.xproc.xprocspec.logging.pipeline.impl.MessageStepProvider registered through declarative services
+			// org.daisy.maven.xproc.xprocspec.logging.pipeline.impl.MessageStepProvider registered
+			// through declarative services or SPI
 		}
 		
 		URI xprocspec = asURI(XProcSpecRunner.class.getResource("/content/xml/xproc/xprocspec.xpl"));
@@ -206,7 +194,8 @@ public class XProcSpecRunner {
 			                                             "enable-log", "false");
 			reporter.running(testName, focusTests.contains(testName));
 			try {
-				engine.run(xprocspec.toASCIIString(), input, output, options, null);
+				engine.run(xprocspec.toASCIIString(), input, output, options, null,
+				           ImmutableMap.of("XPROCSPEC_TEST_ID", testName));
 				if (!surefireReport.exists()) {
 					totalRun += 1;
 					totalErrors += 1;
@@ -217,11 +206,17 @@ public class XProcSpecRunner {
 					Integer errors = (Integer)evaluateXPath(surefireReport, "number(/testsuites/@errors)", null, Integer.class);
 					Integer skipped = (Integer)evaluateXPath(surefireReport, "sum(/testsuites/*/number(@skipped))", null, Integer.class);
 					Long time = (Long)evaluateXPath(surefireReport, "number(/testsuites/@time)", null, Long.class);
+					String shortDesc = (String)evaluateXPath(surefireReport,
+					                                         "string-join("
+					                                         + "/testsuites/testsuite[testcase[@status='FAILED']]"
+					                                         + "/(string(@name),testcase[@status='FAILED']/@name/concat(' - ',.))"
+					                                         + ",'\n')",
+					                                         null, String.class);
 					totalRun += run;
 					totalFailures += failures;
 					totalErrors += errors;
 					totalSkipped += skipped;
-					reporter.result(run, failures, errors, skipped, time, null, null); }}
+					reporter.result(run, failures, errors, skipped, time, shortDesc, null); }}
 			catch (XProcExecutionException e) {
 				totalRun += 1;
 				totalErrors += 1;
@@ -267,10 +262,20 @@ public class XProcSpecRunner {
 		return totalErrors == 0 && totalFailures == 0;
 	}
 	
+	public boolean run(Map<String,File> tests,
+	                   File reportsDir,
+	                   File surefireReportsDir,
+	                   File tempDir,
+	                   File catalogFile,
+	                   Reporter reporter) {
+		return run(tests, reportsDir, surefireReportsDir, tempDir, catalogFile, null, reporter);
+	}
+	
 	public boolean run(File testsDir,
 	                   File reportsDir,
 	                   File surefireReportsDir,
 	                   File tempDir,
+	                   File configFile,
 	                   Reporter reporter) {
 		
 		Map<String,File> tests = new HashMap<String,File>();
@@ -280,9 +285,17 @@ public class XProcSpecRunner {
 					.replaceAll("\\.xprocspec$", "")
 					.replaceAll("[\\./\\\\]", "_"),
 				file);
-		File catalog = new File(testsDir, "catalog.xml");
-		if (!catalog.exists()) catalog = null;
-		return run(tests, reportsDir, surefireReportsDir, tempDir, catalog, reporter);
+		File catalogFile = new File(testsDir, "catalog.xml");
+		if (!catalogFile.exists()) catalogFile = null;
+		return run(tests, reportsDir, surefireReportsDir, tempDir, catalogFile, configFile, reporter);
+	}
+	
+	public boolean run(File testsDir,
+	                   File reportsDir,
+	                   File surefireReportsDir,
+	                   File tempDir,
+	                   Reporter reporter) {
+		return run(testsDir, reportsDir, surefireReportsDir, tempDir, null, reporter);
 	}
 	
 	public static interface Reporter {
@@ -309,7 +322,10 @@ public class XProcSpecRunner {
 			}
 			
 			private void println(String format, Object... args) {
-				stream.format(format + "\n", args);
+				if (args.length > 0)
+					stream.format(format + "\n", args);
+				else
+					stream.print(format + "\n");
 			}
 			
 			public void init() {
@@ -331,9 +347,13 @@ public class XProcSpecRunner {
 				        (failures > 0 || errors > 0) ? " <<< FAILURE!" : "");
 				List<String> summary = errors > 0 ? testsInError : failures > 0 ? failedTests : null;
 				if (summary != null) {
-					if (shortDesc != null)
-						summary.add(currentTest + ": " + shortDesc);
-					else
+					if (shortDesc != null) {
+						String formatted = "";
+						for (String s : shortDesc.split("\\r?\\n"))
+							for (String ss : fillParagraph(s, 86).split("\\r?\\n"))
+								formatted += "\n    " + ss;
+						summary.add(currentTest + formatted);
+					} else
 						summary.add(currentTest); }
 				if (longDesc != null)
 					println(longDesc);
@@ -429,5 +449,34 @@ public class XProcSpecRunner {
 				throw new RuntimeException("Cannot evaluate to a " + type.getName()); }
 		catch (Exception e) {
 			throw new RuntimeException("Exception occured during XPath evaluation.", e); }
+	}
+	
+	private static String fillParagraph(String string, int maxColumns) {
+		String prefix = "";
+		Matcher m = Pattern.compile("^( *-? *)[^ -].*$").matcher(string);
+		if (m.matches())
+			prefix = m.group(1).replace('-',' ');
+		StringBuilder b = new StringBuilder();
+		int col = 0;
+		boolean first = true;
+		for (String word : string.split("\\s+")) {
+			while (true) {
+				if (col == 0) {
+					if (!first)
+						b.append(prefix);
+					col += prefix.length();
+				}
+				if (col + word.length() <= maxColumns) {
+					b.append(word).append(" ");
+					col += (word.length() + 1);
+					break;
+				} else {
+					b.append("\n");
+					col = 0;
+				}
+			}
+			first = false;
+		}
+		return b.toString();
 	}
 }
