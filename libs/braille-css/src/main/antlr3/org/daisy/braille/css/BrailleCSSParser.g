@@ -17,10 +17,11 @@ import CSSParser;
 }
 
 // @Override
-// Added volume and text_transform_def
+// Added volume, text_transform_def and vendor_atrule
 unknown_atrule
     : volume
     | text_transform_def
+    | vendor_atrule
     | ATKEYWORD S* LCURLY any* RCURLY -> INVALID_ATSTATEMENT
     ;
 
@@ -41,6 +42,17 @@ volume_area
 text_transform_def
     : TEXT_TRANSFORM S+ IDENT S* LCURLY S* declarations RCURLY
         -> ^(TEXT_TRANSFORM IDENT declarations)
+    ;
+
+vendor_atrule
+    : VENDOR_ATRULE S* LCURLY S* declarations any_atrule* RCURLY
+      -> ^(VENDOR_ATRULE declarations ^(SET any_atrule*))
+    ;
+
+// not using atstatement because that does not include as much
+any_atrule
+    : ATKEYWORD S* LCURLY S* declarations any_atrule* RCURLY S*
+      -> ^(ATKEYWORD declarations ^(SET any_atrule*))
     ;
 
 // @Override
@@ -124,16 +136,32 @@ inlinestyle
     : S* declarations (inlineset S*)* -> ^(INLINESTYLE ^(RULE declarations) inlineset*)
     ;
 
+inline_pagestyle
+    : S* declarations ( (margin_rule | relative_page_pseudo) S*)*
+      -> ^(INLINESTYLE
+            ^(RULE declarations)
+            margin_rule*
+            relative_page_pseudo*
+         )
+    ;
+
+inline_volumestyle
+    : S* declarations ( (inline_volume_area | relative_volume_pseudo) S*)*
+      -> ^(INLINESTYLE
+            ^(RULE declarations)
+            inline_volume_area*
+            relative_volume_pseudo*
+         )
+    ;
+
 // @Override
 inlineset
-    : relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(RULE relative_or_chained_selector declarations)
+    : relative_or_chained_selector LCURLY S* declarations (anonymous_page S*)* RCURLY
+      -> ^(AMPERSAND ^(RULE relative_or_chained_selector declarations anonymous_page*))
     | text_transform_def
-
-// TODO: allowed as well but skip for now:
-//  | anonymous_page // page at-rule
-
-// TODO: need a slightly different format that allows @page inside @begin and @end:
-//  | volume // volume at-rule
+    | anonymous_page
+    | inline_volume
+    | vendor_atrule
     ;
 
 // FIXME: Note that in the braille CSS specification the second AMPERSAND is optional. This
@@ -141,13 +169,30 @@ inlineset
 // between a term and the start of a selector, however I can't find a way to implement this in
 // ANTLR, while keeping the semicolon optional.
 relative_or_chained_selector
-    : ( AMPERSAND selector | AMPERSAND! S!* combinator selector ) (combinator selector)*
+    : ( AMPERSAND! selector | AMPERSAND! S!* combinator selector ) (combinator selector)*
     ;
 
 anonymous_page
-    : PAGE page_pseudo? S*
-        LCURLY S*
-        declarations margin_rule*
-        RCURLY
-        -> ^(PAGE page_pseudo? declarations ^(SET margin_rule*))
+    : PAGE page_pseudo? S* LCURLY S* declarations margin_rule* RCURLY
+      -> ^(PAGE page_pseudo? declarations ^(SET margin_rule*))
+    ;
+
+relative_page_pseudo
+    : AMPERSAND page_pseudo S* LCURLY S* declarations margin_rule* RCURLY
+      -> ^(AMPERSAND ^(PAGE page_pseudo declarations ^(SET margin_rule*)))
+    ;
+
+inline_volume
+    : VOLUME S* (volume_pseudo S*)? LCURLY S* declarations inline_volume_area* RCURLY
+      -> ^(VOLUME volume_pseudo? declarations ^(SET inline_volume_area*))
+    ;
+
+relative_volume_pseudo
+    : AMPERSAND volume_pseudo S* LCURLY S* declarations inline_volume_area* RCURLY
+      -> ^(AMPERSAND ^(VOLUME volume_pseudo declarations ^(SET inline_volume_area*)))
+    ;
+
+inline_volume_area
+    : VOLUME_AREA S* LCURLY S* declarations (anonymous_page S*)* RCURLY S*
+      -> ^(VOLUME_AREA declarations anonymous_page*)
     ;

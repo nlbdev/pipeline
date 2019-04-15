@@ -13,10 +13,12 @@ import java.util.Arrays;
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.MediaQuery;
+import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.RuleMargin;
+import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.ElementName;
@@ -52,6 +54,7 @@ unknown_atrule returns [RuleBlock<?> stmnt]
 @init { $stmnt = null; }
     : (v=volume) { $stmnt = v; }
     | (tt=text_transform_def) { $stmnt = tt; }
+    | (aar=any_atrule) { $stmnt = aar; }
     | INVALID_ATSTATEMENT { gCSSTreeParser.debug("Skipping invalid at statement"); }
     ;
 
@@ -59,19 +62,25 @@ volume returns [RuleVolume stmnt]
 @init {
     String pseudo = null;
     String pseudoFuncArg = null;
+    CommonTree pos = null;
 }
     : ^(VOLUME
         ( ^(PSEUDOCLASS i=IDENT)
-           { pseudo = i.getText(); }
+           { pos = i; pseudo = i.getText(); }
         | ^(PSEUDOCLASS f=FUNCTION n=NUMBER)
-           { pseudo = f.getText();
+           { pos = f;
+             pseudo = f.getText();
              pseudoFuncArg = n.getText(); }
         )?
         decl=declarations
         areas=volume_areas
       )
       {
-        $stmnt = preparator.prepareRuleVolume(decl, areas, pseudo, pseudoFuncArg);
+        try {
+            $stmnt = preparator.prepareRuleVolume(decl, areas, pseudo, pseudoFuncArg);
+        } catch (IllegalArgumentException e) {
+            gCSSTreeParser.error(pos, e.getMessage());
+        }
       }
     ;
 
@@ -91,10 +100,18 @@ volume_areas returns [List<RuleVolumeArea> list]
     ;
 
 volume_area returns [RuleVolumeArea area]
+@init {
+    List<RulePage> pages = null;
+}
     : ^( a=VOLUME_AREA
-         decl=declarations )
+         decl=declarations
+         // nested anonymous page rules allowed in case of inline style
+         (p=page {
+             if (pages == null) pages = new ArrayList<RulePage>();
+             pages.add(p);
+         })*)
       {
-        $area = preparator.prepareRuleVolumeArea(a.getText().substring(1), decl);
+        $area = preparator.prepareRuleVolumeArea(a.getText().substring(1), decl, pages);
       }
     ;
 
@@ -102,6 +119,27 @@ text_transform_def returns [RuleTextTransform def]
     : ^( TEXT_TRANSFORM n=IDENT decl=declarations ) {
           $def = preparator.prepareRuleTextTransform(n.getText(), decl);
       }
+    ;
+
+any_atrule returns [AnyAtRule stmnt]
+@init {
+    List<AnyAtRule> childrules = new ArrayList<AnyAtRule>();
+}
+    : ^(  at=(VENDOR_ATRULE|ATKEYWORD)
+          decl=declarations
+          ^( SET ( r=any_atrule { childrules.add(r); } )* )
+        ) {
+          String name = at.getText().substring(1);
+          AnyAtRule aar = new AnyAtRule(name);
+          if (decl != null) aar.addAll(decl);
+          if (childrules != null) aar.addAll(childrules);
+          if (aar.isEmpty())
+              gCSSTreeParser.debug("Empty AnyAtRule was omited");
+          else {
+              gCSSTreeParser.info("Create @" + name + " as with:\n{}", aar);
+              $stmnt = aar;
+          }
+        }
     ;
 
 // @Override
@@ -221,14 +259,15 @@ relative_selector returns [CombinedSelector combinedSelector]
  * Rule with selector relative to a certain element. An ampersand indicates that the relative
  * selector should be "chained" onto the element selector (cfr. the "parent reference" in SASS).
  */
-relative_rule returns [RuleSet rs]
+relative_rule returns [RuleBlock<? extends Rule<?>> rb]
 @init {
     boolean attach = false;
     List<Selector> sel = new ArrayList<Selector>();
     boolean invalid = false;
+    List<RulePage> pages = null;
 }
     : ^(RULE
-        ((AMPERSAND s=selector) {
+        ((s=selector) {
             attach = true;
             // may not start with a type selector
             if (s.size() > 0 && s.get(0) instanceof ElementName) {
@@ -244,20 +283,35 @@ relative_rule returns [RuleSet rs]
             sel.add(s.setCombinator(c));
         })*
         decl=declarations
+        (p=page {
+            if (pages == null) pages = new ArrayList<RulePage>();
+            pages.add(p);
+        })*
       ) {
           if (!invalid) {
-              CombinedSelector cs = (CombinedSelector)gCSSTreeParser.rf.createCombinedSelector().unlock();
-              Selector first = (Selector)gCSSTreeParser.rf.createSelector().unlock();
-              first.add(gCSSTreeParser.rf.createElementDOM(((SimplePreparator)preparator).elem, false)); // inlinePriority does not matter
-              if (attach) {
-                  first.addAll(sel.get(0));
-                  sel.remove(0);
+              if (pages != null) {
+                  // Anonymous pages present.
+                  // We can't create a RuleSet, so this style won't be picked up by the DOM Analyzer.
+                  // Anonymous pages inside relative rules are only supported when a single style element is parsed
+                  // (when the BrailleCSSParserFactory.parseInlineStyle() function is called).
+                  InlineStyle.RuleRelativeBlock rrb = new InlineStyle.RuleRelativeBlock(sel, decl);
+                  for (RulePage rp : pages) rrb.add(rp);
+                  $rb = rrb;
+              } else {
+                  CombinedSelector cs = (CombinedSelector)gCSSTreeParser.rf.createCombinedSelector().unlock();
+                  Selector first = (Selector)gCSSTreeParser.rf.createSelector().unlock();
+                  first.add(gCSSTreeParser.rf.createElementDOM(((SimplePreparator)preparator).elem, false)); // inlinePriority does not matter
+                  if (attach) {
+                      first.addAll(sel.get(0));
+                      sel.remove(0);
+                  }
+                  cs.add(first);
+                  cs.addAll(sel);
+                  RuleSet rs = gCSSTreeParser.rf.createSet();
+                  rs.replaceAll(decl);
+                  rs.setSelectors(Arrays.asList(cs));
+                  $rb = rs;
               }
-              cs.add(first);
-              cs.addAll(sel);
-              $rs = gCSSTreeParser.rf.createSet();
-              $rs.replaceAll(decl);
-              $rs.setSelectors(Arrays.asList(cs));
           }
       }
     ;
@@ -293,18 +347,21 @@ inlineblock returns [RuleBlock<?> b]
     : ^(RULE decl=declarations) {
           $b = preparator.prepareInlineRuleSet(decl, null);
       }
-    | rr=relative_rule { $b = rr; }
     | tt=text_transform_def { $b = tt; }
-
-// TODO: allowed as well but skip for now:
-//  | p=page { $b = p; }
-
-// TODO: need a slightly different format that allows @page inside @begin and @end:
-//  | v=volume { $b = v; }
+    | p=page { $b = p; }
+    | v=volume { $b = v; }
+    | pm=margin { $b = pm; }
+    | va=volume_area { $b = va; }
+    | aa=any_atrule { $b = aa; }
+    | ^(AMPERSAND
+         (rr=relative_rule { $b = rr; }
+         |p=page { $b = new InlineStyle.RuleRelativePage(p); } // relative @page pseudo rule
+         |v=volume { $b = new InlineStyle.RuleRelativeVolume(v); } // relative @volume pseudo rule
+         ))
     ;
 
 // TODO: move to CSSTreeParser.g
-page returns [RuleBlock<?> stmnt]
+page returns [RulePage stmnt]
 @init {
     List<RuleSet> rules = null;
     List<RuleMargin> margins = null;
@@ -324,6 +381,6 @@ page returns [RuleBlock<?> stmnt]
               })*
           )
       ) {
-          $stmnt = preparator.prepareRulePage(decl, margins, null, pseudo);
+          $stmnt = (RulePage)preparator.prepareRulePage(decl, margins, null, pseudo);
       }
     ;
