@@ -12,10 +12,11 @@ const (
 	JobStatusTemplate = `
 Job Id: {{.Data.Id }}
 Status: {{.Data.Status}}
-Priority: {{.Data.Priority}}
+{{if .Running}}Progress: {{.Data.Messages.Progress | printAsPercentage}}
+{{end}}Priority: {{.Data.Priority}}
 {{if .Verbose}}Messages:
-{{range .Data.Messages}}
-({{.Sequence}})[{{.Level}}]      {{.Content}}
+{{range .Data.Messages.Message}}
+[{{.Level}}]	{{.Content}}
 {{end}}
 {{end}}
 `
@@ -39,12 +40,14 @@ Pipeline authentication:        {{.Authentication}}
 type printableJob struct {
 	Data    pipeline.Job
 	Verbose bool
+	Running bool
 }
 
 func AddJobStatusCommand(cli *Cli, link PipelineLink) {
 	printable := &printableJob{
 		Data:    pipeline.Job{},
 		Verbose: false,
+		Running: false,
 	}
 	fn := func(args ...string) (interface{}, error) {
 		job, err := link.Job(args[0])
@@ -52,6 +55,9 @@ func AddJobStatusCommand(cli *Cli, link PipelineLink) {
 			return nil, err
 		}
 		printable.Data = job
+		if (job.Status == "RUNNING") {
+			printable.Running = true
+		}
 		return printable, nil
 	}
 	cmd := newCommandBuilder("status", "Returns the status of the job with id JOB_ID").
@@ -87,7 +93,8 @@ func AddResultsCommand(cli *Cli, link PipelineLink) {
 		if err != nil {
 			return
 		}
-		if err = link.Results(args[0], wc); err != nil {
+		ok, err := link.Results(args[0], wc)
+		if err != nil {
 			return
 		}
 		if err = wc.Close(); err != nil {
@@ -98,9 +105,13 @@ func AddResultsCommand(cli *Cli, link PipelineLink) {
 		if zipped {
 			extra = "zipfile "
 		}
-		return fmt.Sprintf("Results stored into %s%v\n", extra, outputPath), err
+		if ok {
+			return fmt.Sprintf("Results stored into %s%v\n", extra, outputPath), err
+		} else {
+			return fmt.Sprintf("No results available for job %s\n", args[0]), err
+		}
 	}).buildWithId(cli)
-	cmd.AddOption("output", "o", "Directory where to store the results", func(name, folder string) error {
+	cmd.AddOption("output", "o", "Directory where to store the results", "", "DIRECTORY", func(name, folder string) error {
 		outputPath = folder
 		return nil
 	}).Must(true)
@@ -136,7 +147,7 @@ func AddLogCommand(cli *Cli, link PipelineLink) {
 	cmd := newCommandBuilder("log", "Stores the results from a job").
 		withCall(fn).buildWithId(cli)
 
-	cmd.AddOption("output", "o", "Write the log lines into the file provided instead of printing it", func(name, file string) error {
+	cmd.AddOption("output", "o", "Write the log lines into the file provided instead of printing it", "", "", func(name, file string) error {
 		outputPath = file
 		return nil
 	})
