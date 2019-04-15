@@ -1,6 +1,8 @@
 package org.daisy.pipeline.client.models;
 
 import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,13 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.Stack;
 import java.util.TreeMap;
 
 import org.daisy.pipeline.client.Pipeline2Exception;
 import org.daisy.pipeline.client.Pipeline2Logger;
 import org.daisy.pipeline.client.filestorage.JobStorage;
 import org.daisy.pipeline.client.filestorage.JobValidator;
+import org.daisy.pipeline.client.utils.Files;
 import org.daisy.pipeline.client.utils.XML;
 import org.daisy.pipeline.client.utils.XPath;
 import org.w3c.dom.Document;
@@ -29,28 +31,35 @@ import org.w3c.dom.Node;
  */
 public class Job implements Comparable<Job> {
 
-	public enum Status { IDLE, RUNNING, DONE, ERROR, VALIDATION_FAIL };
+	public enum Status { IDLE, RUNNING, SUCCESS, ERROR, FAIL };
 	public enum Priority { high, medium, low };
 
-	private String id;
-	private String href; // xs:anyURI
-	private Status status;
-	private Priority priority;
-	private String scriptHref; // for job request xml documents
-	private Script script;
-	private String nicename;
-	private String description;
-	private String batchId;
-	private List<Argument> argumentInputs; // used when there's no script given
-	private List<Argument> argumentOutputs; // used when there's no script given
-	private List<Callback> callback;
-	private JobMessages messages;
-	private Node messagesNode;
-	private String logHref;
-	private Result result; // "all results"-zip
-	private SortedMap<Result,List<Result>> results; // "individual results"-zips as keys, individual files as values
+	private String id; // @id, text, required in job, not present in jobRequest
+	private String href; // @href, xsd:anyURI, required in job, not present in jobRequest
+	private Status status; // @status, required in job, not present in jobRequest
+	private Priority priority; // @priority, required in job, optional in jobRequest
+	private Integer queuePosition; // @queue-position, xsd:int, optional in job, not present in jobRequest
+	private String nicename; // nicename/text(), text, optional in both job and jobRequest
+	private String description; // text, not used in job or jobRequest, but can be useful when storing jobs, for instance as templates
+	private String batchId; // batchId/text(), text, optional in both job and jobRequest
+	
+	// script element optional for job, required (with only href) for jobRequest
+	private Script script; // <script>…</script>
+	
+	private List<Argument> argumentInputs; // in jobRequest: <input> | <option>, in job: script/input | script/option
+	private List<Argument> argumentOutputs; // in jobRequest: <output>, in job: script/output
+	
+	private List<Callback> callback; // <callback>, optional in jobRequest, not used in job
+	
+	private JobMessages messages; // optional in job, not used in jobRequest
+	private Node messagesNode; // for lazy loading of messages
+	private String logHref; // log/@href, xsd:anyURI, optional in job, not used in jobRequest
+	private Result result; // <results>, optional in job, not used in jobRequest, "all results"-zip
+	private SortedMap<Result,List<Result>> results; // results/result, optional in job, not used in jobRequest, "individual results"-zips as keys, individual files as values
 	private Node resultsNode;
 
+	private BigDecimal progress;
+	
 	private boolean lazyLoaded = false;
 	private Node jobNode = null;
 
@@ -75,6 +84,57 @@ public class Job implements Comparable<Job> {
 	public Job(Node jobXml) throws Pipeline2Exception {
 		this();
 		setJobXml(jobXml);
+	}
+	
+	/**
+	 * Creates a new job based on an old job.
+	 * 
+	 * This effectively creates a new job in the same state as the old job
+	 * was before being submitted to the engine. The status, messages,
+	 * results, log, batchId, callback and progress will be reset.
+	 * 
+	 * A new job storage can be provided, in which case all the files
+	 * from the job storage in the old job will be copied over to the job
+	 * storage in the new job. If the new job storage is the same object
+	 * as the one used by the old job, points to the same path as the
+	 * old job storage, or if the new job storage is null,
+	 * then the old job storage will be reused.
+	 * 
+	 * @param oldJob The old job where arguments will be copied from
+	 * @param newStorage The new job storage where files will be stored
+	 * @throws Pipeline2Exception
+	 */
+	public Job(Job oldJob, JobStorage newStorage) throws Pipeline2Exception {
+		this(oldJob.toXml());
+		
+		JobStorage oldStorage = oldJob.getJobStorage();
+		if (newStorage == null || newStorage == oldStorage || newStorage.getContextDir().equals(oldStorage.getContextDir())) {
+			// Reuse old storage
+			storage = oldStorage;
+			
+		} else {
+			// Copy files from old storage to new storage
+			File oldContextDir = oldStorage.getContextDir();
+			Map<String, File> oldFiles = null;
+			try {
+				oldFiles = Files.listFilesRecursively(oldContextDir, false);
+				if (oldFiles.size() > 0) {
+					for (String href : oldFiles.keySet()) {
+						newStorage.addContextFile(oldFiles.get(href), href);
+					}
+				}
+			} catch (IOException e) {
+				Pipeline2Logger.logger().error("Could not list files in old job context", e);
+			}
+			storage = newStorage;
+		}
+
+		setId(oldJob.getId());
+		setHref(oldJob.getHref());
+		setPriority(oldJob.getPriority());
+		setNicename(oldJob.getNicename());
+		setDescription(oldJob.getDescription());
+		setScript(oldJob.getScript());
 	}
 
 	/**
@@ -124,8 +184,9 @@ public class Job implements Comparable<Job> {
 
 		try {
 			// select root element if the node is a document node
-			if (jobNode instanceof Document)
+			if (jobNode instanceof Document) {
 				jobNode = XPath.selectNode("/*", jobNode, XPath.dp2ns);
+			}
 
 			String id = XPath.selectText("@id", jobNode, XPath.dp2ns);
 			if (id != null) {
@@ -148,7 +209,7 @@ public class Job implements Comparable<Job> {
 			}
 			if (this.priority == null) {
 				// in the job XML, the priority is a attribute, but in the job request xml, it is an element
-				priority = XPath.selectText("priority", jobNode, XPath.dp2ns);
+				priority = XPath.selectText("d:priority", jobNode, XPath.dp2ns);
 				for (Priority p : Priority.values()) {
 					if (p.toString().equals(priority)) {
 						this.priority = p;
@@ -156,25 +217,37 @@ public class Job implements Comparable<Job> {
 					}
 				}
 			}
-
-			if (XPath.selectNode("d:script/*", jobNode, XPath.dp2ns) == null) {
-				scriptHref = XPath.selectText("d:script/@href", jobNode, XPath.dp2ns);
-
-			} else {
-				Node scriptNode = XPath.selectNode("d:script", jobNode, XPath.dp2ns);
-				if (scriptNode != null) {
-					this.script = new Script(scriptNode);
+			String queuePosition = XPath.selectText("@queue-position", jobNode, XPath.dp2ns);
+			if (queuePosition != null) {
+				try {
+					this.queuePosition = Integer.parseInt(queuePosition);
+				} catch (NumberFormatException e) {
+					Pipeline2Logger.logger().debug("Could not parse the queue position as an integer.", e);
 				}
 			}
 			this.nicename = XPath.selectText("d:nicename", jobNode, XPath.dp2ns);
 			this.description = XPath.selectText("d:description", jobNode, XPath.dp2ns);
 			this.batchId = XPath.selectText("d:batchId", jobNode, XPath.dp2ns);
+			
+			Node scriptNode = XPath.selectNode("d:script", jobNode, XPath.dp2ns);
+			if (scriptNode != null) {
+				this.script = new Script(scriptNode);
+			}
+			
 			this.logHref = XPath.selectText("d:log/@href", jobNode, XPath.dp2ns);
 			this.callback = new ArrayList<Callback>();
 			for (Node callbackNode : XPath.selectNodes("d:callback", jobNode, XPath.dp2ns)) {
 				this.callback.add(new Callback(callbackNode));
 			}
 			this.messagesNode = XPath.selectNode("d:messages", jobNode, XPath.dp2ns);
+			String progressString = XPath.selectText("d:messages/@progress", jobNode, XPath.dp2ns);
+			if (progressString != null) {
+				try {
+					this.progress = new BigDecimal(Double.parseDouble(progressString));
+				} catch (NumberFormatException e) {
+					Pipeline2Logger.logger().debug("Could not parse the progress as a decimal number.", e);
+				}
+			}
 			this.resultsNode = XPath.selectNode("d:results", jobNode, XPath.dp2ns);
 
 			// Arguments are both part of the script XML and the jobRequest XML.
@@ -218,57 +291,77 @@ public class Job implements Comparable<Job> {
 	 * @return The list of messages
 	 */
 	public List<Message> getMessages(int maxDepth) {
+		return getMessages(maxDepth, new Date().getTime());
+	}
+	
+	List<Message> getMessages(int maxDepth, long now) {
 		lazyLoad();
 		
 		if (messages == null && messagesNode != null) {
 			try {
-
-				messages = new JobMessages();
+				List<Message> messagesTree = new ArrayList<Message>();
 				List<Node> messageNodes = XPath.selectNodes("d:message", this.messagesNode, XPath.dp2ns);
-
 				for (Node messageNode : messageNodes) {
-					Message m = new Message();
-					m.text = XPath.selectText(".", messageNode, XPath.dp2ns);
-					if (XPath.selectText("@level", messageNode, XPath.dp2ns) != null) {
-						m.level = Message.Level.valueOf(XPath.selectText("@level", messageNode, XPath.dp2ns));
-						m.inferredLevel = m.level;
-					}
-					if (XPath.selectText("@sequence", messageNode, XPath.dp2ns) != null) {
-						m.sequence = Integer.valueOf(XPath.selectText("@sequence", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@line", messageNode, XPath.dp2ns) != null) {
-						m.line = Integer.valueOf(XPath.selectText("@line", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@column", messageNode, XPath.dp2ns) != null) {
-						m.column = Integer.valueOf(XPath.selectText("@column", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@timeStamp", messageNode, XPath.dp2ns) != null) {
-						m.setTimeStamp(XPath.selectText("@timeStamp", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@file", messageNode, XPath.dp2ns) != null) {
-						m.file = XPath.selectText("@file", messageNode, XPath.dp2ns);
-					}
-					messages.add(m);
+					Message m = parseMessage(messageNode, now);
+					messagesTree.add(m);
 				}
-				Collections.sort(messages);
-
+				String msgSeq = XPath.selectText("@msgSeq", this.messagesNode, XPath.dp2ns);
+				messages = new JobMessages(messagesTree, msgSeq != null ? Integer.parseInt(msgSeq) : -1);
 			} catch (Exception e) {
 				Pipeline2Logger.logger().error("Unable to parse messages XML", e);
 			}
 		}
-		
 		if (maxDepth >= 0) {
 			ArrayList<Message> filteredMessages = new ArrayList<Message>();
 			for (Message m : messages) {
-				if (m.depth <= maxDepth) {
+				if (m.getDepth() <= maxDepth) {
 					filteredMessages.add(m);
 				}
 			}
 			return filteredMessages;
-			
 		} else {
 			return messages;
 		}
+	}
+
+	private static Message parseMessage(Node messageNode, long now) throws Pipeline2Exception {
+		Message m = new Message(now);
+		m.text = XPath.selectText("@content", messageNode, XPath.dp2ns);
+		if (XPath.selectText("@level", messageNode, XPath.dp2ns) != null) {
+			m.level = Message.Level.valueOf(XPath.selectText("@level", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@sequence", messageNode, XPath.dp2ns) != null) {
+			m.sequence = Integer.valueOf(XPath.selectText("@sequence", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@line", messageNode, XPath.dp2ns) != null) {
+			m.line = Integer.valueOf(XPath.selectText("@line", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@column", messageNode, XPath.dp2ns) != null) {
+			m.column = Integer.valueOf(XPath.selectText("@column", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@timeStamp", messageNode, XPath.dp2ns) != null) {
+			m.setTimeStamp(XPath.selectText("@timeStamp", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@file", messageNode, XPath.dp2ns) != null) {
+			m.file = XPath.selectText("@file", messageNode, XPath.dp2ns);
+		}
+		String portion = XPath.selectText("@portion", messageNode, XPath.dp2ns);
+		if (portion != null) {
+			Message.ProgressInfo progressInfo = new Message.ProgressInfo();
+			progressInfo.portion = new BigDecimal(portion);
+			String progress = XPath.selectText("@progress", messageNode, XPath.dp2ns);
+			progressInfo.progress = progress != null ? new BigDecimal(progress) : BigDecimal.ZERO;
+			m.progressInfo = progressInfo;
+		}
+		List<Node> childNodes = XPath.selectNodes("d:message", messageNode, XPath.dp2ns);
+		m.children = new ArrayList<Message>();
+		for (Node n : childNodes) {
+			Message mm = parseMessage(n, now);
+			mm.parentSequence = m.sequence;
+			mm.parent = m;
+			m.children.add(mm);
+		}
+		return m;
 	}
 
 	private void lazyLoadResults() {
@@ -451,54 +544,75 @@ public class Job implements Comparable<Job> {
 	// simple getters and setters (to ensure lazy loading is performed)
 	public String getId() { lazyLoad(); return id; }
 	public String getHref() { lazyLoad(); return href; }
-	public String getScriptHref() { lazyLoad(); if (script != null) return script.getHref(); else return scriptHref; }
-	public Script getScript() { lazyLoad(); return script; }
 	public Status getStatus() { lazyLoad(); return status; }
-	public String getLogHref() { lazyLoad(); return logHref; }
+	public Priority getPriority() { lazyLoad(); return priority; }
+	public Integer getQueuePosition() { lazyLoad(); return queuePosition; }
 	public String getNicename() { lazyLoad(); return nicename; }
 	public String getDescription() { lazyLoad(); return description; }
 	public String getBatchId() { lazyLoad(); return batchId; }
-	public Priority getPriority() { lazyLoad(); return priority; }
+	public Script getScript() { lazyLoad(); return script; }
+	public String getScriptHref() { lazyLoad(); if (script != null) return script.getHref(); else return null; }
 	public List<Callback> getCallback() { lazyLoad(); return callback; }
+	public BigDecimal getProgress() { lazyLoad(); return progress; }
+	public String getLogHref() { lazyLoad(); return logHref; }
 	public JobStorage getJobStorage() { lazyLoad(); return storage; }
 	public void setId(String id) { lazyLoad(); this.id = id; }
+	public void setHref(String href) { lazyLoad(); this.href = href; }
+	public void setStatus(Status status) { lazyLoad(); this.status = status; }
+	public void setPriority(Priority priority) { lazyLoad(); this.priority = priority; }
+	public void setQueuePosition(Integer queuePosition) { lazyLoad(); this.queuePosition = queuePosition; }
 	public void setNicename(String nicename) { lazyLoad(); this.nicename = nicename; }
 	public void setDescription(String description) { lazyLoad(); this.description = description; }
 	public void setBatchId(String batchId) { lazyLoad(); this.batchId = batchId; }
-	public void setPriority(Priority priority) { lazyLoad(); this.priority = priority; }
-	public void setCallback(List<Callback> callback) { lazyLoad(); this.callback = callback; }
-	public void setJobStorage(JobStorage storage) { lazyLoad(); this.storage = storage; }
-	public void setHref(String href) { lazyLoad(); this.href = href; }
-	public void setStatus(Status status) { lazyLoad(); this.status = status; }
-	public void setScriptHref(String scriptHref) { lazyLoad(); this.scriptHref = scriptHref; }
 	public void setScript(Script script) { lazyLoad(); this.script = script; }
-	public void setLogHref(String logHref) { lazyLoad(); this.logHref = logHref; }
-	
-	public void setMessages(List<Message> messages) {
+	public void setScriptHref(String scriptHref) {
 		lazyLoad();
-		
-		if (this.messages == messages) {
-			return; // same instance
+		if (this.script == null) {
+			try {
+				this.script = new Script(scriptHref);
+			} catch (Pipeline2Exception e) {
+				Pipeline2Logger.logger().error("Could not create script element with href='" + scriptHref + "'", e);
+			}
+		} else {
+			this.script.setHref(scriptHref);
 		}
-		
-		if (messages == null) {
-			this.messages = null;
+	}
+	public void setCallback(List<Callback> callback) { lazyLoad(); this.callback = callback; }
+	public void setProgress(BigDecimal progress) { lazyLoad(); this.progress = progress; }
+	public void setLogHref(String logHref) { lazyLoad(); this.logHref = logHref; }
+	public void setJobStorage(JobStorage storage) { lazyLoad(); this.storage = storage; this.lazyLoaded = false; }
+	
+	/**
+	 * Update this job's messages with a list of new messages from a job update.
+	 */
+	public void joinMessages(Job jobUpdate) {
+		lazyLoad();
+		if (this == jobUpdate) {
 			return;
 		}
-		
+		if (jobUpdate.messages == null) {
+			return;
+		}
+		this.progress = jobUpdate.progress;
 		if (this.messages == null) {
-			this.messages = new JobMessages();
+			this.messages = jobUpdate.messages;
+		} else {
+			this.messages.join(jobUpdate.messages);
 		}
-		
-		Collections.sort(messages);
-		int startSequence = messages.get(0).sequence;
-		for (int m = this.messages.size()-1; m >= 0; m--) {
-			if (this.messages.get(m).sequence >= startSequence) {
-				this.messages.remove(m);
-			}
-		}
-		this.messages.addAll(messages);
 		Collections.sort(this.messages);
+	}
+	
+	// for testing only
+	void joinMessages(List<Message> messagesTree) {
+		lazyLoad();
+		JobMessages update = new JobMessages(messagesTree, -1);
+		if (this.messages == null) {
+			this.messages = update;
+		} else {
+			this.messages.join(update);
+		}
+		Collections.sort(this.messages);
+		this.progress = messages.getProgressFrom();
 	}
 	
 	public void setResults(Result result, SortedMap<Result, List<Result>> results) {
@@ -534,12 +648,11 @@ public class Job implements Comparable<Job> {
 
 	public List<Argument> getInputs() {
 		lazyLoad();
-		if (script == null && argumentInputs == null) {
-			return new ArrayList<Argument>();
-			
-		} else if (script == null) {
+		if (script == null) {
+			if (argumentInputs == null) {
+				argumentInputs = new ArrayList<Argument>();
+			}
 			return argumentInputs;
-			
 		} else {
 			return script.getInputs();
 		}
@@ -547,7 +660,14 @@ public class Job implements Comparable<Job> {
 
 	public List<Argument> getOutputs() {
 		lazyLoad();
-		return script == null ? argumentOutputs : script.getOutputs();
+		if (script == null) {
+			if (argumentOutputs == null) {
+				argumentOutputs = new ArrayList<Argument>();
+			}
+			return argumentOutputs;
+		} else {
+			return script.getOutputs();
+		}
 	}
 	
 	public void setInputs(List<Argument> argumentInputs) {
@@ -690,33 +810,15 @@ public class Job implements Comparable<Job> {
 		}
 		
 		if (messages != null) {
-			Element e = jobElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "messages");
-			for (Message m : messages) {
-				Element mElement = jobElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "message");
-				if (m.level != null) {
-					mElement.setAttribute("level", m.level.toString());
-				}
-				if (m.sequence != null) {
-					mElement.setAttribute("sequence", ""+m.sequence);
-				}
-				if (m.line != null) {
-					mElement.setAttribute("line", ""+m.sequence);
-				}
-				if (m.column != null) {
-					mElement.setAttribute("column", ""+m.sequence);
-				}
-				if (m.timeStamp != null) {
-					mElement.setAttribute("timeStamp", m.formatTimeStamp());
-				}
-				if (m.file != null) {
-					mElement.setAttribute("file", m.file);
-				}
-				if (m.text != null) {
-					mElement.setTextContent(m.text);
-				}
-				e.appendChild(mElement);
+			Element msgsElement = jobElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "messages");
+			if (progress != null)
+				msgsElement.setAttribute("progress", Float.toString(progress.floatValue()));
+			if (messages.msgSeq >= 0)
+				msgsElement.setAttribute("msgSeq", ""+messages.msgSeq);
+			for (Message m : messages.asTree()) {
+				XML.appendChildAcrossDocuments(msgsElement, m.toXml());
 			}
-			jobElement.appendChild(e);
+			jobElement.appendChild(msgsElement);
 		}
 
 		if (results != null) {
@@ -770,29 +872,32 @@ public class Job implements Comparable<Job> {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "script");
 			e.setAttribute("href", script.getHref());
 			jobRequestElement.appendChild(e);
-
-		} else if (scriptHref != null) {
-			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "script");
-			e.setAttribute("href", scriptHref);
-			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().warn("script/@href is required in jobRequest.");
 		}
 
 		if (nicename != null) {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "nicename");
 			e.setTextContent(nicename);
 			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().debug("nicename for job is not provided.");
 		}
 
 		if (priority != null) {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "priority");
 			e.setTextContent(priority.toString());
 			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().debug("priority for job is not provided.");
 		}
 
 		if (batchId != null) {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "batchId");
 			e.setTextContent(batchId);
 			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().debug("batchId for job is not provided.");
 		}
 
 		List<Argument> options = new ArrayList<Argument>();
@@ -923,6 +1028,8 @@ public class Job implements Comparable<Job> {
 			for (Callback c : callback) {
 				XML.appendChildAcrossDocuments(jobRequestElement, c.toXml());
 			}
+		} else {
+			Pipeline2Logger.logger().debug("callback for job is not provided.");
 		}
 
 		return jobRequestDocument;
@@ -941,29 +1048,40 @@ public class Job implements Comparable<Job> {
 		arguments.addAll(getOutputs());
 		return arguments;
 	}
-	
+
 	/**
-	 * Get the start of the current progress interval as a percentage.
-	 * 
-	 * The progress interval might be for instance `[20,30]` which
-	 * would mean that the last progress update we got indicated
-	 * we were 20% done with the job, and that the next progress update
-	 * are expected to come at 30%.
-	 * 
-	 * For the interval `[20,30]` this method would return `20`.
-	 * 
-	 * @return the start of the current progress interval.
+	 * Get the job progress as a percentage.
+	 *
+	 * This represents the most up to date progress information from the server.
 	 */
 	public double getProgressFrom() {
-		if (messages == null) {
+		lazyLoad();
+		if (progress == null && messagesNode != null) {
+			try {
+				String attr = XPath.selectText("@progress", this.messagesNode, XPath.dp2ns);
+				if (attr == null) {
+					// support this case for testing purposes
+					if (messages != null) {
+						progress = messages.getProgressFrom();
+					} else {
+						throw new RuntimeException("could not compute progress");
+					}
+				} else {
+					progress = new BigDecimal(attr).min(BigDecimal.ONE);
+				}
+			} catch (Pipeline2Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		if (progress == null) {
 			return 0.0;
 		} else {
-			return messages.getProgressFrom();
+			return toPercentage(progress);
 		}
 	}
-	
+
 	/**
-	 * Get the time of the start of the current progress interval.
+	 * Get the time when the most up to date progress information from the server was received.
 	 * 
 	 * @return the time as UNIX time.
 	 */
@@ -978,35 +1096,52 @@ public class Job implements Comparable<Job> {
 	/**
 	 * Get the end of the current progress interval as a percentage.
 	 * 
-	 * For the interval `[20,30]` this method would return `30`.
-	 * 
 	 * @return the end of the current progress interval.
 	 */
 	public double getProgressTo() {
+		return getProgressTo(1000);
+	}
+	
+	/**
+	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
+	 */
+	public double getProgressTo(Integer timeUntilUpdateRequest) {
+		return getProgressTo(new Date().getTime(), timeUntilUpdateRequest);
+	}
+	
+	private double getProgressTo(long now, Integer timeUntilUpdateRequest) {
 		if (messages == null) {
 			return 100.0;
 		} else {
-			return messages.getProgressTo();
+			return Math.min(100.0, getProgressFrom() + getProgressInterval(now, timeUntilUpdateRequest));
 		}
 	}
-	
 
 	/**
-	 * Get an estimate of the job progress as a percentage. 
+	 * Get the estimated job progress in between server updates as a percentage.
 	 * 
-	 * This returns a percentage within the current progress
-	 * interval, interpolated based on the current progress
-	 * interval as well as the job duration. It follows this formula:
+	 * This value is always greater than or equal to the result of calling
+	 * getProgressFrom() which represents the most up to date progress information from
+	 * the server.
+	 * 
+	 * The estimate is an interpolation based on the current progress interval and the job
+	 * duration. The "current progress interval" is an interval that starts with the most
+	 * recent progress value received from the server and in which no updates from the
+	 * server are expected. It is chosen in such a way that the end is not expected to be
+	 * reached before the next update request to the server. Note that an update request
+	 * does not necessarily result in an actual progress update. (Details about how the
+	 * interval is determined are omitted here.) The estimate is calculated according to
+	 * this formula:
 	 * 
 	 * P(t) = P_{N+1} - P_{N} e^{-\frac{t-t_{N}}{T})}
 	 * 
 	 * where:
-	 * - `P` is the percentage
+	 * - `P` is the progress estimate
 	 * - `t` is the current time, in seconds
 	 * - `t_{0}` is the time when the job started (i.e. the first progress message arrived)
 	 * - `t_{N}` is the time when information about the current progress interval arrived, in seconds 
-	 * - `P_{N+1}` is the percentage at the end of the current progress interval
-	 * - `P_{N}` is the percentage at the beginning of the current progress interval
+	 * - `P_{N+1}` is the progress at the end of the current progress interval
+	 * - `P_{N}` is the progress at the beginning of the current progress interval
 	 * - `T` is the time constant which determines how slowly the estimated progress approaches P_{N+1}.
 	 *   20 is chosen as the initial value so that after 60 seconds the progress will be 95 % through the current
 	 *   progress interval. When `P_{N} &gt; 0` and `t_{N} - t_{0} &gt; 0` then T is dynamically calculated so that it
@@ -1018,7 +1153,14 @@ public class Job implements Comparable<Job> {
 	 * @return the estimated progress as a percentage.
 	 */
 	public double getProgressEstimate() {
-		return getProgressEstimate(new Date().getTime());
+		return getProgressEstimate(1000);
+	}
+	
+	/**
+	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
+	 */
+	public double getProgressEstimate(Integer timeUntilUpdateRequest) {
+		return getProgressEstimate(new Date().getTime(), timeUntilUpdateRequest);
 	}
 	
 	/**
@@ -1034,7 +1176,13 @@ public class Job implements Comparable<Job> {
 	 * @param now the UNIX time to use as "now".
 	 * @return the estimated progress as a percentage.
 	 */
-	public double getProgressEstimate(Long now) {
+	double getProgressEstimate(Long now) {
+		return getProgressEstimate(now, null);
+	}
+	
+	double getProgressEstimate(Long now, Integer timeUntilUpdateRequest) {
+		getMessages(); // lazy load messages
+		
 		if (status == null || status == Status.IDLE) {
 			return 0.0;
 		} else if (status != Status.RUNNING) {
@@ -1042,15 +1190,82 @@ public class Job implements Comparable<Job> {
 		} else if (messages == null) {
 			return 0.0;
 		} else {
-			return messages.getProgressEstimate(now);
+			Long previousTime = messages.getProgressFromTime();
+			if (previousTime == null) previousTime = now;
+			Double previousPercentage = getProgressFrom();
+			Double nextPercentage = getProgressTo();
+			Double inverseExponential = nextPercentage
+                                        - (nextPercentage - previousPercentage)
+                                          * Math.exp(-(double)Math.max(0L, now - previousTime)
+                                                     / getProgressTimeConstant(now, timeUntilUpdateRequest));
+			Double linear = previousPercentage + (now - previousTime) * getAverageProgress(now);
+			
+			// Linear progress will be lower than inverse exponential progress
+			// for the first 95% of the progress interval. After that, the progress
+			// follows an inverse exponential curve so that the progress is always
+			// moving forward, while never exceeding the progress interval.
+			return Math.min(linear, inverseExponential);
+			
 		}
 	}
 	
 	/**
-	 * The progress stack contains information about the progress at each progress "depth".
-	 * @return the progress stack
+	 * The interval is chosen in such a way that it is not expected to end before the next
+	 * update request to the server. Note that an update request does not necessarily
+	 * result in an actual progress update.
+	 *
+	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
 	 */
-	public Stack<JobMessages.Progress> getProgressStack() {
-		return messages.getProgressStack();
+	private double getProgressInterval(long now, Integer timeUntilUpdateRequest) {
+		if (messages == null) {
+			return 0.0;
+		} else {
+			double interval = toPercentage(messages.getProgressInterval());
+			if (timeUntilUpdateRequest != null) {
+				double minInterval = getAverageProgress(now) * timeUntilUpdateRequest;
+				interval = Math.max(interval, minInterval);
+			}
+			return interval;
+		}
+	}
+	
+	/**
+	 * Get the average progress since the start of the job, in percentage per millisecond
+	 */
+	private double getAverageProgress(Long now) {
+		Long startTime = messages.getJobStartTime();
+		if (startTime == null) {
+			return 0.0;
+		}
+		if (now.equals(startTime)) {
+			return 0.0;
+		}
+		return getProgressFrom() / (now - startTime);
+	}
+	
+	private double getProgressTimeConstant(long now, Integer timeUntilUpdateRequest) {
+		if (messages != null) {
+			double progressFrom = getProgressFrom();
+			double progressInterval = getProgressInterval(now, timeUntilUpdateRequest);
+			Long progressFromTime = getProgressFromTime();
+			Long jobStartTime = messages.getJobStartTime();
+			if (progressFrom > 0.0
+			    && jobStartTime != null
+			    && progressFromTime != null
+			    && progressFromTime - jobStartTime > 0
+			    && progressInterval > 0.0) {
+				return - (progressFromTime - jobStartTime) * progressInterval / progressFrom / Math.log(0.05);
+			}
+		}
+		return 20000.0;
+	}
+	
+	private static double toPercentage(BigDecimal progress) {
+		return progress.multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).doubleValue();
+	}
+	
+	@Override
+	public String toString() {
+		return XML.toString(toXml());
 	}
 }
