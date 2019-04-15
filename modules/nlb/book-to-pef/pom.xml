@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../../braille/maven/parent/</relativePath>
   </parent>
 
@@ -22,7 +22,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.12.1-SNAPSHOT</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -129,6 +129,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>libhyphen-libreoffice-tables</artifactId>
       <scope>test</scope>
@@ -161,6 +166,7 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
+      <version>1.0.4</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

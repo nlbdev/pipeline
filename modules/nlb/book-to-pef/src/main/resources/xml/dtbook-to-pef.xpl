@@ -90,6 +90,7 @@
     <p:import href="pef-post-processing.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl"/>
@@ -130,14 +131,19 @@
     
     <nlb:validate-tables name="validate-tables"/>
     
+    <px:dtbook-load name="load"/>
+    
     <p:try name="try-convert-and-store">
         <p:group>
             <p:output port="status"/>
             <p:variable name="default-table-class" select="//c:param[@name='default-table-class']/@value">
                 <p:pipe step="main" port="parameters"/>
             </p:variable>
-            <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
-                                      name="convert">
+            <px:dtbook-to-pef default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
+                              name="convert">
+                <p:input port="source.in-memory">
+                    <p:pipe step="load" port="in-memory.out"/>
+                </p:input>
                 <p:with-option name="stylesheet" select="string-join((
                                                            'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
                                                            'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
@@ -153,7 +159,7 @@
                 <p:with-option name="temp-dir" select="string(/c:result)">
                     <p:pipe step="temp-dir" port="result"/>
                 </p:with-option>
-            </px:dtbook-to-pef.convert>
+            </px:dtbook-to-pef>
             <p:choose>
                 <p:documentation>Add metadata</p:documentation>
                 <p:xpath-context>

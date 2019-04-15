@@ -132,14 +132,19 @@
     
     <nlb:validate-tables name="validate-tables"/>
     
+    <px:html-to-fileset/>
+    
     <p:try name="try-convert-and-store">
         <p:group>
             <p:output port="status"/>
             <p:variable name="default-table-class" select="//c:param[@name='default-table-class']/@value">
                 <p:pipe step="main" port="parameters"/>
             </p:variable>
-            <px:html-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
-                                      name="convert">
+            <px:html-to-pef default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
+                            name="convert">
+                <p:input port="source.in-memory">
+                    <p:pipe step="validate-tables" port="result"/>
+                </p:input>
                 <p:with-option name="stylesheet" select="string-join((
                                                            'http://www.nlb.no/pipeline/modules/braille/pre-processing.xsl',
                                                            'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
@@ -156,7 +161,7 @@
                 <p:with-option name="temp-dir" select="string(/c:result)">
                     <p:pipe step="temp-dir" port="result"/>
                 </p:with-option>
-            </px:html-to-pef.convert>
+            </px:html-to-pef>
             <p:choose>
                 <p:documentation>Add metadata</p:documentation>
                 <p:xpath-context>

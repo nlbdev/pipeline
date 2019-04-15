@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.Iterables.size;
@@ -272,7 +272,7 @@ public interface NLBTranslator {
 			
 			@Override
 			public String toString() {
-				return Objects.toStringHelper(NLBTranslator.class.getSimpleName())
+				return MoreObjects.toStringHelper(NLBTranslator.class.getSimpleName())
 					// .add("grade", grade)
 					// .add("dots", dots)
 					.toString();

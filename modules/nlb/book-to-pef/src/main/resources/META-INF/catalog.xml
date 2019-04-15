@@ -5,9 +5,12 @@
   <uri name="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl" uri="../xml/xml-to-pef.xpl"  px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
   
   <!-- scripts -->
-  <uri name="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl" uri="../xml/dtbook-to-pef.xpl" px:script="true" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
-  <uri name="http://www.nlb.no/pipeline/modules/braille/epub3-to-pef.xpl" uri="../xml/epub3-to-pef.xpl" px:script="true" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
-  <uri name="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl" uri="../xml/html-to-pef.xpl" px:script="true" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
+  <uri name="http://www.nlb.no/pipeline/modules/braille/dtbook-to-pef.xpl" uri="../xml/dtbook-to-pef.xpl"
+       px:content-type="script" px:id="nlb:dtbook-to-pef" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
+  <uri name="http://www.nlb.no/pipeline/modules/braille/epub3-to-pef.xpl" uri="../xml/epub3-to-pef.xpl"
+       px:content-type="script" px:id="nlb:epub3-to-pef" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
+  <uri name="http://www.nlb.no/pipeline/modules/braille/html-to-pef.xpl" uri="../xml/html-to-pef.xpl"
+       px:content-type="script" px:id="nlb:html-to-pef" px:extends="http://www.nlb.no/pipeline/modules/braille/xml-to-pef.xpl"/>
 
   <!-- utilities -->
   <uri name="http://www.nlb.no/pipeline/modules/braille/insert-boilerplate.xsl" uri="../xml/insert-boilerplate.xsl"/>
