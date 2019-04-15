@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/brailleapps/braille-utils.impl
 	branch = master
-	commit = 6095eecd5b4fcb26cc405f5dbf4843a237c0d6a1
-	parent = 14dac45caf27abdb52f6fe38d71379d1c9b0476c
+	commit = 6a52756bd8d278102d760418fe58338946ca2e6e
+	parent = 60257ed132083f7d0151c617c8e908b54f84d456
 	cmdver = 0.3.1
