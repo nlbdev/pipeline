@@ -7,9 +7,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.model.RuntimeValue;
-import com.xmlcalabash.runtime.XStep;
 import net.sf.saxon.s9api.*;
-import net.sf.saxon.Configuration;
 import net.sf.saxon.trans.XPathException;
 
 import java.net.URI;
@@ -30,6 +28,7 @@ import com.xmlcalabash.util.S9apiUtils;
  * To change this template use File | Settings | File Templates.
  */
 public class DefaultStep implements XProcStep {
+    
     public static final QName _byte_order_mark = new QName("", "byte-order-mark");
     public static final QName _cdata_section_elements = new QName("", "cdata-section-elements");
     public static final QName _doctype_public = new QName("", "doctype-public");
@@ -45,6 +44,7 @@ public class DefaultStep implements XProcStep {
     public static final QName _standalone = new QName("", "standalone");
     public static final QName _undeclare_prefixes = new QName("", "undeclare-prefixes");
     public static final QName _version = new QName("", "version");
+    public static final QName cx_message = new QName(XProcConstants.NS_CALABASH_EX, "message");
 
     protected Logger logger = null;
     private Hashtable<QName,RuntimeValue> options = null;
@@ -166,10 +166,17 @@ public class DefaultStep implements XProcStep {
             type = step.getType().getClarkName();
         }
         logger.debug("Running " + type + " " + step.getName() + addnLog);
+        String msg = step.getExtensionAttribute(cx_message);
+        if (msg != null) {
+            System.err.println("Message: " + msg);
+        }
     }
 
     public Serializer makeSerializer() {
-        Serializer serializer = new Serializer();
+        Serializer serializer = runtime.getProcessor().newSerializer();
+
+        // This is XML; default to UTF-8
+        serializer.setOutputProperty(Serializer.Property.ENCODING, "UTF-8");
 
         if (options == null) {
             return serializer;
@@ -258,8 +265,6 @@ public class DefaultStep implements XProcStep {
 
     public Vector<XdmItem> evaluateXPath(XdmNode doc, Hashtable<String,String> nsBindings, String xpath, Hashtable<QName,RuntimeValue> globals) {
         Vector<XdmItem> results = new Vector<XdmItem> ();
-
-        Configuration config = runtime.getProcessor().getUnderlyingConfiguration();
 
         try {
             XPathCompiler xcomp = runtime.getProcessor().newXPathCompiler();

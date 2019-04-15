@@ -65,7 +65,7 @@ public class Step extends SourceArtifact {
     protected DeclareStep declaration = null;
     protected Double version = null;
 
-    /** Creates a new instance of Step */
+    /* Creates a new instance of Step */
     public Step(XProcRuntime xproc, XdmNode node, QName type) {
         super(xproc, node);
         stepType = type;
@@ -148,6 +148,10 @@ public class Step extends SourceArtifact {
 
     public Step getStep() {
         return this;
+    }
+    
+    public Step getParent() {
+        return parent;
     }
 
     protected void setVersion(Double version) {
