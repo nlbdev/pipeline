@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>epub3-validator</artifactId>
-  <version>1.1.4-SNAPSHOT</version>
+  <version>1.1.6-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 Validator</name>
@@ -33,6 +33,11 @@
     <!--
         test dependencies
     -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>

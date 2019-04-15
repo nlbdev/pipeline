@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:epub3-to-pef.convert" version="1.0"
+<p:declare-step type="px:epub3-to-pef" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
@@ -27,6 +27,11 @@
     <p:output port="obfl" sequence="true"> <!-- sequence=false when include-obfl=true -->
         <p:pipe step="transform" port="obfl"/>
     </p:output>
+    <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:documentation>Whether or not the conversion was successful. When include-obfl is true,
+        the conversion may fail but still output a document on the "obfl" port.</p:documentation>
+        <p:pipe step="transform" port="status"/>
+    </p:output>
     
     <p:input kind="parameter" port="parameters" sequence="true">
         <p:inline>
@@ -52,37 +57,17 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
-    <px:merge-parameters name="parameters">
+    <px:merge-parameters name="parameters" px:progress=".01">
         <p:input port="source">
             <p:pipe step="main" port="parameters"/>
         </p:input>
     </px:merge-parameters>
     
-    <!-- Load OPF and add content files to fileset. -->
-    <px:fileset-load media-types="application/oebps-package+xml">
+    <!-- Load XHTML documents in spine order. -->
+    <px:fileset-load px:message="Load XHTML documents in spine order" px:progress=".04"
+                     media-types="application/oebps-package+xml application/xhtml+xml">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe port="in-memory.in" step="main"/>
-        </p:input>
-    </px:fileset-load>
-    <p:identity name="opf"/>
-    <p:xslt>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/opf-manifest-to-fileset.xsl"/>
-        </p:input>
-    </p:xslt>
-    <p:identity name="opf-fileset"/>
-    <p:sink/>
-    
-    <!-- Load XHTML documents in spine order. -->
-    <px:fileset-load media-types="application/oebps-package+xml application/xhtml+xml">
-        <p:input port="fileset">
-            <p:pipe port="result" step="opf-fileset"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
@@ -94,7 +79,7 @@
         </p:add-attribute>
     </p:for-each>
     <p:wrap-sequence wrapper="wrapper"/>
-    <p:xslt>
+    <p:xslt px:progress=".01">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -105,18 +90,17 @@
     <p:filter select="/*/*"/>
     
     <!-- In case there exists any CSS in the EPUB already, and $apply-document-specific-stylesheets = 'true',  then inline that CSS. -->
-    <px:message message="Processing CSS that is already present in the EPUB"/>
-    <p:for-each>
+    <p:for-each px:message="Processing CSS that is already present in the EPUB" px:progress=".09">
         <p:add-attribute match="/*" attribute-name="xml:base">
             <p:with-option name="attribute-value" select="base-uri(/*)"/>
         </p:add-attribute>
         
-        <p:choose>
+        <p:choose px:progress="1/2">
             <p:when test="$apply-document-specific-stylesheets='true'">
-                <px:message severity="DEBUG">
+                <px:message>
                     <p:with-option name="message" select="concat('Inlining document-specific CSS for ',replace(base-uri(/*),'.*/',''),'')"/>
                 </px:message>
-                <px:apply-stylesheets>
+                <px:apply-stylesheets px:progress="1">
                     <p:input port="parameters">
                         <p:pipe step="parameters" port="result"/>
                     </p:input>
@@ -126,7 +110,7 @@
                 <p:delete match="@style"/>
             </p:otherwise>
         </p:choose>
-        <css:delete-stylesheets/>
+        <css:delete-stylesheets px:progress="1/2"/>
         <p:filter select="/*/html:body"/>
         
         <!-- xml:base attribute is required for resolving cross-references between different bodies -->
@@ -137,10 +121,16 @@
     <p:identity name="spine-bodies"/>
     
     <!-- Convert OPF metadata to HTML metadata. -->
-    <p:xslt>
-        <p:input port="source">
-            <p:pipe port="result" step="opf"/>
+    <px:fileset-load media-types="application/oebps-package+xml">
+        <p:input port="fileset">
+            <p:pipe port="fileset.in" step="main"/>
         </p:input>
+        <p:input port="in-memory">
+            <p:pipe port="in-memory.in" step="main"/>
+        </p:input>
+    </px:fileset-load>
+    <p:identity name="opf"/>
+    <p:xslt px:message="Convert OPF metadata to HTML metadata" px:progress=".01">
         <p:input port="stylesheet">
             <p:document href="../xslt/opf-to-html-head.xsl"/>
         </p:input>
@@ -163,8 +153,7 @@
         </p:with-option>
     </p:add-attribute>
     
-    <px:message message="Applying stylesheets"/>
-    <p:group>
+    <p:group px:message="Inlining global CSS" px:progress=".11">
         <p:variable name="abs-stylesheet"
                     select="string-join(for $s in tokenize($stylesheet,'\s+')[not(.='')]
                                         return resolve-uri($s,$epub),' ')"/>
@@ -183,10 +172,8 @@
                               (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
-        <px:message severity="DEBUG">
-            <p:with-option name="message" select="concat('stylesheets: ',$stylesheets-to-be-inlined)"/>
-        </px:message>
-        <px:apply-stylesheets>
+        <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
+        <px:apply-stylesheets px:progress="1">
             <p:with-option name="stylesheets" select="$stylesheets-to-be-inlined"/>
             <p:input port="parameters">
                 <p:pipe port="result" step="parameters"/>
@@ -194,12 +181,12 @@
         </px:apply-stylesheets>
     </p:group>
     
-    <px:message message="Transforming MathML"/>
-    <p:group>
+    <p:group px:message="Transforming MathML" px:progress=".10">
         <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
             <p:pipe port="result" step="opf"/>
         </p:variable>
-        <p:viewport match="math:math">
+        <p:viewport px:progress="1"
+                    match="math:math">
             <px:transform>
                 <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
                 <p:with-option name="temp-dir" select="$temp-dir"/>
@@ -207,23 +194,23 @@
         </p:viewport>
     </p:group>
     
-    <p:choose name="transform">
+    <p:choose name="transform" px:progress=".61">
         <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
             <p:pipe port="result" step="opf"/>
         </p:variable>
         <p:when test="$include-obfl='true'">
-            <p:output port="pef" primary="true"/>
+            <p:output port="pef" primary="true" sequence="true"/>
             <p:output port="obfl">
                 <p:pipe step="obfl" port="result"/>
             </p:output>
-            <px:message message="Transforming from XML with inline CSS to OBFL"/>
-            <p:group name="obfl">
+            <p:output port="status">
+                <p:pipe step="try-pef" port="status"/>
+            </p:output>
+            <p:group name="obfl" px:message="Transforming from XML with inline CSS to OBFL" px:progress=".40">
                 <p:output port="result"/>
                 <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
-                <px:message severity="DEBUG">
-                    <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
-                </px:message>
-                <px:transform>
+                <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
+                <px:transform px:progress="1">
                     <p:with-option name="query" select="$transform-query"/>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
                     <p:input port="parameters">
@@ -231,76 +218,108 @@
                     </p:input>
                 </px:transform>
             </p:group>
-            <px:message message="Transforming from OBFL to PEF"/>
-            <p:group>
-                <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
-                <px:message severity="DEBUG">
-                    <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
-                </px:message>
-                <px:transform>
-                    <p:with-option name="query" select="$transform-query"/>
-                    <p:with-option name="temp-dir" select="$temp-dir"/>
-                    <p:input port="parameters">
-                        <p:pipe port="result" step="parameters"/>
-                    </p:input>
-                </px:transform>
-            </p:group>
+            <p:try name="try-pef">
+                <p:group px:message="Transforming from OBFL to PEF" px:progress=".60">
+                   <p:output port="pef" primary="true"/>
+                    <p:output port="status">
+                        <p:inline>
+                            <d:validation-status result="ok"/>
+                        </p:inline>
+                    </p:output>
+                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+                    <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
+                    <px:transform px:progress="1">
+                        <p:with-option name="query" select="$transform-query"/>
+                        <p:with-option name="temp-dir" select="$temp-dir"/>
+                        <p:input port="parameters">
+                            <p:pipe port="result" step="parameters"/>
+                        </p:input>
+                    </px:transform>
+                </p:group>
+                <p:catch>
+                    <p:output port="pef" primary="true">
+                        <p:empty/>
+                    </p:output>
+                    <p:output port="status">
+                        <p:inline>
+                            <d:validation-status result="error"/>
+                        </p:inline>
+                    </p:output>
+                    <p:sink/>
+                </p:catch>
+            </p:try>
         </p:when>
-        <p:otherwise>
+        <p:otherwise px:message="Transforming from XML with inline CSS to PEF" >
             <p:output port="pef" primary="true"/>
             <p:output port="obfl">
                 <p:empty/>
             </p:output>
-            <px:message message="Transforming from XML with inline CSS to PEF"/>
-            <p:group>
-                <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
-                <px:message severity="DEBUG">
-                    <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
-                </px:message>
-                <px:transform>
-                    <p:with-option name="query" select="$transform-query"/>
-                    <p:with-option name="temp-dir" select="$temp-dir"/>
-                    <p:input port="parameters">
-                        <p:pipe port="result" step="parameters"/>
-                    </p:input>
-                </px:transform>
-            </p:group>
+            <p:output port="status">
+                <p:inline>
+                    <d:validation-status result="ok"/>
+                </p:inline>
+            </p:output>
+            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+            <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
+            <px:transform px:progress="1">
+                <p:with-option name="query" select="$transform-query"/>
+                <p:with-option name="temp-dir" select="$temp-dir"/>
+                <p:input port="parameters">
+                    <p:pipe port="result" step="parameters"/>
+                </p:input>
+            </px:transform>
         </p:otherwise>
     </p:choose>
     
-    <p:identity name="pef"/>
-
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="pef" port="result"/>
-            <p:pipe step="opf" port="result"/>
-        </p:input>
-    </p:identity>
-    <px:message message="Adding metadata to PEF based on EPUB 3 package document metadata"/>
-    <p:xslt>
-        <p:input port="stylesheet">
-            <p:document href="http://www.daisy.org/pipeline/modules/braille/pef-utils/add-opf-metadata-to-pef.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
-    
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="replace(base-uri(/*),'[^/]+$',concat(((/*/opf:metadata/dc:identifier[not(@refines)]/text()), 'pef')[1],'.pef'))">
-            <p:pipe port="result" step="opf"/>
-        </p:with-option>
-    </p:add-attribute>
+    <p:choose>
+        <p:xpath-context>
+            <p:pipe step="transform" port="status"/>
+        </p:xpath-context>
+        <p:when test="/*/@result='ok'">
+            <p:identity name="pef"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="pef" port="result"/>
+                    <p:pipe step="opf" port="result"/>
+                </p:input>
+            </p:identity>
+            <p:xslt px:message="Adding metadata to PEF based on EPUB 3 package document metadata" px:progress=".01">
+                <p:input port="stylesheet">
+                    <p:document href="http://www.daisy.org/pipeline/modules/braille/pef-utils/add-opf-metadata-to-pef.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <px:set-base-uri>
+                <p:with-option name="base-uri" select="replace(base-uri(/*),'[^/]+$',concat(((/*/opf:metadata/dc:identifier[not(@refines)]/text()), 'pef')[1],'.pef'))">
+                    <p:pipe port="result" step="opf"/>
+                </p:with-option>
+            </px:set-base-uri>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
     <p:identity name="in-memory.out"/>
+    <p:count/>
     
-    <px:fileset-create>
-        <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')"/>
-    </px:fileset-create>
-    <px:fileset-add-entry media-type="application/x-pef+xml">
-        <p:with-option name="href" select="base-uri(/*)">
-            <p:pipe port="result" step="in-memory.out"/>
-        </p:with-option>
-    </px:fileset-add-entry>
+    <p:choose>
+        <p:when test="number(/*)=0">
+            <px:fileset-create/>
+        </p:when>
+        <p:otherwise>
+            <px:fileset-create>
+                <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')"/>
+            </px:fileset-create>
+            <px:fileset-add-entry px:progress=".01"
+                                  media-type="application/x-pef+xml">
+                <p:with-option name="href" select="base-uri(/*)">
+                    <p:pipe port="result" step="in-memory.out"/>
+                </p:with-option>
+            </px:fileset-add-entry>
+        </p:otherwise>
+    </p:choose>
     <p:identity name="fileset.out"/>
     
 </p:declare-step>

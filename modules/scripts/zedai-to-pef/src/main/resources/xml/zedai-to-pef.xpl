@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:zedai-to-pef" version="1.0"
+<p:declare-step type="px:zedai-to-pef.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
@@ -31,9 +31,9 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="stylesheet" required="false" px:sequence="true" px:type="string" select="''" px:media-type="text/css application/xslt+xml">
+    <p:option name="stylesheet" required="false" px:sequence="true" select="''" px:media-type="text/css application/xslt+xml">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
                         <documentation xml:lang="en">File path relative to input ZedAI.</documentation>
@@ -42,7 +42,7 @@
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
         <p:documentation>
             <h2 px:role="name">Style sheets</h2>
@@ -67,14 +67,14 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="transform" required="false" px:type="string" px:data-type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
+    <p:option name="transform" required="false" px:type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Transformer query</h2>
             <p px:role="desc">The transformer query.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="ascii-table" required="false" px:type="string" px:data-type="transform-query" select="''">
+    <p:option name="ascii-table" required="false" px:type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ASCII braille table</h2>
             <p px:role="desc">The ASCII braille table, used to render the PEF preview and the plain text version.
@@ -126,9 +126,21 @@ If left blank, the locale information in the input document will be used to sele
     </p:option>
     
     <p:import href="zedai-to-pef.convert.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
+        <p:documentation>
+            px:xml-to-pef.store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:tempdir
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl">
+        <p:documentation>
+            px:zedai-load
+        </p:documentation>
+    </p:import>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
@@ -139,20 +151,30 @@ If left blank, the locale information in the input document will be used to sele
     </px:tempdir>
     <p:sink/>
     
+    <!-- ========== -->
+    <!-- LOAD ZEDAI -->
+    <!-- ========== -->
+    
+    <px:zedai-load name="load">
+        <p:input port="source">
+            <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:zedai-load>
+    
     <!-- ============ -->
     <!-- ZEDAI TO PEF -->
     <!-- ============ -->
     
-    <px:zedai-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/default.css">
-        <p:input port="source">
-            <p:pipe step="main" port="source"/>
+    <px:zedai-to-pef default-stylesheet="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/default.css">
+        <p:input port="source.in-memory">
+            <p:pipe step="load" port="in-memory.out"/>
         </p:input>
         <p:with-option name="stylesheet" select="$stylesheet"/>
         <p:with-option name="transform" select="$transform"/>
         <p:with-option name="temp-dir" select="string(/c:result)">
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>
-    </px:zedai-to-pef.convert>
+    </px:zedai-to-pef>
     
     <!-- ========= -->
     <!-- STORE PEF -->

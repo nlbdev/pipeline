@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:dtbook-to-pef" version="1.0"
+<p:declare-step type="px:dtbook-to-pef.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -36,7 +36,7 @@
         </p:documentation>
     </p:input>
     
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+    <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Status</h2>
             <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
@@ -49,7 +49,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     
     <p:option name="stylesheet" px:sequence="true">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
                         <documentation xml:lang="en">File path relative to input DTBook.</documentation>
@@ -58,7 +58,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
     </p:option>
     
@@ -114,6 +114,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -122,7 +123,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- pass all the variables all the time.              -->
     <!-- ================================================= -->
     <p:in-scope-names name="in-scope-names"/>
-    <px:delete-parameters name="input-options"
+    <px:delete-parameters name="input-options" px:progress=".01"
                           parameter-names="stylesheet
                                            transform
                                            ascii-file-format
@@ -139,22 +140,31 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
-    <p:sink/>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
     <!-- =============== -->
-    <px:tempdir name="temp-dir">
+    <px:tempdir name="temp-dir" px:progress=".01">
         <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
     </px:tempdir>
     <p:sink/>
     
     <!-- ======= -->
-    <!-- CONVERT -->
+    <!-- LOAD -->
     <!-- ======= -->
-    <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css" name="convert">
+    <px:dtbook-load name="load">
         <p:input port="source">
             <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:dtbook-load>
+    
+    <!-- ======= -->
+    <!-- CONVERT -->
+    <!-- ======= -->
+    <px:dtbook-to-pef name="convert" px:message="Transforming from DTBook to PEF" px:progress=".92"
+                      default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css">
+        <p:input port="source.in-memory">
+            <p:pipe step="load" port="in-memory.out"/>
         </p:input>
         <p:with-option name="temp-dir" select="string(/c:result)">
             <p:pipe step="temp-dir" port="result"/>
@@ -165,12 +175,12 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
         </p:input>
-    </px:dtbook-to-pef.convert>
+    </px:dtbook-to-pef>
     
     <!-- ===== -->
     <!-- STORE -->
     <!-- ===== -->
-    <px:dtbook-to-pef.store>
+    <px:dtbook-to-pef.store px:message="Storing" px:progress=".06">
         <p:input port="dtbook">
             <p:pipe step="main" port="source"/>
         </p:input>
