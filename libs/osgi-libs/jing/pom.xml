@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>4</version>
+    <version>5</version>
     <relativePath />
   </parent>
 
   <groupId>org.daisy.libs</groupId>
   <artifactId>jing</artifactId>
-  <version>20151127.0.0</version>
+  <version>20151127.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Jing</name>
@@ -287,9 +287,4 @@
 	</profile>
 	
   </profiles>
-
-
-  <scm>
-    <tag>v20151127.0.0</tag>
-  </scm>
 </project>
