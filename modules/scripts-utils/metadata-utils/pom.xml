@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-utils-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
@@ -17,7 +17,9 @@
   <name>DAISY Pipeline 2 module :: metadata-utils</name>
   
   <dependencies>
-    <!-- runtime dependencies -->
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>validation-utils</artifactId>
@@ -32,6 +34,14 @@
       <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

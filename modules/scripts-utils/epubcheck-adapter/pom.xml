@@ -6,26 +6,36 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-utils-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>epubcheck-adapter</artifactId>
-  <version>1.1.4-SNAPSHOT</version>
+  <version>1.1.6-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EpubCheck Adapter</name>
 
   <dependencies>
-    <!-- Framework bundles -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
-    <!-- EpubCheck -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.idpf</groupId>
       <artifactId>epubcheck</artifactId>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -37,7 +47,10 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Import-Package>org.daisy.pipeline.script,*</Import-Package>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/epubcheck.xml,OSGI-INF/column-number.xml,OSGI-INF/line-number.xml,OSGI-INF/system-id.xml</Service-Component>
           </instructions>
         </configuration>

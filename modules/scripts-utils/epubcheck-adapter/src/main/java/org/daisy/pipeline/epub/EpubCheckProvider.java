@@ -1,9 +1,9 @@
 package org.daisy.pipeline.epub;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.HashMap;
 
@@ -17,6 +17,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
+import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 
 import com.adobe.epubcheck.api.EpubCheck;
@@ -38,6 +39,7 @@ import com.adobe.epubcheck.util.*;
 public class EpubCheckProvider implements XProcStepProvider {
 
 	private static HashMap<OPSType, String> modeMimeTypeMap;
+	private static Messages messages = Messages.getInstance();
 
 	static {
 		HashMap<OPSType, String> map = new HashMap<OPSType, String>();
@@ -85,6 +87,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 		private static final QName _epubFile = new QName("epub");
 		private static final QName _epubVersion = new QName("version");
 		private static final QName _mode = new QName("mode"); // epub/opf/xhtml/svg/mo/nav
+		private static final QName _tempDir = new QName("temp-dir");
 
 		private WritablePipe report = null;
 
@@ -107,7 +110,6 @@ public class EpubCheckProvider implements XProcStepProvider {
 			super.run();
 
 			Archive epub = null;
-			File tempDir = null;
 			try {
 
 				URI epubURI = new URI(getOption(_epubFile).getString());
@@ -134,24 +136,28 @@ public class EpubCheckProvider implements XProcStepProvider {
 					xmlReport.info(null, FeatureEnum.TOOL_DATE, toolDate);
 
 				if (mode != null) {
-					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.get("single_file"), mode, epubVersion.toString(), EPUBProfile.DEFAULT));
+					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(messages.get("single_file"), mode, epubVersion.toString(), EPUBProfile.DEFAULT));
 
 					if ("expanded".equals(mode) || "exp".equals(mode)) {
-						if (new File(path+".epub").exists()) {
-							// epubcheck will delete the file `path`.epub if it exists,
-							// so if it exists, we create a copy in the temporary directory
-							// and use that instead.
-							tempDir = File.createTempFile("epub-", null);
-							tempDir.delete();
-							tempDir.mkdir();
-							File destDir = new File(tempDir, new File(path).getName());
-							copyDirectory(new File(path), destDir);
-							path = new File(tempDir, new File(path).getName()).getCanonicalPath();
-						}
-						
 						epub = new Archive(path, false);
-						epub.createArchive();
-
+						String epubName = new File(path).getName() + ".epub";
+						File tempDir; {
+							RuntimeValue o = getOption(_tempDir);
+							String tempDirOpt = o == null ? null : o.getString();
+							if (tempDirOpt != null && !tempDirOpt.equals("")) {
+								try {
+									tempDir = new File(new URI(tempDirOpt));
+								} catch (URISyntaxException e) {
+									throw new IllegalArgumentException("temp-dir option invalid: " + tempDirOpt);
+								}
+								if (tempDir.exists())
+									throw new IllegalArgumentException("temp-dir option must be a non-existing directory: "+tempDirOpt);
+							} else
+								tempDir = Files.createTempDirectory("epubcheck-").toFile();
+						}
+						File zippedEpubFile = new File(tempDir, epubName);
+						tempDir.mkdirs();
+						epub.createArchive(zippedEpubFile);
 						EpubCheck check = new EpubCheck(epub.getEpubFile(), xmlReport);
 						check.validate();
 					}
@@ -171,9 +177,9 @@ public class EpubCheckProvider implements XProcStepProvider {
 					DocumentValidatorFactory factory = (DocumentValidatorFactory) documentValidatorFactoryMap.get(opsType);
 
 					if (factory == null) {
-						xmlReport.message(new Message(null, Severity.FATAL, Messages.get("mode_version_not_supported", mode, epubVersion), null), EPUBLocation.create(PathUtil.removeWorkingDirectory(path), 0, 0), mode, epubVersion);
+						xmlReport.message(new Message(null, Severity.FATAL, messages.get("mode_version_not_supported", mode, epubVersion), null), EPUBLocation.create(PathUtil.removeWorkingDirectory(path), 0, 0), mode, epubVersion);
 
-						throw new RuntimeException(Messages.get("mode_version_not_supported", mode, epubVersion));
+						throw new RuntimeException(messages.get("mode_version_not_supported", mode, epubVersion));
 					}
 					
 					ValidationContext validationContext = new ValidationContext.ValidationContextBuilder()
@@ -201,45 +207,9 @@ public class EpubCheckProvider implements XProcStepProvider {
 			}
 
 			finally {
-				if (tempDir != null) {
-					try {
-						deleteDirectory(tempDir);
-					} catch (IOException e) {
-						// ignore
-					}
-				}
-				
 				if (epub != null)
 					epub.deleteEpubFile();
 			}
-		}
-		
-		private void copyDirectory(final File srcDir, final File destDir) throws IOException {
-	        final File[] srcFiles = srcDir.listFiles();
-	        destDir.mkdirs();
-	        for (final File srcFile : srcFiles) {
-	            final File dstFile = new File(destDir, srcFile.getName());
-                if (srcFile.isDirectory()) {
-                	copyDirectory(srcFile, dstFile);
-                } else {
-                	Files.copy(srcFile.toPath(), dstFile.toPath());
-                }
-	        }
-		}
-		
-		private void deleteDirectory(final File directory) throws IOException {
-			if (!directory.exists()) {
-	            return;
-	        }
-	        final File[] files = directory.listFiles();
-	        for (final File file : files) {
-                if (file.isDirectory()) {
-                	deleteDirectory(file);
-                } else {
-                	file.delete();
-                }
-	        }
-			directory.delete();
 		}
 	}
 }
