@@ -75,7 +75,7 @@ public class XmlBreakRebuilder implements InlineSectionProcessor {
 		do {
 			mDuplicationManager.onNewDocument();
 			mTreeWriter = treeWriterFactory.newInstance();
-			mTreeWriter.startDocument(doc.getDocumentURI());
+			mTreeWriter.startDocument(doc.getBaseURI());
 			XdmSequenceIterator iter = doc.axisIterator(Axis.CHILD);
 			while (iter.hasNext()) {
 				XdmNode n = (XdmNode) iter.next();
@@ -89,10 +89,8 @@ public class XmlBreakRebuilder implements InlineSectionProcessor {
 
 					new InlineSectionFinder().find(root, mPreviousLevel, specs, this,
 					        unsplittable);
-
+					closeAllElementsUntil(root, 0);
 					break;
-					//Some elements remain opened but they will be closed automatically by the 
-					//serializer. There should be no node (PI, comments) after the root though.
 
 				} else {
 					mTreeWriter.addSubtree(n);
