@@ -17,6 +17,7 @@ package org.daisy.maven.xspec;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -25,9 +26,12 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.ServiceLoader;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Source;
@@ -60,10 +64,20 @@ import com.google.common.base.Function;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
-import com.google.common.io.InputSupplier;
 import com.google.common.io.Resources;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "xspec-runner",
+	service = { XSpecRunner.class }
+)
 public class XSpecRunner {
 
 	private final static String XSPEC_NAMESPACE = "http://www.jenitennison.com/xslt/xspec";
@@ -83,8 +97,15 @@ public class XSpecRunner {
 	private XsltExecutable xspecHtmlFormatterLoader;
 	private XsltExecutable xspecHtmlSummaryFormatterLoader;
 	private XsltExecutable xspecJUnitFormatterLoader;
-	private InputSupplier<InputStream> cssSupplier;
+	private ByteSource cssSupplier;
 
+	@Reference(
+		name = "Processor",
+		unbind = "-",
+		service = Processor.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setProcessor(Processor processor) {
 		this.processor = processor;
 	}
@@ -200,7 +221,6 @@ public class XSpecRunner {
 			processor.getUnderlyingConfiguration().setErrorListener(
 					saxonReporter);
 			Source compiledTestAsSource = xspecTestCompiled.getXdmNode().asSource();
-			compiledTestAsSource.setSystemId(testAsSource.getSystemId());
 			XsltTransformer xspecTestRunner = xspecTestCompiler.compile(
 					compiledTestAsSource).load();
 			xspecTestRunner.setInitialTemplate(XSPEC_MAIN_TEMPLATE);
@@ -233,13 +253,13 @@ public class XSpecRunner {
 				// Write XSpec report
 				File xspecReport = new File(reportDir, "XSPEC-" + testName
 						+ ".xml");
-				new Serializer(xspecReport).serializeNode(xspecTestResult
+				serializeToFile(xspecReport).serializeNode(xspecTestResult
 						.getXdmNode());
 
 				// Write HTML report
 				File css = new File(reportDir, XSPEC_CSS_NAME);
 				if (!css.exists()) {
-					Files.copy(cssSupplier, css);
+					cssSupplier.copyTo(new FileOutputStream(css));
 				}
 				File htmlReport = new File(reportDir, "HTML-" + testName
 						+ ".html");
@@ -247,7 +267,7 @@ public class XSpecRunner {
 				htmlFormatter
 						.setSource(xspecTestResult.getXdmNode().asSource());
 				htmlFormatter.setParameter(XSPEC_CSS_URI_PARAM, XSPEC_CSS_URI);
-				htmlFormatter.setDestination(new Serializer(htmlReport));
+				htmlFormatter.setDestination(serializeToFile(htmlReport));
 				htmlFormatter.setMessageListener(SaxonSinkReporter.INSTANCE);
 				htmlFormatter.transform();
 
@@ -258,7 +278,7 @@ public class XSpecRunner {
 						.load();
 				junitFormatter.setSource(xspecTestResult.getXdmNode()
 						.asSource());
-				junitFormatter.setDestination(new Serializer(surefireReport));
+				junitFormatter.setDestination(serializeToFile(surefireReport));
 				junitFormatter.setParameter(JUNIT_NAME_PARAM,
 						new XdmAtomicValue(testName));
 				junitFormatter.setParameter(
@@ -294,14 +314,24 @@ public class XSpecRunner {
 			formatter.setParameter(new QName("report-dir"),
 					new XdmAtomicValue(reportDir.toURI()));
 			formatter.setDestination(
-					new Serializer(new File(reportDir, "index.html")));
+					serializeToFile(new File(reportDir, "index.html")));
 			formatter.setMessageListener(SaxonSinkReporter.INSTANCE);
 			formatter.transform();
 		} catch (SaxonApiException e) {
 			throw new RuntimeException(e);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
+	private Serializer serializeToFile(File file) throws FileNotFoundException {
+		Serializer serializer = processor.newSerializer();
+		serializer.setOutputStream(new FileOutputStream(file));
+		serializer.setCloseOnCompletion(true);
+		return serializer;
+	}
+
+	@Activate
 	public void init() {
 		try {
 
@@ -336,7 +366,7 @@ public class XSpecRunner {
 		xpathCompiler.declareNamespace("", XSPEC_NAMESPACE);
 
 		// Input supplier for the report CSS
-		cssSupplier = Resources.newInputStreamSupplier(XSpecRunner.class
+		cssSupplier = Resources.asByteSource(XSpecRunner.class
 				.getResource("/xspec/reporter/test-report.css"));
 
 		} catch (SaxonApiException e) {
@@ -443,6 +473,9 @@ public class XSpecRunner {
 					InputStream is = XSpecRunner.class.getResourceAsStream(uri
 							.substring(6));
 					return new StreamSource(is, uri);
+				} else if (Pattern.compile("\\.(zip|jar)!/").matcher(uri).find() && uri.startsWith("file:")) {
+					Source s = delegate.resolve("jar:" + uri, base);
+					if (s != null) return s;
 				}
 			} catch (URISyntaxException e) {
 				// Do nothing
