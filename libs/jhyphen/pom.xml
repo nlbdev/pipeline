@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.daisy.bindings</groupId>
   <artifactId>jhyphen</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>jhyphen</name>
   <description>Java bindings for the 'libhyphen' hyphenation library</description>

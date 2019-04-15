@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/jhyphen.git
 	branch = master
 	commit = a66a6ca29bf47aba9a07562c5dc90c3192bec0fc
-	parent = 5ecb8749d877effdab6347e00778cbd2b126eb52
+	parent = eda44e02127d75c38f8035477f559071ca113b08
 	cmdver = 0.3.1

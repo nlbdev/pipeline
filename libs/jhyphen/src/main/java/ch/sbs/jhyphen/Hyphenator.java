@@ -49,7 +49,7 @@ public class Hyphenator {
 	
 	/**
 	 * Default constructor
-	 * @param dictPath The path to the hyphenation dictionary file,
+	 * @param dictionaryFile The path to the hyphenation dictionary file,
 	 *        e.g. /usr/share/hyphen/hyph_de_DE.dic
 	 * @throws FileNotFoundException if the dictionary file cannot be found.
 	 * @throws CompilationException if the encoding of the file is not supported.
