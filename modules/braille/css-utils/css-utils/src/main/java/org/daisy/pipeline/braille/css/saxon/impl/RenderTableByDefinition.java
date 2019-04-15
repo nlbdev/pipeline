@@ -1,8 +1,11 @@
 package org.daisy.pipeline.braille.css.saxon.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import static java.util.Collections.sort;
 import java.util.Comparator;
+import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,18 +17,27 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
+import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.TransformerException;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
+
+import com.xmlcalabash.core.XProcException;
 
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
+import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoClass;
@@ -36,7 +48,6 @@ import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.csskit.OutputUtil;
 
-import net.sf.saxon.Configuration;
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -54,12 +65,15 @@ import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
+import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.stax.XMLStreamWriterHelper.ToStringWriter;
+import org.daisy.common.stax.XMLStreamWriterHelper.WriterEvent;
+import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
+import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
+import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
+import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
+import org.daisy.common.transform.XMLStreamToXMLStreamTransformer;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
-
-import org.daisy.pipeline.braille.common.saxon.StreamToStreamTransform;
-import org.daisy.pipeline.braille.common.saxon.StreamToStreamTransform.util.Events;
-import org.daisy.pipeline.braille.common.saxon.StreamToStreamTransform.util.ToStringWriter;
-import org.daisy.pipeline.braille.common.TransformationException;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -94,11 +108,12 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	public SequenceType[] getArgumentTypes() {
 		return new SequenceType[] {
 			SequenceType.SINGLE_STRING,
-			SequenceType.SINGLE_ELEMENT_NODE};
+			SequenceType.SINGLE_NODE // SINGLE_ELEMENT_NODE
+		};
 	}
 	
 	public SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {
-		return SequenceType.SINGLE_ELEMENT_NODE;
+		return SequenceType.SINGLE_NODE; // SINGLE_ELEMENT_NODE
 	}
 	
 	public ExtensionFunctionCall makeCallExpression() {
@@ -110,13 +125,15 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 					
 					// FIXME: why does this not work?
 					// URI base = new URI(tableElement.getBaseURI());
-					XdmNode result = new TableAsList(context.getConfiguration(), axes).transform(tableElement);
+					XdmNode result = Iterators.getOnlyElement(
+						SaxonHelper.transform(
+							new TableAsList(axes),
+							Collections.singleton(tableElement).iterator(),
+							context.getConfiguration()));
 					result = (XdmNode)result.axisIterator(Axis.CHILD).next(); // because result is document-node
 					return result.getUnderlyingNode(); }
-				catch (TransformationException e) {
-					logger.error("css:render-table-by failed", e);
-					e.printStackTrace();
-					throw new XPathException("css:render-table-by failed"); }
+				catch (TransformerException e) {
+					throw new XPathException("css:render-table-by failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}
@@ -145,60 +162,57 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	
 	private static final QName CSS_TABLE_HEADER_POLICY = new QName(XMLNS_CSS, "table-header-policy");
 	
-	private static final QName HTML_ = new QName(XMLNS_HTML, "_");
-	private static final QName DTB_ = new QName(XMLNS_DTB, "_");
-	
 	private static final Splitter HEADERS_SPLITTER = Splitter.on(' ').trimResults().omitEmptyStrings();
 	private static final Splitter AXIS_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 	
-	private static class TableAsList extends StreamToStreamTransform {
+	private static class TableAsList implements XMLStreamToXMLStreamTransformer {
 		
 		final List<String> axes;
 		
-		private TableAsList(Configuration configuration, String axes) {
-			super(configuration);
+		private TableAsList(String axes) {
 			this.axes = new ArrayList<String>(AXIS_SPLITTER.splitToList(axes));
 			if (this.axes.remove("auto"))
 				if (!this.axes.isEmpty())
 					throw new RuntimeException();
 		}
 		
-		List<Event> writeActionsBefore;
-		List<Event> writeActionsAfter;
+		List<WriterEvent> writeActionsBefore;
+		List<WriterEvent> writeActionsAfter;
 		List<TableCell> cells;
 		Set<CellCoordinates> coveredCoordinates;
-		QName _;
+		String ns;
 		
-		protected void _transform(XMLStreamReader reader, BufferedWriter writer) {
+		public void transform(Iterator<BaseURIAwareXMLStreamReader> input, Supplier<BaseURIAwareXMLStreamWriter> output) {
+			XMLStreamReader reader = Iterators.getOnlyElement(input);
+			XMLStreamWriter writer = output.get();
 			
 			try {
 			
-			writeActionsBefore = new ArrayList<Event>();
-			writeActionsAfter = new ArrayList<Event>();
+			writeActionsBefore = new ArrayList<WriterEvent>();
+			writeActionsAfter = new ArrayList<WriterEvent>();
 			cells = new ArrayList<TableCell>();
 			coveredCoordinates = new HashSet<CellCoordinates>();
-			List<Event> writeActions = writeActionsBefore;
+			List<WriterEvent> writeActions = writeActionsBefore;
 			int depth = 0;
 			TableCell withinCell = null;
 			TableCell.RowType rowType = TableCell.RowType.TBODY;
 			int rowGroup = 1;
 			int row = 1;
 			int col = 1;
-			QName name = null;
-			while (true)
+		  loop: while (true)
 				try {
 					switch (reader.next()) {
-					case START_ELEMENT:
-						name = reader.getName();
+					case START_ELEMENT: {
+						QName name = reader.getName();
 						depth++;
 						boolean isCell = false;
 						if (depth == 1) {
 							if (!isHTMLorDTBookElement(TABLE, name))
 								throw new RuntimeException("Expected table element (html|dtb).");
 							if (XMLNS_HTML.equals(name.getNamespaceURI()))
-								_ = HTML_;
+								ns = XMLNS_HTML;
 							else if (XMLNS_DTB.equals(name.getNamespaceURI()))
-								_ = DTB_; }
+								ns = XMLNS_DTB; }
 						else if (isHTMLorDTBookElement(THEAD, name)) {
 							rowType = TableCell.RowType.THEAD;
 							// TODO: if style != default, warning that style on thead element is ignored
@@ -228,9 +242,11 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							if (isHTMLorDTBookElement(TH, name))
 								withinCell.type = TableCell.CellType.TH;
 							writeActions = withinCell.writeActions; }
-						writeActions.add(Events.startElement(name));
-						for (int i = 0; i < reader.getNamespaceCount(); i++)
-							writeActions.add(Events.namespace(reader.getNamespacePrefix(i), reader.getNamespaceURI(i)));
+						writeActions.add(w -> writeStartElement(w, name));
+						for (int i = 0; i < reader.getNamespaceCount(); i++) {
+							String prf = reader.getNamespacePrefix(i);
+							String ns = reader.getNamespaceURI(i);
+							writeActions.add(w -> w.writeNamespace(prf, ns)); }
 						for (int i = 0; i < reader.getAttributeCount(); i++) {
 							QName attrName = reader.getAttributeName(i);
 							String attrValue = reader.getAttributeValue(i);
@@ -281,66 +297,69 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							else if (isCell && _ID.equals(attrName))
 								withinCell.id = attrValue;
 							else if (depth == 1 && _STYLE.equals(attrName)) {
-								InlineStyle style = new InlineStyle(attrValue);
-								String newStyle = null;
-								for (RuleBlock<?> block : style) {
-									if (block instanceof RuleMainBlock)
-										newStyle = joinRuleSets(newStyle, serializeRuleSet(style.getMainStyle()));
-									else if (block instanceof RuleRelativeBlock) {
-										RuleRelativeBlock ruleset = (RuleRelativeBlock)block;
-										List<Selector> selector = ruleset.getSelector();
-										if (selector.size() > 0) { // should always be true
-											// note that in the cases "&::list-item", "&::list-header" and "&::table-by(...)" we
-											// are ignoring any following selector parts except those that are "stacked" onto the
-											// pseudo element
-											if (selector.get(0).size() > 0) { // should always be true
-												if (selector.get(0).get(0) instanceof PseudoElementImpl) {
-													// selector.get(0).size() should always be 1
-													PseudoElementImpl pseudo = (PseudoElementImpl)selector.get(0).get(0);
-													// selector size should be 1
-													if ("list-item".equals(pseudo.getName()))
-														addListItemStyle(
-															pseudo.getPseudoClasses(),
-															new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset));
-													else if ("list-header".equals(pseudo.getName())) {
-														if (pseudo.getPseudoClasses().isEmpty())
-															addListHeaderStyle(
-																new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset)); }
-													else if ("table-by".equals(pseudo.getName())) {
-														String axis = pseudo.getArguments()[0];
-														if (pseudo.getPseudoClasses().isEmpty()) {
-															if (pseudo.hasStackedPseudoElement()) {
-																pseudo = pseudo.getStackedPseudoElement();
-																if ("list-item".equals(pseudo.getName()))
-																	getTableByStyle(axis).addListItemStyle(
-																		pseudo.getPseudoClasses(),
-																		new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset));
-																else if ("list-header".equals(pseudo.getName())) {
-																	if (pseudo.getPseudoClasses().isEmpty())
-																		getTableByStyle(axis).addListHeaderStyle(
-																			new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset)); }
+								String newStyle; {
+									InlineStyle style = new InlineStyle(attrValue);
+									String builder = null;
+									for (RuleBlock<?> block : style) {
+										if (block instanceof RuleMainBlock)
+											builder = joinRuleBlocks(builder, serializeRuleBlock(style.getMainStyle()));
+										else if (block instanceof RuleRelativeBlock) {
+											RuleRelativeBlock ruleblock = (RuleRelativeBlock)block;
+											List<Selector> selector = ruleblock.getSelector();
+											if (selector.size() > 0) { // should always be true
+												// note that in the cases "&::list-item", "&::list-header" and "&::table-by(...)" we
+												// are ignoring any following selector parts except those that are "stacked" onto the
+												// pseudo element
+												if (selector.get(0).size() > 0) { // should always be true
+													if (selector.get(0).get(0) instanceof PseudoElementImpl) {
+														// selector.get(0).size() should always be 1
+														PseudoElementImpl pseudo = (PseudoElementImpl)selector.get(0).get(0);
+														// selector size should be 1
+														if ("list-item".equals(pseudo.getName()))
+															addListItemStyle(
+																pseudo.getPseudoClasses(),
+																new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock));
+														else if ("list-header".equals(pseudo.getName())) {
+															if (pseudo.getPseudoClasses().isEmpty())
+																addListHeaderStyle(
+																	new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock)); }
+														else if ("table-by".equals(pseudo.getName())) {
+															String axis = pseudo.getArguments()[0];
+															if (pseudo.getPseudoClasses().isEmpty()) {
+																if (pseudo.hasStackedPseudoElement()) {
+																	pseudo = pseudo.getStackedPseudoElement();
+																	if ("list-item".equals(pseudo.getName()))
+																		getTableByStyle(axis).addListItemStyle(
+																			pseudo.getPseudoClasses(),
+																			new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock));
+																	else if ("list-header".equals(pseudo.getName())) {
+																		if (pseudo.getPseudoClasses().isEmpty())
+																			getTableByStyle(axis).addListHeaderStyle(
+																				new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock)); }
+																	else
+																		getTableByStyle(axis).addRuleBlock(pseudo, ruleblock); }
 																else
-																	getTableByStyle(axis).addRuleSet(pseudo, ruleset); }
-															else
-																getTableByStyle(axis).addRuleSet(ruleset); }}
+																	getTableByStyle(axis).addRuleBlock(ruleblock); }}
+														else
+															builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }
 													else
-														newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset)); }
+														builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }
 												else
-													newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset)); }
-											else
-												newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset)); }}
-									else
-										throw new RuntimeException("Unexpected style " + block); }
+													builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }}
+										else
+											throw new RuntimeException("Unexpected style " + block); }
+									newStyle = builder; }
 								if (newStyle != null)
-									writeActions.add(Events.attribute(attrName, newStyle)); }
+									writeActions.add(w -> writeAttribute(w, attrName, newStyle)); }
 							else
-								writeActions.add(Events.attribute(attrName, attrValue)); }
-						break;
+								writeActions.add(w -> writeAttribute(w, attrName, attrValue)); }
+						break; }
 					case CHARACTERS:
-						writeActions.add(Events.characters(reader.getText()));
+						String chars = reader.getText();
+						writeActions.add(w -> w.writeCharacters(chars));
 						break;
-					case END_ELEMENT:
-						name = reader.getName();
+					case END_ELEMENT: {
+						QName name = reader.getName();
 						depth--;
 						if (isHTMLorDTBookElement(THEAD, name)
 						    || isHTMLorDTBookElement(TFOOT, name)
@@ -352,12 +371,14 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							col = 1;
 							while (isCovered(row, col)) col++;
 							break; }
-						writeActions.add(Events.endElement);
+						writeActions.add(w -> w.writeEndElement());
 						if (isHTMLorDTBookElement(TD, name) || isHTMLorDTBookElement(TH, name)) {
 							withinCell = null;
 							writeActions = writeActionsAfter;
 							while (isCovered(row, col)) col++; }
-						break; }}
+						break; }
+					case END_DOCUMENT:
+						break loop; }}
 				catch (NoSuchElementException e) {
 					break; }
 			
@@ -397,7 +418,9 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 				c.rowGroup = newRowGroup;
 				c.row = newRow; }
 			
+			writer.writeStartDocument();
 			write(writer);
+			writer.writeEndDocument();
 			
 			} catch (XMLStreamException e) {
 				throw new RuntimeException(e);
@@ -421,15 +444,15 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			return coveredCoordinates.contains(new CellCoordinates(row, col));
 		}
 		
-		private void write(Writer writer) throws XMLStreamException {
-			for (Event action : writeActionsBefore)
+		private void write(XMLStreamWriter writer) throws XMLStreamException {
+			for (WriterEvent action : writeActionsBefore)
 				action.writeTo(writer);
 			List<TableCell> dataCells = new ArrayList<TableCell>();
 			for (TableCell c : cells)
 				if (!isHeader(c))
 					dataCells.add(c);
 			new TableCellGroup(dataCells, axes.iterator()).write(writer);
-			for (Event action : writeActionsAfter)
+			for (WriterEvent action : writeActionsAfter)
 				action.writeTo(writer);
 		}
 		
@@ -438,7 +461,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		private abstract class TableCellCollection {
 			public abstract List<TableCell> newlyRenderedHeaders();
 			public abstract List<TableCell> newlyPromotedHeaders();
-			public abstract void write(Writer writer) throws XMLStreamException;
+			public abstract void write(XMLStreamWriter writer) throws XMLStreamException;
 		}
 		
 		private class SingleTableCell extends TableCellCollection {
@@ -508,7 +531,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 				return newlyRenderedHeaders;
 			}
 			
-			public void write(Writer writer) throws XMLStreamException {
+			public void write(XMLStreamWriter writer) throws XMLStreamException {
 				cell.write(writer);
 			}
 			
@@ -742,7 +765,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 				return newlyRenderedHeaders;
 			}
 			
-			public void write(Writer writer) {
+			public void write(XMLStreamWriter writer) {
 				try {
 					List<List<TableCell>> promotedHeaders = null;
 					int i = 0;
@@ -754,17 +777,17 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 								if (!cc.newlyPromotedHeaders().isEmpty()) {
 									if (promotedHeaders == null) {
 										if (i == 0 && j == 0) {
-											writer.writeStartElement(_);
+											writeStartElement(writer, new QName(ns, "_"));
 											writeStyleAttribute(writer,
 											                    groupingAxis != null ? getTableByStyle(groupingAxis).getListHeaderStyle()
 											                                         : getListHeaderStyle());
-											writer.writeStartElement(_);
+											writeStartElement(writer, new QName(ns, "_"));
 											writeStyleAttribute(writer, getTableByStyle(g.groupingAxis));
 											promotedHeaders = new ArrayList<List<TableCell>>(); }
 										else
 											throw new RuntimeException("Some headers of children promoted but not all children have a promoted header."); }
 									if (i == 0) {
-										writer.writeStartElement(_);
+										writeStartElement(writer, new QName(ns, "_"));
 										Predicate<PseudoClass> matcher = matchesPosition(j + 1, g.children.size());
 										writeStyleAttribute(writer, getTableByStyle(g.groupingAxis).getListItemStyle(matcher));
 										for (TableCell h : cc.newlyPromotedHeaders())
@@ -786,7 +809,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 						writer.writeEndElement(); }
 					i = 0;
 					for (TableCellCollection c : children) {
-						writer.writeStartElement(_);
+						writeStartElement(writer, new QName(ns, "_"));
 						Predicate<PseudoClass> matcher = matchesPosition(i + 1, children.size());
 						writeStyleAttribute(writer,
 						                    groupingAxis != null ? getTableByStyle(groupingAxis).getListItemStyle(matcher)
@@ -795,7 +818,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							h.write(writer);
 						if (c instanceof TableCellGroup) {
 							TableCellGroup g = (TableCellGroup)c;
-							writer.writeStartElement(_);
+							writeStartElement(writer, new QName(ns, "_"));
 							writeStyleAttribute(writer, getTableByStyle(g.groupingAxis)); }
 						c.write(writer);
 						if (c instanceof TableCellGroup)
@@ -818,9 +841,9 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			}
 		}
 		
-		private static void writeStyleAttribute(Writer writer, PseudoElementStyle style) throws XMLStreamException {
+		private static void writeStyleAttribute(XMLStreamWriter writer, PseudoElementStyle style) throws XMLStreamException {
 			if (!style.isEmpty())
-				writer.writeAttribute(_STYLE, style.toString());
+				writeAttribute(writer, _STYLE, style.toString());
 		}
 		
 		final private Map<String,TableByStyle> tableByStyles = new HashMap<String,TableByStyle>();
@@ -862,29 +885,29 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		
 		private static class PseudoElementStyle {
 			
-			final protected Map<PseudoElementImpl,List<Declaration>> ruleSets = new HashMap<PseudoElementImpl,List<Declaration>>();
+			final protected Map<PseudoElementImpl,List<Rule<?>>> ruleBlocks = new HashMap<PseudoElementImpl,List<Rule<?>>>();
 			
-			public void addRuleSet(List<Declaration> ruleset) {
-				addRuleSet(null, ruleset);
+			public void addRuleBlock(List<Rule<?>> ruleblock) {
+				addRuleBlock(null, ruleblock);
 			}
 			
-			public void addRuleSet(PseudoElementImpl pseudo, List<Declaration> ruleset) {
-				if (!ruleset.isEmpty())
-					if (!ruleSets.containsKey(pseudo))
-						ruleSets.put(pseudo, ruleset);
+			public void addRuleBlock(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
+				if (!ruleblock.isEmpty())
+					if (!ruleBlocks.containsKey(pseudo))
+						ruleBlocks.put(pseudo, ruleblock);
 					else
-						ruleSets.put(pseudo, ImmutableList.<Declaration>builder().addAll(ruleSets.get(pseudo)).addAll(ruleset).build());
+						ruleBlocks.put(pseudo, ImmutableList.<Rule<?>>builder().addAll(ruleBlocks.get(pseudo)).addAll(ruleblock).build());
 			}
 			
 			public boolean isEmpty() {
-				return ruleSets.isEmpty();
+				return ruleBlocks.isEmpty();
 			}
 			
 			@Override
 			public String toString() {
 				String style = null;
-				for (PseudoElementImpl pseudo : ruleSets.keySet())
-					style = joinRuleSets(style, serializeRuleSet(ruleSets.get(pseudo), pseudo));
+				for (PseudoElementImpl pseudo : ruleBlocks.keySet())
+					style = joinRuleBlocks(style, serializeRuleBlock(ruleBlocks.get(pseudo), pseudo));
 				if (style != null)
 					return style;
 				else
@@ -900,8 +923,8 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			public TableByStyle() {}
 			
 			@SuppressWarnings("unused")
-			public TableByStyle(PseudoElementImpl pseudo, List<Declaration> ruleset) {
-				addRuleSet(pseudo, ruleset);
+			public TableByStyle(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
+				addRuleBlock(pseudo, ruleblock);
 			}
 			
 			public void addListItemStyle(List<PseudoClass> pseudo, ListItemStyle style) {
@@ -931,8 +954,8 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			
 			@SuppressWarnings("unused")
 			public TableByStyle mergeWith(TableByStyle style) {
-				for (Map.Entry<PseudoElementImpl,List<Declaration>> r: style.ruleSets.entrySet())
-					addRuleSet(r.getKey(), r.getValue());
+				for (Map.Entry<PseudoElementImpl,List<Rule<?>>> r: style.ruleBlocks.entrySet())
+					addRuleBlock(r.getKey(), r.getValue());
 				for (Map.Entry<List<PseudoClass>,ListItemStyle> s: style.listItemStyles.entrySet())
 					addListItemStyle(s.getKey(), s.getValue());
 				addListHeaderStyle(style.listHeaderStyle);
@@ -944,13 +967,13 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			
 			public ListItemStyle() {}
 			
-			public ListItemStyle(PseudoElementImpl pseudo, List<Declaration> ruleset) {
-				addRuleSet(pseudo, ruleset);
+			public ListItemStyle(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
+				addRuleBlock(pseudo, ruleblock);
 			}
 			
 			public ListItemStyle mergeWith(ListItemStyle style) {
-				for (Map.Entry<PseudoElementImpl,List<Declaration>> r: style.ruleSets.entrySet())
-					addRuleSet(r.getKey(), r.getValue());
+				for (Map.Entry<PseudoElementImpl,List<Rule<?>>> r: style.ruleBlocks.entrySet())
+					addRuleBlock(r.getKey(), r.getValue());
 				return this;
 			}
 		}
@@ -1160,10 +1183,10 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			private int rowspan = 1;
 			private int colspan = 1;
 			
-			private List<Event> writeActions = new ArrayList<Event>();
+			private List<WriterEvent> writeActions = new ArrayList<WriterEvent>();
 			
-			public void write(Writer writer) throws XMLStreamException {
-				for (Event action : writeActions)
+			public void write(XMLStreamWriter writer) throws XMLStreamException {
+				for (WriterEvent action : writeActions)
 					action.writeTo(writer);
 			}
 			
@@ -1247,8 +1270,9 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	 * TODO: move to shared component!
 	 */
 	
-	private static String serializeDeclarations(List<Declaration> declarations) {
-		List<Declaration> sortedDeclarations = new ArrayList<Declaration>(declarations);
+	private static String serializeDeclarations(Iterable<Declaration> declarations) {
+		List<Declaration> sortedDeclarations = new ArrayList<Declaration>();
+		for (Declaration d : declarations) sortedDeclarations.add(d);
 		sort(sortedDeclarations);
 		return join(sortedDeclarations, "; ", serializeDeclaration);
 	}
@@ -1287,21 +1311,28 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		}
 	};
 	
-	private static String serializeRuleSet(List<Declaration> declarations, PseudoElementImpl pseudo) {
+	private static String serializeRuleBlock(List<? extends Rule<?>> declarations, PseudoElementImpl pseudo) {
 		StringBuilder b = new StringBuilder();
 		if (pseudo != null)
 			b.append("&").append(pseudo.toString()).append(" { ");
-		b.append(serializeDeclarations(declarations));
+		b.append(serializeDeclarations(Iterables.filter(declarations, Declaration.class)));
+		for (Rule<?> r : declarations)
+			if (r instanceof Declaration);
+			else if (r instanceof RulePage)
+				b.append(new ParseStylesheetDefinition.Style().add("@page",
+				                                                   ParseStylesheetDefinition.Style.of((RulePage)r)));
+			else
+				throw new RuntimeException("coding error");
 		if (pseudo != null)
 			b.append(" }");
 		return b.toString();
 	}
 
-	private static String serializeRuleSet(RuleMainBlock rule) {
+	private static String serializeRuleBlock(RuleMainBlock rule) {
 		return serializeDeclarations(rule);
 	}
 	
-	private static String serializeRuleSet(RuleRelativeBlock rule) {
+	private static String serializeRuleBlock(RuleRelativeBlock rule) {
 		StringBuilder b = new StringBuilder();
 		boolean first = true;
 		for (Selector s : rule.getSelector()) {
@@ -1317,25 +1348,22 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			b = OutputUtil.appendList(b, s, OutputUtil.EMPTY_DELIM);
 		}
 		b.append(" { ");
-		b.append(serializeDeclarations(rule));
+		b.append(serializeRuleBlock(rule, null));
 		b.append(" }");
 		return b.toString();
 	}
 	
-	private static String joinRuleSets(String... ruleSets) {
+	private static String joinRuleBlocks(String... ruleBlocks) {
 		String b = null;
-		for (String r : ruleSets)
+		for (String r : ruleBlocks)
 			if (r != null && !r.isEmpty())
 				if (b == null)
 					b = r;
 				else {
-					if (!b.endsWith("}"))
-						b = "{ " + b + " }";
+					if (!(b.endsWith("}") || b.endsWith(";")))
+						b = b + ";";
 					b += " ";
-					if (!r.endsWith("}"))
-						b += ("{ " + r + " }");
-					else
-						b += r; }
+					b += r; }
 		return b;
 	}
 	

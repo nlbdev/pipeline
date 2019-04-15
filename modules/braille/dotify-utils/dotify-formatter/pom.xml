@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
   
   <artifactId>dotify-formatter</artifactId>
-  <version>1.13.0-SNAPSHOT</version>
+  <version>1.14.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DP2 Braille Modules :: dotify-utils :: dotify-formatter</name>
@@ -26,12 +26,20 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.dotify</groupId>
       <artifactId>dotify.api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.dotify</groupId>
       <artifactId>dotify.common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -104,6 +112,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>logging-appender</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
@@ -137,6 +155,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <!--
                 in order to avoid including services in the same package in other bundles
             -->

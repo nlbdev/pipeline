@@ -55,7 +55,7 @@
 			<x:param select="'orphans: 3; @page { size: 40 25;}   display:block'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule style="orphans: 3;; display:block"/>
+			<css:rule style="orphans: 3;"/>
 			<css:rule selector="@page" style="size: 40 25;"/>
 		</x:expect>
 	</x:scenario>
@@ -71,18 +71,18 @@
 	
 	<x:scenario label="test_06">
 		<x:call function="css:parse-stylesheet">
-			<x:param select="'&amp;::before { content: &quot; } &quot; }
-			                 display:block
-			                 @page { size: 40 25 @top-right-corner { content: &quot; } &quot; }}
+			<x:param select="'display:block
+			                 &amp;::before { content: &quot; } &quot; }
+			                 @page { size: 40 25 @top-right { content: &quot; } &quot; }}
 			                 @volume { @begin { content: flow(titlepage); @page { size: 15 5; } @page:left { size: 15 5; @top-right { content: none; }}}}
 			                 &amp;:-obfl-alternate-scenario tr:blank::after { content: &quot;(empty)&quot; }'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule selector="&amp;::before" style="content: &quot; }} &quot;"/>
-			<css:rule style="display:block"/>
-			<css:rule selector="@page" style="size: 40 25 @top-right-corner {{ content: &quot; }} &quot; }}"/>
-			<css:rule selector="@volume" style="@begin {{ content: flow(titlepage); @page {{ size: 15 5; }} @page:left {{ size: 15 5; @top-right {{ content: none; }}}}}}"/>
-			<css:rule selector="&amp;:-obfl-alternate-scenario" style="&amp; tr:blank::after {{ content: &quot;(empty)&quot; }}"/>
+			<css:rule style="display: block;"/>
+			<css:rule selector="@page" style="size: 40 25; @top-right {{ content: ' }} '; }}"/>
+			<css:rule selector="@volume" style="@begin {{ content: flow(titlepage); @page {{ size: 15 5; }} @page:left {{ size: 15 5; @top-right {{ content: none; }} }} }}"/>
+			<css:rule selector="&amp;:-obfl-alternate-scenario" style="&amp; tr:blank::after {{ content: '(empty)'; }}"/>
+			<css:rule selector="&amp;::before" style="content: ' }} ';"/>
 		</x:expect>
 	</x:scenario>
 	
@@ -93,7 +93,7 @@
 			                  &amp;::before::before::before { display: block }'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule selector="&amp;::before" style="display: block &amp;::before {{ display: block }} &amp;::before::before {{ display: block }}"/>
+			<css:rule selector="&amp;::before" style="display: block; &amp;::before {{ display: block; }} &amp;::before::before {{ display: block; }}"/>
 		</x:expect>
 	</x:scenario>
 	
@@ -102,8 +102,6 @@
 			<x:param select="'@page { size: 15 15; @bottom-right { content: counter(braille-page, lower-roman) }'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule style="@page {{ size: 15 15;"/>
-			<css:rule selector="@bottom-right" style="content: counter(braille-page, lower-roman)"/>
 		</x:expect>
 	</x:scenario>
 	
@@ -174,7 +172,7 @@
 				<css:rule selector="&amp;::table-by(foo)" style="&amp;::list-item::after {{ content: &quot;, &quot; }} &amp;::list-item:last-child::after {{ content: none }}"/>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="'display:block @page { size: 40 25; @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { min-length: 20; max-length: 100; } @volume:nth(2) { max-length: 50; } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none }'"/>
+		<x:expect label="result" select="'display:block @page { size: 40 25 @bottom-center { content: ''foo'' } } @page:left { @bottom-left { content: counter(page) } } @volume { min-length: 20; max-length: 100 } @volume:nth(2) { max-length: 50 } &amp;::before { content: ''foo'' } &amp;::before::after { content: ''foo'' } &amp;::table-by(foo)::list-item::after { content: '', '' } &amp;::table-by(foo)::list-item:last-child::after { content: none }'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_15">
@@ -404,21 +402,14 @@
 	
 	<x:scenario label="test_32">
 		<x:call function="css:deep-parse-stylesheet">
-			<x:param select="'&amp;::before { content: &quot;x&quot; }
+			<x:param select="'display:block
+			                  &amp;::before { content: &quot;x&quot; }
 			                  &amp;::before::after { content: &quot;x&quot; }
-			                  display:block
-			                  @page { size: 40 25 @top-right-corner { content: &quot;x&quot; }}
+			                  &amp;::after { @page { size: 10 10 }}
+			                  @page { size: 40 25 @top-right { content: &quot;x&quot; }}
 			                  @volume { @begin { content: flow(titlepage); @page { size: 15 5; } @page:left { size: 15 5; @top-right { content: none; }}}}'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule selector="&amp;::before">
-				<css:rule>
-					<css:property name="content" value="&quot;x&quot;"/>
-				</css:rule>
-				<css:rule selector="&amp;::after">
-					<css:property name="content" value="&quot;x&quot;"/>
-				</css:rule>
-			</css:rule>
 			<css:rule>
 				<css:property name="display" value="block"/>
 			</css:rule>
@@ -426,8 +417,8 @@
 				<css:rule>
 					<css:property name="size" value="40 25"/>
 				</css:rule>
-				<css:rule selector="@top-right-corner">
-					<css:property name="content" value="&quot;x&quot;"/>
+				<css:rule selector="@top-right">
+					<css:property name="content" value="'x'"/>
 				</css:rule>
 			</css:rule>
 			<css:rule selector="@volume">
@@ -450,12 +441,25 @@
 					</css:rule>
 				</css:rule>
 			</css:rule>
+			<css:rule selector="&amp;::after">
+				<css:rule selector="@page">
+					<css:property name="size" value="10 10"/>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="&amp;::before">
+				<css:rule>
+					<css:property name="content" value="'x'"/>
+				</css:rule>
+				<css:rule selector="&amp;::after">
+					<css:property name="content" value="'x'"/>
+				</css:rule>
+			</css:rule>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="test_33">
 		<x:call function="css:deep-parse-stylesheet">
-			<x:param select="'@page { size: 32 27; @bottom-center { content: none }; @bottom-left { content: none } }'"/>
+			<x:param select="'@page { size: 32 27; @bottom-center { content: none } @bottom-left { content: none } }'"/>
 		</x:call>
 		<x:expect label="result">
 			<css:rule selector="@page">
@@ -561,20 +565,41 @@
 	</x:scenario>
 	
 	<x:scenario label="test_36">
+		<x:call function="css:serialize-string-set">
+			<x:param>
+				<css:string-set name="print-page" value="&quot;page &quot; attr(num)"/>
+				<css:string-set name="running-header" value="&quot;foo&quot;"/>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="'print-page &quot;page &quot; attr(num), running-header &quot;foo&quot;'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_37">
+		<x:call function="css:deep-parse-stylesheet">
+			<x:param select="'string-set: print-page content(), foo &quot;bar&quot;;'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule>
+				<css:property name="string-set" value="print-page content(), foo 'bar'"/>
+			</css:rule>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_38">
 		<x:call function="css:round-line-height">
 			<x:param select="'0.9'"/>
 		</x:call>
 		<x:expect label="result" select="'1'"/>
 	</x:scenario>
 	
-	<x:scenario label="test_37">
+	<x:scenario label="test_39">
 		<x:call function="css:round-line-height">
 			<x:param select="'1.7'"/>
 		</x:call>
 		<x:expect label="result" select="'1.75'"/>
 	</x:scenario>
 	
-	<x:scenario label="test_38">
+	<x:scenario label="test_40">
 		<x:call function="css:round-line-height">
 			<x:param select="'240%'"/>
 		</x:call>

@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:dotify="http://code.google.com/p/dotify/"
                xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
   
   <x:script>
@@ -17,15 +18,17 @@
       <p:import href="../../main/resources/xml/css-to-obfl.xpl"/>
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
-      <pxi:css-to-obfl name="obfl" duplex="true">
+      <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
+                       duplex="true">
         <p:with-option name="text-transform" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
         <p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
       </pxi:css-to-obfl>
-      <pxi:obfl-normalize-space/>
+      <pxi:obfl-normalize-space px:progress=".01"/>
       <p:for-each><p:identity/></p:for-each>
-      <p:try>
+      <p:try px:progress=".10">
         <p:group>
-          <dotify:obfl-to-pef locale="und">
+          <dotify:obfl-to-pef px:message="obfl-to-pef" px:progress="1"
+                              locale="und">
             <p:with-option name="mode" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
             <p:with-param port="parameters" name="allow-text-overflow-trimming" select="$allow-text-overflow-trimming"/>
           </dotify:obfl-to-pef>
@@ -2534,15 +2537,15 @@
   
   <x:scenario label="test_23">
     <x:documentation>
-      Tests generated newline (&#xA;) and white-space:pre-line.
+      Tests generated newline and white-space:pre-line.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none; display:block">
-            ⠤⠤⠤<br style="&amp;::before { content: '&#xA;'; white-space: pre-line; }"/>⠤⠤⠤
-            <br style="&amp;::before { content: '&#xA;'; white-space: pre-line; }"/>
-            <br style="&amp;::before { content: '&#xA;'; white-space: pre-line; }"/>⠤⠤⠤
+            ⠤⠤⠤<br style="&amp;::before { content: '\A'; white-space: pre-line; }"/>⠤⠤⠤
+            <br style="&amp;::before { content: '\A'; white-space: pre-line; }"/>
+            <br style="&amp;::before { content: '\A'; white-space: pre-line; }"/>⠤⠤⠤
           </doc>
         </x:document>
       </x:input>
@@ -3384,7 +3387,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform: none; @page { @top-left { content: '⠆' } margin-top: 1; }">
+          <doc style="text-transform: none; @page { margin-top: 1; @top-left { content: '⠆' } }">
             <body>
               <p style="display:block">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
             </body>
@@ -3455,7 +3458,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform: none; @page { @top-left { content: '⠆' } margin-top: 2; }">
+          <doc style="text-transform: none; @page { margin-top: 2; @top-left { content: '⠆' } }">
             <body>
               <p style="display:block">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
             </body>
@@ -4141,7 +4144,7 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none;
-                      @page { @bottom-left { content: '⠆' } size: 15 5; margin-bottom: 1; }">
+                      @page { size: 15 5; margin-bottom: 1; @bottom-left { content: '⠆' } }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4229,7 +4232,7 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none;
-                      @page { @bottom-left { content: '⠆' } size: 15 5; margin-bottom: 2;}">
+                      @page { size: 15 5; margin-bottom: 2; @bottom-left { content: '⠆' } }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4322,14 +4325,14 @@
   
   <x:scenario label="test_46">
     <x:documentation>
-      Tests newline (&#x0a;) with white-space:pre-wrap in bottom page margin, which results into
+      Tests newline with white-space:pre-wrap in bottom page margin, which results into
       multi-line footer.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none;
-                      @page { @bottom-left { content: '⠆&#x0a;⠆⠆'; white-space: pre-wrap; } size: 15 5; margin-bottom: 2; }">
+                      @page { size: 15 5; margin-bottom: 2; @bottom-left { content: '⠆\A⠆⠆'; white-space: pre-wrap; } }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -4422,14 +4425,14 @@
   
   <x:scenario label="test_47">
     <x:documentation>
-      Tests newline (&#x0a;) with white-space:pre-wrap in bottom page margin, which results into
-      multi-line footer, even with margin-bottom:1.
+      Tests newline with white-space:pre-wrap in bottom page margin, which results into multi-line
+      footer, even with margin-bottom:1.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none;
-                      @page { @bottom-left { content: '⠆&#x0a;⠆⠆'; white-space: pre-wrap; } size: 15 5; margin-bottom: 1; }">
+                      @page { size: 15 5; margin-bottom: 1; @bottom-left { content: '⠆\A⠆⠆'; white-space: pre-wrap; } }">
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
             <p style="display: block"> ⠿ </p>
@@ -10066,7 +10069,7 @@
             <block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
-			  </block>
+              </block>
             </block>
           </sequence>
           <sequence master="main" break-before="volume">
@@ -13197,6 +13200,330 @@
   </x:scenario>
   
   <x:scenario label="test_115">
+    <x:documentation>
+      Tests @-obfl-volume-transition rule.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <body style="text-transform: none;
+                       @page { size: 10 5 }
+                       @volume { max-length: 3 }
+                       @-obfl-volume-transition {
+                         @sequence-interrupted {
+                           content: '⠒ ⠒ ⠒ ⠒ ⠒' }}">
+            <p style="display: block">
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+            </p>
+            <p style="display: block">
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+            </p>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="main" duplex="true" page-number-variable="page" page-width="10" page-height="5">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <volume-template sheets-in-volume-max="3"/>
+          <volume-transition range="sheet">
+            <sequence-interrupted>
+              <block>⠒ ⠒ ⠒ ⠒ ⠒</block>
+            </sequence-interrupted>
+          </volume-transition>
+          <sequence master="main">
+            <block>
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+            </block>
+            <block>
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+              ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠒⠀⠒⠀⠒⠀⠒⠀⠒</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_116">
+    <x:documentation>
+      Tests that tables do not inherit padding from container.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none;
+                      @page { size: 20 15 }">
+            <div style="display: block; padding-top: 2">
+              ⠛⠛⠛
+              <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+                     style="display:table">
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+              </table>
+            </div>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="body" page-width="20" page-height="15" duplex="true" page-number-variable="page">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="body">
+            <block padding-top="2">
+              <block>⠛⠛⠛</block>
+              <block>
+                <table>
+                  <tr>
+                    <td>⠤⠤⠤</td>
+                    <td>⠤⠤⠤</td>
+                  </tr>
+                  <tr>
+                    <td>⠤⠤⠤</td>
+                    <td>⠤⠤⠤</td>
+                  </tr>
+                  <tr>
+                    <td>⠤⠤⠤</td>
+                    <td>⠤⠤⠤</td>
+                  </tr>
+                </table>
+              </block>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="15" cols="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row/>
+                  <row/>
+                  <row>⠛⠛⠛</row>
+                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_117">
+    <x:documentation>
+      Tests that captions do not inherit padding from table.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none;
+                      @page { size: 20 15 }">
+            <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+                   style="display:table; padding-bottom: 2">
+              <caption style="display:block">⠛⠛⠛⠛⠛⠛</caption>
+              <tr>
+                <td>⠤⠤⠤</td>
+                <td>⠤⠤⠤</td>
+              </tr>
+              <tr>
+                <td>⠤⠤⠤</td>
+                <td>⠤⠤⠤</td>
+              </tr>
+              <tr>
+                <td>⠤⠤⠤</td>
+                <td>⠤⠤⠤</td>
+              </tr>
+            </table>
+            <p style="display:block">⠛⠛⠛</p>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="body" page-width="20" page-height="15" duplex="true" page-number-variable="page">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="body">
+            <block padding-bottom="2">
+              <block>⠛⠛⠛⠛⠛⠛</block>
+              <table>
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+                <tr>
+                  <td>⠤⠤⠤</td>
+                  <td>⠤⠤⠤</td>
+                </tr>
+              </table>
+            </block>
+            <block>⠛⠛⠛</block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="15" cols="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠛⠛⠛⠛⠛⠛</row>
+                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
+                  <row/>
+                  <row/>
+                  <row>⠛⠛⠛</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_118">
     <x:documentation>
       Tests noteref inside repeated table header.
     </x:documentation>

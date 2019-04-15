@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
@@ -7,13 +6,10 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.Iterables.size;
 
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.SimpleInlineStyle;
-
-import org.daisy.maven.xproc.xprocspec.XProcSpecRunner;
 
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
@@ -23,15 +19,16 @@ import org.daisy.pipeline.braille.common.TransformProvider;
 
 import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 
+import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.ops4j.pax.exam.util.PathUtils;
+import org.ops4j.pax.exam.Configuration;
+import static org.ops4j.pax.exam.CoreOptions.composite;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import org.ops4j.pax.exam.Option;
 
 import org.osgi.framework.BundleContext;
 
@@ -60,9 +57,18 @@ public class DotifyFormatterTest extends AbstractXSpecAndXProcSpecTest {
 			// logging
 			"org.slf4j:jul-to-slf4j:?",
 			"org.daisy.pipeline:logging-activator:?",
-			// FIXME: Dotify needs older version of jing
-			"org.daisy.libs:jing:20120724.0.0",
+			"org.daisy.pipeline:logging-appender:?",
+			// FIXME: because otherwise excluded through com.fasterxml.woodstox:woodstox-core exclusion
+			"org.codehaus.woodstox:stax2-api:?",
 		};
+	}
+	
+	@Override @Configuration
+	public Option[] config() {
+		return options(
+			// FIXME: BrailleUtils needs older version of jing
+			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
+			composite(super.config()));
 	}
 	
 	@Inject
@@ -74,17 +80,6 @@ public class DotifyFormatterTest extends AbstractXSpecAndXProcSpecTest {
 		Hashtable<String,Object> properties = new Hashtable<String,Object>();
 		context.registerService(BrailleTranslatorProvider.class.getName(), provider, properties);
 		context.registerService(TransformProvider.class.getName(), provider, properties);
-	}
-	
-	@Override @Test
-	public void runXProcSpec() throws Exception {
-		File baseDir = new File(PathUtils.getBaseDir());
-		boolean success = xprocspecRunner.run(new File(baseDir, "src/test/xprocspec"),
-		                                      new File(baseDir, "target/xprocspec-reports"),
-		                                      new File(baseDir, "target/surefire-reports"),
-		                                      new File(baseDir, "target/xprocspec"),
-		                                      new XProcSpecRunner.Reporter.DefaultReporter());
-		assertTrue("XProcSpec tests should run with success", success);
 	}
 	
 	private static class NumberBrailleTranslator extends AbstractBrailleTranslator {
