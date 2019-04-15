@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.11.2-SNAPSHOT</version>
+  <version>1.12.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
@@ -110,17 +110,40 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!-- Build/test utilities -->
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>webservice-jaxb</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>clientlib-java-jaxb</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xproc-engine-daisy-pipeline</artifactId>
+        <version>1.12.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xproc-engine-daisy-pipeline-logging</artifactId>
+        <version>1.0.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <properties>
-    <java.version>1.8</java.version>
+    <java.source.version>1.8</java.source.version> <!-- if we change this to 9 we also have to change target to 9 -->
+    <java.target.version>1.8</java.target.version>
+    <!-- must match version from framework-bom -->
+    <saxon.versionRange>[9.8.0,9.8.1)</saxon.versionRange>
   </properties>
-
 
   <dependencies>
     <!--
@@ -143,8 +166,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>${java.source.version}</source>
+          <target>${java.target.version}</target>
         </configuration>
       </plugin>
       <plugin>
@@ -177,6 +200,8 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
             <additionalparam>-Xdoclint:none</additionalparam>
+            <source>${java.source.version}</source>
+            <target>${java.target.version}</target>
           </configuration>
       </plugin>
     </plugins>
@@ -226,23 +251,70 @@
       <id>central</id>
       <name>Maven Central</name>
       <url>http://repo.maven.apache.org/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <!-- Restlet maven repository -->
     <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <!-- springsource used for the osgi version of mysql -->
     <repository>
       <id>com.springsource.repository.bundles.external</id>
       <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
       <url>http://repository.springsource.com/maven/bundles/external</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <!-- EclipseLink stuff -->
     <repository>
       <id>EclipseLink</id>
       <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <!-- gemini related bundles and derby -->
+    <repository>
+      <id>eclipse-gemini-repo</id>
+      <name>Eclipse Gemini Maven repository</name>
+      <url>http://download.eclipse.org/gemini/mvn/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>eclipse-gemini-dbaccess</id>
+      <name>Eclipse Gemini DBAccess Milestones</name>
+      <url>http://download.eclipse.org/gemini/dbaccess/mvn/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

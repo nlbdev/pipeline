@@ -1,18 +1,20 @@
 package org.daisy.common.xproc.calabash.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Properties;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.common.messaging.Message.MessageBuilder;
-import org.daisy.common.messaging.MessageBuliderFactory;
 import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
+import org.daisy.pipeline.properties.Properties;
 
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
+import com.xmlcalabash.runtime.XStep;
 
 
 /**
@@ -21,30 +23,26 @@ import com.xmlcalabash.core.XProcRunnable;
  */
 public class EventBusMessageListener implements XProcMessageListener {
 
-	private static boolean LOG_DEBUG = Boolean.parseBoolean(
-		org.daisy.pipeline.properties.Properties.getProperty("org.daisy.pipeline.calabash.logDebug","false"));
+	// use this property to automatically add a message to all steps with progress information but
+	// no message (only for debugging)
+	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
+		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
 	
 	/** The listener. */
 	EventBusProvider eventBus;
-	MessageBuliderFactory messageBuilderFactory;
-	Properties props;
-	int sequence = 0;
+	private final String jobId;
 
-	public EventBusMessageListener(EventBusProvider eventBus,
-			 Properties props) {
+	public EventBusMessageListener(EventBusProvider eventBus, String jobId) {
 		super();
 		this.eventBus = eventBus;
-		messageBuilderFactory = new MessageBuliderFactory();
-		this.props = props;
+		this.jobId = jobId;
 	}
 
-	private void post(MessageBuilder builder) {
-		if (props != null && props.getProperty("JOB_ID")!=null) {
-			builder.withJobId(props.getProperty("JOB_ID"));
-		}
-		builder.withSequence(sequence++);
-		builder.withTimeStamp(new Date());
-		eventBus.get().post(builder.build());
+	private ProgressMessage post(ProgressMessageBuilder builder) {
+		ProgressMessage activeBlock = ProgressMessage.getActiveBlock(jobId, null);
+		return activeBlock != null
+			? activeBlock.post(builder)
+			: eventBus.post(builder);
 	}
 
 	/*
@@ -54,11 +52,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void error(Throwable exception) {
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.ERROR);
 		XprocMessageHelper.errorMessage(exception, builder);
-		post(builder);
-
+		post(builder).close();
 	}
 
 	/*
@@ -72,10 +69,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	@Override
 	public void error(XProcRunnable step, XdmNode node, String message,
 			QName qName) {
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.ERROR);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder);
+		post(builder).close();
 	}
 
 	/*
@@ -86,12 +83,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void fine(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.DEBUG);
-                builder = XprocMessageHelper.message(step, node, message, builder);
-                if (LOG_DEBUG){
-                        post(builder);
-                }
+		builder = XprocMessageHelper.message(step, node, message, builder);
+		post(builder).close();
 	}
 
 	/*
@@ -103,13 +98,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void finer(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-                if (LOG_DEBUG){
-                        post(builder);
-                }
-
+		post(builder).close();
 	}
 
 	/*
@@ -121,13 +113,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void finest(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-                if (LOG_DEBUG){
-                        post(builder);
-                }
-
+		post(builder).close();
 	}
 
 	/*
@@ -138,13 +127,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void info(XProcRunnable step, XdmNode node, String message) {
-          
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.INFO);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder);
-                
-
+		post(builder).close();
 	}
 
 	/*
@@ -156,11 +142,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void warning(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.WARNING);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-		post(builder);
-
+		post(builder).close();
 	}
 
 	/*
@@ -171,11 +156,53 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void warning(Throwable exception) {
-		MessageBuilder builder = messageBuilderFactory.newMessageBuilder()
+		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.WARNING);
 		XprocMessageHelper.errorMessage(exception, builder);
-		post(builder);
-
+		post(builder).close();
 	}
 
+	@Override
+	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
+		ProgressMessageBuilder builder = createMessageBuilder().withProgress(portion);
+		if (message == null && AUTO_NAME_STEPS && portion != null && portion.compareTo(BigDecimal.ZERO) > 0) {
+			// FIXME: not if there is a an ancestor block with portion 0!
+			// how to test this?
+			// -> activeBlock.getPortion() returns portion as defined in XPL and no access to parents
+			// -> only check parent and change portion to 0 if parent has portion 0 because irrelevant anyway
+			if (step instanceof XStep)
+				message = ((XStep)step).getStep().getName();
+			if (level == null)
+				level = "DEBUG";
+		}
+		if (level == null || level.equals("INFO")) {
+			builder.withLevel(Level.INFO);
+		} else if (level.equals("ERROR")) {
+			builder.withLevel(Level.ERROR);
+		} else if (level.equals("WARN")) {
+			builder.withLevel(Level.WARNING);
+		} else if (level.equals("DEBUG")) {
+			builder.withLevel(Level.DEBUG);
+		} else if (level.equals("TRACE")) {
+			builder.withLevel(Level.TRACE);
+		} else {
+			builder.withLevel(Level.INFO);
+			message = "Message with invalid level '" + level + "': " + message;
+		}
+		XprocMessageHelper.message(step, node, message, builder);
+		post(builder);
+	}
+
+	@Override
+	public void closeStep() {
+		ProgressMessage m = ProgressMessage.getActiveBlock(jobId, null);
+		if (m == null)
+			throw new RuntimeException("coding error");
+		else
+			m.close();
+	}
+
+	private ProgressMessageBuilder createMessageBuilder() {
+		return new ProgressMessageBuilder().withJobId(jobId);
+	}
 }

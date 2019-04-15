@@ -20,12 +20,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResultSet;
-import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -134,11 +132,6 @@ public final class PersistentJobContext extends AbstractJobContext {
                 ContextHydrator.hydrateResultPorts(rBuilder,portResults);
                 ContextHydrator.hydrateResultOptions(rBuilder,optionResults);
                 this.setResults(rBuilder.build());
-
-                //so the context is configured once it leaves to the real world.
-                if (configurator!=null)
-                        configurator.configure(this);
-                
         }
 
         private void updateResults(){
@@ -206,11 +199,11 @@ public final class PersistentJobContext extends AbstractJobContext {
          *
          * @return The script.
          */
-        @Column(name="script_uri")
+        @Column(name="script_id")
         @Access(AccessType.PROPERTY)
-        private String getScriptUri() {
+        private String getScriptId() {
                 if(this.getScript()!=null){
-                        return this.getScript().getURI().toString();
+                        return this.getScript().getDescriptor().getId();
                 }else{
                         //throw new IllegalStateException("Script is null");
                         return "";
@@ -220,23 +213,19 @@ public final class PersistentJobContext extends AbstractJobContext {
 
 
         @SuppressWarnings("unused") //used by jpa
-        private void setScriptUri(String uri) {
+        private void setScriptId(String id) {
                 if(registry!=null){
-                        XProcScriptService service=registry.getScript(URI.create(uri));
+                        XProcScriptService service=registry.getScript(id);
                         if (service!=null){
                                 XProcScript xcript=service.load();
                                 logger.debug(String.format("load script %s",xcript));
                                 this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
-                        }else{
-                                XProcScript empty= new XProcScript.Builder().withPipelineInfo(new XProcPipelineInfo.Builder().withURI(URI.create(uri)).build()).build();
-                                this.setScript(empty);
+                                return;
                         }
-                }else{
-                        throw new IllegalStateException(
-                                        String.format("Illegal state for recovering XProcScript: registry %s"
-                                                ,this.getScript(),registry));
                 }
-
+                throw new IllegalStateException(
+                                String.format("Illegal state for recovering XProcScript: registry %s"
+                                        ,this.getScript(),registry));
         }
 
         /**
@@ -267,15 +256,9 @@ public final class PersistentJobContext extends AbstractJobContext {
                                 
         }
 
-        //Configuration for adding runtime inforamtion  
         @Transient
         static ScriptRegistry registry;
         public static void setScriptRegistry(ScriptRegistry sregistry){
                 registry=sregistry;
-        }
-        @Transient
-        private static RuntimeConfigurator configurator;
-        public static void setConfigurator(RuntimeConfigurator configurator){
-                PersistentJobContext.configurator=configurator;
         }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<script xmlns="http://www.daisy.org/ns/pipeline/data"
+    id="dtbook-to-zedai"
+    href="http://example.org/ws/scripts/dtbook-to-zedai">
+    <nicename>DTBook to ZedAI</nicename>
+    <description>Transforms DTBook XML into ZedAI XML.</description>
+    <homepage>http://daisy.github.io/pipeline/modules/dtbook-to-zedai</homepage>
+    <version>1.1.2</version>
+    <input
+        desc="One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed."
+        mediaType="application/x-dtbook+xml" name="source" sequence="true" required="true" nicename="DTBook file(s)"/>
+    <option desc="Filename for the generated MODS file" mediaType="" name="opt-mods-filename" nicename="Mods File"
+        required="false" type="string" ordered="false" sequence="false"/>
+    <option desc="Filename for the generated CSS file" mediaType="" name="opt-css-filename" nicename="CSS File"
+        required="false" type="string" ordered="false" sequence="false"/>
+    <option desc="Filename for the generated ZedAI file" mediaType="" name="opt-zedai-filename" nicename="ZedAI File"
+        required="false" type="string" ordered="false" sequence="false"/>
+</script>

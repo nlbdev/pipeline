@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>framework-core</artifactId>
-  <version>3.2.1-SNAPSHOT</version>
+  <version>4.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Framework Core</name>
   <dependencies>
@@ -31,6 +31,11 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
     </dependency>
     <!--
         test dependencies
@@ -66,7 +71,17 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>OSGI-INF/event-provider.xml, OSGI-INF/job-execution-service.xml, OSGI-INF/runtime-configurator.xml, OSGI-INF/job-manager-factory.xml, OSGI-INF/parser.xml, OSGI-INF/registry.xml, OSGI-INF/datatype-registry.xml</Service-Component>
+            <Service-Component>
+              OSGI-INF/event-provider.xml,
+              OSGI-INF/job-execution-service.xml,
+              OSGI-INF/runtime-configurator.xml,
+              OSGI-INF/job-manager-factory.xml,
+              OSGI-INF/parser.xml,
+              OSGI-INF/registry.xml,
+              OSGI-INF/datatype-registry.xml,
+              OSGI-INF/monitor.xml,
+              OSGI-INF/event-listener.xml
+            </Service-Component>
             <!--
                 compatible with versions >= 20120724
             -->
@@ -104,8 +119,6 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <source>1.8</source>
-              <target>1.8</target>
               <offlineLinks>
                 <offlineLink>
                   <url>http://daisy.github.io/pipeline/api/</url>
