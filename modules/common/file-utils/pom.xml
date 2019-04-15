@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>common-utils-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>file-utils</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.5.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: File Utilities</name>
@@ -36,7 +36,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <scope>provided</scope>
     </dependency>
     <!--
         runtime dependencies
@@ -49,6 +48,11 @@
     <!--
         test dependencies
     -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
@@ -85,6 +89,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>
               OSGI-INF/file-exists.xml,
               OSGI-INF/file-expand83.xml,
@@ -95,6 +103,7 @@
               OSGI-INF/set-xml-declaration-step.xml,
               OSGI-INF/config-calabash.xml
             </Service-Component>
+            <Private-Package>org.daisy.common.xproc.calabash.steps</Private-Package>
           </instructions>
         </configuration>
         <executions>
