@@ -8,18 +8,45 @@
                <string value="   "/>
                <current-page number-format="default"/>
             </field>
-		 </header>
+         </header>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <layout-master name="b" duplex="false" page-width="10" page-height="5">
+      <default-template>
+         <header>
+            <field allow-text-flow="true"/>
+            <field>
+               <string value="  ⠿"/>
+            </field>
+         </header>
+         <header>
+            <field allow-text-flow="true"/>
+            <field>
+               <string value="  ⠿"/>
+            </field>
+         </header>
          <footer/>
       </default-template>
    </layout-master>
    <sequence master="a">
-      <block id="a">
+      <block>
          ⠁⠁⠁ ⠿⠿⠿ ⠠⠠⠠ ⠤⠤⠤
          ⠁⠁⠁ ⠿⠿⠿ ⠠⠠⠠ ⠤⠤⠤
          ⠁⠁⠁ ⠿⠿⠿ ⠠⠠⠠ ⠤⠤⠤
          ⠁⠁⠁ ⠿⠿⠿ ⠠⠠⠠ ⠤⠤⠤
          ⠁⠁⠁ ⠿⠿⠿ ⠠⠠⠠ ⠤⠤⠤
          ⠁⠁⠁ ⠿⠿⠿ ⠠⠠⠠ ⠤⠤⠤
-     </block>
+      </block>
+   </sequence>
+   <sequence master="a">
+      <block border-top-style="solid">
+         ⠁⠁⠁
+      </block>
+   </sequence>
+   <sequence master="b">
+      <block border-bottom-style="solid">
+         ⠁⠁⠁
+      </block>
    </sequence>
 </obfl>

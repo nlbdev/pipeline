@@ -6,6 +6,7 @@ import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
 import org.daisy.dotify.formatter.impl.row.BlockStatistics;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 
@@ -44,9 +45,9 @@ abstract class BlockProcessor {
 		rowGroupProvider = new RowGroupProvider(master, g, bcm, bc, keepWithNext);
 	}
 	
-	protected void processNextRowGroup(DefaultContext context, boolean wholeWordsOnly) {
+	protected void processNextRowGroup(DefaultContext context, LineProperties lineProps) {
 		if (hasNextInBlock()) {
-			addRowGroup(rowGroupProvider.next(context, wholeWordsOnly));
+			addRowGroup(rowGroupProvider.next(context, lineProps));
 		}
 	}
 	

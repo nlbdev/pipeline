@@ -10,6 +10,7 @@ import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
 import org.daisy.dotify.formatter.impl.row.BlockStatistics;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
@@ -86,21 +87,27 @@ class RowGroupProvider {
 		return bcm;
 	}
 	
-	public RowGroup next(DefaultContext context, boolean wholeWordsOnly) {
+	public RowGroup next(DefaultContext context, LineProperties lineProps) {
 		if (this.context==null || !this.context.equals(context)) {
 			this.context = g.contextWithMeta(context);
 			bcm.setContext(this.context);
 		}
-		RowGroup b = nextInner(wholeWordsOnly);
+		RowGroup b = nextInner(lineProps);
 		return b;
 	}
 
-	private RowGroup nextInner(boolean wholeWordsOnly) {
+	private RowGroup nextInner(LineProperties lineProps) {
+		if (lineProps.getReservedWidth()>0 && !bcm.supportsVariableWidth()) {
+			return new RowGroup.Builder(master.getRowSpacing()).add(new RowImpl())
+					.mergeable(false)
+					.collapsible(false).skippable(false).breakable(false).build();
+		}
 		if (phase==0) {
 			phase++;
 			//if there is a row group, return it (otherwise, try next phase)
 			if (bcm.hasCollapsiblePreContentRows()) {
 				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getCollapsiblePreContentRows()).
+										mergeable(true).
 										collapsible(true).skippable(false).breakable(false), hasNext(), g).build();
 			}
 		}
@@ -109,6 +116,7 @@ class RowGroupProvider {
 			//if there is a row group, return it (otherwise, try next phase)
 			if (bcm.hasInnerPreContentRows()) {
 				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getInnerPreContentRows()).
+										mergeable(false).
 										collapsible(false).skippable(false).breakable(false), hasNext(), g).build();
 			}
 		}
@@ -117,7 +125,7 @@ class RowGroupProvider {
 			//TODO: Does this interfere with collapsing margins?
 			if (shouldAddGroupForEmptyContent()) {
 				RowGroup.Builder rgb = setPropertiesForFirstContentRowGroup(
-					new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>()), 
+					new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>()).mergeable(true), 
 					bc.getRefs(),
 					g
 				);
@@ -126,7 +134,7 @@ class RowGroupProvider {
 		}
 		if (phase==3) {
 			Optional<RowImpl> rt;
-			if ((rt=bcm.getNext(wholeWordsOnly)).isPresent()) {
+			if ((rt=bcm.getNext(lineProps)).isPresent()) {
 				RowImpl r = rt.get();
 				rowIndex++;
 				boolean hasNext = bcm.hasNext(); 
@@ -136,6 +144,7 @@ class RowGroupProvider {
 					bc.getRefs().setRowCount(g.getBlockAddress(), bcm.getRowCount());
 				}
 				RowGroup.Builder rgb = new RowGroup.Builder(master.getRowSpacing()).add(r).
+						mergeable(bcm.supportsVariableWidth()).
 						collapsible(false).skippable(false).breakable(
 								r.allowsBreakAfter()&&
 								owc.allowsBreakAfter(rowIndex-1)&&
@@ -156,6 +165,7 @@ class RowGroupProvider {
 			phase++;
 			if (bcm.hasPostContentRows()) {
 				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getPostContentRows()).
+					mergeable(false).
 					collapsible(false).skippable(false).breakable(keepWithNext<0), hasNext(), g).build();
 			}
 		}
@@ -163,6 +173,7 @@ class RowGroupProvider {
 			phase++;
 			if (bcm.hasSkippablePostContentRows()) {
 				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getSkippablePostContentRows()).
+					mergeable(true).
 					collapsible(true).skippable(true).breakable(keepWithNext<0), hasNext(), g).build();
 			}
 		}

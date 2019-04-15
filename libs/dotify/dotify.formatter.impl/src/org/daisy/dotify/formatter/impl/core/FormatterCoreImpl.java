@@ -28,6 +28,7 @@ import org.daisy.dotify.api.translator.TextBorderFactory;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
+import org.daisy.dotify.formatter.impl.row.BlockMargin;
 import org.daisy.dotify.formatter.impl.row.ListItem;
 import org.daisy.dotify.formatter.impl.row.Margin;
 import org.daisy.dotify.formatter.impl.row.Margin.Type;
@@ -130,8 +131,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 					widows(p.getWidows()).
 					blockIndent(blockIndent).
 					blockIndentParent(blockIndentParent.peek()).
-					leftMargin(new Margin(Type.LEFT, leftMarginComps)).
-					rightMargin(new Margin(Type.RIGHT, rightMarginComps)).
+					margins(new BlockMargin(new Margin(Type.LEFT, leftMarginComps), new Margin(Type.RIGHT, rightMarginComps), fc.getSpaceCharacter())).
 					outerSpaceBefore(p.getMargin().getTopSpacing()).
 					underlineStyle(p.getUnderlineStyle());
 		Block c = newBlock(blockId, rdp.build());
@@ -266,11 +266,11 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 						widows(p.getWidows()).
 						blockIndent(blockIndent).
 						blockIndentParent(blockIndentParent.peek()).
-						leftMargin(new Margin(Type.LEFT, leftMarginComps)). //.stackMarginComp(formatterContext, false, false)
-						//leftMarginParent((Margin)leftMargin.clone()). //.stackMarginComp(formatterContext, true, false)
-						rightMargin(new Margin(Type.RIGHT, rightMarginComps)). //.stackMarginComp(formatterContext, false, true)
-						//rightMarginParent((Margin)rightMargin.clone())
-						//.stackMarginComp(formatterContext, true, true)
+						margins(new BlockMargin(
+								new Margin(Type.LEFT, leftMarginComps),
+								new Margin(Type.RIGHT, rightMarginComps),
+								fc.getSpaceCharacter()
+								)).
 						underlineStyle(p.getUnderlineStyle());
 			Block c = newBlock(null, rdp.build());
 			c.setKeepType(keep);
@@ -464,8 +464,11 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 				//text properties are not relevant here, since a table block doesn't support mixed content
 				//textIndent, firstLineIndent, align, orphans, widows, blockIndent and blockIndentParent
 				//rowSpacing is handled by the table itself
-				.leftMargin(new Margin(Type.LEFT, leftMarginComps))
-				.rightMargin(new Margin(Type.RIGHT, rightMarginComps))
+				.margins(new BlockMargin(
+						new Margin(Type.LEFT, leftMarginComps),
+						new Margin(Type.RIGHT, rightMarginComps),
+						fc.getSpaceCharacter()
+						))
 				//all margins are set here, because the table is an opaque block
 				.outerSpaceBefore(props.getMargin().getTopSpacing())
 				.outerSpaceAfter(props.getMargin().getBottomSpacing())

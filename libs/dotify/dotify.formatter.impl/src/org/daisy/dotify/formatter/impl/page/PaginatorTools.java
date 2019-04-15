@@ -71,7 +71,7 @@ class PaginatorTools {
 					throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units);
 				}
 			} else {
-				throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units);
+				throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units + " (" + units.stream().mapToInt(v->v.length()).sum() + ")");
 			}
 		}
 		int parts = units.size()-1;

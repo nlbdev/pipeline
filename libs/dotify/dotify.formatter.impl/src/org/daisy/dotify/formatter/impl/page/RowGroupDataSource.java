@@ -3,6 +3,7 @@ package org.daisy.dotify.formatter.impl.page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.common.splitter.DefaultSplitResult;
@@ -14,6 +15,7 @@ import org.daisy.dotify.common.splitter.Supplements;
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 
 /**
  * <p>Provides a data source for row groups.</p>
@@ -37,6 +39,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	private final List<Block> blocks;
 	private List<RowGroup> groups;
 	private BlockContext bc;
+	private Function<Integer, Integer> reservedWidths = x->0;
 	private int blockIndex;
 	private boolean allowHyphenateLastLine;
 
@@ -75,6 +78,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		this.vs = template.vs;
 		this.blockIndex = template.blockIndex;
 		this.allowHyphenateLastLine = template.allowHyphenateLastLine;
+		this.reservedWidths = template.reservedWidths;
 	}
 	
 	static RowGroupDataSource copyUnlessNull(RowGroupDataSource template) {
@@ -93,7 +97,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 
 	@Override
 	public boolean isEmpty() {
-		return this.currentRowCount()==0 && blockIndex>=blocks.size() && !hasNextInBlock();
+		return this.groupSize()==0 && blockIndex>=blocks.size() && !hasNextInBlock();
 	}
 
 	@Override
@@ -110,7 +114,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		if (this.groups==null) {
 			return Collections.emptyList();
 		} else {
-			return this.groups.subList(0, currentRowCount());
+			return this.groups.subList(0, groupSize());
 		}
 	}
 
@@ -118,7 +122,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	public int getSize(int limit) {
 		if (!ensureBuffer(limit))  {
 			//we have buffered all elements
-			return this.currentRowCount();
+			return this.groupSize();
 		} else {
 			return limit;
 		}
@@ -140,6 +144,10 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		this.bc = c;
 	}
 	
+	void setReservedWidths(Function<Integer, Integer> func) {
+		this.reservedWidths = func;
+	}
+	
 	/**
 	 * <p>Sets the hyphenate last line property.</p>
 	 * 
@@ -159,7 +167,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	 * @return returns true if the index element was available, false otherwise
 	 */
 	private boolean ensureBuffer(int index) {
-		while (index<0 || this.currentRowCount()<index) {
+		while (index<0 || this.groupSize()<index) {
 			if (blockIndex>=blocks.size() && !hasNextInBlock()) {
 				return false;
 			}
@@ -173,7 +181,10 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 			// This is reasonable: The very last line in a result would never be hyphenated, so suppressing
 			// hyphenation is unnecessary. Also, actively doing this would be difficult, because we do not know
 			// if the line produced below is the last line or not, until after the call has already been made.
-			processNextRowGroup(bc, !allowHyphenateLastLine && index>-1 && currentRowCount()>=index-1);
+			processNextRowGroup(bc, new LineProperties.Builder()
+				.suppressHyphenation(!allowHyphenateLastLine && index>-1 && groupSize()>=index-1)
+				.reservedWidth(reservedWidths.apply(countRows())).build()
+			);
 		}
 		return true;
 	}
@@ -228,7 +239,11 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		groups.add(rg);
 	}
 	
-	int currentRowCount() {
+	private int groupSize() {
 		return groups==null?0:groups.size();
+	}
+	
+	private int countRows() {
+		return groups==null?0:groups.stream().mapToInt(v->v.getRows().size()).sum();
 	}
 }

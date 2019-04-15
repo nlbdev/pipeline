@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.daisy.dotify.api.engine.FormatterEngine;
+import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
-import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
 import org.junit.Test;
 @SuppressWarnings("javadoc")

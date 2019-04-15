@@ -16,26 +16,31 @@ public class HyphenateTest extends AbstractFormatterEngineTest {
 
 	private FormatterEngine configureEngine() throws PagedMediaWriterConfigurationException {
 		return FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
-					new FormatterConfiguration.Builder("sv-SE",
+				new FormatterConfiguration.Builder("sv-SE",
 						BrailleTranslatorFactory.MODE_UNCONTRACTED)
-					.allowsEndingVolumeOnHyphen(false)
-					.build(), 
+				.allowsEndingVolumeOnHyphen(false)
+				.build(), 
 				PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE));
 	}
 
 	@Test
+	public void testHyphenation_01() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/hyphenate/hyphenate-input.obfl", "resource-files/hyphenate/hyphenate-expected.pef", false);
+	}
+
+	@Test
 	public void testHyphenateLastLine_01() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF(configureEngine(), "resource-files/hyphenate-last-line-input.obfl", "resource-files/hyphenate-last-line-expected.pef", null);
+		testPEF(configureEngine(), "resource-files/hyphenate/hyphenate-last-line-input.obfl", "resource-files/hyphenate/hyphenate-last-line-expected.pef", null);
 	}
 
 	@Test
 	public void testHyphenateLastLine_02() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF(configureEngine(), "resource-files/hyphenate-last-line2-input.obfl", "resource-files/hyphenate-last-line2-expected.pef", null);
+		testPEF(configureEngine(), "resource-files/hyphenate/hyphenate-last-line2-input.obfl", "resource-files/hyphenate/hyphenate-last-line2-expected.pef", null);
 	}
-	
+
 	@Test
 	public void testHyphenateLastLine_03() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF(configureEngine(), "resource-files/hyphenate-last-line3-input.obfl", "resource-files/hyphenate-last-line3-expected.pef", null);
+		testPEF(configureEngine(), "resource-files/hyphenate/hyphenate-last-line3-input.obfl", "resource-files/hyphenate/hyphenate-last-line3-expected.pef", null);
 	}
 
 }

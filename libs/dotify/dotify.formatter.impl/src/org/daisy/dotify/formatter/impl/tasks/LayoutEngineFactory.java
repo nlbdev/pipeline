@@ -8,7 +8,6 @@ import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
-import org.daisy.streamline.api.media.FormatIdentifier;
 import org.daisy.streamline.api.tasks.TaskGroup;
 import org.daisy.streamline.api.tasks.TaskGroupFactory;
 import org.daisy.streamline.api.tasks.TaskGroupInformation;
@@ -27,7 +26,6 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 @Component
 public class LayoutEngineFactory implements TaskGroupFactory {
 	private static final String LOCALE = "sv-SE";
-	private final Set<TaskGroupSpecification> supportedSpecifications;
 	private final Set<TaskGroupInformation> information;
 	private PagedMediaWriterFactoryMakerService pmw;
 	private FormatterEngineFactoryService fe;
@@ -37,15 +35,6 @@ public class LayoutEngineFactory implements TaskGroupFactory {
 	 * Creates a new layout engine factory.
 	 */
 	public LayoutEngineFactory() {
-		supportedSpecifications = new HashSet<>();
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.PEF_FORMAT), LOCALE).build());
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.TEXT_FORMAT), LOCALE).build());
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.TEXT_FORMAT), "en-US").build());
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.TEXT_FORMAT), "no-NO").build());
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.TEXT_FORMAT), "de").build());
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.TEXT_FORMAT), "de-DE").build());
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.TEXT_FORMAT), "da").build());
-		supportedSpecifications.add(new TaskGroupSpecification.Builder(FormatIdentifier.with("obfl"), FormatIdentifier.with(Keys.TEXT_FORMAT), "da-DK").build());
 		Set<TaskGroupInformation> tmp = new HashSet<>();
 		tmp.add(TaskGroupInformation.newConvertBuilder("obfl", Keys.PEF_FORMAT).locale(LOCALE).build());
 		tmp.add(TaskGroupInformation.newConvertBuilder("obfl", Keys.TEXT_FORMAT).build());

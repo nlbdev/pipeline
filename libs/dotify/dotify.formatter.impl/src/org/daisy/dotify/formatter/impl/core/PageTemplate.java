@@ -177,8 +177,6 @@ public class PageTemplate implements PageTemplateBuilder {
 				if (f instanceof NoField) {
 					if (hasEmptyField) {
 						throw new RuntimeException("At most one <field allow-text-flow=\"true\"/> allowed.");
-					} else if (k > 0) {
-						throw new RuntimeException("<field allow-text-flow=\"true\"/> only allowed on the left.");
 					} else {
 						hasEmptyField = true;
 					}
@@ -188,8 +186,6 @@ public class PageTemplate implements PageTemplateBuilder {
 			if (hasEmptyField) {
 				if (k == 1) {
 					throw new RuntimeException("<field allow-text-flow=\"true\"/> does not make sense as single child.");
-				} else if (k > 2) {
-					throw new RuntimeException("<field allow-text-flow=\"true\"/> only allowed in combination with a single <field allow-text-flow=\"false\"/>.");
 				}
 				float rowSpacing;
 				if (row.getRowSpacing() != null) {

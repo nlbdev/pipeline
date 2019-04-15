@@ -23,6 +23,7 @@ class RowGroup implements SplitPointUnit {
 	private final int keepWithNextSheets, keepWithPreviousSheets;
 	private final VolumeKeepPriority avoidVolumeBreakAfterPriority;
 	private final boolean lastInBlock;
+	private final boolean mergeable;
 	
 	static class Builder {
 		private final List<RowImpl> rows;
@@ -35,6 +36,7 @@ class RowGroup implements SplitPointUnit {
 		private boolean lazyCollapse = true;
 		private VolumeKeepPriority avoidVolumeBreakAfterPriority = VolumeKeepPriority.empty();
 		private boolean lastInBlock = false;
+		private boolean mergeable = false;
 		Builder(float rowDefault, RowImpl ... rows) {
 			this(rowDefault, Arrays.asList(rows));
 		}
@@ -105,6 +107,10 @@ class RowGroup implements SplitPointUnit {
 			this.lastInBlock = value;
 			return this;
 		}
+		Builder mergeable(boolean value) {
+			this.mergeable = value;
+			return this;
+		}
 		RowGroup build() {
 			return new RowGroup(this);
 		}
@@ -129,6 +135,7 @@ class RowGroup implements SplitPointUnit {
 		this.keepWithPreviousSheets = builder.keepWithPreviousSheets;
 		this.avoidVolumeBreakAfterPriority = builder.avoidVolumeBreakAfterPriority;
 		this.lastInBlock = builder.lastInBlock;
+		this.mergeable = builder.mergeable;
 	}
 	
 	/**
@@ -151,6 +158,7 @@ class RowGroup implements SplitPointUnit {
 		this.keepWithPreviousSheets = template.keepWithPreviousSheets;
 		this.avoidVolumeBreakAfterPriority = template.avoidVolumeBreakAfterPriority;
 		this.lastInBlock = template.lastInBlock;
+		this.mergeable = template.mergeable;
 	}
 	
 	private static float getRowSpacing(float rowDefault, RowImpl r) {
@@ -236,8 +244,8 @@ class RowGroup implements SplitPointUnit {
 
 	@Override
 	public String toString() {
-		return "RowGroup [rows=" + rows + ", unitSize=" + unitSize + ", breakable=" + breakable + ", skippable="
-				+ skippable + ", collapsible=" + collapsible + ", ids=" + ids + ", identifiers=" + identifiers + "]";
+		return "RowGroup [rows=" + rows + ", variableWidth=" + mergeable + ", unitSize=" + unitSize + ", breakable="
+				+ breakable + ", skippable=" + skippable + ", collapsible=" + collapsible + ", ids=" + ids + "]";
 	}
 
 	@Override
@@ -279,6 +287,16 @@ class RowGroup implements SplitPointUnit {
 	 */
 	public boolean isLastRowGroupInBlock() {
 		return lastInBlock;
+	}
+	
+	
+	/**
+	 * Returns true if this {@link RowGroup} is mergeable with a compatible
+	 * header or footer.
+	 * @return true if this row group is mergeable, false otherwise
+	 */
+	boolean isMergeable() {
+		return mergeable;
 	}
 	
 }

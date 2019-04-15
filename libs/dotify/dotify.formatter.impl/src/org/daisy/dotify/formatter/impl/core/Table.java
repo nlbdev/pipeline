@@ -19,6 +19,7 @@ import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.common.text.StringTools;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
+import org.daisy.dotify.formatter.impl.row.BlockMargin;
 import org.daisy.dotify.formatter.impl.row.MarginProperties;
 import org.daisy.dotify.formatter.impl.row.RowDataProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
@@ -98,8 +99,9 @@ class Table extends Block {
 		int rowCount = countRows();
 		int[] colSpace = calcSpacings(new ColumnSpaceCalculator(rowCount, columnCount));
 		//int[] rowSpace = calcSpacings(new RowSpaceCalculator(rowCount, columnCount));
-		MarginProperties leftMargin = rdp.getLeftMargin().buildMargin(context.getFcontext().getSpaceCharacter());
-		MarginProperties rightMargin = rdp.getRightMargin().buildMargin(context.getFcontext().getSpaceCharacter());
+		BlockMargin bm = rdp.getMargins();
+		MarginProperties leftMargin = bm.getLeftMargin();
+		MarginProperties rightMargin = bm.getRightMargin();
 		int maxWidth = (context.getFlowWidth() 
 				- leftMargin.getContent().length() 
 				- rightMargin.getContent().length()

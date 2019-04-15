@@ -1,4 +1,4 @@
-package org.daisy.dotify.formatter.impl;
+package org.daisy.dotify.formatter.impl.core;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,19 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.daisy.dotify.api.formatter.BlockProperties;
+import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 import org.daisy.dotify.formatter.impl.core.FormatterCoreImpl;
+import org.daisy.dotify.formatter.impl.row.BlockMargin;
 import org.daisy.dotify.formatter.impl.row.Margin;
 import org.daisy.dotify.formatter.impl.row.Margin.Type;
 import org.daisy.dotify.formatter.impl.row.MarginComponent;
 import org.daisy.dotify.formatter.impl.row.RowDataProperties;
 import org.junit.Test;
+import org.mockito.Mockito;
 @SuppressWarnings("javadoc")
 public class FormatterCoreImplTest {
+	private final FormatterCoreContext context;
+	
+	public FormatterCoreImplTest() {
+		context = Mockito.mock(FormatterCoreContext.class);
+		Mockito.when(context.getSpaceCharacter()).thenReturn(' ');
+	}
 
 	@Test
 	public void testBlockPropertiesHierarchy() {
 		//Setup
-		FormatterCoreImpl formatter = new FormatterCoreImpl(null);
+		FormatterCoreContext context = Mockito.mock(FormatterCoreContext.class);
+		Mockito.when(context.getSpaceCharacter()).thenReturn(' ');
+		FormatterCoreImpl formatter = new FormatterCoreImpl(context);
 		formatter.startBlock(new BlockProperties.Builder().rowSpacing(1.0f).firstLineIndent(1).orphans(2).widows(2).build());
 		formatter.startBlock(new BlockProperties.Builder().rowSpacing(2.0f).firstLineIndent(2).orphans(3).widows(3).build());
 		formatter.endBlock();
@@ -35,8 +46,12 @@ public class FormatterCoreImplTest {
 		Margin leftInner = new Margin(Type.LEFT, leftComps);
 		Margin rightInner = new Margin(Type.RIGHT, rightComps);
 
-		RowDataProperties expectedOuter = new RowDataProperties.Builder().rowSpacing(1.0f).firstLineIndent(1).orphans(2).widows(2).leftMargin(left).rightMargin(right).build();
-		RowDataProperties expectedInner = new RowDataProperties.Builder().rowSpacing(2.0f).firstLineIndent(2).orphans(3).widows(3).leftMargin(leftInner).rightMargin(rightInner).build();
+		RowDataProperties expectedOuter = new RowDataProperties.Builder().rowSpacing(1.0f).firstLineIndent(1).orphans(2).widows(2)
+				.margins(new BlockMargin(left, right, ' '))
+				.build();
+		RowDataProperties expectedInner = new RowDataProperties.Builder().rowSpacing(2.0f).firstLineIndent(2).orphans(3).widows(3)
+				.margins(new BlockMargin(leftInner, rightInner, ' '))
+				.build();
 		
 		//Test
 		assertEquals(3, formatter.size());
@@ -48,7 +63,7 @@ public class FormatterCoreImplTest {
 	@Test
 	public void testVolumeKeepProperties_01() {
 		//Setup
-		FormatterCoreImpl formatter = new FormatterCoreImpl(null);
+		FormatterCoreImpl formatter = new FormatterCoreImpl(context);
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(1).build());
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(2).build());
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(3).build());
@@ -76,7 +91,7 @@ public class FormatterCoreImplTest {
 	@Test
 	public void testVolumeKeepProperties_02() {
 		//Setup
-		FormatterCoreImpl formatter = new FormatterCoreImpl(null);
+		FormatterCoreImpl formatter = new FormatterCoreImpl(context);
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(1).build());
 		formatter.endBlock();
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(2).build());
@@ -98,7 +113,7 @@ public class FormatterCoreImplTest {
 	@Test
 	public void testVolumeKeepProperties_03() {
 		//Setup
-		FormatterCoreImpl formatter = new FormatterCoreImpl(null);
+		FormatterCoreImpl formatter = new FormatterCoreImpl(context);
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(1).build());
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(2).build());
 		formatter.startBlock(new BlockProperties.Builder().build());
@@ -131,7 +146,7 @@ public class FormatterCoreImplTest {
 	@Test
 	public void testVolumeKeepProperties_04() {
 		//Setup
-		FormatterCoreImpl formatter = new FormatterCoreImpl(null);
+		FormatterCoreImpl formatter = new FormatterCoreImpl(context);
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(1).build());
 		formatter.startBlock(new BlockProperties.Builder().volumeKeepPriority(2).build());
 		formatter.startBlock(new BlockProperties.Builder().build());

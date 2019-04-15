@@ -7,6 +7,7 @@ import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 
 /**
  * Provides data about a single rendering scenario.
@@ -71,7 +72,7 @@ class ScenarioData extends BlockProcessor {
 	void processBlock(LayoutMaster master, Block g, BlockContext bc) {
 		loadBlock(master, g, bc);
 		while (hasNextInBlock()) {
-			processNextRowGroup(bc, false);
+			processNextRowGroup(bc, LineProperties.DEFAULT);
 		}
 		dataGroups.peek().getBlocks().add(g);
 	}

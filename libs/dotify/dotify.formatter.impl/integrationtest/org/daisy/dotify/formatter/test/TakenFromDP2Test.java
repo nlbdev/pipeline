@@ -33,26 +33,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		        "resource-files/dp2/page-number-follows-leader-expected.pef", false);
 	}
 	@Test
-	public void testNestedBlocksWithBorders() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/nested-blocks-with-borders-input.obfl",
-		        "resource-files/dp2/nested-blocks-with-borders-expected.pef", false);
-	}
-	@Test
-	public void testBorderAlignCenter() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/border-align-center-input.obfl",
-		        "resource-files/dp2/border-align-center-expected.pef", false);
-	}
-	@Test
-	public void testVerticalPositionAlignBefore() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/vertical-position-align-before-input.obfl",
-		        "resource-files/dp2/vertical-position-align-before-expected.pef", false);
-	}
-	@Test
-	public void testVerticalPositionAlignBeforeNestedBlocks() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/vertical-position-align-before-nested-blocks-input.obfl",
-		        "resource-files/dp2/vertical-position-align-before-nested-blocks-expected.pef", false);
-	}
-	@Test
 	public void testLayoutMasterRowSpacing() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/layout-master-row-spacing-input.obfl",
 		        "resource-files/dp2/layout-master-row-spacing-expected.pef", false);
@@ -133,56 +113,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	public void testCommentInWhiteSpace() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/comment-in-white-space-input.obfl",
 		        "resource-files/dp2/comment-in-white-space-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferenceSequenceBackward() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-sequence-backward-input.obfl",
-		        "resource-files/dp2/marker-reference-sequence-backward-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferencePageForwardBackward() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-page-forward-backward-input.obfl",
-		        "resource-files/dp2/marker-reference-page-forward-backward-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferencePageContentForwardBackward() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-page-content-forward-backward-input.obfl",
-		        "resource-files/dp2/marker-reference-page-content-forward-backward-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferenceAcrossSequenceWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-across-sequence-workaround-input.obfl",
-		        "resource-files/dp2/marker-reference-across-sequence-workaround-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferenceSpreadAcrossSequence() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-spread-across-sequence-input.obfl",
-		        "resource-files/dp2/marker-reference-spread-across-sequence-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferenceSpreadAcrossVolume() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-spread-across-volume-input.obfl",
-		        "resource-files/dp2/marker-reference-spread-across-volume-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferenceStartOffsetFirstPage() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-start-offset-first-page-input.obfl",
-		        "resource-files/dp2/marker-reference-start-offset-first-page-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferencePageFirstWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-page-first-workaround-input.obfl",
-		        "resource-files/dp2/marker-reference-page-first-workaround-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferencePageStartWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-page-start-workaround-input.obfl",
-		        "resource-files/dp2/marker-reference-page-start-workaround-expected.pef", false);
-	}
-	@Test
-	public void testMarkerReferenceSpreadStartWorkaround() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-spread-start-workaround-input.obfl",
-		        "resource-files/dp2/marker-reference-spread-start-workaround-expected.pef", false);
 	}
 	@Ignore // position of middle field of header/footer depends on width of fields in
 	        // left and right corner, so centering is not perfect
@@ -317,11 +247,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 		        "resource-files/dp2/sheet-calculation-initial-page-number-expected.pef", false);
 	}
 	@Test
-	public void testMarkerReferenceSpreadInitialPageNumber() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/marker-reference-spread-initial-page-number-input.obfl",
-		        "resource-files/dp2/marker-reference-spread-initial-page-number-expected.pef", false);
-	}
-	@Test
 	public void testSheetsInVolume() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/sheets-in-volume-input.obfl",
 		        "resource-files/dp2/sheets-in-volume-expected.pef", false);
@@ -407,11 +332,5 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	public void testBreakBeforeSheet() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/dp2/break-before-sheet-input.obfl",
 		        "resource-files/dp2/break-before-sheet-expected.pef", false);
-	}
-	@Ignore // see https://github.com/brailleapps/dotify.formatter.impl/issues/39
-	@Test
-	public void testIssue39() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
-		testPEF("resource-files/dp2/issue-39-input.obfl",
-		        "resource-files/dp2/issue-39-expected.pef", true);
 	}
 }

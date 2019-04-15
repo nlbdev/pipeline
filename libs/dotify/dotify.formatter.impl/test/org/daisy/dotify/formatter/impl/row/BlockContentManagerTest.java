@@ -1,4 +1,4 @@
-package org.daisy.dotify.formatter.impl;
+package org.daisy.dotify.formatter.impl.row;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,10 +12,10 @@ import org.daisy.dotify.api.formatter.Leader;
 import org.daisy.dotify.api.formatter.Position;
 import org.daisy.dotify.api.formatter.TextProperties;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
-import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMaker;
 import org.daisy.dotify.api.translator.MarkerProcessorFactoryMaker;
 import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
+import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
 import org.daisy.dotify.formatter.impl.row.BlockContentManager;

@@ -11,11 +11,13 @@ public class TransitionContent {
 	private final Type type;
 	private final List<Block> inBlock;
 	private final List<Block> inSeq;
+	private final List<Block> inAny;
 
-	public TransitionContent(Type type, FormatterCoreImpl inBlock, FormatterCoreImpl inSeq) {
+	public TransitionContent(Type type, FormatterCoreImpl inBlock, FormatterCoreImpl inSeq, FormatterCoreImpl inAny) {
 		this.type = type;
 		this.inBlock = Collections.unmodifiableList(inBlock);
 		this.inSeq = Collections.unmodifiableList(inSeq);
+		this.inAny = Collections.unmodifiableList(inAny);
 	}
 
 	public Type getType() {
@@ -28,5 +30,9 @@ public class TransitionContent {
 
 	public List<Block> getInSequence() {
 		return inSeq;
+	}
+	
+	public List<Block> getInAny() {
+		return inAny;
 	}
 }
