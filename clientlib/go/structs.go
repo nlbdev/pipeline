@@ -50,20 +50,77 @@ type Option struct {
 	Required   bool     `xml:"required,attr,omitempty"`
 	Sequence   bool     `xml:"sequence,attr,omitempty"`
 	Name       string   `xml:"name,attr,omitempty"`
+	NiceName   string   `xml:"nicename,attr,omitempty"`
 	Ordered    bool     `xml:"ordered,attr,omitempty"`
 	Mediatype  string   `xml:"mediaType,attr,omitempty"`
-	Desc       string   `xml:"desc,attr,omitempty"`
-	Type       string   `xml:"type,attr,omitempty"`
+	ShortDesc  string   `xml:"-"`
+	LongDesc   string   `xml:"desc,attr,omitempty"`
+	TypeAttr   string   `xml:"type,attr,omitempty"`
+	DataTypeAttr string `xml:"data-type,attr,omitempty"`
+	Type       DataType `xml:"-"`
+	Default    string   `xml:"default,attr,omitempty"`
 	OutputType string   `xml:"optionType,attr,omitempty"`
 	Separator  string   `xml:"separator,attr,omitempty"`
 	Value      string   `xml:",chardata"`
 	Items      []Item
 }
+
+type DataType interface{}
+
+type Choice struct {
+	XmlDefinition string
+	Values        []DataType
+}
+
+type Value struct {
+	XmlDefinition string
+	Documentation string
+	Value         string
+}
+
+type Pattern struct {
+	XmlDefinition string
+	Pattern       string
+	Documentation string
+}
+
+type AnyFileURI struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type AnyDirURI struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsAnyURI struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsBoolean struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsInteger struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsString struct {
+	XmlDefinition string
+	Documentation string
+}
+
 type Input struct {
 	XMLName   xml.Name `xml:"http://www.daisy.org/ns/pipeline/data input"`
-	Desc      string   `xml:"desc,attr,omitempty"`
+	ShortDesc string   `xml:"-"`
+	LongDesc  string   `xml:"desc,attr,omitempty"`
 	Mediatype string   `xml:"mediaType,attr,omitempty"`
-	Name      string   `xml:"name,attr"`
+	Name      string   `xml:"name,attr,omitempty"`
+	NiceName  string   `xml:"nicename,attr,omitempty"`
 	Sequence  bool     `xml:"sequence,attr,omitempty"`
 	Items     []Item
 }
@@ -95,14 +152,14 @@ type Job struct {
 	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data job"`
 	Nicename string   `xml:"http://www.daisy.org/ns/pipeline/data nicename"`
 	BatchId  string   `xml:"http://www.daisy.org/ns/pipeline/data batchId"`
-	Script   `xml:"http://www.daisy.org/ns/pipeline/data script"`
-	Messages []Message `xml:"http://www.daisy.org/ns/pipeline/data messages>message"`
-	Log      Log       `xml:"http://www.daisy.org/ns/pipeline/data log"`
-	Results  Results   `xml:"http://www.daisy.org/ns/pipeline/data results"`
-	Priority string    `xml:"priority,attr"`
-	Status   string    `xml:"status,attr"`
-	Href     string    `xml:"href,attr"`
-	Id       string    `xml:"id,attr"`
+	Script            `xml:"http://www.daisy.org/ns/pipeline/data script"`
+	Messages Messages `xml:"http://www.daisy.org/ns/pipeline/data messages"`
+	Log      Log      `xml:"http://www.daisy.org/ns/pipeline/data log"`
+	Results  Results  `xml:"http://www.daisy.org/ns/pipeline/data results"`
+	Priority string   `xml:"priority,attr"`
+	Status   string   `xml:"status,attr"`
+	Href     string   `xml:"href,attr"`
+	Id       string   `xml:"id,attr"`
 }
 type Result struct {
 	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data result"`
@@ -111,18 +168,20 @@ type Result struct {
 	Result   []Result `xml:"http://www.daisy.org/ns/pipeline/data result"`
 }
 type Message struct {
-	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data message"`
-	Level    string   `xml:"level,attr"`
-	Sequence int      `xml:"sequence,attr"`
-	Content  string   `xml:",chardata"`
+	XMLName  xml.Name  `xml:"http://www.daisy.org/ns/pipeline/data message"`
+	Level    string    `xml:"level,attr"`
+	Sequence int       `xml:"sequence,attr"`
+	Content  string    `xml:"content,attr"`
+	Message  []Message `xml:"http://www.daisy.org/ns/pipeline/data message"`
 }
 type Log struct {
 	XMLName xml.Name `xml:"http://www.daisy.org/ns/pipeline/data log"`
 	Href    string   `xml:"href,attr"`
 }
 type Messages struct {
-	XMLName xml.Name `xml:"http://www.daisy.org/ns/pipeline/data messages"`
-	Message `xml:"http://www.daisy.org/ns/pipeline/data message"`
+	XMLName  xml.Name  `xml:"http://www.daisy.org/ns/pipeline/data messages"`
+	Progress float64   `xml:"progress,attr"`
+	Message  []Message `xml:"http://www.daisy.org/ns/pipeline/data message"`
 }
 type Results struct {
 	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data results"`
