@@ -17,8 +17,6 @@ import static org.daisy.pipeline.pax.exam.Options.mavenBundles;
 import static org.daisy.pipeline.pax.exam.Options.xprocspec;
 import static org.daisy.pipeline.pax.exam.Options.xspec;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import org.ops4j.pax.exam.Configuration;
@@ -39,7 +37,10 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 			File reportsDir = new File(baseDir, "target/surefire-reports");
 			reportsDir.mkdirs();
 			TestResults result = xspecRunner.run(testsDir, reportsDir);
-			assertEquals("Number of failures and errors should be zero", 0L, result.getFailures() + result.getErrors());
+			if (result.getFailures() > 0 || result.getErrors() > 0) {
+				System.out.println(result.toDetailedString());
+				 throw new AssertionError("There are XSpec test failures.");
+			}
 		}
 	}
 	
@@ -51,12 +52,14 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 		File baseDir = new File(PathUtils.getBaseDir());
 		File testsDir = new File(baseDir, "src/test/xprocspec");
 		if (testsDir.exists()) {
+			File reportsDir = new File(baseDir, "target/xprocspec-reports");
 			boolean success = xprocspecRunner.run(testsDir,
-			                                      new File(baseDir, "target/xprocspec-reports"),
+			                                      reportsDir,
 			                                      new File(baseDir, "target/surefire-reports"),
 			                                      new File(baseDir, "target/xprocspec"),
 			                                      new XProcSpecRunner.Reporter.DefaultReporter());
-			assertTrue("XProcSpec tests should run with success", success);
+			if (!success)
+				throw new AssertionError("There are XProcSpec test failures.");
 		}
 	}
 	
@@ -94,6 +97,7 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 				// xprocspec
 				xprocspec(),
 				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
+				mavenBundle("org.daisy.pipeline:framework-volatile:?"),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"),
 				// xspec
 				xspec(),

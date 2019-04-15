@@ -3,6 +3,7 @@
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog"
                 xmlns:px="http://www.daisy.org/ns/pipeline"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-result-prefixes="#all"
                 version="2.0">
 	
@@ -38,26 +39,42 @@
 	</xsl:template>
 	
 	<xsl:template mode="serialize" match="cat:uri">
-		<span about="../{@uri}">
-			<xsl:choose>
-				<xsl:when test="@px:script='true'">
-					<xsl:attribute name="typeof" select="'script'"/>
-				</xsl:when>
-				<xsl:when test="@px:data-type='true'">
-					<xsl:attribute name="typeof" select="'data-type'"/>
-					<xsl:variable name="data-type-doc" select="document(@uri,.)"/>
-					<meta property="id" content="{string($data-type-doc/*/@id)}"/>
-					<xsl:variable name="data-type-xml" as="node()*">
-						<xsl:apply-templates mode="serialize" select="$data-type-doc/*"/>
-					</xsl:variable>
-					<!--
-					    Note: backslashes must be escaped (not sure if this is a bug in the ruby RDF library)
-					-->
-					<meta property="definition" content="{replace(string-join($data-type-xml/string(),''),'\\','\\\\')}"/>
-				</xsl:when>
-			</xsl:choose>
-			<xsl:next-match/>
-		</span>
+		<xsl:if test="@name">
+			<span about="../{@uri}">
+				<xsl:choose>
+					<xsl:when test="@px:content-type='script'">
+						<xsl:attribute name="typeof" select="'script'"/>
+						<xsl:variable name="id" as="xs:string">
+							<xsl:choose>
+								<xsl:when test="@px:id">
+									<xsl:sequence select="@px:id"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:variable name="type" select="string(document(@uri,.)/*/@type)"/>
+									<xsl:sequence select="if (namespace-uri-for-prefix(substring-before($type,':'),document(@uri,.)/*)
+									                          ='http://www.daisy.org/ns/pipeline/xproc')
+									                      then substring-after($type,':')
+									                      else $type"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
+						<meta property="id" content="{$id}"/>
+					</xsl:when>
+					<xsl:when test="@px:content-type='data-type'">
+						<xsl:attribute name="typeof" select="'data-type'"/>
+						<meta property="id" content="{@px:id}"/>
+						<xsl:variable name="data-type-xml" as="node()*">
+							<xsl:apply-templates mode="serialize" select="document(@uri,.)/*"/>
+						</xsl:variable>
+						<!--
+						    Note: backslashes must be escaped (not sure if this is a bug in the ruby RDF library)
+						-->
+						<meta property="definition" content="{replace(string-join($data-type-xml/string(),''),'\\','\\\\')}"/>
+					</xsl:when>
+				</xsl:choose>
+				<xsl:next-match/>
+			</span>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template mode="attribute-value" match="cat:uri/@name">
