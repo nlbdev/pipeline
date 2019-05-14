@@ -19,6 +19,9 @@ This tool attempts to map EPUB3 to DTBook with as little loss as possible (a 1:1
 While the EPUB3 will consist of multiple HTML files internally, an intermediate
 single-page HTML representation is useful for converting to and from DTBook.
 
+Scripts
+-------
+
 This project provides the following Pipeline 2 scripts:
 
  * EPUB3 to DTBook
@@ -56,6 +59,16 @@ and is defined in the Nordic markup guidelines. Most DTBooks will work with thes
 there are few limitations to the input DTBook grammar. There are more limitations to the HTML/EPUB3
 grammar however, because there must be a way to convert it to DTBook.
 Most notably, multimedia such as audio and video are currently not allowed in these EPUB3s.
+
+Building
+--------
+
+The nordic migrator can be built with Maven,
+either directly (with for instance `mvn clean package`),
+or indirectly with Docker (with for instance `docker build .`).
+
+References
+----------
 
 See [the project homepage](http://nlbdev.github.io/nordic-epub3-dtbook-migrator/) for more information.
 
