@@ -41,24 +41,28 @@ RUN unzip pipeline2-*_linux.zip -d /opt/pipeline2-linux
 
 # ----------------------------------------
 
-FROM openjdk:11-jre
+FROM debian:stretch
 LABEL MAINTAINER Jostein Austvik Jacobsen <jostein@nlb.no> <http://www.nlb.no/>
+
+# Install Java 11
+RUN apt-get update && apt-get install -y wget
+RUN wget "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz" -O /tmp/openjdk.tar.gz --no-verbose \
+    && tar -zxvf /tmp/openjdk.tar.gz -C /opt \
+    && rm /tmp/openjdk.tar.gz
+ENV JAVA_HOME=/opt/jdk-11+28
 
 COPY --from=builder /opt/pipeline2-linux/daisy-pipeline/ /opt/daisy-pipeline2/
 
 # Enable calabash debugging
 RUN sed -i 's/\(com.xmlcalabash.*\)INFO/\1DEBUG/' /opt/daisy-pipeline2/etc/config-logback.xml
 
+# Other configuration
 ENV PIPELINE2_WS_LOCALFS=false \
     PIPELINE2_WS_AUTHENTICATION=false \
     PIPELINE2_WS_AUTHENTICATION_KEY=clientid \
-    PIPELINE2_WS_AUTHENTICATION_SECRET=secret \
-    PIPELINE2_WS_HOST=0.0.0.0
-
+    PIPELINE2_WS_AUTHENTICATION_SECRET=sekret
 EXPOSE 8181
 
-# For the healthcheck use PIPELINE2_WS_HOST if defined. Otherwise use 0.0.0.0
-# TODO: Fix healthcheck. Currently gives "Connection to 0.0.0.0 failed." when curling inside container.
-#HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD curl --fail http://${PIPELINE2_WS_HOST:-0.0.0.0}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
-
+# for the healthcheck use PIPELINE2_HOST if defined. Otherwise use localhost
+HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD curl --fail http://${PIPELINE2_WS_HOST-localhost}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
 ENTRYPOINT ["/opt/daisy-pipeline2/bin/pipeline2"]
