@@ -17,6 +17,7 @@ Thumbs.db
 /.maven-cache/
 /.maven-workspace/
 /maven.log
+.deps.mk
 
 # Eclipse
 bin/
