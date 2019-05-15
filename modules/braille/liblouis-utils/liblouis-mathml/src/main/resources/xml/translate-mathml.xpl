@@ -1,5 +1,5 @@
 <?xml version="1.1" encoding="UTF-8"?>
-<p:declare-step type="louis:translate-mathml" name="translate-mathml"
+<p:pipeline type="louis:translate-mathml" name="translate-mathml"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:louis="http://liblouis.org/liblouis"
@@ -9,9 +9,6 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Translate a MathML document to Braille using liblouisutdml.</p>
     </p:documentation>
-    
-    <p:input port="source" px:media-type="application/mathml+xml"/>
-    <p:output port="result"/>
     
     <p:option name="temp-dir" required="true"/>
     <p:option name="math-code" required="true"/>
@@ -47,4 +44,4 @@
     <p:string-replace match="/louis:result/text()"
                       replace="translate(replace(., '&#x0A;&#x0C;$', ''), ' ', '&#x2800;')"/>
     
-</p:declare-step>
+</p:pipeline>
