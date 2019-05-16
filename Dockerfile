@@ -45,7 +45,7 @@ FROM debian:stretch
 LABEL MAINTAINER Jostein Austvik Jacobsen <jostein@nlb.no> <http://www.nlb.no/>
 
 # Install Java 11
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update && apt-get install -y wget curl
 RUN wget "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz" -O /tmp/openjdk.tar.gz --no-verbose \
     && tar -zxvf /tmp/openjdk.tar.gz -C /opt \
     && rm /tmp/openjdk.tar.gz
