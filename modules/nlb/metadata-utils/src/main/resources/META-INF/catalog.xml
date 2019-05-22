@@ -2,8 +2,8 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
 
     <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/library.xpl" uri="../xml/xproc/library.xpl"/>
-    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/report-1-view-metadata.xpl" uri="../xml/xproc/report-1-view-metadata.xpl" px:script="true"/>
-    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/report-2-everything-from-year.xpl" uri="../xml/xproc/report-2-everything-from-year.xpl" px:script="true"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/report-1-view-metadata.xpl" uri="../xml/xproc/report-1-view-metadata.xpl" px:content-type="script" px:id="nlb:report-1-view-metadata"/>
+    <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/report-2-everything-from-year.xpl" uri="../xml/xproc/report-2-everything-from-year.xpl" px:content-type="script" px:id="nlb:report-2-everything-from-year"/>
 
     <uri name="http://www.nlb.no/pipeline/modules/nlb-metadata-utils/catalog-dewey-split.xpl" uri="../xml/xproc/catalog-dewey-split.xpl"/>
     
