@@ -65,6 +65,8 @@ RUN wget "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/j
     && rm /tmp/openjdk.tar.gz
 ENV JAVA_HOME=/opt/jdk-11+28
 
+RUN apt-get update && apt-get install -y libxml2 libxml2-dev libxml2-utils libxslt1-dev zlib1g-dev liblzma-dev
+
 COPY --from=builder /opt/pipeline2-linux/daisy-pipeline/ /opt/daisy-pipeline2/
 
 # Enable calabash debugging
