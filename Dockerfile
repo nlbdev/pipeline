@@ -23,12 +23,26 @@ RUN gem install bundler
 RUN gem install nokogiri:1.5.6
 RUN gem install commaparty:0.0.2
 
-# Add nlbdev/pipeline
-ADD . /opt/pipeline
+# Add relevant files and directories for nlbdev/pipeline
+ADD Makefile /opt/pipeline/Makefile
+ADD .make /opt/pipeline/.make
+ADD assembly-make.sh /opt/pipeline/assembly-make.sh
+ADD pom.xml /opt/pipeline/pom.xml
+ADD cli /opt/pipeline/cli
+ADD clientlib /opt/pipeline/clientlib
+ADD framework /opt/pipeline/framework
+ADD gui /opt/pipeline/gui
+ADD it /opt/pipeline/it
+ADD libs /opt/pipeline/libs
+ADD settings.xml /opt/pipeline/settings.xml
+ADD updater /opt/pipeline/updater
+ADD utils /opt/pipeline/utils
+ADD website /opt/pipeline/website
+ADD webui /opt/pipeline/webui
+ADD assembly /opt/pipeline/assembly
+ADD modules /opt/pipeline/modules
+ADD .git /opt/pipeline/.git
 WORKDIR /opt/pipeline
-
-# build until first error in case of build errors (easier to debug)
-#RUN make RUBY=ruby dist-zip-linux || true
 
 # build for Linux
 RUN make RUBY=ruby dist-zip-linux
@@ -65,4 +79,6 @@ EXPOSE 8181
 
 # for the healthcheck use PIPELINE2_HOST if defined. Otherwise use localhost
 HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD curl --fail http://${PIPELINE2_WS_HOST-localhost}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
-ENTRYPOINT ["/opt/daisy-pipeline2/bin/pipeline2"]
+
+ADD docker-entrypoint.sh /opt/daisy-pipeline2/docker-entrypoint.sh
+ENTRYPOINT ["/opt/daisy-pipeline2/docker-entrypoint.sh"]
