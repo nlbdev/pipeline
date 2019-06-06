@@ -136,6 +136,10 @@
             <p:filter select="/*/*"/>
             (kommentert ut sånn at vi kan teste ny feed med april-nyhetsbrevet)
         </p:when>-->
+        <p:when test="starts-with($month,'2019-05')">
+            <p:load href="news-feed-archive/manuelt-laget-for-juni-2019.xml"/>
+            <p:filter select="/*/*"/>
+        </p:when>
         <p:otherwise>
             <p:identity>
                 <p:input port="source">
