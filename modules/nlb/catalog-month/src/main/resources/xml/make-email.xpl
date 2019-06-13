@@ -65,7 +65,8 @@
             </p:add-attribute>
         </p:viewport>
         <p:viewport match="html:iframe[matches(@src,'^https?://[^/]*youtube.com/')]">
-            <p:variable name="youtube" select="replace(/*/@src,'.*/([^?/]*).*','$1')"/>
+            <!-- YOUTUBE: https://www.youtube.com/embed/xxxxxx -->
+            <p:variable name="youtube" select="replace(/*/@src,'^.*/(embed/|watch\?v=)([^?/]*).*?$','$2')"/>
             <p:identity name="iframe"/>
             <p:in-scope-names name="vars"/>
             <p:template>
@@ -81,6 +82,33 @@
                     <p:pipe step="vars" port="result"/>
                 </p:input>
             </p:template>
+        </p:viewport>
+        <p:viewport match="html:iframe[matches(@src,'^https?://[^/]*vimeo.com/')]">
+            <!-- VIMEO: https://vimeo.com/xxxxxx -->
+            <p:variable name="vimeo" select="replace(/*/@src,'^.*/([^?/]*).*?$','$1')"/>
+            <p:identity name="iframe"/>
+            <p:in-scope-names name="vars"/>
+            <p:template>
+                <p:input port="template">
+                    <p:inline xmlns="http://www.w3.org/1999/xhtml">
+                        <span>*|VIMEO:{$vimeo}|*</span>
+                    </p:inline>
+                </p:input>
+                <p:input port="source">
+                    <p:pipe step="iframe" port="result"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:pipe step="vars" port="result"/>
+                </p:input>
+            </p:template>
+        </p:viewport>
+        <p:viewport match="html:iframe">
+            <!-- Delete all other iframes -->
+            <p:identity>
+                <p:input port="source">
+                    <p:empty/>
+                </p:input>
+            </p:identity>
         </p:viewport>
     </p:group>
 
