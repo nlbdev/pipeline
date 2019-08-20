@@ -21,7 +21,10 @@
 
             <xsl:variable name="format" select="dc:format/text()"/>
             <xsl:variable name="audience"
-                select="(meta[@property='audience' and text()='Student'], meta[@property='audience' and text()='Adult'], meta[@property='audience' and text()='Juvenile'])[1]/text()"/>
+                select="if (exists(meta[@property='educationalUse' and text()='true'])) then 'Student'
+                        else if (exists(meta[@property='audience' and text()='Adult'])) then 'Adult'
+                        else if (exists(meta[@property='audience' and text()=('Adolescent','Child')])) then 'Juvenile'
+                        else ''"/>
             <xsl:variable name="mainGenre" select="(meta[@property='dc:type.genre']/(.[text()='Fiction'],.[text()='Non-fiction']))[1]/text()"/>
             <xsl:variable name="genre" select="distinct-values(meta[@property='dc:type.genre.no']/text())"/>
             <xsl:variable name="newspaper" select="meta[@property='newspaper']/text() = 'true'"/>

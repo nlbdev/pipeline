@@ -81,7 +81,7 @@
             <p:with-option name="attribute-value" select="/*/dc:format[not(@refines)]/text()"/>
         </p:add-attribute>
         <p:add-attribute attribute-name="audience" match="/*">
-            <p:with-option name="attribute-value" select="if (/*/opf:meta[not(@refines)][@property='audience']/text()='Student') then 'Student' else (/*/opf:meta[not(@refines)][@property='audience' and text()=('Adult','Juvenile')]/text())[1]"/>
+            <p:with-option name="attribute-value" select="if (/*/opf:meta[not(@refines)][@property='educationalUse']/text()='true') then 'Student' else (/*/opf:meta[not(@refines)][@property='audience' and text()=('Adult','Adolescent','Child')]/text())[1]"/>
         </p:add-attribute>
         <p:add-attribute attribute-name="genre" match="/*">
             <p:with-option name="attribute-value" select="(/*/opf:meta[not(@refines)][@property='dc:type.genre' and text()=('Fiction','Non-fiction')])[1]/text()"/>
@@ -114,7 +114,7 @@
     </p:for-each>
     <p:identity name="braille-adult-nonfiction"/>
 
-    <p:split-sequence test="/*[@format='Braille' and @audience='Juvenile' and @genre='Fiction']">
+    <p:split-sequence test="/*[@format='Braille' and @audience=('Adolescent','Child') and @genre='Fiction']">
         <p:input port="source">
             <p:pipe port="matched" step="periodical-split"/>
         </p:input>
@@ -124,7 +124,7 @@
     </p:for-each>
     <p:identity name="braille-juvenile-fiction"/>
 
-    <p:split-sequence test="/*[@format='Braille' and @audience='Juvenile' and @genre='Non-fiction']">
+    <p:split-sequence test="/*[@format='Braille' and @audience=('Adolescent','Child') and @genre='Non-fiction']">
         <p:input port="source">
             <p:pipe port="matched" step="periodical-split"/>
         </p:input>
@@ -164,7 +164,7 @@
     </p:for-each>
     <p:identity name="audio-adult-nonfiction"/>
 
-    <p:split-sequence test="/*[@format='DAISY 2.02' and @audience='Juvenile' and @genre='Fiction']">
+    <p:split-sequence test="/*[@format='DAISY 2.02' and @audience=('Adolescent','Child') and @genre='Fiction']">
         <p:input port="source">
             <p:pipe port="matched" step="periodical-split"/>
         </p:input>
@@ -174,7 +174,7 @@
     </p:for-each>
     <p:identity name="audio-juvenile-fiction"/>
 
-    <p:split-sequence test="/*[@format='DAISY 2.02' and @audience='Juvenile' and @genre='Non-fiction']">
+    <p:split-sequence test="/*[@format='DAISY 2.02' and @audience=('Adolescent','Child') and @genre='Non-fiction']">
         <p:input port="source">
             <p:pipe port="matched" step="periodical-split"/>
         </p:input>
