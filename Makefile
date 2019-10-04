@@ -15,7 +15,6 @@ MVN_PROPERTIES          := -Dworkspace="$(CURDIR)/$(MVN_WORKSPACE)" \
                            -Dorg.ops4j.pax.url.mvn.localRepository="$(CURDIR)/$(MVN_WORKSPACE)" \
                            -Dorg.daisy.org.ops4j.pax.url.mvn.settings="$(CURDIR)/settings.xml"
 MVN_RELEASE_CACHE_REPO  := $(MVN_CACHE)
-GRADLE                  := $(CURDIR)/libs/dotify/dotify.api/gradlew
 
 ifeq ($(shell uname),Darwin)
 nar.aol := x86_64-MacOSX-gpp
@@ -75,8 +74,12 @@ dist-deb : pipeline2-$(assembly/VERSION)_debian.deb
 dist-rpm : pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
-dist-docker-image : assembly/.compile-dependencies
+dist-docker-image : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(EVAL) 'bash -c "unset MAKECMDGOALS && $(MAKE) -C assembly docker"'
+
+# FIXME: $(cli/VERSION) does not always match version in assembly/pom.xml
+.PHONY : dist-cli-deb
+dist-cli-deb : cli-$(cli/VERSION)-linux_386.deb
 
 .PHONY : dist-webui-deb
 dist-webui-deb : assembly/.compile-dependencies
@@ -107,15 +110,15 @@ dp2 : $(dp2)
 
 .PHONY : run
 run : $(dev_launcher)
-	$(call with-java-11,$< shell)
+	$< shell
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
-	$(call with-java-11,$< gui shell)
+	$< gui shell
 
 .PHONY : run-cli
 run-cli :
-	echo "dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(call with-java-11,$(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"\$$@\"); }"
+	echo "dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"\$$@\"; }"
 	echo '# Run this command to configure your shell: '
 	echo '# eval $$(make $@)'
 
@@ -129,6 +132,7 @@ run-webui : webui/.compile-dependencies
 run-docker : dist-docker-image
 	docker run --name pipeline --detach \
 	       -e PIPELINE2_WS_HOST=0.0.0.0 \
+           -e PIPELINE2_WS_AUTHENTICATION=false \
 	       -p 8181:8181 daisyorg/pipeline-assembly
 
 .PHONY : check
@@ -183,6 +187,11 @@ pipeline2-$(assembly/VERSION)_redhat.rpm \
 	| .group-eval
 	+$(EVAL) cp $< $@
 
+cli-$(cli/VERSION)-linux_386.deb \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb \
+	| .group-eval
+	+$(EVAL) cp $< $@
+
 $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher)
 
@@ -218,6 +227,10 @@ assembly/.install.dmg : assembly/.compile-dependencies | .maven-init .group-eval
 assembly/.install.exe : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,exe)
 
+.SECONDARY : assembly/.install-cli.deb
+assembly/.install-cli.deb : assembly/.compile-dependencies | .maven-init .group-eval
+	+$(call eval-for-host-platform,./assembly-make.sh,deb-cli)
+
 webui/.deps.mk : webui/build.sbt
 	if ! bash .make/make-webui-deps.mk.sh >$@; then \
 		echo "\$$(error $@ could not be generated)" >$@; \
@@ -238,12 +251,12 @@ export PIPELINE_CLIENTLIB_PATH = $(CURDIR)/clientlib/go
 
 cli/build/bin/darwin_386/dp2 cli/build/bin/linux_386/dp2 : cli/.install
 
-cli/.install : cli/cli/*.go clientlib/go/*.go
+cli/.install : $(call rwildcard,cli/cli/,*.go) $(call rwildcard,cli/dp2/,*.go) $(call rwildcard,clientlib/go/,*.go)
 
 .SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip
 cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip : cli/.install
 
-updater/cli/.install : updater/cli/*.go
+updater/cli/.install : $(call rwildcard,updater/cli/,*)
 
 .SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
 updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip : updater/cli/.install
@@ -265,22 +278,22 @@ libs/liblouis/.install-${nar.aol}-shared.nar : \
 	libs/liblouis/.install
 
 .SECONDARY : \
-	modules/braille/liblouis-utils/liblouis-native/.install-mac.jar \
-	modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
-	modules/braille/liblouis-utils/liblouis-native/.install-windows.jar
-modules/braille/liblouis-utils/liblouis-native/.install-mac.jar \
-modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
-modules/braille/liblouis-utils/liblouis-native/.install-windows.jar: \
-	modules/braille/liblouis-utils/liblouis-native/.install
+	modules/braille/liblouis-utils/.install-mac.jar \
+	modules/braille/liblouis-utils/.install-linux.jar \
+	modules/braille/liblouis-utils/.install-windows.jar
+modules/braille/liblouis-utils/.install-mac.jar \
+modules/braille/liblouis-utils/.install-linux.jar \
+modules/braille/liblouis-utils/.install-windows.jar: \
+	modules/braille/liblouis-utils/.install
 
 .SECONDARY : \
-	modules/braille/libhyphen-utils/libhyphen-native/.install-mac.jar \
-	modules/braille/libhyphen-utils/libhyphen-native/.install-linux.jar \
-	modules/braille/libhyphen-utils/libhyphen-native/.install-windows.jar
-modules/braille/libhyphen-utils/libhyphen-native/.install-mac.jar \
-modules/braille/libhyphen-utils/libhyphen-native/.install-linux.jar \
-modules/braille/libhyphen-utils/libhyphen-native/.install-windows.jar: \
-	modules/braille/libhyphen-utils/libhyphen-native/.install
+	modules/braille/libhyphen-utils/.install-mac.jar \
+	modules/braille/libhyphen-utils/.install-linux.jar \
+	modules/braille/libhyphen-utils/.install-windows.jar
+modules/braille/libhyphen-utils/.install-mac.jar \
+modules/braille/libhyphen-utils/.install-linux.jar \
+modules/braille/libhyphen-utils/.install-windows.jar: \
+	modules/braille/libhyphen-utils/.install
 
 # dotify dependencies
 
@@ -453,6 +466,8 @@ help :
 	echo "	Incrementally compile code and package into a ZIP for Windows"                                          >&2
 	echo "make dist-docker-image:"                                                                                  >&2
 	echo "	Incrementally compile code and package into a Docker image"                                             >&2
+	echo "make dist-cli-deb:"                                                                                       >&2
+	echo "	Compile CLI and package into a DEB"                                                                     >&2
 	echo "make dist-webui-deb:"                                                                                     >&2
 	echo "	Compile Web UI and package into a DEB"                                                                  >&2
 	echo "make dist-webui-rpm:"                                                                                     >&2
