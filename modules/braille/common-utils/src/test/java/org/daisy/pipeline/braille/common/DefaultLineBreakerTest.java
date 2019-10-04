@@ -9,7 +9,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.CSSStyledText;
@@ -104,6 +103,54 @@ public class DefaultLineBreakerTest {
 		assertFalse(i.hasNext());
 	}
 	
+	@Test
+	public void testKeepSegmentsTogether() {
+		assertEquals(
+			"xxx abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcdef",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx\n" +
+			"abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcdefg",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx\n" +
+			"abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcdef­g",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcde­fg",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcde-\u200Bfg",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx ab-",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx ab­cdefg",
+					0, 7, ' ', '-', 1),
+				10));
+	}
+	
 	private static class TestHyphenator extends AbstractHyphenator {
 		
 		@Override
@@ -156,7 +203,9 @@ public class DefaultLineBreakerTest {
 		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
 		
 		private final LineBreakingFromStyledText lineBreaker = new AbstractBrailleTranslator.util.DefaultLineBreaker(' ', '-', null) {
-			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText) {
+			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText, int from, int to) {
+				if (from != 0 && to >= 0)
+					throw new UnsupportedOperationException();
 				return new BrailleStream() {
 					int pos = 0;
 					String text; {
@@ -217,6 +266,9 @@ public class DefaultLineBreakerTest {
 					}
 					public String remainder() {
 						return translate(text.substring(pos));
+					}
+					public boolean hasPrecedingSpace() {
+						return false;
 					}
 					@Override
 					public Object clone() {

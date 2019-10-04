@@ -5,61 +5,47 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>nlp-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
   <artifactId>nlp-break-detection</artifactId>
-  <version>2.0.4-SNAPSHOT</version>
+  <version>2.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Break Detection</name>
   <description>Break Detection Xproc Step based on any Lexer implementation</description>
 
  <dependencies>
-
    <dependency>
      <groupId>junit</groupId>
      <artifactId>junit</artifactId>
      <scope>test</scope>
    </dependency>
-
    <dependency>
      <groupId>org.daisy.libs</groupId>
      <artifactId>saxon-he</artifactId>
    </dependency>
-
-   <!--  Possible future language detection: -->
-   <!--  <dependency>
-     <groupId>org.daisy.libs</groupId>
-     <artifactId>langdetect-osgi</artifactId>
-     <version>1.1-SNAPSHOT</version>
-   </dependency> -->
-
-   <!-- needed to use com.xmlcalabash.library.DefaultStep ... -->
+   <!--  for DefaultStep -->
    <dependency>
      <groupId>org.daisy.libs</groupId>
      <artifactId>com.xmlcalabash</artifactId>
    </dependency>
-
-   <!-- needed to use org.daisy.common.xproc.calabash.XProcStepProvider -->
+   <!-- for XProcStepProvider -->
    <dependency>
      <groupId>org.daisy.pipeline</groupId>
      <artifactId>calabash-adapter</artifactId>
    </dependency>
-
    <dependency>
      <groupId>org.daisy.pipeline.modules</groupId>
      <artifactId>nlp-common</artifactId>
    </dependency>
-
    <!-- Lexing Services interface -->
    <dependency>
      <groupId>org.daisy.pipeline.modules</groupId>
      <artifactId>nlp-lexing</artifactId>
    </dependency>
-
     <!--
         runtime dependencies
     -->
@@ -69,6 +55,13 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_nlp_break_detection,
+      org.daisy.pipeline.nlp.breakdetect.calabash.impl.BreakDetectProvider
+    </expose-services>
+  </properties>
 
    <build>
     <plugins>
@@ -77,13 +70,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <!-- must match version from framework-bom -->
             <Import-Package>
-              net.sf.saxon.*;version="[9.8.0,9.8.1)",
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package />
-            <Service-Component>OSGI-INF/break-detect.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>

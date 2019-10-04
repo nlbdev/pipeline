@@ -5,14 +5,14 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>nlp-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>dtbook-break-detection</artifactId>
-  <version>2.0.2-SNAPSHOT</version>
+  <version>2.0.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBOOK break detection</name>
@@ -28,5 +28,11 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_dtbook_break_detection
+    </expose-services>
+  </properties>
   
 </project>

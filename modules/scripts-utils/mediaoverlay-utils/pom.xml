@@ -5,13 +5,13 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>scripts-utils-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>mediaoverlay-utils</artifactId>
-  <version>1.1.5-SNAPSHOT</version>
+  <version>1.1.6-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 Media Overlays Utilities</name>
@@ -35,14 +35,15 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-appender</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_mediaoverlay_utils
+    </expose-services>
+  </properties>
   
 </project>

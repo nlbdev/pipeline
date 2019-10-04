@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.1.1-SNAPSHOT</version>
+  <version>3.1.2-SNAPSHOT</version>
   <artifactId>ssml-to-audio</artifactId>
   <packaging>bundle</packaging>
 
@@ -34,17 +34,22 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>audio-common</artifactId>
     </dependency>
-    <!-- needed to use com.xmlcalabash.library.DefaultStep ... -->
+    <!-- for ProgressMessage -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <!-- for DefaultStep ... -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
     </dependency>
-    <!-- needed to use org.daisy.common.xproc.calabash.XProcStepProvider -->
+    <!-- for XProcStepProvider -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
-     <!-- needed for its XslTransformCompiler -->
+     <!-- for XslTransformCompiler -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
@@ -62,41 +67,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-omnilang-lexer</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.synthesize.calabash.impl.SynthesizeProvider,
+      org.daisy.pipeline.modules.impl.Module_ssml_to_audio
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
@@ -104,19 +89,25 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/synthesize.xml</Service-Component>
-            <Export-Package/>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
             <goals>
-              <goal>bundle</goal>
+              <goal>generate-spi-test-classes</goal>
             </goals>
+            <configuration>
+              <includes>MockEncoder,MockTTS</includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>

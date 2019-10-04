@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>audio-modules-parent</artifactId>
-    <version>1.11.3-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.4-SNAPSHOT</version>
   <artifactId>audio-encoder-lame</artifactId>
   <packaging>bundle</packaging>
 
@@ -39,18 +39,10 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Service-Component>OSGI-INF/encoder.xml</Service-Component>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.audio.lame.impl.LameEncoder
+    </expose-services>
+  </properties>
 
 </project>

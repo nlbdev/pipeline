@@ -155,7 +155,7 @@
                     <p:output port="pef" primary="true"/>
                     <p:output port="status">
                         <p:inline>
-                            <d:status result="ok"/>
+                            <d:validation-status result="ok"/>
                         </p:inline>
                     </p:output>
                     <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
@@ -174,7 +174,7 @@
                     </p:output>
                     <p:output port="status">
                         <p:inline>
-                            <d:status result="error"/>
+                            <d:validation-status result="error"/>
                         </p:inline>
                     </p:output>
                     <p:sink/>
@@ -203,28 +203,38 @@
         </p:otherwise>
     </p:choose>
     
-    <p:identity name="pef"/>
-    
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="html" port="result"/>
-        </p:input>
-    </p:identity>
-    <p:xslt name="metadata" px:message="Extracting metadata from HTML" px:progress=".01">
-        <p:input port="stylesheet">
-            <p:document href="../xslt/html-to-opf-metadata.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
-    <pef:add-metadata px:message="Adding metadata to PEF" px:progress=".01">
-        <p:input port="source">
-            <p:pipe step="pef" port="result"/>
-        </p:input>
-        <p:input port="metadata">
-            <p:pipe step="metadata" port="result"/>
-        </p:input>
-    </pef:add-metadata>
+    <p:choose>
+        <p:xpath-context>
+            <p:pipe step="transform" port="status"/>
+        </p:xpath-context>
+        <p:when test="/*/@result='ok'">
+            <p:identity name="pef"/>
+            <p:sink/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="html" port="result"/>
+                </p:input>
+            </p:identity>
+            <p:xslt name="metadata" px:message="Extracting metadata from HTML" px:progress=".01">
+                <p:input port="stylesheet">
+                    <p:document href="../xslt/html-to-opf-metadata.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <pef:add-metadata px:message="Adding metadata to PEF" px:progress=".01">
+                <p:input port="source">
+                    <p:pipe step="pef" port="result"/>
+                </p:input>
+                <p:input port="metadata">
+                    <p:pipe step="metadata" port="result"/>
+                </p:input>
+            </pef:add-metadata>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
     
 </p:declare-step>

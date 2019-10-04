@@ -5,24 +5,49 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
   <artifactId>mathml-to-ssml</artifactId>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Production of SSML chunks from MathML</name>
   <description>Convert MathML islands (both Content and Presentation) into SSML for TTS</description>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_mathml_to_ssml
+    </expose-services>
+  </properties>
+
+  <dependencies>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        for MessageStorage, needed by JobMonitorFactory
+        FIXME: make optional
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-maven-plugin</artifactId>
-        <version>1.0.0</version>
         <executions>
           <execution>
             <phase>test</phase>
@@ -31,18 +56,6 @@
             </goals>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.daisy.maven</groupId>
-            <artifactId>xproc-engine-calabash</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-          <dependency>
-            <groupId>org.daisy.xprocspec</groupId>
-            <artifactId>xprocspec</artifactId>
-            <version>1.2.0</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>

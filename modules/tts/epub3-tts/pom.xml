@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.2-SNAPSHOT</version>
   <artifactId>epub3-tts</artifactId>
   <packaging>bundle</packaging>
 
@@ -18,7 +18,9 @@
   <description>Enriches an EPUB3 HTML document with break detection and generates audio clips with TTS.</description>
   
   <dependencies>
-    <!-- runtime dependencies -->
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
@@ -46,4 +48,10 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_epub3_tts
+    </expose-services>
+  </properties>
+  
 </project>

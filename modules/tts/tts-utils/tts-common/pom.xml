@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.5-SNAPSHOT</version>
+  <version>3.0.6-SNAPSHOT</version>
   <artifactId>tts-common</artifactId>
   <packaging>bundle</packaging>
 
@@ -26,9 +26,9 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-registry.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>
@@ -55,11 +55,6 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
     <!-- For its TreeWriter -->
@@ -97,5 +92,11 @@
       <artifactId>tts-helpers</artifactId>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.TTSRegistry
+    </expose-services>
+  </properties>
 
 </project>

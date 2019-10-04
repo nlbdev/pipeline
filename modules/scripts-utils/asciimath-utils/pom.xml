@@ -3,18 +3,22 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>scripts-utils-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
   </parent>
   <artifactId>asciimath-utils</artifactId>
-  <version>1.0.6-SNAPSHOT</version>
+  <version>1.0.7-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 module :: ASCIIMath Utils</name>
 
   <properties>
     <asciimathml.js.url>http://mathcs.chapman.edu/~jipsen/mathml/ASCIIMathML.js</asciimathml.js.url>
     <asciimathml.js.sha1>3c31edd313d5f312a5aed3719b7dd6c022111b09</asciimathml.js.sha1>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_asciimath_utils,
+      org.daisy.pipeline.asciimathml.calabash.impl.ASCIIMathMLProvider
+    </expose-services>
   </properties>
 
   <dependencies>
@@ -25,14 +29,6 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   
@@ -45,9 +41,9 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/asciimathml.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>

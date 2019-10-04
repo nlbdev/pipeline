@@ -22,6 +22,8 @@
     <p:import href="normalize-uri.xpl"/>
     <p:import href="normalize-document-base.xpl"/>
     <p:import href="set-base-uri.xpl"/>
+    <p:import href="add-xml-base.xpl"/>
+    <p:import href="data.xpl"/>
     
     <p:import href="java-library.xpl"/>
 

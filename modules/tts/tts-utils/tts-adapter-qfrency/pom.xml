@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
   <artifactId>tts-adapter-qfrency</artifactId>
   <packaging>bundle</packaging>
 
@@ -38,6 +38,12 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.qfrency.impl.QfrencyService
+    </expose-services>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -47,10 +53,9 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-            <Export-Package />
           </instructions>
         </configuration>
       </plugin>

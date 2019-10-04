@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-		<version>1.12.1-SNAPSHOT</version>
-		<relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+		<version>1.13.1-SNAPSHOT</version>
+		<relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.4-SNAPSHOT</version>
   <artifactId>tts-adapter-sapinative</artifactId>
   <packaging>bundle</packaging>
 
@@ -27,11 +27,6 @@
       <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -43,6 +38,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.sapinative.impl.SAPIservice
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -130,10 +131,9 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-	    <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package />
           </instructions>
         </configuration>
         <executions>
@@ -154,7 +154,6 @@
 		  x64/sapinative.dll;osname=Win32;processor=x86-64
 		</Bundle-NativeCode>
                 <Include-Resource>
-                  OSGI-INF/tts-service.xml=src/main/resources/OSGI-INF/tts-service.xml,
 		  transform-ssml.xsl=src/main/resources/transform-ssml.xsl,
                   x64/sapinative.dll=target/generated-resources/lib/x64-Windows-msvc/jni/sapi-nar.dll,
 		  x86/sapinative.dll=target/generated-resources/lib/x86-Windows-msvc/jni/sapi-nar.dll

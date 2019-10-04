@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.4-SNAPSHOT</version>
+  <version>3.0.5-SNAPSHOT</version>
   <artifactId>tts-adapter-acapela</artifactId>
   <packaging>bundle</packaging>
 
@@ -32,14 +32,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-    </dependency>
-    <dependency>
+      <!--
+          includes jna 4.0.0
+      -->
       <groupId>org.daisy.libs</groupId>
       <artifactId>jnaerator</artifactId>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.acapella.impl.AcapellaService
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -50,10 +55,9 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package />
           </instructions>
         </configuration>
       </plugin>

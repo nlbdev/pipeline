@@ -5,18 +5,23 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>scripts-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>zedai-to-epub3</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
+  <version>2.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: ZedAI to EPUB 3</name>
   
   <dependencies>
+    <!-- for XProcScriptService -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
     <!--
         runtime dependencies
     -->
@@ -72,11 +77,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>metadata-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-helpers</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -90,19 +90,13 @@
       <artifactId>zedai-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_zedai_to_epub3,
+      org.daisy.pipeline.script.impl.XProcScript_zedai_to_epub3
+    </expose-services>
+  </properties>
 
 </project>

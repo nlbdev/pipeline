@@ -5,13 +5,13 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>scripts-utils-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>epub3-pub-utils</artifactId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 Publication Utilities</name>
@@ -46,5 +46,11 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_epub3_pub_utils
+    </expose-services>
+  </properties>
   
 </project>

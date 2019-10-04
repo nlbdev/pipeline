@@ -5,30 +5,30 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>audio-modules-parent</artifactId>
-    <version>1.11.3-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.3-SNAPSHOT</version>
   <artifactId>audio-common</artifactId>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Audio API</name>
   <description>Common API for audio-related functionality</description>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Service-Component>OSGI-INF/audio-services.xml</Service-Component>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.audio.AudioServices
+    </expose-services>
+  </properties>
+  
 </project>

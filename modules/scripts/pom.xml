@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-aggregator</artifactId>
-  <version>1.12.1-SNAPSHOT</version>
+  <version>1.13.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for the Default Scripts</name>
@@ -20,8 +20,6 @@
 
   <!-- List of the modules to build all-at-once -->
   <modules>
-    <module>bom</module>
-    <module>parent</module>
     <module>daisy202-to-epub3</module>
     <module>daisy202-validator</module>
     <module>daisy3-to-daisy202</module>

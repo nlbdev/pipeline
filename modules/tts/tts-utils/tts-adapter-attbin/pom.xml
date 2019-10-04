@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.10.0-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.0-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
   <version>1.0.1-SNAPSHOT</version>
@@ -32,6 +32,12 @@
       <artifactId>common-utils</artifactId>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.att.impl.ATTBin
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -42,10 +48,9 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package />
           </instructions>
         </configuration>
       </plugin>

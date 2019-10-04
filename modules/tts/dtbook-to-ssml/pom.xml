@@ -5,12 +5,12 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.3-SNAPSHOT</version>
   <artifactId>dtbook-to-ssml</artifactId>
   <packaging>bundle</packaging>
 
@@ -18,7 +18,9 @@
   <description>Generates SSML fragments to prepare the TTS narration of a DTBook document.</description>
   
   <dependencies>
-    <!-- runtime dependencies -->
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
@@ -34,14 +36,36 @@
       <artifactId>tts-helpers</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        for MessageStorage, needed by JobMonitorFactory
+        FIXME: make optional
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_dtbook_to_ssml
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-maven-plugin</artifactId>
-        <version>1.0.0</version>
         <executions>
           <execution>
             <phase>test</phase>
@@ -50,18 +74,6 @@
             </goals>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.daisy.maven</groupId>
-            <artifactId>xproc-engine-calabash</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-          <dependency>
-            <groupId>org.daisy.xprocspec</groupId>
-            <artifactId>xprocspec</artifactId>
-            <version>1.2.0</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>

@@ -4,19 +4,24 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../maven/parent/</relativePath>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>common-utils</artifactId>
-  <version>6.1.0-SNAPSHOT</version>
+  <version>7.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: common-utils</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
@@ -46,45 +51,36 @@
       <artifactId>calabash-adapter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <!--
-        test dependencies
-    -->
+    <!-- for UrlBasedDatatypeService -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
+      <artifactId>framework-core</artifactId>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_braille_common_utils,
+      org.daisy.pipeline.datatypes.impl.Datatype_transform_query,
+      org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
+      org.daisy.pipeline.braille.common.saxon.impl.MessageDefinition,
+      org.daisy.pipeline.braille.common.saxon.impl.ProgressDefinition,
+      org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider
+    </expose-services>
+  </properties>
   
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
+            <id>xspecTest</id>
+            <phase>none</phase>
           </execution>
         </executions>
       </plugin>
@@ -95,23 +91,27 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>
-              org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
-              org.daisy.pipeline.braille.common.saxon.impl.MessageDefinition,
-              org.daisy.pipeline.braille.common.saxon.impl.ProgressDefinition,
-              org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider
-            </_dsannotations>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
             <goals>
-              <goal>bundle</goal>
+              <goal>generate-spi-test-classes</goal>
             </goals>
+            <configuration>
+              <includes>
+                UppercaseTransform$Provider
+              </includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -119,6 +119,15 @@
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
         <executions>
+          <execution>
+            <id>process-catalog</id>
+            <configuration>
+              <!--
+                  avoid name collision
+              -->
+              <moduleName>braille-${project.artifactId}</moduleName>
+            </configuration>
+          </execution>
           <execution>
             <id>package-list</id>
             <phase>prepare-package</phase>
@@ -162,7 +171,6 @@
                 <link>https://osgi.org/javadoc/r5/core</link>
                 <link>https://osgi.org/javadoc/r5/cmpn</link>
               </links>
-              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>

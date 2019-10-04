@@ -5,18 +5,22 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>common-utils-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>file-utils</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>2.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: File Utilities</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
@@ -45,21 +49,22 @@
       <artifactId>common-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_file_utils,
+      org.daisy.common.xproc.calabash.impl.ConfigurationFileProvider_file_utils,
+      org.daisy.pipeline.file.calabash.impl.CopyResourceProvider,
+      org.daisy.pipeline.file.calabash.impl.PeekProvider,
+      org.daisy.pipeline.file.calabash.impl.SetDoctypeProvider,
+      org.daisy.pipeline.file.calabash.impl.SetXmlDeclarationProvider,
+      org.daisy.pipeline.file.calabash.impl.XMLPeekProvider,
+      org.daisy.pipeline.file.saxon.impl.Expand83,
+      org.daisy.pipeline.file.saxon.impl.FileExists
+    </expose-services>
+  </properties>
+  
   <build>
     <plugins>
       <plugin>
@@ -73,48 +78,17 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>
-              OSGI-INF/file-exists.xml,
-              OSGI-INF/file-expand83.xml,
-              OSGI-INF/copy-resource-step.xml,
-              OSGI-INF/peek-step.xml,
-              OSGI-INF/xml-peek-step.xml,
-              OSGI-INF/set-doctype-step.xml,
-              OSGI-INF/set-xml-declaration-step.xml,
-              OSGI-INF/config-calabash.xml
-            </Service-Component>
-            <Private-Package>org.daisy.common.xproc.calabash.steps</Private-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

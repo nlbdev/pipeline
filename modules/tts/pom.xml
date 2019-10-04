@@ -12,15 +12,13 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>tts-modules-aggregator</artifactId>
-  <version>1.12.1-SNAPSHOT</version>
+  <version>1.13.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: TTS Modules Aggregator POM</name>
   <description>Aggregator POM for modules related to TTS-based production</description>
 
   <modules>
-    <module>bom</module>
-    <module>parent</module>
     <!-- The modules att-nar and sapi-nar are excluded from the main built -->
     <!-- because they are platform-specific. The module tts-adapter-attnative -->
     <!-- too, because it depends on att-nar which cannot be publicly deployed -->
@@ -39,7 +37,7 @@
     <module>tts-utils/tts-adapter-sapinative</module>
     <module>tts-utils/tts-adapter-qfrency</module>
     <module>tts-utils/tts-helpers</module>
-    <module>zedai-to-ssml</module>
+    <!--<module>zedai-to-ssml</module>-->
     <module>mathml-to-ssml</module>
   </modules>
 </project>
