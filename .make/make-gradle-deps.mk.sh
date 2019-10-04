@@ -20,6 +20,9 @@ echo "$module/.test : %/.test : %/build.gradle %/gradle.properties \$(call rwild
 if [ -e $module/test ]; then
 	echo "$module/.test : \$(call rwildcard,$module/test/,*)"
 fi
+if [ -e $module/integrationtest ]; then
+	echo "$module/.test : \$(call rwildcard,$module/integrationtest/,*)"
+fi
 if [[ $v == *-SNAPSHOT ]]; then
 	echo ""
 	echo "\$(MVN_LOCAL_REPOSITORY)/$(echo $g |tr . /)/$a/$v/$a-$v.jar : $module/.install-jar"
@@ -54,8 +57,8 @@ if [[ $v == *-SNAPSHOT ]]; then
 	# FIXME: gradle eclipse does not link up projects
 	# FIXME: gradle eclipse does not take into account localRepository from .gradle-settings/conf/settings.xml
 	# when creating .classpath (but it does need the dependencies to be installed in .maven-workspace)
-	echo "$module/.project : $module/build.gradle $module/gradle.properties $module/.dependencies"
-	echo "	+\$(EVAL) '.make/gradle-eclipse.sh' \$\$(dirname \$@)"
+	echo "$module/.project : $module/build.gradle $module/gradle.properties $module/.dependencies .group-eval"
+	echo "	+\$(EVAL) '${MY_DIR}/gradle-eclipse.sh' \$\$(dirname \$@)"
 	echo ""
 	echo "clean-eclipse : $module/.clean-eclipse"
 	echo ".PHONY : $module/.clean-eclipse"
