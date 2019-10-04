@@ -83,6 +83,9 @@ pagenum, *[epub|type~='pagebreak'] {
 }
 
 @page body {
+        @if $show-print-page-numbers or $show-braille-page-numbers {
+                margin-bottom: 1;
+        }
         @if $show-print-page-numbers {
                 @bottom-right {
                         content: string(print-page-break-indicator, first)

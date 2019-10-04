@@ -54,11 +54,9 @@ strike, s {
 }
 
 sub {
-    // FIXME: use "-louis-sub" when supported
-    text-transform: -louis-emph-4;
+    text-transform: -louis-sub;
 }
 
 sup {
-    // FIXME: use "-louis-super" when supported
-    text-transform: -louis-emph-5;
+    text-transform: -louis-super;
 }

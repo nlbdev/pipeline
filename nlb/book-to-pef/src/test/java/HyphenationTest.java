@@ -391,8 +391,8 @@ public class HyphenationTest {
 				systemPackage("com.sun.org.apache.xml.internal.resolver.tools"),
 				mavenBundlesWithDependencies(
 					mavenBundles(
-						"org.daisy.pipeline.modules.braille:libhyphen-core:?",
-						"org.daisy.pipeline.modules.braille:libhyphen-native:jar:" + thisPlatform() + ":?",
+						"org.daisy.pipeline.modules.braille:libhyphen-utils:?",
+						"org.daisy.pipeline.modules.braille:libhyphen-utils:jar:" + thisPlatform() + ":?",
 						"org.slf4j:jul-to-slf4j:?",
 						"org.daisy.pipeline:logging-activator:?",
 						"org.slf4j:jcl-over-slf4j:1.7.2"),

@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../modules/braille/maven/parent/</relativePath>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.1-SNAPSHOT</version>
+    <relativePath>../../modules/parent/</relativePath>
   </parent>
 
   <artifactId>mod-nlb</artifactId>
@@ -16,18 +16,6 @@
 
   <name>DP2 Braille Modules :: NLB</name>
   <description>Module for the Norwegian Library of Talking Books and Braille to produce Norwegian braille.</description>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>scripts-bom</artifactId>
-        <version>1.12.1-SNAPSHOT</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -40,15 +28,15 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>css-core</artifactId>
+      <artifactId>css-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>liblouis-core</artifactId>
+      <artifactId>liblouis-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>libhyphen-core</artifactId>
+      <artifactId>libhyphen-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -80,11 +68,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>file-utils</artifactId>
       <scope>runtime</scope>
@@ -92,16 +75,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>fileset-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>liblouis-tables</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>liblouis-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -119,28 +92,13 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>liblouis-native</artifactId>
+      <artifactId>liblouis-utils</artifactId>
       <classifier>linux</classifier>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>libhyphen-libreoffice-tables</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>dotify-formatter</artifactId>
+      <artifactId>dotify-utils</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -163,13 +121,20 @@
       <artifactId>logging-activator</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <version>1.0.4</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_mod_nlb,
+      org.daisy.pipeline.script.impl.XProcScript_nlb_dtbook_to_pef,
+      org.daisy.pipeline.script.impl.XProcScript_nlb_html_to_pef,
+      org.daisy.pipeline.script.impl.XProcScript_nlb_epub3_to_pef,
+      org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTablePath_nlb_hyphen_tables,
+      no.nlb.pipeline.braille.impl.NLBTranslator$Provider,
+      no.nlb.pipeline.braille.impl.LibhyphenTablePath,
+      no.nlb.pipeline.braille.impl.NFCStep$Provider
+    </expose-services>
+  </properties>
 
   <build>
     <pluginManagement>
@@ -193,11 +158,11 @@
           <exclude>hyph/hyph_nb_NO_nonstandard.pat</exclude>
           <exclude>hyph/hyph_nb_NO_standard_base.pat</exclude>
           <exclude>hyph/hyph_nb_NO_standard_dictionary/*</exclude>
+          <exclude>META-INF/maven/version.xml</exclude>
           <!--
-              braille-modules-parent
+              modules-parent
           -->
           <exclude>META-INF/catalog.xml</exclude>
-          <exclude>META-INF/maven/version.xml</exclude>
         </excludes>
       </resource>
       <resource>
@@ -207,32 +172,16 @@
           <include>META-INF/maven/version.xml</include>
         </includes>
       </resource>
+      <!--
       <resource>
         <directory>${project.build.directory}/generated-resources</directory>
         <includes>
-          <!--
           <include>hyph/hyph_nb_NO.dic</include>
-          -->
-          <!--
-              braille-modules-parent
-          -->
-          <include>META-INF/catalog.xml</include>
-          <include>generated-scripts</include>
-          <include>generated-scripts/*</include>
-          <include>data-types</include>
-          <include>data-types/**/*</include>
         </includes>
       </resource>
+      -->
     </resources>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>ch.sbs</groupId>
         <artifactId>project-version-maven-plugin</artifactId>
@@ -241,40 +190,6 @@
           <execution>
             <goals>
               <goal>set-detailed-project-version</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <_dsannotations>
-              no.nlb.pipeline.braille.impl.NLBTranslator$Provider,
-              no.nlb.pipeline.braille.impl.LibhyphenTablePath,
-              no.nlb.pipeline.braille.impl.NFCStep$Provider
-            </_dsannotations>
-          </instructions>
-        </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
             </goals>
           </execution>
         </executions>

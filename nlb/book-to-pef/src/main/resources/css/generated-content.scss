@@ -79,6 +79,9 @@
                         margin-left: 2;
                         margin-top: 0;
                         text-indent: -2;
+                        // otherwise the spaces to the left and right of the leader are collapsed into one
+                        // because Dotify passes the leader to the translator as an empty string
+                        white-space: pre-wrap;
                 }
         }
 }

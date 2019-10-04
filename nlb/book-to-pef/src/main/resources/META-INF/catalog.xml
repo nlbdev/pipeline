@@ -22,21 +22,13 @@
   <!-- css -->
   <uri name="http://www.nlb.no/pipeline/modules/braille/default.scss" uri="../css/nlb-default.scss"/>
   
+  <!-- hyphen dictionaries-->
+  <uri name="http://www.nlb.no/hyphen/" uri="../hyph/" px:includes="*.dic" px:content-type="libhyphen-tables" px:id="nlb-hyphen-tables"/>
+  
   <!-- dependencies -->
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-core"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-core"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:libhyphen-core"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:dtbook-to-pef"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:epub3-to-pef"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:html-to-pef"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:xml-to-pef"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-tables"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
   

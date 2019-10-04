@@ -54,7 +54,7 @@
                 <x:option name="temp-dir" select="resolve-uri('alphabet-and-numbers/temp-dir',$temp-dir)"/>
             </x:call>
             <x:context label="the output directory contents">
-                <x:document type="file" base-uri="temp-dir" href="alphabet-and-numbers/preview-output-dir/book.pef.html" select="(//*[@class='text-page'])"/>
+                <x:document type="file" base-uri="temp-dir" href="alphabet-and-numbers/preview-output-dir/book.pef.html" select="(//*[@class='text-page'])[1]"/>
             </x:context>
             <x:expect label="There should be a preview" type="count" min="1"/>
             <x:expect label="The preview should render as expected" type="compare">

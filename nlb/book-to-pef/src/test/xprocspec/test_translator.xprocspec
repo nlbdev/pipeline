@@ -628,8 +628,8 @@
           <bodymatter xml:lang="no" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
             <level1>
               <p style="display: block">
-                CO<sub style="text-transform: -louis-emph-4">2</sub>
-                cm<sup style="text-transform: -louis-emph-5">2</sup>
+                CO<sub style="text-transform: -louis-sub">2</sub>
+                cm<sup style="text-transform: -louis-super">2</sup>
               </p>
             </level1>
           </bodymatter>

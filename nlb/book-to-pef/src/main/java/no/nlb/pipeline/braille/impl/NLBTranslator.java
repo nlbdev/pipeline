@@ -4,8 +4,10 @@ import java.net.URI;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import static java.nio.file.Files.createTempDirectory;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +30,9 @@ import cz.vutbr.web.css.TermList;
 
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.SimpleInlineStyle;
+
+import org.daisy.common.file.URIs;
+import org.daisy.common.file.URLs;
 
 import org.daisy.dotify.api.translator.UnsupportedMetricException;
 
@@ -53,10 +58,10 @@ import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.partial;
+import static org.daisy.pipeline.braille.common.util.Files.normalize;
 import static org.daisy.pipeline.braille.common.util.Iterables.combinations;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 
@@ -65,7 +70,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.ComponentContext;
 
 public interface NLBTranslator {
 	
@@ -76,16 +80,16 @@ public interface NLBTranslator {
 			TransformProvider.class
 		}
 	)
-	public class Provider extends AbstractTransformProvider<BrailleTranslator> implements BrailleTranslatorProvider<BrailleTranslator> {
+	public static class Provider extends AbstractTransformProvider<BrailleTranslator> implements BrailleTranslatorProvider<BrailleTranslator> {
 		
-		private URI href;
+		private URI xprocHref;
 		
 		@Activate
-		private void activate(ComponentContext context, final Map<?,?> properties) {
-			href = asURI(context.getBundleContext().getBundle().getEntry("xml/block-translate.xpl"));
+		void activate(final Map<?,?> properties) {
+			xprocHref = URIs.asURI(URLs.getResourceFromJAR("/xml/block-translate.xpl", NLBTranslator.class));
 			otherLanguagesProvider = memoize(
 				TransformProvider.util.cast(
-					new LiblouisTranslatorWithUndefinedDotsProvider(liblouisTranslatorProvider, "26", context)));
+					new LiblouisTranslatorWithUndefinedDotsProvider(liblouisTranslatorProvider, "26")));
 		}
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
@@ -153,12 +157,13 @@ public interface NLBTranslator {
 						logCreate(
 							new TransformImpl(norwegianProvider,
 							                  forceNorwegian ? norwegianProvider : otherLanguagesProvider,
-							                  htmlOrDtbookOut)));
+							                  htmlOrDtbookOut,
+							                  xprocHref)));
 				}
 			return empty;
 		}
 		
-		private class TransformImpl extends AbstractBrailleTranslator {
+		private static class TransformImpl extends AbstractBrailleTranslator {
 			
 			private final XProc xproc;
 			private final TransformProvider<BrailleTranslator> norwegianTranslator;
@@ -166,7 +171,8 @@ public interface NLBTranslator {
 			
 			private TransformImpl(TransformProvider<BrailleTranslator> norwegianTranslator,
 			                      TransformProvider<BrailleTranslator> otherLanguageTranslators,
-			                      boolean htmlOrDtbookOut) {
+			                      boolean htmlOrDtbookOut,
+			                      URI xprocHref) {
 				Map<String,String> options = ImmutableMap.<String,String>of(
 					"text-transform", mutableQuery().add("id", this.getIdentifier()).toString(),
 					// This will omit the <_ style="text-transform:none">
@@ -175,7 +181,7 @@ public interface NLBTranslator {
 					// braille (which is the case if (output:braille) is also
 					// set).
 					"no-wrap", String.valueOf(htmlOrDtbookOut));
-				xproc = new XProc(href, null, options);
+				xproc = new XProc(xprocHref, null, options);
 				this.norwegianTranslator = memoize(new HandleComputerAndUncontractedProvider(norwegianTranslator));
 				this.otherLanguageTranslators = memoize(new HandleComputerAndUncontractedProvider(otherLanguageTranslators));
 			}
@@ -190,33 +196,47 @@ public interface NLBTranslator {
 				return fromStyledTextToBraille;
 			}
 			
-			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
+			private static abstract class TransformPerLanguage<T> {
 				
-				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText) {
+				List<T> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+					if (from < 0 || (to >= 0 && from > to))
+						throw new IndexOutOfBoundsException();
 					styledText = PreProcessing.dontBreakBeforeEllipsis(styledText);
-					List<String> transformed = new ArrayList<String>();
-					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
+					List<T> transformed = new ArrayList<>();
+					if (from == to) return transformed;
 					String curLang = null;
+					int i = 0;
 					for (CSSStyledText st : styledText) {
 						Map<String,String> attrs = st.getTextAttributes();
 						String lang = null;
 						if (attrs != null)
 							lang = attrs.remove("lang");
-						if (!(lang == null && curLang == null || lang == curLang)) {
-							if (!buffer.isEmpty()) {
-								for (String s : transform(buffer, curLang))
-									transformed.add(s);
-								buffer.clear(); }}
+						if (!(lang == null && curLang == null || lang == curLang) && i > from) {
+							for (T t : transform(styledText, from, to < i ? to : i, curLang))
+								transformed.add(t);
+							if (i < to)
+								from = i;
+							else
+								return transformed; }
 						curLang = lang;
-						buffer.add(st); }
-					if (!buffer.isEmpty())
-						for (String s : transform(buffer, curLang))
-							transformed.add(s);
+						i++; }
+					if (i > from)
+						for (T t : transform(styledText, from, to < i ? to : i, curLang))
+							transformed.add(t);
 					return transformed;
 				}
 				
-				private java.lang.Iterable<String> transform(List<CSSStyledText> styledText, String lang) {
-					return handleComputerAndUncontracted(lang).fromStyledTextToBraille().transform(styledText);
+				abstract java.lang.Iterable<T> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to, String lang);
+			}
+			
+			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
+				TransformPerLanguage<String> impl = new TransformPerLanguage<String>() {
+					java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to, String lang) {
+						return handleComputerAndUncontracted(lang).fromStyledTextToBraille().transform(styledText, from, to);
+					}
+				};
+				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+					return impl.transform(styledText, from, to);
 				}
 			};
 			
@@ -226,30 +246,14 @@ public interface NLBTranslator {
 			}
 			
 			private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
-				
-				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText) {
-					styledText = PreProcessing.dontBreakBeforeEllipsis(styledText);
-					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
-					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
-					String curLang = null;
-					for (CSSStyledText st : styledText) {
-						Map<String,String> attrs = st.getTextAttributes();
-						String lang = null;
-						if (attrs != null)
-							lang = attrs.remove("lang");
-						if (!(lang == null && curLang == null || lang == curLang)) {
-							if (!buffer.isEmpty()) {
-								lineIterators.add(transform(buffer, curLang));
-								buffer.clear(); }}
-						curLang = lang;
-						buffer.add(st); }
-					if (!buffer.isEmpty()) {
-						lineIterators.add(transform(buffer, curLang)); }
-					return concatLineIterators(lineIterators);
-				}
-				
-				private LineIterator transform(List<CSSStyledText> styledText, String lang) {
-					return handleComputerAndUncontracted(lang).lineBreakingFromStyledText().transform(styledText);
+				TransformPerLanguage<LineIterator> impl = new TransformPerLanguage<LineIterator>() {
+					java.lang.Iterable<LineIterator> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to, String lang) {
+						return Collections.singleton(
+							handleComputerAndUncontracted(lang).lineBreakingFromStyledText().transform(styledText, from, to));
+					}
+				};
+				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+					return concatLineIterators(impl.transform(styledText, from, to));
 				}
 			};
 			
@@ -310,16 +314,26 @@ public interface NLBTranslator {
 				return fromStyledTextToBraille;
 			}
 			
-			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
+			private static abstract class TransformImpl<T> {
 				
-				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText) {
+				List<T> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+					if (from < 0 || (to >= 0 && from > to))
+						throw new IndexOutOfBoundsException();
 					List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 					// which segments are an url or e-mail address
 					List<Boolean> computer = new ArrayList<Boolean>();
-					// mapping from index in segments to index in text
-					List<Integer> mapping = new ArrayList<Integer>(); {
+					// mapping from index in segments to index in styledText
+					List<Integer> mapping = new ArrayList<Integer>();
+					// from and to mapped to segments
+					int fromSegment, toSegment; {
 						int i = 0;
+						fromSegment = -1;
+						toSegment = -1;
 						for (CSSStyledText st : styledText) {
+							if (i == from)
+								fromSegment = segments.size();
+							if (i == to)
+								toSegment = segments.size();
 							String text = st.getText();
 							if (text.isEmpty()) {
 								segments.add(st);
@@ -342,27 +356,32 @@ public interface NLBTranslator {
 										mapping.add(i);
 										needStyleCopy = true; }
 									c = !c; }}
-							i++; }}
-					String braille[] = new String[size(styledText)];
-					for (int i = 0; i < braille.length; i++)
-						braille[i] = "";
-					int i = 0;
+							i++; }
+						if (fromSegment < 0)
+							throw new IndexOutOfBoundsException();
+						if (toSegment < 0)
+							toSegment = segments.size(); }
+					int size = (to < 0 ? size(styledText) : to) - from;
+					List<T> braille = new ArrayList<>();
+					for (int i = 0; i < size; i++) braille.add(empty());
+					int i = fromSegment;
 					boolean curComputer = false;
-					for (String b : transform(segments, computer)) {
+					for (T b : transform(segments, fromSegment, toSegment, computer)) {
 						if (!computer.get(i) && curComputer)
-							braille[mapping.get(i)] += CLOSE_COMPUTER;
+							braille.set(mapping.get(i) - from, add(braille.get(mapping.get(i) - from), closeComputer()));
 						else if (computer.get(i) && !curComputer)
-							braille[mapping.get(i)] += OPEN_COMPUTER;
-						braille[mapping.get(i)] += b;
+							braille.set(mapping.get(i) - from, add(braille.get(mapping.get(i) - from), openComputer()));
+						braille.set(mapping.get(i) - from, add(braille.get(mapping.get(i) - from), b));
 						curComputer = computer.get(i);
 						i++; }
 					if (curComputer)
-						braille[mapping.get(i-1)] += CLOSE_COMPUTER;
-					return Arrays.asList(braille);
+						braille.set(mapping.get(i-1) - from, add(braille.get(mapping.get(i-1) - from), closeComputer()));
+					return braille;
 				}
 				
-				private java.lang.Iterable<String> transform(List<CSSStyledText> styledText, List<Boolean> computer) {
-					List<String> transformed = new ArrayList<String>();
+				java.lang.Iterable<T> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to, List<Boolean> computer) {
+					List<T> transformed = new ArrayList<>();
+					if (from == to) return transformed;
 					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 					boolean curUncontracted = false;
 					int i = 0;
@@ -382,7 +401,6 @@ public interface NLBTranslator {
 										// is the most logical situation in most cases. However the order in which
 										// "uncontracted" and "contracted" should overwrite each other is exactly the
 										// opposite. Therefore invert the list.
-										// FIXME: why is this not done in LineBreakingFromStyledText interface?
 										Iterator<Term<?>> it = Lists.reverse(values).iterator();
 										while (it.hasNext()) {
 											String tt = ((TermIdent)it.next()).getValue();
@@ -398,18 +416,46 @@ public interface NLBTranslator {
 								uncontracted = uncontracted || computer.get(i);
 						}
 						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
-							for (String s : (curUncontracted ? nonContractingTranslator : contractingTranslator)
-							                .fromStyledTextToBraille().transform(buffer))
-								transformed.add(s);
+							if (from < buffer.size())
+								for (T s : transform(buffer, from, to < buffer.size() ? to : -1, curUncontracted))
+									transformed.add(s);
+							from -= buffer.size();
+							if (from < 0) from = 0;
+							if (to > 0) {
+								to -= buffer.size();
+								if (to <= 0)
+									return transformed; }
 							buffer = new ArrayList<CSSStyledText>(); }
 						curUncontracted = uncontracted;
 						buffer.add(st);
 						i++; }
-					if (!buffer.isEmpty())
-						for (String s : (curUncontracted ? nonContractingTranslator : contractingTranslator)
-						                .fromStyledTextToBraille().transform(buffer))
+					if (!buffer.isEmpty() && from < buffer.size())
+						for (T s : transform(buffer, from, to < buffer.size() ? to : -1, curUncontracted))
 							transformed.add(s);
 					return transformed;
+				}
+				
+				abstract java.lang.Iterable<T> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to, boolean uncontracted);
+				
+				abstract T openComputer();
+				abstract T closeComputer();
+				abstract T empty();
+				abstract T add(T a, T b);
+			}
+			
+			private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
+				TransformImpl<String> impl = new TransformImpl<String>() {
+					java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to, boolean uncontracted) {
+						return (uncontracted ? nonContractingTranslator : contractingTranslator)
+						       .fromStyledTextToBraille().transform(styledText, from, to);
+					}
+					String openComputer() { return OPEN_COMPUTER; }
+					String closeComputer() { return CLOSE_COMPUTER; }
+					String empty() { return ""; }
+					String add(String a, String b) { return a + b; }
+				};
+				public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+					return impl.transform(styledText, from, to);
 				}
 			};
 			
@@ -419,77 +465,19 @@ public interface NLBTranslator {
 			}
 			
 			private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
-				
-				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText) {
-					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
-					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
-					boolean curComputer = false;
-					for (CSSStyledText st : styledText) {
-						String text = st.getText();
-						if (!text.isEmpty()) {
-							boolean computer = false;
-							boolean needStyleCopy = false;
-							for (String s : splitInclDelimiter(text, COMPUTER)) {
-								if (!s.isEmpty()) {
-									if (computer != curComputer && !buffer.isEmpty()) {
-										if (curComputer)
-											lineIterators.add(new NonBreakingBrailleString(OPEN_COMPUTER));
-										lineIterators.add(transform(buffer, curComputer));
-										if (curComputer)
-											lineIterators.add(new NonBreakingBrailleString(CLOSE_COMPUTER));
-										buffer = new ArrayList<CSSStyledText>();
-										curComputer = computer; }
-									SimpleInlineStyle style = st.getStyle();
-									Map<String,String> attrs = st.getTextAttributes();
-									if (needStyleCopy) {
-										if (style != null)
-											style = (SimpleInlineStyle)style.clone();
-										if (attrs != null)
-											attrs = new HashMap<String,String>(attrs); }
-									buffer.add(new CSSStyledText(s, style, attrs));
-									needStyleCopy = true; }
-								computer = !computer; }}}
-					if (!buffer.isEmpty()) {
-						if (curComputer)
-							lineIterators.add(new NonBreakingBrailleString(OPEN_COMPUTER));
-						lineIterators.add(transform(buffer, curComputer));
-						if (curComputer)
-							lineIterators.add(new NonBreakingBrailleString(CLOSE_COMPUTER)); }
-					return concatLineIterators(lineIterators);
-				}
-				
-				private LineIterator transform(List<CSSStyledText> styledText, boolean computer) {
-					List<LineIterator> lineIterators = new ArrayList<LineIterator>();
-					List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
-					boolean curUncontracted = false;
-					for (CSSStyledText st : styledText) {
-						SimpleInlineStyle style = st.getStyle();
-						boolean uncontracted; {
-							uncontracted = computer;
-							if (style != null) {
-								CSSProperty val = style.getProperty("text-transform");
-								if (val != null) {
-									if (val == TextTransform.list_values) {
-										TermList values = style.getValue(TermList.class, "text-transform");
-										Iterator<Term<?>> it = values.iterator();
-										while (it.hasNext()) {
-											String tt = ((TermIdent)it.next()).getValue();
-											if (tt.equals("uncontracted")) {
-												uncontracted = true;
-												it.remove();
-												break; }}
-										if (values.isEmpty())
-											style.removeProperty("text-transform"); }}}}
-						if (uncontracted != curUncontracted && !buffer.isEmpty()) {
-							lineIterators.add((curUncontracted ? nonContractingTranslator : contractingTranslator)
-							                  .lineBreakingFromStyledText().transform(buffer));
-							buffer = new ArrayList<CSSStyledText>(); }
-						curUncontracted = uncontracted;
-						buffer.add(st); }
-					if (!buffer.isEmpty())
-						lineIterators.add((curUncontracted ? nonContractingTranslator : contractingTranslator)
-						                  .lineBreakingFromStyledText().transform(buffer));
-					return concatLineIterators(lineIterators);
+				TransformImpl<LineIterator> impl = new TransformImpl<LineIterator>() {
+					java.lang.Iterable<LineIterator> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to, boolean uncontracted) {
+						return Collections.singleton(
+							(uncontracted ? nonContractingTranslator : contractingTranslator)
+							.lineBreakingFromStyledText().transform(styledText, from, to));
+					}
+					LineIterator openComputer() { return new NonBreakingBrailleString(OPEN_COMPUTER); }
+					LineIterator closeComputer() { return new NonBreakingBrailleString(CLOSE_COMPUTER); }
+					LineIterator empty() { return null; }
+					LineIterator add(LineIterator a, LineIterator b) { return concatLineIterators(a, b); }
+				};
+				public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+					return concatLineIterators(impl.transform(styledText, from, to));
 				}
 			};
 		}
@@ -520,7 +508,7 @@ public interface NLBTranslator {
 			}
 			
 			public int countRemaining() {
-				return remainder.length();
+				return (remainder != null) ? remainder.length() : 0;
 			}
 			
 			public boolean hasNext() {
@@ -540,10 +528,23 @@ public interface NLBTranslator {
 			}
 		}
 		
+		private static BrailleTranslator.LineIterator concatLineIterators(BrailleTranslator.LineIterator a, BrailleTranslator.LineIterator b) {
+			if (a == null)
+				return b;
+			else if (b == null)
+				return a;
+			else {
+				List<BrailleTranslator.LineIterator> list = new ArrayList<>();
+				list.add(a);
+				list.add(b);
+				return concatLineIterators(list);
+			}
+		}
+		
 		private static BrailleTranslator.LineIterator concatLineIterators(List<BrailleTranslator.LineIterator> iterators) {
 			if (iterators.size() == 0)
 				return new NonBreakingBrailleString(null);
-			else if (iterators.size() == 1)
+			else if (iterators.size() == 1 && iterators.get(0) != null)
 				return iterators.get(0);
 			else
 				return new ConcatLineIterators(iterators);
@@ -737,14 +738,16 @@ public interface NLBTranslator {
 			final File undefinedTable;
 			
 			LiblouisTranslatorWithUndefinedDotsProvider(TransformProvider<LiblouisTranslator> backingProvider,
-			                                            String dots,
-			                                            ComponentContext componentContext) {
+			                                            String dots) {
 				this.backingProvider = backingProvider;
-				File directory;
-				for (int i = 0; true; i++) {
-					directory = componentContext.getBundleContext().getDataFile("resources" + i);
-					if (!directory.exists()) break; }
-				directory.mkdirs();
+				File directory; {
+					try {
+						directory = createTempDirectory("pipeline-").toFile(); }
+					catch (Exception e) {
+						throw new RuntimeException("Could not create temporary directory", e); }
+					directory.deleteOnExit();
+				}
+				directory = normalize(directory);
 				this.undefinedTable = new File(directory, "undefined.cti");
 				try {
 					undefinedTable.createNewFile();
@@ -776,7 +779,7 @@ public interface NLBTranslator {
 									URI[] uris = new URI[table.length + 1];
 									System.arraycopy(table, 0, uris, 0, uris.length - 1);
 									// adding the "undefined" rule to the end overwrites any previous rules
-									uris[uris.length - 1] = asURI(undefinedTable);
+									uris[uris.length - 1] = URIs.asURI(undefinedTable);
 									tableWithUndefinedDots = new LiblouisTable(uris);
 								}
 								MutableQuery newQuery = mutableQuery().add("table", tableWithUndefinedDots.toString());
@@ -798,50 +801,58 @@ public interface NLBTranslator {
 			
 			ConcatLineIterators(List<BrailleTranslator.LineIterator> iterators) {
 				this.iterators = iterators;
-				this.current = iterators.get(currentIndex);
+				currentIndex = -1;
+				current = null;
+				computeCurrent();
+			}
+			
+			void computeCurrent() {
+				while (current == null || !current.hasNext())
+					if (currentIndex + 1 < iterators.size())
+						current = iterators.get(++currentIndex);
+					else {
+						current = null;
+						break; }
 			}
 			
 			public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly) {
 				String row = "";
 				while (limit > row.length()) {
+					if (current == null) break;
 					row += current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
-					if (!current.hasNext() && currentIndex + 1 < iterators.size())
-						current = iterators.get(++currentIndex);
-					else
-						break; }
+					computeCurrent(); }
 				return row;
 			}
 			
 			public String getTranslatedRemainder() {
 				String remainder = "";
+				if (current == null) return remainder;
 				for (int i = currentIndex; i < iterators.size(); i++)
-					remainder += iterators.get(i).getTranslatedRemainder();
+					if (iterators.get(i) != null)
+						remainder += iterators.get(i).getTranslatedRemainder();
 				return remainder;
 			}
 			
 			public int countRemaining() {
 				int remaining = 0;
+				if (current == null) return remaining;
 				for (int i = currentIndex; i < iterators.size(); i++)
-					remaining += iterators.get(i).countRemaining();
+					if (iterators.get(i) != null)
+						remaining += iterators.get(i).countRemaining();
 				return remaining;
 			}
 			
 			public boolean hasNext() {
-				if (current.hasNext())
-					return true;
-				else {
-					while (currentIndex + 1 < iterators.size()) {
-						current = iterators.get(++currentIndex);
-						if (current.hasNext())
-							return true; }}
-				return false;
+				computeCurrent();
+				return current != null;
 			}
 			
 			public ConcatLineIterators copy() {
 				List<BrailleTranslator.LineIterator> iteratorsCopy = new ArrayList<>(iterators.size() - currentIndex);
 				for (int i = currentIndex; i < iterators.size(); i++)
-					iteratorsCopy.add((BrailleTranslator.LineIterator)iterators.get(i).copy());
-				return new ConcatLineIterators(iterators);
+					if (iterators.get(i) != null)
+						iteratorsCopy.add((BrailleTranslator.LineIterator)iterators.get(i).copy());
+				return new ConcatLineIterators(iteratorsCopy);
 			}
 			
 			public boolean supportsMetric(String metric) {

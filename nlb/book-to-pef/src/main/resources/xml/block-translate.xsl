@@ -8,7 +8,7 @@
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 exclude-result-prefixes="#all">
 	
-	<xsl:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-template.xsl"/>
+	<xsl:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl"/>
 	
 	<xsl:variable name="main-locale" select="'no'"/>
 	
