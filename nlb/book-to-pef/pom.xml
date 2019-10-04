@@ -7,7 +7,7 @@
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../braille/maven/parent/</relativePath>
+    <relativePath>../../modules/braille/maven/parent/</relativePath>
   </parent>
 
   <artifactId>mod-nlb</artifactId>
