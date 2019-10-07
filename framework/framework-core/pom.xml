@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>framework-core</artifactId>
-  <version>4.1.1-SNAPSHOT</version>
+  <version>4.2.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Framework Core</name>
   <dependencies>
@@ -21,10 +21,6 @@
       <artifactId>jing</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
@@ -33,27 +29,18 @@
       <artifactId>xproc-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!--
-        test dependencies
-    -->
     <dependency>
-      <groupId>com.carrotsearch</groupId>
-      <artifactId>junit-benchmarks</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>test</scope>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
     </dependency>
     <!--
         runtime dependencies (for javax.xml.stream.XMLInputFactory)
@@ -63,36 +50,137 @@
       <artifactId>woodstox-osgi-adapter</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
+      <version>1.0.4</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>saxon-adapter</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.daisy.maven</groupId>
+          <artifactId>xproc-engine-daisy-pipeline</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>junit-benchmarks</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>maven-paxexam-plugin</artifactId>
+        <version>1.2.4</version>
+        <executions>
+          <execution>
+            <id>generate-depends-file</id>
+            <goals>
+              <goal>generate-depends-file</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <pax.exam.logging>none</pax.exam.logging>
+          </systemPropertyVariables>
+          <trimStackTrace>false</trimStackTrace>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>
-              OSGI-INF/event-provider.xml,
-              OSGI-INF/job-execution-service.xml,
-              OSGI-INF/runtime-configurator.xml,
-              OSGI-INF/job-manager-factory.xml,
-              OSGI-INF/parser.xml,
-              OSGI-INF/registry.xml,
-              OSGI-INF/datatype-registry.xml,
-              OSGI-INF/monitor.xml,
-              OSGI-INF/event-listener.xml
-            </Service-Component>
+            <_dsannotations>
+              org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+              org.daisy.pipeline.event.EventBusProvider,
+              org.daisy.pipeline.event.JobMonitorFactoryImpl,
+              org.daisy.pipeline.event.MessageEventListener,
+              org.daisy.pipeline.job.impl.DefaultJobExecutionService,
+              org.daisy.pipeline.job.JobManagerFactory,
+              org.daisy.pipeline.job.RuntimeConfigurator,
+              org.daisy.pipeline.script.impl.DefaultScriptRegistry,
+              org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+            </_dsannotations>
             <!--
                 compatible with versions >= 20120724
             -->
-            <Import-Package>com.thaiopensource.*;version="[20120724.0,20151127]",*</Import-Package>
+            <Import-Package>
+              !org.daisy.common.spi,
+              com.thaiopensource.*;version="[20120724.0,20151127]",
+              *
+            </Import-Package>
           </instructions>
         </configuration>
+        <executions>
+          <execution>
+            <id>bundle-before-test</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+                org.daisy.pipeline.event.EventBusProvider,
+                org.daisy.pipeline.event.JobMonitorFactoryImpl,
+                org.daisy.pipeline.event.MessageEventListener,
+                org.daisy.pipeline.job.impl.DefaultJobExecutionService,
+                org.daisy.pipeline.job.JobManagerFactory,
+                org.daisy.pipeline.job.RuntimeConfigurator,
+                org.daisy.pipeline.script.impl.DefaultScriptRegistry,
+                org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
+        <!-- <version>2.3.0-SNAPSHOT</version> -->
         <executions>
+          <!--
+          <execution>
+            <id>process-test-catalog</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>process-test-catalog</goal>
+            </goals>
+          </execution>
+          -->
           <execution>
             <id>package-list</id>
             <phase>prepare-package</phase>

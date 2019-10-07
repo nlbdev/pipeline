@@ -1,5 +1,6 @@
 package org.daisy.pipeline.modules;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -8,11 +9,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.daisy.common.file.URIs;
+
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.xmlcatalog.XmlCatalog;
+import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +34,8 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 	private ResourceLoader loader;
 	private final List<Component> components = new ArrayList<Component>();
 	private final List<Entity> entities = new ArrayList<Entity>();
-	private final Logger mLogger = LoggerFactory.getLogger(getClass());
+
+	private static final Logger mLogger = LoggerFactory.getLogger(AbstractModuleBuilder.class);
 	
 	public Module build() {
 		return new Module(name, version, title, components, entities);
@@ -98,5 +106,45 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 			}
 		}
 		return self();
+	}
+	
+	/*
+	 * Use loader to find catalog.xml file
+	 */
+	public T withCatalogParser(XmlCatalogParser parser) {
+		if (loader == null)
+			throw new UnsupportedOperationException("Resource loader not set");
+		URL catalogURL = loader.loadResource("../META-INF/catalog.xml");
+		if (catalogURL == null)
+			throw new RuntimeException("/META-INF/catalog.xml file not found");
+		return withCatalog(parser.parse(URIs.asURI(catalogURL)));
+	}
+	
+	/*
+	 * Return either a JarModuleBuilder or a OSGIModuleBuilder
+	 */
+	public static AbstractModuleBuilder fromContainedClass(Class<?> clazz) {
+		try {
+			URI jarFileURI = clazz.getProtectionDomain().getCodeSource().getLocation().toURI();
+			try {
+				File jarFile = new File(jarFileURI);
+				mLogger.trace("Creating module from JAR: " + jarFile);
+				return new JarModuleBuilder().withJarFile(jarFile);
+			} catch (IllegalArgumentException e) {
+				// Could be because we are running in OSGi context
+				return OSGiHelper.getOSGiModuleBuilder(clazz);
+			}
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	// static nested class in order to delay class loading
+	private static abstract class OSGiHelper {
+		static AbstractModuleBuilder getOSGiModuleBuilder(Class<?> clazz) {
+			Bundle bundle = FrameworkUtil.getBundle(clazz);
+			mLogger.trace("Creating module from OSGi bundle: " + bundle);
+			return new OSGIModuleBuilder().withBundle(bundle);
+		}
 	}
 }

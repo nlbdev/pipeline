@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.ops4j.pax.exam.Configuration;
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
@@ -165,7 +166,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 			"org.slf4j:slf4j-api:?",
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
-			"org.daisy.pipeline:xpath-registry:?",
+			"org.daisy.pipeline:saxon-adapter:?",
 			"org.daisy.pipeline:xproc-api:?",
 			"org.daisy.pipeline:modules-registry:?",
 			"org.apache.httpcomponents:httpclient-osgi:?",
@@ -212,7 +213,9 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.jpa:?"),
 			mavenBundle("org.eclipse.persistence:javax.persistence:?"),
 			mavenBundle("org.eclipse.gemini:org.apache.derby:?"),
-			mavenBundle("org.osgi:org.osgi.enterprise:5.0.0")
+			mavenBundle("org.osgi:org.osgi.enterprise:5.0.0"),
+			
+			systemPackage("javax.transaction")
 		);
 	}
 	

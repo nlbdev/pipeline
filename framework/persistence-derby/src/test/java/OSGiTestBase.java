@@ -9,6 +9,7 @@ import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 import org.ops4j.pax.exam.Configuration;
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
@@ -58,13 +59,14 @@ public abstract class OSGiTestBase extends AbstractTest {
 			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.jpa:?"),
 			mavenBundle("org.eclipse.persistence:javax.persistence:?"),
 			mavenBundle("org.eclipse.gemini:org.apache.derby:?"),
-			mavenBundle("org.osgi:org.osgi.enterprise:?")
+			mavenBundle("org.osgi:org.osgi.enterprise:?"),
+			systemPackage("javax.transaction")
 		);
 	}
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Bundle-Name", "Test module");
+		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
 		probe.setHeader("Service-Component", "OSGI-INF/script.xml");
 		return probe;
 	}
