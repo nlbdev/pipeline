@@ -1,6 +1,6 @@
 /* intprops.h -- properties of integer types
 
-   Copyright (C) 2001-2017 Free Software Foundation, Inc.
+   Copyright (C) 2001-2019 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published
@@ -13,7 +13,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* Written by Paul Eggert.  */
 
@@ -22,12 +22,13 @@
 
 #include <limits.h>
 
-/* Return a value with the common real type of E and V and the value of V.  */
-#define _GL_INT_CONVERT(e, v) (0 * (e) + (v))
+/* Return a value with the common real type of E and V and the value of V.
+   Do not evaluate E.  */
+#define _GL_INT_CONVERT(e, v) ((1 ? 0 : (e)) + (v))
 
 /* Act like _GL_INT_CONVERT (E, -V) but work around a bug in IRIX 6.5 cc; see
-   <http://lists.gnu.org/archive/html/bug-gnulib/2011-05/msg00406.html>.  */
-#define _GL_INT_NEGATE_CONVERT(e, v) (0 * (e) - (v))
+   <https://lists.gnu.org/r/bug-gnulib/2011-05/msg00406.html>.  */
+#define _GL_INT_NEGATE_CONVERT(e, v) ((1 ? 0 : (e)) - (v))
 
 /* The extra casts in the following macros work around compiler bugs,
    e.g., in Cray C 5.0.3.0.  */
@@ -40,13 +41,14 @@
 #define TYPE_SIGNED(t) (! ((t) 0 < (t) -1))
 
 /* Return 1 if the real expression E, after promotion, has a
-   signed or floating type.  */
+   signed or floating type.  Do not evaluate E.  */
 #define EXPR_SIGNED(e) (_GL_INT_NEGATE_CONVERT (e, 1) < 0)
 
 
 /* Minimum and maximum values for integer types and expressions.  */
 
 /* The width in bits of the integer type or expression T.
+   Do not evaluate T.
    Padding bits are not supported; this is checked at compile-time below.  */
 #define TYPE_WIDTH(t) (sizeof (t) * CHAR_BIT)
 
@@ -58,7 +60,7 @@
         : ((((t) 1 << (TYPE_WIDTH (t) - 2)) - 1) * 2 + 1)))
 
 /* The maximum and minimum values for the type of the expression E,
-   after integer promotion.  E should not have side effects.  */
+   after integer promotion.  E is not evaluated.  */
 #define _GL_INT_MINIMUM(e)                                              \
   (EXPR_SIGNED (e)                                                      \
    ? ~ _GL_SIGNED_INT_MAXIMUM (e)                                       \
@@ -179,7 +181,7 @@
 /* Return 1 if A * B would overflow in [MIN,MAX] arithmetic.
    See above for restrictions.  Avoid && and || as they tickle
    bugs in Sun C 5.11 2010/08/13 and other compilers; see
-   <http://lists.gnu.org/archive/html/bug-gnulib/2011-05/msg00401.html>.  */
+   <https://lists.gnu.org/r/bug-gnulib/2011-05/msg00401.html>.  */
 #define INT_MULTIPLY_RANGE_OVERFLOW(a, b, min, max)     \
   ((b) < 0                                              \
    ? ((a) < 0                                           \
@@ -219,7 +221,11 @@
    : (max) >> (b) < (a))
 
 /* True if __builtin_add_overflow (A, B, P) works when P is non-null.  */
-#define _GL_HAS_BUILTIN_OVERFLOW (5 <= __GNUC__)
+#if 5 <= __GNUC__ && !defined __ICC
+# define _GL_HAS_BUILTIN_OVERFLOW 1
+#else
+# define _GL_HAS_BUILTIN_OVERFLOW 0
+#endif
 
 /* True if __builtin_add_overflow_p (A, B, C) works.  */
 #define _GL_HAS_BUILTIN_OVERFLOW_P (7 <= __GNUC__)
@@ -336,8 +342,8 @@
    Arguments should be free of side effects.  */
 #define _GL_BINARY_OP_OVERFLOW(a, b, op_result_overflow)        \
   op_result_overflow (a, b,                                     \
-                      _GL_INT_MINIMUM (0 * (b) + (a)),          \
-                      _GL_INT_MAXIMUM (0 * (b) + (a)))
+                      _GL_INT_MINIMUM (_GL_INT_CONVERT (a, b)), \
+                      _GL_INT_MAXIMUM (_GL_INT_CONVERT (a, b)))
 
 /* Store the low-order bits of A + B, A - B, A * B, respectively, into *R.
    Return 1 if the result overflows.  See above for restrictions.  */
@@ -439,7 +445,7 @@
    implementation-defined result or signal for values outside T's
    range.  However, code that works around this theoretical problem
    runs afoul of a compiler bug in Oracle Studio 12.3 x86.  See:
-   http://lists.gnu.org/archive/html/bug-gnulib/2017-04/msg00049.html
+   https://lists.gnu.org/r/bug-gnulib/2017-04/msg00049.html
    As the compiler bug is real, don't try to work around the
    theoretical problem.  */
 

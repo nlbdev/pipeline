@@ -1,5 +1,23 @@
 #  Copyright (C) 2015 by Harpo Sp. z o. o. <info@harpo.com.pl>
 #
+# -----------
+#-index-name: Polish, computer
+#-display-name: Polish computer braille
+#
+#+locale:pl
+#+type:computer
+#+dots:8
+#
+# TODO: Please correct the metadata above. It is not meant to be
+# accurate nor complete. It hasn't been verified by the table
+# author yet. It is merely an attempt by the liblouis maintainers
+# to get some sensible initial values in place.
+#
+# TODO: Please add a reference to official documentation about
+# the implemented braille code. Preferably submit the documents
+# to https://github.com/liblouis/braille-specs.
+# -----------
+#
 #  This file is part of liblouis.
 #
 #  liblouis is free software: you can redistribute it and/or modify it
@@ -62,6 +80,7 @@ sign \x0060 345 	# `
 punctuation \x007B 123567 	# {
 sign \x007C 456 	# |
 punctuation \x007D 234567 	# }
+punctuation	\x2013 36		 # 8211			smart minus sign
 math \x007E 1246 	# ~
 
 noback sign \x0000 34578

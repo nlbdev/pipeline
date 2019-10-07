@@ -1,129 +1,192 @@
-liblouis 3.2.0 has been released
+liblouis 3.11.0 has been released
 
 The liblouis developer team is proud to announce the liblouis release
-3.2.0. The release is available for download at:
+3.11.0. The release is available for download at:
 
-    https://github.com/liblouis/liblouis/releases
+https://github.com/liblouis/liblouis/releases
 
 Introduction
 ============
 
 Liblouis is an open-source braille translator and back-translator. It
 features support for computer, literary and math braille, supports
-contracted and uncontracted translation for many, many languages[1].
-It plays an important role in an open source accessibility stack and
-is used by screenreaders such as NVDA, Orca and JAWS. A companion
-project liblouisutdml[2] deals with formatting of braille.
+contracted and uncontracted translation for many, many languages [1]_.
+It plays an important role in an open source accessibility stack and is
+used by screenreaders such as NVDA, Orca and JAWS. A companion project
+liblouisutdml [2]_ deals with formatting of braille.
 
-Changes in this release
-=======================
+Noteworthy changes in this release
+==================================
 
-Aside from the usual improvements to Braille tables this release
-focuses on improving the internal infrastructure. Numerous bugs have
-been fixed, the CI infrastructure also checks mingw builds now and
-MSVC compatibility has been massively improved. For a detailed list of
-all the changes refer to
+A tremendous amount of work by Dave Mielke and Bert Frees has gone into
+this release. They have improved liblouis for use on note taker devices,
+for backwards translation and a number of languages. Many other
+contributors (listed below) have also helped in fixing bugs and
+improving braille tables, such as Dutch, Mongolian, Polish, Ancient
+Greek, Danish, Irish, Chinese, and American Braille Computer Code.
 
-    https://github.com/liblouis/liblouis/milestone/10?closed=1
+For a detailed list of all the changes refer to the list of closed
+issues [3]_.
+
+New features
+------------
+
+-  Enable ``always`` rules with a single character and a single braille
+   cell for back-translation. Thanks to Bue Vester-Andersen.
+-  Implement ``noUndefined`` mode for forward translation, thanks to
+   Dave Mielke.
+-  Use fallback braille representations (NABCC) for rendering undefined
+   characters in hexadecimal notation, thanks to Dave Mielke.
+-  Always render undefined characters, also ASCII characters, in
+   hexadecimal notation.
+-  Add a new metadata field ``index-name`` for selecting a table from a
+   list fast and efficiently. It has the most important information
+   first and no redundant information. It should look nice when sorted.
+   This in contrast to the existing ``display-name`` field which is for
+   describing a table accurately and should sound good. Thanks to Dave
+   Mielke and Bert Frees.
 
 Bug fixes
-~~~~~~~~~
+---------
 
-  - Fix capsnocont opcode. Also mark capital letters with capsletter
-    symbol when capsnocont is defined but no begcapsword indicator is
-    defined. Thanks to Bue Vester-Andersen.
-  - Fix the syllable opcode. It had been broken under some circumstances
-    since 3.0. Thanks to Bert Frees and Christian Egli.
-
-Other changes
-~~~~~~~~~~~~~
-
-  - Fix building of Python bindings when cross-compiling. Thanks to
-    Chris Brannon
-  - lou_checkyaml is now only installed if libyaml is available. Thanks
-    to Christian Egli
-  - Major internal changes to improve MSVC compatibility. Thanks to Davy
-    Kager
-  - Enhance documentation on usage of display tables in particular in
-    conjunction with Unicode dot patterns. Thanks to Bert Frees
+-  Don't let a caps passage end on a word with no letters. Thanks to
+   Bert Frees.
+-  Handle word resets in the last word of an caps or emphasis passage if
+   the end indicator was placed before the word. Thanks to Bert Frees.
+-  Never convert to lowercase if ``capsletter`` is not defined. Thanks
+   to Bert Frees.
+-  Fix position mapping for back-translation when ``noUndefined`` mode
+   is active. Thanks to Dave Mielke.
+-  Fix bug where a translation would hang on words that match both a
+   ``nocont`` and a ``repeated`` rule. Thanks to Dave Mielke.
+-  Fix bug where the effect of ``capsnocont`` would leak to the next
+   word if that word starts with a capital. Thanks to Bue
+   Vester-Andersen.
 
 Braille table improvements
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
-  - Improvements to the Swedish 8-dots table (`se-se.ctb') thanks to
-    Kevin Derome
-  - Improvements to the Simplified-Chinese Braille table thanks to
-    Roshanson
-  - Fixes for the International Phonetic Alphabet Braille table thanks
-    to Ludovic Oger
-  - Added more Unicode symbols (fractions and not equal) to the UEB
-    tables. Thanks to Paul Wood and James Bowden.
-  - Fixes to UEB grade 2 (en-ueb-g2.ctb) thanks to Mike Gray.
-  - Vastly improved Danish tables thanks to Bue Vester-Andersen.
-    - New literary tables for 6 dots, mainly for embossing (no
-      back-translation).
-    - Improved back-translation in 6 dots tables, all grades.
-    - New support for many Unicode characters in all 6 dots tables.
-    - Strengthened internal tests to prevent breaking of tables due to
-      changes in the code.
-    - Fixed 8 dots tables which were broken in the previous version.
-  - New Braille tables for Sinhala script thanks to Ashoka Bandula
-    Weerawardhana.
-  - New Hungarian grade 2 Braille table thanks to Attila Hammer.
-  - Improvements to UEB in particular to symbols specified mostly on the
-    Appendix 3 (Symbols List) from the Rules of Unified English Braille
-    Second Edition 2013 document thanks to Victor Montalvão.
-  - Improvements to Persian 8 dot computer Braille table thanks to
-    Mohammadreza Rashad.
+-  Fix an issue with ordinal numbers inside caps passages in Dutch
+   braille. Thanks to Bert Frees.
+-  Improved back-translation for Mongolian thanks to Angaragerdene.
+-  Fixes to Polish grade 1 and Polish computer braille thanks to Łukasz
+   Golonka.
+-  Improvements to Ancient Greek braille, which has been renamed
+   &quot;Greek international braille&quot;. A version with composed
+   accents is made available as a .uti table. Thanks to Dave Mielke and
+   Μαρια Γεωργακαράκου (Maria Georgakarakou).
+-  Various improvements to modern Greek thanks to Dave Mielke.
+-  Improvements and fixes to Spanish contracted braille. Details in
+   #741. Thanks to Juan Pablo Bello.
+-  Improvements and fixes to the Danish tables. Thanks to Bue
+   Vester-Andersen.
+-  Add a display table to match Word CX which is used in Norway and
+   Sweden, and maybe also in other countries thanks to Lars Bjørndal.
+-  Fix handling of colon within number in Dutch braille, thanks to Jake
+   Kyle.
+-  Fix translation of bullet and dot operators in Dutch braille, thanks
+   to Paul Rambags
+-  Added North American Braille Computer Code table (``en-nabcc.utb``)
+   which is the counterpart of the ``text_nabcc.dis`` display table.
+   Thanks to Dave Mielke.
+-  Add support for the International Phonetic Alphabet (IPA) to the
+   Chinese bopomofo braille table, thanks to Hurt Huang and Sponge Jhan.
+   Various improvements, including dot patterns and test cases, to the
+   Chinese bopomofo braille table, thanks to Sponge Jhan.
+-  Unified English Braille no longer displays a single underscore when
+   multiple underscores are in the text, thanks to André-Abush Clause.
+-  Update to Afrikaans uncontracted braille and new table for contracted
+   braille. Thanks to Christo de Klerk and Greg Kearney.
+-  Update Irish braille (contracted and uncontracted) to the May 2019
+   version of the specification, thanks to Ronan McGuirk
+
+Other changes
+-------------
+
+-  The python wrapper now encodes and decodes strings to/from UTF-16 and
+   UTF-32 using the surrogatepass error handler. This ensures that
+   single UTF-16 surrogate characters are processed correctly by the
+   wrapper and don't raise an encoding/decoding error. Thanks to Leonard
+   de Ruijter.
+-  Metadata keys and values are now case insensitive, thanks to Dave
+   Mielke.
+-  Remove ``unicodedefs.cti``. It was obsolete and never meant to be
+   included by any tables. Instead use the online references as
+   mentioned in the documentation now. See also #696.
+-  ``lou_checkyaml`` test reporting has been improved, thanks to Bert
+   Frees. For example it now has a ``--verbose`` option so that printing
+   of expected failures can be enabled.
+-  Hyphenation tables have been removed from tables except those needed
+   for ``nocross`` rules, thanks to Bert Frees.
+
+   The idea is that the caller (for example ``odt2braille`` or
+   ``liblouisutdml``) should be able to decide for themselves which
+   hyphenation table to use. The case in which a table contains nocross
+   rules is an exception. In this case the hyphenation patterns are a
+   real part of the table. Because it is not recommended to append an
+   own hyphenation table in this case, a ``#-has-nocross`` metadata
+   field was added to indicate that a table contains nocross rules.
+-  ``lou_hyphenate`` can now handle more than just words (sequences of
+   letters), e.g compound words, thanks to Bert Frees.
+
+Deprecation notice
+------------------
+
+-  The ``noUndefinedDots`` mode has been renamed to ``noUndefined``. For
+   backwards compatibility ``noUndefinedDots`` is still available in the
+   header file and in the Python bindings, as an alias for
+   ``noUndefined``.
 
 Backwards incompatible changes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
-  - The old Greek table gr-gr-g1.utb is gone. Use el.ctb instead
-  - The doctests are gone. They have been superseded by the YAML tests.
+None
+
+Invisible changes
+-----------------
+
+-  Internally separate more clearly the display and translation phases.
 
 New, renamed or removed tables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 New
----
-  - sin.cti
-  - sin.utb
-  - hu-hu-g2.ctb (new)
-  - da-dk-6miscChars.cti (new)
-  - da-dk-g16-lit.ctb (new)
-  - da-dk-g26-lit.ctb (new)
-  - da-dk-g26l-lit.ctb (new)
+~~~
 
+-  grc-international-common.uti
+-  grc-international-composed.uti
+-  grc-international-decomposed.uti
+-  en-nabcc.utb
 
 Renamed
--------
-  - gr-gr-g1.utb (removed and replaced by el.ctb)
+~~~~~~~
 
+-  gr-bb.ctb -&gt; grc-international-en.utb
 
 Removed
--------
-  - da-chardefs6.cti
-  - da-dk-common6.uti
-  - da-dk-g26-patches.cti
-  - da-dk-g2core.cti
-  - da-dk-nocaps.uti
+~~~~~~~
 
+-  unicodedefs.cti
+-  fi-fi.ctb
 
 Next release
 ============
 
-The next release will be published on September 4 2017 so please keep
-up the excellent work and keep those improvements coming.
+The next release will be published on December 2 2019 so please keep up
+the excellent work and keep those improvements coming.
 
 Share and Enjoy!
 
--- Christian Egli, on behalf of the liblouis developers
+– Christian Egli, on behalf of the liblouis developers
 
 Footnotes
 =========
 
-[1]  See https://github.com/liblouis/liblouis/tree/master/tables
-[2]  See https://github.com/liblouis/liblouisutdml
-[3]  See https://github.com/liblouis/liblouis/wiki/Emphasis-Opcodes#upgrade-from-previous-versions
-[4]  See https://github.com/liblouis/liblouis/wiki/Licensing-of-liblouis-tables
+.. [1]
+   https://github.com/liblouis/liblouis/tree/master/tables
+
+.. [2]
+   https://github.com/liblouis/liblouisutdml
+
+.. [3]
+   https://github.com/liblouis/liblouis/milestone/21?closed=1

@@ -1,3 +1,6 @@
+#-index-name: Scottish Gaelic, computer
+#-display-name: Scottish Gaelic computer braille
+
 #+locale:gd
 #+type:computer
 #+dots:8

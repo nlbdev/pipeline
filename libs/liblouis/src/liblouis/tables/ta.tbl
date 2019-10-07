@@ -1,3 +1,6 @@
+#-index-name: Tamil, computer
+#-display-name: Tamil computer braille
+
 #+locale:ta
 #+type:computer
 #+dots:8
@@ -11,6 +14,5 @@
 # the implemented braille code. Preferably submit the documents
 # to https://github.com/liblouis/braille-specs.
 
-include spaces.ctb
 include ta.ctb
 include braille-patterns.cti

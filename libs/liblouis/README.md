@@ -3,6 +3,7 @@ Build
 
 To build for all platforms at once:
 
+    docker-compose build debian
     make clean all
 
 This requires [Docker](https://www.docker.com). Mac binaries will only

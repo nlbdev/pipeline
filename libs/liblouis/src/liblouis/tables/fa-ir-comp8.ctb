@@ -1,5 +1,23 @@
 # Liblouis: Persian 8 dot computer Braille table
 #
+# -----------
+#-index-name: Persian, computer
+#-display-name: Persian computer braille
+#
+#+locale:fa
+#+type:computer
+#+dots:8
+#
+# TODO: Please correct the metadata above. It is not meant to be
+# accurate nor complete. It hasn't been verified by the table
+# author yet. It is merely an attempt by the liblouis maintainers
+# to get some sensible initial values in place.
+#
+# TODO: Please add a reference to official documentation about
+# the implemented braille code. Preferably submit the documents
+# to https://github.com/liblouis/braille-specs.
+# -----------
+#
 # Copyright (C) 2017 by Mohammadreza Rashad <mohammadreza5712@gmail.com>
 #
 #  This file is part of liblouis.
@@ -200,4 +218,4 @@ math \x2212 368 (−)
 sign \x25E6 358 (◦)
 sign \x25FE 3568 (◾)
 sign \xFDFC 123578 (﷼)
-noback sign \X25CF 168 (●) # 9679 black circle
+noback sign \x25CF 168 (●) # 9679 black circle

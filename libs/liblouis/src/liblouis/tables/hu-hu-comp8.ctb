@@ -1,5 +1,23 @@
 # liblouis: Hungarian Computer Braille table
 #
+# -----------
+#-index-name: Hungarian, computer
+#-display-name: Hungarian computer braille
+#
+#+locale:hu
+#+type:computer
+#+dots:8
+#
+# TODO: Please correct the metadata above. It is not meant to be
+# accurate nor complete. It hasn't been verified by the table
+# author yet. It is merely an attempt by the liblouis maintainers
+# to get some sensible initial values in place.
+#
+# TODO: Please add a reference to official documentation about
+# the implemented braille code. Preferably submit the documents
+# to https://github.com/liblouis/braille-specs.
+# -----------
+#
 #  Based on the Linux screenreader BRLTTY, copyright (C) 1999-2011 by the BRLTTY Team
 #
 #  Copyright (C) 2012 Attila Hammer from IT Foundation for the Visually Impaired - Hungary. www.infoalap.hu
@@ -29,7 +47,7 @@
 include boxes.ctb
 include digits6DotsPlusDot6.uti
 include latinLetterDef8Dots.uti
-include spaces.ctb
+include spaces.uti
 #Uppercase and lowercase accented characters
 uppercase	\x00c1	478	LATIN CAPITAL LETTER A WITH ACUTE
 uppercase	\x00c4	4578	LATIN CAPITAL LETTER A WITH DIAERESIS
@@ -98,6 +116,9 @@ punctuation – 36
 punctuation … 3-3-3
 sign € 457
 sign • 6-35
+nofor pass2 @67 @6-35
+noback pass2 @67 @6-35
 space	\s	0	SPACE
 include braille-patterns.cti
+
 undefined 26

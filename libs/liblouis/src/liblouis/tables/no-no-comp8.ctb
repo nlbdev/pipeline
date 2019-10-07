@@ -1,14 +1,18 @@
 # liblouis: Norwegian computer braille, 8-dot
 #
-# -----------
+#-name: Norsk datapunktskrift, 8-punkt
+#-index-name: Norwegian, computer
+#-display-name: Norwegian computer braille
+#
 #+locale:no
 #+type:computer
-#+contraction:no
 #+dots:8
 #+grade:0
 #
-#-name: Norsk datapunktskrift, 8-punkt
-#-display-name: Norwegian computer braille, 8-dot
+#  Copyright (C) 1995-2004 The BRLTTY Team
+#  Copyright (C) 2004-2006 ViewPlus Technologies, Inc. www.viewplus.com
+#  Copyright (C) 2004-2006 JJB Software, Inc. www.jjb-software.com
+#  Copyright (C) 2015 NLB Norwegian library of talking books and braille, http://www.nlb.no/
 #
 #-copyright: 1995-2004, The BRLTTY Team
 #-copyright: 2004-2006, ViewPlus Technologies, Inc. www.viewplus.com
@@ -34,7 +38,6 @@
 # Offentlig Utvalg for Blindeskrift (Public Commission for Braille)
 # translation table for Windows 1252.
 # Updated January 2008.
-# -----------
 #
 #  This file is part of liblouis.
 #
@@ -217,11 +220,7 @@ sign \x009C 1234568    # String Terminator
 sign \x009D 235678     # Operating System Command
 sign \x009E 23468      # Privacy Message
 sign \x009F 125678     # Application Program Command
-
-# does not work because `space \x00a0 a` is hardcoded in compileTranslationTable.c; replacing with a pass2 rule
-# sign \x00A0 8          # NO-BREAK SPACE ( - Hardt mellomrom)
-noback pass2 @a @8
-
+sign \x00A0 8          # NO-BREAK SPACE ( - Hardt mellomrom)
 sign \x00A1 2358       # INVERTED EXCLAMATION MARK (¡ - Omvendt utropstegn)
 sign \x00A2 2578       # CENT SIGN (¢ - Cent-tegn)
 sign \x00A3 1238       # POUND SIGN (£ - Pund-tegn)
@@ -317,4 +316,4 @@ sign \x00FC 1256       # LATIN SMALL LETTER U WITH DIAERESIS (ü - Liten latinsk
 sign \x00FD 12346      # LATIN SMALL LETTER Y WITH ACUTE (ý - Liten latinsk bokstav y med akutt)
 sign \x00FE 12468      # LATIN SMALL LETTER THORN (þ - Liten latinsk bokstav thorn)
 sign \x00FF 12568      # LATIN SMALL LETTER Y WITH DIAERESIS (ÿ - Liten latinsk bokstav y med trema)
-noback sign \X25CF 35  # 9679 BLACK CIRCLE (●)
+noback sign \x25CF 35  # 9679 BLACK CIRCLE (●)

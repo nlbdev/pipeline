@@ -1,6 +1,9 @@
 # liblouis: Norwegian literary braille, 6-dot, uncontracted
 #
-# -----------
+#-name: Norsk litterær punktskrift, 6-punkt, fullskrift
+#-index-name: Norwegian, uncontracted, 6-dot
+#-display-name: Norwegian 6-dot uncontracted braille
+#
 #+locale:no
 #+type:literary
 #+direction:both
@@ -8,12 +11,13 @@
 #+dots:6
 #+grade:0
 #
-#-name: Norsk litterær punktskrift, 6-punkt, fullskrift
-#-display-name: Norwegian literary braille, 6-dot, uncontracted
+#  Copyright (C) 2005 ViewPlus Technologies, Inc. www.viewplus.com
+#  Copyright (C) 2009-2019 Lars Bjørndal <lars@lamasti.net>
+#  Copyright (C) 2015-2018 NLB Norwegian library of talking books and braille, http://www.nlb.no/
 #
 #-copyright: 2005, ViewPlus Technologies, Inc. www.viewplus.com
-#-copyright: 2009, Lars Bjørndal
-#-copyright: 2015, Norwegian library of talking books and braille (NLB), http://www.nlb.no/
+#-copyright: 2009-2019, Lars Bjørndal
+#-copyright: 2015-2018, Norwegian library of talking books and braille (NLB), http://www.nlb.no/
 #-license: LGPLv2.1
 #
 # Created June 9, 2005 by Leon Ungier <Leon.Ungier@ViewPlus.com> with
@@ -38,9 +42,8 @@
 #-author-url: https://github.com/usama49
 #
 # Official norwegian braille specifications are collected here:
-# https://github.com/liblouis/braille-specs/blob/master/norwegian/README.md
+# http://liblouis.org/braille-specs/norwegian
 # This specific table is based on the document "Håndbok i litterær punktskrift".
-# -----------
 #
 #  This file is part of liblouis.
 #
@@ -59,6 +62,7 @@
 #  <http://www.gnu.org/licenses/>.
 #
 
+include no-no.dis
 include no-no-chardefs6.uti
 include litdigits6Dots.uti
 include braille-patterns.cti # unicode braille
@@ -69,7 +73,7 @@ include braille-patterns.cti # unicode braille
 numsign 3456
 capsletter 6                    # single capital letter indicator
 begcapsword 6-6                  # a block of consecutive capital letters indicator
-endcapsword 56                   # TODO
+noback endcapsword 56                   # TODO
 
 emphclass italic
 emphclass underline
@@ -79,7 +83,7 @@ begemph italic 23
 begemph bold 6-3
 begemph underline 456
 
-endemph italic 56
+noback endemph italic 56
 endemph bold 6-3
 endemph underline 456
 
@@ -92,7 +96,7 @@ midnum : 25
 midnum = 2356
 
 endnum # 56-3456
-always # 3456
+noback always # 3456
 endnum a 56-1
 endnum b 56-12
 endnum c 56-14

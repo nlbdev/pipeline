@@ -1,11 +1,15 @@
 # liblouis: English, U.S. grade 1 (EBAE) table
 #
 # -----------
+#-name: U.S. English grade 1 (EBAE)
+#-index-name: English, U.S., uncontracted
+#-display-name: English uncontracted braille as used in the U.S.
+#
 #+locale:en-US
-#+abae
 #+type:literary
 #+contraction:no
 #+grade:1
+#+system:ebae
 #
 # TODO: Please correct the metadata above. It is not meant to be
 # accurate nor complete. It hasn't been verified by the table
@@ -39,7 +43,8 @@
 #  License along with liblouis. If not, see
 #  <http://www.gnu.org/licenses/>.
 
-include chardefs.cti All character definition opcodes
+include en-chardefs.cti All character definition opcodes
+include en-us-compbrl.uti Comp6 translation  opcodes
 
 # Braille indicators
 numsign 3456  number sign, just a dots operand
@@ -90,10 +95,10 @@ include braille-patterns.cti
 # punctuation
 prepunc ( 2356
 word ( 4-2356
-always ( 2356
+noback always ( 2356
 postpunc ) 2356
 word ) 4-2356
-always ) 2356
+noback always ) 2356
 prepunc " 236
 postpunc " 356
 word " 4-236

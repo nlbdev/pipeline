@@ -1,3 +1,6 @@
+#-index-name: Dravidian, computer
+#-display-name: Dravidian computer braille
+
 #+locale:dra
 #+type:computer
 #+dots:8
@@ -11,6 +14,5 @@
 # the implemented braille code. Preferably submit the documents
 # to https://github.com/liblouis/braille-specs.
 
-include spaces.ctb
 include dra.ctb
 include braille-patterns.cti

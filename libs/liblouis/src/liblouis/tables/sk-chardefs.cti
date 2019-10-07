@@ -29,6 +29,11 @@
 #     Derived from the Czech braille table by Bert Frees and Jan Halousek
 # ----------------------------------------------------------------------------------------------
 
+space       \x0009        9                                       <control> HORIZONTAL TABULATION
+space       \x001B        1b                                      <control> ESCAPE
+space       \x00A0        a                                       NO-BREAK SPACE
+include spaces.uti
+
 # ==============================================================================================
 # SINGLE-CELL
 # ==============================================================================================
@@ -85,13 +90,6 @@ uplow       \x017D\x017E  2346,2346           Žž                  LATIN CAPITA
 # Unicode 0000..007F  C0 Controls and Basic Latin
 # ----------------------------------------------------------------------------------------------
 
-space       \x0009        9                                       <control> HORIZONTAL TABULATION
-space       \x000A        0                                       <control> LINE FEED
-space       \x000C        0                                       <control> FORM FEED
-space       \x000D        0                                       <control> CARRIAGE RETURN
-space       \x001B        1b                                      <control> ESCAPE
-space       \x0020        0                                       SPACE
-
 punctuation \x0021        235                 !                   EXCLAMATION MARK
 punctuation \x0022        2356                "                   QUOTATION MARK
 sign        \x0023        3456                #                   NUMBER SIGN
@@ -125,13 +123,13 @@ punctuation \x0060        6                   `                   GRAVE ACCENT
 # Unicode 0080..00FF  C1 Controls and Latin-1 Supplement
 # ----------------------------------------------------------------------------------------------
 
-space       \x00A0        a                                       NO-BREAK SPACE
 punctuation \x00A7        346                 §                   SECTION
 punctuation \x00AD        36                  ­                   SOFT HYPHEN
 sign        \x00B4        4                   ´                   ACUTE ACCENT
 noback math \x00D7        3                  ×                   MULTIPLICATION SIGN
 math        \x00D7        25-3               ×                   MULTIPLICATION SIGN
 math        \x00F7        25                  ÷                   DIVISION SIGN
+sign        \x00A9        236-6-14-356        ©                   COPYRIGHT
 
 
 # ----------------------------------------------------------------------------------------------
@@ -152,6 +150,8 @@ punctuation \x201C        2356                “                   LEFT DOUBLE 
 punctuation \x201D        2356                ”                   RIGHT DOUBLE QUOTATION MARK
 punctuation \x201E        2356                „                   DOUBLE LOW-9 QUOTATION MARK
 punctuation \x201F        2356                ‟                   DOUBLE HIGH-REVERSED-9 QUOTATION MARK
+punctuation \x2026        256-256-256         …                   HORIZONTAL ELLIPSIS
+sign        \x20AC        15-136-1235-135     €                   EURO SIGN
 
 
 # ==============================================================================================
@@ -180,7 +180,6 @@ math        \x007E        56-26                 ~                   TILDE
 # Unicode 0080..00FF  C1 Controls and Latin-1 Supplement
 # ----------------------------------------------------------------------------------------------
 
-sign        \x0080        15-136-1235-135     €                   <control> - ANSI: EURO-CURRENCY SIGN - MACROMAN: A DIAERESIS
 sign        \x00B0        3456-234            °                   DEGREE SIGN
 math        \x00B1        56-256-36              ±                   PLUS-MINUS SIGN
 sign        \x00B5        45-134               µ                   MICRO SIGN

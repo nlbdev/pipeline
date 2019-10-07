@@ -1,3 +1,6 @@
+#-index-name: Slovenian
+#-display-name: Slovenian braille
+
 #+locale:sl
 #+type:literary
 #+grade:1
@@ -12,4 +15,3 @@
 # to https://github.com/liblouis/braille-specs.
 
 include sl-si-g1.utb
-include braille-patterns.cti

@@ -1,3 +1,6 @@
+#-index-name: Romanian, computer
+#-display-name: Romanian computer braille
+
 #+locale:ro
 #+type:computer
 #+dots:8

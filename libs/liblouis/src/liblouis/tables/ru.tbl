@@ -1,3 +1,6 @@
+#-index-name: Russian
+#-display-name: Russian braille
+
 #+locale:ru
 #+type:literary
 #+grade:1
@@ -11,5 +14,5 @@
 # the implemented braille code. Preferably submit the documents
 # to https://github.com/liblouis/braille-specs.
 
-include ru-ru-g1.utb
+include ru-litbrl.ctb
 include braille-patterns.cti
