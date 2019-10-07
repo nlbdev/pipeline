@@ -5,9 +5,9 @@
 
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>scripts-parent</artifactId>
-        <version>1.12.0</version>
-        <!--<relativePath>../../scripts/parent/</relativePath>-->
+        <artifactId>modules-parent</artifactId>
+        <version>1.13.1-SNAPSHOT</version>
+        <!--<relativePath>../../modules/parent/</relativePath>-->
     </parent>
     
     <groupId>org.daisy.pipeline.modules</groupId>
