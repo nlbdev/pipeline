@@ -3,6 +3,7 @@ package org.daisy.dotify.formatter.impl.page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
@@ -16,44 +17,53 @@ import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.row.LineProperties;
+import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
 
 /**
- * <p>Provides a data source for row groups.</p>
- * 
+ * <p>Provides a {@link SplitPointDataSource data source} for {@link RowGroup row groups}.</p>
+ *
+ * <p>The input is</p>
+ * <ul>
+ *   <li>a {@link RowGroupSequence}, i.e. a sequence of {@link Block}s starting at a hard page
+ *       break (<code>break-before="page"</code> or <code>break-before="sheet"</code>) or a block
+ *       with absolute positioning (<code>vertical-position</code>)</li>
+ *   <li>a {@link Supplements} of {@link RowGroup}s: a map containing the items in the collection
+ *       corresponding to the page's <code>page-area</code> (if any). Each item is a single RowGroup.</li>
+ * </ul>
+ *
  * <p>Note that the implementation requires that break point searching is performed on a copy,
  * so that the items are created when a split is performed. If this assumption is not met,
  * things will break.</p>
+ *
  * @author Joel Håkansson
  */
-class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<RowGroup, RowGroupDataSource> {
+class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataSource> {
 	private static final Supplements<RowGroup> EMPTY_SUPPLEMENTS = new Supplements<RowGroup>() {
 		@Override
 		public RowGroup get(String id) {
 			return null;
 		}
 	};
+	private final BlockProcessor blockProcessor;
 	private final LayoutMaster master;
 	private final Supplements<RowGroup> supplements;
-	private final BreakBefore breakBefore;
-	private final VerticalSpacing vs;
-	private final List<Block> blocks;
-	private List<RowGroup> groups;
+	private final RowGroupSequence data;
 	private BlockContext bc;
 	private Function<Integer, Integer> reservedWidths = x->0;
 	private int blockIndex;
 	private boolean allowHyphenateLastLine;
+	private int offsetInBlock;
 
 	RowGroupDataSource(LayoutMaster master, BlockContext bc, List<Block> blocks, BreakBefore breakBefore, VerticalSpacing vs, Supplements<RowGroup> supplements) {
 		super();
+		this.blockProcessor = new BlockProcessor();
 		this.master = master;
 		this.bc = bc;
-		this.groups = null;
-		this.blocks = blocks;
 		this.supplements = supplements;
-		this.breakBefore = breakBefore;
-		this.vs = vs;
+		this.data = new RowGroupSequence(breakBefore, vs, blocks, null);
 		this.blockIndex = 0;
 		this.allowHyphenateLastLine = true;
+		this.offsetInBlock = 0;
 	}
 
 	RowGroupDataSource(RowGroupDataSource template) {
@@ -61,21 +71,12 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	}
 	
 	RowGroupDataSource(RowGroupDataSource template, int offset) {
-		super(template);
+		this.blockProcessor = new BlockProcessor(template.blockProcessor);
 		this.master = template.master;
 		this.bc = template.bc;
-		if (template.groups==null) {
-			this.groups = null;
-		} else if (template.groups.size()>offset) {
-			this.groups = new ArrayList<>(
-					offset>0?template.groups.subList(offset, template.groups.size()):template.groups);
-		} else {
-			this.groups = new ArrayList<>();
-		}
-		this.blocks = template.blocks;
+		this.offsetInBlock = template.offsetInBlock;
 		this.supplements = template.supplements;
-		this.breakBefore = template.breakBefore;
-		this.vs = template.vs;
+		this.data = new RowGroupSequence(template.data, offset);
 		this.blockIndex = template.blockIndex;
 		this.allowHyphenateLastLine = template.allowHyphenateLastLine;
 		this.reservedWidths = template.reservedWidths;
@@ -97,7 +98,7 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 
 	@Override
 	public boolean isEmpty() {
-		return this.groupSize()==0 && blockIndex>=blocks.size() && !hasNextInBlock();
+		return this.groupSize()==0 && blockIndex>=data.getBlocks().size() && !blockProcessor.hasNextInBlock();
 	}
 
 	@Override
@@ -105,16 +106,16 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		if (!ensureBuffer(n+1)) {
 			throw new IndexOutOfBoundsException("" + n);
 		}
-		return this.groups.get(n);
+		return this.data.getGroup().get(n);
 	}
 
 	@Override
 	public List<RowGroup> getRemaining() {
 		ensureBuffer(-1);
-		if (this.groups==null) {
+		if (this.data.getGroup()==null) {
 			return Collections.emptyList();
 		} else {
-			return this.groups.subList(0, groupSize());
+			return this.data.getGroup().subList(0, groupSize());
 		}
 	}
 
@@ -129,11 +130,11 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	}
 
 	VerticalSpacing getVerticalSpacing() {
-		return vs;
+		return data.getVerticalSpacing();
 	}
 	
 	BreakBefore getBreakBefore() {
-		return breakBefore;
+		return data.getBreakBefore();
 	}
 	
 	BlockContext getContext() {
@@ -168,27 +169,32 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 	 */
 	private boolean ensureBuffer(int index) {
 		while (index<0 || this.groupSize()<index) {
-			if (blockIndex>=blocks.size() && !hasNextInBlock()) {
+			if (blockIndex>=data.getBlocks().size() && !blockProcessor.hasNextInBlock()) {
 				return false;
 			}
-			if (!hasNextInBlock()) {
+			if (!blockProcessor.hasNextInBlock()) {
 				//get next block
-				Block b = blocks.get(blockIndex);
+				Block b = data.getBlocks().get(blockIndex);
 				blockIndex++;
-				loadBlock(master, b, bc);
+				offsetInBlock=0;
+				blockProcessor.loadBlock(master, b, bc, hasSequence(), hasResult(), this::newRowGroupSequence, v->{});
 			}
 			// Requesting all items implies that no special last line hyphenation processing is needed.
 			// This is reasonable: The very last line in a result would never be hyphenated, so suppressing
 			// hyphenation is unnecessary. Also, actively doing this would be difficult, because we do not know
 			// if the line produced below is the last line or not, until after the call has already been made.
-			processNextRowGroup(bc, new LineProperties.Builder()
+			Optional<RowGroup> added = blockProcessor.getNextRowGroup(bc, new LineProperties.Builder()
 				.suppressHyphenation(!allowHyphenateLastLine && index>-1 && groupSize()>=index-1)
-				.reservedWidth(reservedWidths.apply(countRows())).build()
-			);
+				.reservedWidth(reservedWidths.apply(countRows()))
+				.lineBlockLocation(new BlockLineLocation(blockProcessor.getBlockAddress(), offsetInBlock))
+				.build());
+			added.ifPresent(rg->data.getGroup().add(rg));
+			offsetInBlock += added.map(v->v.getRows().size()).orElse(0);
 		}
 		return true;
 	}
 
+	// this happens when a new page is started
 	@Override
 	public SplitResult<RowGroup, RowGroupDataSource> splitInRange(int atIndex) {
 		// TODO: rewrite this so that rendered tail data is discarded
@@ -200,13 +206,13 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		if (atIndex==0) {
 			return new DefaultSplitResult<RowGroup, RowGroupDataSource>(Collections.emptyList(), tail);
 		} else {
-			return new DefaultSplitResult<RowGroup, RowGroupDataSource>(this.groups.subList(0, atIndex), tail);
+			return new DefaultSplitResult<RowGroup, RowGroupDataSource>(this.data.getGroup().subList(0, atIndex), tail);
 		}
 	}
 
 	@Override
 	public RowGroupDataSource createEmpty() {
-		return new RowGroupDataSource(master, bc, Collections.emptyList(), breakBefore, vs, EMPTY_SUPPLEMENTS);
+		return new RowGroupDataSource(master, bc, Collections.emptyList(), data.getBreakBefore(), data.getVerticalSpacing(), EMPTY_SUPPLEMENTS);
 	}
 
 	@Override
@@ -214,36 +220,31 @@ class RowGroupDataSource extends BlockProcessor implements SplitPointDataSource<
 		return this;
 	}
 
-	@Override
-	protected void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
-		if (groups!=null) {
-			// this means ScenarioData.maybeNewRowGroupSequence() did not return true for this block
+	private void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
+		// Vertical spacing isn't used at this stage.
+		if (data.getGroup()!=null) {
+			// this means the return values of ScenarioData.hasSequence() and
+			// ScenarioData.hasResult() did not match those of RowGroupDataSource.hasSequence() and
+			// RowGroupDataSource.hasResult() for the same block
 			throw new IllegalStateException();
 		} else {
-			groups = new ArrayList<>();
+			data.setGroup(new ArrayList<>());
 		}
 	}
 
-	@Override
-	protected boolean hasSequence() {
-		return groups!=null;
+	private boolean hasSequence() {
+		return data.getGroup()!=null;
 	}
 
-	@Override
-	protected boolean hasResult() {
-		return hasSequence() && !groups.isEmpty();
+	private boolean hasResult() {
+		return hasSequence() && !data.getGroup().isEmpty();
 	}
 
-	@Override
-	protected void addRowGroup(RowGroup rg) {
-		groups.add(rg);
-	}
-	
 	private int groupSize() {
-		return groups==null?0:groups.size();
+		return data.getGroup()==null?0:data.getGroup().size();
 	}
 	
 	private int countRows() {
-		return groups==null?0:groups.stream().mapToInt(v->v.getRows().size()).sum();
+		return data.getGroup()==null?0:data.getGroup().stream().mapToInt(v->v.getRows().size()).sum();
 	}
 }

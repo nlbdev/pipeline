@@ -296,65 +296,91 @@ public final class RowDataProperties {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		RowDataProperties other = (RowDataProperties) obj;
-		if (align != other.align)
+		if (align != other.align) {
 			return false;
-		if (blockIndent != other.blockIndent)
+		}
+		if (blockIndent != other.blockIndent) {
 			return false;
-		if (blockIndentParent != other.blockIndentParent)
+		}
+		if (blockIndentParent != other.blockIndentParent) {
 			return false;
-		if (firstLineIndent != other.firstLineIndent)
+		}
+		if (firstLineIndent != other.firstLineIndent) {
 			return false;
-		if (innerSpaceAfter != other.innerSpaceAfter)
+		}
+		if (innerSpaceAfter != other.innerSpaceAfter) {
 			return false;
-		if (innerSpaceBefore != other.innerSpaceBefore)
+		}
+		if (innerSpaceBefore != other.innerSpaceBefore) {
 			return false;
+		}
 		if (leadingDecoration == null) {
-			if (other.leadingDecoration != null)
+			if (other.leadingDecoration != null) {
 				return false;
-		} else if (!leadingDecoration.equals(other.leadingDecoration))
+			}
+		} else if (!leadingDecoration.equals(other.leadingDecoration)) {
 			return false;
+		}
 		if (listProps == null) {
-			if (other.listProps != null)
+			if (other.listProps != null) {
 				return false;
-		} else if (!listProps.equals(other.listProps))
+			}
+		} else if (!listProps.equals(other.listProps)) {
 			return false;
+		}
 		if (margins == null) {
-			if (other.margins != null)
+			if (other.margins != null) {
 				return false;
-		} else if (!margins.equals(other.margins))
+			}
+		} else if (!margins.equals(other.margins)) {
 			return false;
-		if (orphans != other.orphans)
+		}
+		if (orphans != other.orphans) {
 			return false;
-		if (outerSpaceAfter != other.outerSpaceAfter)
+		}
+		if (outerSpaceAfter != other.outerSpaceAfter) {
 			return false;
-		if (outerSpaceBefore != other.outerSpaceBefore)
+		}
+		if (outerSpaceBefore != other.outerSpaceBefore) {
 			return false;
+		}
 		if (rowSpacing == null) {
-			if (other.rowSpacing != null)
+			if (other.rowSpacing != null) {
 				return false;
-		} else if (!rowSpacing.equals(other.rowSpacing))
+			}
+		} else if (!rowSpacing.equals(other.rowSpacing)) {
 			return false;
-		if (textIndent != other.textIndent)
+		}
+		if (textIndent != other.textIndent) {
 			return false;
+		}
 		if (trailingDecoration == null) {
-			if (other.trailingDecoration != null)
+			if (other.trailingDecoration != null) {
 				return false;
-		} else if (!trailingDecoration.equals(other.trailingDecoration))
+			}
+		} else if (!trailingDecoration.equals(other.trailingDecoration)) {
 			return false;
+		}
 		if (underlineStyle == null) {
-			if (other.underlineStyle != null)
+			if (other.underlineStyle != null) {
 				return false;
-		} else if (!underlineStyle.equals(other.underlineStyle))
+			}
+		} else if (!underlineStyle.equals(other.underlineStyle)) {
 			return false;
-		if (widows != other.widows)
+		}
+		if (widows != other.widows) {
 			return false;
+		}
 		return true;
 	}
 

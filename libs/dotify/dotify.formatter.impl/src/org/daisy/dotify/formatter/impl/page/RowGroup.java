@@ -9,9 +9,15 @@ import java.util.Objects;
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.api.writer.Row;
 import org.daisy.dotify.common.splitter.SplitPointUnit;
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
+import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
+/**
+ * <code>RowGroup</code> is the unit used when calculating page breaks. For this reason,
+ * <code>RowGroup</code> implements {@link SplitPointUnit}. It contains zero, one or more rows that
+ * can not be separated.
+ */
 class RowGroup implements SplitPointUnit {
 	private final List<RowImpl> rows;
 	private final List<Marker> markers;
@@ -24,6 +30,7 @@ class RowGroup implements SplitPointUnit {
 	private final VolumeKeepPriority avoidVolumeBreakAfterPriority;
 	private final boolean lastInBlock;
 	private final boolean mergeable;
+	private final LineProperties lineProps;
 	
 	static class Builder {
 		private final List<RowImpl> rows;
@@ -37,6 +44,8 @@ class RowGroup implements SplitPointUnit {
 		private VolumeKeepPriority avoidVolumeBreakAfterPriority = VolumeKeepPriority.empty();
 		private boolean lastInBlock = false;
 		private boolean mergeable = false;
+		private LineProperties lineProps = LineProperties.DEFAULT;
+		
 		Builder(float rowDefault, RowImpl ... rows) {
 			this(rowDefault, Arrays.asList(rows));
 		}
@@ -111,6 +120,10 @@ class RowGroup implements SplitPointUnit {
 			this.mergeable = value;
 			return this;
 		}
+		Builder lineProperties(LineProperties value) {
+			this.lineProps = value;
+			return this;
+		}
 		RowGroup build() {
 			return new RowGroup(this);
 		}
@@ -136,6 +149,7 @@ class RowGroup implements SplitPointUnit {
 		this.avoidVolumeBreakAfterPriority = builder.avoidVolumeBreakAfterPriority;
 		this.lastInBlock = builder.lastInBlock;
 		this.mergeable = builder.mergeable;
+		this.lineProps = builder.lineProps;
 	}
 	
 	/**
@@ -159,6 +173,7 @@ class RowGroup implements SplitPointUnit {
 		this.avoidVolumeBreakAfterPriority = template.avoidVolumeBreakAfterPriority;
 		this.lastInBlock = template.lastInBlock;
 		this.mergeable = template.mergeable;
+		this.lineProps = template.lineProps;
 	}
 	
 	private static float getRowSpacing(float rowDefault, RowImpl r) {
@@ -177,21 +192,33 @@ class RowGroup implements SplitPointUnit {
 		return Collections.unmodifiableList(rows);
 	}
 
+	/**
+	 * Means that the page can be broken after this RowGroup.
+	 */
 	@Override
 	public boolean isBreakable() {
 		return breakable;
 	}
 
+	/**
+	 * Means that this RowGroup can be skipped if a page break follows (e.g. bottom margins).
+	 */
 	@Override
 	public boolean isSkippable() {
 		return skippable;
 	}
 
+	/**
+	 * Means that this RowGroup may be combined with preceding RowGroups (e.g. adjoining margins).
+	 */
 	@Override
 	public boolean isCollapsible() {
 		return collapsible;
 	}
 
+	/**
+	 * <code>1</code> means <a href="http://braillespecs.github.io/pef/images/rendering.jpg">dot-to-dot height</a>.
+	 */
 	@Override
 	public float getUnitSize() {
 		return unitSize;
@@ -297,6 +324,10 @@ class RowGroup implements SplitPointUnit {
 	 */
 	boolean isMergeable() {
 		return mergeable;
+	}
+	
+	LineProperties getLineProperties() {
+		return lineProps;
 	}
 	
 }

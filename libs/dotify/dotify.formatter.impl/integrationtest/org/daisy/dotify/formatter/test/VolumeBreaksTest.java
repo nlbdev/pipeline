@@ -60,6 +60,11 @@ public class VolumeBreaksTest extends AbstractFormatterEngineTest {
 	}
 
 	@Test
+	public void testVolumeKeepPriortiy_3() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/volume-break/volume-breaks-priority3-input.obfl", "resource-files/volume-break/volume-breaks-priority3-expected.pef", false);
+	}
+
+	@Test
 	public void testVolumeKeepNext() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF("resource-files/volume-break/volume-breaks-keep-next-input.obfl", "resource-files/volume-break/volume-breaks-keep-next-expected.pef", false);
 	}

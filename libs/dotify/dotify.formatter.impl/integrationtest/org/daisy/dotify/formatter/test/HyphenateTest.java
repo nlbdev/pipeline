@@ -6,7 +6,7 @@ import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.formatter.FormatterConfiguration;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
+import org.daisy.dotify.api.translator.TranslatorType;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
@@ -17,7 +17,7 @@ public class HyphenateTest extends AbstractFormatterEngineTest {
 	private FormatterEngine configureEngine() throws PagedMediaWriterConfigurationException {
 		return FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
 				new FormatterConfiguration.Builder("sv-SE",
-						BrailleTranslatorFactory.MODE_UNCONTRACTED)
+						TranslatorType.UNCONTRACTED.toString())
 				.allowsEndingVolumeOnHyphen(false)
 				.build(), 
 				PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE));

@@ -1,4 +1,4 @@
-package org.daisy.dotify.formatter.impl.writer;
+package org.daisy.dotify.formatter.impl.common;
 
 import java.io.Closeable;
 import java.io.IOException;

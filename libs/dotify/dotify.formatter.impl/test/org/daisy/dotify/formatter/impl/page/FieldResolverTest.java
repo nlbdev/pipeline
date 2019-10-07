@@ -11,7 +11,6 @@ import org.daisy.dotify.api.formatter.NoField;
 import org.daisy.dotify.api.formatter.PageTemplateBuilder;
 import org.daisy.dotify.api.formatter.StringField;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMaker;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMaker;
 import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
@@ -30,7 +29,7 @@ public class FieldResolverTest {
 	public void testGetWidth_01() throws TranslatorConfigurationException {
 		FormatterContext fcontext = new FormatterContext(
 			BrailleTranslatorFactoryMaker.newInstance(),
-			TextBorderFactoryMaker.newInstance(), MarkerProcessorFactoryMaker.newInstance(), 
+			TextBorderFactoryMaker.newInstance(), 
 			new FormatterConfiguration.Builder("sv-SE", "bypass").build()
 		);
 
@@ -58,6 +57,7 @@ public class FieldResolverTest {
 						0
 					)
 				), 
+				null,
 				0);
 		FieldResolver resolver = new FieldResolver(master, fcontext, null, details);
 

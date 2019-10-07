@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.formatter.FormatterConfiguration;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
+import org.daisy.dotify.api.translator.TranslatorType;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
@@ -319,7 +319,7 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
 	public void testVolumeBreakingBetweenWords() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF(
 			FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
-				new FormatterConfiguration.Builder("sv-SE", BrailleTranslatorFactory.MODE_UNCONTRACTED)
+				new FormatterConfiguration.Builder("sv-SE", TranslatorType.UNCONTRACTED.toString())
 				.allowsEndingVolumeOnHyphen(false)
 				.build(),
 				PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)),

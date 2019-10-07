@@ -152,14 +152,15 @@ public class LayoutMaster implements LayoutMasterBuilder, SectionProperties, Bor
 	}
 	
 	/**
-	 * Divide a row-spacing value into several rows with a row-spacing < 2.
+	 * Divide a row-spacing value into several rows with a row-spacing &lt; 2.
 	 * <p>E.g. A row spacing of 2.5 will return:</p>
 	 * <dl>
 	 * 	<dt>RowSpacing.spacing</dt><dd>1.25</dd> 
 	 *  <dt>RowSpacing.lines</dt><dd>2</dd>
 	 * </dl>
-	 * @param rs
-	 * @return
+	 * @param drs the default row spacing
+	 * @param nullIfEqualToDefault if true, use null for the spacing in the returned object
+	 * @return a {@link DistributedRowSpacing} instance
 	 */
 	static DistributedRowSpacing distributeRowSpacing(float drs, boolean nullIfEqualToDefault) {
 		return distributeRowSpacing(drs, drs, nullIfEqualToDefault);

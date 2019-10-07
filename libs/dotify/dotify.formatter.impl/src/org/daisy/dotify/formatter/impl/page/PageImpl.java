@@ -15,24 +15,24 @@ import org.daisy.dotify.api.translator.BrailleTranslator;
 import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.api.writer.Row;
+import org.daisy.dotify.formatter.impl.common.Page;
 import org.daisy.dotify.formatter.impl.core.BorderManager;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
 import org.daisy.dotify.formatter.impl.core.HeightCalculator;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.core.PageTemplate;
 import org.daisy.dotify.formatter.impl.core.PaginatorException;
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
-import org.daisy.dotify.formatter.impl.page.PageSequenceBuilder2.MarkerRef;
 import org.daisy.dotify.formatter.impl.row.MarginProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.PageDetails;
-import org.daisy.dotify.formatter.impl.writer.Page;
+import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 
 //FIXME: scope spread is currently implemented using document wide scope, i.e. across volume boundaries. This is wrong, but is better than the previous sequence scope.
+
 /**
- * Provides a page object.
- * 
+ * <p>Provides a {@link Page} object.</p>
+ *
  * @author Joel Håkansson
  */
 public class PageImpl implements Page {
@@ -46,7 +46,6 @@ public class PageImpl implements Page {
     private final ArrayList<String> identifiers;
 	private final int flowHeight;
 	private final PageTemplate template;
-	private final int pageMargin;
 	private final BorderManager finalRows;
 
 	private boolean hasRows;
@@ -75,8 +74,11 @@ public class PageImpl implements Page {
 		this.isVolBreakAllowed = true;
 		this.keepPreviousSheets = 0;
 		this.volumeBreakAfterPriority = VolumeKeepPriority.empty();
-		this.pageMargin = ((details.getPageId().getOrdinal() % 2 == 0) ? master.getInnerMargin() : master.getOuterMargin());
-		this.finalRows = new BorderManager(master, fcontext, pageMargin);
+		if (master.duplex() && details.getPageId().getOrdinal() % 2 == 1) {
+			this.finalRows = new BorderManager(master, fcontext, master.getOuterMargin(), master.getInnerMargin());
+		} else {
+			this.finalRows = new BorderManager(master, fcontext, master.getInnerMargin(), master.getOuterMargin());
+		}
 		this.hasRows = false;
 		this.filter = fcontext.getDefaultTranslator();
 		this.renderedHeaderRows = 0;
@@ -137,6 +139,11 @@ public class PageImpl implements Page {
 			}
 			addRowDetails(r);
 		}
+	}
+	
+	@FunctionalInterface
+	interface MarkerRef {
+		boolean hasMarkerWithName(String name);
 	}
 	
 	private RowImpl addMarginRegion(RowImpl r) {
@@ -218,8 +225,8 @@ public class PageImpl implements Page {
 	
 	/**
 	 * Gets the page space needed to render the rows. 
-	 * @param rows
-	 * @param defSpacing a value >= 1.0
+	 * @param rows the rows to render
+	 * @param defSpacing a value &gt;= 1.0
 	 * @return returns the space, in rows
 	 */
 	static float rowsNeeded(Collection<? extends Row> rows, float defSpacing) {
@@ -392,4 +399,7 @@ public class PageImpl implements Page {
 		return details;
 	}
 
+	boolean hasRows() {
+		return hasRows;
+	}
 }

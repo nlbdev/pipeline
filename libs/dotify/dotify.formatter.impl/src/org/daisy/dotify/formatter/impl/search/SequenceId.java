@@ -29,32 +29,39 @@ public class SequenceId {
 		int result = 1;
 		result = prime * result + ordinal;
 		result = prime * result + ((space == null) ? 0 : space.hashCode());
-		result = prime * result + (volumeGroup == null ? 0 : volumeGroup);
+		result = prime * result + ((volumeGroup == null) ? 0 : volumeGroup.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		SequenceId other = (SequenceId) obj;
-		if (ordinal != other.ordinal)
+		if (ordinal != other.ordinal) {
 			return false;
+		}
 		if (space == null) {
-			if (other.space != null)
+			if (other.space != null) {
 				return false;
-		} else if (!space.equals(other.space))
+			}
+		} else if (!space.equals(other.space)) {
 			return false;
+		}
 		if (volumeGroup == null) {
 			if (other.volumeGroup != null) {
 				return false;
 			}
-		} else if (!volumeGroup.equals(other.volumeGroup))
+		} else if (!volumeGroup.equals(other.volumeGroup)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -1,4 +1,4 @@
-package org.daisy.dotify.formatter.impl.volume;
+package org.daisy.dotify.formatter.impl.core;
 
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -6,7 +6,6 @@ import java.util.Set;
 import org.daisy.dotify.api.formatter.BlockProperties;
 import org.daisy.dotify.api.formatter.TableOfContents;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
-import org.daisy.dotify.formatter.impl.core.FormatterCoreImpl;
 
 
 /**
@@ -29,11 +28,11 @@ public class TableOfContentsImpl extends FormatterCoreImpl implements TableOfCon
 		return refs.containsKey(id);
 	}
 	
-	Set<String> getTocIdList() {
+	public Set<String> getTocIdList() {
 		return refs.keySet();
 	}
 	
-	String getRefForID(String id) {
+	public String getRefForID(String id) {
 		return refs.get(id);
 	}
 

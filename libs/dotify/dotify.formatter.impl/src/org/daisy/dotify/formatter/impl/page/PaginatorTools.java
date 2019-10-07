@@ -7,6 +7,9 @@ import java.util.TreeSet;
 
 import org.daisy.dotify.common.text.StringTools;
 
+/**
+ * Does positioning of header/footer fields, and layout of tables.
+ */
 class PaginatorTools {
 	/**
 	 * Distribution modes 
@@ -138,8 +141,9 @@ class PaginatorTools {
 			return distributeTable(units, width, padding);
 		default:
 			StringBuffer b = new StringBuffer();
-			for (String s : distributeRetain(units, width, padding, mode))
+			for (String s : distributeRetain(units, width, padding, mode)) {
 				b.append(s);
+			}
 			return b.toString();
 		}
 	}

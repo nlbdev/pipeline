@@ -43,4 +43,15 @@ public class VerticalPositionTest extends AbstractFormatterEngineTest {
 				"resource-files/vertical-position/vertical-position-align-before-nested-blocks-expected.pef", false);
 	}
 
+	@Test
+	public void testVerticalPositionFirstBlock() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/vertical-position/vertical-position-first-block-input.obfl",
+				"resource-files/vertical-position/vertical-position-first-block-expected.pef", false);
+	}
+	
+	@Test
+	public void testVerticalPositionPassed() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
+		testPEF("resource-files/vertical-position/vertical-position-passed-input.obfl",
+				"resource-files/vertical-position/vertical-position-passed-expected.pef", false);
+	}
 }

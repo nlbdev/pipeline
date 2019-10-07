@@ -5,7 +5,15 @@ import java.util.List;
 
 public class TransitionContent {
 	public enum Type {
+		/**
+		 * Defines that content should be inserted at the end of the
+		 * volume when a sequence or block is <em>interrupted</em> by a volume break.
+		 */
 		INTERRUPT,
+		/**
+		 * Defines that content should be inserted at the start of the
+		 * volume when a sequence or block is <em>resumed</em> after a volume break.
+		 */
 		RESUME
 	}
 	private final Type type;

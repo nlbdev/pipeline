@@ -1,5 +1,7 @@
 package org.daisy.dotify.formatter.impl.row;
 
+import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
+
 /**
  * Provides details about a line
  * @author Joel Håkansson
@@ -11,6 +13,7 @@ public final class LineProperties {
 	public static final LineProperties DEFAULT = new LineProperties.Builder().build();
 	private final boolean suppressHyphenation;
 	private final int reservedWidth;
+	private final BlockLineLocation lineBlock;
 
 	/**
 	 * Provides a builder of line properties.
@@ -18,6 +21,7 @@ public final class LineProperties {
 	public static final class Builder {
 		private boolean suppressHyphenation = false;
 		private int reservedWidth = 0;
+		private BlockLineLocation lineBlock = null;
 		
 		/**
 		 * Creates a new empty builder.
@@ -48,6 +52,11 @@ public final class LineProperties {
 			return this;
 		}
 		
+		public Builder lineBlockLocation(BlockLineLocation value) {
+			this.lineBlock = value;
+			return this;
+		}
+
 		/**
 		 * Creates a new {@link LineProperties} with the current settings.
 		 * @return a new line properties instance.
@@ -60,6 +69,7 @@ public final class LineProperties {
 	private LineProperties(Builder builder) {
 		this.suppressHyphenation = builder.suppressHyphenation;
 		this.reservedWidth = builder.reservedWidth;
+		this.lineBlock = builder.lineBlock;
 	}
 	
 	/**
@@ -76,5 +86,9 @@ public final class LineProperties {
 	 */
 	public int getReservedWidth() {
 		return reservedWidth;
+	}
+	
+	public BlockLineLocation getBlockLineLocation() {
+		return lineBlock;
 	}
 }

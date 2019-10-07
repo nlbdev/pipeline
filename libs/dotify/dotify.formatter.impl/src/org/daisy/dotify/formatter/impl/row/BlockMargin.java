@@ -47,33 +47,44 @@ public class BlockMargin {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		BlockMargin other = (BlockMargin) obj;
 		if (leftMargin == null) {
-			if (other.leftMargin != null)
+			if (other.leftMargin != null) {
 				return false;
-		} else if (!leftMargin.equals(other.leftMargin))
+			}
+		} else if (!leftMargin.equals(other.leftMargin)) {
 			return false;
+		}
 		if (leftParent == null) {
-			if (other.leftParent != null)
+			if (other.leftParent != null) {
 				return false;
-		} else if (!leftParent.equals(other.leftParent))
+			}
+		} else if (!leftParent.equals(other.leftParent)) {
 			return false;
+		}
 		if (rightMargin == null) {
-			if (other.rightMargin != null)
+			if (other.rightMargin != null) {
 				return false;
-		} else if (!rightMargin.equals(other.rightMargin))
+			}
+		} else if (!rightMargin.equals(other.rightMargin)) {
 			return false;
+		}
 		if (rightParent == null) {
-			if (other.rightParent != null)
+			if (other.rightParent != null) {
 				return false;
-		} else if (!rightParent.equals(other.rightParent))
+			}
+		} else if (!rightParent.equals(other.rightParent)) {
 			return false;
+		}
 		return true;
 	}
 

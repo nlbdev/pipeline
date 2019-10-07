@@ -11,11 +11,7 @@ import org.daisy.dotify.api.formatter.NoField;
 import org.daisy.dotify.api.formatter.PageTemplateBuilder;
 import org.daisy.dotify.api.formatter.StringField;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMaker;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMaker;
 import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
-import org.daisy.dotify.formatter.impl.core.FormatterContext;
-import org.daisy.dotify.formatter.impl.core.LayoutMaster;
-import org.daisy.dotify.formatter.impl.core.PageTemplate;
 import org.junit.Test;
 
 public class LayoutMasterTest {
@@ -24,7 +20,7 @@ public class LayoutMasterTest {
 	public void testFlowHeight() {
 		FormatterContext fcontext = new FormatterContext(
 				BrailleTranslatorFactoryMaker.newInstance(),
-				TextBorderFactoryMaker.newInstance(), MarkerProcessorFactoryMaker.newInstance(), 
+				TextBorderFactoryMaker.newInstance(), 
 				new FormatterConfiguration.Builder("sv-SE", "bypass").build()
 		);
 			
@@ -48,7 +44,7 @@ public class LayoutMasterTest {
 	public void testFlowHeightWithFlowIntoHeaderFooter() {
 		FormatterContext fcontext = new FormatterContext(
 				BrailleTranslatorFactoryMaker.newInstance(),
-				TextBorderFactoryMaker.newInstance(), MarkerProcessorFactoryMaker.newInstance(), 
+				TextBorderFactoryMaker.newInstance(), 
 				new FormatterConfiguration.Builder("sv-SE", "bypass").build()
 		);
 			

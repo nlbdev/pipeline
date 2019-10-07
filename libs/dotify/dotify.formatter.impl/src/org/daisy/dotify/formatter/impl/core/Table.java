@@ -25,7 +25,6 @@ import org.daisy.dotify.formatter.impl.row.RowDataProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.segment.Segment;
-import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
 class Table extends Block {
 	private static final Logger logger = Logger.getLogger(Table.class.getCanonicalName());
@@ -82,15 +81,20 @@ class Table extends Block {
 	}
 
 	@Override
-	public void addSegment(TextSegment s) {
+	public void addSegment(Segment s) {
 		super.addSegment(s);
 		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().addSegment(s);
 	}
 	
+
 	@Override
-	public void addSegment(Segment s) {
-		super.addSegment(s);
-		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().addSegment(s);
+	void startStyle(String style) {
+		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().startStyle(style);
+	}
+
+	@Override
+	void endStyle() {
+		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().endStyle();
 	}
 
 	@Override

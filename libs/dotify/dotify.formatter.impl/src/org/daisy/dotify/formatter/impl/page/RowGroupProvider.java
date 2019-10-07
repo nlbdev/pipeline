@@ -7,14 +7,33 @@ import org.daisy.dotify.api.formatter.FormattingTypes.Keep;
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
 import org.daisy.dotify.formatter.impl.row.BlockStatistics;
 import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
+import org.daisy.dotify.formatter.impl.search.BlockAddress;
 import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
+import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
+/**
+ * Used by {@link RowGroupDataSource} to generate {@link RowGroup}s from a {@link Block}.
+ *
+ * <p>The input is a {@link Block} (and its corresponding {@link AbstractBlockContentManager}).</p>
+ *
+ * <p>The {@link RowGroup.Builder#avoidVolumeBreakAfterPriority(VolumeKeepPriority)
+ * avoidVolumeBreakAfterPriority} of the {@link RowGroup}s are set to the {@link
+ * Block#getAvoidVolumeBreakInsidePriority() getAvoidVolumeBreakInsidePriority} or {@link
+ * Block#getAvoidVolumeBreakAfterPriority() getAvoidVolumeBreakAfterPriority} of the {@link Block},
+ * depending on whether a RowGroup follows or not.</p>
+ *
+ * <p>Group markers, group anchors and group identifiers are added to the
+ * first content RowGroup (content = not padding, margin or border).</p>
+ *
+ * <p>An empty RowGroup is produced if the block contains markers, anchors or identifiers but no
+ * significant content (significant content = content that results in an actual line, i.e. non-empty
+ * text, a non-empty evaluate, a br, a page-number, a leader).</p>
+ */
 class RowGroupProvider {
 	private final LayoutMaster master;
 	private final Block g;
@@ -87,6 +106,10 @@ class RowGroupProvider {
 		return bcm;
 	}
 	
+	BlockAddress getBlockAddress() {
+		return g.getBlockAddress();
+	}
+	
 	public RowGroup next(DefaultContext context, LineProperties lineProps) {
 		if (this.context==null || !this.context.equals(context)) {
 			this.context = g.contextWithMeta(context);
@@ -97,27 +120,32 @@ class RowGroupProvider {
 	}
 
 	private RowGroup nextInner(LineProperties lineProps) {
+		// if the block does not support variable width (e.g. when there are left or right borders)
+		// and header or footer fields are present on the line, insert an empty row
 		if (lineProps.getReservedWidth()>0 && !bcm.supportsVariableWidth()) {
 			return new RowGroup.Builder(master.getRowSpacing()).add(new RowImpl())
 					.mergeable(false)
+					.lineProperties(lineProps)
 					.collapsible(false).skippable(false).breakable(false).build();
 		}
 		if (phase==0) {
 			phase++;
 			//if there is a row group, return it (otherwise, try next phase)
 			if (bcm.hasCollapsiblePreContentRows()) {
-				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getCollapsiblePreContentRows()).
-										mergeable(true).
-										collapsible(true).skippable(false).breakable(false), hasNext(), g).build();
+				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getCollapsiblePreContentRows())
+										.mergeable(true)
+										.lineProperties(lineProps)
+										.collapsible(true).skippable(false).breakable(false), hasNext(), g).build();
 			}
 		}
 		if (phase==1) {
 			phase++;
 			//if there is a row group, return it (otherwise, try next phase)
 			if (bcm.hasInnerPreContentRows()) {
-				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getInnerPreContentRows()).
-										mergeable(false).
-										collapsible(false).skippable(false).breakable(false), hasNext(), g).build();
+				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getInnerPreContentRows())
+										.mergeable(false)
+										.lineProperties(lineProps)
+										.collapsible(false).skippable(false).breakable(false), hasNext(), g).build();
 			}
 		}
 		if (phase==2) {
@@ -125,7 +153,7 @@ class RowGroupProvider {
 			//TODO: Does this interfere with collapsing margins?
 			if (shouldAddGroupForEmptyContent()) {
 				RowGroup.Builder rgb = setPropertiesForFirstContentRowGroup(
-					new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>()).mergeable(true), 
+					new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>()).mergeable(true).lineProperties(lineProps).skippable(true),
 					bc.getRefs(),
 					g
 				);
@@ -143,9 +171,10 @@ class RowGroupProvider {
 					keepWithNext = g.getKeepWithNext();
 					bc.getRefs().setRowCount(g.getBlockAddress(), bcm.getRowCount());
 				}
-				RowGroup.Builder rgb = new RowGroup.Builder(master.getRowSpacing()).add(r).
-						mergeable(bcm.supportsVariableWidth()).
-						collapsible(false).skippable(false).breakable(
+				RowGroup.Builder rgb = new RowGroup.Builder(master.getRowSpacing()).add(r)
+						.mergeable(bcm.supportsVariableWidth())
+						.lineProperties(lineProps)
+						.collapsible(false).skippable(false).breakable(
 								r.allowsBreakAfter()&&
 								owc.allowsBreakAfter(rowIndex-1)&&
 								keepWithNext<=0 &&
@@ -164,17 +193,19 @@ class RowGroupProvider {
 		if (phase==4) {
 			phase++;
 			if (bcm.hasPostContentRows()) {
-				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getPostContentRows()).
-					mergeable(false).
-					collapsible(false).skippable(false).breakable(keepWithNext<0), hasNext(), g).build();
+				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getPostContentRows())
+					.mergeable(false)
+					.lineProperties(lineProps)
+					.collapsible(false).skippable(false).breakable(keepWithNext<0), hasNext(), g).build();
 			}
 		}
 		if (phase==5) {
 			phase++;
 			if (bcm.hasSkippablePostContentRows()) {
-				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getSkippablePostContentRows()).
-					mergeable(true).
-					collapsible(true).skippable(true).breakable(keepWithNext<0), hasNext(), g).build();
+				return setPropertiesThatDependOnHasNext(new RowGroup.Builder(master.getRowSpacing(), bcm.getSkippablePostContentRows())
+					.mergeable(true)
+					.lineProperties(lineProps)
+					.collapsible(true).skippable(true).breakable(keepWithNext<0), hasNext(), g).build();
 			}
 		}
 		return null;

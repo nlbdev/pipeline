@@ -1,4 +1,4 @@
-package org.daisy.dotify.formatter.impl;
+package org.daisy.dotify.formatter.impl.common;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLEventFactory;
@@ -9,7 +9,6 @@ import javax.xml.xpath.XPathFactory;
 
 import org.daisy.dotify.api.formatter.FormatterFactory;
 import org.daisy.dotify.api.obfl.ExpressionFactory;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 
 /**
@@ -20,7 +19,6 @@ import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
  */
 public class FactoryManager {
 	private FormatterFactory formatterFactory;
-	private MarkerProcessorFactoryMakerService markerProcessorFactory;
 	private TextBorderFactoryMakerService textBorderFactory;
 	private ExpressionFactory expressionFactory;
 	private XMLEventFactory xmlEventFactory;
@@ -49,21 +47,6 @@ public class FactoryManager {
 	 */
 	public void setFormatterFactory(FormatterFactory formatterFactory) {
 		this.formatterFactory = formatterFactory;
-	}
-
-	/**
-	 * Gets the marker processor factory associated with this manager.
-	 * @return returns a marker processor factory, or null if not set
-	 */
-	public MarkerProcessorFactoryMakerService getMarkerProcessorFactory() {
-		return markerProcessorFactory;
-	}
-
-	/** Sets the marker processor factory associated with this manager.
-	 * @param markerProcessorFactory the marker processor factory
-	 */
-	public void setMarkerProcessorFactory(MarkerProcessorFactoryMakerService markerProcessorFactory) {
-		this.markerProcessorFactory = markerProcessorFactory;
 	}
 
 	/**
