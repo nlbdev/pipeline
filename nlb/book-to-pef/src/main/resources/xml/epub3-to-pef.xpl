@@ -47,7 +47,7 @@
 
 [More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="validation-status" step="validate-pef"/>
+        <p:pipe step="status" port="result"/>
     </p:output>
     
     <p:option name="braille-standard"/>
@@ -159,30 +159,49 @@
     </px:epub3-to-pef>
     <p:sink/>
     
+    <p:documentation>Post-process and validate PEF</p:documentation>
     <p:identity>
         <p:input port="source">
             <p:pipe step="convert" port="in-memory.out"/>
         </p:input>
     </p:identity>
-    <p:delete match="/*/@xml:base"/>
-    <p:choose>
-        <p:documentation>Add metadata</p:documentation>
+    <p:choose name="pef">
         <p:xpath-context>
-            <p:pipe step="main" port="parameters"/>
+            <p:pipe step="convert" port="status"/>
         </p:xpath-context>
-        <p:when test="//c:param[@name='skip-post-processing']/@value[.='true']">
-            <p:identity/>
+        <p:when test="/*/@result='ok'">
+            <p:output port="result" primary="true" sequence="true"/>
+            <p:output port="status">
+                <p:pipe step="validate-pef" port="validation-status"/>
+            </p:output>
+            <p:delete match="/*/@xml:base"/>
+            <p:choose>
+                <p:documentation>Add metadata</p:documentation>
+                <p:xpath-context>
+                    <p:pipe step="main" port="parameters"/>
+                </p:xpath-context>
+                <p:when test="//c:param[@name='skip-post-processing']/@value[.='true']">
+                    <p:identity/>
+                </p:when>
+                <p:otherwise>
+                    <nlb:pef-post-processing/>
+                </p:otherwise>
+            </p:choose>
+            <pef:validate assert-valid="false" name="validate-pef">
+                <p:with-option name="temp-dir" select="string(/c:result)">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </pef:validate>
         </p:when>
         <p:otherwise>
-            <nlb:pef-post-processing/>
+            <p:output port="result" primary="true" sequence="true"/>
+            <p:output port="status">
+                <p:pipe step="convert" port="status"/>
+            </p:output>
+            <p:identity/>
         </p:otherwise>
     </p:choose>
-    <pef:validate name="validate-pef" assert-valid="false">
-        <p:with-option name="temp-dir" select="string(/c:result)">
-            <p:pipe step="temp-dir" port="result"/>
-        </p:with-option>
-    </pef:validate>
-    
+
     <px:epub3-to-pef.store include-preview="true" name="epub3-to-pef.store">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="opf">
@@ -196,28 +215,49 @@
         <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:epub3-to-pef.store>
     
-    <p:group>
-        <p:variable name="name" select="if (ends-with(lower-case($epub),'.epub'))
-                                            then replace($epub,'^.*/([^/]*)\.[^/\.]*$','$1')
-                                            else (/opf:package/opf:metadata/dc:identifier[not(@refines)], 'unknown-identifier')[1]">
-            <p:pipe step="opf" port="result"/>
-        </p:variable>
-        <p:variable name="preview-href" select="resolve-uri(concat($name, '.pef.html'), concat($preview-output-dir,'/'))"/>
-        
-        <p:load cx:depends-on="epub3-to-pef.store" px:message="Post-processing HTML preview">
-            <p:with-option name="href" select="$preview-href"/>
-        </p:load>
-        <p:xslt>
-            <p:input port="parameters">
-                <p:pipe port="result" step="parameters"/>
-            </p:input>
-            <p:input port="stylesheet">
-                <p:document href="post-process-preview.xsl"/>
-            </p:input>
-        </p:xslt>
-        <p:store>
-            <p:with-option name="href" select="$preview-href"/>
-        </p:store>
-    </p:group>
-    
+    <p:documentation>Post-process PEF preview</p:documentation>
+    <p:choose name="process-preview">
+        <p:xpath-context>
+            <p:pipe step="convert" port="status"/>
+        </p:xpath-context>
+        <p:when test="/*/@result='ok'">
+            <p:group>
+                <p:variable name="name" select="if (ends-with(lower-case($epub),'.epub'))
+                                                    then replace($epub,'^.*/([^/]*)\.[^/\.]*$','$1')
+                                                    else (/opf:package/opf:metadata/dc:identifier[not(@refines)], 'unknown-identifier')[1]">
+                    <p:pipe step="opf" port="result"/>
+                </p:variable>
+                <p:variable name="preview-href" select="resolve-uri(concat($name, '.pef.html'), concat($preview-output-dir,'/'))"/>
+
+                <p:load cx:depends-on="epub3-to-pef.store" px:message="Post-processing HTML preview">
+                    <p:with-option name="href" select="$preview-href"/>
+                </p:load>
+                <p:xslt>
+                    <p:input port="parameters">
+                        <p:pipe port="result" step="parameters"/>
+                    </p:input>
+                    <p:input port="stylesheet">
+                        <p:document href="post-process-preview.xsl"/>
+                    </p:input>
+                </p:xslt>
+                <p:store>
+                    <p:with-option name="href" select="$preview-href"/>
+                </p:store>
+            </p:group>
+        </p:when>
+        <p:otherwise>
+            <p:sink>
+                <p:input port="source">
+                    <p:empty/>
+                </p:input>
+            </p:sink>
+        </p:otherwise>
+    </p:choose>
+
+    <p:identity name="status" cx:depends-on="process-preview">
+        <p:input port="source">
+            <p:pipe step="pef" port="status"/>
+        </p:input>
+    </p:identity>
+
 </p:declare-step>

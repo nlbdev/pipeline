@@ -136,10 +136,13 @@
     
     <p:try name="try-convert-and-store">
         <p:group>
-            <p:output port="status"/>
+            <p:output port="status">
+                <p:pipe step="status" port="result"/>
+            </p:output>
             <p:variable name="default-table-class" select="//c:param[@name='default-table-class']/@value">
                 <p:pipe step="main" port="parameters"/>
             </p:variable>
+
             <px:html-to-pef default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
                             name="convert">
                 <p:input port="source.in-memory">
@@ -162,48 +165,69 @@
                     <p:pipe step="temp-dir" port="result"/>
                 </p:with-option>
             </px:html-to-pef>
-            <p:choose>
-                <p:documentation>Add metadata</p:documentation>
-                <p:xpath-context>
-                    <p:pipe step="main" port="parameters"/>
-                </p:xpath-context>
-                <p:when test="//c:param[@name='skip-post-processing']/@value[.='true']">
-                    <p:identity/>
-                </p:when>
-                <p:otherwise>
-                    <nlb:pef-post-processing/>
-                </p:otherwise>
-            </p:choose>
-            <p:choose>
+
+            <p:documentation>Post-process and validate PEF</p:documentation>
+            <p:choose name="pef">
                 <p:xpath-context>
                     <p:pipe step="convert" port="status"/>
                 </p:xpath-context>
-                <p:when test="/d:validation-status[@result='ok']">
+                <p:when test="/*/@result='ok'">
+                    <p:output port="result" primary="true" sequence="true"/>
                     <p:output port="status">
                         <p:pipe step="validate-pef" port="validation-status"/>
                     </p:output>
                     
-                    <p:variable name="preview-href" select="resolve-uri(concat(replace(base-uri(/*),'.*/([^\./]*)[^/]*$','$1'), '.pef.html'), concat($preview-output-dir,'/'))">
-                        <p:pipe step="main" port="source"/>
-                    </p:variable>
-                    
+                    <p:choose>
+                        <p:documentation>Add metadata</p:documentation>
+                        <p:xpath-context>
+                            <p:pipe step="main" port="parameters"/>
+                        </p:xpath-context>
+                        <p:when test="//c:param[@name='skip-post-processing']/@value[.='true']">
+                            <p:identity/>
+                        </p:when>
+                        <p:otherwise>
+                            <nlb:pef-post-processing/>
+                        </p:otherwise>
+                    </p:choose>
                     <pef:validate name="validate-pef" assert-valid="false">
                         <p:with-option name="temp-dir" select="string(/c:result)">
                             <p:pipe step="temp-dir" port="result"/>
                         </p:with-option>
                     </pef:validate>
-                    <px:html-to-pef.store include-preview="true" name="html-to-pef.store">
-                        <p:input port="html">
-                            <p:pipe step="main" port="source"/>
-                        </p:input>
-                        <p:input port="obfl">
-                            <p:pipe step="convert" port="obfl"/>
-                        </p:input>
-                        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-                        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-                        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
-                    </px:html-to-pef.store>
-                    
+                </p:when>
+                <p:otherwise>
+                    <p:output port="result" primary="true" sequence="true"/>
+                    <p:output port="status">
+                        <p:pipe step="convert" port="status"/>
+                    </p:output>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+
+            <px:html-to-pef.store include-preview="true" name="html-to-pef.store">
+                <p:input port="html">
+                    <p:pipe step="main" port="source"/>
+                </p:input>
+                <p:input port="obfl">
+                    <p:pipe step="convert" port="obfl"/>
+                </p:input>
+                <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
+                <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+                <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
+            </px:html-to-pef.store>
+
+            <p:documentation>Post-process PEF preview</p:documentation>
+            <p:choose name="process-preview">
+                <p:xpath-context>
+                    <p:pipe step="convert" port="status"/>
+                </p:xpath-context>
+                <p:when test="/*/@result='ok'">
+                    <p:variable name="preview-href"
+                                select="resolve-uri(
+                                          concat(replace(base-uri(/*),'.*/([^\./]*)[^/]*$','$1'), '.pef.html'),
+                                          concat($preview-output-dir,'/'))">
+                        <p:pipe step="main" port="source"/>
+                    </p:variable>
                     <p:load cx:depends-on="html-to-pef.store" px:message="Post-processing HTML preview">
                         <p:with-option name="href" select="$preview-href"/>
                     </p:load>
@@ -220,15 +244,21 @@
                     </p:store>
                 </p:when>
                 <p:otherwise>
-                    <p:output port="status"/>
-                    <p:identity>
+                    <p:sink>
                         <p:input port="source">
-                            <p:pipe step="convert" port="status"/>
+                            <p:empty/>
                         </p:input>
-                    </p:identity>
+                    </p:sink>
                 </p:otherwise>
             </p:choose>
+
+            <p:identity name="status" cx:depends-on="process-preview">
+                <p:input port="source">
+                    <p:pipe step="pef" port="status"/>
+                </p:input>
+            </p:identity>
         </p:group>
+
         <p:catch name="try-convert-and-store.catch">
             <p:output port="status"/>
             <p:viewport match="//c:error" name="try-convert-and-store.catch.viewport">
