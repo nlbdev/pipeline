@@ -6,11 +6,55 @@
   <groupId>org.daisy.pipeline.maven</groupId>
   <artifactId>it-xprocspec-config-calabash</artifactId>
   <version>0.0-SNAPSHOT</version>
-  <parent>
-    <groupId>org.daisy.maven</groupId>
-    <artifactId>xproc-maven-plugin-parent</artifactId>
-    <version>1.3</version>
-  </parent>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>com.xmlcalabash</artifactId>
+        <version>${com.xmlcalabash.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.thaiopensource</groupId>
+            <artifactId>jing</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>saxon-he</artifactId>
+        <version>9.8.0.8</version>
+        <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jing</artifactId>
+        <version>20151127.0.0</version>
+        <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -19,6 +63,17 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
+    </dependency>
+    <!--
+        xproc-engine-calabash is put in test dependencies and not in plugin dependencies because the
+        way XMLCalabash loads extension steps (ex:foo), namely via the current class loader, requires
+        that the class loader that loaded XMLCalabash can also find Foo.
+    -->
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-calabash</artifactId>
+      <version>${xproc-engine-calabash.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -35,6 +90,7 @@
             </goals>
           </execution>
         </executions>
+        <!--
         <dependencies>
           <dependency>
             <groupId>org.daisy.maven</groupId>
@@ -42,6 +98,7 @@
             <version>${xproc-engine-calabash.version}</version>
           </dependency>
         </dependencies>
+        -->
       </plugin>
     </plugins>
   </build>
