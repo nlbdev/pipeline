@@ -20,10 +20,9 @@
 
   <!-- List of the modules to build all-at-once -->
   <modules>
-    <module>modules-parent</module>
     <module>modules-build-helper</module>
     <module>modules-test-helper</module>
-    <module>saxon-adapter</module>
+    <module>ds-to-spi</module>
     <module>pax-exam-helper</module>
     <module>archetypes</module>
   </modules>
