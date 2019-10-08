@@ -163,7 +163,7 @@ class FormatterImpl implements Formatter {
 		 * this value permanently. It should therefore not be parameterized.  Having that said,
 		 * changing this value temporarily could be useful for debugging purposes.
 		 */
-		int maxIterations = 50;
+		int maxIterations = 100;
 		for (int j=1;j<=maxIterations;j++) {
 			try {
 				ret = new ArrayList<>();
