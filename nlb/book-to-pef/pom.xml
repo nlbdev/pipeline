@@ -10,6 +10,7 @@
     <relativePath>../../modules/parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>mod-nlb</artifactId>
   <version>1.10.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
