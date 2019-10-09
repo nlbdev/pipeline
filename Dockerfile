@@ -23,29 +23,12 @@ RUN gem install bundler
 RUN gem install nokogiri:1.5.6
 RUN gem install commaparty:0.0.2
 
-# Add relevant files and directories for nlbdev/pipeline
-ADD Makefile /opt/pipeline/Makefile
-ADD .make /opt/pipeline/.make
-ADD assembly-make.sh /opt/pipeline/assembly-make.sh
-ADD pom.xml /opt/pipeline/pom.xml
-ADD cli /opt/pipeline/cli
-ADD clientlib /opt/pipeline/clientlib
-ADD framework /opt/pipeline/framework
-ADD gui /opt/pipeline/gui
-ADD it /opt/pipeline/it
-ADD libs /opt/pipeline/libs
-ADD settings.xml /opt/pipeline/settings.xml
-ADD updater /opt/pipeline/updater
-ADD utils /opt/pipeline/utils
-ADD website /opt/pipeline/website
-ADD webui /opt/pipeline/webui
-ADD assembly /opt/pipeline/assembly
-ADD modules /opt/pipeline/modules
-ADD .git /opt/pipeline/.git
+# Add source code and set working directory
+ADD . /opt/pipeline/
 WORKDIR /opt/pipeline
 
 # build for Linux
-RUN make RUBY=ruby dist-zip-linux
+RUN make RUBY=ruby MVN_LOG=cat dist-zip-linux
 
 # test NLB and Nordic modules (causes timeout on Docker Hub)
 #RUN make RUBY=ruby check-modules/nlb
