@@ -1222,10 +1222,10 @@
                     <groupId>no.nlb.pipeline.modules</groupId>
                     <artifactId>catalog-month</artifactId>
                 </artifactItem>
-                <artifactItem>
+                <!--<artifactItem>
                     <groupId>no.nlb.pipeline.modules</groupId>
                     <artifactId>catalog-year</artifactId>
-                </artifactItem>
+                </artifactItem>-->
                 <artifactItem>
                     <groupId>no.nlb.pipeline.modules</groupId>
                     <artifactId>html-to-dtbook</artifactId>
