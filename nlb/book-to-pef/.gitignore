@@ -1,7 +1,0 @@
-.DS_Store
-/target
-/.classpath
-/.project
-/.settings/
-/src/test/xspec/*.html
-/src/test/xspec/xspec

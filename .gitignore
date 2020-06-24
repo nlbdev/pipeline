@@ -7,39 +7,7 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
-# "super project"-files
-.last-tested
-/*.deb
-/*.rpm
-/*.zip
-/.gradle/
-/.make-target/
-/.maven-cache/
-/.maven-workspace/
-/maven.log
-.deps.mk
-
-# Eclipse
-bin/
-eclipse/
-eclipse/*
-.classpath
-.project
-.settings/
-/eclimd.log
-/.metadata/
-/.recommenders/
-
-# for build remainders on subrepo branches
-target/
-/build/
-/node-modules/
-
 # vim files
 *~
 *.swp
 
-# NLB-specific
-/releaseDescriptor*xml
-/descriptor-*.xml
-/index.html

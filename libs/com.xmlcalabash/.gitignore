@@ -1,8 +1,0 @@
-# Ignore these files. Note to self: Files in .git/info/exclude are also ignored.
-#
-/.gradle/
-/build/
-/target/
-/src/main/resources/etc/version.properties
-/test/errors.txt
-/test/report.xml

@@ -1,3 +1,0 @@
-#! /bin/bash
-xsltproc doc.xsl manual.xml >manual.html
-xsltproc doc_php.xsl manual.xml >manual.php

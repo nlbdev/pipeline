@@ -1,6 +1,0 @@
-target/
-
-release.properties
-
-# bintray credentials
-*settings.xml

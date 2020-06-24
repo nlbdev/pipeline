@@ -1,1 +1,0 @@
-SUBDIRS = lib1 lib2

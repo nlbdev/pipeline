@@ -1,3 +1,0 @@
-<xproc-config xmlns="http://xmlcalabash.com/ns/configuration" xmlns:ex="http://example.net/ns">
-  <implementation type="ex:foo" class-name="Foo"/>
-</xproc-config>
